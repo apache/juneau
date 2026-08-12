@@ -98,7 +98,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 
  <h5 class='section'>Usage:</h5>
  <p class='bjava'>
-   <jk>try</jk> (RecordReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.fromRecords(<jv>input</jv>)) {
+   <jk>try</jk> (RecordReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readRecords(<jv>input</jv>)) {
       <jk>while</jk> (<jv>r</jv>.canRead()) {
          Bean <jv>bean</jv> = <jv>r</jv>.read(Bean.<jk>class</jk>);
          process(<jv>bean</jv>);
@@ -167,7 +167,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Same as <a href="#read(java.lang.Class)"><code>read(Class)</code></a> but accepts a parameterized <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link"><code>Type</code></a> and optional type
  arguments (the same shape as
- <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.parse(Object, Type, Type...)</code></a>).</div>
+ <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.read(Object, Type, Type...)</code></a>).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;T</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
@@ -264,7 +264,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="#read(java.lang.Class)"><code>read(Class)</code></a> but accepts a parameterized <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link"><code>Type</code></a> and optional type
  arguments (the same shape as
- <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.parse(Object, Type, Type...)</code></a>).</div>
+ <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.read(Object, Type, Type...)</code></a>).</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The expected return type.</dd>

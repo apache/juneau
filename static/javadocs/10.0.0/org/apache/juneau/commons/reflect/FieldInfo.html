@@ -360,8 +360,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  obtain FieldInfo instances from <code>ClassInfo.getField(Field)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>declaringClass</code> - The ClassInfo for the class that declares this field.</dd>
-<dd><code>inner</code> - The field being wrapped.</dd>
+<dd><code>declaringClass</code> - The ClassInfo for the class that declares this field. Must not be <jk>null</jk>.</dd>
+<dd><code>inner</code> - The field being wrapped. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -826,7 +826,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Sets the field value on the specified object if the value is <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object containing the field.</dd>
+<dd><code>o</code> - The object containing the field.  Can be <jk>null</jk> for static fields.</dd>
 <dd><code>value</code> - The new field value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code> - Field was not accessible or field does not belong to object.</dd>

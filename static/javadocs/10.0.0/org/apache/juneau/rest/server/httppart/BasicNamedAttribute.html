@@ -276,9 +276,9 @@ implements <a href="NamedAttribute.html" title="interface in org.apache.juneau.r
 <div class="block">Creates a <a href="BasicNamedAttribute.html" title="class in org.apache.juneau.rest.server.httppart"><code>BasicNamedAttribute</code></a> from a name/value pair string (e.g. <js>"Foo: bar"</js>)</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pair</code> - The pair string.</dd>
+<dd><code>pair</code> - The pair string.  Can be <jk>null</jk>, in which case <jk>null</jk> is returned.</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="BasicNamedAttribute.html" title="class in org.apache.juneau.rest.server.httppart"><code>BasicNamedAttribute</code></a> object.</dd>
+<dd>A new <a href="BasicNamedAttribute.html" title="class in org.apache.juneau.rest.server.httppart"><code>BasicNamedAttribute</code></a> object, or <jk>null</jk> if the pair string was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

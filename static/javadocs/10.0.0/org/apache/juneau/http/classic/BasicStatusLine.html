@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -81,11 +81,20 @@ loadScripts(document, 'script');</script>
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
 </dl>
+<dl class="notes">
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic">BasicStatusLine.Unmodifiable</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-35">BasicStatusLine</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-41">BasicStatusLine</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></span></div>
 <div class="block">A basic implementation of the <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link"><code>StatusLine</code></a> interface.
+
+ <p>
+ Immutability is expressed with the "funnel + nested <code>Unmodifiable</code> snapshot" paradigm: every mutator routes
+ through the single protected <a href="#modify(java.lang.Runnable)"><code>modify(Runnable)</code></a> choke-point, and <a href="#unmodifiable()"><code>unmodifiable()</code></a> returns a
+ point-in-time snapshot of type <a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine.Unmodifiable</code></a> whose <code>modify(...)</code> override throws.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
@@ -93,6 +102,23 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="BasicStatusLine.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic">BasicStatusLine.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">An unmodifiable point-in-time snapshot of a <a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -126,30 +152,30 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertModifiable()" class="member-name-link">assertModifiable</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> if the unmodifiable flag is set on this bean.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a copy of this bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Instantiates a new instance of this bean.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(int,java.lang.String)" class="member-name-link">create</a><wbr>(int&nbsp;statusCode,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reasonPhrase)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Instantiates a new instance of this bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(int,java.lang.String)" class="member-name-link">create</a><wbr>(int&nbsp;statusCode,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reasonPhrase)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Instantiates a new instance of this bean.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#freeze()" class="member-name-link">freeze</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Deep-freeze hook invoked from the <a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine.Unmodifiable</code></a> constructor after the snapshot copy completes.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocale()" class="member-name-link">getLocale</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -167,6 +193,16 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUnmodifiable()" class="member-name-link">isUnmodifiable</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns whether this bean is unmodifiable.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modify(java.lang.Runnable)" class="member-name-link">modify</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Single mutation funnel — the only choke-point through which all state changes on this bean flow.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocale(java.util.Locale)" class="member-name-link">setLocale</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -192,14 +228,14 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the status code on the status line.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies whether this bean should be unmodifiable.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns an unmodifiable snapshot of this bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -220,18 +256,18 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>BasicStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-69">BasicStatusLine</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-74">BasicStatusLine</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.BasicStatusLine)">
 <h3>BasicStatusLine</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-76">BasicStatusLine</a></span><wbr><span class="parameters">(<a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-81">BasicStatusLine</a></span><wbr><span class="parameters">(<a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The status line being copied.</dd>
+<dd><code>copyFrom</code> - The status line being copied.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -246,7 +282,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-42">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-48">create</a></span>()</div>
 <div class="block">Instantiates a new instance of this bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -257,13 +293,13 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="create(int,java.lang.String)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-53">create</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-59">create</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reasonPhrase)</span></div>
 <div class="block">Instantiates a new instance of this bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>statusCode</code> - The initial status code.</dd>
-<dd><code>reasonPhrase</code> - The initial reason phrase.</dd>
+<dd><code>reasonPhrase</code> - The initial reason phrase.  Can be <jk>null</jk> to look up the reason phrase from the reason phrase catalog.</dd>
 <dt>Returns:</dt>
 <dd>A new bean.</dd>
 </dl>
@@ -272,7 +308,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-88">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-94">copy</a></span>()</div>
 <div class="block">Returns a copy of this bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -283,7 +319,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getLocale()">
 <h3>getLocale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-97">getLocale</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-103">getLocale</a></span>()</div>
 <div class="block">Returns the locale of this status line.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -294,7 +330,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getProtocolVersion()">
 <h3>getProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-99">getProtocolVersion</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-105">getProtocolVersion</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html#getProtocolVersion--" title="class or interface in org.apache.http" class="external-link">getProtocolVersion</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
@@ -304,7 +340,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getReasonPhrase()">
 <h3>getReasonPhrase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-102">getReasonPhrase</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-108">getReasonPhrase</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html#getReasonPhrase--" title="class or interface in org.apache.http" class="external-link">getReasonPhrase</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
@@ -314,7 +350,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getStatusCode()">
 <h3>getStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-111">getStatusCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-117">getStatusCode</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html#getStatusCode--" title="class or interface in org.apache.http" class="external-link">getStatusCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/StatusLine.html" title="class or interface in org.apache.http" class="external-link">StatusLine</a></code></dd>
@@ -324,7 +360,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setLocale(java.util.Locale)">
 <h3>setLocale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-123">setLocale</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-129">setLocale</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</span></div>
 <div class="block">Sets the locale used to retrieve reason phrases.
 
  <p>
@@ -340,7 +376,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setProtocolVersion(org.apache.http.ProtocolVersion)">
 <h3>setProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-138">setProtocolVersion</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-142">setProtocolVersion</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;value)</span></div>
 <div class="block">Sets the protocol version on the status line.
 
  <p>
@@ -356,7 +392,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setReasonPhrase(java.lang.String)">
 <h3>setReasonPhrase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-154">setReasonPhrase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-156">setReasonPhrase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the reason phrase on the status line.
 
  <p>
@@ -364,7 +400,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  using the locale on this bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -380,7 +416,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  If not specified, uses <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/impl/EnglishReasonPhraseCatalog.html" title="class or interface in org.apache.http.impl" class="external-link"><code>EnglishReasonPhraseCatalog</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -389,7 +425,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setStatusCode(int)">
 <h3>setStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-184">setStatusCode</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-182">setStatusCode</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the status code on the status line.
 
  <p>
@@ -403,22 +439,37 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 </section>
 </li>
 <li>
-<section class="detail" id="setUnmodifiable()">
-<h3>setUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-197">setUnmodifiable</a></span>()</div>
-<div class="block">Specifies whether this bean should be unmodifiable.
+<section class="detail" id="unmodifiable()">
+<h3>unmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-197">unmodifiable</a></span>()</div>
+<div class="block">Returns an unmodifiable snapshot of this bean.
+
  <p>
- When enabled, attempting to set any properties on this bean will cause an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
+ The returned instance is a point-in-time copy of type <a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine.Unmodifiable</code></a>; any attempt to set a property on it
+ throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.  This method is idempotent: if this bean is already unmodifiable
+ it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still modifiable
+ unless it was already an <a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine.Unmodifiable</code></a>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>This object.</dd>
+<dd>An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isUnmodifiable()">
+<h3>isUnmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-206">isUnmodifiable</a></span>()</div>
+<div class="block">Returns whether this bean is unmodifiable.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if this bean is an <a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine.Unmodifiable</code></a> snapshot.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-202">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-210">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -428,7 +479,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-207">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-215">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -438,7 +489,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-214">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-222">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -446,10 +497,33 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 </section>
 </li>
 <li>
-<section class="detail" id="assertModifiable()">
-<h3>assertModifiable</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-222">assertModifiable</a></span>()</div>
-<div class="block">Throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> if the unmodifiable flag is set on this bean.</div>
+<section class="detail" id="modify(java.lang.Runnable)">
+<h3>modify</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-237">modify</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</span></div>
+<div class="block">Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+
+ <p>
+ Every mutator routes through this method.  The <a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine.Unmodifiable</code></a> snapshot overrides only this method to
+ throw, which freezes the entire mutation surface with a single override.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>mutation</code> - The state change to apply.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="freeze()">
+<h3>freeze</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/classic/BasicStatusLine.html#line-251">freeze</a></span>()</div>
+<div class="block">Deep-freeze hook invoked from the <a href="BasicStatusLine.Unmodifiable.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine.Unmodifiable</code></a> constructor after the snapshot copy completes.
+
+ <p>
+ This is a no-op for <a href="BasicStatusLine.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine</code></a>: all of its fields are immutable value types (protocol version,
+ status code, reason phrase, locale, reason-phrase catalog) with no mutable sub-beans to deep-freeze.  It exists
+ as the paradigm's override point for families whose beans hold mutable sub-beans, which must be frozen here by
+ <b>direct field assignment</b> (never via a setter, which would route through the throwing <a href="#modify(java.lang.Runnable)"><code>modify(Runnable)</code></a>).</div>
 </section>
 </li>
 </ul>

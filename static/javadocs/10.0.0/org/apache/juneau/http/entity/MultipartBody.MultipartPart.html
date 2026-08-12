@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="MultipartBody.html" title="class in org.apache.juneau.http.entity">MultipartBody</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-157">MultipartBody.MultipartPart</a></span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filename, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType, <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-158">MultipartBody.MultipartPart</a></span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filename, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType, <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">A single part within a <a href="MultipartBody.html" title="class in org.apache.juneau.http.entity"><code>MultipartBody</code></a>.</div>
 <dl class="notes">
@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates an instance of a <code>MultipartPart</code> record class.</div>
+<div class="block">Compact constructor enforcing the documented non-null contract on <code>name</code> and <code>body</code>.</div>
 </div>
 </div>
 </section>
@@ -199,18 +199,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.http.HttpBody)">
 <h3>MultipartPart</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">MultipartPart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-163">MultipartPart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filename,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</span></div>
-<div class="block">Creates an instance of a <code>MultipartPart</code> record class.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>name</code> - the value for the <code>name</code> record component</dd>
-<dd><code>filename</code> - the value for the <code>filename</code> record component</dd>
-<dd><code>contentType</code> - the value for the <code>contentType</code> record component</dd>
-<dd><code>body</code> - the value for the <code>body</code> record component</dd>
-</dl>
+<div class="block">Compact constructor enforcing the documented non-null contract on <code>name</code> and <code>body</code>.</div>
 </section>
 </li>
 </ul>
@@ -224,7 +217,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="field(java.lang.String,java.lang.String)">
 <h3>field</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-166">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-175">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Creates a text field part with no filename and <code>text/plain; charset=UTF-8</code> content type.</div>
 <dl class="notes">
@@ -239,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="file(java.lang.String,java.io.File,java.lang.String)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-178">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-187">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType)</span></div>
 <div class="block">Creates a file upload part.</div>
@@ -256,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.http.HttpBody)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-191">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-201">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filename,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</span></div>
@@ -275,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-158">toString</a></span>()</div>
 <div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -288,7 +281,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-158">hashCode</a></span>()</div>
 <div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -301,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-158">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -316,7 +309,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="name()">
 <h3>name</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">name</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-158">name</a></span>()</div>
 <div class="block">Returns the value of the <code>name</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -327,7 +320,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="filename()">
 <h3>filename</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">filename</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-158">filename</a></span>()</div>
 <div class="block">Returns the value of the <code>filename</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -338,7 +331,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contentType()">
 <h3>contentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">contentType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-158">contentType</a></span>()</div>
 <div class="block">Returns the value of the <code>contentType</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -349,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="body()">
 <h3>body</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-157">body</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.MultipartPart.html#line-158">body</a></span>()</div>
 <div class="block">Returns the value of the <code>body</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

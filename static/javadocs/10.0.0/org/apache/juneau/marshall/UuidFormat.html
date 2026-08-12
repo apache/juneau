@@ -325,7 +325,7 @@ not permitted.)</div>
  <a href="#NOT_SET"><code>NOT_SET</code></a> falls through to <a href="#STANDARD"><code>STANDARD</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format.  Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to format.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The formatted wire representation, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
 </dl>
@@ -343,8 +343,8 @@ not permitted.)</div>
  <a href="#URN"><code>URN</code></a>) regardless of the <code>format</code> hint.  The hint is informational only.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value.  Can be <jk>null</jk> or blank.</dd>
-<dd><code>format</code> - The configured format hint (informational only — parsing is format-agnostic).  Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The wire value.  Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
+<dd><code>format</code> - The configured format hint (informational only — parsing is format-agnostic).  Can be <jk>null</jk> (ignored; parsing is format-agnostic).</dd>
 <dt>Returns:</dt>
 <dd>The parsed <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a>, or <jk>null</jk> if <code>value</code> is <jk>null</jk> or blank.</dd>
 <dt>Throws:</dt>

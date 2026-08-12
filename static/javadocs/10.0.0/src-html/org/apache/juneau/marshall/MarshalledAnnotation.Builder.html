@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -409,8 +409,8 @@
 <span class="source-line-no">396</span><span id="line-396">      Object(MarshalledAnnotation.Builder b) {</span>
 <span class="source-line-no">397</span><span id="line-397">         super(b);</span>
 <span class="source-line-no">398</span><span id="line-398">         as = b.as;</span>
-<span class="source-line-no">399</span><span id="line-399">         description = copyOf(b.description);</span>
-<span class="source-line-no">400</span><span id="line-400">         dictionary = copyOf(b.dictionary);</span>
+<span class="source-line-no">399</span><span id="line-399">         description = cp(b.description);</span>
+<span class="source-line-no">400</span><span id="line-400">         dictionary = cp(b.dictionary);</span>
 <span class="source-line-no">401</span><span id="line-401">         example = b.example;</span>
 <span class="source-line-no">402</span><span id="line-402">         implClass = b.implClass;</span>
 <span class="source-line-no">403</span><span id="line-403">         interceptor = b.interceptor;</span>

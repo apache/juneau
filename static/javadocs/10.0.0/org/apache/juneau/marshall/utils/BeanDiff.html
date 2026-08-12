@@ -208,8 +208,8 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The bean types.</dd>
 <dt>Parameters:</dt>
 <dd><code>bc</code> - The bean context to use for comparing beans.</dd>
-<dd><code>first</code> - The first bean to compare.</dd>
-<dd><code>second</code> - The second bean to compare.</dd>
+<dd><code>first</code> - The first bean to compare.  Can be <jk>null</jk> (treated as an empty bean with no properties).</dd>
+<dd><code>second</code> - The second bean to compare.  Can be <jk>null</jk> (treated as an empty bean with no properties).</dd>
 <dd><code>include</code> - Optional properties to include in the comparison.
    <br>If <jk>null</jk>, all properties are included.</dd>
 <dd><code>exclude</code> - Optional properties to exclude in the comparison.

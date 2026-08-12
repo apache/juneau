@@ -149,7 +149,7 @@
 <span class="source-line-no">136</span><span id="line-136">      this.key = key;</span>
 <span class="source-line-no">137</span><span id="line-137">      this.value = value;</span>
 <span class="source-line-no">138</span><span id="line-138">      this.comment = comment;</span>
-<span class="source-line-no">139</span><span id="line-139">      this.preLines = preLines;</span>
+<span class="source-line-no">139</span><span id="line-139">      this.preLines = u(cp(preLines));</span>
 <span class="source-line-no">140</span><span id="line-140">      this.modifiers = modifiers;</span>
 <span class="source-line-no">141</span><span id="line-141">   }</span>
 <span class="source-line-no">142</span><span id="line-142"></span>
@@ -179,14 +179,14 @@
 <span class="source-line-no">166</span><span id="line-166">    *</span>
 <span class="source-line-no">167</span><span id="line-167">    * @return</span>
 <span class="source-line-no">168</span><span id="line-168">    *    The modifier characters.</span>
-<span class="source-line-no">169</span><span id="line-169">    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">169</span><span id="line-169">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; if the event has no modifiers (e.g. remove/section events, or entries set without modifiers).</span>
 <span class="source-line-no">170</span><span id="line-170">    */</span>
 <span class="source-line-no">171</span><span id="line-171">   public String getModifiers() { return modifiers; }</span>
 <span class="source-line-no">172</span><span id="line-172"></span>
 <span class="source-line-no">173</span><span id="line-173">   /**</span>
 <span class="source-line-no">174</span><span id="line-174">    * Returns the section or entry lines.</span>
 <span class="source-line-no">175</span><span id="line-175">    *</span>
-<span class="source-line-no">176</span><span id="line-176">    * @return The section or entry lines.</span>
+<span class="source-line-no">176</span><span id="line-176">    * @return An unmodifiable list of the section or entry lines, or &lt;jk&gt;null&lt;/jk&gt; if none were supplied.</span>
 <span class="source-line-no">177</span><span id="line-177">    */</span>
 <span class="source-line-no">178</span><span id="line-178">   public List&lt;String&gt; getPreLines() { return preLines; }</span>
 <span class="source-line-no">179</span><span id="line-179"></span>

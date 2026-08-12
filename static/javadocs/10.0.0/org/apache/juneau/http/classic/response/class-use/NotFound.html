@@ -64,9 +64,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">HTTP Response Exception Beans</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.resources">org.apache.juneau.microservice.resources</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
 <div class="col-last even-row-color">
-<div class="block">Predefined Microservice Resources</div>
+<div class="block">Example / demo Microservice REST Resources</div>
 </div>
 </div>
 <section class="class-uses">
@@ -101,6 +101,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.http.classic.response">
 <h2>Uses of <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a></h2>
+<div class="caption"><span>Subclasses of <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../NotFound.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.response">NotFound.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response"><code>NotFound</code></a> exception.</div>
+</div>
+</div>
 <div class="caption"><span>Fields in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a> declared as <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -164,7 +175,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">NotFound.</span><code><a href="../NotFound.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">NotFound.</span><code><a href="../NotFound.html#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">NotFound.</span><code><a href="../NotFound.html#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a> with parameters of type <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></span></div>
@@ -177,49 +188,54 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor.</div>
 </div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-second odd-row-color"><code><a href="../NotFound.Unmodifiable.html#%3Cinit%3E(org.apache.juneau.http.classic.response.NotFound)" class="member-name-link">Unmodifiable</a><wbr>(<a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a>&nbsp;copyFrom)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.microservice.resources">
-<h2>Uses of <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a> in <a href="../../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a></h2>
-<div class="caption"><span>Methods in <a href="../../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a> that throw <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></span></div>
+<section class="detail" id="org.apache.juneau.microservice.examples">
+<h2>Uses of <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a> in <a href="../../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a></h2>
+<div class="caption"><span>Methods in <a href="../../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a> that throw <a href="../NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>org.apache.juneau.microservice.resources.DirectoryResource.FileContents</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/resources/DirectoryResource.html#downloadFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">downloadFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="col-first even-row-color"><code>org.apache.juneau.microservice.examples.DirectoryResource.FileContents</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/examples/DirectoryResource.html#downloadFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">downloadFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Downloads the contents of a file.</div>
 </div>
-<div class="col-first odd-row-color"><code>org.apache.juneau.microservice.resources.LogsResource.FileContents</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/resources/LogsResource.html#downloadFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">downloadFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="col-first odd-row-color"><code>org.apache.juneau.microservice.examples.LogsResource.FileContents</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/examples/LogsResource.html#downloadFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">downloadFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Downloads the contents of a file.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../../microservice/resources/DirectoryResource.FileResource.html" title="class in org.apache.juneau.microservice.resources">DirectoryResource.FileResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/resources/DirectoryResource.html#getFile(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">getFile</a><wbr>(<a href="../../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-first even-row-color"><code><a href="../../../../microservice/examples/DirectoryResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">DirectoryResource.FileResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/examples/DirectoryResource.html#getFile(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">getFile</a><wbr>(<a href="../../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns information about the specified file or directory.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../../microservice/resources/LogsResource.FileResource.html" title="class in org.apache.juneau.microservice.resources">LogsResource.FileResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/resources/LogsResource.html#getFile(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">getFile</a><wbr>(<a href="../../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-first odd-row-color"><code><a href="../../../../microservice/examples/LogsResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">LogsResource.FileResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/examples/LogsResource.html#getFile(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">getFile</a><wbr>(<a href="../../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns information about the specified file or directory.</div>
 </div>
-<div class="col-first even-row-color"><code>org.apache.juneau.microservice.resources.DirectoryResource.FileContents</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/resources/DirectoryResource.html#viewFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">viewFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="col-first even-row-color"><code>org.apache.juneau.microservice.examples.DirectoryResource.FileContents</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/examples/DirectoryResource.html#viewFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">viewFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Views the contents of a file.</div>
 </div>
 <div class="col-first odd-row-color"><code>void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/resources/LogsResource.html#viewFile(org.apache.juneau.rest.server.RestResponse,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,java.lang.String%5B%5D)" class="member-name-link">viewFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="col-second odd-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/examples/LogsResource.html#viewFile(org.apache.juneau.rest.server.RestResponse,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,java.lang.String%5B%5D)" class="member-name-link">viewFile</a><wbr>(<a href="../../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  boolean&nbsp;highlight,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;start,
@@ -230,8 +246,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Views the contents of a log file with optional filtering.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../../microservice/resources/LogParser.html" title="class in org.apache.juneau.microservice.resources">LogParser</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/resources/LogsResource.html#viewParsedEntries(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,java.lang.String%5B%5D)" class="member-name-link">viewParsedEntries</a><wbr>(<a href="../../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-first even-row-color"><code><a href="../../../../microservice/examples/LogParser.html" title="class in org.apache.juneau.microservice.examples">LogParser</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">LogsResource.</span><code><a href="../../../../microservice/examples/LogsResource.html#viewParsedEntries(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String%5B%5D,java.lang.String%5B%5D)" class="member-name-link">viewParsedEntries</a><wbr>(<a href="../../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;start,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;end,

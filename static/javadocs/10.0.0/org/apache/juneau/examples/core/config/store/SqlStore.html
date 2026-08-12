@@ -294,7 +294,8 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="../../../../config/store/ConfigStore.html#update(java.lang.String,java.lang.String)">update</a></code>&nbsp;in class&nbsp;<code><a href="../../../../config/store/ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>name</code> - The config name (e.g. the filename without the extension).</dd>
+<dd><code>name</code> - The config name (e.g. the filename without the extension).
+   <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>newContents</code> - The new contents.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -304,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="write(java.lang.String,java.lang.String,java.lang.String)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-205">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-208">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedContents,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newContents)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../../config/store/ConfigStore.html#write(java.lang.String,java.lang.String,java.lang.String)">ConfigStore</a></code></span></div>
@@ -325,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDatabaseValue(java.lang.String)">
 <h3>getDatabaseValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-224">getDatabaseValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-227">getDatabaseValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 </section>
 </li>
 </ul>

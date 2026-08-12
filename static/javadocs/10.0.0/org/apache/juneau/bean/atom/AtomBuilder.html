@@ -90,11 +90,11 @@ loadScripts(document, 'script');</script>
    Feed <jv>feed</jv> =
       <jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>,
          <js>"2013-05-08T12:29:29Z"</js>)
-      .subtitle(<jsm>text</jsm>(<js>"html"</js>)
-         .children(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
-      .links(
+      .setSubtitle(<jsm>text</jsm>(<js>"html"</js>)
+         .setText(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
+      .setLinks(
          <jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>)
-            .hreflang(<js>"en"</js>),
+            .setHreflang(<js>"en"</js>),
          <jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
       );
  </p>
@@ -153,32 +153,32 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;updated)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>Entry.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Entry.html#setUpdated(java.util.Calendar)"><code>Entry.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#entry(org.apache.juneau.bean.atom.Id,org.apache.juneau.bean.atom.Text,java.util.Calendar)" class="member-name-link">entry</a><wbr>(<a href="Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;id,
  <a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;updated)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>Entry.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Entry.html#setUpdated(java.util.Calendar)"><code>Entry.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Feed.html" title="class in org.apache.juneau.bean.atom">Feed</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#feed(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">feed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;updated)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="Feed.html#setId(org.apache.juneau.bean.atom.Id)"><code>Feed.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Feed.html#setUpdated(java.util.Calendar)"><code>Feed.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Feed.html" title="class in org.apache.juneau.bean.atom">Feed</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#feed(org.apache.juneau.bean.atom.Id,org.apache.juneau.bean.atom.Text,java.util.Calendar)" class="member-name-link">feed</a><wbr>(<a href="Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;id,
  <a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;updated)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="Feed.html#setId(org.apache.juneau.bean.atom.Id)"><code>Feed.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Feed.html#setUpdated(java.util.Calendar)"><code>Feed.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="Generator.html" title="class in org.apache.juneau.bean.atom">Generator</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#generator(java.lang.String)" class="member-name-link">generator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
@@ -267,7 +267,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <a href="Category.html" title="class in org.apache.juneau.bean.atom"><code>Category</code></a> element with the specified <a href="Category.html#setTerm(java.lang.String)"><code>Category.setTerm(String)</code></a> attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>term</code> - The <a href="Category.html#setTerm(java.lang.String)"><code>Category.setTerm(String)</code></a> attribute.</dd>
+<dd><code>term</code> - The <a href="Category.html#setTerm(java.lang.String)"><code>Category.setTerm(String)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <a href="Content.html" title="class in org.apache.juneau.bean.atom"><code>Content</code></a> element.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>type</code> - The <a href="Content.html#setType(java.lang.String)"><code>Content.setType(String)</code></a> attribute.</dd>
+<dd><code>type</code> - The <a href="Content.html#setType(java.lang.String)"><code>Content.setType(String)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -303,13 +303,13 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/AtomBuilder.html#line-89">entry</a></span><wbr><span class="parameters">(<a href="Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;id,
  <a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;updated)</span></div>
-<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>Entry.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Entry.html#setUpdated(java.util.Calendar)"><code>Entry.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - The <a href="Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>Entry.setId(Id)</code></a> attribute.</dd>
-<dd><code>title</code> - The <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a> attribute.</dd>
-<dd><code>updated</code> - The <a href="Entry.html#setUpdated(java.util.Calendar)"><code>Entry.setUpdated(Calendar)</code></a> attribute.</dd>
+<dd><code>id</code> - The <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>title</code> - The <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>updated</code> - The <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -321,13 +321,13 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/AtomBuilder.html#line-102">entry</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;updated)</span></div>
-<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>Entry.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Entry.html#setUpdated(java.util.Calendar)"><code>Entry.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates an <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - The <a href="Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>Entry.setId(Id)</code></a> attribute.</dd>
-<dd><code>title</code> - The <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a> attribute.</dd>
-<dd><code>updated</code> - The <a href="Entry.html#setUpdated(java.util.Calendar)"><code>Entry.setUpdated(Calendar)</code></a> attribute.</dd>
+<dd><code>id</code> - The <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a> attribute.  Can be <jk>null</jk>, in which case the property is set to an <a href="Id.html" title="class in org.apache.juneau.bean.atom"><code>Id</code></a> with no text (not left unset).</dd>
+<dd><code>title</code> - The <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a> attribute.  Can be <jk>null</jk>, in which case the property is set to a <a href="Text.html" title="class in org.apache.juneau.bean.atom"><code>Text</code></a> with no text (not left unset).</dd>
+<dd><code>updated</code> - The <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attribute.  Can be <jk>null</jk> or blank to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -339,13 +339,13 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Feed.html" title="class in org.apache.juneau.bean.atom">Feed</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/AtomBuilder.html#line-115">feed</a></span><wbr><span class="parameters">(<a href="Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;id,
  <a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;updated)</span></div>
-<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="Feed.html#setId(org.apache.juneau.bean.atom.Id)"><code>Feed.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Feed.html#setUpdated(java.util.Calendar)"><code>Feed.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - The <a href="Feed.html#setId(org.apache.juneau.bean.atom.Id)"><code>Feed.setId(Id)</code></a> attribute.</dd>
-<dd><code>title</code> - The <a href="Feed.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Feed.setTitle(Text)</code></a> attribute.</dd>
-<dd><code>updated</code> - The <a href="Feed.html#setUpdated(java.util.Calendar)"><code>Feed.setUpdated(Calendar)</code></a> attribute.</dd>
+<dd><code>id</code> - The <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>title</code> - The <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>updated</code> - The <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -357,13 +357,13 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Feed.html" title="class in org.apache.juneau.bean.atom">Feed</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/AtomBuilder.html#line-128">feed</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;updated)</span></div>
-<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="Feed.html#setId(org.apache.juneau.bean.atom.Id)"><code>Feed.setId(Id)</code></a>, <a href="Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Entry.setTitle(Text)</code></a>, and
- <a href="Feed.html#setUpdated(java.util.Calendar)"><code>Feed.setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates a <a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a> element with the specified <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - The <a href="Feed.html#setId(org.apache.juneau.bean.atom.Id)"><code>Feed.setId(Id)</code></a> attribute.</dd>
-<dd><code>title</code> - The <a href="Feed.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>Feed.setTitle(Text)</code></a> attribute.</dd>
-<dd><code>updated</code> - The <a href="Feed.html#setUpdated(java.util.Calendar)"><code>Feed.setUpdated(Calendar)</code></a> attribute.</dd>
+<dd><code>id</code> - The <a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a> attribute.  Can be <jk>null</jk>, in which case the property is set to an <a href="Id.html" title="class in org.apache.juneau.bean.atom"><code>Id</code></a> with no text (not left unset).</dd>
+<dd><code>title</code> - The <a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a> attribute.  Can be <jk>null</jk>, in which case the property is set to a <a href="Text.html" title="class in org.apache.juneau.bean.atom"><code>Text</code></a> with no text (not left unset).</dd>
+<dd><code>updated</code> - The <a href="CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attribute.  Can be <jk>null</jk> or blank to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -376,7 +376,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <a href="Generator.html" title="class in org.apache.juneau.bean.atom"><code>Generator</code></a> element with the specified <a href="Generator.html#setText(java.lang.String)"><code>Generator.setText(String)</code></a> child node.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The <a href="Generator.html#setText(java.lang.String)"><code>Generator.setText(String)</code></a> child node.</dd>
+<dd><code>text</code> - The <a href="Generator.html#setText(java.lang.String)"><code>Generator.setText(String)</code></a> child node.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -396,7 +396,7 @@ loadScripts(document, 'script');</script>
  URIs defined by <a href="../../marshall/UriResolver.html" title="class in org.apache.juneau.marshall"><code>UriResolver</code></a> can be used for values.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>uri</code> - The <a href="Icon.html#setUri(java.lang.Object)"><code>Icon.setUri(Object)</code></a> attribute.</dd>
+<dd><code>uri</code> - The <a href="Icon.html#setUri(java.lang.Object)"><code>Icon.setUri(Object)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -409,7 +409,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates an <a href="Id.html" title="class in org.apache.juneau.bean.atom"><code>Id</code></a> element with the specified <a href="Id.html#setText(java.lang.String)"><code>Id.setText(String)</code></a> child node.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The <a href="Id.html#setText(java.lang.String)"><code>Id.setText(String)</code></a> child node.</dd>
+<dd><code>text</code> - The <a href="Id.html#setText(java.lang.String)"><code>Id.setText(String)</code></a> child node.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -425,9 +425,9 @@ loadScripts(document, 'script');</script>
  <a href="Link.html#setHref(java.lang.String)"><code>Link.setHref(String)</code></a> attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>rel</code> - The <a href="Link.html#setRel(java.lang.String)"><code>Link.setRel(String)</code></a> attribute.</dd>
-<dd><code>type</code> - The <a href="Link.html#setType(java.lang.String)"><code>Link.setType(String)</code></a> attribute.</dd>
-<dd><code>href</code> - The <a href="Link.html#setHref(java.lang.String)"><code>Link.setHref(String)</code></a> attribute.</dd>
+<dd><code>rel</code> - The <a href="Link.html#setRel(java.lang.String)"><code>Link.setRel(String)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>type</code> - The <a href="Link.html#setType(java.lang.String)"><code>Link.setType(String)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>href</code> - The <a href="Link.html#setHref(java.lang.String)"><code>Link.setHref(String)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -447,7 +447,7 @@ loadScripts(document, 'script');</script>
  URIs defined by <a href="../../marshall/UriResolver.html" title="class in org.apache.juneau.marshall"><code>UriResolver</code></a> can be used for values.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>uri</code> - The <a href="Logo.html#setUri(java.lang.Object)"><code>Logo.setUri(Object)</code></a> attribute.</dd>
+<dd><code>uri</code> - The <a href="Logo.html#setUri(java.lang.Object)"><code>Logo.setUri(Object)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -460,7 +460,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <a href="Person.html" title="class in org.apache.juneau.bean.atom"><code>Person</code></a> element with the specified <a href="Person.html#setName(java.lang.String)"><code>Person.setName(String)</code></a> attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The <a href="Person.html#setName(java.lang.String)"><code>Person.setName(String)</code></a> attribute.</dd>
+<dd><code>name</code> - The <a href="Person.html#setName(java.lang.String)"><code>Person.setName(String)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>
@@ -495,7 +495,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <a href="Text.html" title="class in org.apache.juneau.bean.atom"><code>Text</code></a> element with the specified <a href="Text.html#setType(java.lang.String)"><code>Text.setType(String)</code></a> attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>type</code> - The <a href="Text.html#setType(java.lang.String)"><code>Text.setType(String)</code></a> attribute.</dd>
+<dd><code>type</code> - The <a href="Text.html#setType(java.lang.String)"><code>Text.setType(String)</code></a> attribute.  Can be <jk>null</jk> to leave the property unset.</dd>
 <dt>Returns:</dt>
 <dd>The new element.</dd>
 </dl>

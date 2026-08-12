@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The name of this variable.</dd>
+<dd><code>name</code> - The name of this variable.  Must not be <jk>null</jk>.</dd>
 <dd><code>streamed</code> - Whether this variable is 'streamed', meaning the <a href="#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer,java.lang.String)"><code>resolveTo(VarResolverSession, Writer, String)</code></a> method
    is implemented.
    If <jk>false</jk>, then the <a href="#resolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)"><code>resolve(VarResolverSession, String)</code></a> method is implemented.</dd>

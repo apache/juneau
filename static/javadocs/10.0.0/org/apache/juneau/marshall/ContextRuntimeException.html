@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-27">ContextRuntimeException</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-25">ContextRuntimeException</a></span>
 <span class="extends-implements">extends <a href="BasicRuntimeException.html" title="class in org.apache.juneau.marshall">BasicRuntimeException</a></span></div>
 <div class="block">General runtime operation exception that can occur in any of the context classes.</div>
 </section>
@@ -167,7 +167,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Object...)">
 <h3>ContextRuntimeException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-40">ContextRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-38">ContextRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -180,26 +180,26 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Throwable)">
 <h3>ContextRuntimeException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-49">ContextRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-47">ContextRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cause</code> - The initial cause of the exception.</dd>
+<dd><code>cause</code> - The initial cause of the exception.  Can be <jk>null</jk> (no cause is set).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>ContextRuntimeException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-60">ContextRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-58">ContextRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of this exception.</dd>
-<dd><code>message</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>cause</code> - The cause of this exception.  Can be <jk>null</jk> (no cause is set).</dd>
+<dd><code>message</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message (<c>%s</c> placeholders).</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMessage(java.lang.String,java.lang.Object...)">
 <h3>setMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContextRuntimeException.html" title="class in org.apache.juneau.marshall">ContextRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-64">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContextRuntimeException.html" title="class in org.apache.juneau.marshall">ContextRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextRuntimeException.html#line-62">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../commons/BasicRuntimeException.html#setMessage(java.lang.String,java.lang.Object...)">BasicRuntimeException</a></code></span></div>
 <div class="block">Sets the detail message on this exception.</div>

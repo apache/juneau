@@ -195,7 +195,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The store to use for storing thrown exception statistics.</dd>
+<dd><code>builder</code> - The builder for this object. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the timing information returned by <a href="#getStatsByTotalTime()"><code>getStatsByTotalTime()</code></a> in a readable format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>A report of all method execution times ordered by .</dd>
+<dd>A report of all method execution times ordered by total time descending.</dd>
 </dl>
 </section>
 </li>
@@ -263,7 +263,7 @@ loadScripts(document, 'script');</script>
  Creates a new stats object if one has not already been created.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>m</code> - The method to return the statistics for.</dd>
+<dd><code>m</code> - The method to return the statistics for. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The statistics for the specified method.  Never <jk>null</jk>.</dd>
 </dl>

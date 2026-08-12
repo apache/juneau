@@ -281,8 +281,8 @@ loadScripts(document, 'script');</script>
  commons-side path (no marshalling context).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>marshallingContext</code> - The marshalling-side context (as an opaque <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a>).  Can be <jk>null</jk>.</dd>
-<dd><code>beanFilter</code> - The bean filter applied to this bean meta.  Can be <jk>null</jk>.</dd>
+<dd><code>marshallingContext</code> - The marshalling-side context (as an opaque <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a>).  Can be <jk>null</jk>.  The effect is implementation-dependent — see <code>org.apache.juneau.marshall.MarshalledBeanMetaInitializer</code>, the sole concrete implementer of this SPI.</dd>
+<dd><code>beanFilter</code> - The bean filter applied to this bean meta.  Can be <jk>null</jk>.  The effect is implementation-dependent — see <code>org.apache.juneau.marshall.MarshalledBeanMetaInitializer</code>.</dd>
 <dd><code>classInfo</code> - The class info of the bean.  Must not be <jk>null</jk>.</dd>
 <dd><code>config</code> - The bean-modeling configuration.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
@@ -317,7 +317,7 @@ loadScripts(document, 'script');</script>
  <code>rawClass</code> found in any parent's registry, or <jk>null</jk> if none.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>marshallingContext</code> - The marshalling-side context.  Can be <jk>null</jk>.</dd>
+<dd><code>marshallingContext</code> - The marshalling-side context.  Can be <jk>null</jk>.  The effect is implementation-dependent — see <code>org.apache.juneau.marshall.MarshalledBeanMetaInitializer</code>.</dd>
 <dd><code>classInfo</code> - The bean's class info.</dd>
 <dd><code>rawClass</code> - The raw class to look up.</dd>
 <dt>Returns:</dt>

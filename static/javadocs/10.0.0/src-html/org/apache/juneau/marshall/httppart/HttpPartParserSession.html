@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">049</span><span id="line-49">    * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.</span>
 <span class="source-line-no">050</span><span id="line-50">    */</span>
-<span class="source-line-no">051</span><span id="line-51">   &lt;T&gt; T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta&lt;T&gt; toType) throws ParseException, SchemaValidationException;</span>
+<span class="source-line-no">051</span><span id="line-51">   &lt;T&gt; T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta&lt;T&gt; toType) throws ParseException, SchemaValidationException;</span>
 <span class="source-line-no">052</span><span id="line-52">}</span>
 
 

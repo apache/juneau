@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -356,10 +356,10 @@
 <span class="source-line-no">343</span><span id="line-343"></span>
 <span class="source-line-no">344</span><span id="line-344">      Object(MarshalledPropAnnotation.Builder b) {</span>
 <span class="source-line-no">345</span><span id="line-345">         super(b);</span>
-<span class="source-line-no">346</span><span id="line-346">         description = copyOf(b.description);</span>
-<span class="source-line-no">347</span><span id="line-347">         dictionary = copyOf(b.dictionary);</span>
+<span class="source-line-no">346</span><span id="line-346">         description = cp(b.description);</span>
+<span class="source-line-no">347</span><span id="line-347">         dictionary = cp(b.dictionary);</span>
 <span class="source-line-no">348</span><span id="line-348">         format = b.format;</span>
-<span class="source-line-no">349</span><span id="line-349">         view = copyOf(b.view);</span>
+<span class="source-line-no">349</span><span id="line-349">         view = cp(b.view);</span>
 <span class="source-line-no">350</span><span id="line-350">         durationFormat = b.durationFormat;</span>
 <span class="source-line-no">351</span><span id="line-351">         periodFormat = b.periodFormat;</span>
 <span class="source-line-no">352</span><span id="line-352">         calendarFormat = b.calendarFormat;</span>

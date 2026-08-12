@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The initial value.</dd>
+<dd><code>value</code> - The initial value.  Can be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The initial value.</dd>
+<dd><code>value</code> - The initial value.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new boolean value.</dd>
 </dl>
@@ -275,7 +275,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="Holder.html#is(T)">is</a></code>&nbsp;in class&nbsp;<code><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to compare to.</dd>
+<dd><code>value</code> - The value to compare to.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the current value is equal to the specified value.</dd>
 </dl>
@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The values to compare to.</dd>
+<dd><code>values</code> - The values to compare to.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the current value matches any of the specified values.</dd>
 </dl>

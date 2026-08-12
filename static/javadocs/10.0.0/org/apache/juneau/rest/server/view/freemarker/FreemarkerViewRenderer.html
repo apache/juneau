@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></code>, <code><a href="../ViewRenderer.html" title="interface in org.apache.juneau.rest.server.view">ViewRenderer</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-70">FreemarkerViewRenderer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-71">FreemarkerViewRenderer</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.rest.server.view">ViewRenderer</a></span></div>
 <div class="block"><a href="../../processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor"><code>ResponseProcessor</code></a> that detects <a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a>-typed return values and asks the
@@ -204,7 +204,7 @@ implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT_CONTENT_TYPE">
 <h3>DEFAULT_CONTENT_TYPE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-76">DEFAULT_CONTENT_TYPE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-77">DEFAULT_CONTENT_TYPE</a></span></div>
 <div class="block">Default <code>Content-Type</code> applied when the view does not specify one explicitly.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -219,7 +219,7 @@ implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="NO_ENGINE_DIAGNOSTIC">
 <h3>NO_ENGINE_DIAGNOSTIC</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-86">NO_ENGINE_DIAGNOSTIC</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-87">NO_ENGINE_DIAGNOSTIC</a></span></div>
 <div class="block">Diagnostic message emitted when no FreeMarker engine can be found on the classpath at
  render-time.
 
@@ -247,7 +247,7 @@ implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>FreemarkerViewRenderer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-73">FreemarkerViewRenderer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-74">FreemarkerViewRenderer</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -261,7 +261,7 @@ implements <a href="../ViewRenderer.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="process(org.apache.juneau.rest.server.RestOpSession)">
 <h3>process</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-96">process</a></span><wbr><span class="parameters">(<a href="../../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#line-106">process</a></span><wbr><span class="parameters">(<a href="../../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../processor/ResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)">ResponseProcessor</a></code></span></div>

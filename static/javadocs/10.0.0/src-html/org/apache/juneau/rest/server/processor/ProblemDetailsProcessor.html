@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.bean.rfc7807.adapter.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.http.header.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.json.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.marshaller.*;</span>
 <span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.marshall.serializer.*;</span>
 <span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.rest.server.*;</span>
 <span class="source-line-no">031</span><span id="line-31"></span>
@@ -132,21 +132,21 @@
 <span class="source-line-no">119</span><span id="line-119">      Problem problem;</span>
 <span class="source-line-no">120</span><span id="line-120">      boolean isErrorPath;</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">      if (raw instanceof Problem p) {</span>
-<span class="source-line-no">123</span><span id="line-123">         problem = p;</span>
+<span class="source-line-no">122</span><span id="line-122">      if (raw instanceof Problem raw2) {</span>
+<span class="source-line-no">123</span><span id="line-123">         problem = raw2;</span>
 <span class="source-line-no">124</span><span id="line-124">         isErrorPath = false;</span>
-<span class="source-line-no">125</span><span id="line-125">      } else if (raw instanceof ProblemException pe) {</span>
-<span class="source-line-no">126</span><span id="line-126">         problem = pe.getProblem();</span>
+<span class="source-line-no">125</span><span id="line-125">      } else if (raw instanceof ProblemException raw2) {</span>
+<span class="source-line-no">126</span><span id="line-126">         problem = raw2.getProblem();</span>
 <span class="source-line-no">127</span><span id="line-127">         isErrorPath = opSession.getContext().isProblemDetails();</span>
-<span class="source-line-no">128</span><span id="line-128">      } else if (raw instanceof BasicHttpException e) {</span>
+<span class="source-line-no">128</span><span id="line-128">      } else if (raw instanceof BasicHttpException raw2) {</span>
 <span class="source-line-no">129</span><span id="line-129">         if (! opSession.getContext().isProblemDetails())</span>
 <span class="source-line-no">130</span><span id="line-130">            return NEXT;</span>
-<span class="source-line-no">131</span><span id="line-131">         problem = mapException(opSession, e);</span>
+<span class="source-line-no">131</span><span id="line-131">         problem = mapException(opSession, raw2);</span>
 <span class="source-line-no">132</span><span id="line-132">         isErrorPath = true;</span>
-<span class="source-line-no">133</span><span id="line-133">      } else if (raw instanceof Throwable t) {</span>
+<span class="source-line-no">133</span><span id="line-133">      } else if (raw instanceof Throwable raw2) {</span>
 <span class="source-line-no">134</span><span id="line-134">         if (! opSession.getContext().isProblemDetails())</span>
 <span class="source-line-no">135</span><span id="line-135">            return NEXT;</span>
-<span class="source-line-no">136</span><span id="line-136">         problem = mapException(opSession, t);</span>
+<span class="source-line-no">136</span><span id="line-136">         problem = mapException(opSession, raw2);</span>
 <span class="source-line-no">137</span><span id="line-137">         if (problem == null)</span>
 <span class="source-line-no">138</span><span id="line-138">            return NEXT;</span>
 <span class="source-line-no">139</span><span id="line-139">         isErrorPath = true;</span>
@@ -174,7 +174,7 @@
 <span class="source-line-no">161</span><span id="line-161"></span>
 <span class="source-line-no">162</span><span id="line-162">      try {</span>
 <span class="source-line-no">163</span><span id="line-163">         var os = res.getNegotiatedOutputStream();</span>
-<span class="source-line-no">164</span><span id="line-164">         JsonSerializer.DEFAULT.serialize(problem, os);</span>
+<span class="source-line-no">164</span><span id="line-164">         Json.DEFAULT.write(problem, os);</span>
 <span class="source-line-no">165</span><span id="line-165">         os.flush();</span>
 <span class="source-line-no">166</span><span id="line-166">         os.finish();</span>
 <span class="source-line-no">167</span><span id="line-167">      } catch (SerializeException e) {</span>
@@ -202,8 +202,8 @@
 <span class="source-line-no">189</span><span id="line-189">         if (result != null)</span>
 <span class="source-line-no">190</span><span id="line-190">            return result;</span>
 <span class="source-line-no">191</span><span id="line-191">      }</span>
-<span class="source-line-no">192</span><span id="line-192">      if (thrown instanceof BasicHttpException e)</span>
-<span class="source-line-no">193</span><span id="line-193">         return ProblemAdapters.fromException(e);</span>
+<span class="source-line-no">192</span><span id="line-192">      if (thrown instanceof BasicHttpException thrown2)</span>
+<span class="source-line-no">193</span><span id="line-193">         return ProblemAdapters.fromException(thrown2);</span>
 <span class="source-line-no">194</span><span id="line-194">      return null;</span>
 <span class="source-line-no">195</span><span id="line-195">   }</span>
 <span class="source-line-no">196</span><span id="line-196"></span>

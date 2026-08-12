@@ -118,7 +118,7 @@
 <span class="source-line-no">105</span><span id="line-105">    * &lt;p&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    * {@link #NOT_SET} falls through to {@link #INDICES}.</span>
 <span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * @param value The value to format.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">108</span><span id="line-108">    * @param value The value to format.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">109</span><span id="line-109">    * @param format The format to use.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as {@link #INDICES}).</span>
 <span class="source-line-no">110</span><span id="line-110">    * @return The formatted wire representation, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">111</span><span id="line-111">    */</span>
@@ -157,7 +157,7 @@
 <span class="source-line-no">144</span><span id="line-144">    * Parsing is directed by the {@code format} hint (defaulting to {@link #INDICES}); the three textual</span>
 <span class="source-line-no">145</span><span id="line-145">    * shapes are mutually ambiguous, so the configured format is honored rather than auto-detected.</span>
 <span class="source-line-no">146</span><span id="line-146">    *</span>
-<span class="source-line-no">147</span><span id="line-147">    * @param value The wire value.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @param value The wire value.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;) or blank (returns an empty {@link BitSet}).</span>
 <span class="source-line-no">148</span><span id="line-148">    * @param format The configured format hint.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as {@link #INDICES}).</span>
 <span class="source-line-no">149</span><span id="line-149">    * @return The parsed {@link BitSet}, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">150</span><span id="line-150">    * @throws IllegalArgumentException If the value does not match the configured textual shape.</span>
@@ -186,7 +186,7 @@
 <span class="source-line-no">173</span><span id="line-173">            }</span>
 <span class="source-line-no">174</span><span id="line-174">         }</span>
 <span class="source-line-no">175</span><span id="line-175">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">176</span><span id="line-176">         throw iaex("Invalid BitSet value ''{0}'' for format {1}: {2}", value, fmt, e.getMessage());</span>
+<span class="source-line-no">176</span><span id="line-176">         throw iaex("Invalid BitSet value '%s' for format %s: %s", value, fmt, e.getMessage());</span>
 <span class="source-line-no">177</span><span id="line-177">      }</span>
 <span class="source-line-no">178</span><span id="line-178">      return bs;</span>
 <span class="source-line-no">179</span><span id="line-179">   }</span>

@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html" title="class or interface in java.util" class="external-link">java.util.AbstractCollection</a>&lt;E&gt;
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractList.html" title="class or interface in java.util" class="external-link">java.util.AbstractList</a>&lt;E&gt;
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractSequentialList.html" title="class or interface in java.util" class="external-link">java.util.AbstractSequentialList</a>&lt;E&gt;
-<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">java.util.LinkedList</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;
+<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">java.util.LinkedList</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&gt;
 <div class="inheritance">org.apache.juneau.bean.jsonschema.JsonSchemaArray</div>
 </div>
 </div>
@@ -87,11 +87,11 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Cloneable.html" title="class or interface in java.lang" class="external-link">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html" title="class or interface in java.util" class="external-link">Deque</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Queue.html" title="class or interface in java.util" class="external-link">Queue</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Cloneable.html" title="class or interface in java.lang" class="external-link">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html" title="class or interface in java.util" class="external-link">Deque</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Queue.html" title="class or interface in java.util" class="external-link">Queue</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#line-26">JsonSchemaArray</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">LinkedList</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedList.html" title="class or interface in java.util" class="external-link">LinkedList</a>&lt;<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&gt;</span></div>
 <div class="block">Represents a list of <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> objects.</div>
 </section>
 <section class="summary">
@@ -117,7 +117,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Default constructor.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">JsonSchemaArray</a><wbr>(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;value)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">JsonSchemaArray</a><wbr>(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructor with predefined types to add to this list.</div>
 </div>
@@ -136,7 +136,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonSchemaArray.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaArray</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addAll(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addAll</a><wbr>(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addAll(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addAll</a><wbr>(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;...&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience method for adding one or more <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> objects to this array.</div>
 </div>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.bean.jsonschema.JsonSchema...)">
 <h3>JsonSchemaArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#line-40">JsonSchemaArray</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#line-40">JsonSchemaArray</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;...&nbsp;value)</span></div>
 <div class="block">Constructor with predefined types to add to this list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addAll(org.apache.juneau.bean.jsonschema.JsonSchema...)">
 <h3>addAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaArray.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaArray</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#line-50">addAll</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchemaArray.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaArray</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaArray.html#line-50">addAll</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;...&nbsp;value)</span></div>
 <div class="block">Convenience method for adding one or more <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> objects to this array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

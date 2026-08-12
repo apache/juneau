@@ -342,8 +342,8 @@ loadScripts(document, 'script');</script>
  The available scopes for the OAuth2 security scheme.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The scope key.  Must not be <jk>null</jk>.</dd>
-<dd><code>value</code> - The scope value.  Must not be <jk>null</jk>.</dd>
+<dd><code>key</code> - The scope key.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
+<dd><code>value</code> - The scope value.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -524,7 +524,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="SwaggerElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="SwaggerElement.html" title="class in org.apache.juneau.bean.swagger">SwaggerElement</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>

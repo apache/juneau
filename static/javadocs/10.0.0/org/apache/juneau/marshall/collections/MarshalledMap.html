@@ -724,7 +724,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="EMPTY_MAP">
 <h3>EMPTY_MAP</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-168">EMPTY_MAP</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-169">EMPTY_MAP</a></span></div>
 <div class="block">An empty read-only MarshalledMap.</div>
 </section>
 </li>
@@ -739,14 +739,14 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MarshalledMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-300">MarshalledMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-301">MarshalledMap</a></span>()</div>
 <div class="block">Construct an empty map.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.MarshallingSession)">
 <h3>MarshalledMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-307">MarshalledMap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-308">MarshalledMap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
 <div class="block">Construct an empty map with the specified bean context.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -757,14 +757,14 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.CharSequence,org.apache.juneau.marshall.parser.Parser)">
 <h3>MarshalledMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-322">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-323">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
               throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a map initialized by parsing the specified string with the specified parser.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>in</code> - The input being parsed.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> or empty (results in an empty map; no parsing occurs).</dd>
 <dd><code>p</code> - The parser to use to parse the input.
    <br>Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
@@ -775,12 +775,12 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.Map)">
 <h3>MarshalledMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-336">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;in)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-337">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;in)</span></div>
 <div class="block">Construct a map initialized with the specified map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>in</code> - The map to copy.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk> (results in an empty map).
    <br>Keys will be converted to strings using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.</dd>
 </dl>
 </section>
@@ -788,7 +788,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object...)">
 <h3>MarshalledMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-347">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-348">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</span></div>
 <div class="block">Construct a map initialized with the specified key/value pairs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -799,7 +799,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Reader,org.apache.juneau.marshall.parser.Parser)">
 <h3>MarshalledMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-363">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-364">MarshalledMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
               throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a map initialized by parsing the specified reader with the specified parser.</div>
@@ -824,7 +824,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-206">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-207">create</a></span>()</div>
 <div class="block">Construct an empty map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -835,7 +835,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="filteredMap()">
 <h3>filteredMap</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-215">filteredMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-216">filteredMap</a></span>()</div>
 <div class="block">Construct an empty filtered map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -846,7 +846,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="filteredMap(java.lang.Object...)">
 <h3>filteredMap</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-225">filteredMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-226">filteredMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</span></div>
 <div class="block">Construct a filtered map initialized with the specified key/value pairs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -859,12 +859,12 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="of(java.util.Map)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-238">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-239">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;values)</span></div>
 <div class="block">Construct a map initialized with the specified map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>values</code> - The map to copy.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).
    <br>Keys will be converted to strings using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>A new map or <jk>null</jk> if the map was <jk>null</jk>.</dd>
@@ -874,7 +874,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="of(java.lang.Object...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-248">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-249">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</span></div>
 <div class="block">Construct a map initialized with the specified key/value pairs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -887,7 +887,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofString(java.lang.CharSequence,org.apache.juneau.marshall.parser.Parser)">
 <h3>ofString</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-262">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-263">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
                               throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a map initialized by parsing the specified string with the specified parser.</div>
@@ -906,7 +906,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofString(java.io.Reader,org.apache.juneau.marshall.parser.Parser)">
 <h3>ofString</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-276">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-277">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
                               throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a map initialized by parsing the specified reader with the specified parser.</div>
@@ -925,11 +925,11 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="append(java.util.Map)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-374">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-375">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;values)</span></div>
 <div class="block">Appends all the entries in the specified map to this map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The map to copy.  Can be <jk>null</jk>.</dd>
+<dd><code>values</code> - The map to copy.  Can be <jk>null</jk> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -938,7 +938,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="append(java.lang.String,java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-387">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-388">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds an entry to this map.</div>
 <dl class="notes">
@@ -953,7 +953,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendFirst(java.util.function.Predicate,java.lang.String,T...)">
 <h3 id="appendFirst(java.util.function.Predicate,java.lang.String,java.lang.Object[])">appendFirst</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-401">appendFirst</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-402">appendFirst</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  T...&nbsp;values)</span></div>
 <div class="block">Adds the first value that matches the specified predicate.</div>
@@ -972,7 +972,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendIf(boolean,java.lang.String,java.lang.Object)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-420">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-421">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Add if flag is <jk>true</jk>.</div>
@@ -989,7 +989,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendIf(java.util.function.Predicate,java.lang.String,T)">
 <h3 id="appendIf(java.util.function.Predicate,java.lang.String,java.lang.Object)">appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-435">appendIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-436">appendIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  T&nbsp;value)</span></div>
 <div class="block">Add if predicate matches value.</div>
@@ -1008,7 +1008,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendIfAbsent(java.lang.String,java.lang.Object)">
 <h3>appendIfAbsent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-446">appendIfAbsent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-447">appendIfAbsent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds a value in this map if the entry does not exist or the current value is <jk>null</jk>.</div>
 <dl class="notes">
@@ -1023,7 +1023,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="appendIfAbsentIf(java.util.function.Predicate,java.lang.String,T)">
 <h3 id="appendIfAbsentIf(java.util.function.Predicate,java.lang.String,java.lang.Object)">appendIfAbsentIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-459">appendIfAbsentIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;predicate,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-460">appendIfAbsentIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;predicate,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  T&nbsp;value)</span></div>
 <div class="block">Adds a value in this map if the entry does not exist or the current value is <jk>null</jk> and the value matches the specified predicate.</div>
@@ -1042,7 +1042,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="at(java.lang.String)">
 <h3>at</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-481">at</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-482">at</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
 <div class="block">Returns the node addressed by the specified <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901</a>
  JSON Pointer relative to this map.
 
@@ -1064,7 +1064,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString(org.apache.juneau.marshall.serializer.WriterSerializer)">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-491">toString</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>&nbsp;serializer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-492">toString</a></span><wbr><span class="parameters">(<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>&nbsp;serializer)</span></div>
 <div class="block">Serializes this map to a string using the specified serializer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1077,7 +1077,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="cast(java.lang.Class)">
 <h3>cast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-507">cast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-508">cast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Converts this map into an object of the specified type.
 
  <p>
@@ -1097,7 +1097,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="cast(org.apache.juneau.marshall.ClassMeta)">
 <h3>cast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-530">cast</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-531">cast</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;cm)</span></div>
 <div class="block">Same as <a href="#cast(java.lang.Class)"><code>cast(Class)</code></a>, except allows you to specify a <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> parameter.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -1114,7 +1114,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="containsKey(java.lang.Object)">
 <h3>containsKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-540">containsKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-541">containsKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#containsKey(java.lang.Object)" title="class or interface in java.util" class="external-link">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -1126,7 +1126,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="containsKeyNotEmpty(java.lang.String)">
 <h3>containsKeyNotEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-558">containsKeyNotEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-559">containsKeyNotEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
 
  <p>
@@ -1142,7 +1142,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="containsOuterKey(java.lang.Object)">
 <h3>containsOuterKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-573">containsOuterKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-574">containsOuterKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
 <div class="block">Returns <jk>true</jk> if this map contains the specified key, ignoring the inner map if it exists.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1155,7 +1155,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="deleteAt(java.lang.String)">
 <h3>deleteAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-588">deleteAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-589">deleteAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Similar to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link"><code>remove(Object)</code></a>, but the key is a slash-delimited path used to traverse entries
  in this POJO.
 
@@ -1173,7 +1173,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="entrySet()">
 <h3>entrySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-592">entrySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-593">entrySet</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#entrySet()" title="class or interface in java.util" class="external-link">entrySet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -1185,7 +1185,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="exclude(java.lang.String...)">
 <h3>exclude</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-650">exclude</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-651">exclude</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns a copy of this map without the specified keys.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1198,7 +1198,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="filtered()">
 <h3>filtered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-676">filtered</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-677">filtered</a></span>()</div>
 <div class="block">Enables filtering based on default values.
 
  <p>
@@ -1218,7 +1218,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="filtered(java.util.function.Predicate)">
 <h3>filtered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-698">filtered</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-699">filtered</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
 <div class="block">Enables filtering based on a predicate test.
 
  <p>
@@ -1234,7 +1234,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="find(java.lang.Class,java.lang.String...)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-717">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-718">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the value for the first key in the list that has an entry in this map.
 
@@ -1257,7 +1257,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="find(java.lang.String...)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-730">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-731">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the value for the first key in the list that has an entry in this map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1270,7 +1270,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findBoolean(java.lang.String...)">
 <h3>findBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-746">findBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-747">findBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the first entry that exists converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1286,7 +1286,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findInt(java.lang.String...)">
 <h3>findInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-759">findInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-760">findInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the first entry that exists converted to an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1302,7 +1302,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findKeyIgnoreCase(java.lang.String)">
 <h3>findKeyIgnoreCase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-771">findKeyIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-772">findKeyIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Searches for the specified key in this map ignoring case.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1316,7 +1316,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findList(java.lang.String...)">
 <h3>findList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-787">findList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-788">findList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the first entry that exists converted to a <a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledList</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1332,7 +1332,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findLong(java.lang.String...)">
 <h3>findLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-800">findLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-801">findLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the first entry that exists converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link"><code>Long</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1348,7 +1348,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findMap(java.lang.String...)">
 <h3>findMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-813">findMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-814">findMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the first entry that exists converted to a <a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledMap</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1364,7 +1364,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="findString(java.lang.String...)">
 <h3>findString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-825">findString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-826">findString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns the first entry that exists converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1378,7 +1378,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="get(java.lang.Object)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-829">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-830">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#get(java.lang.Object)" title="class or interface in java.util" class="external-link">get</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -1390,7 +1390,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-848">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-849">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Same as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#get(java.lang.Object)" title="class or interface in java.util" class="external-link"><code>get()</code></a>, but casts or converts the value to the specified class type.
 
@@ -1410,7 +1410,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-867">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-868">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span></div>
 <div class="block">Same as <a href="#get(java.lang.String,java.lang.Class)"><code>get(String,Class)</code></a>, but allows for complex data types consisting of collections or maps.
@@ -1435,7 +1435,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getAt(java.lang.String,java.lang.Class)">
 <h3>getAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-881">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-882">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Same as <a href="#get(java.lang.String,java.lang.Class)"><code>get(String,Class)</code></a>, but the key is a slash-delimited path used to traverse
  entries in this POJO.</div>
@@ -1453,7 +1453,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getAt(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>getAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-895">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-896">getAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span></div>
 <div class="block">Same as <a href="#getAt(java.lang.String,java.lang.Class)"><code>getAt(String,Class)</code></a>, but allows for conversion to complex maps and collections.</div>
@@ -1472,7 +1472,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBoolean(java.lang.String)">
 <h3>getBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-906">getBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-907">getBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1487,7 +1487,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBoolean(java.lang.String,java.lang.Boolean)">
 <h3>getBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-918">getBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-919">getBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;defVal)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a>.</div>
 <dl class="notes">
@@ -1504,7 +1504,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getClassMeta(java.lang.String)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-929">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-930">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the class type of the object at the specified index.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1517,7 +1517,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getFirstKey()">
 <h3>getFirstKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-941">getFirstKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-942">getFirstKey</a></span>()</div>
 <div class="block">Returns the first key in the map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1528,7 +1528,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInt(java.lang.String)">
 <h3>getInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-950">getInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-951">getInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the specified entry value converted to an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1543,7 +1543,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInt(java.lang.String,java.lang.Integer)">
 <h3>getInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-962">getInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-963">getInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;defVal)</span></div>
 <div class="block">Returns the specified entry value converted to an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a>.</div>
 <dl class="notes">
@@ -1560,7 +1560,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getList(java.lang.String)">
 <h3>getList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-973">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-974">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledList</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1575,7 +1575,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getList(java.lang.String,boolean)">
 <h3>getList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-985">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-986">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  boolean&nbsp;createIfNotExists)</span></div>
 <div class="block">Same as <a href="#getList(java.lang.String)"><code>getList(String)</code></a> but creates a new empty <a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledList</code></a> if it doesn't already exist.</div>
 <dl class="notes">
@@ -1592,7 +1592,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getList(java.lang.String,java.lang.Class,java.util.List)">
 <h3>getList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1004">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1005">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;def)</span></div>
 <div class="block">Same as <a href="#getList(java.lang.String,org.apache.juneau.marshall.collections.MarshalledList)"><code>getList(String, MarshalledList)</code></a> except converts the elements to the specified types.</div>
@@ -1613,7 +1613,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getList(java.lang.String,org.apache.juneau.marshall.collections.MarshalledList)">
 <h3>getList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1019">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1020">getList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections">MarshalledList</a>&nbsp;defVal)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledList</code></a>.</div>
 <dl class="notes">
@@ -1630,7 +1630,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getLong(java.lang.String)">
 <h3>getLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1030">getLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1031">getLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link"><code>Long</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1645,7 +1645,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getLong(java.lang.String,java.lang.Long)">
 <h3>getLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1042">getLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1043">getLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;defVal)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link"><code>Long</code></a>.</div>
 <dl class="notes">
@@ -1662,7 +1662,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMap(java.lang.String)">
 <h3>getMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1053">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1054">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1677,7 +1677,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMap(java.lang.String,boolean)">
 <h3>getMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1065">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1066">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  boolean&nbsp;createIfNotExists)</span></div>
 <div class="block">Same as <a href="#getMap(java.lang.String)"><code>getMap(String)</code></a> but creates a new empty <a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledMap</code></a> if it doesn't already exist.</div>
 <dl class="notes">
@@ -1695,7 +1695,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="detail" id="getMap(java.lang.String,java.lang.Class,java.lang.Class,java.util.Map)">
 <h3>getMap</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1086">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1087">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K&gt;&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;valType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;def)</span></div>
@@ -1719,7 +1719,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getMap(java.lang.String,org.apache.juneau.marshall.collections.MarshalledMap)">
 <h3>getMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1101">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1102">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a>&nbsp;defVal)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledMap</code></a>.</div>
 <dl class="notes">
@@ -1736,7 +1736,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getMarshallingSession()">
 <h3>getMarshallingSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1110">getMarshallingSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1111">getMarshallingSession</a></span>()</div>
 <div class="block">Returns the <a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall"><code>MarshallingSession</code></a> currently associated with this map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1747,7 +1747,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getString(java.lang.String)">
 <h3>getString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1118">getString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1119">getString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1760,7 +1760,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getString(java.lang.String,java.lang.String)">
 <h3>getString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1129">getString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1130">getString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;defVal)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.</div>
 <dl class="notes">
@@ -1775,7 +1775,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getStringArray(java.lang.String)">
 <h3>getStringArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1139">getStringArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1140">getStringArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Returns the specified entry value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>[] array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1788,7 +1788,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getStringArray(java.lang.String,java.lang.String[])">
 <h3>getStringArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1150">getStringArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1151">getStringArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;def)</span></div>
 <div class="block">Same as <a href="#getStringArray(java.lang.String)"><code>getStringArray(String)</code></a> but returns a default value if the value cannot be found.</div>
 <dl class="notes">
@@ -1803,7 +1803,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getSwapped(java.lang.String,org.apache.juneau.marshall.swap.ObjectSwap)">
 <h3>getSwapped</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1176">getSwapped</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1177">getSwapped</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;T,<wbr>?&gt;&nbsp;objectSwap)</span>
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#get(java.lang.Object)" title="class or interface in java.util" class="external-link"><code>get()</code></a>, but converts the raw value to the specified class type using the specified
@@ -1824,7 +1824,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getWithDefault(java.lang.String,java.lang.Object)">
 <h3>getWithDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1201">getWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1202">getWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;def)</span></div>
 <div class="block">Same as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#get(java.lang.Object)" title="class or interface in java.util" class="external-link"><code>get()</code></a>, but returns the default value if the key could not be found.</div>
 <dl class="notes">
@@ -1839,7 +1839,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getWithDefault(java.lang.String,T,java.lang.Class)">
 <h3 id="getWithDefault(java.lang.String,java.lang.Object,java.lang.Class)">getWithDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1215">getWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1216">getWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  T&nbsp;def,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Same as <a href="#get(java.lang.String,java.lang.Class)"><code>get(String,Class)</code></a> but returns a default value if the value does not exist.</div>
@@ -1848,7 +1848,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <dd><code>T</code> - The class type returned.</dd>
 <dt>Parameters:</dt>
 <dd><code>key</code> - The key.</dd>
-<dd><code>def</code> - The default value.  Can be <jk>null</jk>.</dd>
+<dd><code>def</code> - The default value.  Can be <jk>null</jk> (returns <jk>null</jk> if the entry doesn't exist).</dd>
 <dd><code>type</code> - The class type returned.</dd>
 <dt>Returns:</dt>
 <dd>The value, or <jk>null</jk> if the entry doesn't exist.</dd>
@@ -1858,7 +1858,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getWithDefault(java.lang.String,T,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3 id="getWithDefault(java.lang.String,java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type[])">getWithDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1229">getWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1230">getWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  T&nbsp;def,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span></div>
@@ -1868,7 +1868,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <dd><code>T</code> - The class type returned.</dd>
 <dt>Parameters:</dt>
 <dd><code>key</code> - The key.</dd>
-<dd><code>def</code> - The default value.  Can be <jk>null</jk>.</dd>
+<dd><code>def</code> - The default value.  Can be <jk>null</jk> (returns <jk>null</jk> if the entry doesn't exist).</dd>
 <dd><code>type</code> - The class type returned.</dd>
 <dd><code>args</code> - The class type parameters.</dd>
 <dt>Returns:</dt>
@@ -1879,7 +1879,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="include(java.lang.String...)">
 <h3>include</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1243">include</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1244">include</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Returns a copy of this map with only the specified keys.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1892,7 +1892,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="inner(java.util.Map)">
 <h3>inner</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1264">inner</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;inner)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1265">inner</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;inner)</span></div>
 <div class="block">Set an inner map in this map to allow for chained get calls.
 
  <p>
@@ -1909,7 +1909,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="is(java.lang.String,boolean)">
 <h3>is</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1277">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1278">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  boolean&nbsp;defVal)</span></div>
 <div class="block">Shortcut for <code>getWithDefault(key, defVal, Boolean.<jk>class</jk>)</code>.</div>
 <dl class="notes">
@@ -1926,7 +1926,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isUnmodifiable()">
 <h3>isUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1287">isUnmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1288">isUnmodifiable</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this map is unmodifiable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1937,7 +1937,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="keepAll(java.lang.String...)">
 <h3>keepAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1298">keepAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1299">keepAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">The opposite of <a href="#removeAll(java.lang.String...)"><code>removeAll(String...)</code></a>.
 
  <p>
@@ -1953,7 +1953,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1314">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1315">keySet</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#keySet()" title="class or interface in java.util" class="external-link">keySet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -1965,7 +1965,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1324">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1325">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#equals(java.lang.Object)" title="class or interface in java.util" class="external-link">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -1977,7 +1977,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1329">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1330">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#hashCode()" title="class or interface in java.util" class="external-link">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -1989,7 +1989,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="modifiable()">
 <h3>modifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1339">modifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1340">modifiable</a></span>()</div>
 <div class="block">Returns a modifiable copy of this map if it's unmodifiable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2000,7 +2000,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="postAt(java.lang.String,java.lang.Object)">
 <h3>postAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1356">postAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1357">postAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Similar to <a href="#putAt(java.lang.String,java.lang.Object)"><code>putAt(String,Object)</code></a>, but used to append to collections and arrays.
 
@@ -2019,7 +2019,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="put(java.lang.String,java.lang.Object)">
 <h3>put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1360">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1361">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -2032,7 +2032,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="putAt(java.lang.String,java.lang.Object)">
 <h3>putAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1379">putAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1380">putAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Same as <c>put(String,Object)</c>, but the key is a slash-delimited path used to traverse entries in this
  POJO.
@@ -2052,7 +2052,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeAll(java.util.Collection)">
 <h3>removeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1388">removeAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1389">removeAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;keys)</span></div>
 <div class="block">Convenience method for removing several keys at once.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2063,7 +2063,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeAll(java.lang.String...)">
 <h3>removeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1397">removeAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1398">removeAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;keys)</span></div>
 <div class="block">Convenience method for removing several keys at once.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2074,7 +2074,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeBoolean(java.lang.String)">
 <h3>removeBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1409">removeBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1410">removeBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Boolean.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2089,7 +2089,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeBoolean(java.lang.String,java.lang.Boolean)">
 <h3>removeBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1421">removeBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1422">removeBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;def)</span></div>
 <div class="block">Equivalent to calling <code>removeWithDefault(key,def,Boolean.<jk>class</jk>)</code>.</div>
 <dl class="notes">
@@ -2106,7 +2106,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeInt(java.lang.String)">
 <h3>removeInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1432">removeInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1433">removeInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Integer.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2121,7 +2121,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeInt(java.lang.String,java.lang.Integer)">
 <h3>removeInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1444">removeInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1445">removeInt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;def)</span></div>
 <div class="block">Equivalent to calling <code>removeWithDefault(key,def,Integer.<jk>class</jk>)</code>.</div>
 <dl class="notes">
@@ -2138,7 +2138,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeString(java.lang.String)">
 <h3>removeString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1455">removeString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1456">removeString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,String.<jk>class</jk>)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2153,7 +2153,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeString(java.lang.String,java.lang.String)">
 <h3>removeString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1467">removeString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1468">removeString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;def)</span></div>
 <div class="block">Equivalent to calling <code>removeWithDefault(key,def,String.<jk>class</jk>)</code>.</div>
 <dl class="notes">
@@ -2170,7 +2170,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="removeWithDefault(java.lang.String,T,java.lang.Class)">
 <h3 id="removeWithDefault(java.lang.String,java.lang.Object,java.lang.Class)">removeWithDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1481">removeWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1482">removeWithDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  T&nbsp;defVal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Equivalent to calling <c>get(class,key,def)</c> followed by <c>remove(key);</c></div>
@@ -2191,7 +2191,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="session(org.apache.juneau.marshall.MarshallingSession)">
 <h3>session</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1499">session</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1500">session</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
 <div class="block">Override the default bean session used for converting POJOs.
 
  <p>
@@ -2210,7 +2210,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="setBeanSession(org.apache.juneau.marshall.MarshallingSession)">
 <h3>setBeanSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1510">setBeanSession</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1511">setBeanSession</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;value)</span></div>
 <div class="block">Sets the <a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall"><code>MarshallingSession</code></a> currently associated with this map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -2223,7 +2223,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="unmodifiable()">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1520">unmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1521">unmodifiable</a></span>()</div>
 <div class="block">Returns an unmodifiable copy of this map if it's modifiable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2234,7 +2234,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="bs()">
 <h3>bs</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1531">bs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1532">bs</a></span>()</div>
 <div class="block">Returns the <a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall"><code>MarshallingSession</code></a> associated with this map (lazily defaults to <a href="../MarshallingContext.html#DEFAULT_SESSION"><code>MarshallingContext.DEFAULT_SESSION</code></a>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2245,7 +2245,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="newMarshalledMap(org.apache.juneau.marshall.MarshallingSession)">
 <h3>newMarshalledMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1548">newMarshalledMap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;bs)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledMap.html#line-1549">newMarshalledMap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;bs)</span></div>
 <div class="block">Factory hook used by <a href="#cast(java.lang.Class)"><code>cast(Class)</code></a> / <a href="#cast(org.apache.juneau.marshall.ClassMeta)"><code>cast(ClassMeta)</code></a> when the target map type cannot be
  instantiated directly (e.g. when the caller asks for the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> interface).
 

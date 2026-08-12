@@ -161,14 +161,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HoconValue.HoconConcat.</span><code><a href="../HoconValue.HoconConcat.html#add(org.apache.juneau.marshall.hocon.HoconValue)" class="member-name-link">add</a><wbr>(<a href="../HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;part)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HoconValue.HoconArray.</span><code><a href="../HoconValue.HoconArray.html#add(org.apache.juneau.marshall.hocon.HoconValue)" class="member-name-link">add</a><wbr>(<a href="../HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;element)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Adds a part.</div>
+<div class="block">Adds an element to this array.</div>
 </div>
 <div class="col-first odd-row-color"><code>void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HoconValue.HoconObject.</span><code><a href="../HoconValue.HoconObject.html#setPath(java.lang.String%5B%5D,org.apache.juneau.marshall.hocon.HoconValue)" class="member-name-link">setPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;path,
- <a href="../HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HoconValue.HoconConcat.</span><code><a href="../HoconValue.HoconConcat.html#add(org.apache.juneau.marshall.hocon.HoconValue)" class="member-name-link">add</a><wbr>(<a href="../HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;part)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Adds a part.</div>
+</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HoconValue.HoconObject.</span><code><a href="../HoconValue.HoconObject.html#setPath(java.lang.String%5B%5D,org.apache.juneau.marshall.hocon.HoconValue)" class="member-name-link">setPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;path,
+ <a href="../HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets a value at a dotted path (e.g., a.b.c).</div>
 </div>
 </div>
@@ -182,6 +187,11 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;&nbsp;lookup)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Resolves a concatenation value with a custom lookup (for self-referential substitution).</div>
+</div>
+<div class="col-first odd-row-color"><code>void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HoconValue.HoconArray.</span><code><a href="../HoconValue.HoconArray.html#setElements(java.util.List)" class="member-name-link">setElements</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Replaces the contents of this array with the specified elements.</div>
 </div>
 </div>
 </section>

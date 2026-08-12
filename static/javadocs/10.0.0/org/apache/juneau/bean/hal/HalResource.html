@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
          <jk>new</jk> HalLink().setName(<js>"acme"</js>).setHref(<js>"https://acme.example/{rel}"</js>).setTemplated(<jk>true</jk>))
       .set(<js>"total"</js>, 99.50);
 
-   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>order</jv>);
+   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>order</jv>);
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
@@ -282,8 +282,8 @@ loadScripts(document, 'script');</script>
  multiple links under the same relation use <a href="#addLinks(java.lang.String,org.apache.juneau.bean.hal.HalLink...)"><code>addLinks(String, HalLink...)</code></a> instead.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>relation</code> - The link relation (e.g. <code>"self"</code>, <code>"next"</code>, <code>"curies"</code>).</dd>
-<dd><code>value</code> - The link to set.</dd>
+<dd><code>relation</code> - The link relation (e.g. <code>"self"</code>, <code>"next"</code>, <code>"curies"</code>).  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
+<dd><code>value</code> - The link to set.  Can be <jk>null</jk> (stored as a <jk>null</jk> entry under the relation).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
  containing the original link and the appended ones.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>relation</code> - The link relation.</dd>
+<dd><code>relation</code> - The link relation.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>values</code> - The links to append.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -352,8 +352,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Convenience method that embeds a single sub-resource under the given relation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>relation</code> - The relation name.</dd>
-<dd><code>value</code> - The sub-resource.</dd>
+<dd><code>relation</code> - The relation name.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
+<dd><code>value</code> - The sub-resource.  Can be <jk>null</jk> (stored as a <jk>null</jk> entry under the relation).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -368,7 +368,7 @@ loadScripts(document, 'script');</script>
  <code>relation</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>relation</code> - The relation name.</dd>
+<dd><code>relation</code> - The relation name.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>values</code> - The sub-resources to append.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -395,7 +395,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Generic property getter.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name. Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name. Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>The property value, or <jk>null</jk> if the property is not set.</dd>
 </dl>
@@ -413,8 +413,8 @@ loadScripts(document, 'script');</script>
  Use this to set arbitrary payload fields alongside <code>_links</code> and <code>_embedded</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name. Must not be <jk>null</jk>.</dd>
-<dd><code>value</code> - The new value for the property.</dd>
+<dd><code>property</code> - The property name. Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
+<dd><code>value</code> - The new value for the property. Can be <jk>null</jk> (stored as <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

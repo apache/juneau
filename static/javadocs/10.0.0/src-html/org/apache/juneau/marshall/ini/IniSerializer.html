@@ -63,11 +63,11 @@
 <span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;jc&gt;// Serialize a bean to INI&lt;/jc&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *    String &lt;jv&gt;ini&lt;/jv&gt; = IniSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
+<span class="source-line-no">053</span><span id="line-53"> *    String &lt;jv&gt;ini&lt;/jv&gt; = IniSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;jc&gt;// Create a custom serializer&lt;/jc&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *    IniSerializer &lt;jv&gt;s&lt;/jv&gt; = IniSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().useComments().build();</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &lt;jv&gt;ini&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.serialize(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;jv&gt;ini&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.write(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='figure'&gt;Example output (Map of name/age):&lt;/h5&gt;</span>
@@ -112,8 +112,8 @@
 <span class="source-line-no">099</span><span id="line-99">})</span>
 <span class="source-line-no">100</span><span id="line-100">public class IniSerializer extends WriterSerializer implements IniMetaProvider, RecordWritable {</span>
 <span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;, IniClassMeta&gt; iniClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">103</span><span id="line-103">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta, IniBeanPropertyMeta&gt; iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">102</span><span id="line-102">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,IniClassMeta&gt; iniClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">103</span><span id="line-103">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,IniBeanPropertyMeta&gt; iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">104</span><span id="line-104"></span>
 <span class="source-line-no">105</span><span id="line-105">   private static final String PROP_kvSeparator = "kvSeparator";</span>
 <span class="source-line-no">106</span><span id="line-106">   private static final String PROP_spacedSeparator = "spacedSeparator";</span>
@@ -294,20 +294,20 @@
 <span class="source-line-no">281</span><span id="line-281"></span>
 <span class="source-line-no">282</span><span id="line-282">   /**</span>
 <span class="source-line-no">283</span><span id="line-283">    * Convenience delegator that opens a {@link RecordWriter} over the output using</span>
-<span class="source-line-no">284</span><span id="line-284">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #serialize(Object)}).</span>
+<span class="source-line-no">284</span><span id="line-284">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
 <span class="source-line-no">285</span><span id="line-285">    *</span>
 <span class="source-line-no">286</span><span id="line-286">    * &lt;p&gt;</span>
-<span class="source-line-no">287</span><span id="line-287">    * The real implementation lives on {@link IniSerializerSession#serializeRecords(Object)}.</span>
+<span class="source-line-no">287</span><span id="line-287">    * The real implementation lives on {@link IniSerializerSession#writeRecords(Object)}.</span>
 <span class="source-line-no">288</span><span id="line-288">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
-<span class="source-line-no">289</span><span id="line-289">    * invoke {@link IniSerializerSession#serializeRecords(Object)} on the built session instead.</span>
+<span class="source-line-no">289</span><span id="line-289">    * invoke {@link IniSerializerSession#writeRecords(Object)} on the built session instead.</span>
 <span class="source-line-no">290</span><span id="line-290">    *</span>
 <span class="source-line-no">291</span><span id="line-291">    * @param output The output.</span>
 <span class="source-line-no">292</span><span id="line-292">    * @return A new {@link RecordWriter}.</span>
 <span class="source-line-no">293</span><span id="line-293">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">294</span><span id="line-294">    */</span>
 <span class="source-line-no">295</span><span id="line-295">   @Override /* RecordWritable */</span>
-<span class="source-line-no">296</span><span id="line-296">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">297</span><span id="line-297">      return ((RecordWritable) getSession()).serializeRecords(output);</span>
+<span class="source-line-no">296</span><span id="line-296">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">297</span><span id="line-297">      return ((RecordWritable) getSession()).writeRecords(output);</span>
 <span class="source-line-no">298</span><span id="line-298">   }</span>
 <span class="source-line-no">299</span><span id="line-299"></span>
 <span class="source-line-no">300</span><span id="line-300">   @Override /* RecordWritable */</span>

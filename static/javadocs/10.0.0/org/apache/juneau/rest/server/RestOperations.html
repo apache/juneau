@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder containing the settings for this object.</dd>
+<dd><code>builder</code> - The builder containing the settings for this object. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Finds the method that should handle the specified call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>session</code> - The HTTP call.</dd>
+<dd><code>session</code> - The HTTP call. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The method that should handle the specified call.</dd>
 <dt>Throws:</dt>

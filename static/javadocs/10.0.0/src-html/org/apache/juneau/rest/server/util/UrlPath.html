@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41">   /**</span>
 <span class="source-line-no">042</span><span id="line-42">    * Creates a new parsed {@link UrlPath} object from the specified string.</span>
 <span class="source-line-no">043</span><span id="line-43">    *</span>
-<span class="source-line-no">044</span><span id="line-44">    * @param path The path to create.  Must be &lt;jk&gt;null&lt;/jk&gt; or or start with '/' per HttpServletRequest.getPathInfo().</span>
+<span class="source-line-no">044</span><span id="line-44">    * @param path The path to create.  Must be &lt;jk&gt;null&lt;/jk&gt; or start with '/' per HttpServletRequest.getPathInfo().</span>
 <span class="source-line-no">045</span><span id="line-45">    * @return A new {@link UrlPath} object.</span>
 <span class="source-line-no">046</span><span id="line-46">    */</span>
 <span class="source-line-no">047</span><span id="line-47">   public static UrlPath of(String path) {</span>
@@ -85,7 +85,7 @@
 <span class="source-line-no">072</span><span id="line-72">    * &lt;p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73">    * For example, given the path &lt;js&gt;"/foo/bar.txt"&lt;/js&gt;, this returns &lt;js&gt;"bar.txt"&lt;/js&gt;.</span>
 <span class="source-line-no">074</span><span id="line-74">    *</span>
-<span class="source-line-no">075</span><span id="line-75">    * @return The filename portion of the path, or &lt;jk&gt;null&lt;/jk&gt; if the path doesn't match a file name.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @return The filename portion of the path, or an empty {@link Optional} if the path doesn't match a file name.</span>
 <span class="source-line-no">076</span><span id="line-76">    */</span>
 <span class="source-line-no">077</span><span id="line-77">   public Optional&lt;String&gt; getFileName() {</span>
 <span class="source-line-no">078</span><span id="line-78">      if (parts.length == 0)</span>
@@ -99,14 +99,14 @@
 <span class="source-line-no">086</span><span id="line-86">   /**</span>
 <span class="source-line-no">087</span><span id="line-87">    * Returns the path parts.</span>
 <span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @return The path parts.</span>
+<span class="source-line-no">089</span><span id="line-89">    * @return The path parts.  This is a defensive copy; modifying it does not affect this object's routing state.</span>
 <span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   public String[] getParts() { return parts; }</span>
+<span class="source-line-no">091</span><span id="line-91">   public String[] getParts() { return cp(parts); }</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
 <span class="source-line-no">093</span><span id="line-93">   /**</span>
 <span class="source-line-no">094</span><span id="line-94">    * Returns the raw path passed into this object.</span>
 <span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @return The raw path passed into this object.</span>
+<span class="source-line-no">096</span><span id="line-96">    * @return The raw path passed into this object, or &lt;jk&gt;null&lt;/jk&gt; if the path was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">097</span><span id="line-97">    */</span>
 <span class="source-line-no">098</span><span id="line-98">   public String getPath() { return path; }</span>
 <span class="source-line-no">099</span><span id="line-99"></span>

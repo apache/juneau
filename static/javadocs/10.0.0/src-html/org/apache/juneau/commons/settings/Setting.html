@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">    * @return A Setting describing the result of applying a mapping function to the value of this Setting, if a value is present, otherwise an empty Setting.</span>
 <span class="source-line-no">103</span><span id="line-103">    */</span>
 <span class="source-line-no">104</span><span id="line-104">   @Override</span>
-<span class="source-line-no">105</span><span id="line-105">   public &lt;U&gt; Setting&lt;U&gt; map(Function&lt;? super T, ? extends U&gt; mapper) {</span>
+<span class="source-line-no">105</span><span id="line-105">   public &lt;U&gt; Setting&lt;U&gt; map(Function&lt;? super T,? extends U&gt; mapper) {</span>
 <span class="source-line-no">106</span><span id="line-106">      assertArgNotNull(ARG_mapper, mapper);</span>
 <span class="source-line-no">107</span><span id="line-107">      return new Setting&lt;&gt;(settings, () -&gt; {</span>
 <span class="source-line-no">108</span><span id="line-108">         T value = get();</span>

@@ -237,8 +237,8 @@ loadScripts(document, 'script');</script>
  <a href="#clear()"><code>clear()</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>appContext</code> - The Spring application context used to resolve beans. Can be <jk>null</jk>.</dd>
-<dd><code>parent</code> - The parent bean store. Can be <jk>null</jk>.</dd>
+<dd><code>appContext</code> - The Spring application context used to resolve beans. Can be <jk>null</jk> (no Spring environment bridge is installed).</dd>
+<dd><code>parent</code> - The parent bean store. Can be <jk>null</jk> for a root store with no parent chain.</dd>
 </dl>
 </section>
 </li>
@@ -286,7 +286,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type of bean to return.</dd>
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The type of bean to return.</dd>
+<dd><code>beanType</code> - The type of bean to return.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The bean, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if not found.</dd>
 </dl>
@@ -310,8 +310,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type of bean to return.</dd>
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The type of bean to return.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>beanType</code> - The type of bean to return.  Must not be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd>The bean, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if not found.</dd>
 </dl>
@@ -335,7 +335,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The bean type.</dd>
+<dd><code>beanType</code> - The bean type.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A map of bean names to bean instances.  Never <jk>null</jk>.</dd>
 </dl>
@@ -356,7 +356,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="../../../commons/inject/BasicBeanStore.html#hasBean(java.lang.Class)">hasBean</a></code>&nbsp;in class&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html" title="class in org.apache.juneau.commons.inject">BasicBeanStore</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The bean type to check.</dd>
+<dd><code>beanType</code> - The bean type to check.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if this store contains at least one unnamed bean of the specified type.</dd>
 </dl>
@@ -378,8 +378,8 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="../../../commons/inject/BasicBeanStore.html#hasBean(java.lang.Class,java.lang.String)">hasBean</a></code>&nbsp;in class&nbsp;<code><a href="../../../commons/inject/BasicBeanStore.html" title="class in org.apache.juneau.commons.inject">BasicBeanStore</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The bean type to check.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>beanType</code> - The bean type to check.  Must not be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if this store contains a bean of the specified type and name.</dd>
 </dl>
@@ -402,7 +402,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The bean type.</dd>
+<dd><code>beanType</code> - The bean type.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The supplier, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if no supplier of the specified type exists.</dd>
 </dl>
@@ -426,8 +426,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The bean type.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>beanType</code> - The bean type.  Must not be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd>The supplier, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if no supplier of the specified type and name exists.</dd>
 </dl>

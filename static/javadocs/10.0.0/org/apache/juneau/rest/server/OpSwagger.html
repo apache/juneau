@@ -126,7 +126,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
 <div class="col-second odd-row-color"><code><a href="#produces()" class="member-name-link">produces</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.</div>
+<div class="block">Defines the swagger field <c>/paths/{path}/{method}/produces</c>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
 <div class="col-second even-row-color"><code><a href="#responses()" class="member-name-link">responses</a></code></div>
@@ -400,7 +400,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="produces()">
 <h3>produces</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/OpSwagger.html#line-227">produces</a></span></div>
-<div class="block">Defines the swagger field <c>/paths/{path}/{method}/consumes</c>.
+<div class="block">Defines the swagger field <c>/paths/{path}/{method}/produces</c>.
 
  <p>
  Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via <a href="RestOp.html#serializers()"><code>RestOp.serializers()</code></a>.
@@ -448,7 +448,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> objc consisting of the concatenated individual strings.
+      The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object consisting of the concatenated individual strings.
       <br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).

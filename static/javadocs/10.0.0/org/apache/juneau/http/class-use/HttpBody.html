@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates an instance of a <code>MultipartPart</code> record class.</div>
+<div class="block">Compact constructor enforcing the documented non-null contract on <code>name</code> and <code>body</code>.</div>
 </div>
 </div>
 </section>
@@ -288,7 +288,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Sets the response body.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../response/BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color"><code><a href="../response/BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">BasicHttpResponse.</span><code><a href="../response/BasicHttpResponse.html#setBody(org.apache.juneau.http.HttpBody)" class="member-name-link">setBody</a><wbr>(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Sets the response body.</div>
@@ -298,15 +298,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Sets the response body.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../response/BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color"><code><a href="../response/BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">BasicHttpResponse.</span><code><a href="../response/BasicHttpResponse.html#setContent(org.apache.juneau.http.HttpBody)" class="member-name-link">setContent</a><wbr>(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Sets the response body.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../response/BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color"><code><a href="../response/BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">BasicHttpResponse.</span><code><a href="../response/BasicHttpResponse.html#withBody(org.apache.juneau.http.HttpBody)" class="member-name-link">withBody</a><wbr>(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Returns a new instance with the given body replacing the current body.</div>
+<div class="block">Sets the body on this response.</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../response/package-summary.html">org.apache.juneau.http.response</a> with parameters of type <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span></div>
@@ -324,14 +324,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Constructor with a response body.</div>
 </div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-second even-row-color"><code><a href="../response/BasicHttpResponse.html#%3Cinit%3E(org.apache.juneau.http.HttpStatusLine,java.util.List,org.apache.juneau.http.HttpBody)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;&nbsp;headers,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor with headers and an optional body.</div>
 </div>
-<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>protected </code></div>
 <div class="col-second odd-row-color"><code><a href="../response/BasicHttpResponse.html#%3Cinit%3E(org.apache.juneau.http.HttpStatusLine,org.apache.juneau.http.HttpBody)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">

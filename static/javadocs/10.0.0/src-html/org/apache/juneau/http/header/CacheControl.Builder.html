@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">      private Long sMaxAge;</span>
 <span class="source-line-no">139</span><span id="line-139">      private Long staleWhileRevalidate;</span>
 <span class="source-line-no">140</span><span id="line-140">      private Long staleIfError;</span>
-<span class="source-line-no">141</span><span id="line-141">      private final List&lt;String&gt; extensions = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">141</span><span id="line-141">      private final List&lt;String&gt; extensions = l();</span>
 <span class="source-line-no">142</span><span id="line-142"></span>
 <span class="source-line-no">143</span><span id="line-143">      /**</span>
 <span class="source-line-no">144</span><span id="line-144">       * Adds the &lt;c&gt;public&lt;/c&gt; directive (responses may be cached by any cache).</span>
@@ -263,7 +263,7 @@
 <span class="source-line-no">250</span><span id="line-250">       */</span>
 <span class="source-line-no">251</span><span id="line-251">      public Builder maxAge(long seconds) {</span>
 <span class="source-line-no">252</span><span id="line-252">         if (seconds &lt; 0)</span>
-<span class="source-line-no">253</span><span id="line-253">            throw iaex("max-age must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">253</span><span id="line-253">            throw iaex("max-age must be non-negative: %s", seconds);</span>
 <span class="source-line-no">254</span><span id="line-254">         maxAge = seconds;</span>
 <span class="source-line-no">255</span><span id="line-255">         return this;</span>
 <span class="source-line-no">256</span><span id="line-256">      }</span>
@@ -289,7 +289,7 @@
 <span class="source-line-no">276</span><span id="line-276">       */</span>
 <span class="source-line-no">277</span><span id="line-277">      public Builder sMaxAge(long seconds) {</span>
 <span class="source-line-no">278</span><span id="line-278">         if (seconds &lt; 0)</span>
-<span class="source-line-no">279</span><span id="line-279">            throw iaex("s-maxage must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">279</span><span id="line-279">            throw iaex("s-maxage must be non-negative: %s", seconds);</span>
 <span class="source-line-no">280</span><span id="line-280">         sMaxAge = seconds;</span>
 <span class="source-line-no">281</span><span id="line-281">         return this;</span>
 <span class="source-line-no">282</span><span id="line-282">      }</span>
@@ -315,7 +315,7 @@
 <span class="source-line-no">302</span><span id="line-302">       */</span>
 <span class="source-line-no">303</span><span id="line-303">      public Builder staleWhileRevalidate(long seconds) {</span>
 <span class="source-line-no">304</span><span id="line-304">         if (seconds &lt; 0)</span>
-<span class="source-line-no">305</span><span id="line-305">            throw iaex("stale-while-revalidate must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">305</span><span id="line-305">            throw iaex("stale-while-revalidate must be non-negative: %s", seconds);</span>
 <span class="source-line-no">306</span><span id="line-306">         staleWhileRevalidate = seconds;</span>
 <span class="source-line-no">307</span><span id="line-307">         return this;</span>
 <span class="source-line-no">308</span><span id="line-308">      }</span>
@@ -329,7 +329,7 @@
 <span class="source-line-no">316</span><span id="line-316">       */</span>
 <span class="source-line-no">317</span><span id="line-317">      public Builder staleIfError(long seconds) {</span>
 <span class="source-line-no">318</span><span id="line-318">         if (seconds &lt; 0)</span>
-<span class="source-line-no">319</span><span id="line-319">            throw iaex("stale-if-error must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">319</span><span id="line-319">            throw iaex("stale-if-error must be non-negative: %s", seconds);</span>
 <span class="source-line-no">320</span><span id="line-320">         staleIfError = seconds;</span>
 <span class="source-line-no">321</span><span id="line-321">         return this;</span>
 <span class="source-line-no">322</span><span id="line-322">      }</span>

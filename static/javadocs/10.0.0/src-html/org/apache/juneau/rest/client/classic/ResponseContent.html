@@ -134,7 +134,7 @@
 <span class="source-line-no">121</span><span id="line-121">    * @param client The client used to build this request.</span>
 <span class="source-line-no">122</span><span id="line-122">    * @param request The request object.</span>
 <span class="source-line-no">123</span><span id="line-123">    * @param response The response object.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @param parser The parser to use to consume the body.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">124</span><span id="line-124">    * @param parser The parser to use to consume the body.  Can be &lt;jk&gt;null&lt;/jk&gt; to use the response's negotiated/default parser.</span>
 <span class="source-line-no">125</span><span id="line-125">    */</span>
 <span class="source-line-no">126</span><span id="line-126">   public ResponseContent(RestClient client, RestRequest request, RestResponse response, Parser parser) {</span>
 <span class="source-line-no">127</span><span id="line-127">      this.client = client;</span>
@@ -175,7 +175,7 @@
 <span class="source-line-no">162</span><span id="line-162">    *          &lt;li&gt;{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.</span>
 <span class="source-line-no">163</span><span id="line-163">    *          &lt;li&gt;{@link Reader} - Returns access to the raw reader of the response.</span>
 <span class="source-line-no">164</span><span id="line-164">    *          &lt;li&gt;{@link InputStream} - Returns access to the raw input stream of the response.</span>
-<span class="source-line-no">165</span><span id="line-165">    *          &lt;li&gt;{@link HttpResource} - Response will be converted to an {@link BasicResource}.</span>
+<span class="source-line-no">165</span><span id="line-165">    *          &lt;li&gt;{@link HttpResource} - Response will be converted to a {@link StreamResource}.</span>
 <span class="source-line-no">166</span><span id="line-166">    *          &lt;li&gt;Any type that takes in an {@link HttpResponse} object.</span>
 <span class="source-line-no">167</span><span id="line-167">    *       &lt;/ul&gt;</span>
 <span class="source-line-no">168</span><span id="line-168">    *    &lt;li class='note'&gt;</span>
@@ -267,8 +267,8 @@
 <span class="source-line-no">254</span><span id="line-254">         if (type.is(HttpResponse.class))</span>
 <span class="source-line-no">255</span><span id="line-255">            return (T)response;</span>
 <span class="source-line-no">256</span><span id="line-256"></span>
-<span class="source-line-no">257</span><span id="line-257">         if (type.is(HttpResource.class))</span>
-<span class="source-line-no">258</span><span id="line-258">            type = (ClassMeta&lt;T&gt;)getClassMeta(BasicResource.class);</span>
+<span class="source-line-no">257</span><span id="line-257">         if (type.is(HttpResource.class) || type.is(BasicResource.class))</span>
+<span class="source-line-no">258</span><span id="line-258">            type = (ClassMeta&lt;T&gt;)getClassMeta(StreamResource.class);</span>
 <span class="source-line-no">259</span><span id="line-259"></span>
 <span class="source-line-no">260</span><span id="line-260">         var result = type.getPublicConstructor(x -&gt; x.hasParameterTypes(HttpResponse.class)).map(ci -&gt; safe(() -&gt; (T)ci.newInstance(response)));</span>
 <span class="source-line-no">261</span><span id="line-261">         if (result.isPresent())</span>
@@ -295,7 +295,7 @@
 <span class="source-line-no">282</span><span id="line-282">                  .mediaType(mt)</span>
 <span class="source-line-no">283</span><span id="line-283">                  .schema(schema)</span>
 <span class="source-line-no">284</span><span id="line-284">                  .build()</span>
-<span class="source-line-no">285</span><span id="line-285">                  .parse(in, type);</span>
+<span class="source-line-no">285</span><span id="line-285">                  .read(in, type);</span>
 <span class="source-line-no">286</span><span id="line-286">               // @formatter:on</span>
 <span class="source-line-no">287</span><span id="line-287"></span>
 <span class="source-line-no">288</span><span id="line-288">               // Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.</span>
@@ -320,7 +320,7 @@
 <span class="source-line-no">307</span><span id="line-307">         if (ct == null &amp;&amp; client.hasParsers())</span>
 <span class="source-line-no">308</span><span id="line-308">            throw new ParseException("Content-Type not specified in response header.  Cannot find appropriate parser.");</span>
 <span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">         throw new ParseException("Unsupported media-type in request header ''Content-Type'': ''{0}''", ct);</span>
+<span class="source-line-no">310</span><span id="line-310">         throw new ParseException("Unsupported media-type in request header 'Content-Type': '%s'", ct);</span>
 <span class="source-line-no">311</span><span id="line-311"></span>
 <span class="source-line-no">312</span><span id="line-312">      } catch (ParseException | IOException e) {</span>
 <span class="source-line-no">313</span><span id="line-313">         response.close();</span>
@@ -331,7 +331,7 @@
 <span class="source-line-no">318</span><span id="line-318">   /**</span>
 <span class="source-line-no">319</span><span id="line-319">    * Resolves a cursor return type ({@link RecordReader} / {@link TokenReader} or any subtype)</span>
 <span class="source-line-no">320</span><span id="line-320">    * by negotiating the response Content-Type to a parser and calling its</span>
-<span class="source-line-no">321</span><span id="line-321">    * {@code parseRecords(...)} / {@code parseTokens(...)} factory.</span>
+<span class="source-line-no">321</span><span id="line-321">    * {@code readRecords(...)} / {@code readTokens(...)} factory.</span>
 <span class="source-line-no">322</span><span id="line-322">    *</span>
 <span class="source-line-no">323</span><span id="line-323">    * &lt;p&gt;</span>
 <span class="source-line-no">324</span><span id="line-324">    * Implements two-layer resolution: the declared type filters eligible parsers (a concrete</span>
@@ -354,25 +354,25 @@
 <span class="source-line-no">341</span><span id="line-341">         var matchedParser = parser != null ? parser : client.getMatchingParser(ct);</span>
 <span class="source-line-no">342</span><span id="line-342">         if (matchedParser == null)</span>
 <span class="source-line-no">343</span><span id="line-343">            throw new RestCallException(response, null,</span>
-<span class="source-line-no">344</span><span id="line-344">               "No registered parser matches Content-Type ''{0}'' for cursor return type ''{1}''.",</span>
+<span class="source-line-no">344</span><span id="line-344">               "No registered parser matches Content-Type '%s' for cursor return type '%s'.",</span>
 <span class="source-line-no">345</span><span id="line-345">               ct, type.inner().getName());</span>
 <span class="source-line-no">346</span><span id="line-346"></span>
 <span class="source-line-no">347</span><span id="line-347">         var isToken = type.isChildOf(TokenReader.class) || type.is(TokenReader.class);</span>
 <span class="source-line-no">348</span><span id="line-348">         var supported = isToken ? matchedParser instanceof TokenReadable : matchedParser instanceof RecordReadable;</span>
 <span class="source-line-no">349</span><span id="line-349">         if (!supported)</span>
 <span class="source-line-no">350</span><span id="line-350">            throw new RestCallException(response, null,</span>
-<span class="source-line-no">351</span><span id="line-351">               "Parser ''{0}'' does not support the {1} surface.",</span>
+<span class="source-line-no">351</span><span id="line-351">               "Parser '%s' does not support the %s surface.",</span>
 <span class="source-line-no">352</span><span id="line-352">               matchedParser.getClass().getName(),</span>
 <span class="source-line-no">353</span><span id="line-353">               isToken ? "token-reader" : "record-reader");</span>
 <span class="source-line-no">354</span><span id="line-354"></span>
 <span class="source-line-no">355</span><span id="line-355">         Object input = matchedParser.isReaderParser() ? asReader() : asInputStream();</span>
 <span class="source-line-no">356</span><span id="line-356">         Object cursor = isToken</span>
-<span class="source-line-no">357</span><span id="line-357">            ? ((TokenReadable) matchedParser).parseTokens(input)</span>
-<span class="source-line-no">358</span><span id="line-358">            : ((RecordReadable) matchedParser).parseRecords(input);</span>
+<span class="source-line-no">357</span><span id="line-357">            ? ((TokenReadable) matchedParser).readTokens(input)</span>
+<span class="source-line-no">358</span><span id="line-358">            : ((RecordReadable) matchedParser).readRecords(input);</span>
 <span class="source-line-no">359</span><span id="line-359"></span>
 <span class="source-line-no">360</span><span id="line-360">         if (!type.inner().isInstance(cursor))</span>
 <span class="source-line-no">361</span><span id="line-361">            throw new RestCallException(response, null,</span>
-<span class="source-line-no">362</span><span id="line-362">               "Parser ''{0}'' produced cursor type ''{1}'' which is not assignable to the declared type ''{2}''.",</span>
+<span class="source-line-no">362</span><span id="line-362">               "Parser '%s' produced cursor type '%s' which is not assignable to the declared type '%s'.",</span>
 <span class="source-line-no">363</span><span id="line-363">               matchedParser.getClass().getName(),</span>
 <span class="source-line-no">364</span><span id="line-364">               cursor == null ? "null" : cursor.getClass().getName(),</span>
 <span class="source-line-no">365</span><span id="line-365">               type.inner().getName());</span>
@@ -442,7 +442,7 @@
 <span class="source-line-no">429</span><span id="line-429">    *          &lt;li&gt;{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.</span>
 <span class="source-line-no">430</span><span id="line-430">    *          &lt;li&gt;{@link Reader} - Returns access to the raw reader of the response.</span>
 <span class="source-line-no">431</span><span id="line-431">    *          &lt;li&gt;{@link InputStream} - Returns access to the raw input stream of the response.</span>
-<span class="source-line-no">432</span><span id="line-432">    *          &lt;li&gt;{@link HttpResource} - Response will be converted to an {@link BasicResource}.</span>
+<span class="source-line-no">432</span><span id="line-432">    *          &lt;li&gt;{@link HttpResource} - Response will be converted to a {@link StreamResource}.</span>
 <span class="source-line-no">433</span><span id="line-433">    *          &lt;li&gt;Any type that takes in an {@link HttpResponse} object.</span>
 <span class="source-line-no">434</span><span id="line-434">    *       &lt;/ul&gt;</span>
 <span class="source-line-no">435</span><span id="line-435">    *    &lt;li class='note'&gt;</span>
@@ -490,7 +490,7 @@
 <span class="source-line-no">477</span><span id="line-477">   /**</span>
 <span class="source-line-no">478</span><span id="line-478">    * Returns the HTTP response message body as a byte array.</span>
 <span class="source-line-no">479</span><span id="line-479">    *</span>
-<span class="source-line-no">480</span><span id="line-480">    *    The HTTP response message body reader, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">480</span><span id="line-480">    *    The HTTP response message body as a byte array, never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">481</span><span id="line-481">    *    &lt;br&gt;For responses without a body(e.g. HTTP 204), returns an empty array.</span>
 <span class="source-line-no">482</span><span id="line-482">    *</span>
 <span class="source-line-no">483</span><span id="line-483">    * @return The HTTP response body as a byte array.</span>
@@ -499,7 +499,7 @@
 <span class="source-line-no">486</span><span id="line-486">   public byte[] asBytes() throws RestCallException {</span>
 <span class="source-line-no">487</span><span id="line-487">      if (body == null) {</span>
 <span class="source-line-no">488</span><span id="line-488">         try {</span>
-<span class="source-line-no">489</span><span id="line-489">            if (entity instanceof BasicHttpEntity entity2) {</span>
+<span class="source-line-no">489</span><span id="line-489">            if (entity instanceof BasicHttpEntity&lt;?&gt; entity2) {</span>
 <span class="source-line-no">490</span><span id="line-490">               body = entity2.asBytes();</span>
 <span class="source-line-no">491</span><span id="line-491">            } else {</span>
 <span class="source-line-no">492</span><span id="line-492">               body = readBytes(entity.getContent());</span>
@@ -1078,7 +1078,7 @@
 <span class="source-line-no">1065</span><span id="line-1065">    * This is the header that should be used when sending the entity, or the one that was received with the entity.</span>
 <span class="source-line-no">1066</span><span id="line-1066">    * &lt;br&gt;Wrapping entities that modify the content encoding should adjust this header accordingly.</span>
 <span class="source-line-no">1067</span><span id="line-1067">    *</span>
-<span class="source-line-no">1068</span><span id="line-1068">    * @return The &lt;c&gt;Content-Encoding&lt;/c&gt; header for this entity, or &lt;jk&gt;null&lt;/jk&gt; if the content encoding is unknown.</span>
+<span class="source-line-no">1068</span><span id="line-1068">    * @return The &lt;c&gt;Content-Encoding&lt;/c&gt; header for this entity.  Never &lt;jk&gt;null&lt;/jk&gt;, but wraps a &lt;jk&gt;null&lt;/jk&gt; value if the content encoding is unknown.</span>
 <span class="source-line-no">1069</span><span id="line-1069">    */</span>
 <span class="source-line-no">1070</span><span id="line-1070">   @Override /* Overridden from HttpEntity */</span>
 <span class="source-line-no">1071</span><span id="line-1071">   public ResponseHeader getContentEncoding() { return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding()); }</span>
@@ -1100,7 +1100,7 @@
 <span class="source-line-no">1087</span><span id="line-1087">    * This is the header that should be used when sending the entity, or the one that was received with the entity.</span>
 <span class="source-line-no">1088</span><span id="line-1088">    * It can include a charset attribute.</span>
 <span class="source-line-no">1089</span><span id="line-1089">    *</span>
-<span class="source-line-no">1090</span><span id="line-1090">    * @return The &lt;c&gt;Content-Type&lt;/c&gt; header for this entity, or &lt;jk&gt;null&lt;/jk&gt; if the content type is unknown.</span>
+<span class="source-line-no">1090</span><span id="line-1090">    * @return The &lt;c&gt;Content-Type&lt;/c&gt; header for this entity.  Never &lt;jk&gt;null&lt;/jk&gt;, but wraps a &lt;jk&gt;null&lt;/jk&gt; value if the content type is unknown.</span>
 <span class="source-line-no">1091</span><span id="line-1091">    */</span>
 <span class="source-line-no">1092</span><span id="line-1092">   @Override /* Overridden from HttpEntity */</span>
 <span class="source-line-no">1093</span><span id="line-1093">   public ResponseHeader getContentType() { return new ResponseHeader(HEADER_ContentType, request, response, entity.getContentType()); }</span>
@@ -1155,7 +1155,7 @@
 <span class="source-line-no">1142</span><span id="line-1142">    * If not specified, uses the parser defined on the client set via {@link RestClient.Builder#parser(Class)}.</span>
 <span class="source-line-no">1143</span><span id="line-1143">    *</span>
 <span class="source-line-no">1144</span><span id="line-1144">    * @param value</span>
-<span class="source-line-no">1145</span><span id="line-1145">    *    The new part parser to use for this body.</span>
+<span class="source-line-no">1145</span><span id="line-1145">    *    The new parser to use for this body.</span>
 <span class="source-line-no">1146</span><span id="line-1146">    * @return This object.</span>
 <span class="source-line-no">1147</span><span id="line-1147">    */</span>
 <span class="source-line-no">1148</span><span id="line-1148">   public ResponseContent parser(Parser value) {</span>

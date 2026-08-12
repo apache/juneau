@@ -225,332 +225,341 @@
 <span class="source-line-no">212</span><span id="line-212">         var availablePort = findOpenPort(ports);</span>
 <span class="source-line-no">213</span><span id="line-213"></span>
 <span class="source-line-no">214</span><span id="line-214">         if (availablePortEnv.isEmpty())</span>
-<span class="source-line-no">215</span><span id="line-215">            System.setProperty("availablePort", String.valueOf(availablePort));</span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">         // Prefer a @Bean-supplied Server, else build one from jetty.xml.</span>
-<span class="source-line-no">218</span><span id="line-218">         var injectedServer = store.getBean(Server.class).orElse(null);</span>
-<span class="source-line-no">219</span><span id="line-219">         if (nn(injectedServer)) {</span>
-<span class="source-line-no">220</span><span id="line-220">            server.set(injectedServer);</span>
-<span class="source-line-no">221</span><span id="line-221">         } else {</span>
-<span class="source-line-no">222</span><span id="line-222">            var factory = store.getBean(JettyServerFactory.class).orElseGet(BasicJettyServerFactory::new);</span>
-<span class="source-line-no">223</span><span id="line-223">            var jettyXml = settings.getJettyXml();</span>
-<span class="source-line-no">224</span><span id="line-224">            var jettyConfig = cf.get("Jetty/config").orElseGet(() -&gt; mf.get("Jetty-Config").orElse("jetty.xml"));</span>
-<span class="source-line-no">225</span><span id="line-225">            var resolveVars = coalesce(settings.getJettyXmlResolveVars(), cf.get("Jetty/resolveVars").asBoolean().orElse(false));</span>
-<span class="source-line-no">226</span><span id="line-226">            boolean resolveVars2 = isTrue(resolveVars);</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">            if (jettyXml == null)</span>
-<span class="source-line-no">229</span><span id="line-229">               jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");</span>
-<span class="source-line-no">230</span><span id="line-230">            if (jettyXml == null)</span>
-<span class="source-line-no">231</span><span id="line-231">               throw rex("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);</span>
+<span class="source-line-no">215</span><span id="line-215">            // Intentional real-JVM-property publish: the bundled jetty.xml binds its connector to</span>
+<span class="source-line-no">216</span><span id="line-216">            // $S{availablePort,10000}, and the $S{...} SVL var resolves via raw System.getProperty (bypassing</span>
+<span class="source-line-no">217</span><span id="line-217">            // the Settings override chain).  A Settings-based write would be invisible to jetty.xml, so the</span>
+<span class="source-line-no">218</span><span id="line-218">            // bound port MUST be published as a real system property here.  The @Value-injected availablePortEnv</span>
+<span class="source-line-no">219</span><span id="line-219">            // read side is already Settings-abstracted; only this publish must stay raw.</span>
+<span class="source-line-no">220</span><span id="line-220">            System.setProperty("availablePort", String.valueOf(availablePort));</span>
+<span class="source-line-no">221</span><span id="line-221"></span>
+<span class="source-line-no">222</span><span id="line-222">         // Prefer a @Bean-supplied Server, else build one from jetty.xml.</span>
+<span class="source-line-no">223</span><span id="line-223">         var injectedServer = store.getBean(Server.class).orElse(null);</span>
+<span class="source-line-no">224</span><span id="line-224">         if (nn(injectedServer)) {</span>
+<span class="source-line-no">225</span><span id="line-225">            server.set(injectedServer);</span>
+<span class="source-line-no">226</span><span id="line-226">         } else {</span>
+<span class="source-line-no">227</span><span id="line-227">            var factory = store.getBean(JettyServerFactory.class).orElseGet(BasicJettyServerFactory::new);</span>
+<span class="source-line-no">228</span><span id="line-228">            var jettyXml = settings.getJettyXml();</span>
+<span class="source-line-no">229</span><span id="line-229">            var jettyConfig = cf.get("Jetty/config").orElseGet(() -&gt; mf.get("Jetty-Config").orElse("jetty.xml"));</span>
+<span class="source-line-no">230</span><span id="line-230">            var resolveVars = coalesce(settings.getJettyXmlResolveVars(), cf.get("Jetty/resolveVars").asBoolean().orElse(false));</span>
+<span class="source-line-no">231</span><span id="line-231">            boolean resolveVars2 = isTrue(resolveVars);</span>
 <span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233">            if (resolveVars2)</span>
-<span class="source-line-no">234</span><span id="line-234">               jettyXml = vr.resolve(jettyXml);</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">            ms.getLogger().info(jettyXml);</span>
+<span class="source-line-no">233</span><span id="line-233">            if (jettyXml == null)</span>
+<span class="source-line-no">234</span><span id="line-234">               jettyXml = loadSystemResourceAsString(jettyConfig, ".", "files");</span>
+<span class="source-line-no">235</span><span id="line-235">            if (jettyXml == null)</span>
+<span class="source-line-no">236</span><span id="line-236">               throw rex("jetty.xml file '%s' was not found on the file system or classpath.", jettyConfig);</span>
 <span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">            try {</span>
-<span class="source-line-no">239</span><span id="line-239">               server.set(factory.create(jettyXml));</span>
-<span class="source-line-no">240</span><span id="line-240">            } catch (Exception e) {</span>
-<span class="source-line-no">241</span><span id="line-241">               throw toRex(e);</span>
-<span class="source-line-no">242</span><span id="line-242">            }</span>
-<span class="source-line-no">243</span><span id="line-243">         }</span>
-<span class="source-line-no">244</span><span id="line-244"></span>
-<span class="source-line-no">245</span><span id="line-245">         // Publish back to the store for downstream beans / lookups.</span>
-<span class="source-line-no">246</span><span id="line-246">         store.addBean(Server.class, server.get());</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">         // Graceful-shutdown wiring (zero-downtime k8s rollouts):</span>
-<span class="source-line-no">249</span><span id="line-249">         //  - Apply a bounded stopTimeout so server.stop() drains in-flight requests before the connector closes.</span>
-<span class="source-line-no">250</span><span id="line-250">         //    Precedence: JettySettings &gt; Jetty/stopTimeout config &gt; jetty.xml value (if any) &gt; 30s default.</span>
-<span class="source-line-no">251</span><span id="line-251">         //  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.</span>
-<span class="source-line-no">252</span><span id="line-252">         //  - Mark readiness ready so a freshly-(re)started service serves traffic.</span>
-<span class="source-line-no">253</span><span id="line-253">         var stopTimeoutOverride = settings.getStopTimeout() != null</span>
-<span class="source-line-no">254</span><span id="line-254">            ? settings.getStopTimeout()</span>
-<span class="source-line-no">255</span><span id="line-255">            : cf.get("Jetty/stopTimeout").asLong().map(Duration::ofMillis).orElse(null);</span>
-<span class="source-line-no">256</span><span id="line-256">         if (stopTimeoutOverride != null)</span>
-<span class="source-line-no">257</span><span id="line-257">            server.get().setStopTimeout(Math.max(0L, stopTimeoutOverride.toMillis()));</span>
-<span class="source-line-no">258</span><span id="line-258">         else if (server.get().getStopTimeout() &lt;= 0L)</span>
-<span class="source-line-no">259</span><span id="line-259">            server.get().setStopTimeout(DEFAULT_STOP_TIMEOUT.toMillis());</span>
-<span class="source-line-no">260</span><span id="line-260">         shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Jetty/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));</span>
-<span class="source-line-no">261</span><span id="line-261">         ReadinessState.resolve(store).markReady();</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">         // Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.</span>
-<span class="source-line-no">264</span><span id="line-264">         var mountedPaths = new LinkedHashMap&lt;String,String&gt;();</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">         for (var s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {</span>
-<span class="source-line-no">267</span><span id="line-267">            try {</span>
-<span class="source-line-no">268</span><span id="line-268">               var c = info(Class.forName(s));</span>
-<span class="source-line-no">269</span><span id="line-269">               if (c.isAssignableTo(RestServlet.class)) {</span>
-<span class="source-line-no">270</span><span id="line-270">                  var rs = (RestServlet)c.newInstance();</span>
-<span class="source-line-no">271</span><span id="line-271">                  mountWithCollisionCheck(rs, rs.getPath(), "Jetty/servlets[" + s + "]", mountedPaths);</span>
-<span class="source-line-no">272</span><span id="line-272">               } else {</span>
-<span class="source-line-no">273</span><span id="line-273">                  throw rex("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}", s);</span>
-<span class="source-line-no">274</span><span id="line-274">               }</span>
-<span class="source-line-no">275</span><span id="line-275">            } catch (ClassNotFoundException e) {</span>
-<span class="source-line-no">276</span><span id="line-276">               throw toRex(e);</span>
-<span class="source-line-no">277</span><span id="line-277">            }</span>
-<span class="source-line-no">278</span><span id="line-278">         }</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">         cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -&gt; {</span>
-<span class="source-line-no">281</span><span id="line-281">            try {</span>
-<span class="source-line-no">282</span><span id="line-282">               var c = info(Class.forName(v.toString()));</span>
-<span class="source-line-no">283</span><span id="line-283">               if (c.isAssignableTo(Servlet.class)) {</span>
-<span class="source-line-no">284</span><span id="line-284">                  var rs = (Servlet)c.newInstance();</span>
-<span class="source-line-no">285</span><span id="line-285">                  mountWithCollisionCheck(rs, k, "Jetty/servletMap[" + k + "]", mountedPaths);</span>
-<span class="source-line-no">286</span><span id="line-286">               } else {</span>
-<span class="source-line-no">287</span><span id="line-287">                  throw rex("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}", cn(v));</span>
-<span class="source-line-no">288</span><span id="line-288">               }</span>
-<span class="source-line-no">289</span><span id="line-289">            } catch (ClassNotFoundException e) {</span>
-<span class="source-line-no">290</span><span id="line-290">               throw toRex(e);</span>
-<span class="source-line-no">291</span><span id="line-291">            }</span>
-<span class="source-line-no">292</span><span id="line-292">         });</span>
-<span class="source-line-no">293</span><span id="line-293"></span>
-<span class="source-line-no">294</span><span id="line-294">         cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">         // Auto-mount @Bean AuthFilterChain at /* before any servlet registration so the filter</span>
-<span class="source-line-no">297</span><span id="line-297">         // runs before routing for all requests.</span>
-<span class="source-line-no">298</span><span id="line-298">         store.getBean(AuthFilterChain.class).ifPresent(chain -&gt; addFilter(chain, "/*"));</span>
-<span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">         // Auto-discover @Rest servlets contributed via @Configuration/@Bean methods.</span>
-<span class="source-line-no">301</span><span id="line-301">         // Path source precedence: @Rest(path=...) on the resource class, else "/".</span>
-<span class="source-line-no">302</span><span id="line-302">         for (var e : store.getBeansOfType(Servlet.class).entrySet()) {</span>
-<span class="source-line-no">303</span><span id="line-303">            var servlet = e.getValue();</span>
-<span class="source-line-no">304</span><span id="line-304">            var cls = servlet.getClass();</span>
-<span class="source-line-no">305</span><span id="line-305">            if (cls.getAnnotation(Rest.class) == null)</span>
-<span class="source-line-no">306</span><span id="line-306">               continue;</span>
-<span class="source-line-no">307</span><span id="line-307">            var pathSpecs = restPathsFor(servlet, store);</span>
-<span class="source-line-no">308</span><span id="line-308">            var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");</span>
-<span class="source-line-no">309</span><span id="line-309">            for (var pathSpec : pathSpecs)</span>
-<span class="source-line-no">310</span><span id="line-310">               checkPathCollision(pathSpec, source, mountedPaths);</span>
-<span class="source-line-no">311</span><span id="line-311">            addServlet(servlet, pathSpecs);</span>
-<span class="source-line-no">312</span><span id="line-312">         }</span>
-<span class="source-line-no">313</span><span id="line-313"></span>
-<span class="source-line-no">314</span><span id="line-314">         if (serverPortEnv.isEmpty())</span>
-<span class="source-line-no">315</span><span id="line-315">            System.setProperty("juneau.serverPort", String.valueOf(availablePort));</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">         server.get().start();</span>
-<span class="source-line-no">318</span><span id="line-318">         ms.out(messages, "ServerStarted", getPort());</span>
-<span class="source-line-no">319</span><span id="line-319">      } catch (Exception e) {</span>
-<span class="source-line-no">320</span><span id="line-320">         throw toRex(e);</span>
-<span class="source-line-no">321</span><span id="line-321">      }</span>
-<span class="source-line-no">322</span><span id="line-322">   }</span>
-<span class="source-line-no">323</span><span id="line-323"></span>
-<span class="source-line-no">324</span><span id="line-324">   @Override /* Overridden from MicroserviceListener */</span>
-<span class="source-line-no">325</span><span id="line-325">   public void onStop(Microservice ms) {</span>
-<span class="source-line-no">326</span><span id="line-326">      final Logger logger = ms.getLogger();</span>
-<span class="source-line-no">327</span><span id="line-327">      // Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /</span>
-<span class="source-line-no">328</span><span id="line-328">      // Kubernetes stops routing new traffic while in-flight requests drain.  /livez stays healthy so the pod is</span>
-<span class="source-line-no">329</span><span id="line-329">      // not killed mid-drain.  The settle delay (default 0) gives the LB a window to observe the 503.</span>
-<span class="source-line-no">330</span><span id="line-330">      ReadinessState.resolve(ms.getBeanStore()).markOutOfService();</span>
-<span class="source-line-no">331</span><span id="line-331">      ms.out(messages, "DrainingRequests");</span>
-<span class="source-line-no">332</span><span id="line-332">      sleepQuietly(shutdownSettleDelay.get());</span>
-<span class="source-line-no">333</span><span id="line-333">      var t = new Thread("JettyServerComponentStop") {</span>
-<span class="source-line-no">334</span><span id="line-334">         @Override /* Overridden from Thread */</span>
-<span class="source-line-no">335</span><span id="line-335">         public void run() {</span>
-<span class="source-line-no">336</span><span id="line-336">            try {</span>
-<span class="source-line-no">337</span><span id="line-337">               var s = server.get();</span>
-<span class="source-line-no">338</span><span id="line-338">               if (s == null || s.isStopping() || s.isStopped())</span>
-<span class="source-line-no">339</span><span id="line-339">                  return;</span>
-<span class="source-line-no">340</span><span id="line-340">               ms.out(messages, "StoppingServer");</span>
-<span class="source-line-no">341</span><span id="line-341">               s.stop();</span>
-<span class="source-line-no">342</span><span id="line-342">               ms.out(messages, "ServerStopped");</span>
-<span class="source-line-no">343</span><span id="line-343">            } catch (Exception e) {</span>
-<span class="source-line-no">344</span><span id="line-344">               logger.log(Level.WARNING, localizedMessage(e), e);</span>
-<span class="source-line-no">345</span><span id="line-345">            }</span>
-<span class="source-line-no">346</span><span id="line-346">         }</span>
-<span class="source-line-no">347</span><span id="line-347">      };</span>
-<span class="source-line-no">348</span><span id="line-348">      t.start();</span>
-<span class="source-line-no">349</span><span id="line-349">      try {</span>
-<span class="source-line-no">350</span><span id="line-350">         t.join();</span>
-<span class="source-line-no">351</span><span id="line-351">      } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
-<span class="source-line-no">352</span><span id="line-352">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">353</span><span id="line-353">      }</span>
-<span class="source-line-no">354</span><span id="line-354">   }</span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">   private static void sleepQuietly(Duration d) {</span>
-<span class="source-line-no">357</span><span id="line-357">      if (d == null || d.isZero() || d.isNegative())</span>
-<span class="source-line-no">358</span><span id="line-358">         return;</span>
-<span class="source-line-no">359</span><span id="line-359">      try {</span>
-<span class="source-line-no">360</span><span id="line-360">         Thread.sleep(d.toMillis());</span>
-<span class="source-line-no">361</span><span id="line-361">      } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
-<span class="source-line-no">362</span><span id="line-362">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">363</span><span id="line-363">      }</span>
-<span class="source-line-no">364</span><span id="line-364">   }</span>
-<span class="source-line-no">365</span><span id="line-365"></span>
-<span class="source-line-no">366</span><span id="line-366">   @Override /* Overridden from MicroserviceListener */</span>
-<span class="source-line-no">367</span><span id="line-367">   public void onConfigChange(Microservice ms, ConfigEvents events) {</span>
-<span class="source-line-no">368</span><span id="line-368">      // No-op: Intentional empty implementation - this component is purely lifecycle-driven.</span>
-<span class="source-line-no">369</span><span id="line-369">   }</span>
-<span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">   /**</span>
-<span class="source-line-no">372</span><span id="line-372">    * Adds an arbitrary servlet to this Jetty server.</span>
-<span class="source-line-no">373</span><span id="line-373">    *</span>
-<span class="source-line-no">374</span><span id="line-374">    * @param servlet The servlet instance.</span>
-<span class="source-line-no">375</span><span id="line-375">    * @param pathSpec The context path of the servlet.</span>
-<span class="source-line-no">376</span><span id="line-376">    * @return This object.</span>
-<span class="source-line-no">377</span><span id="line-377">    */</span>
-<span class="source-line-no">378</span><span id="line-378">   @SuppressWarnings({</span>
-<span class="source-line-no">379</span><span id="line-379">      "java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
-<span class="source-line-no">380</span><span id="line-380">   })</span>
-<span class="source-line-no">381</span><span id="line-381">   public JettyServerComponent addServlet(Servlet servlet, String pathSpec) {</span>
-<span class="source-line-no">382</span><span id="line-382">      if (nn(pathSpec) &amp;&amp; ! pathSpec.endsWith("/*"))</span>
-<span class="source-line-no">383</span><span id="line-383">         pathSpec = trimTrailingSlashes(pathSpec) + "/*";</span>
-<span class="source-line-no">384</span><span id="line-384">      return addServlet(servlet, new String[]{pathSpec});</span>
-<span class="source-line-no">385</span><span id="line-385">   }</span>
-<span class="source-line-no">386</span><span id="line-386"></span>
-<span class="source-line-no">387</span><span id="line-387">   /**</span>
-<span class="source-line-no">388</span><span id="line-388">    * Adds an arbitrary servlet to this Jetty server at one or more context paths.</span>
-<span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * @param servlet The servlet instance.</span>
-<span class="source-line-no">391</span><span id="line-391">    * @param pathSpecs The context paths of the servlet.</span>
-<span class="source-line-no">392</span><span id="line-392">    * @return This object.</span>
-<span class="source-line-no">393</span><span id="line-393">    */</span>
-<span class="source-line-no">394</span><span id="line-394">   public JettyServerComponent addServlet(Servlet servlet, String...pathSpecs) {</span>
-<span class="source-line-no">395</span><span id="line-395">      var sh = new ServletHolder(servlet);</span>
-<span class="source-line-no">396</span><span id="line-396">      for (var pathSpec : pathSpecs)</span>
-<span class="source-line-no">397</span><span id="line-397">         getServletContextHandler().addServlet(sh, pathSpec);</span>
-<span class="source-line-no">398</span><span id="line-398">      return this;</span>
-<span class="source-line-no">399</span><span id="line-399">   }</span>
-<span class="source-line-no">400</span><span id="line-400"></span>
-<span class="source-line-no">401</span><span id="line-401">   /**</span>
-<span class="source-line-no">402</span><span id="line-402">    * Adds a servlet filter to this Jetty server at the specified URL pattern.</span>
-<span class="source-line-no">403</span><span id="line-403">    *</span>
-<span class="source-line-no">404</span><span id="line-404">    * @param filter The filter instance.</span>
-<span class="source-line-no">405</span><span id="line-405">    * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).</span>
-<span class="source-line-no">406</span><span id="line-406">    * @return This object.</span>
-<span class="source-line-no">407</span><span id="line-407">    */</span>
-<span class="source-line-no">408</span><span id="line-408">   @SuppressWarnings({</span>
-<span class="source-line-no">409</span><span id="line-409">      "java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
-<span class="source-line-no">410</span><span id="line-410">   })</span>
-<span class="source-line-no">411</span><span id="line-411">   public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {</span>
-<span class="source-line-no">412</span><span id="line-412">      return addFilter(filter, new String[]{urlPattern});</span>
-<span class="source-line-no">413</span><span id="line-413">   }</span>
-<span class="source-line-no">414</span><span id="line-414"></span>
-<span class="source-line-no">415</span><span id="line-415">   /**</span>
-<span class="source-line-no">416</span><span id="line-416">    * Adds a servlet filter to this Jetty server at one or more URL patterns.</span>
-<span class="source-line-no">417</span><span id="line-417">    *</span>
-<span class="source-line-no">418</span><span id="line-418">    * @param filter The filter instance.</span>
-<span class="source-line-no">419</span><span id="line-419">    * @param urlPatterns The URL patterns the filter applies to.</span>
-<span class="source-line-no">420</span><span id="line-420">    * @return This object.</span>
-<span class="source-line-no">421</span><span id="line-421">    */</span>
-<span class="source-line-no">422</span><span id="line-422">   public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String... urlPatterns) {</span>
-<span class="source-line-no">423</span><span id="line-423">      var fh = new FilterHolder(filter);</span>
-<span class="source-line-no">424</span><span id="line-424">      for (var urlPattern : urlPatterns)</span>
-<span class="source-line-no">425</span><span id="line-425">         getServletContextHandler().addFilter(fh, urlPattern, EnumSet.of(DispatcherType.REQUEST));</span>
-<span class="source-line-no">426</span><span id="line-426">      return this;</span>
-<span class="source-line-no">427</span><span id="line-427">   }</span>
-<span class="source-line-no">428</span><span id="line-428"></span>
-<span class="source-line-no">429</span><span id="line-429">   /**</span>
-<span class="source-line-no">430</span><span id="line-430">    * Adds an attribute to the Jetty server.</span>
-<span class="source-line-no">431</span><span id="line-431">    *</span>
-<span class="source-line-no">432</span><span id="line-432">    * @param name The server attribute name.</span>
-<span class="source-line-no">433</span><span id="line-433">    * @param value The attribute value.</span>
-<span class="source-line-no">434</span><span id="line-434">    * @return This object.</span>
-<span class="source-line-no">435</span><span id="line-435">    */</span>
-<span class="source-line-no">436</span><span id="line-436">   public JettyServerComponent addServletAttribute(String name, Object value) {</span>
-<span class="source-line-no">437</span><span id="line-437">      getServer().setAttribute(name, value);</span>
-<span class="source-line-no">438</span><span id="line-438">      return this;</span>
-<span class="source-line-no">439</span><span id="line-439">   }</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">   /**</span>
-<span class="source-line-no">442</span><span id="line-442">    * Returns the context path that this server is using.</span>
-<span class="source-line-no">443</span><span id="line-443">    *</span>
-<span class="source-line-no">444</span><span id="line-444">    * @return The context path.</span>
-<span class="source-line-no">445</span><span id="line-445">    */</span>
-<span class="source-line-no">446</span><span id="line-446">   public String getContextPath() {</span>
-<span class="source-line-no">447</span><span id="line-447">      return getServletContextHandler().getContextPath();</span>
+<span class="source-line-no">238</span><span id="line-238">            if (resolveVars2)</span>
+<span class="source-line-no">239</span><span id="line-239">               jettyXml = vr.resolve(jettyXml);</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">            ms.getLogger().info(jettyXml);</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">            try {</span>
+<span class="source-line-no">244</span><span id="line-244">               server.set(factory.create(jettyXml));</span>
+<span class="source-line-no">245</span><span id="line-245">            } catch (Exception e) {</span>
+<span class="source-line-no">246</span><span id="line-246">               throw toRex(e);</span>
+<span class="source-line-no">247</span><span id="line-247">            }</span>
+<span class="source-line-no">248</span><span id="line-248">         }</span>
+<span class="source-line-no">249</span><span id="line-249"></span>
+<span class="source-line-no">250</span><span id="line-250">         // Publish back to the store for downstream beans / lookups.</span>
+<span class="source-line-no">251</span><span id="line-251">         store.addBean(Server.class, server.get());</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">         // Graceful-shutdown wiring (zero-downtime k8s rollouts):</span>
+<span class="source-line-no">254</span><span id="line-254">         //  - Apply a bounded stopTimeout so server.stop() drains in-flight requests before the connector closes.</span>
+<span class="source-line-no">255</span><span id="line-255">         //    Precedence: JettySettings &gt; Jetty/stopTimeout config &gt; jetty.xml value (if any) &gt; 30s default.</span>
+<span class="source-line-no">256</span><span id="line-256">         //  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.</span>
+<span class="source-line-no">257</span><span id="line-257">         //  - Mark readiness ready so a freshly-(re)started service serves traffic.</span>
+<span class="source-line-no">258</span><span id="line-258">         var stopTimeoutOverride = settings.getStopTimeout() != null</span>
+<span class="source-line-no">259</span><span id="line-259">            ? settings.getStopTimeout()</span>
+<span class="source-line-no">260</span><span id="line-260">            : cf.get("Jetty/stopTimeout").asLong().map(Duration::ofMillis).orElse(null);</span>
+<span class="source-line-no">261</span><span id="line-261">         if (stopTimeoutOverride != null)</span>
+<span class="source-line-no">262</span><span id="line-262">            server.get().setStopTimeout(Math.max(0L, stopTimeoutOverride.toMillis()));</span>
+<span class="source-line-no">263</span><span id="line-263">         else if (server.get().getStopTimeout() &lt;= 0L)</span>
+<span class="source-line-no">264</span><span id="line-264">            server.get().setStopTimeout(DEFAULT_STOP_TIMEOUT.toMillis());</span>
+<span class="source-line-no">265</span><span id="line-265">         shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Jetty/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));</span>
+<span class="source-line-no">266</span><span id="line-266">         ReadinessState.resolve(store).markReady();</span>
+<span class="source-line-no">267</span><span id="line-267"></span>
+<span class="source-line-no">268</span><span id="line-268">         // Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.</span>
+<span class="source-line-no">269</span><span id="line-269">         var mountedPaths = new LinkedHashMap&lt;String,String&gt;();</span>
+<span class="source-line-no">270</span><span id="line-270"></span>
+<span class="source-line-no">271</span><span id="line-271">         for (var s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {</span>
+<span class="source-line-no">272</span><span id="line-272">            try {</span>
+<span class="source-line-no">273</span><span id="line-273">               var c = info(Class.forName(s));</span>
+<span class="source-line-no">274</span><span id="line-274">               if (c.isAssignableTo(RestServlet.class)) {</span>
+<span class="source-line-no">275</span><span id="line-275">                  var rs = (RestServlet)c.newInstance();</span>
+<span class="source-line-no">276</span><span id="line-276">                  mountWithCollisionCheck(rs, rs.getPath(), "Jetty/servlets[" + s + "]", mountedPaths);</span>
+<span class="source-line-no">277</span><span id="line-277">               } else {</span>
+<span class="source-line-no">278</span><span id="line-278">                  throw rex("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: %s", s);</span>
+<span class="source-line-no">279</span><span id="line-279">               }</span>
+<span class="source-line-no">280</span><span id="line-280">            } catch (ClassNotFoundException e) {</span>
+<span class="source-line-no">281</span><span id="line-281">               throw toRex(e);</span>
+<span class="source-line-no">282</span><span id="line-282">            }</span>
+<span class="source-line-no">283</span><span id="line-283">         }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">         cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -&gt; {</span>
+<span class="source-line-no">286</span><span id="line-286">            try {</span>
+<span class="source-line-no">287</span><span id="line-287">               var c = info(Class.forName(v.toString()));</span>
+<span class="source-line-no">288</span><span id="line-288">               if (c.isAssignableTo(Servlet.class)) {</span>
+<span class="source-line-no">289</span><span id="line-289">                  var rs = (Servlet)c.newInstance();</span>
+<span class="source-line-no">290</span><span id="line-290">                  mountWithCollisionCheck(rs, k, "Jetty/servletMap[" + k + "]", mountedPaths);</span>
+<span class="source-line-no">291</span><span id="line-291">               } else {</span>
+<span class="source-line-no">292</span><span id="line-292">                  throw rex("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: %s", cn(v));</span>
+<span class="source-line-no">293</span><span id="line-293">               }</span>
+<span class="source-line-no">294</span><span id="line-294">            } catch (ClassNotFoundException e) {</span>
+<span class="source-line-no">295</span><span id="line-295">               throw toRex(e);</span>
+<span class="source-line-no">296</span><span id="line-296">            }</span>
+<span class="source-line-no">297</span><span id="line-297">         });</span>
+<span class="source-line-no">298</span><span id="line-298"></span>
+<span class="source-line-no">299</span><span id="line-299">         cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">         // Auto-mount @Bean AuthFilterChain at /* before any servlet registration so the filter</span>
+<span class="source-line-no">302</span><span id="line-302">         // runs before routing for all requests.</span>
+<span class="source-line-no">303</span><span id="line-303">         store.getBean(AuthFilterChain.class).ifPresent(chain -&gt; addFilter(chain, "/*"));</span>
+<span class="source-line-no">304</span><span id="line-304"></span>
+<span class="source-line-no">305</span><span id="line-305">         // Auto-discover @Rest servlets contributed via @Configuration/@Bean methods.</span>
+<span class="source-line-no">306</span><span id="line-306">         // Path source precedence: @Rest(path=...) on the resource class, else "/".</span>
+<span class="source-line-no">307</span><span id="line-307">         for (var e : store.getBeansOfType(Servlet.class).entrySet()) {</span>
+<span class="source-line-no">308</span><span id="line-308">            var servlet = e.getValue();</span>
+<span class="source-line-no">309</span><span id="line-309">            var cls = servlet.getClass();</span>
+<span class="source-line-no">310</span><span id="line-310">            if (cls.getAnnotation(Rest.class) == null)</span>
+<span class="source-line-no">311</span><span id="line-311">               continue;</span>
+<span class="source-line-no">312</span><span id="line-312">            var pathSpecs = restPathsFor(servlet, store);</span>
+<span class="source-line-no">313</span><span id="line-313">            var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");</span>
+<span class="source-line-no">314</span><span id="line-314">            for (var pathSpec : pathSpecs)</span>
+<span class="source-line-no">315</span><span id="line-315">               checkPathCollision(pathSpec, source, mountedPaths);</span>
+<span class="source-line-no">316</span><span id="line-316">            addServlet(servlet, pathSpecs);</span>
+<span class="source-line-no">317</span><span id="line-317">         }</span>
+<span class="source-line-no">318</span><span id="line-318"></span>
+<span class="source-line-no">319</span><span id="line-319">         if (serverPortEnv.isEmpty())</span>
+<span class="source-line-no">320</span><span id="line-320">            // Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external</span>
+<span class="source-line-no">321</span><span id="line-321">            // publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A</span>
+<span class="source-line-no">322</span><span id="line-322">            // Settings-based write would not be visible to those raw readers, so this is kept.  The</span>
+<span class="source-line-no">323</span><span id="line-323">            // @Value-injected serverPortEnv read side is already Settings-abstracted.</span>
+<span class="source-line-no">324</span><span id="line-324">            System.setProperty("juneau.serverPort", String.valueOf(availablePort));</span>
+<span class="source-line-no">325</span><span id="line-325"></span>
+<span class="source-line-no">326</span><span id="line-326">         server.get().start();</span>
+<span class="source-line-no">327</span><span id="line-327">         ms.out(messages, "ServerStarted", getPort());</span>
+<span class="source-line-no">328</span><span id="line-328">      } catch (Exception e) {</span>
+<span class="source-line-no">329</span><span id="line-329">         throw toRex(e);</span>
+<span class="source-line-no">330</span><span id="line-330">      }</span>
+<span class="source-line-no">331</span><span id="line-331">   }</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">   @Override /* Overridden from MicroserviceListener */</span>
+<span class="source-line-no">334</span><span id="line-334">   public void onStop(Microservice ms) {</span>
+<span class="source-line-no">335</span><span id="line-335">      final Logger logger = ms.getLogger();</span>
+<span class="source-line-no">336</span><span id="line-336">      // Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /</span>
+<span class="source-line-no">337</span><span id="line-337">      // Kubernetes stops routing new traffic while in-flight requests drain.  /livez stays healthy so the pod is</span>
+<span class="source-line-no">338</span><span id="line-338">      // not killed mid-drain.  The settle delay (default 0) gives the LB a window to observe the 503.</span>
+<span class="source-line-no">339</span><span id="line-339">      ReadinessState.resolve(ms.getBeanStore()).markOutOfService();</span>
+<span class="source-line-no">340</span><span id="line-340">      ms.out(messages, "DrainingRequests");</span>
+<span class="source-line-no">341</span><span id="line-341">      sleepQuietly(shutdownSettleDelay.get());</span>
+<span class="source-line-no">342</span><span id="line-342">      var t = new Thread("JettyServerComponentStop") {</span>
+<span class="source-line-no">343</span><span id="line-343">         @Override /* Overridden from Thread */</span>
+<span class="source-line-no">344</span><span id="line-344">         public void run() {</span>
+<span class="source-line-no">345</span><span id="line-345">            try {</span>
+<span class="source-line-no">346</span><span id="line-346">               var s = server.get();</span>
+<span class="source-line-no">347</span><span id="line-347">               if (s == null || s.isStopping() || s.isStopped())</span>
+<span class="source-line-no">348</span><span id="line-348">                  return;</span>
+<span class="source-line-no">349</span><span id="line-349">               ms.out(messages, "StoppingServer");</span>
+<span class="source-line-no">350</span><span id="line-350">               s.stop();</span>
+<span class="source-line-no">351</span><span id="line-351">               ms.out(messages, "ServerStopped");</span>
+<span class="source-line-no">352</span><span id="line-352">            } catch (Exception e) {</span>
+<span class="source-line-no">353</span><span id="line-353">               logger.log(Level.WARNING, localizedMessage(e), e);</span>
+<span class="source-line-no">354</span><span id="line-354">            }</span>
+<span class="source-line-no">355</span><span id="line-355">         }</span>
+<span class="source-line-no">356</span><span id="line-356">      };</span>
+<span class="source-line-no">357</span><span id="line-357">      t.start();</span>
+<span class="source-line-no">358</span><span id="line-358">      try {</span>
+<span class="source-line-no">359</span><span id="line-359">         t.join();</span>
+<span class="source-line-no">360</span><span id="line-360">      } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
+<span class="source-line-no">361</span><span id="line-361">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">362</span><span id="line-362">      }</span>
+<span class="source-line-no">363</span><span id="line-363">   }</span>
+<span class="source-line-no">364</span><span id="line-364"></span>
+<span class="source-line-no">365</span><span id="line-365">   private static void sleepQuietly(Duration d) {</span>
+<span class="source-line-no">366</span><span id="line-366">      if (d == null || d.isZero() || d.isNegative())</span>
+<span class="source-line-no">367</span><span id="line-367">         return;</span>
+<span class="source-line-no">368</span><span id="line-368">      try {</span>
+<span class="source-line-no">369</span><span id="line-369">         Thread.sleep(d.toMillis());</span>
+<span class="source-line-no">370</span><span id="line-370">      } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
+<span class="source-line-no">371</span><span id="line-371">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">372</span><span id="line-372">      }</span>
+<span class="source-line-no">373</span><span id="line-373">   }</span>
+<span class="source-line-no">374</span><span id="line-374"></span>
+<span class="source-line-no">375</span><span id="line-375">   @Override /* Overridden from MicroserviceListener */</span>
+<span class="source-line-no">376</span><span id="line-376">   public void onConfigChange(Microservice ms, ConfigEvents events) {</span>
+<span class="source-line-no">377</span><span id="line-377">      // No-op: Intentional empty implementation - this component is purely lifecycle-driven.</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * Adds an arbitrary servlet to this Jetty server.</span>
+<span class="source-line-no">382</span><span id="line-382">    *</span>
+<span class="source-line-no">383</span><span id="line-383">    * @param servlet The servlet instance.</span>
+<span class="source-line-no">384</span><span id="line-384">    * @param pathSpec The context path of the servlet.</span>
+<span class="source-line-no">385</span><span id="line-385">    * @return This object.</span>
+<span class="source-line-no">386</span><span id="line-386">    */</span>
+<span class="source-line-no">387</span><span id="line-387">   @SuppressWarnings({</span>
+<span class="source-line-no">388</span><span id="line-388">      "java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
+<span class="source-line-no">389</span><span id="line-389">   })</span>
+<span class="source-line-no">390</span><span id="line-390">   public JettyServerComponent addServlet(Servlet servlet, String pathSpec) {</span>
+<span class="source-line-no">391</span><span id="line-391">      if (nn(pathSpec) &amp;&amp; ! pathSpec.endsWith("/*"))</span>
+<span class="source-line-no">392</span><span id="line-392">         pathSpec = trimTrailingSlashes(pathSpec) + "/*";</span>
+<span class="source-line-no">393</span><span id="line-393">      return addServlet(servlet, new String[]{pathSpec});</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395"></span>
+<span class="source-line-no">396</span><span id="line-396">   /**</span>
+<span class="source-line-no">397</span><span id="line-397">    * Adds an arbitrary servlet to this Jetty server at one or more context paths.</span>
+<span class="source-line-no">398</span><span id="line-398">    *</span>
+<span class="source-line-no">399</span><span id="line-399">    * @param servlet The servlet instance.</span>
+<span class="source-line-no">400</span><span id="line-400">    * @param pathSpecs The context paths of the servlet.</span>
+<span class="source-line-no">401</span><span id="line-401">    * @return This object.</span>
+<span class="source-line-no">402</span><span id="line-402">    */</span>
+<span class="source-line-no">403</span><span id="line-403">   public JettyServerComponent addServlet(Servlet servlet, String...pathSpecs) {</span>
+<span class="source-line-no">404</span><span id="line-404">      var sh = new ServletHolder(servlet);</span>
+<span class="source-line-no">405</span><span id="line-405">      for (var pathSpec : pathSpecs)</span>
+<span class="source-line-no">406</span><span id="line-406">         getServletContextHandler().addServlet(sh, pathSpec);</span>
+<span class="source-line-no">407</span><span id="line-407">      return this;</span>
+<span class="source-line-no">408</span><span id="line-408">   }</span>
+<span class="source-line-no">409</span><span id="line-409"></span>
+<span class="source-line-no">410</span><span id="line-410">   /**</span>
+<span class="source-line-no">411</span><span id="line-411">    * Adds a servlet filter to this Jetty server at the specified URL pattern.</span>
+<span class="source-line-no">412</span><span id="line-412">    *</span>
+<span class="source-line-no">413</span><span id="line-413">    * @param filter The filter instance.</span>
+<span class="source-line-no">414</span><span id="line-414">    * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).</span>
+<span class="source-line-no">415</span><span id="line-415">    * @return This object.</span>
+<span class="source-line-no">416</span><span id="line-416">    */</span>
+<span class="source-line-no">417</span><span id="line-417">   @SuppressWarnings({</span>
+<span class="source-line-no">418</span><span id="line-418">      "java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
+<span class="source-line-no">419</span><span id="line-419">   })</span>
+<span class="source-line-no">420</span><span id="line-420">   public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {</span>
+<span class="source-line-no">421</span><span id="line-421">      return addFilter(filter, new String[]{urlPattern});</span>
+<span class="source-line-no">422</span><span id="line-422">   }</span>
+<span class="source-line-no">423</span><span id="line-423"></span>
+<span class="source-line-no">424</span><span id="line-424">   /**</span>
+<span class="source-line-no">425</span><span id="line-425">    * Adds a servlet filter to this Jetty server at one or more URL patterns.</span>
+<span class="source-line-no">426</span><span id="line-426">    *</span>
+<span class="source-line-no">427</span><span id="line-427">    * @param filter The filter instance.</span>
+<span class="source-line-no">428</span><span id="line-428">    * @param urlPatterns The URL patterns the filter applies to.</span>
+<span class="source-line-no">429</span><span id="line-429">    * @return This object.</span>
+<span class="source-line-no">430</span><span id="line-430">    */</span>
+<span class="source-line-no">431</span><span id="line-431">   public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String... urlPatterns) {</span>
+<span class="source-line-no">432</span><span id="line-432">      var fh = new FilterHolder(filter);</span>
+<span class="source-line-no">433</span><span id="line-433">      for (var urlPattern : urlPatterns)</span>
+<span class="source-line-no">434</span><span id="line-434">         getServletContextHandler().addFilter(fh, urlPattern, EnumSet.of(DispatcherType.REQUEST));</span>
+<span class="source-line-no">435</span><span id="line-435">      return this;</span>
+<span class="source-line-no">436</span><span id="line-436">   }</span>
+<span class="source-line-no">437</span><span id="line-437"></span>
+<span class="source-line-no">438</span><span id="line-438">   /**</span>
+<span class="source-line-no">439</span><span id="line-439">    * Adds an attribute to the Jetty server.</span>
+<span class="source-line-no">440</span><span id="line-440">    *</span>
+<span class="source-line-no">441</span><span id="line-441">    * @param name The server attribute name.</span>
+<span class="source-line-no">442</span><span id="line-442">    * @param value The attribute value.</span>
+<span class="source-line-no">443</span><span id="line-443">    * @return This object.</span>
+<span class="source-line-no">444</span><span id="line-444">    */</span>
+<span class="source-line-no">445</span><span id="line-445">   public JettyServerComponent addServletAttribute(String name, Object value) {</span>
+<span class="source-line-no">446</span><span id="line-446">      getServer().setAttribute(name, value);</span>
+<span class="source-line-no">447</span><span id="line-447">      return this;</span>
 <span class="source-line-no">448</span><span id="line-448">   }</span>
 <span class="source-line-no">449</span><span id="line-449"></span>
 <span class="source-line-no">450</span><span id="line-450">   /**</span>
-<span class="source-line-no">451</span><span id="line-451">    * Returns the hostname of this microservice.</span>
+<span class="source-line-no">451</span><span id="line-451">    * Returns the context path that this server is using.</span>
 <span class="source-line-no">452</span><span id="line-452">    *</span>
-<span class="source-line-no">453</span><span id="line-453">    * @return The hostname.</span>
+<span class="source-line-no">453</span><span id="line-453">    * @return The context path.</span>
 <span class="source-line-no">454</span><span id="line-454">    */</span>
-<span class="source-line-no">455</span><span id="line-455">   public String getHostName() {</span>
-<span class="source-line-no">456</span><span id="line-456">      String hostname = "localhost";</span>
-<span class="source-line-no">457</span><span id="line-457">      try {</span>
-<span class="source-line-no">458</span><span id="line-458">         hostname = InetAddress.getLocalHost().getHostName();</span>
-<span class="source-line-no">459</span><span id="line-459">      } catch (@SuppressWarnings("unused") UnknownHostException e) {</span>
-<span class="source-line-no">460</span><span id="line-460">         // Cannot determine hostname, use default "localhost"</span>
-<span class="source-line-no">461</span><span id="line-461">      }</span>
-<span class="source-line-no">462</span><span id="line-462">      return hostname;</span>
-<span class="source-line-no">463</span><span id="line-463">   }</span>
-<span class="source-line-no">464</span><span id="line-464"></span>
-<span class="source-line-no">465</span><span id="line-465">   /**</span>
-<span class="source-line-no">466</span><span id="line-466">    * Returns the port that this server is listening on.</span>
-<span class="source-line-no">467</span><span id="line-467">    *</span>
-<span class="source-line-no">468</span><span id="line-468">    * @return The port.</span>
-<span class="source-line-no">469</span><span id="line-469">    */</span>
-<span class="source-line-no">470</span><span id="line-470">   public int getPort() {</span>
-<span class="source-line-no">471</span><span id="line-471">      for (var c : getServer().getConnectors())</span>
-<span class="source-line-no">472</span><span id="line-472">         if (c instanceof ServerConnector c2)</span>
-<span class="source-line-no">473</span><span id="line-473">            return c2.getPort();</span>
-<span class="source-line-no">474</span><span id="line-474">      throw new IllegalStateException("Could not locate ServerConnector in Jetty server.");</span>
-<span class="source-line-no">475</span><span id="line-475">   }</span>
-<span class="source-line-no">476</span><span id="line-476"></span>
-<span class="source-line-no">477</span><span id="line-477">   /**</span>
-<span class="source-line-no">478</span><span id="line-478">    * Returns whether this server is using &lt;js&gt;"http"&lt;/js&gt; or &lt;js&gt;"https"&lt;/js&gt;.</span>
-<span class="source-line-no">479</span><span id="line-479">    *</span>
-<span class="source-line-no">480</span><span id="line-480">    * @return The protocol.</span>
-<span class="source-line-no">481</span><span id="line-481">    */</span>
-<span class="source-line-no">482</span><span id="line-482">   public String getProtocol() {</span>
-<span class="source-line-no">483</span><span id="line-483">      for (var c : getServer().getConnectors())</span>
-<span class="source-line-no">484</span><span id="line-484">         if (c instanceof ServerConnector c2)</span>
-<span class="source-line-no">485</span><span id="line-485">            for (var cf : c2.getConnectionFactories())</span>
-<span class="source-line-no">486</span><span id="line-486">               if (cf instanceof SslConnectionFactory)</span>
-<span class="source-line-no">487</span><span id="line-487">                  return "https";</span>
-<span class="source-line-no">488</span><span id="line-488">      return "http";</span>
-<span class="source-line-no">489</span><span id="line-489">   }</span>
-<span class="source-line-no">490</span><span id="line-490"></span>
-<span class="source-line-no">491</span><span id="line-491">   /**</span>
-<span class="source-line-no">492</span><span id="line-492">    * Returns the underlying Jetty server.</span>
-<span class="source-line-no">493</span><span id="line-493">    *</span>
-<span class="source-line-no">494</span><span id="line-494">    * @return The underlying Jetty server.</span>
-<span class="source-line-no">495</span><span id="line-495">    * @throws IllegalStateException If the server has not been created yet.</span>
-<span class="source-line-no">496</span><span id="line-496">    */</span>
-<span class="source-line-no">497</span><span id="line-497">   public Server getServer() {</span>
-<span class="source-line-no">498</span><span id="line-498">      return Objects.requireNonNull(server.get(), "Server not found.  Microservice has not been started yet.");</span>
-<span class="source-line-no">499</span><span id="line-499">   }</span>
-<span class="source-line-no">500</span><span id="line-500"></span>
-<span class="source-line-no">501</span><span id="line-501">   /**</span>
-<span class="source-line-no">502</span><span id="line-502">    * Finds and returns the servlet context handler defined in the Jetty container.</span>
-<span class="source-line-no">503</span><span id="line-503">    *</span>
-<span class="source-line-no">504</span><span id="line-504">    * @return The servlet context handler.</span>
-<span class="source-line-no">505</span><span id="line-505">    * @throws IllegalStateException If the context handler is not defined.</span>
-<span class="source-line-no">506</span><span id="line-506">    */</span>
-<span class="source-line-no">507</span><span id="line-507">   public ServletContextHandler getServletContextHandler() {</span>
-<span class="source-line-no">508</span><span id="line-508">      var obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);</span>
-<span class="source-line-no">509</span><span id="line-509">      if (obj instanceof ServletContextHandler obj2)</span>
-<span class="source-line-no">510</span><span id="line-510">         return obj2;</span>
-<span class="source-line-no">511</span><span id="line-511">      throw new IllegalStateException("Servlet context handler not found in jetty server or at attribute '" + KEY_SERVLET_CONTEXT_HANDLER + "'");</span>
-<span class="source-line-no">512</span><span id="line-512">   }</span>
-<span class="source-line-no">513</span><span id="line-513"></span>
-<span class="source-line-no">514</span><span id="line-514">   /**</span>
-<span class="source-line-no">515</span><span id="line-515">    * Returns the URI where this server is listening.</span>
-<span class="source-line-no">516</span><span id="line-516">    *</span>
-<span class="source-line-no">517</span><span id="line-517">    * @return The URI.</span>
-<span class="source-line-no">518</span><span id="line-518">    */</span>
-<span class="source-line-no">519</span><span id="line-519">   public URI getURI() {</span>
-<span class="source-line-no">520</span><span id="line-520">      var cp = getContextPath();</span>
-<span class="source-line-no">521</span><span id="line-521">      try {</span>
-<span class="source-line-no">522</span><span id="line-522">         return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);</span>
-<span class="source-line-no">523</span><span id="line-523">      } catch (URISyntaxException e) {</span>
-<span class="source-line-no">524</span><span id="line-524">         throw toRex(e);</span>
-<span class="source-line-no">525</span><span id="line-525">      }</span>
-<span class="source-line-no">526</span><span id="line-526">   }</span>
-<span class="source-line-no">527</span><span id="line-527"></span>
-<span class="source-line-no">528</span><span id="line-528">   private void mountWithCollisionCheck(Servlet servlet, String rawPath, String source, Map&lt;String,String&gt; mountedPaths) {</span>
-<span class="source-line-no">529</span><span id="line-529">      var pathSpec = normalizePathSpec(rawPath);</span>
-<span class="source-line-no">530</span><span id="line-530">      checkPathCollision(pathSpec, source, mountedPaths);</span>
-<span class="source-line-no">531</span><span id="line-531">      addServlet(servlet, pathSpec);</span>
-<span class="source-line-no">532</span><span id="line-532">   }</span>
-<span class="source-line-no">533</span><span id="line-533"></span>
-<span class="source-line-no">534</span><span id="line-534">   private void checkPathCollision(String pathSpec, String source, Map&lt;String,String&gt; mountedPaths) {</span>
-<span class="source-line-no">535</span><span id="line-535">      var prior = mountedPaths.get(pathSpec);</span>
-<span class="source-line-no">536</span><span id="line-536">      if (nn(prior))</span>
-<span class="source-line-no">537</span><span id="line-537">         throw rex("Servlet mount path collision: ''{0}'' is already mounted by {1}; refused by {2}.", pathSpec, prior, source);</span>
-<span class="source-line-no">538</span><span id="line-538">      mountedPaths.put(pathSpec, source);</span>
-<span class="source-line-no">539</span><span id="line-539">   }</span>
-<span class="source-line-no">540</span><span id="line-540">}</span>
+<span class="source-line-no">455</span><span id="line-455">   public String getContextPath() {</span>
+<span class="source-line-no">456</span><span id="line-456">      return getServletContextHandler().getContextPath();</span>
+<span class="source-line-no">457</span><span id="line-457">   }</span>
+<span class="source-line-no">458</span><span id="line-458"></span>
+<span class="source-line-no">459</span><span id="line-459">   /**</span>
+<span class="source-line-no">460</span><span id="line-460">    * Returns the hostname of this microservice.</span>
+<span class="source-line-no">461</span><span id="line-461">    *</span>
+<span class="source-line-no">462</span><span id="line-462">    * @return The hostname.</span>
+<span class="source-line-no">463</span><span id="line-463">    */</span>
+<span class="source-line-no">464</span><span id="line-464">   public String getHostName() {</span>
+<span class="source-line-no">465</span><span id="line-465">      String hostname = "localhost";</span>
+<span class="source-line-no">466</span><span id="line-466">      try {</span>
+<span class="source-line-no">467</span><span id="line-467">         hostname = InetAddress.getLocalHost().getHostName();</span>
+<span class="source-line-no">468</span><span id="line-468">      } catch (@SuppressWarnings("unused") UnknownHostException e) {</span>
+<span class="source-line-no">469</span><span id="line-469">         // Cannot determine hostname, use default "localhost"</span>
+<span class="source-line-no">470</span><span id="line-470">      }</span>
+<span class="source-line-no">471</span><span id="line-471">      return hostname;</span>
+<span class="source-line-no">472</span><span id="line-472">   }</span>
+<span class="source-line-no">473</span><span id="line-473"></span>
+<span class="source-line-no">474</span><span id="line-474">   /**</span>
+<span class="source-line-no">475</span><span id="line-475">    * Returns the port that this server is listening on.</span>
+<span class="source-line-no">476</span><span id="line-476">    *</span>
+<span class="source-line-no">477</span><span id="line-477">    * @return The port.</span>
+<span class="source-line-no">478</span><span id="line-478">    */</span>
+<span class="source-line-no">479</span><span id="line-479">   public int getPort() {</span>
+<span class="source-line-no">480</span><span id="line-480">      for (var c : getServer().getConnectors())</span>
+<span class="source-line-no">481</span><span id="line-481">         if (c instanceof ServerConnector c2)</span>
+<span class="source-line-no">482</span><span id="line-482">            return c2.getPort();</span>
+<span class="source-line-no">483</span><span id="line-483">      throw new IllegalStateException("Could not locate ServerConnector in Jetty server.");</span>
+<span class="source-line-no">484</span><span id="line-484">   }</span>
+<span class="source-line-no">485</span><span id="line-485"></span>
+<span class="source-line-no">486</span><span id="line-486">   /**</span>
+<span class="source-line-no">487</span><span id="line-487">    * Returns whether this server is using &lt;js&gt;"http"&lt;/js&gt; or &lt;js&gt;"https"&lt;/js&gt;.</span>
+<span class="source-line-no">488</span><span id="line-488">    *</span>
+<span class="source-line-no">489</span><span id="line-489">    * @return The protocol.</span>
+<span class="source-line-no">490</span><span id="line-490">    */</span>
+<span class="source-line-no">491</span><span id="line-491">   public String getProtocol() {</span>
+<span class="source-line-no">492</span><span id="line-492">      for (var c : getServer().getConnectors())</span>
+<span class="source-line-no">493</span><span id="line-493">         if (c instanceof ServerConnector c2)</span>
+<span class="source-line-no">494</span><span id="line-494">            for (var cf : c2.getConnectionFactories())</span>
+<span class="source-line-no">495</span><span id="line-495">               if (cf instanceof SslConnectionFactory)</span>
+<span class="source-line-no">496</span><span id="line-496">                  return "https";</span>
+<span class="source-line-no">497</span><span id="line-497">      return "http";</span>
+<span class="source-line-no">498</span><span id="line-498">   }</span>
+<span class="source-line-no">499</span><span id="line-499"></span>
+<span class="source-line-no">500</span><span id="line-500">   /**</span>
+<span class="source-line-no">501</span><span id="line-501">    * Returns the underlying Jetty server.</span>
+<span class="source-line-no">502</span><span id="line-502">    *</span>
+<span class="source-line-no">503</span><span id="line-503">    * @return The underlying Jetty server.</span>
+<span class="source-line-no">504</span><span id="line-504">    * @throws NullPointerException If the server has not been created yet.</span>
+<span class="source-line-no">505</span><span id="line-505">    */</span>
+<span class="source-line-no">506</span><span id="line-506">   public Server getServer() {</span>
+<span class="source-line-no">507</span><span id="line-507">      return Objects.requireNonNull(server.get(), "Server not found.  Microservice has not been started yet.");</span>
+<span class="source-line-no">508</span><span id="line-508">   }</span>
+<span class="source-line-no">509</span><span id="line-509"></span>
+<span class="source-line-no">510</span><span id="line-510">   /**</span>
+<span class="source-line-no">511</span><span id="line-511">    * Finds and returns the servlet context handler defined in the Jetty container.</span>
+<span class="source-line-no">512</span><span id="line-512">    *</span>
+<span class="source-line-no">513</span><span id="line-513">    * @return The servlet context handler.</span>
+<span class="source-line-no">514</span><span id="line-514">    * @throws IllegalStateException If the context handler is not defined.</span>
+<span class="source-line-no">515</span><span id="line-515">    */</span>
+<span class="source-line-no">516</span><span id="line-516">   public ServletContextHandler getServletContextHandler() {</span>
+<span class="source-line-no">517</span><span id="line-517">      var obj = getServer().getAttribute(KEY_SERVLET_CONTEXT_HANDLER);</span>
+<span class="source-line-no">518</span><span id="line-518">      if (obj instanceof ServletContextHandler obj2)</span>
+<span class="source-line-no">519</span><span id="line-519">         return obj2;</span>
+<span class="source-line-no">520</span><span id="line-520">      throw isex("Servlet context handler not found in jetty server or at attribute '%s'", KEY_SERVLET_CONTEXT_HANDLER);</span>
+<span class="source-line-no">521</span><span id="line-521">   }</span>
+<span class="source-line-no">522</span><span id="line-522"></span>
+<span class="source-line-no">523</span><span id="line-523">   /**</span>
+<span class="source-line-no">524</span><span id="line-524">    * Returns the URI where this server is listening.</span>
+<span class="source-line-no">525</span><span id="line-525">    *</span>
+<span class="source-line-no">526</span><span id="line-526">    * @return The URI.</span>
+<span class="source-line-no">527</span><span id="line-527">    */</span>
+<span class="source-line-no">528</span><span id="line-528">   public URI getURI() {</span>
+<span class="source-line-no">529</span><span id="line-529">      var cp = getContextPath();</span>
+<span class="source-line-no">530</span><span id="line-530">      try {</span>
+<span class="source-line-no">531</span><span id="line-531">         return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);</span>
+<span class="source-line-no">532</span><span id="line-532">      } catch (URISyntaxException e) {</span>
+<span class="source-line-no">533</span><span id="line-533">         throw toRex(e);</span>
+<span class="source-line-no">534</span><span id="line-534">      }</span>
+<span class="source-line-no">535</span><span id="line-535">   }</span>
+<span class="source-line-no">536</span><span id="line-536"></span>
+<span class="source-line-no">537</span><span id="line-537">   private void mountWithCollisionCheck(Servlet servlet, String rawPath, String source, Map&lt;String,String&gt; mountedPaths) {</span>
+<span class="source-line-no">538</span><span id="line-538">      var pathSpec = normalizePathSpec(rawPath);</span>
+<span class="source-line-no">539</span><span id="line-539">      checkPathCollision(pathSpec, source, mountedPaths);</span>
+<span class="source-line-no">540</span><span id="line-540">      addServlet(servlet, pathSpec);</span>
+<span class="source-line-no">541</span><span id="line-541">   }</span>
+<span class="source-line-no">542</span><span id="line-542"></span>
+<span class="source-line-no">543</span><span id="line-543">   private void checkPathCollision(String pathSpec, String source, Map&lt;String,String&gt; mountedPaths) {</span>
+<span class="source-line-no">544</span><span id="line-544">      var prior = mountedPaths.get(pathSpec);</span>
+<span class="source-line-no">545</span><span id="line-545">      if (nn(prior))</span>
+<span class="source-line-no">546</span><span id="line-546">         throw rex("Servlet mount path collision: '%s' is already mounted by %s; refused by %s.", pathSpec, prior, source);</span>
+<span class="source-line-no">547</span><span id="line-547">      mountedPaths.put(pathSpec, source);</span>
+<span class="source-line-no">548</span><span id="line-548">   }</span>
+<span class="source-line-no">549</span><span id="line-549">}</span>
 
 
 

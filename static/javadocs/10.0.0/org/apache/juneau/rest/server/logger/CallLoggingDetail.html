@@ -240,9 +240,9 @@ not permitted.)</div>
 <div class="block">Retrieves this enum using case-insensitive matching.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The enum name to resolve.</dd>
+<dd><code>s</code> - The enum name to resolve. Can be <jk>null</jk>, in which case <jk>null</jk> is returned.</dd>
 <dt>Returns:</dt>
-<dd>The resolved value.</dd>
+<dd>The resolved value, or <jk>null</jk> if the string is <jk>null</jk>, empty, or not a valid enum name.</dd>
 </dl>
 </section>
 </li>

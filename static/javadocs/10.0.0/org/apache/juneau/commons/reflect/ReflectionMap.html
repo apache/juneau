@@ -333,11 +333,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.reflect.ReflectionMap.Builder)">
 <h3>ReflectionMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-657">ReflectionMap</a></span><wbr><span class="parameters">(<a href="ReflectionMap.Builder.html" title="class in org.apache.juneau.commons.reflect">ReflectionMap.Builder</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-656">ReflectionMap</a></span><wbr><span class="parameters">(<a href="ReflectionMap.Builder.html" title="class in org.apache.juneau.commons.reflect">ReflectionMap.Builder</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>b</code> - The builder containing the mappings to initialize this map with.</dd>
+<dd><code>b</code> - The builder containing the mappings to initialize this map with. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -352,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.lang.Class)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;V&gt;</span>&nbsp;<span class="return-type"><a href="ReflectionMap.Builder.html" title="class in org.apache.juneau.commons.reflect">ReflectionMap.Builder</a>&lt;V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-544">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;V&gt;</span>&nbsp;<span class="return-type"><a href="ReflectionMap.Builder.html" title="class in org.apache.juneau.commons.reflect">ReflectionMap.Builder</a>&lt;V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-543">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;c)</span></div>
 <div class="block">Creates a new builder for constructing a <a href="ReflectionMap.html" title="class in org.apache.juneau.commons.reflect"><code>ReflectionMap</code></a>.
 
  <h5 class='section'>Example:</h5>
@@ -367,7 +367,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>V</code> - The type of values stored in the map.</dd>
 <dt>Parameters:</dt>
-<dd><code>c</code> - The class type of values (used for type safety, not stored).</dd>
+<dd><code>c</code> - The class type of values (used for type safety, not stored). Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new builder instance.</dd>
 </dl>
@@ -376,7 +376,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="find(java.lang.Class)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-687">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-686">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Finds all values associated with the specified class.
 
  <p>
@@ -406,7 +406,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="find(java.lang.reflect.Constructor)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-713">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-712">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Finds all values associated with the specified constructor.
 
  <p>
@@ -435,7 +435,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="find(java.lang.reflect.Field)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-739">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html" title="class or interface in java.lang.reflect" class="external-link">Field</a>&nbsp;f)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-738">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html" title="class or interface in java.lang.reflect" class="external-link">Field</a>&nbsp;f)</span></div>
 <div class="block">Finds all values associated with the specified field.
 
  <p>
@@ -464,7 +464,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="find(java.lang.reflect.Method)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-767">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="ReflectionMap.html" title="type parameter in ReflectionMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-766">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</span></div>
 <div class="block">Finds all values associated with the specified method.
 
  <p>
@@ -495,13 +495,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-771">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-770">properties</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-781">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-780">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

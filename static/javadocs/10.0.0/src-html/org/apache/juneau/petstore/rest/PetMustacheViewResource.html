@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85">   public View viewPet(@Path("id") long id) {</span>
 <span class="source-line-no">086</span><span id="line-86">      var pet = store.getPet(id);</span>
 <span class="source-line-no">087</span><span id="line-87">      if (pet == null)</span>
-<span class="source-line-no">088</span><span id="line-88">         throw new NotFound("Pet not found: id={0}", id);</span>
+<span class="source-line-no">088</span><span id="line-88">         throw new NotFound("Pet not found: id=%s", id);</span>
 <span class="source-line-no">089</span><span id="line-89">      return MustacheView.of("pet").attr("pet", pet);</span>
 <span class="source-line-no">090</span><span id="line-90">   }</span>
 <span class="source-line-no">091</span><span id="line-91">}</span>

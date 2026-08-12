@@ -241,7 +241,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>BeanTester</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-63">BeanTester</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-64">BeanTester</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -255,11 +255,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bean(T)">
 <h3 id="bean(java.lang.Object)">bean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-74">bean</a></span><wbr><span class="parameters">(<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-75">bean</a></span><wbr><span class="parameters">(<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&nbsp;value)</span></div>
 <div class="block">Sets the bean instance to be tested.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The bean instance to test.</dd>
+<dd><code>value</code> - The bean instance to test. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>
@@ -268,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bean()">
 <h3>bean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="type parameter in BeanTester">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-81">bean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="type parameter in BeanTester">T</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-82">bean</a></span>()</div>
 <div class="block">Returns the bean instance being tested.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -279,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="json(java.lang.String)">
 <h3>json</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-96">json</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-97">json</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the expected JSON representation of the bean.
 
  <p>
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="json()">
 <h3>json</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-103">json</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-104">json</a></span>()</div>
 <div class="block">Returns the expected JSON representation of the bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -308,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="props(java.lang.String)">
 <h3>props</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-119">props</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-120">props</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the comma-delimited list of property names for bean validation.
 
  <p>
@@ -327,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="props()">
 <h3>props</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-126">props</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-127">props</a></span>()</div>
 <div class="block">Returns the comma-delimited list of property names.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -338,7 +338,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="vals(java.lang.String)">
 <h3>vals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-142">vals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-143">vals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the comma-delimited list of expected property values for bean validation.
 
  <p>
@@ -357,7 +357,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="vals()">
 <h3>vals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-149">vals</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-150">vals</a></span>()</div>
 <div class="block">Returns the comma-delimited list of expected property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -368,7 +368,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="string(java.lang.String)">
 <h3>string</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-163">string</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanTester.html" title="class in org.apache.juneau">BeanTester</a>&lt;<a href="BeanTester.html" title="type parameter in BeanTester">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-164">string</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the expected string representation of the bean.
 
  <p>
@@ -385,7 +385,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="string()">
 <h3>string</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-170">string</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-171">string</a></span>()</div>
 <div class="block">Returns the expected string representation of the bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -396,7 +396,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="assertGettersAndSetters()">
 <h3>assertGettersAndSetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-182">assertGettersAndSetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-183">assertGettersAndSetters</a></span>()</div>
 <div class="block">Validates that the bean's getters and setters work correctly.
 
  <p>
@@ -412,7 +412,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="assertCopy()">
 <h3>assertCopy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-199">assertCopy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-200">assertCopy</a></span>()</div>
 <div class="block">Validates that the bean's copy constructor or copy() method works correctly.
 
  <p>
@@ -431,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="assertToJson()">
 <h3>assertToJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-214">assertToJson</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-215">assertToJson</a></span>()</div>
 <div class="block">Validates that the bean serializes to the expected JSON format.
 
  <p>
@@ -446,7 +446,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="assertFromJson()">
 <h3>assertFromJson</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-229">assertFromJson</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-230">assertFromJson</a></span>()</div>
 <div class="block">Validates that the expected JSON deserializes to a bean with correct property values.
 
  <p>
@@ -463,7 +463,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="assertRoundTrip()">
 <h3>assertRoundTrip</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-247">assertRoundTrip</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-248">assertRoundTrip</a></span>()</div>
 <div class="block">Validates that the bean can be serialized to JSON and deserialized back correctly.
 
  <p>
@@ -483,7 +483,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="assertToString()">
 <h3>assertToString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-260">assertToString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../src-html/org/apache/juneau/BeanTester.html#line-261">assertToString</a></span>()</div>
 <div class="block">Validates that the bean's toString() method returns the expected string.
 
  <p>

@@ -96,15 +96,15 @@
 <span class="source-line-no">083</span><span id="line-83">            if ("*".equals(n)) {</span>
 <span class="source-line-no">084</span><span id="line-84">               for (var o2 : iterate(o)) {</span>
 <span class="source-line-no">085</span><span id="line-85">                  HttpHeader h;</span>
-<span class="source-line-no">086</span><span id="line-86">                  if (o2 instanceof Map.Entry o22) {</span>
-<span class="source-line-no">087</span><span id="line-87">                     var k = s(o22.getKey());</span>
-<span class="source-line-no">088</span><span id="line-88">                     h = toHeader(k, o22.getValue(), serializer, ps != null ? ps.getProperty(k) : null);</span>
-<span class="source-line-no">089</span><span id="line-89">                  } else if (o2 instanceof HttpHeader o22) {</span>
-<span class="source-line-no">090</span><span id="line-90">                     h = o22;</span>
-<span class="source-line-no">091</span><span id="line-91">                  } else if (o2 instanceof HttpPart o23) {</span>
-<span class="source-line-no">092</span><span id="line-92">                     h = HttpStringHeader.of(o23.getName(), o23.getValue());</span>
+<span class="source-line-no">086</span><span id="line-86">                  if (o2 instanceof Map.Entry o3) {</span>
+<span class="source-line-no">087</span><span id="line-87">                     var k = s(o3.getKey());</span>
+<span class="source-line-no">088</span><span id="line-88">                     h = toHeader(k, o3.getValue(), serializer, ps != null ? ps.getProperty(k) : null);</span>
+<span class="source-line-no">089</span><span id="line-89">                  } else if (o2 instanceof HttpHeader o3) {</span>
+<span class="source-line-no">090</span><span id="line-90">                     h = o3;</span>
+<span class="source-line-no">091</span><span id="line-91">                  } else if (o2 instanceof HttpPart o3) {</span>
+<span class="source-line-no">092</span><span id="line-92">                     h = HttpStringHeader.of(o3.getName(), o3.getValue());</span>
 <span class="source-line-no">093</span><span id="line-93">                  } else {</span>
-<span class="source-line-no">094</span><span id="line-94">                     throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", cn(o2), n);</span>
+<span class="source-line-no">094</span><span id="line-94">                     throw new InternalServerError("Invalid type '%s' for header '%s'", cn(o2), n);</span>
 <span class="source-line-no">095</span><span id="line-95">                  }</span>
 <span class="source-line-no">096</span><span id="line-96">                  res.addHeader(h);</span>
 <span class="source-line-no">097</span><span id="line-97">               }</span>
@@ -112,14 +112,14 @@
 <span class="source-line-no">099</span><span id="line-99">               HttpHeader h;</span>
 <span class="source-line-no">100</span><span id="line-100">               if (o instanceof HttpHeader o2)</span>
 <span class="source-line-no">101</span><span id="line-101">                  h = o2;</span>
-<span class="source-line-no">102</span><span id="line-102">               else if (o instanceof HttpPart o3)</span>
-<span class="source-line-no">103</span><span id="line-103">                  h = HttpStringHeader.of(o3.getName(), o3.getValue());</span>
+<span class="source-line-no">102</span><span id="line-102">               else if (o instanceof HttpPart o2)</span>
+<span class="source-line-no">103</span><span id="line-103">                  h = HttpStringHeader.of(o2.getName(), o2.getValue());</span>
 <span class="source-line-no">104</span><span id="line-104">               else</span>
 <span class="source-line-no">105</span><span id="line-105">                  h = toHeader(n, o, serializer, ps);</span>
 <span class="source-line-no">106</span><span id="line-106">               res.addHeader(h);</span>
 <span class="source-line-no">107</span><span id="line-107">            }</span>
 <span class="source-line-no">108</span><span id="line-108">         } catch (Exception e) {</span>
-<span class="source-line-no">109</span><span id="line-109">            throw new InternalServerError(e, "Could not set header ''{0}''", n);</span>
+<span class="source-line-no">109</span><span id="line-109">            throw new InternalServerError(e, "Could not set header '%s'", n);</span>
 <span class="source-line-no">110</span><span id="line-110">         }</span>
 <span class="source-line-no">111</span><span id="line-111">      }</span>
 <span class="source-line-no">112</span><span id="line-112"></span>
@@ -152,12 +152,12 @@
 <span class="source-line-no">139</span><span id="line-139">    * and {@code skipIfEmpty} semantics apply.</span>
 <span class="source-line-no">140</span><span id="line-140">    */</span>
 <span class="source-line-no">141</span><span id="line-141">   @SuppressWarnings({</span>
-<span class="source-line-no">142</span><span id="line-142">      "java:S112" // Propagates the checked exceptions thrown by HttpPartSerializerSession.serialize(...); the caller already re-wraps them in InternalServerError.</span>
+<span class="source-line-no">142</span><span id="line-142">      "java:S112" // Propagates the checked exceptions thrown by HttpPartSerializerSession.write(...); the caller already re-wraps them in InternalServerError.</span>
 <span class="source-line-no">143</span><span id="line-143">   })</span>
 <span class="source-line-no">144</span><span id="line-144">   private static HttpHeader toHeader(String name, Object value, HttpPartSerializerSession session, HttpPartSchema schema) throws Exception {</span>
 <span class="source-line-no">145</span><span id="line-145">      String v;</span>
 <span class="source-line-no">146</span><span id="line-146">      if (session != null)</span>
-<span class="source-line-no">147</span><span id="line-147">         v = session.serialize(HttpPartType.HEADER, schema, value);</span>
+<span class="source-line-no">147</span><span id="line-147">         v = session.write(HttpPartType.HEADER, schema, value);</span>
 <span class="source-line-no">148</span><span id="line-148">      else</span>
 <span class="source-line-no">149</span><span id="line-149">         v = value == null ? null : value.toString();</span>
 <span class="source-line-no">150</span><span id="line-150">      if (v != null &amp;&amp; v.isEmpty())</span>
@@ -174,7 +174,7 @@
 <span class="source-line-no">161</span><span id="line-161">         return l((Object[])o);</span>
 <span class="source-line-no">162</span><span id="line-162">      if (o instanceof Collection&lt;?&gt; c)</span>
 <span class="source-line-no">163</span><span id="line-163">         return c;</span>
-<span class="source-line-no">164</span><span id="line-164">      throw new InternalServerError("Could not iterate over Headers of type ''{0}''", cn(o));</span>
+<span class="source-line-no">164</span><span id="line-164">      throw new InternalServerError("Could not iterate over Headers of type '%s'", cn(o));</span>
 <span class="source-line-no">165</span><span id="line-165">   }</span>
 <span class="source-line-no">166</span><span id="line-166">}</span>
 

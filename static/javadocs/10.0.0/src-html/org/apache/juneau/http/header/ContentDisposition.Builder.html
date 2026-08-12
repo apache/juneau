@@ -157,7 +157,7 @@
 <span class="source-line-no">144</span><span id="line-144">   public static class Builder {</span>
 <span class="source-line-no">145</span><span id="line-145"></span>
 <span class="source-line-no">146</span><span id="line-146">      private String type;</span>
-<span class="source-line-no">147</span><span id="line-147">      private final Map&lt;String,String&gt; params = new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">147</span><span id="line-147">      private final Map&lt;String,String&gt; params = m();</span>
 <span class="source-line-no">148</span><span id="line-148"></span>
 <span class="source-line-no">149</span><span id="line-149">      /**</span>
 <span class="source-line-no">150</span><span id="line-150">       * Sets the disposition-type (e.g. &lt;js&gt;"inline"&lt;/js&gt;, &lt;js&gt;"attachment"&lt;/js&gt;, &lt;js&gt;"form-data"&lt;/js&gt;).</span>
@@ -271,7 +271,7 @@
 <span class="source-line-no">258</span><span id="line-258">       */</span>
 <span class="source-line-no">259</span><span id="line-259">      public Builder size(long value) {</span>
 <span class="source-line-no">260</span><span id="line-260">         if (value &lt; 0)</span>
-<span class="source-line-no">261</span><span id="line-261">            throw iaex("size must be non-negative: {0}", value);</span>
+<span class="source-line-no">261</span><span id="line-261">            throw iaex("size must be non-negative: %s", value);</span>
 <span class="source-line-no">262</span><span id="line-262">         return tokenParam("size", Long.toString(value));</span>
 <span class="source-line-no">263</span><span id="line-263">      }</span>
 <span class="source-line-no">264</span><span id="line-264"></span>

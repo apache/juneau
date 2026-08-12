@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.apache.juneau.rest.server.httppart.NamedAttribute...)" class="member-name-link">add</a><wbr>(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;values)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Appends the specified rest matcher classes to the list.</div>
+<div class="block">Appends the specified named attributes to the list.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
@@ -238,9 +238,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The initial contents of this list.</dd>
+<dd><code>values</code> - The initial contents of this list.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>An empty list.</dd>
+<dd>A new list containing the specified attributes.</dd>
 </dl>
 </section>
 </li>
@@ -248,10 +248,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="add(org.apache.juneau.rest.server.httppart.NamedAttribute...)">
 <h3>add</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/NamedAttributeMap.html#line-70">add</a></span><wbr><span class="parameters">(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;values)</span></div>
-<div class="block">Appends the specified rest matcher classes to the list.</div>
+<div class="block">Appends the specified named attributes to the list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The values to add.</dd>
+<dd><code>values</code> - The values to add.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

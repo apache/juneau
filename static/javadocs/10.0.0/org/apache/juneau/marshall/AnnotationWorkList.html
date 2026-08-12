@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>vrs</code> - The variable resolver.</dd>
+<dd><code>vrs</code> - The variable resolver. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new list.</dd>
 </dl>
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotations</code> - The annotations to create work from.</dd>
+<dd><code>annotations</code> - The annotations to create work from. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new list.</dd>
 </dl>
@@ -226,8 +226,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>vrs</code> - The variable resolver.</dd>
-<dd><code>annotations</code> - The annotations to create work from.</dd>
+<dd><code>vrs</code> - The variable resolver. Must not be <jk>null</jk>.</dd>
+<dd><code>annotations</code> - The annotations to create work from. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new list.</dd>
 </dl>
@@ -283,7 +283,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds entries for the specified annotations to this work list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotations</code> - The annotations to create work from.</dd>
+<dd><code>annotations</code> - The annotations to create work from. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

@@ -44,9 +44,9 @@
 <span class="source-line-no">031</span><span id="line-31">    * Consumes the specified value if the predicate is &lt;jk&gt;null&lt;/jk&gt; or matches the specified value.</span>
 <span class="source-line-no">032</span><span id="line-32">    *</span>
 <span class="source-line-no">033</span><span id="line-33">    * @param &lt;T&gt; The type being consumed.</span>
-<span class="source-line-no">034</span><span id="line-34">    * @param predicate The predicate.</span>
-<span class="source-line-no">035</span><span id="line-35">    * @param consumer The consumer.</span>
-<span class="source-line-no">036</span><span id="line-36">    * @param value The value.</span>
+<span class="source-line-no">034</span><span id="line-34">    * @param predicate The predicate.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an always-match).</span>
+<span class="source-line-no">035</span><span id="line-35">    * @param consumer The consumer.  Must not be &lt;jk&gt;null&lt;/jk&gt; when the predicate matches.</span>
+<span class="source-line-no">036</span><span id="line-36">    * @param value The value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">037</span><span id="line-37">    */</span>
 <span class="source-line-no">038</span><span id="line-38">   public static &lt;T&gt; void consumeIf(Predicate&lt;T&gt; predicate, Consumer&lt;T&gt; consumer, T value) {</span>
 <span class="source-line-no">039</span><span id="line-39">      if (test(predicate, value))</span>
@@ -70,8 +70,8 @@
 <span class="source-line-no">057</span><span id="line-57">    * Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.</span>
 <span class="source-line-no">058</span><span id="line-58">    *</span>
 <span class="source-line-no">059</span><span id="line-59">    * @param &lt;T&gt; The type of value.</span>
-<span class="source-line-no">060</span><span id="line-60">    * @param message A format string using {@code {0}} as placeholder for the formatted value.</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param formatter A function to extract/format the value for display.</span>
+<span class="source-line-no">060</span><span id="line-60">    * @param message A format string using {@code {0}} as placeholder for the formatted value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param formatter A function to extract/format the value for display.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">062</span><span id="line-62">    * @return A function that prints and returns the value.</span>
 <span class="source-line-no">063</span><span id="line-63">    */</span>
 <span class="source-line-no">064</span><span id="line-64">   public static &lt;T&gt; Function&lt;T,T&gt; peek(String message, Function&lt;T,?&gt; formatter) {</span>
@@ -85,8 +85,8 @@
 <span class="source-line-no">072</span><span id="line-72">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified predicate is &lt;jk&gt;null&lt;/jk&gt; or matches the specified value.</span>
 <span class="source-line-no">073</span><span id="line-73">    *</span>
 <span class="source-line-no">074</span><span id="line-74">    * @param &lt;T&gt; The type being tested.</span>
-<span class="source-line-no">075</span><span id="line-75">    * @param predicate The predicate.</span>
-<span class="source-line-no">076</span><span id="line-76">    * @param value The value to test.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param predicate The predicate.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;true&lt;/jk&gt;).</span>
+<span class="source-line-no">076</span><span id="line-76">    * @param value The value to test.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">077</span><span id="line-77">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified predicate is &lt;jk&gt;null&lt;/jk&gt; or matches the specified value.</span>
 <span class="source-line-no">078</span><span id="line-78">    */</span>
 <span class="source-line-no">079</span><span id="line-79">   public static &lt;T&gt; boolean test(Predicate&lt;T&gt; predicate, T value) {</span>
@@ -108,11 +108,11 @@
 <span class="source-line-no">095</span><span id="line-95">    * &lt;/p&gt;</span>
 <span class="source-line-no">096</span><span id="line-96">    *</span>
 <span class="source-line-no">097</span><span id="line-97">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param keyExtractor A function that extracts the key from each element.</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param keyExtractor A function that extracts the key from each element.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">099</span><span id="line-99">    * @return A predicate that returns &lt;jk&gt;true&lt;/jk&gt; for the first occurrence of each unique key,</span>
 <span class="source-line-no">100</span><span id="line-100">    *    and &lt;jk&gt;false&lt;/jk&gt; for subsequent occurrences with the same key.</span>
 <span class="source-line-no">101</span><span id="line-101">    */</span>
-<span class="source-line-no">102</span><span id="line-102">   public static &lt;T&gt; Predicate&lt;T&gt; distinctByKey(Function&lt;? super T, ?&gt; keyExtractor) {</span>
+<span class="source-line-no">102</span><span id="line-102">   public static &lt;T&gt; Predicate&lt;T&gt; distinctByKey(Function&lt;? super T,?&gt; keyExtractor) {</span>
 <span class="source-line-no">103</span><span id="line-103">      var seen = ConcurrentHashMap.newKeySet();</span>
 <span class="source-line-no">104</span><span id="line-104">      return t -&gt; seen.add(keyExtractor.apply(t));</span>
 <span class="source-line-no">105</span><span id="line-105">   }</span>

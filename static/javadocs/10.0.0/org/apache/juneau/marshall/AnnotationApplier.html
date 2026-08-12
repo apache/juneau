@@ -217,7 +217,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stream(java.lang.String%5B%5D)" class="member-name-link">stream</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;in)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Resolves the specified string as a comma-delimited list of strings.</div>
+<div class="block">Resolves each string in the specified array.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in)</code></div>
@@ -265,9 +265,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotationClass</code> - The annotation class.</dd>
-<dd><code>builderClass</code> - The builder class.</dd>
-<dd><code>varResolverSession</code> - The string resolver to use for resolving strings.</dd>
+<dd><code>annotationClass</code> - The annotation class. Must not be <jk>null</jk>.</dd>
+<dd><code>builderClass</code> - The builder class. Must not be <jk>null</jk>.</dd>
+<dd><code>varResolverSession</code> - The string resolver to use for resolving strings. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -327,7 +327,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>in</code> - The CDL string containing variables to resolve.</dd>
 <dt>Returns:</dt>
-<dd>An array with resolved strings.</dd>
+<dd>A stream of resolved strings.</dd>
 </dl>
 </section>
 </li>
@@ -394,12 +394,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="stream(java.lang.String[])">
 <h3>stream</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/AnnotationApplier.html#line-213">stream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;in)</span></div>
-<div class="block">Resolves the specified string as a comma-delimited list of strings.</div>
+<div class="block">Resolves each string in the specified array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>in</code> - The CDL string containing variables to resolve.</dd>
+<dd><code>in</code> - The array of strings containing variables to resolve.</dd>
 <dt>Returns:</dt>
-<dd>An array with resolved strings.</dd>
+<dd>A stream of resolved strings.</dd>
 </dl>
 </section>
 </li>

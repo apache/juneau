@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
    <code>null</code>.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">OidcSession</a></span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subject, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sid, <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a>&nbsp;principal, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../oauth/OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;&nbsp;token, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;createdAt, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">OidcSession</a></span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subject, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sid, <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a>&nbsp;principal, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;&nbsp;token, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;createdAt, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">Immutable record describing a logged-in OpenID Connect Relying Party session.
 
@@ -131,7 +131,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sid,
  <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../oauth/OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;&nbsp;token,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;&nbsp;token,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;createdAt,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</code></div>
 <div class="col-last even-row-color">
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <a href="#param-subject"><code>subject</code></a> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../oauth/OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#token()" class="member-name-link">token</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <a href="#param-token"><code>token</code></a> record component.</div>
@@ -231,12 +231,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.util.Optional,org.apache.juneau.rest.server.auth.ClaimsPrincipal,java.util.Set,java.util.Optional,java.time.Instant,java.time.Instant)">
 <h3>OidcSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-68">OidcSession</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-70">OidcSession</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subject,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sid,
  <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../oauth/OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;&nbsp;token,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;&nbsp;token,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;createdAt,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</span></div>
 <div class="block">Compact constructor enforcing non-null fields and defensively copying the role set.</div>
@@ -253,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isExpired(java.time.Instant)">
 <h3>isExpired</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-87">isExpired</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-89">isExpired</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
 <div class="block">Returns whether this session is expired relative to the supplied instant.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">toString</a></span>()</div>
 <div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -279,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">hashCode</a></span>()</div>
 <div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -307,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="id()">
 <h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">id</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">id</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-id"><code>id</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -318,7 +318,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="subject()">
 <h3>subject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">subject</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">subject</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-subject"><code>subject</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -329,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sid()">
 <h3>sid</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">sid</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">sid</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-sid"><code>sid</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -340,7 +340,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="principal()">
 <h3>principal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">principal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">principal</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-principal"><code>principal</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -351,7 +351,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="roles()">
 <h3>roles</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">roles</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">roles</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-roles"><code>roles</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -362,7 +362,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="token()">
 <h3>token</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../oauth/OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">token</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">token</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-token"><code>token</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -373,7 +373,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createdAt()">
 <h3>createdAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">createdAt</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">createdAt</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-createdAt"><code>createdAt</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -384,7 +384,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="expiresAt()">
 <h3>expiresAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-55">expiresAt</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcSession.html#line-57">expiresAt</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-expiresAt"><code>expiresAt</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

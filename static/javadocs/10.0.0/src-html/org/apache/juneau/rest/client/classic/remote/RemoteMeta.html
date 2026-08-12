@@ -111,7 +111,7 @@
 <span class="source-line-no">098</span><span id="line-98">      ci.getPublicMethods().forEach(x -&gt; operations2.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));</span>
 <span class="source-line-no">099</span><span id="line-99"></span>
 <span class="source-line-no">100</span><span id="line-100">      this.operations = u(operations2);</span>
-<span class="source-line-no">101</span><span id="line-101">      this.headers = headers2;</span>
+<span class="source-line-no">101</span><span id="line-101">      this.headers = headers2.unmodifiable();</span>
 <span class="source-line-no">102</span><span id="line-102">   }</span>
 <span class="source-line-no">103</span><span id="line-103"></span>
 <span class="source-line-no">104</span><span id="line-104">   /**</span>

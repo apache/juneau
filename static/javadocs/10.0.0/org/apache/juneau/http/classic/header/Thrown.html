@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Thrown.Part.html" title="class in org.apache.juneau.http.classic.header">Thrown.Part</a>&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asParts()" class="member-name-link">asParts</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the class name portion of the header.</div>
+<div class="block">Returns the parts in this header.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Thrown.html" title="class in org.apache.juneau.http.classic.header">Thrown</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>values</code> - The header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> or empty (treated as no thrown values).</dd>
 <dt>Returns:</dt>
 <dd>A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.</dd>
 </dl>
@@ -301,10 +301,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="asParts()">
 <h3>asParts</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Thrown.Part.html" title="class in org.apache.juneau.http.classic.header">Thrown.Part</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/Thrown.html#line-184">asParts</a></span>()</div>
-<div class="block">Returns the class name portion of the header.</div>
+<div class="block">Returns the parts in this header.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The class name portion of the header, or <jk>null</jk> if not there.</dd>
+<dd>The parts in this header, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if the header value was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

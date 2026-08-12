@@ -81,13 +81,21 @@ loadScripts(document, 'script');</script>
 <div class="block">Juneau <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> types for
  <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.bean.jsonschema">org.apache.juneau.bean.jsonschema</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.bean.jsonrpc">org.apache.juneau.bean.jsonrpc</a></div>
 <div class="col-last odd-row-color">
+<div class="block">JSON-RPC 2.0 envelope beans.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.bean.jsonschema">org.apache.juneau.bean.jsonschema</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSON Schema Data Transfer Objects</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.bean.mcp">org.apache.juneau.bean.mcp</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.bean.mcp.v20250618">org.apache.juneau.bean.mcp.v20250618</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Juneau <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> types for the Model Context Protocol (MCP) wire format.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.bean.mcp.v20260728">org.apache.juneau.bean.mcp.v20260728</a></div>
 <div class="col-last even-row-color">
-<div class="block">Juneau <code>@Marshalled</code> types for the Model Context Protocol (MCP) wire format.</div>
+<div class="block">Juneau <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> types for the Model Context Protocol (MCP) wire format.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.bean.openapi3">org.apache.juneau.bean.openapi3</a></div>
 <div class="col-last odd-row-color">
@@ -976,6 +984,37 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.bean.jsonrpc">
+<h2>Uses of <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a> in <a href="../../bean/jsonrpc/package-summary.html">org.apache.juneau.bean.jsonrpc</a></h2>
+<div class="caption"><span>Classes in <a href="../../bean/jsonrpc/package-summary.html">org.apache.juneau.bean.jsonrpc</a> with annotations of type <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/jsonrpc/JsonRpcError.html" class="type-name-link" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcError</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">JSON-RPC 2.0 error object.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/jsonrpc/JsonRpcRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">JSON-RPC 2.0 request envelope.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/jsonrpc/JsonRpcResponse.html" class="type-name-link" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcResponse</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">JSON-RPC 2.0 success or error response envelope.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/jsonrpc/McpException.html" class="type-name-link" title="class in org.apache.juneau.bean.jsonrpc">McpException</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Runtime exception carrying JSON-RPC error fields for mapping to <a href="../../bean/jsonrpc/JsonRpcError.html" title="class in org.apache.juneau.bean.jsonrpc"><code>JsonRpcError</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.bean.jsonschema">
 <h2>Uses of <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a> in <a href="../../bean/jsonschema/package-summary.html">org.apache.juneau.bean.jsonschema</a></h2>
 <div class="caption"><span>Classes in <a href="../../bean/jsonschema/package-summary.html">org.apache.juneau.bean.jsonschema</a> with annotations of type <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a></span></div>
@@ -984,7 +1023,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/jsonschema/JsonSchema.html" class="type-name-link" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/jsonschema/JsonSchema.html" class="type-name-link" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;SELF extends <a href="../../bean/jsonschema/JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;SELF&gt;&gt;</code></div>
 <div class="col-last even-row-color">
 <div class="block">Represents a top-level schema object bean in the JSON-Schema core specification.</div>
 </div>
@@ -992,192 +1031,577 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.bean.mcp">
-<h2>Uses of <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a> in <a href="../../bean/mcp/package-summary.html">org.apache.juneau.bean.mcp</a></h2>
-<div class="caption"><span>Classes in <a href="../../bean/mcp/package-summary.html">org.apache.juneau.bean.mcp</a> with annotations of type <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a></span></div>
+<section class="detail" id="org.apache.juneau.bean.mcp.v20250618">
+<h2>Uses of <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a> in <a href="../../bean/mcp/v20250618/package-summary.html">org.apache.juneau.bean.mcp.v20250618</a></h2>
+<div class="caption"><span>Classes in <a href="../../bean/mcp/v20250618/package-summary.html">org.apache.juneau.bean.mcp.v20250618</a> with annotations of type <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/BlobResourceContents.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">BlobResourceContents</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/BlobResourceContents.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">BlobResourceContents</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Base64 blob body for <code>resources/read</code> results or embedded resource content.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/CallToolRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">CallToolRequest</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/CallToolRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">CallToolRequest</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Parameters for <a href="../../bean/mcp/McpMethods.html#TOOLS_CALL">"tools/call"</a>.</div>
+<div class="block">Parameters for <a href="../../bean/mcp/v20250618/McpMethods.html#TOOLS_CALL">"tools/call"</a>.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/CallToolResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">CallToolResult</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/CallToolResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">CallToolResult</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Result payload for <a href="../../bean/mcp/McpMethods.html#TOOLS_CALL">"tools/call"</a>.</div>
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#TOOLS_CALL">"tools/call"</a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/ClientCapabilities.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ClientCapabilities</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/ClientCapabilities.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ClientCapabilities</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">MCP client capability advertisement in <a href="../../bean/mcp/InitializeRequest.html" title="class in org.apache.juneau.bean.mcp"><code>InitializeRequest</code></a>.</div>
+<div class="block">MCP client capability advertisement in <a href="../../bean/mcp/v20250618/InitializeRequest.html" title="class in org.apache.juneau.bean.mcp.v20250618"><code>InitializeRequest</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/CompleteRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">CompleteRequest</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Parameters for <a href="../../bean/mcp/v20250618/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/CompleteResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">CompleteResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/Completion.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">Completion</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Completion values for a <a href="../../bean/mcp/v20250618/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a> request.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/CompletionArgument.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">CompletionArgument</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Identifies the prompt argument or resource-template variable being completed, and its current partial value.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/CompletionCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">CompletionCapability</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Empty marker capability advertising <a href="../../bean/mcp/v20250618/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a> support (structure may grow with
+ the spec).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/CompletionContext.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">CompletionContext</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Optional already-resolved argument values supplied alongside a <code>completion/complete</code> request.</div>
 </div>
 <div class="col-first even-row-color"><code>interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/Content.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp">Content</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/CompletionReference.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp.v20250618">CompletionReference</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Polymorphic <a href="../../bean/mcp/v20250618/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a> target reference (prompt or resource template).</div>
+</div>
+<div class="col-first odd-row-color"><code>interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/Content.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp.v20250618">Content</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Polymorphic MCP content block (tool results, prompt messages).</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/EmbeddedResourceContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">EmbeddedResourceContent</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/EmbeddedResourceContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">EmbeddedResourceContent</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">MCP <code>resource</code> content block (inline resource body).</div>
 </div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/GetPromptRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">GetPromptRequest</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Parameters for <a href="../../bean/mcp/v20250618/McpMethods.html#PROMPTS_GET">"prompts/get"</a>.</div>
+</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/GetPromptRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">GetPromptRequest</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/GetPromptResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">GetPromptResult</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Parameters for <a href="../../bean/mcp/McpMethods.html#PROMPTS_GET">"prompts/get"</a>.</div>
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#PROMPTS_GET">"prompts/get"</a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/GetPromptResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">GetPromptResult</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/ImageContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ImageContent</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Result payload for <a href="../../bean/mcp/McpMethods.html#PROMPTS_GET">"prompts/get"</a>.</div>
-</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/ImageContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ImageContent</a></code></div>
-<div class="col-last even-row-color">
 <div class="block">MCP <code>image</code> content block (base64 data).</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/Implementation.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">Implementation</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/Implementation.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">Implementation</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">MCP <code>Implementation</code> object (<code>name</code> / <code>version</code>).</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/InitializeRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">InitializeRequest</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/InitializeRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">InitializeRequest</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">MCP <code>initialize</code> request parameters.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/InitializeResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">InitializeResult</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/InitializeResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">InitializeResult</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">MCP <code>initialize</code> result payload.</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/JsonRpcError.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">JsonRpcError</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">JSON-RPC 2.0 error object.</div>
-</div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/JsonRpcRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">JsonRpcRequest</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">JSON-RPC 2.0 request envelope.</div>
-</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/JsonRpcResponse.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">JsonRpcResponse</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">JSON-RPC 2.0 success or error response envelope.</div>
-</div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/JsonSchema.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/JsonSchema.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">JsonSchema</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">JSON Schema subset used by MCP tool <code>inputSchema</code> objects.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/ListPromptsResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ListPromptsResult</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/ListPromptsResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ListPromptsResult</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Result payload for <a href="../../bean/mcp/McpMethods.html#PROMPTS_LIST">"prompts/list"</a>.</div>
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#PROMPTS_LIST">"prompts/list"</a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/ListResourcesResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ListResourcesResult</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/ListResourcesResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ListResourcesResult</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Result payload for <a href="../../bean/mcp/McpMethods.html#RESOURCES_LIST">"resources/list"</a>.</div>
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#RESOURCES_LIST">"resources/list"</a>.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/ListToolsResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ListToolsResult</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/ListResourceTemplatesResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ListResourceTemplatesResult</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Result payload for <a href="../../bean/mcp/McpMethods.html#TOOLS_LIST">"tools/list"</a>.</div>
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#RESOURCES_TEMPLATES_LIST">"resources/templates/list"</a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/LoggingCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">LoggingCapability</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/ListToolsResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ListToolsResult</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#TOOLS_LIST">"tools/list"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/LoggingCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">LoggingCapability</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Server logging capability marker (structure may grow with the spec).</div>
 </div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/McpException.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">McpException</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Runtime exception carrying JSON-RPC error fields for mapping to <a href="../../bean/mcp/JsonRpcError.html" title="class in org.apache.juneau.bean.mcp"><code>JsonRpcError</code></a>.</div>
-</div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/Prompt.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">Prompt</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/Prompt.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">Prompt</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">MCP prompt descriptor (<code>prompts/list</code> entry).</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/PromptArgument.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">PromptArgument</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/PromptArgument.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">PromptArgument</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Declared argument for an MCP prompt.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/PromptCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">PromptCapability</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/PromptCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">PromptCapability</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Server capability flags for prompts.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/PromptMessage.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">PromptMessage</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/PromptMessage.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">PromptMessage</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Single message line inside <a href="../../bean/mcp/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp"><code>GetPromptResult</code></a>.</div>
+<div class="block">Single message line inside <a href="../../bean/mcp/v20250618/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20250618"><code>GetPromptResult</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/ReadResourceRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ReadResourceRequest</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/PromptReference.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">PromptReference</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Parameters for <a href="../../bean/mcp/McpMethods.html#RESOURCES_READ">"resources/read"</a>.</div>
+<div class="block"><a href="../../bean/mcp/v20250618/CompletionReference.html" title="interface in org.apache.juneau.bean.mcp.v20250618"><code>CompletionReference</code></a> targeting a declared prompt by name.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/ReadResourceResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ReadResourceResult</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/ReadResourceRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ReadResourceRequest</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Result payload for <a href="../../bean/mcp/McpMethods.html#RESOURCES_READ">"resources/read"</a>.</div>
+<div class="block">Parameters for <a href="../../bean/mcp/v20250618/McpMethods.html#RESOURCES_READ">"resources/read"</a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/Resource.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">Resource</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/ReadResourceResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ReadResourceResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20250618/McpMethods.html#RESOURCES_READ">"resources/read"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/Resource.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">Resource</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">MCP resource descriptor (<code>resources/list</code> entry).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/ResourceCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ResourceCapability</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Server capability flags for resources.</div>
+</div>
+<div class="col-first even-row-color"><code>interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/ResourceContents.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp.v20250618">ResourceContents</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Polymorphic MCP resource body (text or base64 blob).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/ResourceTemplate.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ResourceTemplate</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP resource-template descriptor (<code>resources/templates/list</code> entry).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/ResourceTemplateReference.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ResourceTemplateReference</a></code></div>
+<div class="col-last even-row-color">
+<div class="block"><a href="../../bean/mcp/v20250618/CompletionReference.html" title="interface in org.apache.juneau.bean.mcp.v20250618"><code>CompletionReference</code></a> targeting a registered resource template by its exact URI-template string.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/RootsCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">RootsCapability</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Client roots capability.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/ServerCapabilities.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ServerCapabilities</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">MCP server capability advertisement in <a href="../../bean/mcp/v20250618/InitializeResult.html" title="class in org.apache.juneau.bean.mcp.v20250618"><code>InitializeResult</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/TextContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">TextContent</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>text</code> content block.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/TextResourceContents.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">TextResourceContents</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Text body for <code>resources/read</code> results or embedded resource content.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20250618/Tool.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">Tool</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP tool descriptor (<code>tools/list</code> entry).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20250618/ToolCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20250618">ToolCapability</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Server capability flags for tools.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.bean.mcp.v20260728">
+<h2>Uses of <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a> in <a href="../../bean/mcp/v20260728/package-summary.html">org.apache.juneau.bean.mcp.v20260728</a></h2>
+<div class="caption"><span>Classes in <a href="../../bean/mcp/v20260728/package-summary.html">org.apache.juneau.bean.mcp.v20260728</a> with annotations of type <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/AudioContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">AudioContent</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">MCP <code>audio</code> content block (base64 data).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/BlobResourceContents.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">BlobResourceContents</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Base64 blob body for <code>resources/read</code> results or embedded resource content.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/CallToolRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolRequest</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Parameters for <a href="../../bean/mcp/v20260728/McpMethods.html#TOOLS_CALL">"tools/call"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/CallToolResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CallToolResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#TOOLS_CALL">"tools/call"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ClientCapabilities.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ClientCapabilities</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">MCP client capability advertisement carried by RequestMeta.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/CompleteRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CompleteRequest</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Parameters for <a href="../../bean/mcp/v20260728/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/CompleteResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CompleteResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/Completion.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">Completion</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Completion values for a <a href="../../bean/mcp/v20260728/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a> request.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/CompletionArgument.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CompletionArgument</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Identifies the prompt argument or resource-template variable being completed, and its current partial value.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/CompletionCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CompletionCapability</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Empty marker capability advertising <a href="../../bean/mcp/v20260728/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a> support (structure may grow with
+ the spec).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/CompletionContext.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CompletionContext</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Optional already-resolved argument values supplied alongside a <code>completion/complete</code> request.</div>
+</div>
+<div class="col-first odd-row-color"><code>interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/CompletionReference.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp.v20260728">CompletionReference</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Polymorphic <a href="../../bean/mcp/v20260728/McpMethods.html#COMPLETION_COMPLETE">"completion/complete"</a> target reference (prompt or resource template).</div>
+</div>
+<div class="col-first even-row-color"><code>interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/Content.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp.v20260728">Content</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Polymorphic MCP content block (tool results, prompt messages).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/CreateMessageRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CreateMessageRequest</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Parameters for <a href="../../bean/mcp/v20260728/McpMethods.html#SAMPLING_CREATE_MESSAGE">"sampling/createMessage"</a>, a server-to-client duplex request (MCP sampling).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/CreateMessageResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">CreateMessageResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#SAMPLING_CREATE_MESSAGE">"sampling/createMessage"</a> (MCP sampling).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ElicitationCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ElicitationCapability</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Client elicitation capability (SEP-2322): presence on <a href="../../bean/mcp/v20260728/ClientCapabilities.html#getElicitation()"><code>ClientCapabilities.getElicitation()</code></a> signals the
+ client understands <code>input_required</code> elicitation-flavored requests.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ElicitRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ElicitRequest</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">One entry of an <code>input_required</code> pause's <code>inputRequests</code> map for an elicitation sub-request (MCP
+ <code>2026-07-28</code> SEP-2322), built by a <code>tools/call</code>/<code>prompts/get</code>/<code>resources/read</code> handler
+ and placed via <code>org.apache.juneau.rest.server.mcp.v20260728.ElicitationRequests</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ElicitResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ElicitResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The end user's answer to an <a href="../../bean/mcp/v20260728/ElicitRequest.html" title="class in org.apache.juneau.bean.mcp.v20260728"><code>ElicitRequest</code></a> (MCP <code>2026-07-28</code> SEP-2322), echoed back keyed by the
+ same server-assigned id in a follow-up request's <code>inputResponses</code> and decoded via
+ <code>org.apache.juneau.rest.server.mcp.v20260728.ElicitationResponses</code>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/EmbeddedResourceContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">EmbeddedResourceContent</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">MCP <code>resource</code> content block (inline resource body).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/GetPromptRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptRequest</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Parameters for <a href="../../bean/mcp/v20260728/McpMethods.html#PROMPTS_GET">"prompts/get"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/GetPromptResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">GetPromptResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#PROMPTS_GET">"prompts/get"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/Icon.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">Icon</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP icon descriptor (the schema's <code>Icons.icons</code> entry shape), used by <a href="../../bean/mcp/v20260728/Implementation.html" title="class in org.apache.juneau.bean.mcp.v20260728"><code>Implementation</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ImageContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ImageContent</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">MCP <code>image</code> content block (base64 data).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/Implementation.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">Implementation</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>Implementation</code> object (<code>BaseMetadata</code> + <code>Icons</code> per the schema): required
+ <code>name</code> / <code>version</code>, plus optional <code>title</code>, <code>description</code>, and ordered <code>icons</code>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/InputRequiredResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">InputRequiredResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result of a <code>tools/call</code>, <code>prompts/get</code>, or <code>resources/read</code> handler pausing to request more
+ input (MCP <code>2026-07-28</code> SEP-2322 Multi-Round-Trip Requests).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ListPromptsResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ListPromptsResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#PROMPTS_LIST">"prompts/list"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ListResourcesResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ListResourcesResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#RESOURCES_LIST">"resources/list"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ListResourceTemplatesResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ListResourceTemplatesResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#RESOURCES_TEMPLATES_LIST">"resources/templates/list"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ListToolsResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ListToolsResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#TOOLS_LIST">"tools/list"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/LoggingCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">LoggingCapability</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Server logging capability marker (structure may grow with the spec).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ModelHint.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ModelHint</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A model family/name hint for <a href="../../bean/mcp/v20260728/ModelPreferences.html#getHints()"><code>ModelPreferences.getHints()</code></a> (MCP sampling).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ModelPreferences.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ModelPreferences</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Model-selection preferences for <a href="../../bean/mcp/v20260728/CreateMessageRequest.html" title="class in org.apache.juneau.bean.mcp.v20260728"><code>CreateMessageRequest</code></a> (MCP sampling).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/PingResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">PingResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#PING">"ping"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/Prompt.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">Prompt</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP prompt descriptor (<code>prompts/list</code> entry).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/PromptArgument.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">PromptArgument</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Declared argument for an MCP prompt.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/PromptCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">PromptCapability</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Server capability flags for prompts.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/PromptMessage.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">PromptMessage</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Single message line inside <a href="../../bean/mcp/v20260728/GetPromptResult.html" title="class in org.apache.juneau.bean.mcp.v20260728"><code>GetPromptResult</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/PromptReference.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">PromptReference</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block"><a href="../../bean/mcp/v20260728/CompletionReference.html" title="interface in org.apache.juneau.bean.mcp.v20260728"><code>CompletionReference</code></a> targeting a declared prompt by name.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/PromptsListChangedNotification.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">PromptsListChangedNotification</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Params for the <code>notifications/prompts/list_changed</code> notification.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ReadResourceRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceRequest</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Parameters for <a href="../../bean/mcp/v20260728/McpMethods.html#RESOURCES_READ">"resources/read"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ReadResourceResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ReadResourceResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#RESOURCES_READ">"resources/read"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/RequestMeta.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">RequestMeta</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opaque per-request MCP metadata carried under the JSON-RPC <code>params._meta</code> property.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/RequestParamsOnly.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">RequestParamsOnly</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Metadata-only request params carrier for v2 methods whose only common params member is <code>_meta</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/Resource.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">Resource</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">MCP resource descriptor (<code>resources/list</code> entry).</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/ResourceCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ResourceCapability</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ResourceCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ResourceCapability</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Server capability flags for resources.</div>
 </div>
 <div class="col-first odd-row-color"><code>interface&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/ResourceContents.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp">ResourceContents</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ResourceContents.html" class="type-name-link" title="interface in org.apache.juneau.bean.mcp.v20260728">ResourceContents</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Polymorphic MCP resource body (text or base64 blob).</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/RootsCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">RootsCapability</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ResourcesListChangedNotification.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ResourcesListChangedNotification</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Client roots capability.</div>
+<div class="block">Params for the <code>notifications/resources/list_changed</code> notification.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/ServerCapabilities.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ServerCapabilities</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ResourceTemplate.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ResourceTemplate</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">MCP server capability advertisement in <a href="../../bean/mcp/InitializeResult.html" title="class in org.apache.juneau.bean.mcp"><code>InitializeResult</code></a>.</div>
+<div class="block">MCP resource-template descriptor (<code>resources/templates/list</code> entry).</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/TextContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">TextContent</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ResourceTemplateReference.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ResourceTemplateReference</a></code></div>
+<div class="col-last even-row-color">
+<div class="block"><a href="../../bean/mcp/v20260728/CompletionReference.html" title="interface in org.apache.juneau.bean.mcp.v20260728"><code>CompletionReference</code></a> targeting a registered resource template by its exact URI-template string.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ResourceUpdatedNotification.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ResourceUpdatedNotification</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Params for the <code>notifications/resources/updated</code> notification: a specific subscribed resource's
+ content changed.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ResultMeta.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ResultMeta</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Opaque per-result MCP metadata carried under the JSON-RPC <code>result._meta</code> property.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/RootsCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">RootsCapability</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Client roots capability.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/SamplingCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">SamplingCapability</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Client sampling capability marker (MCP sampling): presence on
+ <a href="../../bean/mcp/v20260728/ClientCapabilities.html#getSampling()"><code>ClientCapabilities.getSampling()</code></a> signals the client understands <a href="../../bean/mcp/v20260728/McpMethods.html#SAMPLING_CREATE_MESSAGE">"sampling/createMessage"</a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/SamplingMessage.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">SamplingMessage</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">One message in <a href="../../bean/mcp/v20260728/CreateMessageRequest.html#getMessages()"><code>CreateMessageRequest.getMessages()</code></a> (MCP sampling).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ServerCapabilities.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ServerCapabilities</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">MCP server capability advertisement returned by <a href="../../bean/mcp/v20260728/ServerDiscoverResult.html" title="class in org.apache.juneau.bean.mcp.v20260728"><code>ServerDiscoverResult</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ServerDiscoverResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ServerDiscoverResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Result payload for <a href="../../bean/mcp/v20260728/McpMethods.html#SERVER_DISCOVER">"server/discover"</a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/SubscriptionFilter.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">SubscriptionFilter</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Wire filter for <code>subscriptions/listen</code>: which notification kinds and resource URIs a client wants
+ (see <a href="../../bean/mcp/v20260728/SubscriptionsListenRequest.html#getNotifications()"><code>SubscriptionsListenRequest.getNotifications()</code></a>), or the honored subset a server actually
+ granted (see <a href="../../bean/mcp/v20260728/SubscriptionsAcknowledgedNotification.html#getNotifications()"><code>SubscriptionsAcknowledgedNotification.getNotifications()</code></a>).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/SubscriptionsAcknowledgedNotification.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">SubscriptionsAcknowledgedNotification</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Mandatory first frame on every accepted <code>subscriptions/listen</code> stream: echoes the honored subset of
+ the client's requested <a href="../../bean/mcp/v20260728/SubscriptionFilter.html" title="class in org.apache.juneau.bean.mcp.v20260728"><code>SubscriptionFilter</code></a> (after capability gating).</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/SubscriptionsListenRequest.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">SubscriptionsListenRequest</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Request params for <code>subscriptions/listen</code> (SEP-2575): the requested notification filter.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/SubscriptionsListenResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">SubscriptionsListenResult</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Terminal JSON-RPC result for a gracefully-closed <code>subscriptions/listen</code> stream.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/TextContent.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">TextContent</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">MCP <code>text</code> content block.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/TextResourceContents.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">TextResourceContents</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/TextResourceContents.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">TextResourceContents</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Text body for <code>resources/read</code> results or embedded resource content.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../bean/mcp/Tool.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">Tool</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/Tool.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">Tool</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">MCP tool descriptor (<code>tools/list</code> entry).</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../bean/mcp/ToolCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ToolCapability</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/mcp/v20260728/ToolCapability.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ToolCapability</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Server capability flags for tools.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../bean/mcp/v20260728/ToolsListChangedNotification.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ToolsListChangedNotification</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Params for the <code>notifications/tools/list_changed</code> notification.</div>
 </div>
 </div>
 </section>
@@ -1261,7 +1685,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Basic implementation of the <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link"><code>HttpResponse</code></a> interface for error responses.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../http/classic/response/BasicHttpResponse.html" class="type-name-link" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../http/classic/response/BasicHttpResponse.html" class="type-name-link" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a>&lt;SELF extends <a href="../../http/classic/response/BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a>&lt;SELF&gt;&gt;</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Basic implementation of the <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link"><code>HttpResponse</code></a> interface.</div>
 </div>

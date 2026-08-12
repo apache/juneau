@@ -99,12 +99,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#setAllowReserved(java.lang.Boolean)" class="member-name-link">setAllowReserved</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property setter:  <property>explode</property>.</div>
+<div class="block">Bean property setter:  <property>allowReserved</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#setContentType(java.lang.String)" class="member-name-link">setContentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property setter:  <property>url</property>.</div>
+<div class="block">Bean property setter:  <property>contentType</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#setExplode(java.lang.Boolean)" class="member-name-link">setExplode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
@@ -114,12 +114,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#setHeaders(java.util.Map)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property setter:  <property>variables</property>.</div>
+<div class="block">Bean property setter:  <property>headers</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#setStyle(java.lang.String)" class="member-name-link">setStyle</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property setter:  <property>description</property>.</div>
+<div class="block">Bean property setter:  <property>style</property>.</div>
 </div>
 <div class="col-first even-row-color"><code>protected <a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Encoding.</span><code><a href="../Encoding.html#strict()" class="member-name-link">strict</a>()</code></div>
@@ -136,7 +136,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MediaType.</span><code><a href="../MediaType.html#getEncoding()" class="member-name-link">getEncoding</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property getter:  <property>variables</property>.</div>
+<div class="block">Bean property getter:  <property>encoding</property>.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.bean.openapi3</a> with parameters of type <a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></span></div>
@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">MediaType.</span><code><a href="../MediaType.html#addEncoding(java.lang.String,org.apache.juneau.bean.openapi3.Encoding)" class="member-name-link">addEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Adds one or more values to the <property>variables</property> property.</div>
+<div class="block">Adds one or more values to the <property>encoding</property> property.</div>
 </div>
 </div>
 <div class="caption"><span>Method parameters in <a href="../package-summary.html">org.apache.juneau.bean.openapi3</a> with type arguments of type <a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></span></div>
@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MediaType.</span><code><a href="../MediaType.html#setEncoding(java.util.Map)" class="member-name-link">setEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property setter:  <property>variables</property>.</div>
+<div class="block">Bean property setter:  <property>encoding</property>.</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.bean.openapi3</a> with parameters of type <a href="../Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a></span></div>

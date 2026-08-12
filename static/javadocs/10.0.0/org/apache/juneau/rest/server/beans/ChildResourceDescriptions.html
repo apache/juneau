@@ -207,19 +207,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ChildResourceDescriptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-54">ChildResourceDescriptions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-55">ChildResourceDescriptions</a></span>()</div>
 <div class="block">Bean constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestContext,org.apache.juneau.rest.server.RestRequest)">
 <h3>ChildResourceDescriptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-62">ChildResourceDescriptions</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-64">ChildResourceDescriptions</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>context</code> - The servlet context that this bean describes.</dd>
+<dd><code>context</code> - The servlet context that this bean describes.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>req</code> - The HTTP servlet request.</dd>
 </dl>
 </section>
@@ -227,13 +228,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestContext,org.apache.juneau.rest.server.RestRequest,boolean)">
 <h3>ChildResourceDescriptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-75">ChildResourceDescriptions</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-78">ChildResourceDescriptions</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  boolean&nbsp;sort)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>context</code> - The servlet context that this bean describes.</dd>
+<dd><code>context</code> - The servlet context that this bean describes.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>req</code> - The HTTP servlet request.</dd>
 <dd><code>sort</code> - If <jk>true</jk>, list will be ordered by name alphabetically.
    Default is to maintain the order as specified in the annotation.</dd>
@@ -243,11 +245,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestRequest)">
 <h3>ChildResourceDescriptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-94">ChildResourceDescriptions</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-98">ChildResourceDescriptions</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The HTTP servlet request.</dd>
+<dd><code>req</code> - The HTTP servlet request.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -262,11 +265,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(org.apache.juneau.rest.server.RestRequest)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ChildResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ChildResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-47">of</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ChildResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ChildResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-48">of</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The HTTP servlet request.</dd>
+<dd><code>req</code> - The HTTP servlet request.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="ChildResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans"><code>ChildResourceDescriptions</code></a> bean.</dd>
 </dl>
@@ -275,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String,java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChildResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ChildResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-98">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChildResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ChildResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-102">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ResourceDescriptions.html#append(java.lang.String,java.lang.String)">ResourceDescriptions</a></code></span></div>
 <div class="block">Adds a new <a href="ResourceDescription.html" title="class in org.apache.juneau.rest.server.beans"><code>ResourceDescription</code></a> to this list.</div>
@@ -293,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String,java.lang.String,java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChildResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ChildResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-104">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ChildResourceDescriptions.html" title="class in org.apache.juneau.rest.server.beans">ChildResourceDescriptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/ChildResourceDescriptions.html#line-108">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ResourceDescriptions.html#append(java.lang.String,java.lang.String,java.lang.String)">ResourceDescriptions</a></code></span></div>

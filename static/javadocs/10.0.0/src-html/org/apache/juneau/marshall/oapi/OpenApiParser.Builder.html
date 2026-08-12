@@ -123,10 +123,10 @@
 <span class="source-line-no">110</span><span id="line-110">       *       .build();</span>
 <span class="source-line-no">111</span><span id="line-111">       *</span>
 <span class="source-line-no">112</span><span id="line-112">       *    &lt;jc&gt;// Parse CSV.&lt;/jc&gt;</span>
-<span class="source-line-no">113</span><span id="line-113">       *    JsonList &lt;jv&gt;list1&lt;/jv&gt; = &lt;jv&gt;parser1&lt;/jv&gt;.parse(&lt;js&gt;"foo=bar,baz=qux\,true\,123"&lt;/js&gt;, JsonList.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">113</span><span id="line-113">       *    JsonList &lt;jv&gt;list1&lt;/jv&gt; = &lt;jv&gt;parser1&lt;/jv&gt;.read(&lt;js&gt;"foo=bar,baz=qux\,true\,123"&lt;/js&gt;, JsonList.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">114</span><span id="line-114">       *</span>
 <span class="source-line-no">115</span><span id="line-115">       *    &lt;jc&gt;// Parse UON.&lt;/jc&gt;</span>
-<span class="source-line-no">116</span><span id="line-116">       *    JsonList &lt;jv&gt;list2&lt;/jv&gt; = &lt;jv&gt;parser2&lt;/jv&gt;.parse(&lt;js&gt;"(foo=bar,baz=@(qux,true,123))"&lt;/js&gt;, JsonList.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">116</span><span id="line-116">       *    JsonList &lt;jv&gt;list2&lt;/jv&gt; = &lt;jv&gt;parser2&lt;/jv&gt;.read(&lt;js&gt;"(foo=bar,baz=@(qux,true,123))"&lt;/js&gt;, JsonList.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">117</span><span id="line-117">       * &lt;/p&gt;</span>
 <span class="source-line-no">118</span><span id="line-118">       *</span>
 <span class="source-line-no">119</span><span id="line-119">       * &lt;ul class='values javatree'&gt;</span>
@@ -174,10 +174,10 @@
 <span class="source-line-no">161</span><span id="line-161">       *       .build();</span>
 <span class="source-line-no">162</span><span id="line-162">       *</span>
 <span class="source-line-no">163</span><span id="line-163">       *    &lt;jc&gt;// Parse a plain-text string.&lt;/jc&gt;</span>
-<span class="source-line-no">164</span><span id="line-164">       *    String &lt;jv&gt;value1&lt;/jv&gt; = &lt;jv&gt;parser1&lt;/jv&gt;.parse(&lt;js&gt;"foo bar"&lt;/js&gt;);</span>
+<span class="source-line-no">164</span><span id="line-164">       *    String &lt;jv&gt;value1&lt;/jv&gt; = &lt;jv&gt;parser1&lt;/jv&gt;.read(&lt;js&gt;"foo bar"&lt;/js&gt;);</span>
 <span class="source-line-no">165</span><span id="line-165">       *</span>
 <span class="source-line-no">166</span><span id="line-166">       *    &lt;jc&gt;// Parse a UON string.&lt;/jc&gt;</span>
-<span class="source-line-no">167</span><span id="line-167">       *    String &lt;jv&gt;value2&lt;/jv&gt; = &lt;jv&gt;parser1&lt;/jv&gt;.parse(&lt;js&gt;"'foo bar'"&lt;/js&gt;);</span>
+<span class="source-line-no">167</span><span id="line-167">       *    String &lt;jv&gt;value2&lt;/jv&gt; = &lt;jv&gt;parser1&lt;/jv&gt;.read(&lt;js&gt;"'foo bar'"&lt;/js&gt;);</span>
 <span class="source-line-no">168</span><span id="line-168">       * &lt;/p&gt;</span>
 <span class="source-line-no">169</span><span id="line-169">       *</span>
 <span class="source-line-no">170</span><span id="line-170">       * &lt;ul class='values javatree'&gt;</span>

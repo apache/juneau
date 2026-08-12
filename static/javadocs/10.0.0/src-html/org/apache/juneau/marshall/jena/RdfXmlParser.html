@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> *    &lt;jc&gt;// Parse RDF/XML string into a bean.&lt;/jc&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> *    String &lt;jv&gt;rdfXml&lt;/jv&gt; = ...;  &lt;jc&gt;// RDF/XML content&lt;/jc&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *    Person &lt;jv&gt;person&lt;/jv&gt; = RdfXmlParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, Person.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">030</span><span id="line-30"> *    Person &lt;jv&gt;person&lt;/jv&gt; = RdfXmlParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, Person.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;/p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;jc&gt;// Or use the RdfXml marshaller for convenience.&lt;/jc&gt;</span>
@@ -48,12 +48,12 @@
 <span class="source-line-no">035</span><span id="line-35"> * &lt;/p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Parse into a map.&lt;/jc&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> *    Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = RdfXmlParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, Map.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">038</span><span id="line-38"> *    Map&amp;lt;String, String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = RdfXmlParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, Map.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;/p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;jc&gt;// Custom parser with swaps.&lt;/jc&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    RdfXmlParser &lt;jv&gt;p&lt;/jv&gt; = RdfXmlParser.create().swaps(DateSwap.&lt;jk&gt;class&lt;/jk&gt;).build();</span>
-<span class="source-line-no">043</span><span id="line-43"> *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;p&lt;/jv&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">043</span><span id="line-43"> *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;p&lt;/jv&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/p&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='figure'&gt;Example input (bean with name/age):&lt;/h5&gt;</span>
@@ -114,11 +114,12 @@
 <span class="source-line-no">101</span><span id="line-101">    * Constructor.</span>
 <span class="source-line-no">102</span><span id="line-102">    *</span>
 <span class="source-line-no">103</span><span id="line-103">    * @param builder The builder for this object.</span>
-<span class="source-line-no">104</span><span id="line-104">    */</span>
-<span class="source-line-no">105</span><span id="line-105">   public RdfXmlParser(RdfParser.Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">106</span><span id="line-106">      super(builder.xml().consumes("text/xml+rdf"));</span>
-<span class="source-line-no">107</span><span id="line-107">   }</span>
-<span class="source-line-no">108</span><span id="line-108">}</span>
+<span class="source-line-no">104</span><span id="line-104">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   public RdfXmlParser(RdfParser.Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">107</span><span id="line-107">      super(builder.xml().consumes("text/xml+rdf"));</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109">}</span>
 
 
 

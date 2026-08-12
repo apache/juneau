@@ -113,16 +113,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#parseArrayRecords(java.lang.Object)" class="member-name-link">parseArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readArrayRecords(java.lang.Object)" class="member-name-link">readArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Opens a <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that yields each element of a top-level wire array as a
  separate record.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#parseArrayRecords(java.lang.Object,java.lang.String)" class="member-name-link">parseArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#readArrayRecords(java.lang.Object,java.lang.String)" class="member-name-link">readArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rootElementName)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">Variant of <a href="#parseArrayRecords(java.lang.Object)"><code>parseArrayRecords(Object)</code></a> that accepts a caller-specified root element
+<div class="block">Variant of <a href="#readArrayRecords(java.lang.Object)"><code>readArrayRecords(Object)</code></a> that accepts a caller-specified root element
  name.</div>
 </div>
 </div>
@@ -140,10 +140,10 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="parseArrayRecords(java.lang.Object)">
-<h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordReadable.html#line-49">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readArrayRecords(java.lang.Object)">
+<h3>readArrayRecords</h3>
+<div class="member-signature"><span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordReadable.html#line-49">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that yields each element of a top-level wire array as a
  separate record.</div>
 <dl class="notes">
@@ -157,17 +157,17 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="parseArrayRecords(java.lang.Object,java.lang.String)">
-<h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordReadable.html#line-65">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<section class="detail" id="readArrayRecords(java.lang.Object,java.lang.String)">
+<h3>readArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordReadable.html#line-65">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rootElementName)</span>
-                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Variant of <a href="#parseArrayRecords(java.lang.Object)"><code>parseArrayRecords(Object)</code></a> that accepts a caller-specified root element
+                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Variant of <a href="#readArrayRecords(java.lang.Object)"><code>readArrayRecords(Object)</code></a> that accepts a caller-specified root element
  name.  Used by HTML/XML when the wire format is e.g. <code>&lt;items&gt;&lt;item&gt;...</code> and the caller
  needs to declare which child element is the array element.
 
  <p>
- The default ignores the root name and delegates to <a href="#parseArrayRecords(java.lang.Object)"><code>parseArrayRecords(Object)</code></a>.</div>
+ The default ignores the root name and delegates to <a href="#readArrayRecords(java.lang.Object)"><code>readArrayRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>

@@ -143,7 +143,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Joins an array of strings with newlines.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The array to join.</dd>
+<dd><code>s</code> - The arrays to join.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new joined string.</dd>
 </dl>
@@ -157,7 +157,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Parses a generic object as JSON and converts it to an <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object to convert.</dd>
+<dd><code>o</code> - The object to convert.  Can be <jk>null</jk> (returns a new empty <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The parsed contents (a new empty <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a> if <code>o</code> is <jk>null</jk> or an empty string),
    never <jk>null</jk>.</dd>
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Concatenates and parses a string array as a JSON object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>ss</code> - The array to concatenate and parse.</dd>
+<dd><code>ss</code> - The array to concatenate and parse.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The parsed contents (a new empty <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a> if the array is empty or joins to an empty string),
    never <jk>null</jk>.</dd>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Concatenates and parses a string array as JSON array or comma-delimited list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>ss</code> - The array to concatenate and parse.</dd>
+<dd><code>ss</code> - The array to concatenate and parse.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The parsed contents (a new empty mutable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link"><code>Set</code></a> if the array is empty or joins to an empty string),
    never <jk>null</jk>.</dd>

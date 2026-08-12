@@ -177,8 +177,8 @@
 <span class="source-line-no">164</span><span id="line-164">    * and should not be called directly. Use the static factory methods {@link #of(Method)} or</span>
 <span class="source-line-no">165</span><span id="line-165">    * obtain MethodInfo instances from {@link ClassInfo#getMethod(Method)}.</span>
 <span class="source-line-no">166</span><span id="line-166">    *</span>
-<span class="source-line-no">167</span><span id="line-167">    * @param declaringClass The ClassInfo for the class that declares this method.</span>
-<span class="source-line-no">168</span><span id="line-168">    * @param inner The method being wrapped.</span>
+<span class="source-line-no">167</span><span id="line-167">    * @param declaringClass The ClassInfo for the class that declares this method. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">168</span><span id="line-168">    * @param inner The method being wrapped. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">169</span><span id="line-169">    */</span>
 <span class="source-line-no">170</span><span id="line-170">   protected MethodInfo(ClassInfo declaringClass, Method inner) {</span>
 <span class="source-line-no">171</span><span id="line-171">      super(declaringClass, inner);</span>
@@ -297,7 +297,7 @@
 <span class="source-line-no">284</span><span id="line-284">    * &lt;/p&gt;</span>
 <span class="source-line-no">285</span><span id="line-285">    *</span>
 <span class="source-line-no">286</span><span id="line-286">    * @param &lt;A&gt; The annotation type.</span>
-<span class="source-line-no">287</span><span id="line-287">    * @param type The annotation type to filter by.</span>
+<span class="source-line-no">287</span><span id="line-287">    * @param type The annotation type to filter by. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">288</span><span id="line-288">    * @return</span>
 <span class="source-line-no">289</span><span id="line-289">    *    A stream of matching annotation infos in child-to-parent order.</span>
 <span class="source-line-no">290</span><span id="line-290">    *    &lt;br&gt;Repeatable annotations are expanded into individual instances.</span>
@@ -645,7 +645,7 @@
 <span class="source-line-no">632</span><span id="line-632">    */</span>
 <span class="source-line-no">633</span><span id="line-633">   @Override</span>
 <span class="source-line-no">634</span><span id="line-634">   public boolean equals(Object obj) {</span>
-<span class="source-line-no">635</span><span id="line-635">      return obj instanceof MethodInfo other &amp;&amp; eq(this, other, (x, y) -&gt; eq(x.inner, y.inner) &amp;&amp; eq(x.declaringClass, y.declaringClass));</span>
+<span class="source-line-no">635</span><span id="line-635">      return obj instanceof MethodInfo obj2 &amp;&amp; eq(this, obj2, (x, y) -&gt; eq(x.inner, y.inner) &amp;&amp; eq(x.declaringClass, y.declaringClass));</span>
 <span class="source-line-no">636</span><span id="line-636">   }</span>
 <span class="source-line-no">637</span><span id="line-637"></span>
 <span class="source-line-no">638</span><span id="line-638">   /**</span>
@@ -691,7 +691,7 @@
 <span class="source-line-no">678</span><span id="line-678">         } catch (InvocationTargetException e) {</span>
 <span class="source-line-no">679</span><span id="line-679">            throw exex(e.getTargetException());</span>
 <span class="source-line-no">680</span><span id="line-680">         }</span>
-<span class="source-line-no">681</span><span id="line-681">      }, e -&gt; exex(e));</span>
+<span class="source-line-no">681</span><span id="line-681">      }, Shorts::exex);</span>
 <span class="source-line-no">682</span><span id="line-682">   }</span>
 <span class="source-line-no">683</span><span id="line-683"></span>
 <span class="source-line-no">684</span><span id="line-684">   /**</span>

@@ -150,7 +150,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>range</code> - The range string to parse.</dd>
+<dd><code>range</code> - The range string to parse.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified version string matches this version range.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>v</code> - The version string (e.g. <js>"1.2.3"</js>)</dd>
+<dd><code>v</code> - The version string (e.g. <js>"1.2.3"</js>).  Can be <jk>null</jk> or empty.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified version string matches this version range.</dd>
 </dl>

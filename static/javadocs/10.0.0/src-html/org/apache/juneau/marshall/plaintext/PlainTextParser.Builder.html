@@ -175,12 +175,12 @@
 <span class="source-line-no">162</span><span id="line-162"></span>
 <span class="source-line-no">163</span><span id="line-163">   /**</span>
 <span class="source-line-no">164</span><span id="line-164">    * Convenience delegator that opens a {@link RecordReader} over the input using</span>
-<span class="source-line-no">165</span><span id="line-165">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #parse(Object, Class)}).</span>
+<span class="source-line-no">165</span><span id="line-165">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #read(Object, Class)}).</span>
 <span class="source-line-no">166</span><span id="line-166">    *</span>
 <span class="source-line-no">167</span><span id="line-167">    * &lt;p&gt;</span>
-<span class="source-line-no">168</span><span id="line-168">    * The real implementation lives on {@link PlainTextParserSession#parseRecords(Object)}.  Callers</span>
+<span class="source-line-no">168</span><span id="line-168">    * The real implementation lives on {@link PlainTextParserSession#readRecords(Object)}.  Callers</span>
 <span class="source-line-no">169</span><span id="line-169">    * that need request-derived configuration (locale, timezone, schema, swaps) should call</span>
-<span class="source-line-no">170</span><span id="line-170">    * {@link #createSession()} and invoke {@link PlainTextParserSession#parseRecords(Object)} on the</span>
+<span class="source-line-no">170</span><span id="line-170">    * {@link #createSession()} and invoke {@link PlainTextParserSession#readRecords(Object)} on the</span>
 <span class="source-line-no">171</span><span id="line-171">    * built session instead.</span>
 <span class="source-line-no">172</span><span id="line-172">    *</span>
 <span class="source-line-no">173</span><span id="line-173">    * @param input The input.</span>
@@ -188,8 +188,8 @@
 <span class="source-line-no">175</span><span id="line-175">    * @throws IOException If a problem occurred opening the underlying input.</span>
 <span class="source-line-no">176</span><span id="line-176">    */</span>
 <span class="source-line-no">177</span><span id="line-177">   @Override /* RecordReadable */</span>
-<span class="source-line-no">178</span><span id="line-178">   public RecordReader parseRecords(Object input) throws IOException {</span>
-<span class="source-line-no">179</span><span id="line-179">      return getSession().parseRecords(input);</span>
+<span class="source-line-no">178</span><span id="line-178">   public RecordReader readRecords(Object input) throws IOException {</span>
+<span class="source-line-no">179</span><span id="line-179">      return getSession().readRecords(input);</span>
 <span class="source-line-no">180</span><span id="line-180">   }</span>
 <span class="source-line-no">181</span><span id="line-181"></span>
 <span class="source-line-no">182</span><span id="line-182">   @Override /* RecordReadable */</span>

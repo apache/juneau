@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
       .addRequired(<js>"firstName"</js>, <js>"lastName"</js>);
 
    <jc>// Serialize to JSON</jc>
-   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>schema</jv>);
+   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.write(<jv>schema</jv>);
  </p>
 
  <p>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
       .addDefinition(<js>"tmpfs"</js>, <jk>new</jk> JsonSchema());
 
    <jc>// Serialize to JSON</jc>
-   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>schema</jv>);
+   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.write(<jv>schema</jv>);
  </p>
 
  <h5 class='topic'>Serializing to Other Data Types</h5>
@@ -253,7 +253,7 @@ loadScripts(document, 'script');</script>
  </p>
  <p class='bjava'>
    <jc>// Use parser to load JSON Schema document into JSON Schema DTOs</jc>
-   JsonSchema <jv>schema</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonSchema.<jk>class</jk>);
+   JsonSchema <jv>schema</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, JsonSchema.<jk>class</jk>);
  </p>
 
  <p>
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;SELF extends <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;SELF&gt;&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Represents a top-level schema object bean in the JSON-Schema core specification.</div>
 </div>
@@ -325,7 +325,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A container for retrieving JSON <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> objects by URI.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonSchemaProperty.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaProperty</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonSchemaProperty.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaProperty</a>&lt;SELF extends <a href="JsonSchemaProperty.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaProperty</a>&lt;SELF&gt;&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Represents a JSON property in the JSON-Schema core specification.</div>
 </div>

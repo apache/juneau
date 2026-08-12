@@ -177,7 +177,7 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 <div class="block">Returns metadata about the specified class.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">parse</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">read</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;toType)</code></div>
@@ -185,7 +185,7 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">parse</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">read</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;toType,
@@ -194,7 +194,7 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">parse</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</code></div>
@@ -285,13 +285,13 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 </section>
 </li>
 <li>
-<section class="detail" id="parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)">
-<h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartParser.html#line-109">parse</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<section class="detail" id="read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)">
+<h3>read</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartParser.html#line-109">read</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;toType)</span>
-            throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
+           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
 <a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></span></div>
 <div class="block">Converts the specified input to the specified class type.</div>
 <dl class="notes">
@@ -301,7 +301,7 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 <dd><code>partType</code> - The part type being parsed.
    <br>Can be <jk>null</jk> (will default to <a href="../../commons/httppart/HttpPartType.html#OTHER"><code>HttpPartType.OTHER</code></a>).</dd>
 <dd><code>schema</code> - Schema information about the part.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartParserSession</code></a>.
    <br>Not all part parsers use the schema information.</dd>
 <dd><code>in</code> - The input being parsed.
    <br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).</dd>
@@ -316,13 +316,13 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 </section>
 </li>
 <li>
-<section class="detail" id="parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)">
-<h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartParser.html#line-131">parse</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<section class="detail" id="read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)">
+<h3>read</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartParser.html#line-131">read</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</span>
-            throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
+           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
 <a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></span></div>
 <div class="block">Converts the specified input to the specified class type.</div>
 <dl class="notes">
@@ -332,7 +332,7 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 <dd><code>partType</code> - The part type being parsed.
    <br>Can be <jk>null</jk> (will default to <a href="../../commons/httppart/HttpPartType.html#OTHER"><code>HttpPartType.OTHER</code></a>).</dd>
 <dd><code>schema</code> - Schema information about the part.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartParserSession</code></a>.
    <br>Not all part parsers use the schema information.</dd>
 <dd><code>in</code> - The input being parsed.
    <br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).</dd>
@@ -347,14 +347,14 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 </section>
 </li>
 <li>
-<section class="detail" id="parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
-<h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartParser.html#line-155">parse</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<section class="detail" id="read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
+<h3>read</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartParser.html#line-155">read</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;toType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;toTypeArgs)</span>
-            throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
+           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
 <a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></span></div>
 <div class="block">Converts the specified input to the specified class type.</div>
 <dl class="notes">
@@ -364,7 +364,7 @@ implements <a href="HttpPartParser.html" title="interface in org.apache.juneau.m
 <dd><code>partType</code> - The part type being parsed.
    <br>Can be <jk>null</jk> (will default to <a href="../../commons/httppart/HttpPartType.html#OTHER"><code>HttpPartType.OTHER</code></a>).</dd>
 <dd><code>schema</code> - Schema information about the part.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartParserSession</code></a>.
    <br>Not all part parsers use the schema information.</dd>
 <dd><code>in</code> - The input being parsed.
    <br>Can be <jk>null</jk> (will return <jk>null</jk> or use schema default if available).</dd>

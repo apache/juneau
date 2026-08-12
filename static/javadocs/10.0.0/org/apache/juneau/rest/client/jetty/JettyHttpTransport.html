@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-60">JettyHttpTransport</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-63">JettyHttpTransport</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span></div>
 <div class="block"><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> implementation backed by Jetty 12 <code>HttpClient</code>.
@@ -174,7 +174,7 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="builder()">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JettyHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client.jetty">JettyHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-80">builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JettyHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client.jetty">JettyHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-83">builder</a></span>()</div>
 <div class="block">Returns a new builder for this transport.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -185,7 +185,7 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JettyHttpTransport.html" title="class in org.apache.juneau.rest.client.jetty">JettyHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-90">create</a></span>()
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JettyHttpTransport.html" title="class in org.apache.juneau.rest.client.jetty">JettyHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-93">create</a></span>()
                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Returns a new instance backed by a default <code>HttpClient</code>.</div>
 <dl class="notes">
@@ -199,7 +199,7 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="execute(org.apache.juneau.rest.client.TransportRequest)">
 <h3>execute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-94">execute</a></span><wbr><span class="parameters">(<a href="../TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-97">execute</a></span><wbr><span class="parameters">(<a href="../TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
                           throws <span class="exceptions"><a href="../TransportException.html" title="class in org.apache.juneau.rest.client">TransportException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransport.html#execute(org.apache.juneau.rest.client.TransportRequest)">HttpTransport</a></code></span></div>
 <div class="block">Executes the given request and returns the response.
@@ -221,7 +221,7 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-115">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/jetty/JettyHttpTransport.html#line-160">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransport.html#close()">HttpTransport</a></code></span></div>
 <div class="block">Releases resources held by this transport (connection pools, threads, etc.).

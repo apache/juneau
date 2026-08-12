@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The header value.
    <br>Must be parsable by <a href="../../../commons/http/StringRanges.html#of(java.lang.String)"><code>StringRanges.of(String)</code></a>.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -254,7 +254,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The supplier of the header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -410,7 +410,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the header value as a <a href="../../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http"><code>StringRanges</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The header value as a <a href="../../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http"><code>StringRanges</code></a>.  Can be <jk>null</jk>.</dd>
+<dd>The header value as a <a href="../../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http"><code>StringRanges</code></a>, or <jk>null</jk> if the header has no value.</dd>
 </dl>
 </section>
 </li>

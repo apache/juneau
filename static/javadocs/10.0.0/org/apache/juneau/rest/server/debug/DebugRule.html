@@ -177,11 +177,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.debug.DebugRule.Builder)">
 <h3>DebugRule</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-147">DebugRule</a></span><wbr><span class="parameters">(<a href="DebugRule.Builder.html" title="class in org.apache.juneau.rest.server.debug">DebugRule.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-149">DebugRule</a></span><wbr><span class="parameters">(<a href="DebugRule.Builder.html" title="class in org.apache.juneau.rest.server.debug">DebugRule.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder.</dd>
+<dd><code>builder</code> - The builder.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="DebugRule.Builder.html" title="class in org.apache.juneau.rest.server.debug">DebugRule.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-132">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="DebugRule.Builder.html" title="class in org.apache.juneau.rest.server.debug">DebugRule.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-134">create</a></span>()</div>
 <div class="block">Creates a builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isEnabled(jakarta.servlet.http.HttpServletRequest)">
 <h3>isEnabled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-161">isEnabled</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-163">isEnabled</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">Returns whether this rule enables debug for this request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -220,28 +220,28 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFormat()">
 <h3>getFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DebugFormat.html" title="interface in org.apache.juneau.rest.server.debug">DebugFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-166">getFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DebugFormat.html" title="interface in org.apache.juneau.rest.server.debug">DebugFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-168">getFormat</a></span>()</div>
 <div class="block">Returns format override.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getLevel()">
 <h3>getLevel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-169">getLevel</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-171">getLevel</a></span>()</div>
 <div class="block">Returns level override.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getCacheBodies()">
 <h3>getCacheBodies</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-172">getCacheBodies</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-174">getCacheBodies</a></span>()</div>
 <div class="block">Returns cache-body override.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-174">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/debug/DebugRule.html#line-176">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

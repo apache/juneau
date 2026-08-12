@@ -59,8 +59,8 @@
 <span class="source-line-no">046</span><span id="line-46">      try {</span>
 <span class="source-line-no">047</span><span id="line-47">         Class.forName("java.net.http.HttpClient");</span>
 <span class="source-line-no">048</span><span id="line-48">         return true;</span>
-<span class="source-line-no">049</span><span id="line-49">      } catch (ClassNotFoundException e) {</span>
-<span class="source-line-no">050</span><span id="line-50">         return false;</span>
+<span class="source-line-no">049</span><span id="line-49">      } catch (ClassNotFoundException e) { // HTT: java.net.http.HttpClient has shipped in every JDK since 11; unreachable on any JVM this test suite can run on.</span>
+<span class="source-line-no">050</span><span id="line-50">         return false; // HTT: unreachable body of the line-above HTT-excluded catch block.</span>
 <span class="source-line-no">051</span><span id="line-51">      }</span>
 <span class="source-line-no">052</span><span id="line-52">   }</span>
 <span class="source-line-no">053</span><span id="line-53"></span>

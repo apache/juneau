@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../ops/AdminResource.html" title="class in org.apache.juneau.rest.server.ops">AdminResource</a></code>, <code><a href="BasicRestResource.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestResource</a></code>, <code><a href="../convention/FaviconResource.html" title="class in org.apache.juneau.rest.server.convention">FaviconResource</a></code>, <code><a href="../staticfile/StaticFilesResource.html" title="class in org.apache.juneau.rest.server.staticfile">StaticFilesResource</a></code>, <code><a href="../convention/VersionResource.html" title="class in org.apache.juneau.rest.server.convention">VersionResource</a></code>, <code><a href="../view/ViewResource.html" title="class in org.apache.juneau.rest.server.view">ViewResource</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-44">RestResource</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-43">RestResource</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Identical to <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> but doesn't extend from <code>HttpServlet</code>.
 
@@ -229,14 +229,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RestResource</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-60">RestResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-59">RestResource</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestBuilder)">
 <h3>RestResource</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-67">RestResource</a></span><wbr><span class="parameters">(<a href="../RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-66">RestResource</a></span><wbr><span class="parameters">(<a href="../RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Builder-injection constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -255,11 +255,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRestBuilder()">
 <h3>getRestBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-76">getRestBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-75">getRestBuilder</a></span>()</div>
 <div class="block">Returns the programmatic configuration builder stashed on this resource, or <jk>null</jk> if none.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The stashed builder, or <jk>null</jk>.</dd>
+<dd>The stashed builder, or <jk>null</jk> if none was injected.</dd>
 </dl>
 </section>
 </li>
@@ -267,7 +267,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="builder(java.lang.Class)">
 <h3>builder</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;R extends <a href="RestResource.html" title="class in org.apache.juneau.rest.server.servlet">RestResource</a>&gt;</span>
-<span class="return-type"><a href="RestResource.DefaultBuilder.html" title="class in org.apache.juneau.rest.server.servlet">RestResource.DefaultBuilder</a>&lt;R&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-90">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;R&gt;&nbsp;type)</span></div>
+<span class="return-type"><a href="RestResource.DefaultBuilder.html" title="class in org.apache.juneau.rest.server.servlet">RestResource.DefaultBuilder</a>&lt;R&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-89">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;R&gt;&nbsp;type)</span></div>
 <div class="block">Creates a new fluent builder for programmatically configuring an instance of the specified resource type.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRequest()">
 <h3>getRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-99">getRequest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-98">getRequest</a></span>()</div>
 <div class="block">Returns the current thread-local HTTP request.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -293,7 +293,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponse()">
 <h3>getResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-106">getResponse</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-105">getResponse</a></span>()</div>
 <div class="block">Returns the current thread-local HTTP response.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.String,java.lang.Object...)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-118">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-117">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Log a message.
@@ -315,14 +315,14 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>level</code> - The log level.</dd>
 <dd><code>msg</code> - The message to log.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-133">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-132">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
@@ -335,14 +335,14 @@ loadScripts(document, 'script');</script>
 <dd><code>level</code> - The log level.</dd>
 <dd><code>cause</code> - The cause.</dd>
 <dd><code>msg</code> - The message to log.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="doLog(java.util.logging.Level,java.lang.Throwable,java.util.function.Supplier)">
 <h3>doLog</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-150">doLog</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-149">doLog</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;msg)</span></div>
 <div class="block">Main logger method.
@@ -363,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContext()">
 <h3>getContext</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-163">getContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-162">getContext</a></span>()</div>
 <div class="block">Returns the read-only context object that contains all the configuration information about this resource.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -374,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPaths()">
 <h3>getPaths</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-215">getPaths</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-214">getPaths</a></span>()</div>
 <div class="block">Returns the runtime-overridden top-level mount paths for this resource.
 
  <p>
@@ -427,7 +427,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setContext(org.apache.juneau.rest.server.RestContext)">
 <h3>setContext</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-223">setContext</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/servlet/RestResource.html#line-222">setContext</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context)</span>
                    throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Sets the context object for this servlet.</div>
 <dl class="notes">

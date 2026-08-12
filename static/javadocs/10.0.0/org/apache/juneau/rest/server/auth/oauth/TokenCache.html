@@ -79,13 +79,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth">BoundedLruTokenCache</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-38">TokenCache</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-40">TokenCache</a></span></div>
 <div class="block">SPI for caching the result of an OAuth introspection or token-acquisition call.
 
  <p>
  Two value shapes are supported via dedicated entry types: validator-side caches store
  <code>CachedPrincipal</code> (used by <a href="OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>OAuthIntrospectionValidator</code></a>); flow-side caches store
- <a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>OAuthToken</code></a>.  Implementations are not required to support both surfaces &mdash; a Redis-backed
+ <a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthToken</code></a>.  Implementations are not required to support both surfaces &mdash; a Redis-backed
  impl can serialize either via JSON, an in-memory impl can hold both.  The default impl
  <a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>BoundedLruTokenCache</code></a> supports both.
 
@@ -114,7 +114,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Retrieves a non-expired principal entry.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getToken(java.lang.String,java.time.Instant,java.time.Duration)" class="member-name-link">getToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;skew)</code></div>
@@ -134,8 +134,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Stores or replaces a principal entry.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#putToken(java.lang.String,org.apache.juneau.rest.server.auth.oauth.OAuthToken)" class="member-name-link">putToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- <a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&nbsp;token)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#putToken(java.lang.String,org.apache.juneau.rest.auth.oauth.flow.OAuthToken)" class="member-name-link">putToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&nbsp;token)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Stores or replaces a token entry.</div>
 </div>
@@ -161,7 +161,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="putPrincipal(java.lang.String,java.security.Principal,java.time.Duration)">
 <h3>putPrincipal</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-47">putPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-49">putPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl)</span></div>
 <div class="block">Stores or replaces a principal entry.</div>
@@ -176,7 +176,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPrincipal(java.lang.String)">
 <h3>getPrincipal</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-55">getPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-57">getPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Retrieves a non-expired principal entry.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -187,10 +187,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="putToken(java.lang.String,org.apache.juneau.rest.server.auth.oauth.OAuthToken)">
+<section class="detail" id="putToken(java.lang.String,org.apache.juneau.rest.auth.oauth.flow.OAuthToken)">
 <h3>putToken</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-63">putToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- <a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&nbsp;token)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-65">putToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&nbsp;token)</span></div>
 <div class="block">Stores or replaces a token entry.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getToken(java.lang.String,java.time.Instant,java.time.Duration)">
 <h3>getToken</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-73">getToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-75">getToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;skew)</span></div>
 <div class="block">Retrieves a non-expired token entry.</div>
@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invalidate(java.lang.String)">
 <h3>invalidate</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-80">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-82">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Removes the entry under the supplied key.  No-op if absent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-87">size</a></span>()</div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/TokenCache.html#line-89">size</a></span>()</div>
 <div class="block">Returns the current entry count.  Primarily for tests and metrics.</div>
 <dl class="notes">
 <dt>Returns:</dt>

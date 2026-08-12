@@ -147,14 +147,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,org.apache.juneau.commons.reflect.MethodInfo)">
 <h3>ClientVersionMatcher</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/ClientVersionMatcher.html#line-49">ClientVersionMatcher</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientVersionHeader,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/ClientVersionMatcher.html#line-50">ClientVersionMatcher</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientVersionHeader,
  <a href="../../../commons/reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;mi)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>clientVersionHeader</code> - The HTTP request header name containing the client version.
    If <jk>null</jk> or an empty string, uses <js>"Client-Version"</js></dd>
-<dd><code>mi</code> - The version string that the client version must match.</dd>
+<dd><code>mi</code> - The Java method info that this matcher is being applied to (used to resolve the
+   <code>@RestOp(clientVersion)</code> annotation value).</dd>
 </dl>
 </section>
 </li>
@@ -169,7 +170,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="matches(jakarta.servlet.http.HttpServletRequest)">
 <h3>matches</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/ClientVersionMatcher.html#line-63">matches</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/ClientVersionMatcher.html#line-64">matches</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RestMatcher.html#matches(jakarta.servlet.http.HttpServletRequest)">RestMatcher</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if the specified request matches this matcher.</div>
 <dl class="notes">
@@ -185,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="required()">
 <h3>required</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/ClientVersionMatcher.html#line-68">required</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/ClientVersionMatcher.html#line-69">required</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RestMatcher.html#required()">RestMatcher</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this matcher is required to match in order for the method to be invoked.
 

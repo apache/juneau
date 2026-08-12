@@ -130,7 +130,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter</code></a> using either a pattern or predefined pattern name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pattern</code> - The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).</dd>
+<dd><code>pattern</code> - The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).  Can be <jk>null</jk> or empty, in which case <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_INSTANT" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_INSTANT</code></a> is returned.</dd>
 <dt>Returns:</dt>
 <dd>The formatter.</dd>
 </dl>

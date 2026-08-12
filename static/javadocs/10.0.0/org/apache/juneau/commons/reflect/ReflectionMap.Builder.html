@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The mapping key pattern(s).
+<dd><code>key</code> - The mapping key pattern(s).  Must not be <jk>null</jk>.
    <br>Can be any of the following:
    <ul>
       <li>Fully qualified class name (e.g., <js>"com.foo.MyClass"</js>)
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
       <li>Comma-delimited list of any of the above (e.g., <js>"MyClass, MyClass.method1, MyClass.field1"</js>)
    </ul></dd>
 <dd><code>value</code> - The value to associate with the matching reflection element(s).
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> (the key pattern will then map to a <jk>null</jk> value).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>

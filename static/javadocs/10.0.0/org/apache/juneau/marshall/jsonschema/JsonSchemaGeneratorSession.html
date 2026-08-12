@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.  Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -339,7 +339,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the definition ID for the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The class to get the definition ID of.</dd>
+<dd><code>cm</code> - The class to get the definition ID of.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The definition ID for the specified class.</dd>
 </dl>
@@ -366,7 +366,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the definition URI for the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The class to get the definition URI of.</dd>
+<dd><code>cm</code> - The class to get the definition URI of.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The definition URI for the specified class.</dd>
 </dl>
@@ -392,7 +392,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>bpm</code> - The bean property to return the metadata on.</dd>
+<dd><code>bpm</code> - The bean property to return the metadata on.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The metadata.</dd>
 </dl>
@@ -405,7 +405,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The class to return the metadata on.</dd>
+<dd><code>cm</code> - The class to return the metadata on.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The metadata.</dd>
 </dl>
@@ -422,7 +422,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>cm</code> - The object type.</dd>
 <dt>Returns:</dt>
-<dd>The schema for the type.</dd>
+<dd>The schema for the type, or <jk>null</jk> if the type is ignored (see <a href="JsonSchemaGenerator.Builder.html#ignoreTypes(java.lang.String...)"><code>JsonSchemaGenerator.Builder.ignoreTypes(String...)</code></a>).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../MarshallingRecursionException.html" title="class in org.apache.juneau.marshall">MarshallingRecursionException</a></code> - Bean recursion occurred.</dd>
 <dd><code><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code> - Error occurred.</dd>
@@ -441,7 +441,7 @@ loadScripts(document, 'script');</script>
 <dd><code>o</code> - The object.
    <br>Can either be a POJO or a <c>Class</c>/<c>Type</c>.</dd>
 <dt>Returns:</dt>
-<dd>The schema for the type.</dd>
+<dd>The schema for the type, or <jk>null</jk> if the type is ignored (see <a href="JsonSchemaGenerator.Builder.html#ignoreTypes(java.lang.String...)"><code>JsonSchemaGenerator.Builder.ignoreTypes(String...)</code></a>).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../MarshallingRecursionException.html" title="class in org.apache.juneau.marshall">MarshallingRecursionException</a></code> - Bean recursion occurred.</dd>
 <dd><code><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code> - Error occurred.</dd>
@@ -459,7 +459,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>type</code> - The object type.</dd>
 <dt>Returns:</dt>
-<dd>The schema for the type.</dd>
+<dd>The schema for the type, or <jk>null</jk> if the type is ignored (see <a href="JsonSchemaGenerator.Builder.html#ignoreTypes(java.lang.String...)"><code>JsonSchemaGenerator.Builder.ignoreTypes(String...)</code></a>).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../MarshallingRecursionException.html" title="class in org.apache.juneau.marshall">MarshallingRecursionException</a></code> - Bean recursion occurred.</dd>
 <dd><code><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code> - Error occurred.</dd>
@@ -469,7 +469,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAddDescriptionsTo()">
 <h3>getAddDescriptionsTo</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.marshall.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-459">getAddDescriptionsTo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.marshall.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-461">getAddDescriptionsTo</a></span>()</div>
 <div class="block">Add descriptions to types.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -486,7 +486,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAddExamplesTo()">
 <h3>getAddExamplesTo</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.marshall.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-468">getAddExamplesTo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="TypeCategory.html" title="enum class in org.apache.juneau.marshall.jsonschema">TypeCategory</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-470">getAddExamplesTo</a></span>()</div>
 <div class="block">Add examples.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -503,7 +503,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanDefMapper()">
 <h3>getBeanDefMapper</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="MarshallingDefMapper.html" title="interface in org.apache.juneau.marshall.jsonschema">MarshallingDefMapper</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-477">getBeanDefMapper</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="MarshallingDefMapper.html" title="interface in org.apache.juneau.marshall.jsonschema">MarshallingDefMapper</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-479">getBeanDefMapper</a></span>()</div>
 <div class="block">Bean schema definition mapper.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -520,7 +520,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getIgnoreTypes()">
 <h3>getIgnoreTypes</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-486">getIgnoreTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-488">getIgnoreTypes</a></span>()</div>
 <div class="block">Ignore types from schema definitions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -537,7 +537,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isAllowNestedDescriptions()">
 <h3>isAllowNestedDescriptions</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-495">isAllowNestedDescriptions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-497">isAllowNestedDescriptions</a></span>()</div>
 <div class="block">Allow nested descriptions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -554,7 +554,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isAllowNestedExamples()">
 <h3>isAllowNestedExamples</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-504">isAllowNestedExamples</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-506">isAllowNestedExamples</a></span>()</div>
 <div class="block">Allow nested examples.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -571,7 +571,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUseBeanDefs()">
 <h3>isUseBeanDefs</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-513">isUseBeanDefs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonschema/JsonSchemaGeneratorSession.html#line-515">isUseBeanDefs</a></span>()</div>
 <div class="block">Use bean definitions.</div>
 <dl class="notes">
 <dt>Returns:</dt>

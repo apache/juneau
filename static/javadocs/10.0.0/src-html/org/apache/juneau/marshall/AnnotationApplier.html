@@ -114,9 +114,9 @@
 <span class="source-line-no">101</span><span id="line-101">   /**</span>
 <span class="source-line-no">102</span><span id="line-102">    * Constructor.</span>
 <span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * @param annotationClass The annotation class.</span>
-<span class="source-line-no">105</span><span id="line-105">    * @param builderClass The builder class.</span>
-<span class="source-line-no">106</span><span id="line-106">    * @param varResolverSession The string resolver to use for resolving strings.</span>
+<span class="source-line-no">104</span><span id="line-104">    * @param annotationClass The annotation class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">105</span><span id="line-105">    * @param builderClass The builder class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param varResolverSession The string resolver to use for resolving strings. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">107</span><span id="line-107">    */</span>
 <span class="source-line-no">108</span><span id="line-108">   protected AnnotationApplier(Class&lt;A&gt; annotationClass, Class&lt;B&gt; builderClass, VarResolverSession varResolverSession) {</span>
 <span class="source-line-no">109</span><span id="line-109">      ca = assertArgNotNull(ARG_annotationClass, annotationClass);</span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141"></span>
 <span class="source-line-no">142</span><span id="line-142">   private Character toCharacter(String in, String loc) {</span>
 <span class="source-line-no">143</span><span id="line-143">      if (in.length() != 1)</span>
-<span class="source-line-no">144</span><span id="line-144">         throw new ConfigException("Invalid syntax for character on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);</span>
+<span class="source-line-no">144</span><span id="line-144">         throw new ConfigException("Invalid syntax for character on annotation @%s(%s): %s", ca.getSimpleName(), loc, in);</span>
 <span class="source-line-no">145</span><span id="line-145">      return in.charAt(0);</span>
 <span class="source-line-no">146</span><span id="line-146">   }</span>
 <span class="source-line-no">147</span><span id="line-147"></span>
@@ -162,7 +162,7 @@
 <span class="source-line-no">149</span><span id="line-149">    * Resolves the specified string as a comma-delimited list of strings.</span>
 <span class="source-line-no">150</span><span id="line-150">    *</span>
 <span class="source-line-no">151</span><span id="line-151">    * @param in The CDL string containing variables to resolve.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @return An array with resolved strings.</span>
+<span class="source-line-no">152</span><span id="line-152">    * @return A stream of resolved strings.</span>
 <span class="source-line-no">153</span><span id="line-153">    */</span>
 <span class="source-line-no">154</span><span id="line-154">   protected Stream&lt;String&gt; cdl(String in) {</span>
 <span class="source-line-no">155</span><span id="line-155">      return Arrays.stream(splita(vr.resolve(in))).filter(Shorts::ine);</span>
@@ -213,15 +213,15 @@
 <span class="source-line-no">200</span><span id="line-200">      try {</span>
 <span class="source-line-no">201</span><span id="line-201">         return string(in).map(Integer::parseInt);</span>
 <span class="source-line-no">202</span><span id="line-202">      } catch (NumberFormatException e) {</span>
-<span class="source-line-no">203</span><span id="line-203">         throw new ConfigException(e, "Invalid syntax for integer on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);</span>
+<span class="source-line-no">203</span><span id="line-203">         throw new ConfigException(e, "Invalid syntax for integer on annotation @%s(%s): %s", ca.getSimpleName(), loc, in);</span>
 <span class="source-line-no">204</span><span id="line-204">      }</span>
 <span class="source-line-no">205</span><span id="line-205">   }</span>
 <span class="source-line-no">206</span><span id="line-206"></span>
 <span class="source-line-no">207</span><span id="line-207">   /**</span>
-<span class="source-line-no">208</span><span id="line-208">    * Resolves the specified string as a comma-delimited list of strings.</span>
+<span class="source-line-no">208</span><span id="line-208">    * Resolves each string in the specified array.</span>
 <span class="source-line-no">209</span><span id="line-209">    *</span>
-<span class="source-line-no">210</span><span id="line-210">    * @param in The CDL string containing variables to resolve.</span>
-<span class="source-line-no">211</span><span id="line-211">    * @return An array with resolved strings.</span>
+<span class="source-line-no">210</span><span id="line-210">    * @param in The array of strings containing variables to resolve.</span>
+<span class="source-line-no">211</span><span id="line-211">    * @return A stream of resolved strings.</span>
 <span class="source-line-no">212</span><span id="line-212">    */</span>
 <span class="source-line-no">213</span><span id="line-213">   protected Stream&lt;String&gt; stream(String[] in) {</span>
 <span class="source-line-no">214</span><span id="line-214">      return Arrays.stream(in).map(vr::resolve).filter(Shorts::ine);</span>

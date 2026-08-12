@@ -221,11 +221,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestOpSession.Builder)">
 <h3>RestOpSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-134">RestOpSession</a></span><wbr><span class="parameters">(<a href="RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-135">RestOpSession</a></span><wbr><span class="parameters">(<a href="RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.
+   <br>Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -257,7 +258,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finish()">
 <h3>finish</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-153">finish</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-154">finish</a></span>()</div>
 <div class="block">Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -268,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanStore()">
 <h3>getBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-173">getBeanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-174">getBeanStore</a></span>()</div>
 <div class="block">Returns the bean store for this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -279,7 +280,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContext()">
 <h3>getContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-175">getContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-176">getContext</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../marshall/ContextSession.html#getContext()">ContextSession</a></code></span></div>
 <div class="block">Returns the context that created this session.</div>
 <dl class="notes">
@@ -293,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRequest()">
 <h3>getRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-183">getRequest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-184">getRequest</a></span>()</div>
 <div class="block">Returns the REST request object for this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -304,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponse()">
 <h3>getResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-190">getResponse</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-191">getResponse</a></span>()</div>
 <div class="block">Returns the REST response object for this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -315,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRestContext()">
 <h3>getRestContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-197">getRestContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-198">getRestContext</a></span>()</div>
 <div class="block">Returns the context of the parent class of this Java method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -326,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRestSession()">
 <h3>getRestSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-204">getRestSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-205">getRestSession</a></span>()</div>
 <div class="block">Returns the session of the parent class of this Java method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -337,7 +338,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run()">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-221">run</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-222">run</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Runs this session.
 
@@ -359,7 +360,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="status(org.apache.juneau.http.HttpStatusLine)">
 <h3>status</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-241">status</a></span><wbr><span class="parameters">(<a href="../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-242">status</a></span><wbr><span class="parameters">(<a href="../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
 <div class="block">Sets the status of the response.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -373,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-246">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpSession.html#line-247">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../marshall/ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

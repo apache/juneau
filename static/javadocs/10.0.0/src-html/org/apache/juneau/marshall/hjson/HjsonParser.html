@@ -139,8 +139,8 @@
 <span class="source-line-no">126</span><span id="line-126"></span>
 <span class="source-line-no">127</span><span id="line-127">   private static final String ARG_ctx = "ctx";</span>
 <span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;, HjsonClassMeta&gt; hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">130</span><span id="line-130">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta, HjsonBeanPropertyMeta&gt; hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">129</span><span id="line-129">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,HjsonClassMeta&gt; hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">130</span><span id="line-130">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,HjsonBeanPropertyMeta&gt; hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">131</span><span id="line-131"></span>
 <span class="source-line-no">132</span><span id="line-132">   /**</span>
 <span class="source-line-no">133</span><span id="line-133">    * Builder class.</span>
@@ -216,12 +216,12 @@
 <span class="source-line-no">203</span><span id="line-203"></span>
 <span class="source-line-no">204</span><span id="line-204">   /**</span>
 <span class="source-line-no">205</span><span id="line-205">    * Convenience delegator that opens a {@link RecordReader} over the input using</span>
-<span class="source-line-no">206</span><span id="line-206">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #parse(Object, Class)}).</span>
+<span class="source-line-no">206</span><span id="line-206">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #read(Object, Class)}).</span>
 <span class="source-line-no">207</span><span id="line-207">    *</span>
 <span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
-<span class="source-line-no">209</span><span id="line-209">    * The real implementation lives on {@link HjsonParserSession#parseRecords(Object)}.  Callers</span>
+<span class="source-line-no">209</span><span id="line-209">    * The real implementation lives on {@link HjsonParserSession#readRecords(Object)}.  Callers</span>
 <span class="source-line-no">210</span><span id="line-210">    * that need request-derived configuration (locale, timezone, schema, swaps) should call</span>
-<span class="source-line-no">211</span><span id="line-211">    * {@link #createSession()} and invoke {@link HjsonParserSession#parseRecords(Object)} on the</span>
+<span class="source-line-no">211</span><span id="line-211">    * {@link #createSession()} and invoke {@link HjsonParserSession#readRecords(Object)} on the</span>
 <span class="source-line-no">212</span><span id="line-212">    * built session instead.</span>
 <span class="source-line-no">213</span><span id="line-213">    *</span>
 <span class="source-line-no">214</span><span id="line-214">    * @param input The input.</span>
@@ -229,8 +229,8 @@
 <span class="source-line-no">216</span><span id="line-216">    * @throws IOException If a problem occurred opening the underlying input.</span>
 <span class="source-line-no">217</span><span id="line-217">    */</span>
 <span class="source-line-no">218</span><span id="line-218">   @Override /* RecordReadable */</span>
-<span class="source-line-no">219</span><span id="line-219">   public RecordReader parseRecords(Object input) throws IOException {</span>
-<span class="source-line-no">220</span><span id="line-220">      return ((RecordReadable) getSession()).parseRecords(input);</span>
+<span class="source-line-no">219</span><span id="line-219">   public RecordReader readRecords(Object input) throws IOException {</span>
+<span class="source-line-no">220</span><span id="line-220">      return ((RecordReadable) getSession()).readRecords(input);</span>
 <span class="source-line-no">221</span><span id="line-221">   }</span>
 <span class="source-line-no">222</span><span id="line-222"></span>
 <span class="source-line-no">223</span><span id="line-223">   @Override /* RecordReadable */</span>

@@ -143,8 +143,8 @@
 <span class="source-line-no">130</span><span id="line-130">    * Builds the bean-level {@link BeanRegistryLookup} for the supplied class.  Returns &lt;jk&gt;null&lt;/jk&gt; on the</span>
 <span class="source-line-no">131</span><span id="line-131">    * commons-side path (no marshalling context).</span>
 <span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param marshallingContext The marshalling-side context (as an opaque {@link Object}).  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">134</span><span id="line-134">    * @param beanFilter The bean filter applied to this bean meta.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">133</span><span id="line-133">    * @param marshallingContext The marshalling-side context (as an opaque {@link Object}).  Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent — see {@code org.apache.juneau.marshall.MarshalledBeanMetaInitializer}, the sole concrete implementer of this SPI.</span>
+<span class="source-line-no">134</span><span id="line-134">    * @param beanFilter The bean filter applied to this bean meta.  Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent — see {@code org.apache.juneau.marshall.MarshalledBeanMetaInitializer}.</span>
 <span class="source-line-no">135</span><span id="line-135">    * @param classInfo The class info of the bean.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">136</span><span id="line-136">    * @param config The bean-modeling configuration.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">137</span><span id="line-137">    * @return The bean-level registry, or &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">    * Walks the parent classes/interfaces of {@code classInfo} and returns the first dictionary-name mapping for</span>
 <span class="source-line-no">153</span><span id="line-153">    * {@code rawClass} found in any parent's registry, or &lt;jk&gt;null&lt;/jk&gt; if none.</span>
 <span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * @param marshallingContext The marshalling-side context.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param marshallingContext The marshalling-side context.  Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent — see {@code org.apache.juneau.marshall.MarshalledBeanMetaInitializer}.</span>
 <span class="source-line-no">156</span><span id="line-156">    * @param classInfo The bean's class info.</span>
 <span class="source-line-no">157</span><span id="line-157">    * @param rawClass The raw class to look up.</span>
 <span class="source-line-no">158</span><span id="line-158">    * @return The dictionary name found in a parent's registry, or &lt;jk&gt;null&lt;/jk&gt;.</span>

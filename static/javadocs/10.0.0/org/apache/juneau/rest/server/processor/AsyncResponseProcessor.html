@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-100">AsyncResponseProcessor</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-102">AsyncResponseProcessor</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></span></div>
 <div class="block">Response processor that unwraps <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a> return values from
@@ -246,7 +246,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="ATTR_ASYNC_DISPATCH_OWNED">
 <h3>ATTR_ASYNC_DISPATCH_OWNED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-113">ATTR_ASYNC_DISPATCH_OWNED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-115">ATTR_ASYNC_DISPATCH_OWNED</a></span></div>
 <div class="block">Request attribute set by this processor when the <code>AsyncContext</code> path is taken so
  downstream lifecycle code (specifically <a href="../RestOpSession.html#finish()"><code>RestOpSession.finish()</code></a> and
  <a href="../RestSession.html#finish()"><code>RestSession.finish()</code></a>) can skip the synchronous <code>flushBuffer()</code> / <code>req.close()</code>
@@ -267,7 +267,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="DEFAULT_ASYNC_TIMEOUT_MILLIS">
 <h3>DEFAULT_ASYNC_TIMEOUT_MILLIS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-116">DEFAULT_ASYNC_TIMEOUT_MILLIS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-118">DEFAULT_ASYNC_TIMEOUT_MILLIS</a></span></div>
 <div class="block">Default async timeout in milliseconds when no annotation override is supplied.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -290,7 +290,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AsyncResponseProcessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-100">AsyncResponseProcessor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-102">AsyncResponseProcessor</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -304,7 +304,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="process(org.apache.juneau.rest.server.RestOpSession)">
 <h3>process</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-118">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-120">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)">ResponseProcessor</a></code></span></div>
@@ -333,14 +333,15 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="isAsyncDispatchOwned(org.apache.juneau.rest.server.RestOpSession)">
 <h3>isAsyncDispatchOwned</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-319">isAsyncDispatchOwned</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-322">isAsyncDispatchOwned</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span></div>
 <div class="block">Returns whether the given session has been handed off to async dispatch. Inspected by
  <a href="../RestOpSession.html#finish()"><code>RestOpSession.finish()</code></a> / <a href="../RestSession.html#finish()"><code>RestSession.finish()</code></a> to skip the synchronous
  <code>flushBuffer()</code> call when the <code>AsyncContext.complete()</code> path will commit the
  response itself.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>opSession</code> - The session to check.</dd>
+<dd><code>opSession</code> - The session to check.
+   <br>Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> if <a href="#ATTR_ASYNC_DISPATCH_OWNED"><code>ATTR_ASYNC_DISPATCH_OWNED</code></a> has been set.</dd>
 </dl>
@@ -349,13 +350,14 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="isAsyncDispatchOwned(jakarta.servlet.http.HttpServletRequest)">
 <h3>isAsyncDispatchOwned</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-333">isAsyncDispatchOwned</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html#line-337">isAsyncDispatchOwned</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">Variant of <a href="#isAsyncDispatchOwned(org.apache.juneau.rest.server.RestOpSession)"><code>isAsyncDispatchOwned(RestOpSession)</code></a> that operates directly on the
  underlying servlet request — used by <a href="../RestSession.html#finish()"><code>RestSession.finish()</code></a> where the
  <a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a> may not be available.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The servlet request.</dd>
+<dd><code>req</code> - The servlet request.
+   <br>Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> if <a href="#ATTR_ASYNC_DISPATCH_OWNED"><code>ATTR_ASYNC_DISPATCH_OWNED</code></a> has been set.</dd>
 </dl>

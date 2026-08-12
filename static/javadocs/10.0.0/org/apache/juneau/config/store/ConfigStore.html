@@ -97,7 +97,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  Content stores require two methods to be implemented:
  <ul class='javatree'>
    <li class='jm'><a href="#read(java.lang.String)"><code>read(String)</code></a> - Retrieve a config file.
-   <li class='jm'><a href="#write(java.lang.String,java.lang.String,java.lang.String)"><code>write(String,String,String)</code></a> - ConfigStore a config file.
+   <li class='jm'><a href="#write(java.lang.String,java.lang.String,java.lang.String)"><code>write(String,String,String)</code></a> - Store a config file.
  </ul>
 
  <h5 class='section'>Notes:</h5><ul>
@@ -243,11 +243,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.config.store.ConfigStore.Builder)">
 <h3>ConfigStore</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-97">ConfigStore</a></span><wbr><span class="parameters">(<a href="ConfigStore.Builder.html" title="class in org.apache.juneau.config.store">ConfigStore.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-98">ConfigStore</a></span><wbr><span class="parameters">(<a href="ConfigStore.Builder.html" title="class in org.apache.juneau.config.store">ConfigStore.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.
+   <br>Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -262,7 +263,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="exists(java.lang.String)">
 <h3>exists</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-107">exists</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-108">exists</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Checks whether the configuration with the specified name exists in this store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -275,7 +276,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMap(java.lang.String)">
 <h3>getMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../internal/ConfigMap.html" title="class in org.apache.juneau.config.internal">ConfigMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-118">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../internal/ConfigMap.html" title="class in org.apache.juneau.config.internal">ConfigMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-119">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns a map file containing the parsed contents of a configuration.</div>
 <dl class="notes">
@@ -292,14 +293,15 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getMap(java.lang.String,org.apache.juneau.config.format.ConfigFormat)">
 <h3>getMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../internal/ConfigMap.html" title="class in org.apache.juneau.config.internal">ConfigMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-130">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../internal/ConfigMap.html" title="class in org.apache.juneau.config.internal">ConfigMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-133">getMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="../format/ConfigFormat.html" title="interface in org.apache.juneau.config.format">ConfigFormat</a>&nbsp;format)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns a map file containing the parsed contents of a configuration.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The configuration name.</dd>
-<dd><code>format</code> - The configuration format.</dd>
+<dd><code>format</code> - The configuration format.
+   <br>Can be <jk>null</jk> (defaults to <a href="../format/IniConfigFormat.html" title="class in org.apache.juneau.config.format"><code>IniConfigFormat</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The parsed configuration.</dd>
 <dt>Throws:</dt>
@@ -310,7 +312,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="read(java.lang.String)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-176">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-179">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the contents of the configuration file.</div>
 <dl class="notes">
@@ -328,12 +330,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="register(java.lang.String,org.apache.juneau.config.store.ConfigStoreListener)">
 <h3>register</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-185">register</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-190">register</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="ConfigStoreListener.html" title="interface in org.apache.juneau.config.store">ConfigStoreListener</a>&nbsp;l)</span></div>
 <div class="block">Registers a new listener on this store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The configuration name to listen for.</dd>
+<dd><code>name</code> - The configuration name to listen for.
+   <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>l</code> - The new listener.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -343,12 +346,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="unregister(java.lang.String,org.apache.juneau.config.store.ConfigStoreListener)">
 <h3>unregister</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-199">unregister</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-206">unregister</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="ConfigStoreListener.html" title="interface in org.apache.juneau.config.store">ConfigStoreListener</a>&nbsp;l)</span></div>
 <div class="block">Unregisters a listener from this store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The configuration name to listen for.</dd>
+<dd><code>name</code> - The configuration name to listen for.
+   <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>l</code> - The listener to unregister.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -358,7 +362,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="update(java.lang.String,java.lang.String)">
 <h3>update</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-217">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-226">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contents)</span></div>
 <div class="block">Called when the physical contents of a config file have changed.
 
@@ -366,7 +370,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  Triggers calls to <a href="ConfigStoreListener.html#onChange(java.lang.String)"><code>ConfigStoreListener.onChange(String)</code></a> on all registered listeners.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The config name (e.g. the filename without the extension).</dd>
+<dd><code>name</code> - The config name (e.g. the filename without the extension).
+   <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>contents</code> - The new contents.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -376,12 +381,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="update(java.lang.String,java.lang.String...)">
 <h3>update</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-232">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-243">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;contentLines)</span></div>
 <div class="block">Convenience method for updating the contents of a file with lines.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The config name (e.g. the filename without the extension).</dd>
+<dd><code>name</code> - The config name (e.g. the filename without the extension).
+   <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>contentLines</code> - The new contents.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -391,7 +397,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="write(java.lang.String,java.lang.String,java.lang.String)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-251">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-262">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedContents,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newContents)</span>
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -412,7 +418,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="resolveName(java.lang.String)">
 <h3>resolveName</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-263">resolveName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/store/ConfigStore.html#line-274">resolveName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Subclasses can override this method to convert config names to internal forms.
 
  <p>

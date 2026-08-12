@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">    * @param m The map whose entries are to be added. Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
 <span class="source-line-no">144</span><span id="line-144">    * @return This object for method chaining.</span>
 <span class="source-line-no">145</span><span id="line-145">    */</span>
-<span class="source-line-no">146</span><span id="line-146">   public FluentMap&lt;K,V&gt; aa(Map&lt;? extends K, ? extends V&gt; m) {</span>
+<span class="source-line-no">146</span><span id="line-146">   public FluentMap&lt;K,V&gt; aa(Map&lt;? extends K,? extends V&gt; m) {</span>
 <span class="source-line-no">147</span><span id="line-147">      if (m != null)</span>
 <span class="source-line-no">148</span><span id="line-148">         map.putAll(m);</span>
 <span class="source-line-no">149</span><span id="line-149">      return this;</span>
@@ -241,7 +241,7 @@
 <span class="source-line-no">228</span><span id="line-228">   }</span>
 <span class="source-line-no">229</span><span id="line-229"></span>
 <span class="source-line-no">230</span><span id="line-230">   @Override</span>
-<span class="source-line-no">231</span><span id="line-231">   public void putAll(Map&lt;? extends K, ? extends V&gt; m) {</span>
+<span class="source-line-no">231</span><span id="line-231">   public void putAll(Map&lt;? extends K,? extends V&gt; m) {</span>
 <span class="source-line-no">232</span><span id="line-232">      map.putAll(m);</span>
 <span class="source-line-no">233</span><span id="line-233">   }</span>
 <span class="source-line-no">234</span><span id="line-234"></span>

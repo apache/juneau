@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-84">BidiMap</a>&lt;K,<wbr>V&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-85">BidiMap</a>&lt;K,<wbr>V&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span></div>
 <div class="block">A bidirectional map with reverse key lookup by value.
@@ -101,7 +101,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <li>Implements the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> interface for forward key→value lookups
    <li>Provides <a href="#getKey(V)"><code>getKey(Object)</code></a> method for reverse value→key lookups
    <li>Maintains insertion order using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> internally
-   <li>Automatically filters out null keys and values
+   <li>Filters out null keys and values when built via the <a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections"><code>BidiMap.Builder</code></a>
    <li>Supports both mutable and unmodifiable instances via the builder
    <li>Thread-safety: Not thread-safe by default; external synchronization required if accessed by multiple threads
  </ul>
@@ -124,9 +124,10 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 
  <h5 class='section'>Null Handling:</h5>
  <p>
- This map automatically filters out entries with null keys or values during construction.
- Attempting to add null keys or values via <a href="#put(K,V)"><code>put(Object, Object)</code></a> or <a href="#putAll(java.util.Map)"><code>putAll(Map)</code></a>
- after construction will result in them being stored in the forward map but not the reverse map.
+ The <a href="BidiMap.Builder.html#add(K,V)"><code>BidiMap.Builder.add(Object, Object)</code></a>/<a href="BidiMap.Builder.html#build()"><code>BidiMap.Builder.build()</code></a> construction path filters out entries with
+ null keys or values.
+ <a href="#put(K,V)"><code>put(Object, Object)</code></a> and <a href="#putAll(java.util.Map)"><code>putAll(Map)</code></a> perform <b>no</b> null filtering after construction —
+ null keys and values are stored in both the forward and reverse maps unconditionally.
 
  <h5 class='section'>Unmodifiable Instances:</h5>
  <p class='bjava'>
@@ -301,7 +302,7 @@ V&gt;&nbsp;<a href="BidiMap.Builder.html" title="class in org.apache.juneau.comm
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.collections.BidiMap.Builder)">
 <h3>BidiMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-188">BidiMap</a></span><wbr><span class="parameters">(<a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-189">BidiMap</a></span><wbr><span class="parameters">(<a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.
 
  <p>
@@ -309,7 +310,7 @@ V&gt;&nbsp;<a href="BidiMap.Builder.html" title="class in org.apache.juneau.comm
  out any entries with null keys or values.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder containing the initial entries.</dd>
+<dd><code>builder</code> - The builder containing the initial entries. Must not be <jk>null</jk> or a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown.</dd>
 </dl>
 </section>
 </li>
@@ -325,7 +326,7 @@ V&gt;&nbsp;<a href="BidiMap.Builder.html" title="class in org.apache.juneau.comm
 <section class="detail" id="create()">
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-172">create</a></span>()</div>
+V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-173">create</a></span>()</div>
 <div class="block">Creates a new builder for this class.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -339,7 +340,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="clear()">
 <h3>clear</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-203">clear</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-204">clear</a></span>()</div>
 <div class="block">Removes all key-value mappings from this map.
 
  <p>
@@ -355,13 +356,13 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="containsKey(java.lang.Object)">
 <h3>containsKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-215">containsKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-216">containsKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
 <div class="block">Returns <jk>true</jk> if this map contains a mapping for the specified key.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#containsKey(java.lang.Object)" title="class or interface in java.util" class="external-link">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key to check for.</dd>
+<dd><code>key</code> - The key to check for. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if this map contains a mapping for the specified key.</dd>
 </dl>
@@ -370,7 +371,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="containsValue(java.lang.Object)">
 <h3>containsValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-229">containsValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-230">containsValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Returns <jk>true</jk> if this map maps one or more keys to the specified value.
 
  <p>
@@ -379,7 +380,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#containsValue(java.lang.Object)" title="class or interface in java.util" class="external-link">containsValue</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to check for.</dd>
+<dd><code>value</code> - The value to check for. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if this map maps one or more keys to the specified value.</dd>
 </dl>
@@ -388,7 +389,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="entrySet()">
 <h3>entrySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-239">entrySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-240">entrySet</a></span>()</div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link"><code>Set</code></a> view of the mappings contained in this map.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -401,13 +402,13 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="get(java.lang.Object)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-250">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-251">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
 <div class="block">Returns the value to which the specified key is mapped, or <jk>null</jk> if this map contains no mapping for the key.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#get(java.lang.Object)" title="class or interface in java.util" class="external-link">get</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key whose associated value is to be returned.</dd>
+<dd><code>key</code> - The key whose associated value is to be returned. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The value to which the specified key is mapped, or <jk>null</jk> if this map contains no mapping for the key.</dd>
 </dl>
@@ -416,7 +417,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="getKey(V)">
 <h3 id="getKey(java.lang.Object)">getKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">K</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-270">getKey</a></span><wbr><span class="parameters">(<a href="BidiMap.html" title="type parameter in BidiMap">V</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">K</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-271">getKey</a></span><wbr><span class="parameters">(<a href="BidiMap.html" title="type parameter in BidiMap">V</a>&nbsp;value)</span></div>
 <div class="block">Returns the key that is currently mapped to the specified value.
 
  <p>
@@ -429,7 +430,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value whose associated key is to be returned.</dd>
+<dd><code>value</code> - The value whose associated key is to be returned. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The key to which the specified value is mapped, or <jk>null</jk> if this map contains no mapping for the value.</dd>
 </dl>
@@ -438,7 +439,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="isEmpty()">
 <h3>isEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-279">isEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-280">isEmpty</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this map contains no key-value mappings.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -451,7 +452,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-287">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-288">keySet</a></span>()</div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link"><code>Set</code></a> view of the keys contained in this map.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -464,7 +465,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="put(K,V)">
 <h3 id="put(java.lang.Object,java.lang.Object)">put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-304">put</a></span><wbr><span class="parameters">(<a href="BidiMap.html" title="type parameter in BidiMap">K</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-305">put</a></span><wbr><span class="parameters">(<a href="BidiMap.html" title="type parameter in BidiMap">K</a>&nbsp;key,
  <a href="BidiMap.html" title="type parameter in BidiMap">V</a>&nbsp;value)</span></div>
 <div class="block">Associates the specified value with the specified key in this map.
 
@@ -474,8 +475,8 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#put(K,V)" title="class or interface in java.util" class="external-link">put</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key with which the specified value is to be associated.</dd>
-<dd><code>value</code> - The value to be associated with the specified key.</dd>
+<dd><code>key</code> - The key with which the specified value is to be associated. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to be associated with the specified key. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.</dd>
 <dt>Throws:</dt>
@@ -487,7 +488,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="putAll(java.util.Map)">
 <h3>putAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-326">putAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;? extends <a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr>? extends <a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;&nbsp;m)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-327">putAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;? extends <a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr>? extends <a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;&nbsp;m)</span></div>
 <div class="block">Copies all mappings from the specified map to this map.
 
  <p>
@@ -496,7 +497,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#putAll(java.util.Map)" title="class or interface in java.util" class="external-link">putAll</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>m</code> - Mappings to be stored in this map.</dd>
+<dd><code>m</code> - Mappings to be stored in this map. Must not be <jk>null</jk> or a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code> - if the map is unmodifiable.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if any value in the map already exists mapped to a different key.</dd>
@@ -506,7 +507,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="remove(java.lang.Object)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-351">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="type parameter in BidiMap">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-352">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key)</span></div>
 <div class="block">Removes the mapping for a key from this map if it is present.
 
  <p>
@@ -515,7 +516,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key whose mapping is to be removed from the map.</dd>
+<dd><code>key</code> - The key whose mapping is to be removed from the map. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.</dd>
 <dt>Throws:</dt>
@@ -526,7 +527,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-363">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-364">size</a></span>()</div>
 <div class="block">Returns the number of key-value mappings in this map.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -539,7 +540,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-373">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-374">values</a></span>()</div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a> view of the values contained in this map.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -552,7 +553,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-386">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-387">toString</a></span>()</div>
 <div class="block">Returns a string representation of this map.
 
  <p>
@@ -568,7 +569,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-405">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-406">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Compares the specified object with this map for equality.
 
  <p>
@@ -593,7 +594,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-424">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-425">hashCode</a></span>()</div>
 <div class="block">Returns the hash code value for this map.
 
  <p>

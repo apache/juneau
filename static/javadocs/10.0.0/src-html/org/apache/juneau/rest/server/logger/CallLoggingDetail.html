@@ -58,13 +58,13 @@
 <span class="source-line-no">045</span><span id="line-45">   /**</span>
 <span class="source-line-no">046</span><span id="line-46">    * Retrieves this enum using case-insensitive matching.</span>
 <span class="source-line-no">047</span><span id="line-47">    *</span>
-<span class="source-line-no">048</span><span id="line-48">    * @param s The enum name to resolve.</span>
-<span class="source-line-no">049</span><span id="line-49">    * @return The resolved value.</span>
+<span class="source-line-no">048</span><span id="line-48">    * @param s The enum name to resolve. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">049</span><span id="line-49">    * @return The resolved value, or &lt;jk&gt;null&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt;, empty, or not a valid enum name.</span>
 <span class="source-line-no">050</span><span id="line-50">    */</span>
 <span class="source-line-no">051</span><span id="line-51">   public static CallLoggingDetail fromString(String s) {</span>
 <span class="source-line-no">052</span><span id="line-52">      if (ine(s)) {</span>
 <span class="source-line-no">053</span><span id="line-53">         try {</span>
-<span class="source-line-no">054</span><span id="line-54">            return valueOf(s.toUpperCase());</span>
+<span class="source-line-no">054</span><span id="line-54">            return valueOf(ucr(s));</span>
 <span class="source-line-no">055</span><span id="line-55">         } catch (@SuppressWarnings("unused") IllegalArgumentException e) {</span>
 <span class="source-line-no">056</span><span id="line-56">            // Invalid enum value - return null below</span>
 <span class="source-line-no">057</span><span id="line-57">         }</span>

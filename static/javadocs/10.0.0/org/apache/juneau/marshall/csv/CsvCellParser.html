@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellParser.html#line-38">CsvCellParser</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellParser.html#line-40">CsvCellParser</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Parses CSV cell inline notation: <code>{key:val;key2:val2}</code> and <code>[val1;val2;val3]</code>.
 
@@ -108,7 +108,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parse(java.lang.String,java.lang.String)" class="member-name-link">parse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cell,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#read(java.lang.String,java.lang.String)" class="member-name-link">read</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cell,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nullMarker)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Parses a cell value string into a Map, List, or scalar.</div>
@@ -131,16 +131,18 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="parse(java.lang.String,java.lang.String)">
-<h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellParser.html#line-59">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cell,
+<section class="detail" id="read(java.lang.String,java.lang.String)">
+<h3>read</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellParser.html#line-63">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cell,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nullMarker)</span>
-                    throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
+                   throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Parses a cell value string into a Map, List, or scalar.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cell</code> - The cell string (e.g. <code>{a:1;b:2}</code> or <code>[1;2;3]</code>).</dd>
-<dd><code>nullMarker</code> - The string that denotes null (e.g. <code>&lt;NULL&gt;</code> or <code>null</code>).</dd>
+<dd><code>cell</code> - The cell string (e.g. <code>{a:1;b:2}</code> or <code>[1;2;3]</code>).
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
+<dd><code>nullMarker</code> - The string that denotes null (e.g. <code>&lt;NULL&gt;</code> or <code>null</code>).
+   <br>Can be <jk>null</jk> (defaults to <code>null</code>).</dd>
 <dt>Returns:</dt>
 <dd>Parsed object: Map, List, String, Number, Boolean, or null.</dd>
 <dt>Throws:</dt>

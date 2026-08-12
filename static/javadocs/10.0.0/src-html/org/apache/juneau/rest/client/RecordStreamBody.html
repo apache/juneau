@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">      assertArgNotNull("serializer", serializer);</span>
 <span class="source-line-no">103</span><span id="line-103">      assertArgNotNull("consumer", consumer);</span>
 <span class="source-line-no">104</span><span id="line-104">      if (! (serializer instanceof RecordWritable))</span>
-<span class="source-line-no">105</span><span id="line-105">         throw iaex("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());</span>
+<span class="source-line-no">105</span><span id="line-105">         throw iaex("Serializer '%s' does not support the record-writer surface.", serializer.getClass().getName());</span>
 <span class="source-line-no">106</span><span id="line-106">      return new RecordStreamBody(serializer, consumer, RecordWriter.class, false);</span>
 <span class="source-line-no">107</span><span id="line-107">   }</span>
 <span class="source-line-no">108</span><span id="line-108"></span>
@@ -142,7 +142,7 @@
 <span class="source-line-no">129</span><span id="line-129">      assertArgNotNull("serializer", serializer);</span>
 <span class="source-line-no">130</span><span id="line-130">      assertArgNotNull("consumer", consumer);</span>
 <span class="source-line-no">131</span><span id="line-131">      if (! (serializer instanceof TokenWritable))</span>
-<span class="source-line-no">132</span><span id="line-132">         throw iaex("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());</span>
+<span class="source-line-no">132</span><span id="line-132">         throw iaex("Serializer '%s' does not support the token-writer surface.", serializer.getClass().getName());</span>
 <span class="source-line-no">133</span><span id="line-133">      return new RecordStreamBody(serializer, consumer, TokenWriter.class, false);</span>
 <span class="source-line-no">134</span><span id="line-134">   }</span>
 <span class="source-line-no">135</span><span id="line-135"></span>
@@ -198,8 +198,8 @@
 <span class="source-line-no">185</span><span id="line-185">         throw new IOException("Non-repeatable streaming body cannot be resent.  Mark the body repeatable() if its producer can be replayed.");</span>
 <span class="source-line-no">186</span><span id="line-186">      written = true;</span>
 <span class="source-line-no">187</span><span id="line-187">      try (var w = (writerKind == TokenWriter.class)</span>
-<span class="source-line-no">188</span><span id="line-188">            ? ((TokenWritable) serializer).serializeTokens(out)</span>
-<span class="source-line-no">189</span><span id="line-189">            : ((RecordWritable) serializer).serializeRecords(out)) {</span>
+<span class="source-line-no">188</span><span id="line-188">            ? ((TokenWritable) serializer).writeTokens(out)</span>
+<span class="source-line-no">189</span><span id="line-189">            : ((RecordWritable) serializer).writeRecords(out)) {</span>
 <span class="source-line-no">190</span><span id="line-190">         ((Consumer&lt;RecordWriter&gt;) consumer).accept(w);</span>
 <span class="source-line-no">191</span><span id="line-191">         w.flush();</span>
 <span class="source-line-no">192</span><span id="line-192">      }</span>

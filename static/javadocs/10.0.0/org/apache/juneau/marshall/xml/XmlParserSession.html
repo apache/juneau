@@ -180,13 +180,13 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <div class="block">Decodes and trims the specified string.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Workhorse method.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doParseIntoCollection</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doReadIntoCollection</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -194,7 +194,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
@@ -267,7 +267,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Returns <jk>true</jk> if the current element is a whitespace element.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseAnything(org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.marshall.xml.XmlReader,java.lang.Object,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">parseAnything</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;eType,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readAnything(org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.marshall.xml.XmlReader,java.lang.Object,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">readAnything</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;currAttr,
  <a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer,
@@ -277,29 +277,29 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Workhorse method.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseArrayRecords(java.lang.Object)" class="member-name-link">parseArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readArrayRecords(java.lang.Object)" class="member-name-link">readArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> for XML, bound to this live session.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseArrayRecords(java.lang.Object,java.lang.String)" class="member-name-link">parseArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readArrayRecords(java.lang.Object,java.lang.String)" class="member-name-link">readArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rootElementName)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that honors the caller-specified root element
  name.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseRecords(java.lang.Object)" class="member-name-link">parseRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readRecords(java.lang.Object)" class="member-name-link">readRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Opens a whole-value pull-parser cursor over an XML document, bound to this live session.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseText(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">parseText</a><wbr>(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readText(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">readText</a><wbr>(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Parses the current element as text.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">parseWhitespaceElement</a><wbr>(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">readWhitespaceElement</a><wbr>(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Parses the current whitespace element.</div>
 </div>
@@ -308,10 +308,10 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ReaderParserSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></h3>
-<code><a href="../parser/ReaderParserSession.html#create(org.apache.juneau.marshall.parser.ReaderParser)">create</a>, <a href="../parser/ReaderParserSession.html#createPipe(java.lang.Object)">createPipe</a>, <a href="../parser/ReaderParserSession.html#getFileCharset()">getFileCharset</a>, <a href="../parser/ReaderParserSession.html#getStreamCharset()">getStreamCharset</a>, <a href="../parser/ReaderParserSession.html#isReaderParser()">isReaderParser</a>, <a href="../parser/ReaderParserSession.html#properties()">properties</a></code></div>
+<code><a href="../parser/ReaderParserSession.html#create(org.apache.juneau.marshall.parser.ReaderParser)">create</a>, <a href="../parser/ReaderParserSession.html#createPipe(java.lang.Object)">createPipe</a>, <a href="../parser/ReaderParserSession.html#getStreamCharset()">getStreamCharset</a>, <a href="../parser/ReaderParserSession.html#isReaderParser()">isReaderParser</a>, <a href="../parser/ReaderParserSession.html#properties()">properties</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ParserSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></h3>
-<code><a href="../parser/ParserSession.html#cast(org.apache.juneau.marshall.collections.MarshalledMap,org.apache.juneau.commons.bean.BeanPropertyMeta,org.apache.juneau.marshall.ClassMeta)">cast</a>, <a href="../parser/ParserSession.html#convertAttrToType(java.lang.Object,java.lang.String,org.apache.juneau.marshall.ClassMeta)">convertAttrToType</a>, <a href="../parser/ParserSession.html#create(org.apache.juneau.marshall.parser.Parser)">create</a>, <a href="../parser/ParserSession.html#doParseToBeanConsumer(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)">doParseToBeanConsumer</a>, <a href="../parser/ParserSession.html#getCalendarFormat()">getCalendarFormat</a>, <a href="../parser/ParserSession.html#getClassMeta(java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,org.apache.juneau.marshall.ClassMeta)">getClassMeta</a>, <a href="../parser/ParserSession.html#getDateFormat()">getDateFormat</a>, <a href="../parser/ParserSession.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/ParserSession.html#getDurationFormat()">getDurationFormat</a>, <a href="../parser/ParserSession.html#getInputAsString()">getInputAsString</a>, <a href="../parser/ParserSession.html#getJavaMethod()">getJavaMethod</a>, <a href="../parser/ParserSession.html#getLastLocation()">getLastLocation</a>, <a href="../parser/ParserSession.html#getListener()">getListener</a>, <a href="../parser/ParserSession.html#getListener(java.lang.Class)">getListener</a>, <a href="../parser/ParserSession.html#getListenerClass()">getListenerClass</a>, <a href="../parser/ParserSession.html#getLocaleFormat()">getLocaleFormat</a>, <a href="../parser/ParserSession.html#getNulls()">getNulls</a>, <a href="../parser/ParserSession.html#getOuter()">getOuter</a>, <a href="../parser/ParserSession.html#getPeriodFormat()">getPeriodFormat</a>, <a href="../parser/ParserSession.html#getPosition()">getPosition</a>, <a href="../parser/ParserSession.html#getSchema()">getSchema</a>, <a href="../parser/ParserSession.html#getStringBuilder()">getStringBuilder</a>, <a href="../parser/ParserSession.html#getTemporalFormat()">getTemporalFormat</a>, <a href="../parser/ParserSession.html#getTimeZoneFormat()">getTimeZoneFormat</a>, <a href="../parser/ParserSession.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/ParserSession.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/ParserSession.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/ParserSession.html#mark()">mark</a>, <a href="../parser/ParserSession.html#onBeanSetterException(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.Throwable)">onBeanSetterException</a>, <a href="../parser/ParserSession.html#onUnknownProperty(java.lang.String,org.apache.juneau.commons.bean.BeanMap,java.lang.Object)">onUnknownProperty</a>, <a href="../parser/ParserSession.html#parse(java.lang.Object,java.lang.Class)">parse</a>, <a href="../parser/ParserSession.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/ParserSession.html#parse(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/ParserSession.html#parse(java.lang.String,java.lang.Class)">parse</a>, <a href="../parser/ParserSession.html#parse(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/ParserSession.html#parse(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/ParserSession.html#parseArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">parseArgs</a>, <a href="../parser/ParserSession.html#parseCalendar(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parseCalendar</a>, <a href="../parser/ParserSession.html#parseDate(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parseDate</a>, <a href="../parser/ParserSession.html#parseDuration(java.lang.String)">parseDuration</a>, <a href="../parser/ParserSession.html#parseIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../parser/ParserSession.html#parseIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">parseIntoMap</a>, <a href="../parser/ParserSession.html#parsePeriod(java.lang.String)">parsePeriod</a>, <a href="../parser/ParserSession.html#parseTemporal(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parseTemporal</a>, <a href="../parser/ParserSession.html#parseToBeanConsumer(java.lang.Object,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)">parseToBeanConsumer</a>, <a href="../parser/ParserSession.html#returnStringBuilder(java.lang.StringBuilder)">returnStringBuilder</a>, <a href="../parser/ParserSession.html#setCurrentClass(org.apache.juneau.marshall.ClassMeta)">setCurrentClass</a>, <a href="../parser/ParserSession.html#setCurrentProperty(org.apache.juneau.commons.bean.BeanPropertyMeta)">setCurrentProperty</a>, <a href="../parser/ParserSession.html#setName(org.apache.juneau.marshall.ClassMeta,java.lang.Object,java.lang.Object)">setName</a>, <a href="../parser/ParserSession.html#setParent(org.apache.juneau.marshall.ClassMeta,java.lang.Object,java.lang.Object)">setParent</a>, <a href="../parser/ParserSession.html#setPipe(org.apache.juneau.marshall.parser.ParserPipe)">setPipe</a>, <a href="../parser/ParserSession.html#trim(java.lang.String)">trim</a>, <a href="../parser/ParserSession.html#trim(K)">trim</a>, <a href="../parser/ParserSession.html#unmark()">unmark</a>, <a href="../parser/ParserSession.html#unswap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">unswap</a></code></div>
+<code><a href="../parser/ParserSession.html#cast(org.apache.juneau.marshall.collections.MarshalledMap,org.apache.juneau.commons.bean.BeanPropertyMeta,org.apache.juneau.marshall.ClassMeta)">cast</a>, <a href="../parser/ParserSession.html#convertAttrToType(java.lang.Object,java.lang.String,org.apache.juneau.marshall.ClassMeta)">convertAttrToType</a>, <a href="../parser/ParserSession.html#create(org.apache.juneau.marshall.parser.Parser)">create</a>, <a href="../parser/ParserSession.html#doReadToBeanConsumer(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)">doReadToBeanConsumer</a>, <a href="../parser/ParserSession.html#getCalendarFormat()">getCalendarFormat</a>, <a href="../parser/ParserSession.html#getClassMeta(java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,org.apache.juneau.marshall.ClassMeta)">getClassMeta</a>, <a href="../parser/ParserSession.html#getDateFormat()">getDateFormat</a>, <a href="../parser/ParserSession.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/ParserSession.html#getDurationFormat()">getDurationFormat</a>, <a href="../parser/ParserSession.html#getInputAsString()">getInputAsString</a>, <a href="../parser/ParserSession.html#getJavaMethod()">getJavaMethod</a>, <a href="../parser/ParserSession.html#getLastLocation()">getLastLocation</a>, <a href="../parser/ParserSession.html#getListener()">getListener</a>, <a href="../parser/ParserSession.html#getListener(java.lang.Class)">getListener</a>, <a href="../parser/ParserSession.html#getListenerClass()">getListenerClass</a>, <a href="../parser/ParserSession.html#getLocaleFormat()">getLocaleFormat</a>, <a href="../parser/ParserSession.html#getNulls()">getNulls</a>, <a href="../parser/ParserSession.html#getOuter()">getOuter</a>, <a href="../parser/ParserSession.html#getPeriodFormat()">getPeriodFormat</a>, <a href="../parser/ParserSession.html#getPosition()">getPosition</a>, <a href="../parser/ParserSession.html#getSchema()">getSchema</a>, <a href="../parser/ParserSession.html#getStringBuilder()">getStringBuilder</a>, <a href="../parser/ParserSession.html#getTemporalFormat()">getTemporalFormat</a>, <a href="../parser/ParserSession.html#getTimeZoneFormat()">getTimeZoneFormat</a>, <a href="../parser/ParserSession.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/ParserSession.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/ParserSession.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/ParserSession.html#mark()">mark</a>, <a href="../parser/ParserSession.html#onBeanSetterException(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.Throwable)">onBeanSetterException</a>, <a href="../parser/ParserSession.html#onUnknownProperty(java.lang.String,org.apache.juneau.commons.bean.BeanMap,java.lang.Object)">onUnknownProperty</a>, <a href="../parser/ParserSession.html#parentBean()">parentBean</a>, <a href="../parser/ParserSession.html#read(java.lang.Object,java.lang.Class)">read</a>, <a href="../parser/ParserSession.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/ParserSession.html#read(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/ParserSession.html#read(java.lang.String,java.lang.Class)">read</a>, <a href="../parser/ParserSession.html#read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/ParserSession.html#read(java.lang.String,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/ParserSession.html#readArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">readArgs</a>, <a href="../parser/ParserSession.html#readCalendar(java.lang.String,org.apache.juneau.marshall.ClassMeta)">readCalendar</a>, <a href="../parser/ParserSession.html#readDate(java.lang.String,org.apache.juneau.marshall.ClassMeta)">readDate</a>, <a href="../parser/ParserSession.html#readDuration(java.lang.String)">readDuration</a>, <a href="../parser/ParserSession.html#readIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">readIntoCollection</a>, <a href="../parser/ParserSession.html#readIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">readIntoMap</a>, <a href="../parser/ParserSession.html#readPeriod(java.lang.String)">readPeriod</a>, <a href="../parser/ParserSession.html#readTemporal(java.lang.String,org.apache.juneau.marshall.ClassMeta)">readTemporal</a>, <a href="../parser/ParserSession.html#readToBeanConsumer(java.lang.Object,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)">readToBeanConsumer</a>, <a href="../parser/ParserSession.html#returnStringBuilder(java.lang.StringBuilder)">returnStringBuilder</a>, <a href="../parser/ParserSession.html#setCurrentClass(org.apache.juneau.marshall.ClassMeta)">setCurrentClass</a>, <a href="../parser/ParserSession.html#setCurrentProperty(org.apache.juneau.commons.bean.BeanPropertyMeta)">setCurrentProperty</a>, <a href="../parser/ParserSession.html#setName(org.apache.juneau.marshall.ClassMeta,java.lang.Object,java.lang.Object)">setName</a>, <a href="../parser/ParserSession.html#setParent(org.apache.juneau.marshall.ClassMeta,java.lang.Object,java.lang.Object)">setParent</a>, <a href="../parser/ParserSession.html#setPipe(org.apache.juneau.marshall.parser.ParserPipe)">setPipe</a>, <a href="../parser/ParserSession.html#swapParentBean(java.lang.Object)">swapParentBean</a>, <a href="../parser/ParserSession.html#trim(java.lang.String)">trim</a>, <a href="../parser/ParserSession.html#trim(K)">trim</a>, <a href="../parser/ParserSession.html#unmark()">unmark</a>, <a href="../parser/ParserSession.html#unswap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">unswap</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></h3>
 <code><a href="../MarshallingSession.html#addWarning(java.lang.String,java.lang.Object...)">addWarning</a>, <a href="../MarshallingSession.html#convertToMemberType(java.lang.Object,java.lang.Object,java.lang.Class)">convertToMemberType</a>, <a href="../MarshallingSession.html#convertToMemberType(java.lang.Object,java.lang.Object,java.lang.Object)">convertToMemberType</a>, <a href="../MarshallingSession.html#convertToMemberType(java.lang.Object,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">convertToMemberType</a>, <a href="../MarshallingSession.html#convertToType(java.lang.Object,java.lang.Class)">convertToType</a>, <a href="../MarshallingSession.html#convertToType(java.lang.Object,java.lang.Object)">convertToType</a>, <a href="../MarshallingSession.html#convertToType(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">convertToType</a>, <a href="../MarshallingSession.html#convertToType(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">convertToType</a>, <a href="../MarshallingSession.html#create(org.apache.juneau.marshall.MarshallingContext)">create</a>, <a href="../MarshallingSession.html#get(java.lang.Class)">get</a>, <a href="../MarshallingSession.html#getActiveView()">getActiveView</a>, <a href="../MarshallingSession.html#getAnnotationProvider()">getAnnotationProvider</a>, <a href="../MarshallingSession.html#getArgsClassMeta(java.lang.reflect.Type%5B%5D)">getArgsClassMeta</a>, <a href="../MarshallingSession.html#getBeanClassVisibility()">getBeanClassVisibility</a>, <a href="../MarshallingSession.html#getBeanConstructorVisibility()">getBeanConstructorVisibility</a>, <a href="../MarshallingSession.html#getBeanDictionary()">getBeanDictionary</a>, <a href="../MarshallingSession.html#getBeanFieldVisibility()">getBeanFieldVisibility</a>, <a href="../MarshallingSession.html#getBeanMeta(java.lang.Class)">getBeanMeta</a>, <a href="../MarshallingSession.html#getBeanMethodVisibility()">getBeanMethodVisibility</a>, <a href="../MarshallingSession.html#getBeanRegistry()">getBeanRegistry</a>, <a href="../MarshallingSession.html#getBeanTypePropertyName()">getBeanTypePropertyName</a>, <a href="../MarshallingSession.html#getBeanTypePropertyName(org.apache.juneau.marshall.ClassMeta)">getBeanTypePropertyName</a>, <a href="../MarshallingSession.html#getClassLoader()">getClassLoader</a>, <a href="../MarshallingSession.html#getClassMeta(java.lang.Class)">getClassMeta</a>, <a href="../MarshallingSession.html#getClassMeta(java.lang.reflect.Type,java.lang.reflect.Type...)">getClassMeta</a>, <a href="../MarshallingSession.html#getClassMetaForObject(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">getClassMetaForObject</a>, <a href="../MarshallingSession.html#getClassMetaForObject(T)">getClassMetaForObject</a>, <a href="../MarshallingSession.html#getLocale()">getLocale</a>, <a href="../MarshallingSession.html#getMarshallingContext()">getMarshallingContext</a>, <a href="../MarshallingSession.html#getMediaType()">getMediaType</a>, <a href="../MarshallingSession.html#getNotBeanClasses()">getNotBeanClasses</a>, <a href="../MarshallingSession.html#getNotBeanPackagesNames()">getNotBeanPackagesNames</a>, <a href="../MarshallingSession.html#getPropertyNamer()">getPropertyNamer</a>, <a href="../MarshallingSession.html#getSwaps()">getSwaps</a>, <a href="../MarshallingSession.html#getTimeZone()">getTimeZone</a>, <a href="../MarshallingSession.html#getTimeZoneId()">getTimeZoneId</a>, <a href="../MarshallingSession.html#isBean(java.lang.Class)">isBean</a>, <a href="../MarshallingSession.html#isBean(java.lang.Object)">isBean</a>, <a href="../MarshallingSession.html#isBeanMapPutReturnsOldValue()">isBeanMapPutReturnsOldValue</a>, <a href="../MarshallingSession.html#isBeansRequireDefaultConstructor()">isBeansRequireDefaultConstructor</a>, <a href="../MarshallingSession.html#isBeansRequireSerializable()">isBeansRequireSerializable</a>, <a href="../MarshallingSession.html#isBeansRequireSettersForGetters()">isBeansRequireSettersForGetters</a>, <a href="../MarshallingSession.html#isBeansRequireSomeProperties()">isBeansRequireSomeProperties</a>, <a href="../MarshallingSession.html#isFindFluentSetters()">isFindFluentSetters</a>, <a href="../MarshallingSession.html#isIgnoreInvocationExceptionsOnGetters()">isIgnoreInvocationExceptionsOnGetters</a>, <a href="../MarshallingSession.html#isIgnoreInvocationExceptionsOnSetters()">isIgnoreInvocationExceptionsOnSetters</a>, <a href="../MarshallingSession.html#isIgnoreMissingSetters()">isIgnoreMissingSetters</a>, <a href="../MarshallingSession.html#isIgnoreUnknownBeanProperties()">isIgnoreUnknownBeanProperties</a>, <a href="../MarshallingSession.html#isIgnoreUnknownNullBeanProperties()">isIgnoreUnknownNullBeanProperties</a>, <a href="../MarshallingSession.html#isPropertyInActiveView(org.apache.juneau.commons.bean.BeanPropertyMeta)">isPropertyInActiveView</a>, <a href="../MarshallingSession.html#isUnsortedProperties()">isUnsortedProperties</a>, <a href="../MarshallingSession.html#isUseInterfaceProxies()">isUseInterfaceProxies</a>, <a href="../MarshallingSession.html#isUseJavaBeanIntrospector()">isUseJavaBeanIntrospector</a>, <a href="../MarshallingSession.html#isValidateSchema()">isValidateSchema</a>, <a href="../MarshallingSession.html#newBean(java.lang.Class)">newBean</a>, <a href="../MarshallingSession.html#newBean(java.lang.Object,java.lang.Class)">newBean</a>, <a href="../MarshallingSession.html#newBeanMap(java.lang.Class)">newBeanMap</a>, <a href="../MarshallingSession.html#newBeanMap(java.lang.Object,java.lang.Class)">newBeanMap</a>, <a href="../MarshallingSession.html#newGenericList()">newGenericList</a>, <a href="../MarshallingSession.html#newGenericMap()">newGenericMap</a>, <a href="../MarshallingSession.html#newGenericMap(org.apache.juneau.marshall.ClassMeta)">newGenericMap</a>, <a href="../MarshallingSession.html#object()">object</a>, <a href="../MarshallingSession.html#parseToList(java.lang.CharSequence)">parseToList</a>, <a href="../MarshallingSession.html#parseToMap(java.lang.CharSequence)">parseToMap</a>, <a href="../MarshallingSession.html#string()">string</a>, <a href="../MarshallingSession.html#toArray(org.apache.juneau.marshall.ClassMeta,java.util.Collection)">toArray</a>, <a href="../MarshallingSession.html#toBeanMap(T)">toBeanMap</a>, <a href="../MarshallingSession.html#toBeanMap(T,java.lang.Class)">toBeanMap</a>, <a href="../MarshallingSession.html#toBeanMap(T,org.apache.juneau.commons.bean.PropertyNamer)">toBeanMap</a></code></div>
@@ -338,7 +338,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.xml.XmlParserSession.Builder)">
 <h3>XmlParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-197">XmlParserSession</a></span><wbr><span class="parameters">(<a href="XmlParserSession.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlParserSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-199">XmlParserSession</a></span><wbr><span class="parameters">(<a href="XmlParserSession.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlParserSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -357,11 +357,12 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.xml.XmlParser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="XmlParserSession.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlParserSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-158">create</a></span><wbr><span class="parameters">(<a href="XmlParser.html" title="class in org.apache.juneau.marshall.xml">XmlParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="XmlParserSession.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlParserSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-160">create</a></span><wbr><span class="parameters">(<a href="XmlParser.html" title="class in org.apache.juneau.marshall.xml">XmlParser</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>ctx</code> - The context creating this session.</dd>
+<dd><code>ctx</code> - The context creating this session.
+   <br>Cannot be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new builder.</dd>
 </dl>
@@ -370,38 +371,39 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="decodeString(java.lang.String)">
 <h3>decodeString</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-591">decodeString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-594">decodeString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Decodes and trims the specified string.
 
  <p>
  Any <js>'_x####_'</js> sequences in the string will be decoded.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The string to be decoded.</dd>
+<dd><code>s</code> - The string to be decoded.
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The decoded string.</dd>
+<dd>The decoded string, or <jk>null</jk> if the input was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">
-<h3>doParse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-601">doParse</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<section class="detail" id="doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">
+<h3>doRead</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-604">doRead</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
-                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
+                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
 <a href="../../commons/reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../parser/ParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">ParserSession</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../parser/ParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">ParserSession</a></code></span></div>
 <div class="block">Workhorse method.
 
  <p>
- Subclasses are expected to implement this method or <a href="../parser/Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)"><code>Parser.doParse(ParserSession,ParserPipe,ClassMeta)</code></a>.
+ Subclasses are expected to implement this method or <a href="../parser/Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)"><code>Parser.doRead(ParserSession,ParserPipe,ClassMeta)</code></a>.
 
  <p>
- The default implementation of this method simply calls <a href="../parser/Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)"><code>Parser.doParse(ParserSession,ParserPipe,ClassMeta)</code></a>.</div>
+ The default implementation of this method simply calls <a href="../parser/Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)"><code>Parser.doRead(ParserSession,ParserPipe,ClassMeta)</code></a>.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../parser/ParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doParse</a></code>&nbsp;in class&nbsp;<code><a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></code></dd>
+<dd><code><a href="../parser/ParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doRead</a></code>&nbsp;in class&nbsp;<code><a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></code></dd>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The class type of the object to create.</dd>
 <dt>Parameters:</dt>
@@ -420,20 +422,20 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)">
-<h3>doParseIntoCollection</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-610">doParseIntoCollection</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<section class="detail" id="doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)">
+<h3>doReadIntoCollection</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-613">doReadIntoCollection</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</span>
-                                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../parser/ParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)">ParserSession</a></code></span></div>
+                                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../parser/ParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)">ParserSession</a></code></span></div>
 <div class="block">Implementation method.
 
  <p>
  Default implementation throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../parser/ParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)">doParseIntoCollection</a></code>&nbsp;in class&nbsp;<code><a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></code></dd>
+<dd><code><a href="../parser/ParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)">doReadIntoCollection</a></code>&nbsp;in class&nbsp;<code><a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></code></dd>
 <dt>Type Parameters:</dt>
 <dd><code>E</code> - The element type.</dd>
 <dt>Parameters:</dt>
@@ -448,22 +450,22 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">
-<h3>doParseIntoMap</h3>
+<section class="detail" id="doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">
+<h3>doReadIntoMap</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-616">doParseIntoMap</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-619">doReadIntoMap</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</span>
-                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../parser/ParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">ParserSession</a></code></span></div>
+                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../parser/ParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">ParserSession</a></code></span></div>
 <div class="block">Implementation method.
 
  <p>
  Default implementation throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../parser/ParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">doParseIntoMap</a></code>&nbsp;in class&nbsp;<code><a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></code></dd>
+<dd><code><a href="../parser/ParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">doReadIntoMap</a></code>&nbsp;in class&nbsp;<code><a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></code></dd>
 <dt>Type Parameters:</dt>
 <dd><code>K</code> - The key type.</dd>
 <dd><code>V</code> - The value type.</dd>
@@ -480,20 +482,20 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 </section>
 </li>
 <li>
-<section class="detail" id="parseRecords(java.lang.Object)">
-<h3>parseRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-634">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readRecords(java.lang.Object)">
+<h3>readRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-637">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a whole-value pull-parser cursor over an XML document, bound to this live session.
 
  <p>
  Because XML's wire format (attributes, namespaces, mixed content) is non-trivial to expose
  as a fine-grained token cursor, this implementation supports only the cursor-level POJO
  bridge &mdash; <a href="../stream/RecordReader.html#read(java.lang.Class)"><code>read(...)</code></a> delegates to the polymorphic
- <a href="../parser/ParserSession.html#parse(java.lang.Object,java.lang.Class)"><code>ParserSession.parse(Object, Class)</code></a> entry point.</div>
+ <a href="../parser/ParserSession.html#read(java.lang.Object,java.lang.Class)"><code>ParserSession.read(Object, Class)</code></a> entry point.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/RecordReadable.html#parseRecords(java.lang.Object)">parseRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
+<dd><code><a href="../stream/RecordReadable.html#readRecords(java.lang.Object)">readRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -504,18 +506,18 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 </section>
 </li>
 <li>
-<section class="detail" id="parseArrayRecords(java.lang.Object)">
-<h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-650">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readArrayRecords(java.lang.Object)">
+<h3>readArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-653">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> for XML, bound to this live session.  Calls
  <code>parse(input, List.class, Object.class)</code> once and iterates the result.
 
  <p>
- For caller-specified-root semantics use <a href="#parseArrayRecords(java.lang.Object,java.lang.String)"><code>parseArrayRecords(Object, String)</code></a>.</div>
+ For caller-specified-root semantics use <a href="#readArrayRecords(java.lang.Object,java.lang.String)"><code>readArrayRecords(Object, String)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordReadable.html#parseArrayRecords(java.lang.Object)">parseArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordReadable.html#readArrayRecords(java.lang.Object)">readArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -526,11 +528,11 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 </section>
 </li>
 <li>
-<section class="detail" id="parseArrayRecords(java.lang.Object,java.lang.String)">
-<h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-685">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<section class="detail" id="readArrayRecords(java.lang.Object,java.lang.String)">
+<h3>readArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-688">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rootElementName)</span>
-                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that honors the caller-specified root element
  name.
 
@@ -549,17 +551,17 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
  </ul>
 
  <p>
- A <jk>null</jk> <code>rootElementName</code> is equivalent to <a href="#parseArrayRecords(java.lang.Object)"><code>parseArrayRecords(Object)</code></a>.
+ A <jk>null</jk> <code>rootElementName</code> is equivalent to <a href="#readArrayRecords(java.lang.Object)"><code>readArrayRecords(Object)</code></a>.
  The cursor is buffered (<a href="../stream/RecordReader.html#isStreaming()"><code>RecordReader.isStreaming()</code></a> == <jk>false</jk>); see
  <code>175ab</code> Item 3 for why true element-at-a-time XML streaming is left for a
  demand-driven StAX cursor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordReadable.html#parseArrayRecords(java.lang.Object,java.lang.String)">parseArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordReadable.html#readArrayRecords(java.lang.Object,java.lang.String)">readArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dd><code>rootElementName</code> - The name of the wrapping/child element whose occurrences are the
-   records.  <jk>null</jk> defers to <a href="#parseArrayRecords(java.lang.Object)"><code>parseArrayRecords(Object)</code></a>.</dd>
+   records.  <jk>null</jk> defers to <a href="#readArrayRecords(java.lang.Object)"><code>readArrayRecords(Object)</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>A buffered <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a>.</dd>
 <dt>Throws:</dt>
@@ -570,7 +572,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-737">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-740">isRecordStreaming</a></span>()</div>
 <div class="block">The XML record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -583,7 +585,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isArrayRecordStreaming()">
 <h3>isArrayRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-745">isArrayRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-748">isArrayRecordStreaming</a></span>()</div>
 <div class="block">The XML array-record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -596,7 +598,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getElementText(org.apache.juneau.marshall.xml.XmlReader)">
 <h3>getElementText</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-763">getElementText</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-767">getElementText</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
@@ -609,7 +611,8 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
  Leading and trailing whitespace (unencoded) will be trimmed from the result.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>r</code> - The reader to read the element text from.</dd>
+<dd><code>r</code> - The reader to read the element text from.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.</dd>
 <dt>Throws:</dt>
@@ -622,7 +625,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getEventAllocator()">
 <h3>getEventAllocator</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/util/XMLEventAllocator.html" title="class or interface in javax.xml.stream.util" class="external-link">XMLEventAllocator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-774">getEventAllocator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/util/XMLEventAllocator.html" title="class or interface in javax.xml.stream.util" class="external-link">XMLEventAllocator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-778">getEventAllocator</a></span>()</div>
 <div class="block">XML event allocator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -639,7 +642,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getReporter()">
 <h3>getReporter</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLReporter.html" title="class or interface in javax.xml.stream" class="external-link">XMLReporter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-783">getReporter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLReporter.html" title="class or interface in javax.xml.stream" class="external-link">XMLReporter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-787">getReporter</a></span>()</div>
 <div class="block">XML reporter.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -656,7 +659,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getResolver()">
 <h3>getResolver</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLResolver.html" title="class or interface in javax.xml.stream" class="external-link">XMLResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-792">getResolver</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLResolver.html" title="class or interface in javax.xml.stream" class="external-link">XMLResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-796">getResolver</a></span>()</div>
 <div class="block">XML resolver.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -673,7 +676,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getXmlBeanMeta(org.apache.juneau.commons.bean.BeanMeta)">
 <h3>getXmlBeanMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlBeanMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-800">getXmlBeanMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;&nbsp;bm)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlBeanMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-804">getXmlBeanMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;&nbsp;bm)</span></div>
 <div class="block">Returns the language-specific metadata on the specified bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -686,7 +689,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getXmlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getXmlBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-810">getXmlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-814">getXmlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -699,7 +702,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getXmlClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getXmlClassMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlClassMeta.html" title="class in org.apache.juneau.marshall.xml">XmlClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-820">getXmlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlClassMeta.html" title="class in org.apache.juneau.marshall.xml">XmlClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-824">getXmlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -712,13 +715,14 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="getXmlReader(org.apache.juneau.marshall.parser.ParserPipe)">
 <h3>getXmlReader</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-832">getXmlReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-837">getXmlReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
 <div class="block">Wrap the specified reader in a STAX reader based on settings in this context.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pipe</code> - The parser input.</dd>
+<dd><code>pipe</code> - The parser input.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The new STAX reader.</dd>
 <dt>Throws:</dt>
@@ -730,7 +734,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isPreserveRootElement()">
 <h3>isPreserveRootElement</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-844">isPreserveRootElement</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-849">isPreserveRootElement</a></span>()</div>
 <div class="block">Preserve root element during generalized parsing.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -748,7 +752,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isValidating()">
 <h3>isValidating</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-853">isValidating</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-858">isValidating</a></span>()</div>
 <div class="block">Enable validation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -765,7 +769,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)">
 <h3>isWhitespaceElement</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-865">isWhitespaceElement</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-870">isWhitespaceElement</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span></div>
 <div class="block">Returns <jk>true</jk> if the current element is a whitespace element.
 
  <p>
@@ -780,15 +784,15 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 </section>
 </li>
 <li>
-<section class="detail" id="parseAnything(org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.marshall.xml.XmlReader,java.lang.Object,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)">
-<h3>parseAnything</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-885">parseAnything</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;eType,
+<section class="detail" id="readAnything(org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.marshall.xml.XmlReader,java.lang.Object,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)">
+<h3>readAnything</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-895">readAnything</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;currAttr,
  <a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer,
  boolean&nbsp;isRoot,
  <a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta)</span>
-                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
+                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
 <a href="../../commons/reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
@@ -797,14 +801,19 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The expected type of object.</dd>
 <dt>Parameters:</dt>
-<dd><code>eType</code> - The expected type of object.</dd>
-<dd><code>currAttr</code> - The current bean property name.</dd>
-<dd><code>r</code> - The reader.</dd>
-<dd><code>outer</code> - The outer object.</dd>
+<dd><code>eType</code> - The expected type of object.
+   <br>Can be <jk>null</jk>, in which case the generic <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a> type is used and the actual type is auto-detected from the XML.</dd>
+<dd><code>currAttr</code> - The current bean property name.
+   <br>Can be <jk>null</jk> if not being parsed as a named bean property (e.g. the root value).</dd>
+<dd><code>r</code> - The reader.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>outer</code> - The outer object.
+   <br>Can be <jk>null</jk> if there is no enclosing (outer) object; the parsed object is then not linked to a parent.</dd>
 <dd><code>isRoot</code> - If <jk>true</jk>, then we're serializing a root element in the document.</dd>
-<dd><code>pMeta</code> - The bean property metadata.</dd>
+<dd><code>pMeta</code> - The bean property metadata.
+   <br>Can be <jk>null</jk> if no bean property metadata applies (e.g. the root value or an unknown property).</dd>
 <dt>Returns:</dt>
-<dd>The parsed object.</dd>
+<dd>The parsed object, or <jk>null</jk> if the element represents a <jk>null</jk> value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying stream.</dd>
 <dd><code><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Malformed input encountered.</dd>
@@ -814,16 +823,17 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 </section>
 </li>
 <li>
-<section class="detail" id="parseText(org.apache.juneau.marshall.xml.XmlReader)">
-<h3>parseText</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-1034">parseText</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span>
-                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
+<section class="detail" id="readText(org.apache.juneau.marshall.xml.XmlReader)">
+<h3>readText</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-1055">readText</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span>
+                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Parses the current element as text.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>r</code> - The input reader.</dd>
+<dd><code>r</code> - The input reader.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The parsed text.</dd>
 <dt>Throws:</dt>
@@ -834,10 +844,10 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 </section>
 </li>
 <li>
-<section class="detail" id="parseWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)">
-<h3>parseWhitespaceElement</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-1074">parseWhitespaceElement</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span>
-                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
+<section class="detail" id="readWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)">
+<h3>readWhitespaceElement</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlParserSession.html#line-1095">readWhitespaceElement</a></span><wbr><span class="parameters">(<a href="XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</span>
+                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Parses the current whitespace element.

@@ -150,7 +150,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new parsed <a href="UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> object from the specified string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The path to create.  Must be <jk>null</jk> or or start with '/' per HttpServletRequest.getPathInfo().</dd>
+<dd><code>path</code> - The path to create.  Must be <jk>null</jk> or start with '/' per HttpServletRequest.getPathInfo().</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> object.</dd>
 </dl>
@@ -166,7 +166,7 @@ loadScripts(document, 'script');</script>
  For example, given the path <js>"/foo/bar.txt"</js>, this returns <js>"bar.txt"</js>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The filename portion of the path, or <jk>null</jk> if the path doesn't match a file name.</dd>
+<dd>The filename portion of the path, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if the path doesn't match a file name.</dd>
 </dl>
 </section>
 </li>
@@ -177,7 +177,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the path parts.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The path parts.</dd>
+<dd>The path parts.  This is a defensive copy; modifying it does not affect this object's routing state.</dd>
 </dl>
 </section>
 </li>
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the raw path passed into this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The raw path passed into this object.</dd>
+<dd>The raw path passed into this object, or <jk>null</jk> if the path was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

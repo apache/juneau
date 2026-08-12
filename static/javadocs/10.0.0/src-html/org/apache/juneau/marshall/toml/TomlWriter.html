@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43">@SuppressWarnings({</span>
 <span class="source-line-no">044</span><span id="line-44">   "resource" // Writer resource managed by calling code</span>
 <span class="source-line-no">045</span><span id="line-45">})</span>
-<span class="source-line-no">046</span><span id="line-46">public class TomlWriter extends SerializerWriter {</span>
+<span class="source-line-no">046</span><span id="line-46">public class TomlWriter extends SerializerWriter&lt;TomlWriter&gt; {</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
 <span class="source-line-no">048</span><span id="line-48">   /**</span>
 <span class="source-line-no">049</span><span id="line-49">    * Constructor.</span>
@@ -176,24 +176,24 @@
 <span class="source-line-no">163</span><span id="line-163">   }</span>
 <span class="source-line-no">164</span><span id="line-164"></span>
 <span class="source-line-no">165</span><span id="line-165">   TomlWriter localDateTimeValue(Object value) {</span>
-<span class="source-line-no">166</span><span id="line-166">      if (value instanceof LocalDateTime ldt)</span>
-<span class="source-line-no">167</span><span id="line-167">         w(ldt.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME));</span>
+<span class="source-line-no">166</span><span id="line-166">      if (value instanceof LocalDateTime value2)</span>
+<span class="source-line-no">167</span><span id="line-167">         w(value2.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME));</span>
 <span class="source-line-no">168</span><span id="line-168">      else</span>
 <span class="source-line-no">169</span><span id="line-169">         w(value.toString());</span>
 <span class="source-line-no">170</span><span id="line-170">      return this;</span>
 <span class="source-line-no">171</span><span id="line-171">   }</span>
 <span class="source-line-no">172</span><span id="line-172"></span>
 <span class="source-line-no">173</span><span id="line-173">   TomlWriter localDateValue(Object value) {</span>
-<span class="source-line-no">174</span><span id="line-174">      if (value instanceof LocalDate ld)</span>
-<span class="source-line-no">175</span><span id="line-175">         w(ld.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE));</span>
+<span class="source-line-no">174</span><span id="line-174">      if (value instanceof LocalDate value2)</span>
+<span class="source-line-no">175</span><span id="line-175">         w(value2.format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE));</span>
 <span class="source-line-no">176</span><span id="line-176">      else</span>
 <span class="source-line-no">177</span><span id="line-177">         w(value.toString());</span>
 <span class="source-line-no">178</span><span id="line-178">      return this;</span>
 <span class="source-line-no">179</span><span id="line-179">   }</span>
 <span class="source-line-no">180</span><span id="line-180"></span>
 <span class="source-line-no">181</span><span id="line-181">   TomlWriter localTimeValue(Object value) {</span>
-<span class="source-line-no">182</span><span id="line-182">      if (value instanceof LocalTime lt)</span>
-<span class="source-line-no">183</span><span id="line-183">         w(lt.format(java.time.format.DateTimeFormatter.ISO_LOCAL_TIME));</span>
+<span class="source-line-no">182</span><span id="line-182">      if (value instanceof LocalTime value2)</span>
+<span class="source-line-no">183</span><span id="line-183">         w(value2.format(java.time.format.DateTimeFormatter.ISO_LOCAL_TIME));</span>
 <span class="source-line-no">184</span><span id="line-184">      else</span>
 <span class="source-line-no">185</span><span id="line-185">         w(value.toString());</span>
 <span class="source-line-no">186</span><span id="line-186">      return this;</span>
@@ -259,31 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">      }</span>
 <span class="source-line-no">247</span><span id="line-247">      return true;</span>
 <span class="source-line-no">248</span><span id="line-248">   }</span>
-<span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">   // Override return types for chaining</span>
-<span class="source-line-no">251</span><span id="line-251">   @Override public TomlWriter append(char c) { super.append(c); return this; }</span>
-<span class="source-line-no">252</span><span id="line-252">   @Override public TomlWriter append(char[] value) { super.append(value); return this; }</span>
-<span class="source-line-no">253</span><span id="line-253">   @Override public TomlWriter append(int indent, char c) { super.append(indent, c); return this; }</span>
-<span class="source-line-no">254</span><span id="line-254">   @Override public TomlWriter append(int indent, String text) { super.append(indent, text); return this; }</span>
-<span class="source-line-no">255</span><span id="line-255">   @Override public TomlWriter append(Object text) { super.append(text); return this; }</span>
-<span class="source-line-no">256</span><span id="line-256">   @Override public TomlWriter append(String text) { super.append(text); return this; }</span>
-<span class="source-line-no">257</span><span id="line-257">   @Override public TomlWriter appendIf(boolean b, char c) { super.appendIf(b, c); return this; }</span>
-<span class="source-line-no">258</span><span id="line-258">   @Override public TomlWriter appendIf(boolean b, String text) { super.appendIf(b, text); return this; }</span>
-<span class="source-line-no">259</span><span id="line-259">   @Override public TomlWriter appendln(int indent, String text) { super.appendln(indent, text); return this; }</span>
-<span class="source-line-no">260</span><span id="line-260">   @Override public TomlWriter appendln(String text) { super.appendln(text); return this; }</span>
-<span class="source-line-no">261</span><span id="line-261">   @Override public TomlWriter appendUri(Object value) { super.appendUri(value); return this; }</span>
-<span class="source-line-no">262</span><span id="line-262">   @Override public TomlWriter cr(int depth) { super.cr(depth); return this; }</span>
-<span class="source-line-no">263</span><span id="line-263">   @Override public TomlWriter cre(int depth) { super.cre(depth); return this; }</span>
-<span class="source-line-no">264</span><span id="line-264">   @Override public TomlWriter i(int indent) { super.i(indent); return this; }</span>
-<span class="source-line-no">265</span><span id="line-265">   @Override public TomlWriter ie(int indent) { super.ie(indent); return this; }</span>
-<span class="source-line-no">266</span><span id="line-266">   @Override public TomlWriter nl(int indent) { super.nl(indent); return this; }</span>
-<span class="source-line-no">267</span><span id="line-267">   @Override public TomlWriter nlIf(boolean flag, int indent) { super.nlIf(flag, indent); return this; }</span>
-<span class="source-line-no">268</span><span id="line-268">   @Override public TomlWriter q() { super.q(); return this; }</span>
-<span class="source-line-no">269</span><span id="line-269">   @Override public TomlWriter s() { super.s(); return this; }</span>
-<span class="source-line-no">270</span><span id="line-270">   @Override public TomlWriter sIf(boolean flag) { super.sIf(flag); return this; }</span>
-<span class="source-line-no">271</span><span id="line-271">   @Override public TomlWriter w(char value) { super.w(value); return this; }</span>
-<span class="source-line-no">272</span><span id="line-272">   @Override public TomlWriter w(String value) { super.w(value); return this; }</span>
-<span class="source-line-no">273</span><span id="line-273">}</span>
+<span class="source-line-no">249</span><span id="line-249">}</span>
 
 
 

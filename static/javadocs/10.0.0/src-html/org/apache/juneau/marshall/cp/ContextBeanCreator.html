@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67">   protected ContextBeanCreator(ContextBeanCreator&lt;T&gt; copyFrom) {</span>
 <span class="source-line-no">068</span><span id="line-68">      this.type = copyFrom.type;</span>
 <span class="source-line-no">069</span><span id="line-69">      this.impl = copyFrom.impl;</span>
-<span class="source-line-no">070</span><span id="line-70">      this.builder = copyFrom.builder == null ? null : copyFrom.builder.copy();</span>
+<span class="source-line-no">070</span><span id="line-70">      this.builder = Context.Builder.copyOrNull(copyFrom.builder);</span>
 <span class="source-line-no">071</span><span id="line-71">   }</span>
 <span class="source-line-no">072</span><span id="line-72"></span>
 <span class="source-line-no">073</span><span id="line-73">   /**</span>
@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">   /**</span>
 <span class="source-line-no">136</span><span id="line-136">    * Returns the built bean.</span>
 <span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    * @return The built bean.</span>
+<span class="source-line-no">138</span><span id="line-138">    * @return The built bean, or &lt;jk&gt;null&lt;/jk&gt; if neither an implementation nor a builder has been set on this creator.</span>
 <span class="source-line-no">139</span><span id="line-139">    */</span>
 <span class="source-line-no">140</span><span id="line-140">   @SuppressWarnings({</span>
 <span class="source-line-no">141</span><span id="line-141">      "unchecked" // Type erasure requires cast to T</span>
@@ -190,7 +190,7 @@
 <span class="source-line-no">177</span><span id="line-177">   public ContextBeanCreator&lt;T&gt; type(Class&lt;? extends T&gt; value) {</span>
 <span class="source-line-no">178</span><span id="line-178">      builder = Context.createBuilder((Class&lt;? extends Context&gt;)value);</span>
 <span class="source-line-no">179</span><span id="line-179">      if (builder == null)</span>
-<span class="source-line-no">180</span><span id="line-180">         throw iaex("Creator for class {0} not found.", cn(value));</span>
+<span class="source-line-no">180</span><span id="line-180">         throw iaex("Creator for class %s not found.", cn(value));</span>
 <span class="source-line-no">181</span><span id="line-181">      return this;</span>
 <span class="source-line-no">182</span><span id="line-182">   }</span>
 <span class="source-line-no">183</span><span id="line-183">}</span>

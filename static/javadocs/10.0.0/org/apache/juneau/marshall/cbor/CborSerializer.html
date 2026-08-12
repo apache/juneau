@@ -132,11 +132,11 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
    <jc>// Serialize a bean to CBOR bytes using the default serializer</jc>
-   byte[] <jv>cbor</jv> = CborSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myBean</jv>);
+   byte[] <jv>cbor</jv> = CborSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
 
    <jc>// Custom serializer with bean type properties enabled</jc>
    CborSerializer <jv>s</jv> = CborSerializer.<jsm>create</jsm>().addBeanTypes().build();
-   byte[] <jv>cbor</jv> = <jv>s</jv>.serialize(<jv>myBean</jv>);
+   byte[] <jv>cbor</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  </p>
 
  <h5 class='section'>Round-trip notes:</h5>
@@ -304,26 +304,26 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeArrayRecords(java.lang.Object)" class="member-name-link">serializeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeArrayRecords(java.lang.Object)" class="member-name-link">writeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator for the streaming array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> (uses default
- session args; see <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>).</div>
+ session args; see <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator that opens a <a href="CborTokenWriter.html" title="class in org.apache.juneau.marshall.cbor"><code>CborTokenWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)"><code>OutputStreamSerializer.serialize(Object)</code></a>).</div>
+ <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#write(java.lang.Object)"><code>OutputStreamSerializer.write(Object)</code></a>).</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.OutputStreamSerializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/OutputStreamSerializer.html" title="class in org.apache.juneau.marshall.serializer">OutputStreamSerializer</a></h3>
-<code><a href="../serializer/OutputStreamSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/OutputStreamSerializer.html#getBinaryFormat()">getBinaryFormat</a>, <a href="../serializer/OutputStreamSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)">serialize</a></code></div>
+<code><a href="../serializer/OutputStreamSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/OutputStreamSerializer.html#getBinaryFormat()">getBinaryFormat</a>, <a href="../serializer/OutputStreamSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/OutputStreamSerializer.html#write(java.lang.Object)">write</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.Serializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a></h3>
-<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doSerialize</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#serialize(java.lang.Object,java.lang.Object)">serialize</a>, <a href="../serializer/Serializer.html#serializeToString(java.lang.Object)">serializeToString</a></code></div>
+<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doWrite</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#write(java.lang.Object,java.lang.Object)">write</a>, <a href="../serializer/Serializer.html#writeToString(java.lang.Object)">writeToString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingTraverseContext">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingTraverseContext.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext</a></h3>
 <code><a href="../MarshallingTraverseContext.html#getDetectRecursions()">getDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#getIgnoreRecursions()">getIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#getInitialDepth()">getInitialDepth</a>, <a href="../MarshallingTraverseContext.html#getMaxDepth()">getMaxDepth</a>, <a href="../MarshallingTraverseContext.html#isDetectRecursions()">isDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#isIgnoreRecursions()">isIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#shouldDetectRecursions()">shouldDetectRecursions</a></code></div>
@@ -338,7 +338,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.ArrayRecordWritable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></h3>
-<code><a href="../stream/ArrayRecordWritable.html#isArrayRecordStreaming()">isArrayRecordStreaming</a>, <a href="../stream/ArrayRecordWritable.html#serializeArrayRecords(java.lang.Object,int)">serializeArrayRecords</a></code></div>
+<code><a href="../stream/ArrayRecordWritable.html#isArrayRecordStreaming()">isArrayRecordStreaming</a>, <a href="../stream/ArrayRecordWritable.html#writeArrayRecords(java.lang.Object,int)">writeArrayRecords</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.util.function.Function">Methods inherited from interface&nbsp;java.util.function.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html#andThen(java.util.function.Function)" title="class or interface in java.util.function" class="external-link">andThen</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html#compose(java.util.function.Function)" title="class or interface in java.util.function" class="external-link">compose</a></code></div>
@@ -350,7 +350,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <code><a href="../../commons/function/ThrowingFunction.html#apply(T)">apply</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.TokenWritable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></h3>
-<code><a href="../stream/TokenWritable.html#serializeRecords(java.lang.Object)">serializeRecords</a></code></div>
+<code><a href="../stream/TokenWritable.html#writeRecords(java.lang.Object)">writeRecords</a></code></div>
 </section>
 </li>
 </ul>
@@ -518,21 +518,21 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 </section>
 </li>
 <li>
-<section class="detail" id="serializeTokens(java.lang.Object)">
-<h3>serializeTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborSerializer.html#line-308">serializeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeTokens(java.lang.Object)">
+<h3>writeTokens</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborSerializer.html#line-308">writeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="CborTokenWriter.html" title="class in org.apache.juneau.marshall.cbor"><code>CborTokenWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)"><code>OutputStreamSerializer.serialize(Object)</code></a>).
+ <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#write(java.lang.Object)"><code>OutputStreamSerializer.write(Object)</code></a>).
 
  <p>
- The real implementation lives on <a href="CborSerializerSession.html#serializeTokens(java.lang.Object)"><code>CborSerializerSession.serializeTokens(Object)</code></a>.
+ The real implementation lives on <a href="CborSerializerSession.html#writeTokens(java.lang.Object)"><code>CborSerializerSession.writeTokens(Object)</code></a>.
  Callers that need request-derived configuration (locale, timezone, schema, swaps) should
  call <a href="#createSession()"><code>createSession()</code></a> and invoke
- <a href="CborSerializerSession.html#serializeTokens(java.lang.Object)"><code>CborSerializerSession.serializeTokens(Object)</code></a> on the built session instead.</div>
+ <a href="CborSerializerSession.html#writeTokens(java.lang.Object)"><code>CborSerializerSession.writeTokens(Object)</code></a> on the built session instead.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/TokenWritable.html#serializeTokens(java.lang.Object)">serializeTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></code></dd>
+<dd><code><a href="../stream/TokenWritable.html#writeTokens(java.lang.Object)">writeTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.  Accepts <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>.</dd>
 <dt>Returns:</dt>
@@ -578,16 +578,16 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 </section>
 </li>
 <li>
-<section class="detail" id="serializeArrayRecords(java.lang.Object)">
-<h3>serializeArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborSerializer.html#line-334">serializeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeArrayRecords(java.lang.Object)">
+<h3>writeArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborSerializer.html#line-334">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the streaming array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> (uses default
- session args; see <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>).  Real impl on
- <a href="CborSerializerSession.html#serializeArrayRecords(java.lang.Object)"><code>CborSerializerSession.serializeArrayRecords(Object)</code></a>.</div>
+ session args; see <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>).  Real impl on
+ <a href="CborSerializerSession.html#writeArrayRecords(java.lang.Object)"><code>CborSerializerSession.writeArrayRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordWritable.html#serializeArrayRecords(java.lang.Object)">serializeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordWritable.html#writeArrayRecords(java.lang.Object)">writeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>
 <dt>Returns:</dt>

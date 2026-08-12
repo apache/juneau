@@ -122,10 +122,10 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
    <jc>// Parse INI into a bean</jc>
-   MyConfig <jv>config</jv> = IniParser.<jsf>DEFAULT</jsf>.parse(<jv>ini</jv>, MyConfig.<jk>class</jk>);
+   MyConfig <jv>config</jv> = IniParser.<jsf>DEFAULT</jsf>.read(<jv>ini</jv>, MyConfig.<jk>class</jk>);
 
    <jc>// Parse into a Map</jc>
-   Map&lt;String, Object&gt; <jv>map</jv> = IniParser.<jsf>DEFAULT</jsf>.parse(<jv>ini</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Object.<jk>class</jk>);
+   Map&lt;String, Object&gt; <jv>map</jv> = IniParser.<jsf>DEFAULT</jsf>.read(<jv>ini</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Object.<jk>class</jk>);
  </p>
 
  <h5 class='figure'>Example input:</h5>
@@ -191,6 +191,11 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <div class="col-second even-row-color"><code><a href="#DEFAULT" class="member-name-link">DEFAULT</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Default parser instance.</div>
+</div>
+<div class="col-first odd-row-color"><code>protected final char</code></div>
+<div class="col-second odd-row-color"><code><a href="#kvSeparator" class="member-name-link">kvSeparator</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Key-value separator.</div>
 </div>
 </div>
 <div class="inherited-list">
@@ -260,21 +265,26 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseRecords(java.lang.Object)" class="member-name-link">parseRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the properties on this bean as a map for debugging.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readRecords(java.lang.Object)" class="member-name-link">readRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).</div>
+ <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ReaderParser">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a></h3>
-<code><a href="../parser/ReaderParser.html#getFileCharset()">getFileCharset</a>, <a href="../parser/ReaderParser.html#getSession()">getSession</a>, <a href="../parser/ReaderParser.html#getStreamCharset()">getStreamCharset</a>, <a href="../parser/ReaderParser.html#isReaderParser()">isReaderParser</a>, <a href="../parser/ReaderParser.html#properties()">properties</a></code></div>
+<code><a href="../parser/ReaderParser.html#getSession()">getSession</a>, <a href="../parser/ReaderParser.html#getStreamCharset()">getStreamCharset</a>, <a href="../parser/ReaderParser.html#isReaderParser()">isReaderParser</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.Parser">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></h3>
-<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doParse</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parseArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">parseArgs</a>, <a href="../parser/Parser.html#parseIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../parser/Parser.html#parseIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">parseIntoMap</a>, <a href="../parser/Parser.html#parseWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">parseWithOuter</a></code></div>
+<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doRead</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#readArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">readArgs</a>, <a href="../parser/Parser.html#readIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">readIntoCollection</a>, <a href="../parser/Parser.html#readIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">readIntoMap</a>, <a href="../parser/Parser.html#readWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">readWithOuter</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingContextable">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingContextable.html" title="class in org.apache.juneau.marshall">MarshallingContextable</a></h3>
 <code><a href="../MarshallingContextable.html#getDurationFormat()">getDurationFormat</a>, <a href="../MarshallingContextable.html#getMarshallingContext()">getMarshallingContext</a>, <a href="../MarshallingContextable.html#getPeriodFormat()">getPeriodFormat</a></code></div>
@@ -298,8 +308,15 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="IniParser.html" title="class in org.apache.juneau.marshall.ini">IniParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-133">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="IniParser.html" title="class in org.apache.juneau.marshall.ini">IniParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-160">DEFAULT</a></span></div>
 <div class="block">Default parser instance.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="kvSeparator">
+<h3>kvSeparator</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-172">kvSeparator</a></span></div>
+<div class="block">Key-value separator.</div>
 </section>
 </li>
 </ul>
@@ -313,7 +330,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.ini.IniParser.Builder)">
 <h3>IniParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-149">IniParser</a></span><wbr><span class="parameters">(<a href="IniParser.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-179">IniParser</a></span><wbr><span class="parameters">(<a href="IniParser.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -332,7 +349,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IniParser.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-140">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IniParser.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-167">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -343,7 +360,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getIniBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getIniBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.ini">IniBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-153">getIniBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.ini">IniBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-184">getIniBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="IniMetaProvider.html#getIniBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">IniMetaProvider</a></code></span></div>
 <div class="block">Returns the INI-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -359,7 +376,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getIniClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getIniClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniClassMeta.html" title="class in org.apache.juneau.marshall.ini">IniClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-160">getIniClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniClassMeta.html" title="class in org.apache.juneau.marshall.ini">IniClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-191">getIniClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="IniMetaProvider.html#getIniClassMeta(org.apache.juneau.marshall.ClassMeta)">IniMetaProvider</a></code></span></div>
 <div class="block">Returns the INI-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -375,7 +392,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniParserSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-165">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniParserSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-196">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -393,7 +410,7 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniParser.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-170">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IniParser.Builder.html" title="class in org.apache.juneau.marshall.ini">IniParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-201">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -408,21 +425,35 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 </section>
 </li>
 <li>
-<section class="detail" id="parseRecords(java.lang.Object)">
-<h3>parseRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-189">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="properties()">
+<h3>properties</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-206">properties</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
+<div class="block">Returns the properties on this bean as a map for debugging.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="../parser/ReaderParser.html#properties()">properties</a></code>&nbsp;in class&nbsp;<code><a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a></code></dd>
+<dt>Returns:</dt>
+<dd>The properties on this bean as a map for debugging.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="readRecords(java.lang.Object)">
+<h3>readRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-226">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).
+ <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).
 
  <p>
- The real implementation lives on <a href="IniParserSession.html#parseRecords(java.lang.Object)"><code>IniParserSession.parseRecords(Object)</code></a>.  Callers
+ The real implementation lives on <a href="IniParserSession.html#readRecords(java.lang.Object)"><code>IniParserSession.readRecords(Object)</code></a>.  Callers
  that need request-derived configuration (locale, timezone, schema, swaps) should call
- <a href="#createSession()"><code>createSession()</code></a> and invoke <a href="IniParserSession.html#parseRecords(java.lang.Object)"><code>IniParserSession.parseRecords(Object)</code></a> on the
+ <a href="#createSession()"><code>createSession()</code></a> and invoke <a href="IniParserSession.html#readRecords(java.lang.Object)"><code>IniParserSession.readRecords(Object)</code></a> on the
  built session instead.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/RecordReadable.html#parseRecords(java.lang.Object)">parseRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
+<dd><code><a href="../stream/RecordReadable.html#readRecords(java.lang.Object)">readRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -435,14 +466,14 @@ implements <a href="IniMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-194">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniParser.html#line-231">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordReadable.html#isRecordStreaming()">RecordReadable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../stream/RecordReadable.html#isRecordStreaming()">isRecordStreaming</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if <a href="../stream/RecordReadable.html#parseRecords(java.lang.Object)"><code>RecordReadable.parseRecords(Object)</code></a> returns an O(1)-memory streaming
+<dd><jk>true</jk> if <a href="../stream/RecordReadable.html#readRecords(java.lang.Object)"><code>RecordReadable.readRecords(Object)</code></a> returns an O(1)-memory streaming
    cursor; <jk>false</jk> for buffered (whole-value) formats backed by
    <a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>.</dd>
 </dl>

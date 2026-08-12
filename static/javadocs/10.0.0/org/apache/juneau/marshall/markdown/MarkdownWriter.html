@@ -75,7 +75,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">java.io.Writer</a>
-<div class="inheritance"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">org.apache.juneau.marshall.serializer.SerializerWriter</a>
+<div class="inheritance"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">org.apache.juneau.marshall.serializer.SerializerWriter</a>&lt;<a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&gt;
 <div class="inheritance">org.apache.juneau.marshall.markdown.MarkdownWriter</div>
 </div>
 </div>
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-35">MarkdownWriter</a></span>
-<span class="extends-implements">extends <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span></div>
+<span class="extends-implements">extends <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;<a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&gt;</span></div>
 <div class="block">Low-level Markdown writer providing helper methods for producing Markdown output.
 
  <p>
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.SerializerWriter">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></h3>
-<code><a href="../serializer/SerializerWriter.html#append(char)">append</a>, <a href="../serializer/SerializerWriter.html#append(char%5B%5D)">append</a>, <a href="../serializer/SerializerWriter.html#append(int,char)">append</a>, <a href="../serializer/SerializerWriter.html#append(int,java.lang.String)">append</a>, <a href="../serializer/SerializerWriter.html#append(java.lang.Object)">append</a>, <a href="../serializer/SerializerWriter.html#append(java.lang.String)">append</a>, <a href="../serializer/SerializerWriter.html#appendIf(boolean,char)">appendIf</a>, <a href="../serializer/SerializerWriter.html#appendIf(boolean,java.lang.String)">appendIf</a>, <a href="../serializer/SerializerWriter.html#appendln(int,java.lang.String)">appendln</a>, <a href="../serializer/SerializerWriter.html#appendln(java.lang.String)">appendln</a>, <a href="../serializer/SerializerWriter.html#appendUri(java.lang.Object)">appendUri</a>, <a href="../serializer/SerializerWriter.html#close()">close</a>, <a href="../serializer/SerializerWriter.html#cr(int)">cr</a>, <a href="../serializer/SerializerWriter.html#cre(int)">cre</a>, <a href="../serializer/SerializerWriter.html#flush()">flush</a>, <a href="../serializer/SerializerWriter.html#i(int)">i</a>, <a href="../serializer/SerializerWriter.html#ie(int)">ie</a>, <a href="../serializer/SerializerWriter.html#nl(int)">nl</a>, <a href="../serializer/SerializerWriter.html#nlIf(boolean,int)">nlIf</a>, <a href="../serializer/SerializerWriter.html#q()">q</a>, <a href="../serializer/SerializerWriter.html#s()">s</a>, <a href="../serializer/SerializerWriter.html#sIf(boolean)">sIf</a>, <a href="../serializer/SerializerWriter.html#w(char)">w</a>, <a href="../serializer/SerializerWriter.html#w(java.lang.String)">w</a>, <a href="../serializer/SerializerWriter.html#write(char%5B%5D,int,int)">write</a></code></div>
+<code><a href="../serializer/SerializerWriter.html#append(char)">append</a>, <a href="../serializer/SerializerWriter.html#append(char%5B%5D)">append</a>, <a href="../serializer/SerializerWriter.html#append(int,char)">append</a>, <a href="../serializer/SerializerWriter.html#append(int,java.lang.String)">append</a>, <a href="../serializer/SerializerWriter.html#append(java.lang.Object)">append</a>, <a href="../serializer/SerializerWriter.html#append(java.lang.String)">append</a>, <a href="../serializer/SerializerWriter.html#appendIf(boolean,char)">appendIf</a>, <a href="../serializer/SerializerWriter.html#appendIf(boolean,java.lang.String)">appendIf</a>, <a href="../serializer/SerializerWriter.html#appendln(int,java.lang.String)">appendln</a>, <a href="../serializer/SerializerWriter.html#appendln(java.lang.String)">appendln</a>, <a href="../serializer/SerializerWriter.html#appendUri(java.lang.Object)">appendUri</a>, <a href="../serializer/SerializerWriter.html#close()">close</a>, <a href="../serializer/SerializerWriter.html#cr(int)">cr</a>, <a href="../serializer/SerializerWriter.html#cre(int)">cre</a>, <a href="../serializer/SerializerWriter.html#flush()">flush</a>, <a href="../serializer/SerializerWriter.html#i(int)">i</a>, <a href="../serializer/SerializerWriter.html#ie(int)">ie</a>, <a href="../serializer/SerializerWriter.html#nl(int)">nl</a>, <a href="../serializer/SerializerWriter.html#nlIf(boolean,int)">nlIf</a>, <a href="../serializer/SerializerWriter.html#q()">q</a>, <a href="../serializer/SerializerWriter.html#s()">s</a>, <a href="../serializer/SerializerWriter.html#self()">self</a>, <a href="../serializer/SerializerWriter.html#sIf(boolean)">sIf</a>, <a href="../serializer/SerializerWriter.html#w(char)">w</a>, <a href="../serializer/SerializerWriter.html#w(java.lang.String)">w</a>, <a href="../serializer/SerializerWriter.html#write(char%5B%5D,int,int)">write</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.io.Writer">Methods inherited from class&nbsp;java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#append(java.lang.CharSequence)" title="class or interface in java.io" class="external-link">append</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#append(java.lang.CharSequence,int,int)" title="class or interface in java.io" class="external-link">append</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#nullWriter()" title="class or interface in java.io" class="external-link">nullWriter</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(char%5B%5D)" title="class or interface in java.io" class="external-link">write</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(int)" title="class or interface in java.io" class="external-link">write</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(java.lang.String)" title="class or interface in java.io" class="external-link">write</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(java.lang.String,int,int)" title="class or interface in java.io" class="external-link">write</a></code></div>
@@ -262,14 +262,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="heading(int,java.lang.String)">
 <h3>heading</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-62">heading</a></span><wbr><span class="parameters">(int&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-63">heading</a></span><wbr><span class="parameters">(int&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a Markdown heading at the specified level.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>level</code> - The heading level (1-6).</dd>
-<dd><code>text</code> - The heading text.</dd>
+<dd><code>text</code> - The heading text.
+   <br>Can be <jk>null</jk> (written as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -280,12 +281,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tableHeader(java.lang.String...)">
 <h3>tableHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-79">tableHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;columns)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-81">tableHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;columns)</span>
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a Markdown table header row.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>columns</code> - The column names.</dd>
+<dd><code>columns</code> - The column names.
+   <br>Individual column names can be <jk>null</jk> (written as an empty cell).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -296,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tableSeparator(int)">
 <h3>tableSeparator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-97">tableSeparator</a></span><wbr><span class="parameters">(int&nbsp;numColumns)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-99">tableSeparator</a></span><wbr><span class="parameters">(int&nbsp;numColumns)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a Markdown table separator row.</div>
 <dl class="notes">
@@ -312,12 +314,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tableRow(java.lang.String...)">
 <h3>tableRow</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-112">tableRow</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-115">tableRow</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a Markdown table data row.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The cell values.</dd>
+<dd><code>values</code> - The cell values.
+   <br>Individual values can be <jk>null</jk> (written as an empty cell).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -328,14 +331,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bulletItem(int,java.lang.String)">
 <h3>bulletItem</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-131">bulletItem</a></span><wbr><span class="parameters">(int&nbsp;depth,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-135">bulletItem</a></span><wbr><span class="parameters">(int&nbsp;depth,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a Markdown bulleted list item.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>depth</code> - The indentation depth (0 = no indent).</dd>
-<dd><code>text</code> - The item text.</dd>
+<dd><code>text</code> - The item text.
+   <br>Can be <jk>null</jk> (written as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -346,7 +350,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="horizontalRule()">
 <h3>horizontalRule</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-146">horizontalRule</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-150">horizontalRule</a></span>()
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a Markdown horizontal rule.</div>
 <dl class="notes">
@@ -360,7 +364,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="blankLine()">
 <h3>blankLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-158">blankLine</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-162">blankLine</a></span>()
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a blank line.</div>
 <dl class="notes">
@@ -374,12 +378,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="text(java.lang.String)">
 <h3>text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-170">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-175">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes plain text with Markdown escaping.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The text to write.</dd>
+<dd><code>text</code> - The text to write.
+   <br>Can be <jk>null</jk> (written as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -390,12 +395,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="code(java.lang.String)">
 <h3>code</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-182">code</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-188">code</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes text wrapped in backticks (inline code).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The text to render as code.</dd>
+<dd><code>text</code> - The text to render as code.
+   <br>Can be <jk>null</jk> (written as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -406,12 +412,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bold(java.lang.String)">
 <h3>bold</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-196">bold</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-203">bold</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes bold text.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The text to render bold.</dd>
+<dd><code>text</code> - The text to render bold.
+   <br>Can be <jk>null</jk> (written as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -422,12 +429,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="italic(java.lang.String)">
 <h3>italic</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-210">italic</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-218">italic</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes italic text.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The text to render italic.</dd>
+<dd><code>text</code> - The text to render italic.
+   <br>Can be <jk>null</jk> (written as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -438,32 +446,34 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="escapeCell(java.lang.String)">
 <h3>escapeCell</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-226">escapeCell</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-235">escapeCell</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block">Escapes a string for use inside a Markdown table cell.
 
  <p>
  Escapes pipe characters and backslashes. Replaces newlines with <code>&lt;br&gt;</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The raw text.</dd>
+<dd><code>text</code> - The raw text.
+   <br>Can be <jk>null</jk> (returns an empty string).</dd>
 <dt>Returns:</dt>
-<dd>The escaped text suitable for a table cell.</dd>
+<dd>The escaped text suitable for a table cell.  Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="escapeText(java.lang.String)">
 <h3>escapeText</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-252">escapeText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/markdown/MarkdownWriter.html#line-262">escapeText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
 <div class="block">Escapes a string for use in general Markdown text.
 
  <p>
  Escapes backslashes and leading Markdown special characters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>text</code> - The raw text.</dd>
+<dd><code>text</code> - The raw text.
+   <br>Can be <jk>null</jk> (returns an empty string).</dd>
 <dt>Returns:</dt>
-<dd>The escaped text.</dd>
+<dd>The escaped text.  Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

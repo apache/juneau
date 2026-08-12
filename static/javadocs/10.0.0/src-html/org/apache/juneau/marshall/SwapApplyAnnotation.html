@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53">      /**</span>
 <span class="source-line-no">054</span><span id="line-54">       * Constructor.</span>
 <span class="source-line-no">055</span><span id="line-55">       *</span>
-<span class="source-line-no">056</span><span id="line-56">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">056</span><span id="line-56">       * @param vr The resolver for resolving values in annotations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">057</span><span id="line-57">       */</span>
 <span class="source-line-no">058</span><span id="line-58">      public Applier(VarResolverSession vr) {</span>
 <span class="source-line-no">059</span><span id="line-59">         super(SwapApply.class, Context.Builder.class, vr);</span>
@@ -227,7 +227,7 @@
 <span class="source-line-no">214</span><span id="line-214">   /**</span>
 <span class="source-line-no">215</span><span id="line-215">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</span>
 <span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    * @param a The annotation to check.</span>
+<span class="source-line-no">217</span><span id="line-217">    * @param a The annotation to check. Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;true&lt;/jk&gt;).</span>
 <span class="source-line-no">218</span><span id="line-218">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</span>
 <span class="source-line-no">219</span><span id="line-219">    */</span>
 <span class="source-line-no">220</span><span id="line-220">   public static boolean empty(SwapApply a) {</span>

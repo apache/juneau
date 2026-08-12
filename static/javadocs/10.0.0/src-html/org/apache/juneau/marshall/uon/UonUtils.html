@@ -57,29 +57,30 @@
 <span class="source-line-no">044</span><span id="line-44">    * For example, strings that start with '(' or '@' or look like boolean or numeric values need to be quoted.</span>
 <span class="source-line-no">045</span><span id="line-45">    *</span>
 <span class="source-line-no">046</span><span id="line-46">    * @param s The string to test.</span>
-<span class="source-line-no">047</span><span id="line-47">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified string needs to be quoted per UON notation.</span>
-<span class="source-line-no">048</span><span id="line-48">    */</span>
-<span class="source-line-no">049</span><span id="line-49">   public static boolean needsQuotes(String s) {</span>
-<span class="source-line-no">050</span><span id="line-50">      var c0 = s.isEmpty() ? 0 : s.charAt(0);</span>
-<span class="source-line-no">051</span><span id="line-51">      // @formatter:off</span>
-<span class="source-line-no">052</span><span id="line-52">      return (</span>
-<span class="source-line-no">053</span><span id="line-53">         s.isEmpty()</span>
-<span class="source-line-no">054</span><span id="line-54">         || c0 == '@'</span>
-<span class="source-line-no">055</span><span id="line-55">         || c0 == '('</span>
-<span class="source-line-no">056</span><span id="line-56">         || needsQuoteChars.contains(s)</span>
-<span class="source-line-no">057</span><span id="line-57">         || (</span>
-<span class="source-line-no">058</span><span id="line-58">            maybeNeedsQuotesFirstChar.contains(c0)</span>
-<span class="source-line-no">059</span><span id="line-59">            &amp;&amp; (</span>
-<span class="source-line-no">060</span><span id="line-60">               "true".equals(s)</span>
-<span class="source-line-no">061</span><span id="line-61">               || "false".equals(s)</span>
-<span class="source-line-no">062</span><span id="line-62">               || "null".equals(s)</span>
-<span class="source-line-no">063</span><span id="line-63">               || isNumeric(s)</span>
-<span class="source-line-no">064</span><span id="line-64">            )</span>
-<span class="source-line-no">065</span><span id="line-65">         )</span>
-<span class="source-line-no">066</span><span id="line-66">      );</span>
-<span class="source-line-no">067</span><span id="line-67">      // @formatter:on</span>
-<span class="source-line-no">068</span><span id="line-68">   }</span>
-<span class="source-line-no">069</span><span id="line-69">}</span>
+<span class="source-line-no">047</span><span id="line-47">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">048</span><span id="line-48">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified string needs to be quoted per UON notation.</span>
+<span class="source-line-no">049</span><span id="line-49">    */</span>
+<span class="source-line-no">050</span><span id="line-50">   public static boolean needsQuotes(String s) {</span>
+<span class="source-line-no">051</span><span id="line-51">      var c0 = s.isEmpty() ? 0 : s.charAt(0);</span>
+<span class="source-line-no">052</span><span id="line-52">      // @formatter:off</span>
+<span class="source-line-no">053</span><span id="line-53">      return (</span>
+<span class="source-line-no">054</span><span id="line-54">         s.isEmpty()</span>
+<span class="source-line-no">055</span><span id="line-55">         || c0 == '@'</span>
+<span class="source-line-no">056</span><span id="line-56">         || c0 == '('</span>
+<span class="source-line-no">057</span><span id="line-57">         || needsQuoteChars.contains(s)</span>
+<span class="source-line-no">058</span><span id="line-58">         || (</span>
+<span class="source-line-no">059</span><span id="line-59">            maybeNeedsQuotesFirstChar.contains(c0)</span>
+<span class="source-line-no">060</span><span id="line-60">            &amp;&amp; (</span>
+<span class="source-line-no">061</span><span id="line-61">               "true".equals(s)</span>
+<span class="source-line-no">062</span><span id="line-62">               || "false".equals(s)</span>
+<span class="source-line-no">063</span><span id="line-63">               || "null".equals(s)</span>
+<span class="source-line-no">064</span><span id="line-64">               || isNumeric(s)</span>
+<span class="source-line-no">065</span><span id="line-65">            )</span>
+<span class="source-line-no">066</span><span id="line-66">         )</span>
+<span class="source-line-no">067</span><span id="line-67">      );</span>
+<span class="source-line-no">068</span><span id="line-68">      // @formatter:on</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70">}</span>
 
 
 

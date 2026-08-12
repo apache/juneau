@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52"> *</span>
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;jk&gt;public class&lt;/jk&gt; Person {</span>
 <span class="source-line-no">054</span><span id="line-54"> *       &lt;ja&gt;@ParentProperty&lt;/ja&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *       &lt;jk&gt;public&lt;/jk&gt; AddressBook addressBook;  &lt;jc&gt;// Automatically set to containing AddressBook&lt;/jc&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *       &lt;jk&gt;public&lt;/jk&gt; AddressBook addressBook;  &lt;jc&gt;// Automatically set to the enclosing AddressBook (the intervening List is skipped).&lt;/jc&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;jk&gt;public&lt;/jk&gt; String name;</span>
 <span class="source-line-no">058</span><span id="line-58"> *       &lt;jk&gt;public&lt;/jk&gt; &lt;jk&gt;char&lt;/jk&gt; sex;</span>
@@ -92,25 +92,66 @@
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li&gt;This allows child objects to navigate back to their parent if needed</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> *</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">083</span><span id="line-83"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ParentPropertyAnnotation"&gt;@ParentProperty Annotation&lt;/a&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"></span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;/ul&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> */</span>
-<span class="source-line-no">087</span><span id="line-87">@Target({ METHOD, FIELD })</span>
-<span class="source-line-no">088</span><span id="line-88">@Retention(RUNTIME)</span>
-<span class="source-line-no">089</span><span id="line-89">@Inherited</span>
-<span class="source-line-no">090</span><span id="line-90">public @interface ParentProperty {</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">   /**</span>
-<span class="source-line-no">093</span><span id="line-93">    * Optional description for the exposed API.</span>
-<span class="source-line-no">094</span><span id="line-94">    *</span>
-<span class="source-line-no">095</span><span id="line-95">    * @return The annotation value.</span>
-<span class="source-line-no">096</span><span id="line-96">    * @since 9.2.0</span>
-<span class="source-line-no">097</span><span id="line-97">    */</span>
-<span class="source-line-no">098</span><span id="line-98">   String[] description() default {};</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">}</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='section'&gt;Parent resolution through collections and maps:&lt;/h5&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> *    &lt;li&gt;A collection/map element's &lt;ja&gt;@ParentProperty&lt;/ja&gt; is set to the nearest enclosing bean, skipping any</span>
+<span class="source-line-no">085</span><span id="line-85"> *       intervening collections, maps, or arrays.  In the example above, each &lt;c&gt;Person&lt;/c&gt; lives inside a</span>
+<span class="source-line-no">086</span><span id="line-86"> *       &lt;c&gt;List&amp;lt;Person&amp;gt;&lt;/c&gt;, yet its &lt;c&gt;addressBook&lt;/c&gt; back-reference receives the enclosing &lt;c&gt;AddressBook&lt;/c&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> *       bean, not the &lt;c&gt;List&lt;/c&gt;.  The same holds through arbitrarily deep nesting</span>
+<span class="source-line-no">088</span><span id="line-88"> *       (e.g. &lt;c&gt;List&amp;lt;List&amp;lt;Person&amp;gt;&amp;gt;&lt;/c&gt;, &lt;c&gt;Map&amp;lt;String,List&amp;lt;Person&amp;gt;&amp;gt;&lt;/c&gt;).</span>
+<span class="source-line-no">089</span><span id="line-89"> *    &lt;li&gt;A bean at the document root (or directly inside a top-level collection) has no enclosing bean, so its</span>
+<span class="source-line-no">090</span><span id="line-90"> *       &lt;ja&gt;@ParentProperty&lt;/ja&gt; is left &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">091</span><span id="line-91"> * &lt;/ul&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> *</span>
+<span class="source-line-no">093</span><span id="line-93"> * &lt;h5 class='section'&gt;Cyclic graphs and serialization:&lt;/h5&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">095</span><span id="line-95"> *    &lt;li&gt;When a &lt;ja&gt;@ParentProperty&lt;/ja&gt; back-reference is also a normally-visible bean property (e.g. a &lt;jk&gt;public&lt;/jk&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> *       field or getter, as in the example above), it forms a parent-to-child/child-to-parent &lt;b&gt;cycle&lt;/b&gt;.  Unlike</span>
+<span class="source-line-no">097</span><span id="line-97"> *       Jackson's &lt;c&gt;@JsonBackReference&lt;/c&gt;, Juneau does &lt;b&gt;not&lt;/b&gt; auto-omit the &lt;ja&gt;@ParentProperty&lt;/ja&gt; member on the</span>
+<span class="source-line-no">098</span><span id="line-98"> *       write (serialize) side — the annotation is a parse-time convenience only.  This is intentional.</span>
+<span class="source-line-no">099</span><span id="line-99"> *    &lt;li&gt;Under the &lt;b&gt;default&lt;/b&gt; serializer configuration (&lt;c&gt;detectRecursions=&lt;jk&gt;false&lt;/jk&gt;&lt;/c&gt;,</span>
+<span class="source-line-no">100</span><span id="line-100"> *       &lt;c&gt;ignoreRecursions=&lt;jk&gt;false&lt;/jk&gt;&lt;/c&gt;), serializing such a cyclic graph produces &lt;b&gt;finite but</span>
+<span class="source-line-no">101</span><span id="line-101"> *       semantically-incomplete&lt;/b&gt; output: the traversal is silently truncated at</span>
+<span class="source-line-no">102</span><span id="line-102"> *       {@link MarshallingTraverseContext.Builder#maxDepth(int) maxDepth} (default &lt;c&gt;100&lt;/c&gt;).  No exception is thrown —</span>
+<span class="source-line-no">103</span><span id="line-103"> *       &lt;c&gt;maxDepth&lt;/c&gt; is a size guard, not a cycle detector.</span>
+<span class="source-line-no">104</span><span id="line-104"> *    &lt;li&gt;To fail-fast on cycles with a clear error, enable</span>
+<span class="source-line-no">105</span><span id="line-105"> *       {@link MarshallingTraverseContext.Builder#detectRecursions() detectRecursions} — a</span>
+<span class="source-line-no">106</span><span id="line-106"> *       {@link MarshallingRecursionException} (surfaced as a serialize exception) is thrown.</span>
+<span class="source-line-no">107</span><span id="line-107"> *    &lt;li&gt;To omit the back-reference and round-trip cleanly, enable</span>
+<span class="source-line-no">108</span><span id="line-108"> *       {@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions} — the repeated node is emitted as</span>
+<span class="source-line-no">109</span><span id="line-109"> *       &lt;jk&gt;null&lt;/jk&gt;, and parsing re-injects the parent via this annotation.</span>
+<span class="source-line-no">110</span><span id="line-110"> * &lt;/ul&gt;</span>
+<span class="source-line-no">111</span><span id="line-111"> *</span>
+<span class="source-line-no">112</span><span id="line-112"> * &lt;p&gt;</span>
+<span class="source-line-no">113</span><span id="line-113"> * Putting it together, the &lt;c&gt;AddressBook&lt;/c&gt;/&lt;c&gt;List&amp;lt;Person&amp;gt;&lt;/c&gt; graph above round-trips cleanly when the</span>
+<span class="source-line-no">114</span><span id="line-114"> * back-reference is omitted on serialize and re-injected on parse:</span>
+<span class="source-line-no">115</span><span id="line-115"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">116</span><span id="line-116"> *    Serializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().ignoreRecursions().build();</span>
+<span class="source-line-no">117</span><span id="line-117"> *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;addressBook&lt;/jv&gt;);</span>
+<span class="source-line-no">118</span><span id="line-118"> *    AddressBook &lt;jv&gt;parsed&lt;/jv&gt; = JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.parse(&lt;jv&gt;json&lt;/jv&gt;, AddressBook.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">119</span><span id="line-119"> *    Person &lt;jv&gt;person&lt;/jv&gt; = &lt;jv&gt;parsed&lt;/jv&gt;.people.get(0);</span>
+<span class="source-line-no">120</span><span id="line-120"> *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;person&lt;/jv&gt;.addressBook == &lt;jv&gt;parsed&lt;/jv&gt;);  &lt;jc&gt;// Parent re-injected through the List.&lt;/jc&gt;</span>
+<span class="source-line-no">121</span><span id="line-121"> * &lt;/p&gt;</span>
+<span class="source-line-no">122</span><span id="line-122"> *</span>
+<span class="source-line-no">123</span><span id="line-123"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">124</span><span id="line-124"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ParentPropertyAnnotation"&gt;@ParentProperty Annotation&lt;/a&gt;</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126"> * &lt;/ul&gt;</span>
+<span class="source-line-no">127</span><span id="line-127"> */</span>
+<span class="source-line-no">128</span><span id="line-128">@Target({ METHOD, FIELD })</span>
+<span class="source-line-no">129</span><span id="line-129">@Retention(RUNTIME)</span>
+<span class="source-line-no">130</span><span id="line-130">@Inherited</span>
+<span class="source-line-no">131</span><span id="line-131">public @interface ParentProperty {</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /**</span>
+<span class="source-line-no">134</span><span id="line-134">    * Optional description for the exposed API.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * @return The annotation value.</span>
+<span class="source-line-no">137</span><span id="line-137">    * @since 9.2.0</span>
+<span class="source-line-no">138</span><span id="line-138">    */</span>
+<span class="source-line-no">139</span><span id="line-139">   String[] description() default {};</span>
+<span class="source-line-no">140</span><span id="line-140"></span>
+<span class="source-line-no">141</span><span id="line-141">}</span>
 
 
 

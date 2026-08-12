@@ -157,7 +157,7 @@
 <span class="source-line-no">144</span><span id="line-144">            return o2.toString();</span>
 <span class="source-line-no">145</span><span id="line-145">         if (o instanceof ZonedDateTime o2)</span>
 <span class="source-line-no">146</span><span id="line-146">            return RFC_1123_DATE_TIME.format(o2);</span>
-<span class="source-line-no">147</span><span id="line-147">         throw rex("Invalid object type returned by supplier: {0}", cn(o));</span>
+<span class="source-line-no">147</span><span id="line-147">         throw rex("Invalid object type returned by supplier: %s", cn(o));</span>
 <span class="source-line-no">148</span><span id="line-148">      }</span>
 <span class="source-line-no">149</span><span id="line-149">      if (nn(etagValue))</span>
 <span class="source-line-no">150</span><span id="line-150">         return s(etagValue);</span>
@@ -169,8 +169,8 @@
 <span class="source-line-no">156</span><span id="line-156">   /**</span>
 <span class="source-line-no">157</span><span id="line-157">    * Static factory with an entity-tag.</span>
 <span class="source-line-no">158</span><span id="line-158">    *</span>
-<span class="source-line-no">159</span><span id="line-159">    * @param value The tag. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">160</span><span id="line-160">    * @return A new instance or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">159</span><span id="line-159">    * @param value The tag. May be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">160</span><span id="line-160">    * @return A new instance, or &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;value&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">161</span><span id="line-161">    */</span>
 <span class="source-line-no">162</span><span id="line-162">   public static IfRange of(EntityTag value) {</span>
 <span class="source-line-no">163</span><span id="line-163">      return value == null ? null : new IfRange(value);</span>
@@ -179,8 +179,8 @@
 <span class="source-line-no">166</span><span id="line-166">   /**</span>
 <span class="source-line-no">167</span><span id="line-167">    * Static factory with a wire string.</span>
 <span class="source-line-no">168</span><span id="line-168">    *</span>
-<span class="source-line-no">169</span><span id="line-169">    * @param value The value. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">170</span><span id="line-170">    * @return A new instance or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">169</span><span id="line-169">    * @param value The value. May be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">170</span><span id="line-170">    * @return A new instance, or &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;value&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">171</span><span id="line-171">    */</span>
 <span class="source-line-no">172</span><span id="line-172">   public static IfRange of(String value) {</span>
 <span class="source-line-no">173</span><span id="line-173">      return value == null ? null : new IfRange(value);</span>
@@ -199,8 +199,8 @@
 <span class="source-line-no">186</span><span id="line-186">   /**</span>
 <span class="source-line-no">187</span><span id="line-187">    * Static factory with an HTTP-date.</span>
 <span class="source-line-no">188</span><span id="line-188">    *</span>
-<span class="source-line-no">189</span><span id="line-189">    * @param value The date/time. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">190</span><span id="line-190">    * @return A new instance or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">189</span><span id="line-189">    * @param value The date/time. May be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">190</span><span id="line-190">    * @return A new instance, or &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;value&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">191</span><span id="line-191">    */</span>
 <span class="source-line-no">192</span><span id="line-192">   public static IfRange of(ZonedDateTime value) {</span>
 <span class="source-line-no">193</span><span id="line-193">      return value == null ? null : new IfRange(value);</span>

@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The header value.
    <br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The supplier of the header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -389,7 +389,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the header value as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link"><code>ZonedDateTime</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The header value as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link"><code>ZonedDateTime</code></a>.  Can be <jk>null</jk>.</dd>
+<dd>The header value as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link"><code>ZonedDateTime</code></a>, or <jk>null</jk> if the header has no value.</dd>
 </dl>
 </section>
 </li>

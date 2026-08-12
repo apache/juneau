@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141">    * @param mapper A mapping function to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">142</span><span id="line-142">    * @return A NullableSupplier describing the result of applying a mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.</span>
 <span class="source-line-no">143</span><span id="line-143">    */</span>
-<span class="source-line-no">144</span><span id="line-144">   default &lt;U&gt; NullableSupplier&lt;U&gt; map(Function&lt;? super T, ? extends U&gt; mapper) {</span>
+<span class="source-line-no">144</span><span id="line-144">   default &lt;U&gt; NullableSupplier&lt;U&gt; map(Function&lt;? super T,? extends U&gt; mapper) {</span>
 <span class="source-line-no">145</span><span id="line-145">      assertArgNotNull(ARG_mapper, mapper);</span>
 <span class="source-line-no">146</span><span id="line-146">      return () -&gt; {</span>
 <span class="source-line-no">147</span><span id="line-147">         T value = get();</span>
@@ -169,7 +169,7 @@
 <span class="source-line-no">156</span><span id="line-156">    * @param mapper A mapping function to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">157</span><span id="line-157">    * @return The result of applying a NullableSupplier-bearing mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.</span>
 <span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   default &lt;U&gt; NullableSupplier&lt;U&gt; flatMap(Function&lt;? super T, ? extends NullableSupplier&lt;? extends U&gt;&gt; mapper) {</span>
+<span class="source-line-no">159</span><span id="line-159">   default &lt;U&gt; NullableSupplier&lt;U&gt; flatMap(Function&lt;? super T,? extends NullableSupplier&lt;? extends U&gt;&gt; mapper) {</span>
 <span class="source-line-no">160</span><span id="line-160">      assertArgNotNull(ARG_mapper, mapper);</span>
 <span class="source-line-no">161</span><span id="line-161">      return () -&gt; {</span>
 <span class="source-line-no">162</span><span id="line-162">         T value = get();</span>

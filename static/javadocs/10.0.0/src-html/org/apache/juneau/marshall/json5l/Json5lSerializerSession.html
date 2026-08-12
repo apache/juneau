@@ -115,11 +115,11 @@
 <span class="source-line-no">102</span><span id="line-102">   }</span>
 <span class="source-line-no">103</span><span id="line-103"></span>
 <span class="source-line-no">104</span><span id="line-104">   @Override /* Overridden from JsonSerializerSession */</span>
-<span class="source-line-no">105</span><span id="line-105">   protected JsonWriter getJsonWriter(SerializerPipe out) {</span>
+<span class="source-line-no">105</span><span id="line-105">   protected JsonWriter&lt;?&gt; getJsonWriter(SerializerPipe out) {</span>
 <span class="source-line-no">106</span><span id="line-106">      if (! json5Sugar)</span>
 <span class="source-line-no">107</span><span id="line-107">         return super.getJsonWriter(out);</span>
 <span class="source-line-no">108</span><span id="line-108">      var output = out.getRawOutput();</span>
-<span class="source-line-no">109</span><span id="line-109">      if (output instanceof JsonWriter output2)</span>
+<span class="source-line-no">109</span><span id="line-109">      if (output instanceof JsonWriter&lt;?&gt; output2)</span>
 <span class="source-line-no">110</span><span id="line-110">         return output2;</span>
 <span class="source-line-no">111</span><span id="line-111">      var w = JsonWriter.create(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), SUGAR_QUOTE, true, isTrimStrings(), getUriResolver());</span>
 <span class="source-line-no">112</span><span id="line-112">      out.setWriter(w);</span>
@@ -127,9 +127,9 @@
 <span class="source-line-no">114</span><span id="line-114">   }</span>
 <span class="source-line-no">115</span><span id="line-115"></span>
 <span class="source-line-no">116</span><span id="line-116">   @Override /* Overridden from JsonlSerializerSession */</span>
-<span class="source-line-no">117</span><span id="line-117">   public TokenWriter serializeTokens(Object output) throws IOException {</span>
+<span class="source-line-no">117</span><span id="line-117">   public TokenWriter writeTokens(Object output) throws IOException {</span>
 <span class="source-line-no">118</span><span id="line-118">      if (! json5Sugar)</span>
-<span class="source-line-no">119</span><span id="line-119">         return super.serializeTokens(output);</span>
+<span class="source-line-no">119</span><span id="line-119">         return super.writeTokens(output);</span>
 <span class="source-line-no">120</span><span id="line-120">      var walk = new PojoWalker.Options(</span>
 <span class="source-line-no">121</span><span id="line-121">         isKeepNullProperties(),</span>
 <span class="source-line-no">122</span><span id="line-122">         isTrimEmptyMaps(),</span>

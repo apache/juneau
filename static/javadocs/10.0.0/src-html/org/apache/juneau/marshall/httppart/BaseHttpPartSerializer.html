@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will default to {@link HttpPartType#OTHER}).</span>
 <span class="source-line-no">085</span><span id="line-85">    * @param schema</span>
 <span class="source-line-no">086</span><span id="line-86">    *    Schema information about the part.</span>
-<span class="source-line-no">087</span><span id="line-87">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">087</span><span id="line-87">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent — see {@link HttpPartSerializerSession}.</span>
 <span class="source-line-no">088</span><span id="line-88">    *    &lt;br&gt;Not all part serializers use the schema information.</span>
 <span class="source-line-no">089</span><span id="line-89">    * @param value The value being serialized.</span>
 <span class="source-line-no">090</span><span id="line-90">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will return &lt;jk&gt;null&lt;/jk&gt;).</span>
@@ -105,8 +105,8 @@
 <span class="source-line-no">092</span><span id="line-92">    * @throws SerializeException If a problem occurred while trying to parse the input.</span>
 <span class="source-line-no">093</span><span id="line-93">    * @throws SchemaValidationException If the output fails schema validation.</span>
 <span class="source-line-no">094</span><span id="line-94">    */</span>
-<span class="source-line-no">095</span><span id="line-95">   public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {</span>
-<span class="source-line-no">096</span><span id="line-96">      return getPartSession().serialize(partType, schema, value);</span>
+<span class="source-line-no">095</span><span id="line-95">   public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {</span>
+<span class="source-line-no">096</span><span id="line-96">      return getPartSession().write(partType, schema, value);</span>
 <span class="source-line-no">097</span><span id="line-97">   }</span>
 <span class="source-line-no">098</span><span id="line-98">}</span>
 

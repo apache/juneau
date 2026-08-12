@@ -234,7 +234,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>annotations</code> - The annotation list (from <a href="../reflect/FieldInfo.html#getAnnotations()"><code>FieldInfo.getAnnotations()</code></a>,
-   <a href="../reflect/ParameterInfo.html#getAnnotations()"><code>ParameterInfo.getAnnotations()</code></a>, etc.).</dd>
+   <a href="../reflect/ParameterInfo.html#getAnnotations()"><code>ParameterInfo.getAnnotations()</code></a>, etc.). May be <code>null</code> or empty, in which case <code>null</code> is returned.</dd>
 <dt>Returns:</dt>
 <dd>The expression, or <code>null</code> if not a <code>@Value</code> site.</dd>
 </dl>
@@ -247,7 +247,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <code>true</code> if any annotation in the list is a <code>@Value</code> marker.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotations</code> - The annotation list.</dd>
+<dd><code>annotations</code> - The annotation list.  May be <code>null</code> or empty, in which case <code>false</code> is returned.</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> if at least one annotation matches <a href="JsrSupport.html#isValueAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)"><code>JsrSupport.isValueAnnotation(AnnotationInfo)</code></a>.</dd>
 </dl>
@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
  the same site is ambiguous — fail fast with a clear message.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotations</code> - The annotation list.</dd>
+<dd><code>annotations</code> - The annotation list.  May be <code>null</code> or empty, in which case this method returns without action.</dd>
 <dd><code>siteDescription</code> - A human-readable description of the site (used in the error message).</dd>
 </dl>
 </section>
@@ -293,8 +293,8 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>expression</code> - The <code>@Value</code> expression (typically <code>"${key}"</code> or <code>"${key:default}"</code>).</dd>
-<dd><code>targetType</code> - The target Java type. May be a primitive.</dd>
+<dd><code>expression</code> - The <code>@Value</code> expression (typically <code>"${key}"</code> or <code>"${key:default}"</code>). May be <code>null</code>, in which case <code>null</code> is returned for reference types (and a <a href="BeanCreationException.html" title="class in org.apache.juneau.commons.inject"><code>BeanCreationException</code></a> is thrown for primitive target types).</dd>
+<dd><code>targetType</code> - The target Java type. May be a primitive. Must not be <code>null</code>.</dd>
 <dd><code>siteDescription</code> - A human-readable description of the site (used in error messages).</dd>
 <dt>Returns:</dt>
 <dd>The coerced value.</dd>
@@ -320,8 +320,8 @@ loadScripts(document, 'script');</script>
  overload &mdash; no extra allocation and no behavior change.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>expression</code> - The <code>@Value</code> expression.</dd>
-<dd><code>targetType</code> - The target Java type. May be a primitive.</dd>
+<dd><code>expression</code> - The <code>@Value</code> expression. May be <code>null</code>, in which case <code>null</code> is returned for reference types (and a <a href="BeanCreationException.html" title="class in org.apache.juneau.commons.inject"><code>BeanCreationException</code></a> is thrown for primitive target types).</dd>
+<dd><code>targetType</code> - The target Java type. May be a primitive. Must not be <code>null</code>.</dd>
 <dd><code>siteDescription</code> - A human-readable description of the site (used in error messages).</dd>
 <dd><code>beanStore</code> - Caller-scoped <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> consulted for <a href="../settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a> beans.
    May be <code>null</code>.</dd>
@@ -363,7 +363,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>expression</code> - The <code>@Value</code> expression. May be <code>null</code>.</dd>
-<dd><code>targetType</code> - The erased target class (e.g. <code>String.class</code> or <code>Supplier.class</code>).</dd>
+<dd><code>targetType</code> - The erased target class (e.g. <code>String.class</code> or <code>Supplier.class</code>). Must not be <code>null</code>.</dd>
 <dd><code>genericTargetType</code> - The declared generic type (e.g. <code>Supplier&lt;Integer&gt;</code>). May be
    <code>null</code>, in which case Supplier-detection is skipped.</dd>
 <dd><code>siteDescription</code> - Human-readable site description for error messages.</dd>
@@ -390,7 +390,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>expression</code> - The <code>@Value</code> expression. May be <code>null</code>.</dd>
-<dd><code>targetType</code> - The erased target class.</dd>
+<dd><code>targetType</code> - The erased target class. Must not be <code>null</code>.</dd>
 <dd><code>genericTargetType</code> - The declared generic type. May be <code>null</code>.</dd>
 <dd><code>siteDescription</code> - Human-readable site description for error messages.</dd>
 <dd><code>beanStore</code> - Caller-scoped <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> consulted for <a href="../settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a> beans.

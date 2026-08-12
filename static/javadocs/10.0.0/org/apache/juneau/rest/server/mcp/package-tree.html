@@ -61,6 +61,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="BasicMcpSubscriptionBroker.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">BasicMcpSubscriptionBroker</a> (implements org.apache.juneau.rest.server.mcp.<a href="McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a>)</li>
 <li class="circle">jakarta.servlet.GenericServlet (implements java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>, jakarta.servlet.Servlet, jakarta.servlet.ServletConfig)
 <ul>
 <li class="circle">jakarta.servlet.http.HttpServlet
@@ -69,7 +70,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">org.apache.juneau.rest.server.servlet.<a href="../servlet/BasicRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a> (implements org.apache.juneau.rest.server.config.<a href="../config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a>)
 <ul>
-<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpRestServlet</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="AbstractMcpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">AbstractMcpRestServlet</a></li>
 </ul>
 </li>
 </ul>
@@ -78,13 +79,35 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
-<li class="circle">org.apache.juneau.rest.server.mcp.<a href="Mcp.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">Mcp</a></li>
-<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpDispatcher.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpDispatcher</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpCompletionRef.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpCompletionRef</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpCompletionRequest.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpCompletionRequest</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpCompletionResult.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpCompletionResult</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpContentBlock.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpContentBlock</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpExchange.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpExchange</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpParamUtils.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpParamUtils</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpPromptArgument.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpPromptArgument</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpPromptMessage.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpPromptMessage</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpPromptOutcome.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpPromptOutcome</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpPromptSpec.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpPromptSpec</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceContents.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpResourceContents</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceOutcome.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpResourceOutcome</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceSpec.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpResourceSpec</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceTemplateSpec.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpSchema.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpSchema</a></li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpServerConfig.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpToolOutcome.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpToolOutcome</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpToolSpec.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpToolSpec</a></li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpTypedHandlers.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpTypedHandlers</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpUriTemplateMatcher.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpUriTemplateMatcher</a></li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" class="type-name-link external-link" title="class or interface in java.lang">Record</a>
 <ul>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpChangeEvent.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpChangeEvent</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpCompletionResult.Normalized.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpCompletionResult.Normalized</a></li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpPage.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpPage</a>&lt;T&gt;</li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResponseResult.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpResponseResult</a> (implements org.apache.juneau.rest.server.mcp.<a href="McpDispatchResult.html" title="interface in org.apache.juneau.rest.server.mcp">McpDispatchResult</a>)</li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpServerConfig.ResourceTemplateMatch.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig.ResourceTemplateMatch</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpStreamResult.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpStreamResult</a> (implements org.apache.juneau.rest.server.mcp.<a href="McpDispatchResult.html" title="interface in org.apache.juneau.rest.server.mcp">McpDispatchResult</a>)</li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpSubscriptionFilter.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a></li>
 </ul>
 </li>
 </ul>
@@ -94,13 +117,46 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" class="type-name-link external-link" title="class or interface in java.lang">AutoCloseable</a>
+<ul>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpSubscription.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a></li>
+</ul>
+</li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpCompleter.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpCompleter</a></li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpCursor.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></li>
-<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpEndpoint.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpEndpoint</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpDispatchResult.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpDispatchResult</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpEndpointMixin.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpEndpointMixin</a></li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpPromptHandler.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceHandler.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceTemplateHandler.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceTemplateHandler.ReadFunction.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler.ReadFunction</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpRevision.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpRevision</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpSubscriptions.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptions</a>
+<ul>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpSubscriptionBroker.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></li>
+</ul>
+</li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpToolHandler.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></li>
-<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpTypedPromptHandler.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpTypedPromptHandler</a>&lt;A&gt;</li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpTypedToolHandler.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;A,<wbr>R&gt;</li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Enum Class Hierarchy">Enum Class Hierarchy</h2>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpChangeKind.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.mcp">McpChangeKind</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpCompletionRef.Kind.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.mcp">McpCompletionRef.Kind</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpContentBlock.Kind.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.mcp">McpContentBlock.Kind</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpErrorKind.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.mcp">McpErrorKind</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpResourceContents.Kind.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.mcp">McpResourceContents.Kind</a></li>
+<li class="circle">org.apache.juneau.rest.server.mcp.<a href="McpRole.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.mcp">McpRole</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </section>
 </main>

@@ -91,8 +91,8 @@ loadScripts(document, 'script');</script>
  <ul>
    <li>the convenience <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> subclass (the
       object REST negotiation matches on) &mdash; a thin delegator that mirrors
-      <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>parse(...)</code></a> by
-      forwarding to <code>getSession().parseRecords(input)</code>;
+      <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>read(...)</code></a> by
+      forwarding to <code>getSession().readRecords(input)</code>;
    <li>the <a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser"><code>ParserSession</code></a> subclass (where
       the live <code>BeanSession</code>/<code>MarshallingContext</code> is) &mdash; the real cursor
       creation.
@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#parseRecords(java.lang.Object)" class="member-name-link">parseRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readRecords(java.lang.Object)" class="member-name-link">readRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Opens a low-level <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor over the specified input.</div>
 </div>
@@ -147,16 +147,16 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="parseRecords(java.lang.Object)">
-<h3>parseRecords</h3>
-<div class="member-signature"><span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordReadable.html#line-66">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readRecords(java.lang.Object)">
+<h3>readRecords</h3>
+<div class="member-signature"><span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordReadable.html#line-66">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor over the specified input.
 
  <p>
  When invoked on a convenience <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> the
  cursor is opened with <b>default session args</b> (mirroring
- <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>parse(...)</code></a>).  Callers
+ <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>read(...)</code></a>).  Callers
  that need request-derived configuration (locale, timezone, schema, swaps) should instead
  call <code>createSession(args).build()</code> and invoke this method on the resulting
  <a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser"><code>ParserSession</code></a> (which is also a
@@ -179,7 +179,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd><jk>true</jk> if <a href="#parseRecords(java.lang.Object)"><code>parseRecords(Object)</code></a> returns an O(1)-memory streaming
+<dd><jk>true</jk> if <a href="#readRecords(java.lang.Object)"><code>readRecords(Object)</code></a> returns an O(1)-memory streaming
    cursor; <jk>false</jk> for buffered (whole-value) formats backed by
    <a href="RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>.</dd>
 </dl>

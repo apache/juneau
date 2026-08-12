@@ -136,7 +136,7 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;retryNonIdempotent,
  boolean&nbsp;throwOnError)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates an instance of a <code>Policy</code> record class.</div>
+<div class="block">Compact constructor.</div>
 </div>
 </div>
 </section>
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="NONE">
 <h3>NONE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="RrpcInterfaceMethodMeta.Policy.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta.Policy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-93">NONE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="RrpcInterfaceMethodMeta.Policy.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta.Policy</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-103">NONE</a></span></div>
 <div class="block">The empty (no-op) policy used for methods that declare none of the cross-cutting policy members.</div>
 </section>
 </li>
@@ -227,20 +227,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class[],java.lang.String,int,boolean,boolean)">
 <h3>Policy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-90">Policy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]&nbsp;interceptors,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-98">Policy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]&nbsp;interceptors,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;timeout,
  int&nbsp;retries,
  boolean&nbsp;retryNonIdempotent,
  boolean&nbsp;throwOnError)</span></div>
-<div class="block">Creates an instance of a <code>Policy</code> record class.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>interceptors</code> - the value for the <a href="#param-interceptors"><code>interceptors</code></a> record component</dd>
-<dd><code>timeout</code> - the value for the <a href="#param-timeout"><code>timeout</code></a> record component</dd>
-<dd><code>retries</code> - the value for the <a href="#param-retries"><code>retries</code></a> record component</dd>
-<dd><code>retryNonIdempotent</code> - the value for the <a href="#param-retryNonIdempotent"><code>retryNonIdempotent</code></a> record component</dd>
-<dd><code>throwOnError</code> - the value for the <a href="#param-throwOnError"><code>throwOnError</code></a> record component</dd>
-</dl>
+<div class="block">Compact constructor.
+
+ <p>
+ Defensively clones the mutable <code>interceptors</code> array so callers cannot mutate the cached policy's state.</div>
 </section>
 </li>
 </ul>
@@ -252,9 +247,20 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="interceptors()">
+<h3>interceptors</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-105">interceptors</a></span>()</div>
+<div class="block">Returns the value of the <a href="#param-interceptors"><code>interceptors</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-interceptors"><code>interceptors</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-95">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-110">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -269,7 +275,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-106">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-121">hashCode</a></span>()</div>
 <div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -282,24 +288,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-111">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-126">toString</a></span>()</div>
 <div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
 <dt>Returns:</dt>
 <dd>a string representation of this object</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="interceptors()">
-<h3>interceptors</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.Policy.html#line-90">interceptors</a></span>()</div>
-<div class="block">Returns the value of the <a href="#param-interceptors"><code>interceptors</code></a> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <a href="#param-interceptors"><code>interceptors</code></a> record component</dd>
 </dl>
 </section>
 </li>

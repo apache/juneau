@@ -98,9 +98,9 @@
 <span class="source-line-no">085</span><span id="line-85">   }</span>
 <span class="source-line-no">086</span><span id="line-86"></span>
 <span class="source-line-no">087</span><span id="line-87">   @Override /* Overridden from SerializerSession */</span>
-<span class="source-line-no">088</span><span id="line-88">   protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
+<span class="source-line-no">088</span><span id="line-88">   protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
 <span class="source-line-no">089</span><span id="line-89">      try {</span>
-<span class="source-line-no">090</span><span id="line-90">         super.doSerialize(out, genSession.getSchema(o));</span>
+<span class="source-line-no">090</span><span id="line-90">         super.doWrite(out, genSession.getSchema(o));</span>
 <span class="source-line-no">091</span><span id="line-91">      } catch (MarshallingRecursionException e) {</span>
 <span class="source-line-no">092</span><span id="line-92">         throw new SerializeException(e);</span>
 <span class="source-line-no">093</span><span id="line-93">      }</span>

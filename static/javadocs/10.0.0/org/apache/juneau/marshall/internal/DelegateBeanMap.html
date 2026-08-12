@@ -425,7 +425,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../commons/bean/BeanMap.html#put(java.lang.String,java.lang.Object)">put</a></code>&nbsp;in class&nbsp;<code><a href="../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;<a href="DelegateBeanMap.html" title="type parameter in DelegateBeanMap">T</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>key</code> - The name of the property to set.</dd>
-<dd><code>val</code> - The value to set the property to.</dd>
+<dd><code>val</code> - The value to set the property to.  Can be <jk>null</jk> to set the property to <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>If the <code>beanMapPutReturnsOldValue</code> setting is <jk>true</jk> on the session's bean configuration,
    then the old value of the property is returned.

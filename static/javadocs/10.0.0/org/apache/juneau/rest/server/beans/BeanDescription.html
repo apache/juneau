@@ -187,14 +187,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-79">type</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-81">type</a></span></div>
 <div class="block">The bean class type.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="properties">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanDescription.BeanPropertyDescription.html" title="class in org.apache.juneau.rest.server.beans">BeanDescription.BeanPropertyDescription</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-82">properties</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanDescription.BeanPropertyDescription.html" title="class in org.apache.juneau.rest.server.beans">BeanDescription.BeanPropertyDescription</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-84">properties</a></span></div>
 <div class="block">The bean properties.</div>
 </section>
 </li>
@@ -209,11 +209,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class)">
 <h3>BeanDescription</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-89">BeanDescription</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-92">BeanDescription</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>c</code> - The bean class type.</dd>
+<dd><code>c</code> - The bean class type.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -228,11 +229,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Class)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BeanDescription.html" title="class in org.apache.juneau.rest.server.beans">BeanDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-74">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BeanDescription.html" title="class in org.apache.juneau.rest.server.beans">BeanDescription</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/beans/BeanDescription.html#line-76">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>c</code> - The bean being described.</dd>
+<dd><code>c</code> - The bean being described.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new bean description.</dd>
 </dl>

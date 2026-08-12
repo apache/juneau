@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Injects a custom JWK source for ID-token / logout-token signature verification.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#metadata(org.apache.juneau.rest.server.auth.oauth.oidc.OidcMetadata)" class="member-name-link">metadata</a><wbr>(<a href="../../oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.server.auth.oauth.oidc">OidcMetadata</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#metadata(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)" class="member-name-link">metadata</a><wbr>(<a href="../../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the IdP metadata explicitly, bypassing discovery.</div>
 </div>
@@ -284,21 +284,26 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="issuer(java.net.URI)">
 <h3>issuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-174">issuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-179">issuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the IdP issuer URL.  OIDC discovery resolves the endpoints + JWKS URI lazily.  Either
- this or <a href="#metadata(org.apache.juneau.rest.server.auth.oauth.oidc.OidcMetadata)"><code>metadata(OidcMetadata)</code></a> is required.</div>
+ this or <a href="#metadata(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)"><code>metadata(OidcMetadata)</code></a> is required.
+
+ <p>
+ The issuer (and every endpoint discovered from it) must use <js>"https"</js> or target a loopback
+ host; discovery, JWKS, and token exchanges carry trust-anchor key material and client credentials, so
+ a plaintext transport to a non-loopback host is rejected.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The issuer URL.  Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The issuer URL.  Must not be <jk>null</jk> and must use HTTPS or target a loopback host.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="metadata(org.apache.juneau.rest.server.auth.oauth.oidc.OidcMetadata)">
+<section class="detail" id="metadata(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)">
 <h3>metadata</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-186">metadata</a></span><wbr><span class="parameters">(<a href="../../oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.server.auth.oauth.oidc">OidcMetadata</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-191">metadata</a></span><wbr><span class="parameters">(<a href="../../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;value)</span></div>
 <div class="block">Sets the IdP metadata explicitly, bypassing discovery.  Either this or <a href="#issuer(java.net.URI)"><code>issuer(URI)</code></a>
  is required.</div>
 <dl class="notes">
@@ -312,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientId(java.lang.String)">
 <h3>clientId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-197">clientId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-202">clientId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the OAuth client id.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -325,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientSecret(java.lang.String)">
 <h3>clientSecret</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-208">clientSecret</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-213">clientSecret</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the client secret.  May be omitted for public clients (PKCE-only).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -338,7 +343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientSecretSupplier(java.util.function.Supplier)">
 <h3>clientSecretSupplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-220">clientSecretSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-225">clientSecretSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets the client secret via a supplier.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -351,7 +356,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="redirectUri(java.net.URI)">
 <h3>redirectUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-231">redirectUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-236">redirectUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the redirect URI registered with the IdP.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -364,7 +369,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="postLogoutRedirectUri(java.net.URI)">
 <h3>postLogoutRedirectUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-242">postLogoutRedirectUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-247">postLogoutRedirectUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the post-logout redirect URI passed to the IdP end-session endpoint.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -377,7 +382,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="postLoginRedirect(java.lang.String)">
 <h3>postLoginRedirect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-254">postLoginRedirect</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-259">postLoginRedirect</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the default post-login redirect target (when the login request supplied no safe
  <code>redirect</code> parameter).  Defaults to <code>"/"</code>.</div>
 <dl class="notes">
@@ -391,7 +396,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="scope(java.lang.String...)">
 <h3>scope</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-265">scope</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-270">scope</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Adds requested scopes.  <code>openid</code> is always included.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -404,7 +409,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sessionStore(org.apache.juneau.rest.server.auth.oidc.rp.SessionStore)">
 <h3>sessionStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-280">sessionStore</a></span><wbr><span class="parameters">(<a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-285">sessionStore</a></span><wbr><span class="parameters">(<a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a>&nbsp;value)</span></div>
 <div class="block">Sets the session store.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -417,7 +422,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rolesClaim(java.lang.String)">
 <h3>rolesClaim</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-292">rolesClaim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-297">rolesClaim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the claim roles are extracted from.  Defaults to <code>"scope"</code> (whitespace-split);
  array claims are also accepted.  Mirrors the <code>OAuthFilter</code> convention.</div>
 <dl class="notes">
@@ -431,7 +436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stateNonceTtl(java.time.Duration)">
 <h3>stateNonceTtl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-303">stateNonceTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-308">stateNonceTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the single-use TTL for the <code>state</code> / <code>nonce</code> store.  Defaults to 5 minutes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -444,7 +449,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sessionTtl(java.time.Duration)">
 <h3>sessionTtl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-314">sessionTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-319">sessionTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the session lifetime (bounded independently of token lifetime).  Defaults to 8 hours.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -457,7 +462,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cookieName(java.lang.String)">
 <h3>cookieName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-327">cookieName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-332">cookieName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the session cookie name.  Defaults to <code>JUNEAU_OIDC_SESSION</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -470,7 +475,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cookieSecure(boolean)">
 <h3>cookieSecure</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-338">cookieSecure</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-343">cookieSecure</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Sets the cookie <code>Secure</code> flag.  Defaults to <jk>true</jk> (fail-closed).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -483,7 +488,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cookieHttpOnly(boolean)">
 <h3>cookieHttpOnly</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-349">cookieHttpOnly</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-354">cookieHttpOnly</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Sets the cookie <code>HttpOnly</code> flag.  Defaults to <jk>true</jk> (fail-closed).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -496,7 +501,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cookieSameSite(java.lang.String)">
 <h3>cookieSameSite</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-361">cookieSameSite</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-366">cookieSameSite</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the cookie <code>SameSite</code> attribute.  Defaults to <code>"Lax"</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -510,7 +515,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpRequestConfigurator(java.util.function.Consumer)">
 <h3>httpRequestConfigurator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-373">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-378">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
 <div class="block">Sets a Nimbus <code>HTTPRequest</code> configurator escape hatch (proxy / TLS / timeouts) applied
  to discovery + token + userinfo calls.</div>
 <dl class="notes">
@@ -524,7 +529,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authenticationRequestCustomizer(java.util.function.Consumer)">
 <h3>authenticationRequestCustomizer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-385">authenticationRequestCustomizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-390">authenticationRequestCustomizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder&gt;&nbsp;value)</span></div>
 <div class="block">Sets a Nimbus <code>AuthenticationRequest.Builder</code> customizer escape hatch (e.g. <code>prompt</code>,
  <code>max_age</code>, <code>acr_values</code>) applied to the authorization redirect.</div>
 <dl class="notes">
@@ -538,7 +543,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="idTokenAlgorithms(com.nimbusds.jose.JWSAlgorithm...)">
 <h3>idTokenAlgorithms</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-396">idTokenAlgorithms</a></span><wbr><span class="parameters">(com.nimbusds.jose.JWSAlgorithm...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-401">idTokenAlgorithms</a></span><wbr><span class="parameters">(com.nimbusds.jose.JWSAlgorithm...&nbsp;values)</span></div>
 <div class="block">Sets the ID-token signing-algorithm allowlist.  Defaults to <code>[RS256, ES256]</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -551,7 +556,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clockSkewSeconds(int)">
 <h3>clockSkewSeconds</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-407">clockSkewSeconds</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-412">clockSkewSeconds</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the clock-skew tolerance (seconds) for ID-token validation.  Defaults to 60.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -564,7 +569,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jwkSet(com.nimbusds.jose.jwk.JWKSet)">
 <h3>jwkSet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-420">jwkSet</a></span><wbr><span class="parameters">(com.nimbusds.jose.jwk.JWKSet&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-425">jwkSet</a></span><wbr><span class="parameters">(com.nimbusds.jose.jwk.JWKSet&nbsp;value)</span></div>
 <div class="block">Injects a fixed JWK set for ID-token / logout-token signature verification, bypassing the
  JWKS endpoint.  Useful for tests and static-key deployments.</div>
 <dl class="notes">
@@ -578,7 +583,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jwkSource(com.nimbusds.jose.jwk.source.JWKSource)">
 <h3>jwkSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-431">jwkSource</a></span><wbr><span class="parameters">(com.nimbusds.jose.jwk.source.JWKSource&lt;com.nimbusds.jose.proc.SecurityContext&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-436">jwkSource</a></span><wbr><span class="parameters">(com.nimbusds.jose.jwk.source.JWKSource&lt;com.nimbusds.jose.proc.SecurityContext&gt;&nbsp;value)</span></div>
 <div class="block">Injects a custom JWK source for ID-token / logout-token signature verification.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -591,7 +596,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="userInfoClaims(java.lang.String...)">
 <h3>userInfoClaims</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-446">userInfoClaims</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-451">userInfoClaims</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Adds claim names to backfill from the UserInfo endpoint when absent from the ID token.
 
  <p>
@@ -608,7 +613,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clock(java.time.Clock)">
 <h3>clock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-461">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-466">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
 <div class="block">Overrides the clock used for session expiry + the ephemeral store.  Useful in tests.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -621,7 +626,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-471">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcRelyingParty.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.Builder.html#line-476">build</a></span>()</div>
 <div class="block">Builds the relying party.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -93,11 +93,11 @@
 <span class="source-line-no">080</span><span id="line-80"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;jc&gt;// Serialize a bean&lt;/jc&gt;</span>
-<span class="source-line-no">083</span><span id="line-83"> *    String &lt;jv&gt;hocon&lt;/jv&gt; = HoconSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
+<span class="source-line-no">083</span><span id="line-83"> *    String &lt;jv&gt;hocon&lt;/jv&gt; = HoconSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
 <span class="source-line-no">085</span><span id="line-85"> *    &lt;jc&gt;// Create a custom serializer instance&lt;/jc&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *    HoconSerializer &lt;jv&gt;s&lt;/jv&gt; = HoconSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().omitRootBraces(&lt;jk&gt;false&lt;/jk&gt;).build();</span>
-<span class="source-line-no">087</span><span id="line-87"> *    String &lt;jv&gt;hocon2&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.serialize(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
+<span class="source-line-no">087</span><span id="line-87"> *    String &lt;jv&gt;hocon2&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.write(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;/p&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> *</span>
 <span class="source-line-no">090</span><span id="line-90"> * &lt;h5 class='figure'&gt;Example output (bean, root braces omitted):&lt;/h5&gt;</span>
@@ -144,8 +144,8 @@
 <span class="source-line-no">131</span><span id="line-131"></span>
 <span class="source-line-no">132</span><span id="line-132">   private static final String ARG_copyFrom = "copyFrom";</span>
 <span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;, HoconClassMeta&gt; hoconClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">135</span><span id="line-135">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta, HoconBeanPropertyMeta&gt; hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">134</span><span id="line-134">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,HoconClassMeta&gt; hoconClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">135</span><span id="line-135">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,HoconBeanPropertyMeta&gt; hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">136</span><span id="line-136"></span>
 <span class="source-line-no">137</span><span id="line-137">   /** Use = (not :) for key-value separator. */</span>
 <span class="source-line-no">138</span><span id="line-138">   protected final boolean useEqualsSign;</span>
@@ -170,7 +170,7 @@
 <span class="source-line-no">157</span><span id="line-157">    */</span>
 <span class="source-line-no">158</span><span id="line-158">   public static class Builder extends WriterSerializer.Builder&lt;Builder&gt; {</span>
 <span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">      private static final Cache&lt;HashKey, HoconSerializer&gt; CACHE = Cache.of(HashKey.class, HoconSerializer.class).build();</span>
+<span class="source-line-no">160</span><span id="line-160">      private static final Cache&lt;HashKey,HoconSerializer&gt; CACHE = Cache.of(HashKey.class, HoconSerializer.class).build();</span>
 <span class="source-line-no">161</span><span id="line-161"></span>
 <span class="source-line-no">162</span><span id="line-162">      private boolean useEqualsSign = true;</span>
 <span class="source-line-no">163</span><span id="line-163">      private boolean useUnquotedStrings = true;</span>
@@ -370,7 +370,7 @@
 <span class="source-line-no">357</span><span id="line-357">   }</span>
 <span class="source-line-no">358</span><span id="line-358"></span>
 <span class="source-line-no">359</span><span id="line-359">   @Override</span>
-<span class="source-line-no">360</span><span id="line-360">   protected FluentMap&lt;String, Object&gt; properties() {</span>
+<span class="source-line-no">360</span><span id="line-360">   protected FluentMap&lt;String,Object&gt; properties() {</span>
 <span class="source-line-no">361</span><span id="line-361">      return super.properties()</span>
 <span class="source-line-no">362</span><span id="line-362">         .a("useEqualsSign", useEqualsSign)</span>
 <span class="source-line-no">363</span><span id="line-363">         .a("useUnquotedStrings", useUnquotedStrings)</span>
@@ -382,20 +382,20 @@
 <span class="source-line-no">369</span><span id="line-369"></span>
 <span class="source-line-no">370</span><span id="line-370">   /**</span>
 <span class="source-line-no">371</span><span id="line-371">    * Convenience delegator that opens a {@link RecordWriter} over the output using</span>
-<span class="source-line-no">372</span><span id="line-372">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #serialize(Object)}).</span>
+<span class="source-line-no">372</span><span id="line-372">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
 <span class="source-line-no">373</span><span id="line-373">    *</span>
 <span class="source-line-no">374</span><span id="line-374">    * &lt;p&gt;</span>
-<span class="source-line-no">375</span><span id="line-375">    * The real implementation lives on {@link HoconSerializerSession#serializeRecords(Object)}.</span>
+<span class="source-line-no">375</span><span id="line-375">    * The real implementation lives on {@link HoconSerializerSession#writeRecords(Object)}.</span>
 <span class="source-line-no">376</span><span id="line-376">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
-<span class="source-line-no">377</span><span id="line-377">    * invoke {@link HoconSerializerSession#serializeRecords(Object)} on the built session instead.</span>
+<span class="source-line-no">377</span><span id="line-377">    * invoke {@link HoconSerializerSession#writeRecords(Object)} on the built session instead.</span>
 <span class="source-line-no">378</span><span id="line-378">    *</span>
 <span class="source-line-no">379</span><span id="line-379">    * @param output The output.</span>
 <span class="source-line-no">380</span><span id="line-380">    * @return A new {@link RecordWriter}.</span>
 <span class="source-line-no">381</span><span id="line-381">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">382</span><span id="line-382">    */</span>
 <span class="source-line-no">383</span><span id="line-383">   @Override /* RecordWritable */</span>
-<span class="source-line-no">384</span><span id="line-384">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">385</span><span id="line-385">      return ((RecordWritable) getSession()).serializeRecords(output);</span>
+<span class="source-line-no">384</span><span id="line-384">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">385</span><span id="line-385">      return ((RecordWritable) getSession()).writeRecords(output);</span>
 <span class="source-line-no">386</span><span id="line-386">   }</span>
 <span class="source-line-no">387</span><span id="line-387"></span>
 <span class="source-line-no">388</span><span id="line-388">   @Override /* RecordWritable */</span>

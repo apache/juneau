@@ -321,7 +321,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a URL-encoded form body from alternating name/value string pairs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pairs</code> - Alternating name/value strings. Length must be even.</dd>
+<dd><code>pairs</code> - Alternating name/value strings. Must not be <jk>null</jk>. Length must be even.</dd>
 <dt>Returns:</dt>
 <dd>A new body. Never <jk>null</jk>.</dd>
 </dl>

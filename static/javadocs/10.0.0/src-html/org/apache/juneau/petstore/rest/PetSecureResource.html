@@ -130,7 +130,7 @@
 <span class="source-line-no">117</span><span id="line-117">   public Pet getPet(@Path("id") long id) {</span>
 <span class="source-line-no">118</span><span id="line-118">      var pet = store.getPet(id);</span>
 <span class="source-line-no">119</span><span id="line-119">      if (pet == null)</span>
-<span class="source-line-no">120</span><span id="line-120">         throw new NotFound("Pet not found: id={0}", id);</span>
+<span class="source-line-no">120</span><span id="line-120">         throw new NotFound("Pet not found: id=%s", id);</span>
 <span class="source-line-no">121</span><span id="line-121">      return pet;</span>
 <span class="source-line-no">122</span><span id="line-122">   }</span>
 <span class="source-line-no">123</span><span id="line-123"></span>

@@ -109,18 +109,35 @@ loadScripts(document, 'script');</script>
 <div class="block">Compression codec (UNCOMPRESSED, GZIP).</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#pageSize()" class="member-name-link">pageSize</a></code></div>
+<div class="col-second even-row-color"><code><a href="#maxCount()" class="member-name-link">maxCount</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Page size in bytes.</div>
+<div class="block">Maximum allowed wire-declared element count (file/row-group row counts, column-chunk value counts)
+ when parsing.</div>
 </div>
-<div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><code><a href="#rank()" class="member-name-link">rank</a></code></div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#maxInputLength()" class="member-name-link">maxInputLength</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Rank for application order.</div>
+<div class="block">Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#rowGroupSize()" class="member-name-link">rowGroupSize</a></code></div>
+<div class="col-second even-row-color"><code><a href="#maxLength()" class="member-name-link">maxLength</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or
+ uncompressed) when parsing.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#pageSize()" class="member-name-link">pageSize</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Page size in bytes.</div>
+</div>
+<div class="col-first even-row-color"><code>int</code></div>
+<div class="col-second even-row-color"><code><a href="#rank()" class="member-name-link">rank</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Rank for application order.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#rowGroupSize()" class="member-name-link">rowGroupSize</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Row group size in bytes.</div>
 </div>
 </div>
@@ -180,9 +197,68 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="maxLength()">
+<h3>maxLength</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-62">maxLength</a></span></div>
+<div class="block">Maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or
+ uncompressed) when parsing.
+
+ <p>
+ Guards against malformed or adversarial input where a small file declares a huge per-page byte
+ size. Default is <js>"268435456"</js> (256 MiB). A value of <js>"0"</js> or less disables the cap.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxCount()">
+<h3>maxCount</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-74">maxCount</a></span></div>
+<div class="block">Maximum allowed wire-declared element count (file/row-group row counts, column-chunk value counts)
+ when parsing.
+
+ <p>
+ Guards against malformed or adversarial input where a small footer declares a huge row or value
+ count. Default is <js>"10000000"</js> (10 million). A value of <js>"0"</js> or less disables the cap.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxInputLength()">
+<h3>maxInputLength</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-85">maxInputLength</a></span></div>
+<div class="block">Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.
+
+ <p>
+ Guards against an oversized input being buffered unbounded into memory. Default is
+ <js>"268435456"</js> (256 MiB). A value of <js>"0"</js> or less disables the cap.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-53">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-88">rank</a></span></div>
 <div class="block">Rank for application order.</div>
 <dl class="notes">
 <dt>Default:</dt>

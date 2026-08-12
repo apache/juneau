@@ -74,18 +74,23 @@ loadScripts(document, 'script');</script>
 <h1 title="Interface McpResourceHandler" class="title">Interface McpResourceHandler</h1>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>Functional Interface:</dt>
-<dd>This is a functional interface and can therefore be used as the assignment target for a lambda expression or method reference.</dd>
-</dl>
 <hr>
-<div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/FunctionalInterface.html" title="class or interface in java.lang" class="external-link">@FunctionalInterface</a>
-</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpResourceHandler.html#line-29">McpResourceHandler</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpResourceHandler.html#line-42">McpResourceHandler</a></span></div>
 <div class="block">Handler for a single MCP resource.
 
  <p>
- Implementations declare a <a href="#descriptor()"><code>descriptor</code></a> (the <a href="../../../bean/mcp/Resource.html" title="class in org.apache.juneau.bean.mcp"><code>Resource</code></a> returned by <code>resources/list</code>)
- and a <a href="#read(java.lang.String,org.apache.juneau.commons.inject.BeanStore)"><code>read</code></a> body invoked when the matching <code>resources/read</code> method runs.</div>
+ Implementations declare a <a href="#descriptor()"><code>descriptor</code></a> (the <a href="McpResourceSpec.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpResourceSpec</code></a> returned by
+ <code>resources/list</code>) and a <a href="#read(java.lang.String,org.apache.juneau.commons.inject.BeanStore)"><code>read</code></a> body invoked when the matching
+ <code>resources/read</code> method runs.
+
+ <p>
+ This is a genuine two-method contract, not a single-method one: both <a href="#descriptor()"><code>descriptor()</code></a> and
+ <a href="#read(java.lang.String,org.apache.juneau.commons.inject.BeanStore)"><code>read(String, BeanStore)</code></a> are abstract, so it is deliberately <b>not</b> annotated
+ <code>@FunctionalInterface</code> and a bare lambda cannot implement it. Routing calls <a href="#descriptor()"><code>descriptor()</code></a>
+ on every registered handler for both <code>resources/list</code> and <code>resources/read</code>, so a handler
+ with no usable descriptor is not a valid handler; making <a href="#descriptor()"><code>descriptor()</code></a> abstract catches that at
+ compile time instead of the first request to reach it at runtime. Use <a href="#of(org.apache.juneau.rest.server.mcp.McpResourceSpec,java.util.function.BiFunction)"><code>of(McpResourceSpec, BiFunction)</code></a>
+ for the common case of wiring both in a single expression.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -94,21 +99,27 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="../../../bean/mcp/Resource.html" title="class in org.apache.juneau.bean.mcp">Resource</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#descriptor()" class="member-name-link">descriptor</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="McpResourceSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#descriptor()" class="member-name-link">descriptor</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Returns the static descriptor for this resource.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../../../bean/mcp/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp">ReadResourceResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(java.lang.String,org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">read</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#of(org.apache.juneau.rest.server.mcp.McpResourceSpec,java.util.function.BiFunction)" class="member-name-link">of</a><wbr>(<a href="McpResourceSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceSpec</a>&nbsp;descriptor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr><a href="McpResourceOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceOutcome</a>&gt;&nbsp;read)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Builds a handler from a fixed descriptor and a <code>read</code> lambda.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="McpResourceOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceOutcome</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(java.lang.String,org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">read</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;ctx)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Reads the resource body.</div>
 </div>
 </div>
@@ -126,14 +137,38 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="of(org.apache.juneau.rest.server.mcp.McpResourceSpec,java.util.function.BiFunction)">
+<h3>of</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpResourceHandler.html#line-59">of</a></span><wbr><span class="parameters">(<a href="McpResourceSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceSpec</a>&nbsp;descriptor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr><a href="McpResourceOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceOutcome</a>&gt;&nbsp;read)</span></div>
+<div class="block">Builds a handler from a fixed descriptor and a <code>read</code> lambda.
+
+ <p>
+ The sanctioned one-expression path for registering a resource: unlike a bare lambda (which cannot
+ satisfy this two-method interface at all), this factory wires both <a href="#descriptor()"><code>descriptor()</code></a> and
+ <a href="#read(java.lang.String,org.apache.juneau.commons.inject.BeanStore)"><code>read(String, BeanStore)</code></a> from a single call.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>descriptor</code> - The static descriptor returned from every <a href="#descriptor()"><code>descriptor()</code></a> call. Must not be
+   <jk>null</jk> and must carry a non-blank <a href="McpResourceSpec.html#getUri()"><code>uri</code></a> (routing matches
+   incoming <code>resources/read</code> requests on uri, not name, so a uri-less resource would be
+   silently unreachable).</dd>
+<dd><code>read</code> - The read body, invoked with the incoming uri and the per-request bean store. Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new handler wiring both. Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="descriptor()">
 <h3>descriptor</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="../../../bean/mcp/Resource.html" title="class in org.apache.juneau.bean.mcp">Resource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpResourceHandler.html#line-41">descriptor</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="McpResourceSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpResourceHandler.html#line-84">descriptor</a></span>()</div>
 <div class="block">Returns the static descriptor for this resource.
 
  <p>
- The <a href="../../../bean/mcp/Resource.html#getUri()"><code>uri</code></a> value is used by <a href="McpDispatcher.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpDispatcher</code></a> to route incoming
- <code>resources/read</code> requests, so each handler in an <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> must use a unique URI.</div>
+ The <a href="McpResourceSpec.html#getUri()"><code>uri</code></a> value is used by the bound <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpRevision</code></a> to route
+ incoming <code>resources/read</code> requests, so each handler in an <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> must use
+ a unique URI.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The resource descriptor. Never <code>null</code>.</dd>
@@ -143,7 +178,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(java.lang.String,org.apache.juneau.commons.inject.BeanStore)">
 <h3>read</h3>
-<div class="member-signature"><span class="return-type"><a href="../../../bean/mcp/ReadResourceResult.html" title="class in org.apache.juneau.bean.mcp">ReadResourceResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpResourceHandler.html#line-52">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
+<div class="member-signature"><span class="return-type"><a href="McpResourceOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceOutcome</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpResourceHandler.html#line-93">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;ctx)</span></div>
 <div class="block">Reads the resource body.</div>
 <dl class="notes">

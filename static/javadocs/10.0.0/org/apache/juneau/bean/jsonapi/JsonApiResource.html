@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../marshall/Marshalled.html" title="annotation interface in org.apache.juneau.marshall">@Marshalled</a>
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-50">JsonApiResource</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-51">JsonApiResource</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Represents a JSON:API Resource Object as defined by
  <a href="https://jsonapi.org/format/#document-resource-objects">JSON:API v1.1 &#167; Resource Objects</a>.
@@ -173,6 +173,18 @@ loadScripts(document, 'script');</script>
 <div class="block">Convenience method to add a single attribute.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#putLink(java.lang.String,java.lang.Object)" class="member-name-link">putLink</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Convenience method to add a single link.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#putMeta(java.lang.String,java.lang.Object)" class="member-name-link">putMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Convenience method to add a single meta entry.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#putRelationship(java.lang.String,org.apache.juneau.bean.jsonapi.JsonApiRelationship)" class="member-name-link">putRelationship</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="JsonApiRelationship.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiRelationship</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -231,20 +243,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>JsonApiResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-63">JsonApiResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-64">JsonApiResource</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>JsonApiResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-71">JsonApiResource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-72">JsonApiResource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">Convenience constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>type</code> - The entity-type name.</dd>
-<dd><code>id</code> - The identifier value.</dd>
+<dd><code>type</code> - The entity-type name.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>id</code> - The identifier value.  Can be <jk>null</jk> to leave the property unset.</dd>
 </dl>
 </section>
 </li>
@@ -259,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getType()">
 <h3>getType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-85">getType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-86">getType</a></span>()</div>
 <div class="block">Bean property getter:  <property>type</property>.
 
  <p>
@@ -274,11 +286,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setType(java.lang.String)">
 <h3>setType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-93">setType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-94">setType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>type</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -287,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getId()">
 <h3>getId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-103">getId</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-104">getId</a></span>()</div>
 <div class="block">Bean property getter:  <property>id</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -298,11 +310,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setId(java.lang.String)">
 <h3>setId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-111">setId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-112">setId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>id</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -311,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAttributes()">
 <h3>getAttributes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-125">getAttributes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-126">getAttributes</a></span>()</div>
 <div class="block">Bean property getter:  <property>attributes</property>.
 
  <p>
@@ -326,11 +338,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAttributes(java.util.Map)">
 <h3>setAttributes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-133">setAttributes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-134">setAttributes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>attributes</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -339,13 +351,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="putAttribute(java.lang.String,java.lang.Object)">
 <h3>putAttribute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-145">putAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-146">putAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Convenience method to add a single attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The attribute name.</dd>
-<dd><code>value</code> - The attribute value.</dd>
+<dd><code>name</code> - The attribute name.  Can be <jk>null</jk> (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> tolerates a <jk>null</jk> key).</dd>
+<dd><code>value</code> - The attribute value.  Can be <jk>null</jk> (stored as <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -354,7 +366,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRelationships()">
 <h3>getRelationships</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="JsonApiRelationship.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiRelationship</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-157">getRelationships</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="JsonApiRelationship.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiRelationship</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-158">getRelationships</a></span>()</div>
 <div class="block">Bean property getter:  <property>relationships</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -365,11 +377,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setRelationships(java.util.Map)">
 <h3>setRelationships</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-165">setRelationships</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="JsonApiRelationship.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiRelationship</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-166">setRelationships</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="JsonApiRelationship.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiRelationship</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>relationships</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -378,13 +390,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="putRelationship(java.lang.String,org.apache.juneau.bean.jsonapi.JsonApiRelationship)">
 <h3>putRelationship</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-177">putRelationship</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-178">putRelationship</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="JsonApiRelationship.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiRelationship</a>&nbsp;value)</span></div>
 <div class="block">Convenience method to add a single named relationship.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The relationship name.</dd>
-<dd><code>value</code> - The relationship object.</dd>
+<dd><code>name</code> - The relationship name.  Can be <jk>null</jk> (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> tolerates a <jk>null</jk> key).</dd>
+<dd><code>value</code> - The relationship object.  Can be <jk>null</jk> (stored as <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -395,7 +407,7 @@ loadScripts(document, 'script');</script>
 <h3>getLinks</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanProp</a>("links")
 <a href="../../marshall/Swap.html" title="annotation interface in org.apache.juneau.marshall">@Swap</a>(<a href="JsonApiLinkOrStringSwap.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiLinkOrStringSwap.class</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-192">getLinks</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-193">getLinks</a></span>()</div>
 <div class="block">Bean property getter:  <property>links</property>.
 
  <p>
@@ -411,11 +423,26 @@ loadScripts(document, 'script');</script>
 <h3>setLinks</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanProp</a>("links")
 <a href="../../marshall/Swap.html" title="annotation interface in org.apache.juneau.marshall">@Swap</a>(<a href="JsonApiLinkOrStringSwap.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiLinkOrStringSwap.class</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-202">setLinks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-203">setLinks</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>links</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="putLink(java.lang.String,java.lang.Object)">
+<h3>putLink</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-217">putLink</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block">Convenience method to add a single link.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - The link name.  Can be <jk>null</jk> (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> tolerates a <jk>null</jk> key).</dd>
+<dd><code>value</code> - The link value (a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> URL or a <a href="JsonApiLink.html" title="class in org.apache.juneau.bean.jsonapi"><code>JsonApiLink</code></a> object).  Can be <jk>null</jk> (stored as <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -424,7 +451,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMeta()">
 <h3>getMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-214">getMeta</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-229">getMeta</a></span>()</div>
 <div class="block">Bean property getter:  <property>meta</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -435,11 +462,26 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMeta(java.util.Map)">
 <h3>setMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-222">setMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-237">setMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>meta</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="putMeta(java.lang.String,java.lang.Object)">
+<h3>putMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonApiResource.html" title="class in org.apache.juneau.bean.jsonapi">JsonApiResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-249">putMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block">Convenience method to add a single meta entry.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - The meta key.  Can be <jk>null</jk> (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> tolerates a <jk>null</jk> key).</dd>
+<dd><code>value</code> - The meta value.  Can be <jk>null</jk> (stored as <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -448,7 +490,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-227">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonapi/JsonApiResource.html#line-256">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

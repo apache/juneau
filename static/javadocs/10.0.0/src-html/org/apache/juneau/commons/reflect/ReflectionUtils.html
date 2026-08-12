@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">    *    Class&amp;lt;? &lt;jk&gt;extends&lt;/jk&gt; Enum&amp;gt; &lt;jv&gt;enumClass&lt;/jv&gt; = ReflectionUtils.&lt;jsm&gt;asEnumClass&lt;/jsm&gt;(&lt;jv&gt;clazz&lt;/jv&gt;);</span>
 <span class="source-line-no">153</span><span id="line-153">    * &lt;/p&gt;</span>
 <span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * @param clazz The class to convert. Must be an enum class.</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param clazz The class to convert. Must be an enum class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">156</span><span id="line-156">    * @return The enum class as a raw type suitable for use with {@link EnumSet#allOf(Class)}.</span>
 <span class="source-line-no">157</span><span id="line-157">    * @throws ClassCastException if the class is not an enum class.</span>
 <span class="source-line-no">158</span><span id="line-158">    */</span>
@@ -199,8 +199,8 @@
 <span class="source-line-no">186</span><span id="line-186">      if (Map.class.isAssignableFrom(inner)) {</span>
 <span class="source-line-no">187</span><span id="line-187">         // Verify it's Map&lt;String,T&gt; by checking the parameterized type</span>
 <span class="source-line-no">188</span><span id="line-188">         Type parameterizedType = targetType.innerType();</span>
-<span class="source-line-no">189</span><span id="line-189">         if (parameterizedType instanceof ParameterizedType pt2) {</span>
-<span class="source-line-no">190</span><span id="line-190">            var typeArgs = pt2.getActualTypeArguments();</span>
+<span class="source-line-no">189</span><span id="line-189">         if (parameterizedType instanceof ParameterizedType parameterizedType2) {</span>
+<span class="source-line-no">190</span><span id="line-190">            var typeArgs = parameterizedType2.getActualTypeArguments();</span>
 <span class="source-line-no">191</span><span id="line-191">            if (typeArgs.length &gt;= 2 &amp;&amp; typeArgs[0] == String.class) {</span>
 <span class="source-line-no">192</span><span id="line-192">               return new LinkedHashMap&lt;&gt;(beans);</span>
 <span class="source-line-no">193</span><span id="line-193">            }</span>

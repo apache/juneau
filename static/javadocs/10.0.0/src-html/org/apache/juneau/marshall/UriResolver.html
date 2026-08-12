@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65">    *</span>
 <span class="source-line-no">066</span><span id="line-66">    * @param resolution Rule on how URIs should be resolved.</span>
 <span class="source-line-no">067</span><span id="line-67">    * @param relativity Rule on what relative URIs are relative to.</span>
-<span class="source-line-no">068</span><span id="line-68">    * @param uriContext Current URI context (i.e. the current URI 'location').</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param uriContext Current URI context (i.e. the current URI 'location'). Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">069</span><span id="line-69">    * @return A new {@link UriResolver} object.</span>
 <span class="source-line-no">070</span><span id="line-70">    */</span>
 <span class="source-line-no">071</span><span id="line-71">   public static UriResolver of(UriResolution resolution, UriRelativity relativity, UriContext uriContext) {</span>
@@ -127,7 +127,7 @@
 <span class="source-line-no">114</span><span id="line-114">    *</span>
 <span class="source-line-no">115</span><span id="line-115">    * @param resolution Rule on how URIs should be resolved.</span>
 <span class="source-line-no">116</span><span id="line-116">    * @param relativity Rule on what relative URIs are relative to.</span>
-<span class="source-line-no">117</span><span id="line-117">    * @param uriContext Current URI context (i.e. the current URI 'location').</span>
+<span class="source-line-no">117</span><span id="line-117">    * @param uriContext Current URI context (i.e. the current URI 'location'). Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">118</span><span id="line-118">    */</span>
 <span class="source-line-no">119</span><span id="line-119">   public UriResolver(UriResolution resolution, UriRelativity relativity, UriContext uriContext) {</span>
 <span class="source-line-no">120</span><span id="line-120">      this.resolution = resolution;</span>
@@ -142,8 +142,8 @@
 <span class="source-line-no">129</span><span id="line-129">   /**</span>
 <span class="source-line-no">130</span><span id="line-130">    * Same as {@link #resolve(Object)} except appends result to the specified appendable.</span>
 <span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param a The appendable to append the URL to.</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param o The URI to convert to absolute form.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param a The appendable to append the URL to. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">133</span><span id="line-133">    * @param o The URI to convert to absolute form. Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.</span>
 <span class="source-line-no">134</span><span id="line-134">    * @return The same appendable passed in.</span>
 <span class="source-line-no">135</span><span id="line-135">    */</span>
 <span class="source-line-no">136</span><span id="line-136">   @SuppressWarnings({</span>
@@ -295,8 +295,8 @@
 <span class="source-line-no">282</span><span id="line-282">    *    String &lt;jv&gt;relativeUri&lt;/jv&gt; = &lt;jv&gt;resolver&lt;/jv&gt;.relativize(&lt;js&gt;"servlet:/"&lt;/js&gt;, &lt;js&gt;"/context/servlet/path/foo"&lt;/js&gt;);</span>
 <span class="source-line-no">283</span><span id="line-283">    * &lt;/p&gt;</span>
 <span class="source-line-no">284</span><span id="line-284">    *</span>
-<span class="source-line-no">285</span><span id="line-285">    * @param relativeTo The URI to relativize against.</span>
-<span class="source-line-no">286</span><span id="line-286">    * @param uri The URI to relativize.</span>
+<span class="source-line-no">285</span><span id="line-285">    * @param relativeTo The URI to relativize against. Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.</span>
+<span class="source-line-no">286</span><span id="line-286">    * @param uri The URI to relativize. Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.</span>
 <span class="source-line-no">287</span><span id="line-287">    * @return The relativized URI.</span>
 <span class="source-line-no">288</span><span id="line-288">    */</span>
 <span class="source-line-no">289</span><span id="line-289">   public String relativize(Object relativeTo, Object uri) {</span>
@@ -310,46 +310,47 @@
 <span class="source-line-no">297</span><span id="line-297">    *</span>
 <span class="source-line-no">298</span><span id="line-298">    * @param uri</span>
 <span class="source-line-no">299</span><span id="line-299">    *    The URI to convert to absolute form.</span>
-<span class="source-line-no">300</span><span id="line-300">    *    Can be any of the following:</span>
-<span class="source-line-no">301</span><span id="line-301">    *    &lt;ul&gt;</span>
-<span class="source-line-no">302</span><span id="line-302">    *       &lt;li&gt;{@link URI}</span>
-<span class="source-line-no">303</span><span id="line-303">    *       &lt;li&gt;{@link URL}</span>
-<span class="source-line-no">304</span><span id="line-304">    *       &lt;li&gt;{@link CharSequence}</span>
-<span class="source-line-no">305</span><span id="line-305">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">306</span><span id="line-306">    *    URI can be any of the following forms:</span>
-<span class="source-line-no">307</span><span id="line-307">    *    &lt;ul&gt;</span>
-<span class="source-line-no">308</span><span id="line-308">    *       &lt;li&gt;&lt;js&gt;"foo://foo"&lt;/js&gt; - Absolute URI.</span>
-<span class="source-line-no">309</span><span id="line-309">    *       &lt;li&gt;&lt;js&gt;"/foo"&lt;/js&gt; - Root-relative URI.</span>
-<span class="source-line-no">310</span><span id="line-310">    *       &lt;li&gt;&lt;js&gt;"/"&lt;/js&gt; - Root URI.</span>
-<span class="source-line-no">311</span><span id="line-311">    *       &lt;li&gt;&lt;js&gt;"context:/foo"&lt;/js&gt; - Context-root-relative URI with path.</span>
-<span class="source-line-no">312</span><span id="line-312">    *       &lt;li&gt;&lt;js&gt;"context:/"&lt;/js&gt; - Context-root URI.</span>
-<span class="source-line-no">313</span><span id="line-313">    *       &lt;li&gt;&lt;js&gt;"context:?foo=bar"&lt;/js&gt; - Context-root URI with query string.</span>
-<span class="source-line-no">314</span><span id="line-314">    *       &lt;li&gt;&lt;js&gt;"servlet:/foo"&lt;/js&gt; - Servlet-path-relative URI with path.</span>
-<span class="source-line-no">315</span><span id="line-315">    *       &lt;li&gt;&lt;js&gt;"servlet:/"&lt;/js&gt; - Servlet-path URI.</span>
-<span class="source-line-no">316</span><span id="line-316">    *       &lt;li&gt;&lt;js&gt;"servlet:?foo=bar"&lt;/js&gt; - Servlet-path URI with query string.</span>
-<span class="source-line-no">317</span><span id="line-317">    *       &lt;li&gt;&lt;js&gt;"request:/foo"&lt;/js&gt; - Request-path-relative URI with path.</span>
-<span class="source-line-no">318</span><span id="line-318">    *       &lt;li&gt;&lt;js&gt;"request:/"&lt;/js&gt; - Request-path URI.</span>
-<span class="source-line-no">319</span><span id="line-319">    *       &lt;li&gt;&lt;js&gt;"request:?foo=bar"&lt;/js&gt; - Request-path URI with query string.</span>
-<span class="source-line-no">320</span><span id="line-320">    *       &lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Path-info-relative URI.</span>
-<span class="source-line-no">321</span><span id="line-321">    *       &lt;li&gt;&lt;js&gt;""&lt;/js&gt; - Path-info URI.</span>
-<span class="source-line-no">322</span><span id="line-322">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">323</span><span id="line-323">    * @return The converted URI.</span>
-<span class="source-line-no">324</span><span id="line-324">    */</span>
-<span class="source-line-no">325</span><span id="line-325">   public String resolve(Object uri) {</span>
-<span class="source-line-no">326</span><span id="line-326">      return resolve(uri, resolution);</span>
-<span class="source-line-no">327</span><span id="line-327">   }</span>
-<span class="source-line-no">328</span><span id="line-328"></span>
-<span class="source-line-no">329</span><span id="line-329">   private String resolve(Object uri, UriResolution res) {</span>
-<span class="source-line-no">330</span><span id="line-330">      var s = s(uri);</span>
-<span class="source-line-no">331</span><span id="line-331">      if (isAbsoluteUri(s))</span>
-<span class="source-line-no">332</span><span id="line-332">         return hasDotSegments(s) &amp;&amp; res != NONE ? normalize(s) : s;</span>
-<span class="source-line-no">333</span><span id="line-333">      if (res == ROOT_RELATIVE &amp;&amp; startsWith(s, '/'))</span>
-<span class="source-line-no">334</span><span id="line-334">         return hasDotSegments(s) ? normalize(s) : s;</span>
-<span class="source-line-no">335</span><span id="line-335">      if (res == NONE &amp;&amp; ! isSpecialUri(s))</span>
-<span class="source-line-no">336</span><span id="line-336">         return s;</span>
-<span class="source-line-no">337</span><span id="line-337">      return append(new StringBuilder(), s).toString();</span>
-<span class="source-line-no">338</span><span id="line-338">   }</span>
-<span class="source-line-no">339</span><span id="line-339">}</span>
+<span class="source-line-no">300</span><span id="line-300">    *    Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent, varying with the configured {@link UriResolution} and {@link UriRelativity}.</span>
+<span class="source-line-no">301</span><span id="line-301">    *    Can be any of the following:</span>
+<span class="source-line-no">302</span><span id="line-302">    *    &lt;ul&gt;</span>
+<span class="source-line-no">303</span><span id="line-303">    *       &lt;li&gt;{@link URI}</span>
+<span class="source-line-no">304</span><span id="line-304">    *       &lt;li&gt;{@link URL}</span>
+<span class="source-line-no">305</span><span id="line-305">    *       &lt;li&gt;{@link CharSequence}</span>
+<span class="source-line-no">306</span><span id="line-306">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">307</span><span id="line-307">    *    URI can be any of the following forms:</span>
+<span class="source-line-no">308</span><span id="line-308">    *    &lt;ul&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">    *       &lt;li&gt;&lt;js&gt;"foo://foo"&lt;/js&gt; - Absolute URI.</span>
+<span class="source-line-no">310</span><span id="line-310">    *       &lt;li&gt;&lt;js&gt;"/foo"&lt;/js&gt; - Root-relative URI.</span>
+<span class="source-line-no">311</span><span id="line-311">    *       &lt;li&gt;&lt;js&gt;"/"&lt;/js&gt; - Root URI.</span>
+<span class="source-line-no">312</span><span id="line-312">    *       &lt;li&gt;&lt;js&gt;"context:/foo"&lt;/js&gt; - Context-root-relative URI with path.</span>
+<span class="source-line-no">313</span><span id="line-313">    *       &lt;li&gt;&lt;js&gt;"context:/"&lt;/js&gt; - Context-root URI.</span>
+<span class="source-line-no">314</span><span id="line-314">    *       &lt;li&gt;&lt;js&gt;"context:?foo=bar"&lt;/js&gt; - Context-root URI with query string.</span>
+<span class="source-line-no">315</span><span id="line-315">    *       &lt;li&gt;&lt;js&gt;"servlet:/foo"&lt;/js&gt; - Servlet-path-relative URI with path.</span>
+<span class="source-line-no">316</span><span id="line-316">    *       &lt;li&gt;&lt;js&gt;"servlet:/"&lt;/js&gt; - Servlet-path URI.</span>
+<span class="source-line-no">317</span><span id="line-317">    *       &lt;li&gt;&lt;js&gt;"servlet:?foo=bar"&lt;/js&gt; - Servlet-path URI with query string.</span>
+<span class="source-line-no">318</span><span id="line-318">    *       &lt;li&gt;&lt;js&gt;"request:/foo"&lt;/js&gt; - Request-path-relative URI with path.</span>
+<span class="source-line-no">319</span><span id="line-319">    *       &lt;li&gt;&lt;js&gt;"request:/"&lt;/js&gt; - Request-path URI.</span>
+<span class="source-line-no">320</span><span id="line-320">    *       &lt;li&gt;&lt;js&gt;"request:?foo=bar"&lt;/js&gt; - Request-path URI with query string.</span>
+<span class="source-line-no">321</span><span id="line-321">    *       &lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Path-info-relative URI.</span>
+<span class="source-line-no">322</span><span id="line-322">    *       &lt;li&gt;&lt;js&gt;""&lt;/js&gt; - Path-info URI.</span>
+<span class="source-line-no">323</span><span id="line-323">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">324</span><span id="line-324">    * @return The converted URI.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   public String resolve(Object uri) {</span>
+<span class="source-line-no">327</span><span id="line-327">      return resolve(uri, resolution);</span>
+<span class="source-line-no">328</span><span id="line-328">   }</span>
+<span class="source-line-no">329</span><span id="line-329"></span>
+<span class="source-line-no">330</span><span id="line-330">   private String resolve(Object uri, UriResolution res) {</span>
+<span class="source-line-no">331</span><span id="line-331">      var s = s(uri);</span>
+<span class="source-line-no">332</span><span id="line-332">      if (isAbsoluteUri(s))</span>
+<span class="source-line-no">333</span><span id="line-333">         return hasDotSegments(s) &amp;&amp; res != NONE ? normalize(s) : s;</span>
+<span class="source-line-no">334</span><span id="line-334">      if (res == ROOT_RELATIVE &amp;&amp; startsWith(s, '/'))</span>
+<span class="source-line-no">335</span><span id="line-335">         return hasDotSegments(s) ? normalize(s) : s;</span>
+<span class="source-line-no">336</span><span id="line-336">      if (res == NONE &amp;&amp; ! isSpecialUri(s))</span>
+<span class="source-line-no">337</span><span id="line-337">         return s;</span>
+<span class="source-line-no">338</span><span id="line-338">      return append(new StringBuilder(), s).toString();</span>
+<span class="source-line-no">339</span><span id="line-339">   }</span>
+<span class="source-line-no">340</span><span id="line-340">}</span>
 
 
 

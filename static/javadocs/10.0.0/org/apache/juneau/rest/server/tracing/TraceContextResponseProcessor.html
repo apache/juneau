@@ -147,6 +147,18 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ATTR_BAGGAGE" class="member-name-link">ATTR_BAGGAGE</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Request-attribute key under which a <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bridge stashes the rendered, non-empty W3C
+ <code>baggage</code> value.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ATTR_SCOPE" class="member-name-link">ATTR_SCOPE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Request-attribute key under which <a href="../RestOpInvoker.html" title="class in org.apache.juneau.rest.server"><code>RestOpInvoker</code></a> stashes the active <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a> for the
+ duration of one <code>@RestOp</code> handler invocation.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#ATTR_TRACEPARENT" class="member-name-link">ATTR_TRACEPARENT</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Request-attribute key under which a <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bridge stashes the rendered W3C
@@ -244,6 +256,59 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="ATTR_BAGGAGE">
+<h3>ATTR_BAGGAGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TraceContextResponseProcessor.html#line-106">ATTR_BAGGAGE</a></span></div>
+<div class="block">Request-attribute key under which a <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bridge stashes the rendered, non-empty W3C
+ <code>baggage</code> value.
+
+ <p>
+ Unlike <a href="#ATTR_TRACEPARENT"><code>ATTR_TRACEPARENT</code></a> / <a href="#ATTR_TRACESTATE"><code>ATTR_TRACESTATE</code></a>, this processor does <b>not</b> read
+ this attribute and never emits a <code>baggage</code> response header from it &mdash; <code>baggage</code> is
+ stashed purely so a dated MCP adapter can echo it into a successful result's <code>_meta</code> (added in
+ a later task). Ordinary HTTP response-header behavior for <code>traceparent</code> / <code>tracestate</code> is
+ unaffected by this constant's existence.</div>
+<dl class="notes">
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../constant-values.html#org.apache.juneau.rest.server.tracing.TraceContextResponseProcessor.ATTR_BAGGAGE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="ATTR_SCOPE">
+<h3>ATTR_SCOPE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TraceContextResponseProcessor.html#line-124">ATTR_SCOPE</a></span></div>
+<div class="block">Request-attribute key under which <a href="../RestOpInvoker.html" title="class in org.apache.juneau.rest.server"><code>RestOpInvoker</code></a> stashes the active <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a> for the
+ duration of one <code>@RestOp</code> handler invocation.
+
+ <p>
+ Populated only on the active-tracer path &mdash; see the no-tracer fast-path contract documented on
+ <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> &mdash; and cleared once that invocation's synchronous or deferred observability
+ lifecycle closes the scope. A dated MCP adapter running inside the handler already resolves this
+ same <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server"><code>RestRequest</code></a> through its own request-scoped <code>BeanStore</code> entry; reading this
+ attribute off that request lets it call <a href="Scope.html#recordRpcError(int,java.lang.String)"><code>Scope.recordRpcError(int, String)</code></a> before returning a
+ JSON-RPC error response &mdash; a JSON-RPC error is dispatched over HTTP <code>200</code>, so it never
+ otherwise reaches <a href="Scope.html#setStatusCode(int)"><code>Scope.setStatusCode(int)</code></a> with anything but the adapter's uniform success
+ status.</div>
+<dl class="notes">
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../constant-values.html#org.apache.juneau.rest.server.tracing.TraceContextResponseProcessor.ATTR_SCOPE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -269,7 +334,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 <li>
 <section class="detail" id="process(org.apache.juneau.rest.server.RestOpSession)">
 <h3>process</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TraceContextResponseProcessor.html#line-98">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TraceContextResponseProcessor.html#line-131">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../processor/ResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)">ResponseProcessor</a></code></span></div>

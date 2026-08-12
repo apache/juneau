@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-73">OAuthIntrospectionValidator</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-75">OAuthIntrospectionValidator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></span></div>
 <div class="block"><a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a> that validates opaque OAuth 2.0 access tokens via the
@@ -247,14 +247,14 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="DEFAULT_CACHE_TTL">
 <h3>DEFAULT_CACHE_TTL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-79">DEFAULT_CACHE_TTL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-81">DEFAULT_CACHE_TTL</a></span></div>
 <div class="block">Default cache TTL.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="MAX_CACHE_TTL">
 <h3>MAX_CACHE_TTL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-82">MAX_CACHE_TTL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-84">MAX_CACHE_TTL</a></span></div>
 <div class="block">Maximum cache TTL.</div>
 </section>
 </li>
@@ -269,7 +269,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.oauth.OAuthIntrospectionValidator.Builder)">
 <h3>OAuthIntrospectionValidator</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-263">OAuthIntrospectionValidator</a></span><wbr><span class="parameters">(<a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-270">OAuthIntrospectionValidator</a></span><wbr><span class="parameters">(<a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -288,7 +288,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-89">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-91">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -299,7 +299,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getIntrospectionEndpoint()">
 <h3>getIntrospectionEndpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-279">getIntrospectionEndpoint</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-286">getIntrospectionEndpoint</a></span>()</div>
 <div class="block">Returns the configured introspection endpoint URL.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -310,7 +310,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getClientId()">
 <h3>getClientId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-288">getClientId</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-295">getClientId</a></span>()</div>
 <div class="block">Returns the configured OAuth client ID.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -321,7 +321,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getCacheTtl()">
 <h3>getCacheTtl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-297">getCacheTtl</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-304">getCacheTtl</a></span>()</div>
 <div class="block">Returns the cache TTL.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -332,7 +332,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getRequiredScopes()">
 <h3>getRequiredScopes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-306">getRequiredScopes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-313">getRequiredScopes</a></span>()</div>
 <div class="block">Returns the required-scope set.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -343,7 +343,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getTokenCache()">
 <h3>getTokenCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-315">getTokenCache</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-322">getTokenCache</a></span>()</div>
 <div class="block">Returns the underlying token cache.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -354,7 +354,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="validate(java.lang.String)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-319">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.html#line-326">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span>
                    throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../TokenValidator.html#validate(java.lang.String)">TokenValidator</a></code></span></div>
 <div class="block">Validates the supplied bearer token and returns the associated <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a>.</div>

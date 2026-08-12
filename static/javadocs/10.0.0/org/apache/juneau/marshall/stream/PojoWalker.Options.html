@@ -99,17 +99,17 @@ loadScripts(document, 'script');</script>
 <dd><a href="PojoWalker.html" title="class in org.apache.juneau.marshall.stream">PojoWalker</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.html#line-82">PojoWalker.Options</a></span>(boolean&nbsp;keepNullProperties, boolean&nbsp;trimEmptyMaps, boolean&nbsp;trimEmptyCollections, boolean&nbsp;sortMaps, boolean&nbsp;sortCollections, boolean&nbsp;trimStrings, <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;context)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.html#line-89">PojoWalker.Options</a></span>(boolean&nbsp;keepNullProperties, boolean&nbsp;trimEmptyMaps, boolean&nbsp;trimEmptyCollections, boolean&nbsp;sortMaps, boolean&nbsp;sortCollections, boolean&nbsp;trimStrings, <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;context)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">Databind-level settings honored by <a href="PojoWalker.html" title="class in org.apache.juneau.marshall.stream"><code>PojoWalker</code></a>.
 
  <p>
- Built by the format's <code>serializeTokens(...)</code> factory from the calling
+ Built by the format's <code>writeTokens(...)</code> factory from the calling
  <a href="../serializer/Serializer.Builder.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer.Builder</code></a> and
  passed through to the walker.  These are the same settings the POJO databind path
- (<code>Serializer.serialize(...)</code>) consults; honoring them here means
- <code>serializeTokens(out).object(o)</code> produces the same shape as
- <code>serializer.serialize(o)</code> for the same configuration.</div>
+ (<code>Serializer.write(...)</code>) consults; honoring them here means
+ <code>writeTokens(out).object(o)</code> produces the same shape as
+ <code>serializer.write(o)</code> for the same configuration.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PojoWalker.Options.html" title="class in org.apache.juneau.marshall.stream">PojoWalker.Options</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-97">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PojoWalker.Options.html" title="class in org.apache.juneau.marshall.stream">PojoWalker.Options</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-104">DEFAULT</a></span></div>
 <div class="block">Default options: emit nulls, no trimming, no sorting, no bound context (falls back to
  <a href="../MarshallingContext.html#DEFAULT"><code>MarshallingContext.DEFAULT</code></a>).  Mirrors
  <a href="../serializer/Serializer.Builder.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer.Builder</code></a>'s
@@ -251,7 +251,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(boolean,boolean,boolean,boolean,boolean,boolean,org.apache.juneau.marshall.MarshallingContext)">
 <h3>Options</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">Options</a></span><wbr><span class="parameters">(boolean&nbsp;keepNullProperties,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">Options</a></span><wbr><span class="parameters">(boolean&nbsp;keepNullProperties,
  boolean&nbsp;trimEmptyMaps,
  boolean&nbsp;trimEmptyCollections,
  boolean&nbsp;sortMaps,
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">toString</a></span>()</div>
 <div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -295,7 +295,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">hashCode</a></span>()</div>
 <div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -308,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -323,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keepNullProperties()">
 <h3>keepNullProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">keepNullProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">keepNullProperties</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-keepNullProperties"><code>keepNullProperties</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -334,7 +334,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimEmptyMaps()">
 <h3>trimEmptyMaps</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">trimEmptyMaps</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">trimEmptyMaps</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-trimEmptyMaps"><code>trimEmptyMaps</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -345,7 +345,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimEmptyCollections()">
 <h3>trimEmptyCollections</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">trimEmptyCollections</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">trimEmptyCollections</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-trimEmptyCollections"><code>trimEmptyCollections</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -356,7 +356,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sortMaps()">
 <h3>sortMaps</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">sortMaps</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">sortMaps</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-sortMaps"><code>sortMaps</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -367,7 +367,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sortCollections()">
 <h3>sortCollections</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">sortCollections</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">sortCollections</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-sortCollections"><code>sortCollections</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -378,7 +378,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimStrings()">
 <h3>trimStrings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">trimStrings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">trimStrings</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-trimStrings"><code>trimStrings</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -389,7 +389,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="context()">
 <h3>context</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-82">context</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/PojoWalker.Options.html#line-89">context</a></span>()</div>
 <div class="block">Returns the value of the <a href="#param-context"><code>context</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

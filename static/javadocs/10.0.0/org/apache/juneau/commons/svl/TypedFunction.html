@@ -189,7 +189,7 @@ implements <a href="VarFunction.html" title="interface in org.apache.juneau.comm
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>TypedFunction</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-91">TypedFunction</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-109">TypedFunction</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -203,7 +203,7 @@ implements <a href="VarFunction.html" title="interface in org.apache.juneau.comm
 <li>
 <section class="detail" id="minArity()">
 <h3>minArity</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-109">minArity</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-127">minArity</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="VarFunction.html#minArity()">VarFunction</a></code></span></div>
 <div class="block">Minimum argument count this function accepts.</div>
 <dl class="notes">
@@ -219,7 +219,7 @@ implements <a href="VarFunction.html" title="interface in org.apache.juneau.comm
 <li>
 <section class="detail" id="maxArity()">
 <h3>maxArity</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-112">maxArity</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-130">maxArity</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="VarFunction.html#maxArity()">VarFunction</a></code></span></div>
 <div class="block">Maximum argument count this function accepts.</div>
 <dl class="notes">
@@ -234,7 +234,7 @@ implements <a href="VarFunction.html" title="interface in org.apache.juneau.comm
 <li>
 <section class="detail" id="invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">
 <h3>invoke</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-115">invoke</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/TypedFunction.html#line-133">invoke</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="VarFunction.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">VarFunction</a></code></span></div>
 <div class="block">Invokes this function with already-resolved, type-coerced arguments.

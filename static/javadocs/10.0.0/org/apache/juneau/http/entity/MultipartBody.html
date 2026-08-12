@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-62">MultipartBody</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-63">MultipartBody</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span></div>
 <div class="block">An <a href="../HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that serializes a <code>multipart/form-data</code> message (RFC 7578).
@@ -211,14 +211,14 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
 <li>
 <section class="detail" id="builder()">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-76">builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-77">builder</a></span>()</div>
 <div class="block">Returns a new <a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity"><code>MultipartBody.Builder</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getContentType()">
 <h3>getContentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-80">getContentType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-81">getContentType</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpBody.html#getContentType()">HttpBody</a></code></span></div>
 <div class="block">Returns the MIME content type of this body, e.g. <code>"application/json; charset=UTF-8"</code>.</div>
 <dl class="notes">
@@ -232,7 +232,7 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
 <li>
 <section class="detail" id="getContentLength()">
 <h3>getContentLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-88">getContentLength</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-89">getContentLength</a></span>()</div>
 <div class="block">Returns <code>-1</code> — multipart bodies are streamed without pre-computing the total length.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -245,7 +245,7 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
 <li>
 <section class="detail" id="writeTo(java.io.OutputStream)">
 <h3>writeTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-93">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-94">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpBody.html#writeTo(java.io.OutputStream)">HttpBody</a></code></span></div>
 <div class="block">Writes the body content to the given output stream.
@@ -265,7 +265,7 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
 <li>
 <section class="detail" id="isRepeatable()">
 <h3>isRepeatable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-122">isRepeatable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-123">isRepeatable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpBody.html#isRepeatable()">HttpBody</a></code></span></div>
 <div class="block">Returns <code>true</code> if this body can be written more than once.
 
@@ -283,7 +283,7 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
 <li>
 <section class="detail" id="getBoundary()">
 <h3>getBoundary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-135">getBoundary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-136">getBoundary</a></span>()</div>
 <div class="block">Returns the multipart boundary string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -294,7 +294,7 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
 <li>
 <section class="detail" id="getParts()">
 <h3>getParts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-144">getParts</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-145">getParts</a></span>()</div>
 <div class="block">Returns an unmodifiable view of the parts in this multipart body.</div>
 <dl class="notes">
 <dt>Returns:</dt>

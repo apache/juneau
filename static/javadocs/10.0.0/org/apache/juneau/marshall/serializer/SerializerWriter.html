@@ -71,11 +71,11 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.apache.juneau.marshall.serializer</a></div>
-<h1 title="Class SerializerWriter" class="title">Class SerializerWriter</h1>
+<h1 title="Class SerializerWriter" class="title">Class SerializerWriter&lt;SELF extends SerializerWriter&lt;SELF&gt;&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">java.io.Writer</a>
-<div class="inheritance">org.apache.juneau.marshall.serializer.SerializerWriter</div>
+<div class="inheritance">org.apache.juneau.marshall.serializer.SerializerWriter&lt;SELF&gt;</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../csv/CsvWriter.html" title="class in org.apache.juneau.marshall.csv">CsvWriter</a></code>, <code><a href="../hjson/HjsonWriter.html" title="class in org.apache.juneau.marshall.hjson">HjsonWriter</a></code>, <code><a href="../hocon/HoconWriter.html" title="class in org.apache.juneau.marshall.hocon">HoconWriter</a></code>, <code><a href="../ini/IniWriter.html" title="class in org.apache.juneau.marshall.ini">IniWriter</a></code>, <code><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></code>, <code><a href="../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a></code>, <code><a href="../toml/TomlWriter.html" title="class in org.apache.juneau.marshall.toml">TomlWriter</a></code>, <code><a href="../uon/UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a></code>, <code><a href="../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a></code>, <code><a href="../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-43">SerializerWriter</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-43">SerializerWriter</a>&lt;SELF extends SerializerWriter&lt;SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span></div>
 <div class="block">Simple wrapper around a standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> with additional methods.
 
@@ -157,9 +157,11 @@ loadScripts(document, 'script');</script>
 <section class="constructor-summary" id="constructor-summary">
 <h2>Constructor Summary</h2>
 <div class="caption"><span>Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.io.Writer,boolean,int,boolean,char,org.apache.juneau.marshall.UriResolver)" class="member-name-link">SerializerWriter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
@@ -167,7 +169,8 @@ loadScripts(document, 'script');</script>
  char&nbsp;quoteChar,
  <a href="../UriResolver.html" title="class in org.apache.juneau.marshall">UriResolver</a>&nbsp;uriResolver)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.marshall.serializer.SerializerWriter)" class="member-name-link">SerializerWriter</a><wbr>(<a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&nbsp;w)</code></div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.marshall.serializer.SerializerWriter)" class="member-name-link">SerializerWriter</a><wbr>(<a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;&nbsp;w)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Copy Constructor</div>
 </div>
@@ -185,61 +188,61 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(char)" class="member-name-link">append</a><wbr>(char&nbsp;c)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(char%5B%5D)" class="member-name-link">append</a><wbr>(char[]&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Appends the specified characters to this writer.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(int,char)" class="member-name-link">append</a><wbr>(int&nbsp;indent,
  char&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(int,java.lang.String)" class="member-name-link">append</a><wbr>(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(java.lang.Object)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
+<div class="block">Writes the string representation of the specified object to the writer.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(java.lang.String)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendIf(boolean,char)" class="member-name-link">appendIf</a><wbr>(boolean&nbsp;flag,
  char&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes the specified text to the writer if b is true.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendIf(boolean,java.lang.String)" class="member-name-link">appendIf</a><wbr>(boolean&nbsp;flag,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes the specified text to the writer if b is true.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendln(int,java.lang.String)" class="member-name-link">appendln</a><wbr>(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text, followed by a newline
  (if the <code>useWhitespace</code> setting is enabled).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendln(java.lang.String)" class="member-name-link">appendln</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes the specified text followed by a newline (if the <code>useWhitespace</code> setting is enabled).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendUri(java.lang.Object)" class="member-name-link">appendUri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Appends the specified object as a URI.</div>
@@ -247,12 +250,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#close()" class="member-name-link">close</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cr(int)" class="member-name-link">cr</a><wbr>(int&nbsp;depth)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Performs a carriage return.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cre(int)" class="member-name-link">cre</a><wbr>(int&nbsp;depth)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Performs a carriage return at the end of a line.</div>
@@ -260,57 +263,60 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#flush()" class="member-name-link">flush</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#i(int)" class="member-name-link">i</a><wbr>(int&nbsp;indent)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes an indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ie(int)" class="member-name-link">ie</a><wbr>(int&nbsp;indent)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes an end-of-line indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nl(int)" class="member-name-link">nl</a><wbr>(int&nbsp;indent)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nlIf(boolean,int)" class="member-name-link">nlIf</a><wbr>(boolean&nbsp;flag,
  int&nbsp;indent)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled and the boolean flag is true.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#q()" class="member-name-link">q</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds the quote character specified by the <code>quoteChar</code> setting to the output.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#s()" class="member-name-link">s</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a whitespace character to the output if the <code>useWhitespace</code> setting is enabled.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sIf(boolean)" class="member-name-link">sIf</a><wbr>(boolean&nbsp;flag)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final <a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sIf(boolean)" class="member-name-link">sIf</a><wbr>(boolean&nbsp;flag)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes a space if the boolean expression is <jk>true</jk> and <code>useWhitespace</code> is false.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#w(char)" class="member-name-link">w</a><wbr>(char&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#w(char)" class="member-name-link">w</a><wbr>(char&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes the specified character to the writer.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#w(java.lang.String)" class="member-name-link">w</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#w(java.lang.String)" class="member-name-link">w</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes the specified string to the writer.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(char%5B%5D,int,int)" class="member-name-link">write</a><wbr>(char[]&nbsp;cbuf,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(char%5B%5D,int,int)" class="member-name-link">write</a><wbr>(char[]&nbsp;cbuf,
  int&nbsp;off,
  int&nbsp;len)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -334,42 +340,42 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="out">
 <h3>out</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-49">out</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-55">out</a></span></div>
 <div class="block">The underlying writer.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="useWhitespace">
 <h3>useWhitespace</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-52">useWhitespace</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-58">useWhitespace</a></span></div>
 <div class="block">Use-whitespace flag.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="maxIndent">
 <h3>maxIndent</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-55">maxIndent</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-61">maxIndent</a></span></div>
 <div class="block">Max indentation levels.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="trimStrings">
 <h3>trimStrings</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-58">trimStrings</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-64">trimStrings</a></span></div>
 <div class="block">Trim strings flag.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="quoteChar">
 <h3>quoteChar</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-61">quoteChar</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-67">quoteChar</a></span></div>
 <div class="block">The quote character being used by this writer.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="uriResolver">
 <h3>uriResolver</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../UriResolver.html" title="class in org.apache.juneau.marshall">UriResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-64">uriResolver</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../UriResolver.html" title="class in org.apache.juneau.marshall">UriResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-70">uriResolver</a></span></div>
 <div class="block">The URI resolver of the request.</div>
 </section>
 </li>
@@ -384,18 +390,19 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.serializer.SerializerWriter)">
 <h3>SerializerWriter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-71">SerializerWriter</a></span><wbr><span class="parameters">(<a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&nbsp;w)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-78">SerializerWriter</a></span><wbr><span class="parameters">(<a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;&nbsp;w)</span></div>
 <div class="block">Copy Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>w</code> - Writer being copied.</dd>
+<dd><code>w</code> - Writer being copied.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Writer,boolean,int,boolean,char,org.apache.juneau.marshall.UriResolver)">
 <h3>SerializerWriter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-90">SerializerWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-98">SerializerWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
  boolean&nbsp;trimStrings,
@@ -403,7 +410,8 @@ loadScripts(document, 'script');</script>
  <a href="../UriResolver.html" title="class in org.apache.juneau.marshall">UriResolver</a>&nbsp;uriResolver)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>out</code> - The writer being wrapped.</dd>
+<dd><code>out</code> - The writer being wrapped.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>useWhitespace</code> - If <jk>true</jk>, calling <a href="#cr(int)"><code>cr(int)</code></a> will create an indentation and calling <a href="#s()"><code>s()</code></a> will write a
    space character.</dd>
 <dd><code>maxIndent</code> - The maximum indentation level.</dd>
@@ -422,9 +430,15 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="self()">
+<h3>self</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-49">self</a></span>()</div>
+</section>
+</li>
+<li>
 <section class="detail" id="append(char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-99">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-107">append</a></span><wbr><span class="parameters">(char&nbsp;c)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html#append(char)" title="class or interface in java.lang" class="external-link">append</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a></code></dd>
@@ -436,11 +450,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(char[])">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-115">append</a></span><wbr><span class="parameters">(char[]&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-124">append</a></span><wbr><span class="parameters">(char[]&nbsp;value)</span></div>
 <div class="block">Appends the specified characters to this writer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The characters to append to this writer.</dd>
+<dd><code>value</code> - The characters to append to this writer.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -449,7 +464,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,char)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-128">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-137">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  char&nbsp;value)</span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
 <dl class="notes">
@@ -464,7 +479,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(int,java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-139">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-148">append</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
 <dl class="notes">
@@ -479,11 +494,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-149">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
-<div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-159">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block">Writes the string representation of the specified object to the writer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The text to write.</dd>
+<dd><code>value</code> - The object to write.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -492,11 +508,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-160">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-171">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The text to write.</dd>
+<dd><code>value</code> - The text to write.
+   <br>Can be <jk>null</jk> (ignored).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -505,7 +522,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(boolean,char)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-173">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-184">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
  char&nbsp;value)</span></div>
 <div class="block">Writes the specified text to the writer if b is true.</div>
 <dl class="notes">
@@ -520,7 +537,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(boolean,java.lang.String)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-186">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-197">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Writes the specified text to the writer if b is true.</div>
 <dl class="notes">
@@ -535,7 +552,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(int,java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-200">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-211">appendln</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text, followed by a newline
  (if the <code>useWhitespace</code> setting is enabled).</div>
@@ -551,7 +568,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendln(java.lang.String)">
 <h3>appendln</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-210">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-221">appendln</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Writes the specified text followed by a newline (if the <code>useWhitespace</code> setting is enabled).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -564,7 +581,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendUri(java.lang.Object)">
 <h3>appendUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-229">appendUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-241">appendUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Appends the specified object as a URI.
 
  <p>
@@ -577,7 +594,8 @@ loadScripts(document, 'script');</script>
  session.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The URI to serialize.</dd>
+<dd><code>value</code> - The URI to serialize.
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="../UriResolver.html#append(java.lang.Appendable,java.lang.Object)"><code>UriResolver.append(Appendable, Object)</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -586,7 +604,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-234">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-246">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -603,7 +621,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cr(int)">
 <h3>cr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-248">cr</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-260">cr</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block">Performs a carriage return.
 
  <p>
@@ -619,7 +637,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cre(int)">
 <h3>cre</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-263">cre</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-275">cre</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block">Performs a carriage return at the end of a line.
 
  <p>
@@ -635,7 +653,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="flush()">
 <h3>flush</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-269">flush</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-281">flush</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -650,7 +668,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="i(int)">
 <h3>i</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-280">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-292">i</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block">Writes an indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -663,7 +681,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ie(int)">
 <h3>ie</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-293">ie</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-305">ie</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block">Writes an end-of-line indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -676,7 +694,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nl(int)">
 <h3>nl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-306">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-318">nl</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -689,7 +707,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nlIf(boolean,int)">
 <h3>nlIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-319">nlIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-331">nlIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
  int&nbsp;indent)</span></div>
 <div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled and the boolean flag is true.</div>
 <dl class="notes">
@@ -704,7 +722,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="q()">
 <h3>q</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-330">q</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-342">q</a></span>()</div>
 <div class="block">Adds the quote character specified by the <code>quoteChar</code> setting to the output.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -715,7 +733,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="s()">
 <h3>s</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-340">s</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-352">s</a></span>()</div>
 <div class="block">Adds a whitespace character to the output if the <code>useWhitespace</code> setting is enabled.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -726,7 +744,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sIf(boolean)">
 <h3>sIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-356">sIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-368">sIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag)</span></div>
 <div class="block">Writes a space if the boolean expression is <jk>true</jk> and <code>useWhitespace</code> is false.
 
  <p>
@@ -743,7 +761,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="w(char)">
 <h3>w</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-368">w</a></span><wbr><span class="parameters">(char&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-380">w</a></span><wbr><span class="parameters">(char&nbsp;value)</span></div>
 <div class="block">Writes the specified character to the writer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -756,11 +774,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="w(java.lang.String)">
 <h3>w</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-383">w</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializerWriter.html" title="type parameter in SerializerWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-396">w</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Writes the specified string to the writer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The string to write.</dd>
+<dd><code>value</code> - The string to write.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -769,7 +788,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="write(char[],int,int)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-392">write</a></span><wbr><span class="parameters">(char[]&nbsp;cbuf,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializerWriter.html#line-405">write</a></span><wbr><span class="parameters">(char[]&nbsp;cbuf,
  int&nbsp;off,
  int&nbsp;len)</span></div>
 <dl class="notes">

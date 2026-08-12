@@ -399,6 +399,17 @@ def _strip_code(text):
     return text
 
 
+def _strip_fenced_code(text):
+    """Remove fenced code blocks only, preserving inline-code (backtick) spans.
+
+    Used ahead of heading extraction: Docusaurus/GitHub slugify inline code in a
+    heading by keeping its text and dropping just the backticks (see
+    _github_anchor), so headings must NOT go through _strip_code first — that
+    would delete the inline-code *content*, not just the backtick markers.
+    """
+    return re.sub(r'```.*?```', '', text, flags=re.DOTALL)
+
+
 def _iter_lines_with(text, pattern):
     """Yield (lineno, match) for a compiled pattern over the code-stripped text."""
     stripped = _strip_code(text)
@@ -408,12 +419,18 @@ def _iter_lines_with(text, pattern):
 
 
 def _github_anchor(heading):
-    """Approximate Docusaurus/GitHub heading-anchor slugification."""
+    """Approximate Docusaurus/GitHub heading-anchor slugification.
+
+    Docusaurus's slugger (github-slugger) does NOT collapse consecutive hyphens
+    and does NOT strip leading/trailing hyphens produced when punctuation is
+    removed from the start/middle/end of a heading — e.g. "A / B" -> "a--b" and
+    "`#{...}` Foo" -> "-foo" are both real, valid anchors. Do not "clean up"
+    the result any further than this.
+    """
     h = heading.strip().lower()
     h = re.sub(r'`', '', h)
     h = re.sub(r'[^a-z0-9 \-_]', '', h)
     h = h.replace(' ', '-')
-    h = re.sub(r'-+', '-', h).strip('-')
     return h
 
 
@@ -657,12 +674,20 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
     # --- 14. anchors (warning; off by default) ----------------------------
     if on(14) and anchors_enabled:
         heading_anchors = {}
+        explicit_id_re = re.compile(r'\{#([^}]+)\}\s*$')
         for t in topics:
             anchors = set()
-            for line in _strip_code(t.body).splitlines():
+            for line in _strip_fenced_code(t.body).splitlines():
                 hm = re.match(r'^#{1,6}\s+(.*?)\s*$', line)
                 if hm:
-                    anchors.add(_github_anchor(hm.group(1)))
+                    heading_text = hm.group(1)
+                    explicit = explicit_id_re.search(heading_text)
+                    if explicit:
+                        # Docusaurus honors an explicit `{#custom-id}` heading
+                        # suffix verbatim instead of auto-slugifying the text.
+                        anchors.add(explicit.group(1))
+                    else:
+                        anchors.add(_github_anchor(heading_text))
             if t.slug:
                 heading_anchors[t.slug] = anchors
         anchored_re = re.compile(r'/docs/topics/([A-Za-z0-9]+)#([^)\s"<>]+)')

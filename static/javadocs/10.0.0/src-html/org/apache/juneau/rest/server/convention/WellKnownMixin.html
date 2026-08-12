@@ -142,7 +142,7 @@
 <span class="source-line-no">129</span><span id="line-129">    * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this</span>
 <span class="source-line-no">130</span><span id="line-130">    * mixin's own {@link Rest @Rest} annotation.</span>
 <span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param builder The builder.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param builder The builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">133</span><span id="line-133">    */</span>
 <span class="source-line-no">134</span><span id="line-134">   protected WellKnownMixin(Builder builder) {</span>
 <span class="source-line-no">135</span><span id="line-135">      super(builder);</span>
@@ -188,7 +188,7 @@
 <span class="source-line-no">175</span><span id="line-175">    * setter chains with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g.</span>
 <span class="source-line-no">176</span><span id="line-176">    * {@code path}, {@code roleGuard}).</span>
 <span class="source-line-no">177</span><span id="line-177">    */</span>
-<span class="source-line-no">178</span><span id="line-178">   public static class Builder extends RestMixin.Builder&lt;WellKnownMixin, Builder&gt; {</span>
+<span class="source-line-no">178</span><span id="line-178">   public static class Builder extends RestMixin.Builder&lt;WellKnownMixin,Builder&gt; {</span>
 <span class="source-line-no">179</span><span id="line-179"></span>
 <span class="source-line-no">180</span><span id="line-180">      private String securityTxt;</span>
 <span class="source-line-no">181</span><span id="line-181"></span>

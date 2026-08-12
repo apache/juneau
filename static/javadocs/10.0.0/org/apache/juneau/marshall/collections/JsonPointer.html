@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-54">JsonPointer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-55">JsonPointer</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">An <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901</a> JSON Pointer that addresses a
  single value within a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>/<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> tree (such as the <a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledMap</code></a>/<a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledList</code></a> family).
@@ -177,7 +177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonPointer.html" title="class in org.apache.juneau.marshall.collections">JsonPointer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-66">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonPointer.html" title="class in org.apache.juneau.marshall.collections">JsonPointer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-73">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
 <div class="block">Parses and validates the specified RFC 6901 JSON Pointer string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -192,7 +192,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="encodeToken(java.lang.String)">
 <h3>encodeToken</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-76">encodeToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rawMemberName)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-83">encodeToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rawMemberName)</span></div>
 <div class="block">Encodes a raw object member name into an RFC 6901 reference token (escapes <c>~</c> to <c>~0</c> and <c>/</c> to <c>~1</c>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="decodeToken(java.lang.String)">
 <h3>decodeToken</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-86">decodeToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-94">decodeToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
 <div class="block">Decodes an RFC 6901 reference token into a raw object member name (unescapes <c>~1</c> to <c>/</c> then <c>~0</c> to <c>~</c>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -218,7 +218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eval(java.lang.Object)">
 <h3>eval</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-120">eval</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-129">eval</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root)</span></div>
 <div class="block">Reads the value addressed by this pointer from the specified root.
 
  <p>
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
  <a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledList</code></a> family). The empty pointer returns <c>root</c>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>root</code> - The root document. Can be <jk>null</jk>.</dd>
+<dd><code>root</code> - The root document. Can be <jk>null</jk> (treated as an empty document; the addressed value evaluates to <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The addressed value, or <jk>null</jk> on any missing key, out-of-range index, or type mismatch.</dd>
 </dl>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.Object,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-137">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-146">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Writes the specified value at the location addressed by this pointer, auto-vivifying missing intermediate containers.
 
@@ -255,11 +255,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(java.lang.Object)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-151">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-160">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root)</span></div>
 <div class="block">Removes the member or element addressed by this pointer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>root</code> - The root document.</dd>
+<dd><code>root</code> - The root document.  Can be <jk>null</jk> (treated as an empty document — nothing is found to remove).</dd>
 <dt>Returns:</dt>
 <dd>The removed value, or <jk>null</jk> if the addressed member/element was absent (or the pointer is the root pointer).</dd>
 </dl>
@@ -268,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-163">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/JsonPointer.html#line-172">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

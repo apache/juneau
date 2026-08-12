@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="RestChildren.html" title="class in org.apache.juneau.rest.server">RestChildren</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-164">RestChildren.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-166">RestChildren.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestContext,org.apache.juneau.commons.inject.BeanStore,jakarta.servlet.ServletConfig)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-183">Builder</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;parent,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-185">Builder</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;parent,
  <a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore,
  jakarta.servlet.ServletConfig&nbsp;servletConfig)</span></div>
 <div class="block">Constructor.</div>
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanStore()">
 <h3>beanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-196">beanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-198">beanStore</a></span>()</div>
 <div class="block">Returns the bean store used by this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(org.apache.juneau.rest.server.RestContext)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-206">add</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-208">add</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;value)</span></div>
 <div class="block">Adds an eager child resource to this builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -210,13 +210,19 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addLazy(java.lang.Class,java.lang.String)">
 <h3>addLazy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-223">addLazy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;resourceClass,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-231">addLazy</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;resourceClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Registers a lazy child resource entry.
 
  <p>
  The path is pre-resolved from the resource class so that routing works immediately at parent startup.
- The full <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> is built on the first matching request.</div>
+ The full <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> is built on the first matching request.
+
+ <p>
+ Delegates to <code>addLazy(RestContext.ResolvedChild, String)</code> with a bare (no-seed) declaration —
+ this public overload's signature is preserved unchanged (it has no external-caller-visible way to
+ express a host-declared <code>@Child</code> seed; see that overload for the seed-carrying entry point used
+ internally by <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>'s <code>childrenDefs</code> discovery).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>resourceClass</code> - The resource class to materialize lazily. Must not be <code>null</code>.</dd>
@@ -230,7 +236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestChildren.html" title="class in org.apache.juneau.rest.server">RestChildren</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-234">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestChildren.html" title="class in org.apache.juneau.rest.server">RestChildren</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.Builder.html#line-263">build</a></span>()</div>
 <div class="block">Builds the children.</div>
 <dl class="notes">
 <dt>Returns:</dt>

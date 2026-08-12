@@ -55,11 +55,11 @@
 <span class="source-line-no">042</span><span id="line-42">       * Produces</span>
 <span class="source-line-no">043</span><span id="line-43">       * (name=name,id=id)</span>
 <span class="source-line-no">044</span><span id="line-44">       */</span>
-<span class="source-line-no">045</span><span id="line-45">      var serial = UonSerializer.DEFAULT.serialize(pojo);</span>
+<span class="source-line-no">045</span><span id="line-45">      var serial = UonSerializer.DEFAULT.write(pojo);</span>
 <span class="source-line-no">046</span><span id="line-46">      Logger.getLogger(UonExample.class).info(serial);</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
 <span class="source-line-no">048</span><span id="line-48">      // Deserialize back to Pojo instance</span>
-<span class="source-line-no">049</span><span id="line-49">      var obj = UonParser.DEFAULT.parse(serial, Pojo.class);</span>
+<span class="source-line-no">049</span><span id="line-49">      var obj = UonParser.DEFAULT.read(serial, Pojo.class);</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">      assert obj.getId().equals(pojo.getId());</span>
 <span class="source-line-no">052</span><span id="line-52">      assert obj.getName().equals(pojo.getName());</span>

@@ -97,11 +97,11 @@
 <span class="source-line-no">084</span><span id="line-84">   }</span>
 <span class="source-line-no">085</span><span id="line-85"></span>
 <span class="source-line-no">086</span><span id="line-86">   @Override /* Overridden from SerializerSession */</span>
-<span class="source-line-no">087</span><span id="line-87">   protected void doSerialize(SerializerPipe out, Object o) throws java.io.IOException, SerializeException {</span>
+<span class="source-line-no">087</span><span id="line-87">   protected void doWrite(SerializerPipe out, Object o) throws java.io.IOException, SerializeException {</span>
 <span class="source-line-no">088</span><span id="line-88">      try (var w = getXmlWriter(out)) {</span>
 <span class="source-line-no">089</span><span id="line-89">         w.append("&lt;?xml").attr("version", "1.0").attr("encoding", "UTF-8").appendln("?&gt;");</span>
 <span class="source-line-no">090</span><span id="line-90">         w.flush();</span>
-<span class="source-line-no">091</span><span id="line-91">         super.doSerialize(out, o);</span>
+<span class="source-line-no">091</span><span id="line-91">         super.doWrite(out, o);</span>
 <span class="source-line-no">092</span><span id="line-92">      }</span>
 <span class="source-line-no">093</span><span id="line-93">   }</span>
 <span class="source-line-no">094</span><span id="line-94">}</span>

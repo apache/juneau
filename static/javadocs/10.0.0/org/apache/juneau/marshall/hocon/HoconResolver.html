@@ -156,11 +156,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.hocon.HoconValue.HoconObject)">
 <h3>HoconResolver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-48">HoconResolver</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconObject.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconObject</a>&nbsp;root)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-49">HoconResolver</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconObject.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconObject</a>&nbsp;root)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>root</code> - The root HOCON object (after parsing, before resolution).</dd>
+<dd><code>root</code> - The root HOCON object (after parsing, before resolution).
+   <br>Must not be <jk>null</jk> (<a href="#resolve()"><code>resolve()</code></a> dereferences it).</dd>
 </dl>
 </section>
 </li>
@@ -175,7 +176,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve()">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-57">resolve</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-58">resolve</a></span>()</div>
 <div class="block">Resolves all substitutions in-place in the tree.</div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -186,28 +187,32 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="lookup(java.lang.String)">
 <h3>lookup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-153">lookup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-152">lookup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Looks up a dotted path in the root object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The path (e.g., "database.host").</dd>
+<dd><code>path</code> - The path (e.g., "database.host").
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The value at that path, or <jk>null</jk>.</dd>
+<dd>The value at that path, or <jk>null</jk> if the path is <jk>null</jk>, blank, or does not resolve to an
+   existing value.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="resolveConcatWithLookup(org.apache.juneau.marshall.hocon.HoconValue.HoconConcat,java.util.function.Function)">
 <h3>resolveConcatWithLookup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-169">resolveConcatWithLookup</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconConcat.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconConcat</a>&nbsp;concat,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconResolver.html#line-170">resolveConcatWithLookup</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconConcat.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconConcat</a>&nbsp;concat,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;&nbsp;lookup)</span></div>
 <div class="block">Resolves a concatenation value with a custom lookup (for self-referential substitution).
  When the concat contains ${path}, the lookup is used instead of the root object.
  This allows <code>path = ${path}"/bin"</code> to append to the previous value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>concat</code> - The concatenation to resolve.</dd>
-<dd><code>lookup</code> - Custom lookup; for path X returns the value to use (e.g. previous value for self-ref).</dd>
+<dd><code>concat</code> - The concatenation to resolve.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>lookup</code> - Custom lookup; for path X returns the value to use (e.g. previous value for self-ref).
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The resolved string value.</dd>
 </dl>

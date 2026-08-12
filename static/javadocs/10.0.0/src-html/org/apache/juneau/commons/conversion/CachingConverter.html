@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line-119">   }</span>
 <span class="source-line-no">120</span><span id="line-120"></span>
 <span class="source-line-no">121</span><span id="line-121">   // Two-level cache: input type -&gt; output type -&gt; conversion function (or NO_CONVERSION sentinel).</span>
-<span class="source-line-no">122</span><span id="line-122">   private final Map&lt;Class&lt;?&gt;, Map&lt;Class&lt;?&gt;, Conversion&lt;?,?&gt;&gt;&gt; conversions = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">122</span><span id="line-122">   private final Map&lt;Class&lt;?&gt;,Map&lt;Class&lt;?&gt;,Conversion&lt;?,?&gt;&gt;&gt; conversions = new ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
 <span class="source-line-no">124</span><span id="line-124">   /**</span>
 <span class="source-line-no">125</span><span id="line-125">    * Finds a conversion function from the specified input type to the specified output type.</span>
@@ -154,19 +154,19 @@
 <span class="source-line-no">141</span><span id="line-141">    * @param outType The target output class.</span>
 <span class="source-line-no">142</span><span id="line-142">    * @return A {@link Conversion} function, or &lt;jk&gt;null&lt;/jk&gt; if no conversion is available.</span>
 <span class="source-line-no">143</span><span id="line-143">    */</span>
-<span class="source-line-no">144</span><span id="line-144">   protected abstract &lt;I, O&gt; Conversion&lt;I, O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType);</span>
+<span class="source-line-no">144</span><span id="line-144">   protected abstract &lt;I,O&gt; Conversion&lt;I,O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType);</span>
 <span class="source-line-no">145</span><span id="line-145"></span>
 <span class="source-line-no">146</span><span id="line-146">   @SuppressWarnings({</span>
 <span class="source-line-no">147</span><span id="line-147">      "unchecked" // Cast is safe: type parameter is verified at construction.</span>
 <span class="source-line-no">148</span><span id="line-148">   })</span>
-<span class="source-line-no">149</span><span id="line-149">   private &lt;I, O&gt; Conversion&lt;I, O&gt; lookupConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">149</span><span id="line-149">   private &lt;I,O&gt; Conversion&lt;I,O&gt; lookupConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
 <span class="source-line-no">150</span><span id="line-150">      var fn = conversions</span>
 <span class="source-line-no">151</span><span id="line-151">         .computeIfAbsent(inType, k -&gt; new ConcurrentHashMap&lt;&gt;())</span>
 <span class="source-line-no">152</span><span id="line-152">         .computeIfAbsent(outType, k -&gt; {</span>
-<span class="source-line-no">153</span><span id="line-153">            var found = findConversion(inType, outType);</span>
+<span class="source-line-no">153</span><span id="line-153">            Conversion&lt;I,O&gt; found = findConversion(inType, outType);</span>
 <span class="source-line-no">154</span><span id="line-154">            return found != null ? found : NO_CONVERSION;</span>
 <span class="source-line-no">155</span><span id="line-155">         });</span>
-<span class="source-line-no">156</span><span id="line-156">      return fn == NO_CONVERSION ? null : (Conversion&lt;I, O&gt;) fn;</span>
+<span class="source-line-no">156</span><span id="line-156">      return fn == NO_CONVERSION ? null : (Conversion&lt;I,O&gt;) fn;</span>
 <span class="source-line-no">157</span><span id="line-157">   }</span>
 <span class="source-line-no">158</span><span id="line-158"></span>
 <span class="source-line-no">159</span><span id="line-159">   @Override</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">      var inType = o.getClass();</span>
 <span class="source-line-no">188</span><span id="line-188">      if (inType == type)</span>
 <span class="source-line-no">189</span><span id="line-189">         return (T) o;</span>
-<span class="source-line-no">190</span><span id="line-190">      var fn = (Conversion&lt;Object, T&gt;) lookupConversion(inType, type);</span>
+<span class="source-line-no">190</span><span id="line-190">      var fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, type);</span>
 <span class="source-line-no">191</span><span id="line-191">      if (fn == null)</span>
 <span class="source-line-no">192</span><span id="line-192">         throw new InvalidConversionException(inType, type);</span>
 <span class="source-line-no">193</span><span id="line-193">      return fn.to(o, null, (ConverterSession)null);</span>
@@ -231,14 +231,14 @@
 <span class="source-line-no">218</span><span id="line-218">      "unchecked" // Cast is safe: type parameter is verified at construction.</span>
 <span class="source-line-no">219</span><span id="line-219">   })</span>
 <span class="source-line-no">220</span><span id="line-220">   public &lt;T&gt; T to(Object o, Type mainType, Type... args) {</span>
-<span class="source-line-no">221</span><span id="line-221">      var rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class&lt;?&gt;) mainType);</span>
+<span class="source-line-no">221</span><span id="line-221">      var rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class&lt;?&gt;) mainType);</span>
 <span class="source-line-no">222</span><span id="line-222">      var argClasses = Stream.of(args)</span>
-<span class="source-line-no">223</span><span id="line-223">         .map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))</span>
+<span class="source-line-no">223</span><span id="line-223">         .map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))</span>
 <span class="source-line-no">224</span><span id="line-224">         .toArray(Class[]::new);</span>
 <span class="source-line-no">225</span><span id="line-225">      if (o == null)</span>
 <span class="source-line-no">226</span><span id="line-226">         return nullDefault(rawType, argClasses);</span>
 <span class="source-line-no">227</span><span id="line-227">      var inType = o.getClass();</span>
-<span class="source-line-no">228</span><span id="line-228">      var fn = (Conversion&lt;Object, T&gt;) lookupConversion(inType, rawType);</span>
+<span class="source-line-no">228</span><span id="line-228">      var fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, rawType);</span>
 <span class="source-line-no">229</span><span id="line-229">      if (fn == null)</span>
 <span class="source-line-no">230</span><span id="line-230">         throw new InvalidConversionException(inType, rawType);</span>
 <span class="source-line-no">231</span><span id="line-231">      return fn.to(o, null, (ConverterSession)null, argClasses);</span>
@@ -270,7 +270,7 @@
 <span class="source-line-no">257</span><span id="line-257">      var inType = o.getClass();</span>
 <span class="source-line-no">258</span><span id="line-258">      if (inType == type)</span>
 <span class="source-line-no">259</span><span id="line-259">         return (T) o;</span>
-<span class="source-line-no">260</span><span id="line-260">      var fn = (Conversion&lt;Object, T&gt;) lookupConversion(inType, type);</span>
+<span class="source-line-no">260</span><span id="line-260">      var fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, type);</span>
 <span class="source-line-no">261</span><span id="line-261">      if (fn == null)</span>
 <span class="source-line-no">262</span><span id="line-262">         throw new InvalidConversionException(inType, type);</span>
 <span class="source-line-no">263</span><span id="line-263">      return fn.to(o, memberOf, session);</span>
@@ -297,14 +297,14 @@
 <span class="source-line-no">284</span><span id="line-284">      "unchecked" // Cast is safe: type parameter is verified at construction.</span>
 <span class="source-line-no">285</span><span id="line-285">   })</span>
 <span class="source-line-no">286</span><span id="line-286">   public &lt;T&gt; T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {</span>
-<span class="source-line-no">287</span><span id="line-287">      var rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class&lt;?&gt;) mainType);</span>
+<span class="source-line-no">287</span><span id="line-287">      var rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class&lt;?&gt;) mainType);</span>
 <span class="source-line-no">288</span><span id="line-288">      var argClasses = Stream.of(args)</span>
-<span class="source-line-no">289</span><span id="line-289">         .map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))</span>
+<span class="source-line-no">289</span><span id="line-289">         .map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))</span>
 <span class="source-line-no">290</span><span id="line-290">         .toArray(Class[]::new);</span>
 <span class="source-line-no">291</span><span id="line-291">      if (o == null)</span>
 <span class="source-line-no">292</span><span id="line-292">         return nullDefault(rawType, argClasses);</span>
 <span class="source-line-no">293</span><span id="line-293">      var inType = o.getClass();</span>
-<span class="source-line-no">294</span><span id="line-294">      var fn = (Conversion&lt;Object, T&gt;) lookupConversion(inType, rawType);</span>
+<span class="source-line-no">294</span><span id="line-294">      var fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, rawType);</span>
 <span class="source-line-no">295</span><span id="line-295">      if (fn == null)</span>
 <span class="source-line-no">296</span><span id="line-296">         throw new InvalidConversionException(inType, rawType);</span>
 <span class="source-line-no">297</span><span id="line-297">      var result = fn.to(o, memberOf, session, argClasses);</span>

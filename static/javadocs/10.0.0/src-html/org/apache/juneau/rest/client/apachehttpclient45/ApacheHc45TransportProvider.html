@@ -65,8 +65,8 @@
 <span class="source-line-no">052</span><span id="line-52">      try {</span>
 <span class="source-line-no">053</span><span id="line-53">         Class.forName("org.apache.http.impl.client.CloseableHttpClient");</span>
 <span class="source-line-no">054</span><span id="line-54">         return true;</span>
-<span class="source-line-no">055</span><span id="line-55">      } catch (ClassNotFoundException e) {</span>
-<span class="source-line-no">056</span><span id="line-56">         return false;</span>
+<span class="source-line-no">055</span><span id="line-55">      } catch (ClassNotFoundException e) { // HTT: unreachable in this module's own tests - httpclient is a compile-time dependency, so the class is always present on the test classpath; this guard only fires when the module is on the classpath without its httpclient dependency (a packaging/shading error), which unit tests can't reproduce without a custom classloader.</span>
+<span class="source-line-no">056</span><span id="line-56">         return false; // HTT: unreachable - see guard above.</span>
 <span class="source-line-no">057</span><span id="line-57">      }</span>
 <span class="source-line-no">058</span><span id="line-58">   }</span>
 <span class="source-line-no">059</span><span id="line-59"></span>

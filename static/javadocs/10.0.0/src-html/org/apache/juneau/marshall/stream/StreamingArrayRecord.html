@@ -72,8 +72,8 @@
 <span class="source-line-no">059</span><span id="line-59">    * consumes the opening {@link TokenType#START_ARRAY} on construction and the closing</span>
 <span class="source-line-no">060</span><span id="line-60">    * {@link TokenType#END_ARRAY} on {@link RecordReader#close() close()}.</span>
 <span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * @param cursor The token reader to wrap.  Owned by the returned RecordReader; closing the</span>
-<span class="source-line-no">063</span><span id="line-63">    *    RecordReader closes the cursor.</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param cursor The token reader to wrap.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Owned by the returned</span>
+<span class="source-line-no">063</span><span id="line-63">    *    RecordReader; closing the RecordReader closes the cursor.</span>
 <span class="source-line-no">064</span><span id="line-64">    * @return A streaming array-element {@link RecordReader}.</span>
 <span class="source-line-no">065</span><span id="line-65">    * @throws IOException If a problem occurred reading the underlying input.</span>
 <span class="source-line-no">066</span><span id="line-66">    * @throws ParseException If the input is not a JSON-style array.</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68">   public static RecordReader reader(TokenReader cursor) throws IOException, ParseException {</span>
 <span class="source-line-no">069</span><span id="line-69">      var t = cursor.next();</span>
 <span class="source-line-no">070</span><span id="line-70">      if (t != TokenType.START_ARRAY)</span>
-<span class="source-line-no">071</span><span id="line-71">         throw new ParseException("Expected START_ARRAY at the root of arrayRecordReader input but got {0}", t);</span>
+<span class="source-line-no">071</span><span id="line-71">         throw new ParseException("Expected START_ARRAY at the root of arrayRecordReader input but got %s", t);</span>
 <span class="source-line-no">072</span><span id="line-72">      return new RecordReader() {</span>
 <span class="source-line-no">073</span><span id="line-73">         @Override public boolean canRead() throws IOException, ParseException {</span>
 <span class="source-line-no">074</span><span id="line-74">            return cursor.canRead();</span>
@@ -113,8 +113,8 @@
 <span class="source-line-no">100</span><span id="line-100">    * {@link TokenWriter#object(Object)}.  {@link RecordWriter#close() close()} emits the</span>
 <span class="source-line-no">101</span><span id="line-101">    * closing array bracket and closes the underlying cursor.</span>
 <span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * @param cursor The token writer to wrap.  Owned by the returned RecordWriter; closing the</span>
-<span class="source-line-no">104</span><span id="line-104">    *    RecordWriter closes the cursor.</span>
+<span class="source-line-no">103</span><span id="line-103">    * @param cursor The token writer to wrap.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Owned by the returned</span>
+<span class="source-line-no">104</span><span id="line-104">    *    RecordWriter; closing the RecordWriter closes the cursor.</span>
 <span class="source-line-no">105</span><span id="line-105">    * @return A streaming array-element {@link RecordWriter}.</span>
 <span class="source-line-no">106</span><span id="line-106">    * @throws IOException If a problem occurred writing to the underlying output.</span>
 <span class="source-line-no">107</span><span id="line-107">    */</span>

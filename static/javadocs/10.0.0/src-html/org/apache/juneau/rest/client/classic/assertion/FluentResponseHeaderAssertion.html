@@ -151,14 +151,14 @@
 <span class="source-line-no">138</span><span id="line-138">    *    &lt;br&gt;Should be &lt;jk&gt;null&lt;/jk&gt; if this is the top-level assertion.</span>
 <span class="source-line-no">139</span><span id="line-139">    * @param value</span>
 <span class="source-line-no">140</span><span id="line-140">    *    The object being tested.</span>
-<span class="source-line-no">141</span><span id="line-141">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">141</span><span id="line-141">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this assertion behaves as if testing a header with no value (e.g. {@link #isNull()} passes, transform methods yield &lt;jk&gt;null&lt;/jk&gt;-valued assertions).</span>
 <span class="source-line-no">142</span><span id="line-142">    * @param returns</span>
 <span class="source-line-no">143</span><span id="line-143">    *    The object to return after a test method is called.</span>
 <span class="source-line-no">144</span><span id="line-144">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
 <span class="source-line-no">145</span><span id="line-145">    * used on the same assertion.</span>
 <span class="source-line-no">146</span><span id="line-146">    */</span>
 <span class="source-line-no">147</span><span id="line-147">   public FluentResponseHeaderAssertion(Assertion creator, ResponseHeader value, R returns) {</span>
-<span class="source-line-no">148</span><span id="line-148">      super(creator, value.asString().orElse(null), returns);</span>
+<span class="source-line-no">148</span><span id="line-148">      super(creator, value == null ? null : value.asString().orElse(null), returns);</span>
 <span class="source-line-no">149</span><span id="line-149">      this.value = value;</span>
 <span class="source-line-no">150</span><span id="line-150">      setThrowable(BadRequest.class);</span>
 <span class="source-line-no">151</span><span id="line-151">   }</span>
@@ -168,7 +168,7 @@
 <span class="source-line-no">155</span><span id="line-155">    *</span>
 <span class="source-line-no">156</span><span id="line-156">    * @param value</span>
 <span class="source-line-no">157</span><span id="line-157">    *    The object being tested.</span>
-<span class="source-line-no">158</span><span id="line-158">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">158</span><span id="line-158">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this assertion behaves as if testing a header with no value (e.g. {@link #isNull()} passes, transform methods yield &lt;jk&gt;null&lt;/jk&gt;-valued assertions).</span>
 <span class="source-line-no">159</span><span id="line-159">    * @param returns</span>
 <span class="source-line-no">160</span><span id="line-160">    *    The object to return after a test method is called.</span>
 <span class="source-line-no">161</span><span id="line-161">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, the test method returns this object allowing multiple test method calls to be</span>
@@ -187,7 +187,7 @@
 <span class="source-line-no">174</span><span id="line-174">    * @throws RestCallException If value could not be parsed.</span>
 <span class="source-line-no">175</span><span id="line-175">    */</span>
 <span class="source-line-no">176</span><span id="line-176">   public &lt;T&gt; FluentAnyAssertion&lt;T,R&gt; as(Class&lt;T&gt; type) throws RestCallException {</span>
-<span class="source-line-no">177</span><span id="line-177">      return new FluentAnyAssertion&lt;&gt;(value.as(type).orElse(null), returns());</span>
+<span class="source-line-no">177</span><span id="line-177">      return new FluentAnyAssertion&lt;&gt;(value == null ? null : value.as(type).orElse(null), returns());</span>
 <span class="source-line-no">178</span><span id="line-178">   }</span>
 <span class="source-line-no">179</span><span id="line-179"></span>
 <span class="source-line-no">180</span><span id="line-180">   /**</span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">    * @throws RestCallException If value could not be parsed.</span>
 <span class="source-line-no">190</span><span id="line-190">    */</span>
 <span class="source-line-no">191</span><span id="line-191">   public FluentAnyAssertion&lt;Object,R&gt; as(Type type, Type...args) throws RestCallException {</span>
-<span class="source-line-no">192</span><span id="line-192">      return new FluentAnyAssertion&lt;&gt;(value.as(type, args).orElse(null), returns());</span>
+<span class="source-line-no">192</span><span id="line-192">      return new FluentAnyAssertion&lt;&gt;(value == null ? null : value.as(type, args).orElse(null), returns());</span>
 <span class="source-line-no">193</span><span id="line-193">   }</span>
 <span class="source-line-no">194</span><span id="line-194"></span>
 <span class="source-line-no">195</span><span id="line-195">   /**</span>
@@ -212,7 +212,7 @@
 <span class="source-line-no">199</span><span id="line-199">    * @throws AssertionError If object is not a boolean.</span>
 <span class="source-line-no">200</span><span id="line-200">    */</span>
 <span class="source-line-no">201</span><span id="line-201">   public FluentBooleanAssertion&lt;R&gt; asBoolean() {</span>
-<span class="source-line-no">202</span><span id="line-202">      return new FluentBooleanAssertion&lt;&gt;(this, value.asBoolean().orElse(null), returns());</span>
+<span class="source-line-no">202</span><span id="line-202">      return new FluentBooleanAssertion&lt;&gt;(this, value == null ? null : value.asBoolean().orElse(null), returns());</span>
 <span class="source-line-no">203</span><span id="line-203">   }</span>
 <span class="source-line-no">204</span><span id="line-204"></span>
 <span class="source-line-no">205</span><span id="line-205">   /**</span>
@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209">    * @throws AssertionError If object is not an integer.</span>
 <span class="source-line-no">210</span><span id="line-210">    */</span>
 <span class="source-line-no">211</span><span id="line-211">   public FluentIntegerAssertion&lt;R&gt; asInteger() {</span>
-<span class="source-line-no">212</span><span id="line-212">      return new FluentIntegerAssertion&lt;&gt;(this, value.asInteger().orElse(null), returns());</span>
+<span class="source-line-no">212</span><span id="line-212">      return new FluentIntegerAssertion&lt;&gt;(this, value == null ? null : value.asInteger().orElse(null), returns());</span>
 <span class="source-line-no">213</span><span id="line-213">   }</span>
 <span class="source-line-no">214</span><span id="line-214"></span>
 <span class="source-line-no">215</span><span id="line-215">   @Override /* Overridden from FluentStringAssertion */</span>
@@ -238,7 +238,7 @@
 <span class="source-line-no">225</span><span id="line-225">    * @throws AssertionError If object is not a long.</span>
 <span class="source-line-no">226</span><span id="line-226">    */</span>
 <span class="source-line-no">227</span><span id="line-227">   public FluentLongAssertion&lt;R&gt; asLong() {</span>
-<span class="source-line-no">228</span><span id="line-228">      return new FluentLongAssertion&lt;&gt;(this, value.asLong().orElse(null), returns());</span>
+<span class="source-line-no">228</span><span id="line-228">      return new FluentLongAssertion&lt;&gt;(this, value == null ? null : value.asLong().orElse(null), returns());</span>
 <span class="source-line-no">229</span><span id="line-229">   }</span>
 <span class="source-line-no">230</span><span id="line-230"></span>
 <span class="source-line-no">231</span><span id="line-231">   /**</span>
@@ -248,7 +248,7 @@
 <span class="source-line-no">235</span><span id="line-235">    * @throws AssertionError If object is not a zoned-datetime.</span>
 <span class="source-line-no">236</span><span id="line-236">    */</span>
 <span class="source-line-no">237</span><span id="line-237">   public FluentZonedDateTimeAssertion&lt;R&gt; asZonedDateTime() {</span>
-<span class="source-line-no">238</span><span id="line-238">      return new FluentZonedDateTimeAssertion&lt;&gt;(this, value.asDateHeader().asZonedDateTime().orElse(null), returns());</span>
+<span class="source-line-no">238</span><span id="line-238">      return new FluentZonedDateTimeAssertion&lt;&gt;(this, value == null ? null : value.asDateHeader().asZonedDateTime().orElse(null), returns());</span>
 <span class="source-line-no">239</span><span id="line-239">   }</span>
 <span class="source-line-no">240</span><span id="line-240"></span>
 <span class="source-line-no">241</span><span id="line-241">   @Override /* Overridden from Assertion */</span>

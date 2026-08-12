@@ -110,9 +110,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../PartList.Void.html" class="type-name-link" title="class in org.apache.juneau.http.classic.part">PartList.Void</a></code></div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../PartList.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.part">PartList.Unmodifiable</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">An unmodifiable snapshot of a <a href="../PartList.html" title="class in org.apache.juneau.http.classic.part"><code>PartList</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../PartList.Void.html" class="type-name-link" title="class in org.apache.juneau.http.classic.part">PartList.Void</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Represents no part list in annotations.</div>
 </div>
 </div>
@@ -149,10 +154,30 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds the specified parts to the end of the parts in this list.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#caseInsensitive(boolean)" class="member-name-link">caseInsensitive</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#append(java.lang.String,java.lang.Object)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#append(java.lang.String,java.util.function.Supplier)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#append(java.util.List)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;values)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#append(org.apache.http.NameValuePair)" class="member-name-link">append</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#append(org.apache.http.NameValuePair...)" class="member-name-link">append</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;values)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#caseInsensitive(boolean)" class="member-name-link">caseInsensitive</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Specifies that the parts in this list should be treated as case-sensitive.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#caseInsensitive(boolean)" class="member-name-link">caseInsensitive</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last even-row-color">
@@ -230,30 +255,62 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds the specified parts to the beginning of the parts in this list.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(java.lang.String)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Removes the part with the specified name from this list.</div>
-</div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#prepend(java.lang.String,java.lang.Object)" class="member-name-link">prepend</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(java.lang.String...)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#prepend(java.lang.String,java.util.function.Supplier)" class="member-name-link">prepend</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#prepend(java.util.List)" class="member-name-link">prepend</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;values)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#prepend(org.apache.http.NameValuePair)" class="member-name-link">prepend</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#prepend(org.apache.http.NameValuePair...)" class="member-name-link">prepend</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(java.lang.String)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Removes the part with the specified name from this list.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(java.util.List)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;values)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(java.lang.String...)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Removes the specified parts from this list.</div>
+<div class="block">Removes the part with the specified name from this list.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(org.apache.http.NameValuePair)" class="member-name-link">remove</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(java.util.List)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Removes the specified parts from this list.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(org.apache.http.NameValuePair)" class="member-name-link">remove</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Removes the specified part from this list.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(org.apache.http.NameValuePair...)" class="member-name-link">remove</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;values)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#remove(org.apache.http.NameValuePair...)" class="member-name-link">remove</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;values)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Removes the specified parts from this list.</div>
 </div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#remove(java.lang.String)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#remove(java.lang.String...)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#remove(java.util.List)" class="member-name-link">remove</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;values)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#remove(org.apache.http.NameValuePair)" class="member-name-link">remove</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#remove(org.apache.http.NameValuePair...)" class="member-name-link">remove</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#resolving()" class="member-name-link">resolving</a>()</code></div>
 <div class="col-last odd-row-color">
@@ -264,6 +321,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Allows part values to contain SVL variables.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#resolving()" class="member-name-link">resolving</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#resolving(org.apache.juneau.commons.svl.VarResolver)" class="member-name-link">resolving</a><wbr>(<a href="../../../../commons/svl/VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a>&nbsp;varResolver)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
@@ -292,30 +355,63 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds or replaces the part(s) with the same name.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(java.lang.String,java.lang.Object)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#set(java.lang.String,java.lang.Object)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#set(java.lang.String,java.util.function.Supplier)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#set(java.util.List)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;values)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#set(org.apache.http.NameValuePair)" class="member-name-link">set</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#set(org.apache.http.NameValuePair...)" class="member-name-link">set</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(java.lang.String,java.lang.Object)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Replaces the first occurrence of the part with the same name.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(java.lang.String,java.util.function.Supplier)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(java.lang.String,java.util.function.Supplier)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Replaces the first occurrence of the headers with the same name.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(java.util.List)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;parts)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(java.util.List)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;parts)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Adds a collection of default parts.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(org.apache.http.NameValuePair...)" class="member-name-link">setDefault</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;parts)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setDefault(org.apache.http.NameValuePair...)" class="member-name-link">setDefault</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;parts)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Makes a copy of this list of parts and adds a collection of default parts.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#setDefault(java.lang.String,java.lang.Object)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#setDefault(java.lang.String,java.util.function.Supplier)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#setDefault(java.util.List)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt;&nbsp;parts)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PartList.Unmodifiable.</span><code><a href="../PartList.Unmodifiable.html#setDefault(org.apache.http.NameValuePair...)" class="member-name-link">setDefault</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>...&nbsp;parts)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PartList.</span><code><a href="../PartList.html#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns an unmodifiable snapshot of this list.</div>
+</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.http.classic.part</a> with parameters of type <a href="../PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a></span></div>
 <div class="summary-table three-column-summary">

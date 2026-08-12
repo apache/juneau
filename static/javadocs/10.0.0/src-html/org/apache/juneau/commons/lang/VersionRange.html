@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40">   /**</span>
 <span class="source-line-no">041</span><span id="line-41">    * Constructor.</span>
 <span class="source-line-no">042</span><span id="line-42">    *</span>
-<span class="source-line-no">043</span><span id="line-43">    * @param range The range string to parse.</span>
+<span class="source-line-no">043</span><span id="line-43">    * @param range The range string to parse.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">044</span><span id="line-44">    */</span>
 <span class="source-line-no">045</span><span id="line-45">   public VersionRange(String range) {</span>
 <span class="source-line-no">046</span><span id="line-46">      range = range.trim();</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69">   /**</span>
 <span class="source-line-no">070</span><span id="line-70">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified version string matches this version range.</span>
 <span class="source-line-no">071</span><span id="line-71">    *</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param v The version string (e.g. &lt;js&gt;"1.2.3"&lt;/js&gt;)</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param v The version string (e.g. &lt;js&gt;"1.2.3"&lt;/js&gt;).  Can be &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">073</span><span id="line-73">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified version string matches this version range.</span>
 <span class="source-line-no">074</span><span id="line-74">    */</span>
 <span class="source-line-no">075</span><span id="line-75">   public boolean matches(String v) {</span>

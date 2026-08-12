@@ -175,7 +175,7 @@
 <span class="source-line-no">162</span><span id="line-162">    * @param mapper A mapping function to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">163</span><span id="line-163">    * @return An NullableReference describing the result of applying a mapping function to the value, if a value is present, otherwise an empty NullableReference.</span>
 <span class="source-line-no">164</span><span id="line-164">    */</span>
-<span class="source-line-no">165</span><span id="line-165">   public &lt;U&gt; NullableReference&lt;U&gt; map(Function&lt;? super V, ? extends U&gt; mapper) {</span>
+<span class="source-line-no">165</span><span id="line-165">   public &lt;U&gt; NullableReference&lt;U&gt; map(Function&lt;? super V,? extends U&gt; mapper) {</span>
 <span class="source-line-no">166</span><span id="line-166">      assertArgNotNull(ARG_mapper, mapper);</span>
 <span class="source-line-no">167</span><span id="line-167">      V value = get();</span>
 <span class="source-line-no">168</span><span id="line-168">      return nn(value) ? NullableReference.of(mapper.apply(value)) : NullableReference.empty();</span>
@@ -188,7 +188,7 @@
 <span class="source-line-no">175</span><span id="line-175">    * @param mapper A mapping function to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">176</span><span id="line-176">    * @return The result of applying an NullableReference-bearing mapping function to the value, if a value is present, otherwise an empty NullableReference.</span>
 <span class="source-line-no">177</span><span id="line-177">    */</span>
-<span class="source-line-no">178</span><span id="line-178">   public &lt;U&gt; NullableReference&lt;U&gt; flatMap(Function&lt;? super V, ? extends NullableReference&lt;? extends U&gt;&gt; mapper) {</span>
+<span class="source-line-no">178</span><span id="line-178">   public &lt;U&gt; NullableReference&lt;U&gt; flatMap(Function&lt;? super V,? extends NullableReference&lt;? extends U&gt;&gt; mapper) {</span>
 <span class="source-line-no">179</span><span id="line-179">      assertArgNotNull(ARG_mapper, mapper);</span>
 <span class="source-line-no">180</span><span id="line-180">      V value = get();</span>
 <span class="source-line-no">181</span><span id="line-181">      if (nn(value)) {</span>

@@ -126,7 +126,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPathInfoUndecoded()" class="member-name-link">getPathInfoUndecoded</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the request path info as a <a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> bean.</div>
+<div class="block">Returns the undecoded request servlet path info.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUrlPath()" class="member-name-link">getUrlPath</a>()</code></div>
@@ -226,10 +226,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getPathInfoUndecoded()">
 <h3>getPathInfoUndecoded</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-98">getPathInfoUndecoded</a></span>()</div>
-<div class="block">Returns the request path info as a <a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> bean.</div>
+<div class="block">Returns the undecoded request servlet path info.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The request path info as a <a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> bean.</dd>
+<dd>The undecoded request servlet path info, or <jk>null</jk> if there is no extra path information.</dd>
 </dl>
 </section>
 </li>

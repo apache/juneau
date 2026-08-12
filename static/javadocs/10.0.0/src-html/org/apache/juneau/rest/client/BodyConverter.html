@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    RestClient &lt;jv&gt;client&lt;/jv&gt; = RestClient.&lt;jsm&gt;builder&lt;/jsm&gt;()</span>
 <span class="source-line-no">044</span><span id="line-44"> *       .bodyConverter(BodyConverter.&lt;jsm&gt;of&lt;/jsm&gt;(MyBean.&lt;jk&gt;class&lt;/jk&gt;,</span>
-<span class="source-line-no">045</span><span id="line-45"> *          &lt;jv&gt;bean&lt;/jv&gt; -&amp;gt; TransportBody.&lt;jsm&gt;of&lt;/jsm&gt;(StringBody.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;mySerializer&lt;/jv&gt;.serialize(&lt;jv&gt;bean&lt;/jv&gt;)))))</span>
+<span class="source-line-no">045</span><span id="line-45"> *          &lt;jv&gt;bean&lt;/jv&gt; -&amp;gt; TransportBody.&lt;jsm&gt;of&lt;/jsm&gt;(StringBody.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;mySerializer&lt;/jv&gt;.write(&lt;jv&gt;bean&lt;/jv&gt;)))))</span>
 <span class="source-line-no">046</span><span id="line-46"> *       .build();</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>

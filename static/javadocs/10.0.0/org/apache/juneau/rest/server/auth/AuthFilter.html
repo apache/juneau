@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ApiKeyAuthFilter.html" title="class in org.apache.juneau.rest.server.auth">ApiKeyAuthFilter</a></code>, <code><a href="BearerTokenAuthFilter.html" title="class in org.apache.juneau.rest.server.auth">BearerTokenAuthFilter</a></code>, <code><a href="oauth/OAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter</a></code>, <code><a href="oidc/rp/OidcSessionAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSessionAuthFilter</a></code>, <code><a href="saml/SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-59">AuthFilter</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-61">AuthFilter</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements jakarta.servlet.Filter, <a href="Authenticator.html" title="interface in org.apache.juneau.rest.server.auth">Authenticator</a></span></div>
 <div class="block">Abstract base class for Juneau authentication servlet filters.
@@ -196,7 +196,7 @@ implements jakarta.servlet.Filter, <a href="Authenticator.html" title="interface
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AuthFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-59">AuthFilter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-61">AuthFilter</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -210,7 +210,7 @@ implements jakarta.servlet.Filter, <a href="Authenticator.html" title="interface
 <li>
 <section class="detail" id="doFilter(jakarta.servlet.ServletRequest,jakarta.servlet.ServletResponse,jakarta.servlet.FilterChain)">
 <h3>doFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-77">doFilter</a></span><wbr><span class="parameters">(jakarta.servlet.ServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-84">doFilter</a></span><wbr><span class="parameters">(jakarta.servlet.ServletRequest&nbsp;req,
  jakarta.servlet.ServletResponse&nbsp;resp,
  jakarta.servlet.FilterChain&nbsp;chain)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
@@ -238,7 +238,7 @@ jakarta.servlet.ServletException</span></div>
 <li>
 <section class="detail" id="init(jakarta.servlet.FilterConfig)">
 <h3>init</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-97">init</a></span><wbr><span class="parameters">(jakarta.servlet.FilterConfig&nbsp;cfg)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-104">init</a></span><wbr><span class="parameters">(jakarta.servlet.FilterConfig&nbsp;cfg)</span>
           throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">No-op default implementation.</div>
 <dl class="notes">
@@ -252,7 +252,7 @@ jakarta.servlet.ServletException</span></div>
 <li>
 <section class="detail" id="destroy()">
 <h3>destroy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-105">destroy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-112">destroy</a></span>()</div>
 <div class="block">No-op default implementation.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -263,14 +263,14 @@ jakarta.servlet.ServletException</span></div>
 <li>
 <section class="detail" id="sendChallenge(jakarta.servlet.http.HttpServletResponse,org.apache.juneau.rest.server.auth.AuthenticationException)">
 <h3>sendChallenge</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-117">sendChallenge</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;resp,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilter.html#line-124">sendChallenge</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;resp,
  <a href="AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a>&nbsp;e)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Writes a 401 response with the <code>WWW-Authenticate</code> challenge from the exception.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>resp</code> - The HTTP response.</dd>
-<dd><code>e</code> - The authentication failure.</dd>
+<dd><code>resp</code> - The HTTP response. Must not be <jk>null</jk>.</dd>
+<dd><code>e</code> - The authentication failure. Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If writing to the response fails.</dd>
 </dl>

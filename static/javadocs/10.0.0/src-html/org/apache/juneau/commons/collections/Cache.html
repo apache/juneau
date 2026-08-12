@@ -356,7 +356,7 @@
 <span class="source-line-no">343</span><span id="line-343">       *    Pattern &lt;jv&gt;p&lt;/jv&gt; = &lt;jv&gt;cache&lt;/jv&gt;.get(&lt;js&gt;"[a-z]+"&lt;/js&gt;);</span>
 <span class="source-line-no">344</span><span id="line-344">       * &lt;/p&gt;</span>
 <span class="source-line-no">345</span><span id="line-345">       *</span>
-<span class="source-line-no">346</span><span id="line-346">       * @param value The default supplier function. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">346</span><span id="line-346">       * @param value The default supplier function. Can be &lt;jk&gt;null&lt;/jk&gt; (calls to {@link Cache#get(Object)} will then always return &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">347</span><span id="line-347">       * @return This object for method chaining.</span>
 <span class="source-line-no">348</span><span id="line-348">       */</span>
 <span class="source-line-no">349</span><span id="line-349">      public Builder&lt;K,V&gt; supplier(Function&lt;K,V&gt; value) {</span>
@@ -577,7 +577,7 @@
 <span class="source-line-no">564</span><span id="line-564">   /**</span>
 <span class="source-line-no">565</span><span id="line-565">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the cache contains a mapping for the specified key.</span>
 <span class="source-line-no">566</span><span id="line-566">    *</span>
-<span class="source-line-no">567</span><span id="line-567">    * @param key The key to check.</span>
+<span class="source-line-no">567</span><span id="line-567">    * @param key The key to check. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">568</span><span id="line-568">    * @return &lt;jk&gt;true&lt;/jk&gt; if the cache contains the key.</span>
 <span class="source-line-no">569</span><span id="line-569">    */</span>
 <span class="source-line-no">570</span><span id="line-570">   public boolean containsKey(K key) {</span>
@@ -587,7 +587,7 @@
 <span class="source-line-no">574</span><span id="line-574">   /**</span>
 <span class="source-line-no">575</span><span id="line-575">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the cache contains one or more entries with the specified value.</span>
 <span class="source-line-no">576</span><span id="line-576">    *</span>
-<span class="source-line-no">577</span><span id="line-577">    * @param value The value to check.</span>
+<span class="source-line-no">577</span><span id="line-577">    * @param value The value to check. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns &lt;jk&gt;false&lt;/jk&gt; (the cache never stores &lt;jk&gt;null&lt;/jk&gt; values).</span>
 <span class="source-line-no">578</span><span id="line-578">    * @return &lt;jk&gt;true&lt;/jk&gt; if the cache contains the value.</span>
 <span class="source-line-no">579</span><span id="line-579">    */</span>
 <span class="source-line-no">580</span><span id="line-580">   public boolean containsValue(V value) {</span>
@@ -615,7 +615,7 @@
 <span class="source-line-no">602</span><span id="line-602">    *    Pattern &lt;jv&gt;p&lt;/jv&gt; = &lt;jv&gt;cache&lt;/jv&gt;.get(&lt;js&gt;"[0-9]+"&lt;/js&gt;);</span>
 <span class="source-line-no">603</span><span id="line-603">    * &lt;/p&gt;</span>
 <span class="source-line-no">604</span><span id="line-604">    *</span>
-<span class="source-line-no">605</span><span id="line-605">    * @param key The cache key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">605</span><span id="line-605">    * @param key The cache key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">606</span><span id="line-606">    * @return The cached or computed value. May be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">607</span><span id="line-607">    * @throws NullPointerException if no default supplier was configured.</span>
 <span class="source-line-no">608</span><span id="line-608">    */</span>
@@ -658,8 +658,8 @@
 <span class="source-line-no">645</span><span id="line-645">    *    &lt;jsm&gt;assert&lt;/jsm&gt; &lt;jv&gt;p1&lt;/jv&gt; == &lt;jv&gt;p2&lt;/jv&gt;;  &lt;jc&gt;// Same instance&lt;/jc&gt;</span>
 <span class="source-line-no">646</span><span id="line-646">    * &lt;/p&gt;</span>
 <span class="source-line-no">647</span><span id="line-647">    *</span>
-<span class="source-line-no">648</span><span id="line-648">    * @param key The cache key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">649</span><span id="line-649">    * @param supplier The supplier to compute the value if it's not in the cache. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">648</span><span id="line-648">    * @param key The cache key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">649</span><span id="line-649">    * @param supplier The supplier to compute the value if it's not in the cache. Must not be &lt;jk&gt;null&lt;/jk&gt; or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">650</span><span id="line-650">    * @return The cached or computed value. May be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">651</span><span id="line-651">    */</span>
 <span class="source-line-no">652</span><span id="line-652">   public V get(K key, Supplier&lt;V&gt; supplier) {</span>
@@ -721,7 +721,7 @@
 <span class="source-line-no">708</span><span id="line-708">   /**</span>
 <span class="source-line-no">709</span><span id="line-709">    * Associates the specified value with the specified key in this cache.</span>
 <span class="source-line-no">710</span><span id="line-710">    *</span>
-<span class="source-line-no">711</span><span id="line-711">    * @param key The cache key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">711</span><span id="line-711">    * @param key The cache key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">712</span><span id="line-712">    * @param value The value to associate with the key.</span>
 <span class="source-line-no">713</span><span id="line-713">    * @return The previous value associated with the key, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping.</span>
 <span class="source-line-no">714</span><span id="line-714">    */</span>
@@ -739,7 +739,7 @@
 <span class="source-line-no">726</span><span id="line-726">   /**</span>
 <span class="source-line-no">727</span><span id="line-727">    * Removes the entry for the specified key from the cache.</span>
 <span class="source-line-no">728</span><span id="line-728">    *</span>
-<span class="source-line-no">729</span><span id="line-729">    * @param key The key to remove. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">729</span><span id="line-729">    * @param key The key to remove. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">730</span><span id="line-730">    * @return The previous value associated with the key, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping.</span>
 <span class="source-line-no">731</span><span id="line-731">    */</span>
 <span class="source-line-no">732</span><span id="line-732">   public V remove(K key) {</span>

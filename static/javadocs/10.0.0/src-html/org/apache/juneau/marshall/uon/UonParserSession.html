@@ -212,7 +212,7 @@
 <span class="source-line-no">199</span><span id="line-199">   }</span>
 <span class="source-line-no">200</span><span id="line-200"></span>
 <span class="source-line-no">201</span><span id="line-201">   @Override /* RecordReadable */</span>
-<span class="source-line-no">202</span><span id="line-202">   public RecordReader parseRecords(Object input) throws IOException {</span>
+<span class="source-line-no">202</span><span id="line-202">   public RecordReader readRecords(Object input) throws IOException {</span>
 <span class="source-line-no">203</span><span id="line-203">      return RecordAdapter.reader(this, input);</span>
 <span class="source-line-no">204</span><span id="line-204">   }</span>
 <span class="source-line-no">205</span><span id="line-205"></span>
@@ -237,7 +237,7 @@
 <span class="source-line-no">224</span><span id="line-224">   }</span>
 <span class="source-line-no">225</span><span id="line-225"></span>
 <span class="source-line-no">226</span><span id="line-226">   @Override /* Overridden from HttpPartParser */</span>
-<span class="source-line-no">227</span><span id="line-227">   public &lt;T&gt; T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta&lt;T&gt; toType) throws ParseException, SchemaValidationException {</span>
+<span class="source-line-no">227</span><span id="line-227">   public &lt;T&gt; T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta&lt;T&gt; toType) throws ParseException, SchemaValidationException {</span>
 <span class="source-line-no">228</span><span id="line-228">      if (in == null)</span>
 <span class="source-line-no">229</span><span id="line-229">         return null;</span>
 <span class="source-line-no">230</span><span id="line-230">      if (toType.isString() &amp;&amp; ine(in)) {</span>
@@ -252,7 +252,7 @@
 <span class="source-line-no">239</span><span id="line-239">      }</span>
 <span class="source-line-no">240</span><span id="line-240">      try (var pipe = createPipe(in)) {</span>
 <span class="source-line-no">241</span><span id="line-241">         try (var r = getUonReader(pipe, false)) {</span>
-<span class="source-line-no">242</span><span id="line-242">            return parseAnything(toType, r, null, true, null);</span>
+<span class="source-line-no">242</span><span id="line-242">            return readAnything(toType, r, null, true, null);</span>
 <span class="source-line-no">243</span><span id="line-243">         }</span>
 <span class="source-line-no">244</span><span id="line-244">      } catch (ParseException e) {</span>
 <span class="source-line-no">245</span><span id="line-245">         throw e;</span>
@@ -267,702 +267,710 @@
 <span class="source-line-no">254</span><span id="line-254">    * @param &lt;T&gt; The class type being parsed, or &lt;jk&gt;null&lt;/jk&gt; if unknown.</span>
 <span class="source-line-no">255</span><span id="line-255">    * @param eType The class type being parsed, or &lt;jk&gt;null&lt;/jk&gt; if unknown.</span>
 <span class="source-line-no">256</span><span id="line-256">    * @param r The reader being parsed.</span>
-<span class="source-line-no">257</span><span id="line-257">    * @param outer The outer object (for constructing nested inner classes).</span>
-<span class="source-line-no">258</span><span id="line-258">    * @param isUrlParamValue</span>
-<span class="source-line-no">259</span><span id="line-259">    *    If &lt;jk&gt;true&lt;/jk&gt;, then we're parsing a top-level URL-encoded value which is treated a bit different than the</span>
-<span class="source-line-no">260</span><span id="line-260">    *    default case.</span>
-<span class="source-line-no">261</span><span id="line-261">    * @param pMeta The current bean property being parsed.</span>
-<span class="source-line-no">262</span><span id="line-262">    * @return The parsed object.</span>
-<span class="source-line-no">263</span><span id="line-263">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">264</span><span id="line-264">    * @throws ParseException Malformed input encountered.</span>
-<span class="source-line-no">265</span><span id="line-265">    * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
-<span class="source-line-no">266</span><span id="line-266">    */</span>
-<span class="source-line-no">267</span><span id="line-267">   @SuppressWarnings({</span>
-<span class="source-line-no">268</span><span id="line-268">      "java:S3776", // Cognitive complexity acceptable for parser state machine</span>
-<span class="source-line-no">269</span><span id="line-269">      "java:S6541"  // Synchronization not needed for session-local state</span>
-<span class="source-line-no">270</span><span id="line-270">   })</span>
-<span class="source-line-no">271</span><span id="line-271">   public &lt;T&gt; T parseAnything(ClassMeta&lt;?&gt; eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {</span>
-<span class="source-line-no">272</span><span id="line-272"></span>
-<span class="source-line-no">273</span><span id="line-273">      if (eType == null)</span>
-<span class="source-line-no">274</span><span id="line-274">         eType = object();</span>
-<span class="source-line-no">275</span><span id="line-275">      var swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(this);</span>
-<span class="source-line-no">276</span><span id="line-276">      var builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(this);</span>
-<span class="source-line-no">277</span><span id="line-277">      ClassMeta&lt;?&gt; sType = null;</span>
-<span class="source-line-no">278</span><span id="line-278">      if (nn(builder))</span>
-<span class="source-line-no">279</span><span id="line-279">         sType = builder.getBuilderClassMeta(this);</span>
-<span class="source-line-no">280</span><span id="line-280">      else if (nn(swap))</span>
-<span class="source-line-no">281</span><span id="line-281">         sType = swap.getSwapClassMeta(this);</span>
-<span class="source-line-no">282</span><span id="line-282">      else</span>
-<span class="source-line-no">283</span><span id="line-283">         sType = eType;</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">      if (sType.isOptional())</span>
-<span class="source-line-no">286</span><span id="line-286">         return (T)o(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));</span>
+<span class="source-line-no">257</span><span id="line-257">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">258</span><span id="line-258">    * @param outer The outer object (for constructing nested inner classes).</span>
+<span class="source-line-no">259</span><span id="line-259">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; if there is no enclosing (outer) object; the parsed object is then not linked to a parent.</span>
+<span class="source-line-no">260</span><span id="line-260">    * @param isUrlParamValue</span>
+<span class="source-line-no">261</span><span id="line-261">    *    If &lt;jk&gt;true&lt;/jk&gt;, then we're parsing a top-level URL-encoded value which is treated a bit different than the</span>
+<span class="source-line-no">262</span><span id="line-262">    *    default case.</span>
+<span class="source-line-no">263</span><span id="line-263">    * @param pMeta The current bean property being parsed.</span>
+<span class="source-line-no">264</span><span id="line-264">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; if no bean property metadata applies (e.g. the root value or an unknown property).</span>
+<span class="source-line-no">265</span><span id="line-265">    * @return The parsed object.</span>
+<span class="source-line-no">266</span><span id="line-266">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">267</span><span id="line-267">    * @throws ParseException Malformed input encountered.</span>
+<span class="source-line-no">268</span><span id="line-268">    * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
+<span class="source-line-no">269</span><span id="line-269">    */</span>
+<span class="source-line-no">270</span><span id="line-270">   @SuppressWarnings({</span>
+<span class="source-line-no">271</span><span id="line-271">      "java:S3776", // Cognitive complexity acceptable for parser state machine</span>
+<span class="source-line-no">272</span><span id="line-272">      "java:S6541"  // Synchronization not needed for session-local state</span>
+<span class="source-line-no">273</span><span id="line-273">   })</span>
+<span class="source-line-no">274</span><span id="line-274">   public &lt;T&gt; T readAnything(ClassMeta&lt;?&gt; eType, UonReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {</span>
+<span class="source-line-no">275</span><span id="line-275"></span>
+<span class="source-line-no">276</span><span id="line-276">      if (eType == null)</span>
+<span class="source-line-no">277</span><span id="line-277">         eType = object();</span>
+<span class="source-line-no">278</span><span id="line-278">      var swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(this);</span>
+<span class="source-line-no">279</span><span id="line-279">      var builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(this);</span>
+<span class="source-line-no">280</span><span id="line-280">      ClassMeta&lt;?&gt; sType = null;</span>
+<span class="source-line-no">281</span><span id="line-281">      if (nn(builder))</span>
+<span class="source-line-no">282</span><span id="line-282">         sType = builder.getBuilderClassMeta(this);</span>
+<span class="source-line-no">283</span><span id="line-283">      else if (nn(swap))</span>
+<span class="source-line-no">284</span><span id="line-284">         sType = swap.getSwapClassMeta(this);</span>
+<span class="source-line-no">285</span><span id="line-285">      else</span>
+<span class="source-line-no">286</span><span id="line-286">         sType = eType;</span>
 <span class="source-line-no">287</span><span id="line-287"></span>
-<span class="source-line-no">288</span><span id="line-288">      setCurrentClass(sType);</span>
-<span class="source-line-no">289</span><span id="line-289"></span>
-<span class="source-line-no">290</span><span id="line-290">      Object o = null;</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">      int c = r.peekSkipWs();</span>
-<span class="source-line-no">293</span><span id="line-293"></span>
-<span class="source-line-no">294</span><span id="line-294">      if (c == -1 || c == AMP) {</span>
-<span class="source-line-no">295</span><span id="line-295">         // If parameter is blank and it's an array or collection, return an empty list.</span>
-<span class="source-line-no">296</span><span id="line-296">         if (sType.isCollectionOrArray())</span>
-<span class="source-line-no">297</span><span id="line-297">            o = sType.newInstance();</span>
-<span class="source-line-no">298</span><span id="line-298">         else if (sType.isString() || sType.isObject())</span>
-<span class="source-line-no">299</span><span id="line-299">            o = "";</span>
-<span class="source-line-no">300</span><span id="line-300">         else if (sType.isPrimitive())</span>
-<span class="source-line-no">301</span><span id="line-301">            o = sType.getPrimitiveDefault();</span>
-<span class="source-line-no">302</span><span id="line-302">         // Otherwise, leave null.</span>
-<span class="source-line-no">303</span><span id="line-303">      } else if (sType.isVoid()) {</span>
-<span class="source-line-no">304</span><span id="line-304">         var s = parseString(r, isUrlParamValue);</span>
-<span class="source-line-no">305</span><span id="line-305">         if (nn(s))</span>
-<span class="source-line-no">306</span><span id="line-306">            throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);</span>
-<span class="source-line-no">307</span><span id="line-307">      } else if (sType.isObject()) {</span>
-<span class="source-line-no">308</span><span id="line-308">         if (c == '(') {</span>
-<span class="source-line-no">309</span><span id="line-309">            var m = newGenericMap();</span>
-<span class="source-line-no">310</span><span id="line-310">            parseIntoMap(r, m, string(), object(), pMeta);</span>
-<span class="source-line-no">311</span><span id="line-311">            o = cast(m, pMeta, eType);</span>
-<span class="source-line-no">312</span><span id="line-312">         } else if (c == '@') {</span>
-<span class="source-line-no">313</span><span id="line-313">            Collection l = newGenericList();</span>
-<span class="source-line-no">314</span><span id="line-314">            o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);</span>
-<span class="source-line-no">315</span><span id="line-315">         } else {</span>
-<span class="source-line-no">316</span><span id="line-316">            var s = parseString(r, isUrlParamValue);</span>
-<span class="source-line-no">317</span><span id="line-317">            if (c != '\'') {</span>
-<span class="source-line-no">318</span><span id="line-318">               if ("true".equals(s) || "false".equals(s))</span>
-<span class="source-line-no">319</span><span id="line-319">                  o = b(s);</span>
-<span class="source-line-no">320</span><span id="line-320">               else {</span>
-<span class="source-line-no">321</span><span id="line-321">                  if (isNumeric(s))</span>
-<span class="source-line-no">322</span><span id="line-322">                     o = StringUtils.parseNumber(s, Number.class);</span>
-<span class="source-line-no">323</span><span id="line-323">                  else</span>
-<span class="source-line-no">324</span><span id="line-324">                     o = s;</span>
-<span class="source-line-no">325</span><span id="line-325">               }</span>
-<span class="source-line-no">326</span><span id="line-326">            } else {</span>
-<span class="source-line-no">327</span><span id="line-327">               o = s;</span>
-<span class="source-line-no">328</span><span id="line-328">            }</span>
-<span class="source-line-no">329</span><span id="line-329">         }</span>
-<span class="source-line-no">330</span><span id="line-330">      } else if (nn(builder)) {</span>
-<span class="source-line-no">331</span><span id="line-331">         var m = toBeanMap(builder.create(this, eType));</span>
-<span class="source-line-no">332</span><span id="line-332">         m = parseIntoBeanMap(r, m);</span>
-<span class="source-line-no">333</span><span id="line-333">         o = m == null ? null : builder.build(this, m.getBean(), eType);</span>
-<span class="source-line-no">334</span><span id="line-334">      } else if (sType.canCreateNewBean(outer)) {</span>
-<span class="source-line-no">335</span><span id="line-335">         var m = newBeanMap(outer, sType.inner());</span>
-<span class="source-line-no">336</span><span id="line-336">         m = parseIntoBeanMap(r, m);</span>
-<span class="source-line-no">337</span><span id="line-337">         o = m == null ? null : m.getBean();</span>
-<span class="source-line-no">338</span><span id="line-338">      } else if (sType.isMap()) {</span>
-<span class="source-line-no">339</span><span id="line-339">         var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));</span>
-<span class="source-line-no">340</span><span id="line-340">         o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);</span>
-<span class="source-line-no">341</span><span id="line-341">      } else if (sType.isCollection()) {</span>
-<span class="source-line-no">342</span><span id="line-342">         if (c == '(') {</span>
-<span class="source-line-no">343</span><span id="line-343">            var m = newGenericMap();</span>
-<span class="source-line-no">344</span><span id="line-344">            parseIntoMap(r, m, string(), object(), pMeta);</span>
-<span class="source-line-no">345</span><span id="line-345">            // Handle case where it's a collection, but serialized as a map with a _type or _value key.</span>
-<span class="source-line-no">346</span><span id="line-346">            if (m.containsKey(getBeanTypePropertyName(sType)))</span>
-<span class="source-line-no">347</span><span id="line-347">               o = cast(m, pMeta, eType);</span>
-<span class="source-line-no">348</span><span id="line-348">            // Handle case where it's a collection, but only a single value was specified.</span>
-<span class="source-line-no">349</span><span id="line-349">            else {</span>
-<span class="source-line-no">350</span><span id="line-350">               var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());</span>
-<span class="source-line-no">351</span><span id="line-351">               l.add(m.cast(sType.getElementType()));</span>
-<span class="source-line-no">352</span><span id="line-352">               o = l;</span>
-<span class="source-line-no">353</span><span id="line-353">            }</span>
-<span class="source-line-no">354</span><span id="line-354">         } else {</span>
-<span class="source-line-no">355</span><span id="line-355">            var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());</span>
-<span class="source-line-no">356</span><span id="line-356">            o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);</span>
-<span class="source-line-no">357</span><span id="line-357">         }</span>
-<span class="source-line-no">358</span><span id="line-358">      } else if (sType.isArray() || sType.isArgs()) {</span>
-<span class="source-line-no">359</span><span id="line-359">         if (c == '(') {</span>
-<span class="source-line-no">360</span><span id="line-360">            var m = newGenericMap();</span>
-<span class="source-line-no">361</span><span id="line-361">            parseIntoMap(r, m, string(), object(), pMeta);</span>
-<span class="source-line-no">362</span><span id="line-362">            // Handle case where it's an array, but serialized as a map with a _type or _value key.</span>
-<span class="source-line-no">363</span><span id="line-363">            if (m.containsKey(getBeanTypePropertyName(sType)))</span>
-<span class="source-line-no">364</span><span id="line-364">               o = cast(m, pMeta, eType);</span>
-<span class="source-line-no">365</span><span id="line-365">            // Handle case where it's an array, but only a single value was specified.</span>
-<span class="source-line-no">366</span><span id="line-366">            else {</span>
-<span class="source-line-no">367</span><span id="line-367">               var l = listOfSize(1);</span>
-<span class="source-line-no">368</span><span id="line-368">               l.add(m.cast(sType.getElementType()));</span>
-<span class="source-line-no">369</span><span id="line-369">               o = toArray(sType, l);</span>
-<span class="source-line-no">370</span><span id="line-370">            }</span>
-<span class="source-line-no">371</span><span id="line-371">         } else {</span>
-<span class="source-line-no">372</span><span id="line-372">            var l = (ArrayList)parseIntoCollection(r, list(), sType, isUrlParamValue, pMeta);</span>
-<span class="source-line-no">373</span><span id="line-373">            o = toArray(sType, l);</span>
-<span class="source-line-no">374</span><span id="line-374">         }</span>
-<span class="source-line-no">375</span><span id="line-375">      } else if (sType.isCharSequence()) {</span>
-<span class="source-line-no">376</span><span id="line-376">         o = parseString(r, isUrlParamValue);</span>
-<span class="source-line-no">377</span><span id="line-377">      } else if (sType.isChar()) {</span>
-<span class="source-line-no">378</span><span id="line-378">         o = parseCharacter(parseString(r, isUrlParamValue));</span>
-<span class="source-line-no">379</span><span id="line-379">      } else if (sType.isNumber()) {</span>
-<span class="source-line-no">380</span><span id="line-380">         o = parseNumber(r, (Class&lt;? extends Number&gt;)sType.inner());</span>
-<span class="source-line-no">381</span><span id="line-381">      } else if (sType.isBoolean()) {</span>
-<span class="source-line-no">382</span><span id="line-382">         o = parseBoolean(r);</span>
-<span class="source-line-no">383</span><span id="line-383">      } else if (sType.isDate()) {</span>
-<span class="source-line-no">384</span><span id="line-384">         o = parseDate(parseString(r, isUrlParamValue), sType);</span>
-<span class="source-line-no">385</span><span id="line-385">      } else if (sType.isCalendar()) {</span>
-<span class="source-line-no">386</span><span id="line-386">         o = parseCalendar(parseString(r, isUrlParamValue), sType);</span>
-<span class="source-line-no">387</span><span id="line-387">      } else if (sType.isTemporal()) {</span>
-<span class="source-line-no">388</span><span id="line-388">         o = parseTemporal(parseString(r, isUrlParamValue), sType);</span>
-<span class="source-line-no">389</span><span id="line-389">      } else if (sType.isDuration()) {</span>
-<span class="source-line-no">390</span><span id="line-390">         o = parseDuration(parseString(r, isUrlParamValue));</span>
-<span class="source-line-no">391</span><span id="line-391">      } else if (sType.isPeriod()) {</span>
-<span class="source-line-no">392</span><span id="line-392">         o = parsePeriod(parseString(r, isUrlParamValue));</span>
-<span class="source-line-no">393</span><span id="line-393">      } else if (sType.canCreateNewInstanceFromString(outer)) {</span>
-<span class="source-line-no">394</span><span id="line-394">         var s = parseString(r, isUrlParamValue);</span>
-<span class="source-line-no">395</span><span id="line-395">         if (nn(s))</span>
-<span class="source-line-no">396</span><span id="line-396">            o = sType.newInstanceFromString(outer, s);</span>
-<span class="source-line-no">397</span><span id="line-397">      } else if (c == '(') {</span>
-<span class="source-line-no">398</span><span id="line-398">         // It could be a non-bean with _type attribute.</span>
-<span class="source-line-no">399</span><span id="line-399">         var m = newGenericMap();</span>
-<span class="source-line-no">400</span><span id="line-400">         parseIntoMap(r, m, string(), object(), pMeta);</span>
-<span class="source-line-no">401</span><span id="line-401">         if (m.containsKey(getBeanTypePropertyName(sType)))</span>
-<span class="source-line-no">402</span><span id="line-402">            o = cast(m, pMeta, eType);</span>
-<span class="source-line-no">403</span><span id="line-403">         else if (nn(sType.getProxyInvocationHandler()))</span>
-<span class="source-line-no">404</span><span id="line-404">            o = newBeanMap(outer, sType.inner()).load(m).getBean();</span>
-<span class="source-line-no">405</span><span id="line-405">         else</span>
-<span class="source-line-no">406</span><span id="line-406">            throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());</span>
-<span class="source-line-no">407</span><span id="line-407">      } else if (c == 'n') {</span>
-<span class="source-line-no">408</span><span id="line-408">         @SuppressWarnings({</span>
-<span class="source-line-no">409</span><span id="line-409">            "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
-<span class="source-line-no">410</span><span id="line-410">         })</span>
-<span class="source-line-no">411</span><span id="line-411">         int ignored = r.read();</span>
-<span class="source-line-no">412</span><span id="line-412">         parseNull(r);</span>
-<span class="source-line-no">413</span><span id="line-413">      } else {</span>
-<span class="source-line-no">414</span><span id="line-414">         throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());</span>
-<span class="source-line-no">415</span><span id="line-415">      }</span>
-<span class="source-line-no">416</span><span id="line-416"></span>
-<span class="source-line-no">417</span><span id="line-417">      if (o == null &amp;&amp; sType.isPrimitive())</span>
-<span class="source-line-no">418</span><span id="line-418">         o = sType.getPrimitiveDefault();</span>
-<span class="source-line-no">419</span><span id="line-419">      if (nn(swap) &amp;&amp; nn(o))</span>
-<span class="source-line-no">420</span><span id="line-420">         o = unswap(swap, o, eType);</span>
-<span class="source-line-no">421</span><span id="line-421"></span>
-<span class="source-line-no">422</span><span id="line-422">      if (nn(outer))</span>
-<span class="source-line-no">423</span><span id="line-423">         setParent(eType, o, outer);</span>
+<span class="source-line-no">288</span><span id="line-288">      if (sType.isOptional())</span>
+<span class="source-line-no">289</span><span id="line-289">         return (T)o(readAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));</span>
+<span class="source-line-no">290</span><span id="line-290"></span>
+<span class="source-line-no">291</span><span id="line-291">      setCurrentClass(sType);</span>
+<span class="source-line-no">292</span><span id="line-292"></span>
+<span class="source-line-no">293</span><span id="line-293">      Object o = null;</span>
+<span class="source-line-no">294</span><span id="line-294"></span>
+<span class="source-line-no">295</span><span id="line-295">      int c = r.peekSkipWs();</span>
+<span class="source-line-no">296</span><span id="line-296"></span>
+<span class="source-line-no">297</span><span id="line-297">      if (c == -1 || c == AMP) {</span>
+<span class="source-line-no">298</span><span id="line-298">         // If parameter is blank and it's an array or collection, return an empty list.</span>
+<span class="source-line-no">299</span><span id="line-299">         if (sType.isCollectionOrArray())</span>
+<span class="source-line-no">300</span><span id="line-300">            o = sType.newInstance();</span>
+<span class="source-line-no">301</span><span id="line-301">         else if (sType.isString() || sType.isObject())</span>
+<span class="source-line-no">302</span><span id="line-302">            o = "";</span>
+<span class="source-line-no">303</span><span id="line-303">         else if (sType.isPrimitive())</span>
+<span class="source-line-no">304</span><span id="line-304">            o = sType.getPrimitiveDefault();</span>
+<span class="source-line-no">305</span><span id="line-305">         // Otherwise, leave null.</span>
+<span class="source-line-no">306</span><span id="line-306">      } else if (sType.isVoid()) {</span>
+<span class="source-line-no">307</span><span id="line-307">         var s = readString(r, isUrlParamValue);</span>
+<span class="source-line-no">308</span><span id="line-308">         if (nn(s))</span>
+<span class="source-line-no">309</span><span id="line-309">            throw new ParseException(this, "Expected 'null' for void value, but was '%s'.", s);</span>
+<span class="source-line-no">310</span><span id="line-310">      } else if (sType.isObject()) {</span>
+<span class="source-line-no">311</span><span id="line-311">         if (c == '(') {</span>
+<span class="source-line-no">312</span><span id="line-312">            var m = newGenericMap();</span>
+<span class="source-line-no">313</span><span id="line-313">            readIntoMap(r, m, string(), object(), pMeta);</span>
+<span class="source-line-no">314</span><span id="line-314">            o = cast(m, pMeta, eType);</span>
+<span class="source-line-no">315</span><span id="line-315">         } else if (c == '@') {</span>
+<span class="source-line-no">316</span><span id="line-316">            Collection l = newGenericList();</span>
+<span class="source-line-no">317</span><span id="line-317">            o = readIntoCollection(r, l, sType, isUrlParamValue, pMeta);</span>
+<span class="source-line-no">318</span><span id="line-318">         } else {</span>
+<span class="source-line-no">319</span><span id="line-319">            var s = readString(r, isUrlParamValue);</span>
+<span class="source-line-no">320</span><span id="line-320">            if (c != '\'') {</span>
+<span class="source-line-no">321</span><span id="line-321">               if ("true".equals(s) || "false".equals(s))</span>
+<span class="source-line-no">322</span><span id="line-322">                  o = b(s);</span>
+<span class="source-line-no">323</span><span id="line-323">               else {</span>
+<span class="source-line-no">324</span><span id="line-324">                  if (isNumeric(s))</span>
+<span class="source-line-no">325</span><span id="line-325">                     o = StringUtils.parseNumber(s, Number.class);</span>
+<span class="source-line-no">326</span><span id="line-326">                  else</span>
+<span class="source-line-no">327</span><span id="line-327">                     o = s;</span>
+<span class="source-line-no">328</span><span id="line-328">               }</span>
+<span class="source-line-no">329</span><span id="line-329">            } else {</span>
+<span class="source-line-no">330</span><span id="line-330">               o = s;</span>
+<span class="source-line-no">331</span><span id="line-331">            }</span>
+<span class="source-line-no">332</span><span id="line-332">         }</span>
+<span class="source-line-no">333</span><span id="line-333">      } else if (nn(builder)) {</span>
+<span class="source-line-no">334</span><span id="line-334">         var m = toBeanMap(builder.create(this, eType));</span>
+<span class="source-line-no">335</span><span id="line-335">         m = readIntoBeanMap(r, m);</span>
+<span class="source-line-no">336</span><span id="line-336">         o = m == null ? null : builder.build(this, m.getBean(), eType);</span>
+<span class="source-line-no">337</span><span id="line-337">      } else if (sType.canCreateNewBean(outer)) {</span>
+<span class="source-line-no">338</span><span id="line-338">         var m = newBeanMap(outer, sType.inner());</span>
+<span class="source-line-no">339</span><span id="line-339">         m = readIntoBeanMap(r, m);</span>
+<span class="source-line-no">340</span><span id="line-340">         o = m == null ? null : m.getBean();</span>
+<span class="source-line-no">341</span><span id="line-341">      } else if (sType.isMap()) {</span>
+<span class="source-line-no">342</span><span id="line-342">         var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));</span>
+<span class="source-line-no">343</span><span id="line-343">         o = readIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);</span>
+<span class="source-line-no">344</span><span id="line-344">      } else if (sType.isCollection()) {</span>
+<span class="source-line-no">345</span><span id="line-345">         if (c == '(') {</span>
+<span class="source-line-no">346</span><span id="line-346">            var m = newGenericMap();</span>
+<span class="source-line-no">347</span><span id="line-347">            readIntoMap(r, m, string(), object(), pMeta);</span>
+<span class="source-line-no">348</span><span id="line-348">            // Handle case where it's a collection, but serialized as a map with a _type or _value key.</span>
+<span class="source-line-no">349</span><span id="line-349">            if (m.containsKey(getBeanTypePropertyName(sType)))</span>
+<span class="source-line-no">350</span><span id="line-350">               o = cast(m, pMeta, eType);</span>
+<span class="source-line-no">351</span><span id="line-351">            // Handle case where it's a collection, but only a single value was specified.</span>
+<span class="source-line-no">352</span><span id="line-352">            else {</span>
+<span class="source-line-no">353</span><span id="line-353">               var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());</span>
+<span class="source-line-no">354</span><span id="line-354">               l.add(m.cast(sType.getElementType()));</span>
+<span class="source-line-no">355</span><span id="line-355">               o = l;</span>
+<span class="source-line-no">356</span><span id="line-356">            }</span>
+<span class="source-line-no">357</span><span id="line-357">         } else {</span>
+<span class="source-line-no">358</span><span id="line-358">            var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());</span>
+<span class="source-line-no">359</span><span id="line-359">            o = readIntoCollection(r, l, sType, isUrlParamValue, pMeta);</span>
+<span class="source-line-no">360</span><span id="line-360">         }</span>
+<span class="source-line-no">361</span><span id="line-361">      } else if (sType.isArray() || sType.isArgs()) {</span>
+<span class="source-line-no">362</span><span id="line-362">         if (c == '(') {</span>
+<span class="source-line-no">363</span><span id="line-363">            var m = newGenericMap();</span>
+<span class="source-line-no">364</span><span id="line-364">            readIntoMap(r, m, string(), object(), pMeta);</span>
+<span class="source-line-no">365</span><span id="line-365">            // Handle case where it's an array, but serialized as a map with a _type or _value key.</span>
+<span class="source-line-no">366</span><span id="line-366">            if (m.containsKey(getBeanTypePropertyName(sType)))</span>
+<span class="source-line-no">367</span><span id="line-367">               o = cast(m, pMeta, eType);</span>
+<span class="source-line-no">368</span><span id="line-368">            // Handle case where it's an array, but only a single value was specified.</span>
+<span class="source-line-no">369</span><span id="line-369">            else {</span>
+<span class="source-line-no">370</span><span id="line-370">               var l = listOfSize(1);</span>
+<span class="source-line-no">371</span><span id="line-371">               l.add(m.cast(sType.getElementType()));</span>
+<span class="source-line-no">372</span><span id="line-372">               o = toArray(sType, l);</span>
+<span class="source-line-no">373</span><span id="line-373">            }</span>
+<span class="source-line-no">374</span><span id="line-374">         } else {</span>
+<span class="source-line-no">375</span><span id="line-375">            var l = (ArrayList)readIntoCollection(r, list(), sType, isUrlParamValue, pMeta);</span>
+<span class="source-line-no">376</span><span id="line-376">            o = toArray(sType, l);</span>
+<span class="source-line-no">377</span><span id="line-377">         }</span>
+<span class="source-line-no">378</span><span id="line-378">      } else if (sType.isCharSequence()) {</span>
+<span class="source-line-no">379</span><span id="line-379">         o = readString(r, isUrlParamValue);</span>
+<span class="source-line-no">380</span><span id="line-380">      } else if (sType.isChar()) {</span>
+<span class="source-line-no">381</span><span id="line-381">         o = parseCharacter(readString(r, isUrlParamValue));</span>
+<span class="source-line-no">382</span><span id="line-382">      } else if (sType.isNumber()) {</span>
+<span class="source-line-no">383</span><span id="line-383">         o = readNumber(r, (Class&lt;? extends Number&gt;)sType.inner());</span>
+<span class="source-line-no">384</span><span id="line-384">      } else if (sType.isBoolean()) {</span>
+<span class="source-line-no">385</span><span id="line-385">         o = readBoolean(r);</span>
+<span class="source-line-no">386</span><span id="line-386">      } else if (sType.isDate()) {</span>
+<span class="source-line-no">387</span><span id="line-387">         o = readDate(readString(r, isUrlParamValue), sType);</span>
+<span class="source-line-no">388</span><span id="line-388">      } else if (sType.isCalendar()) {</span>
+<span class="source-line-no">389</span><span id="line-389">         o = readCalendar(readString(r, isUrlParamValue), sType);</span>
+<span class="source-line-no">390</span><span id="line-390">      } else if (sType.isTemporal()) {</span>
+<span class="source-line-no">391</span><span id="line-391">         o = readTemporal(readString(r, isUrlParamValue), sType);</span>
+<span class="source-line-no">392</span><span id="line-392">      } else if (sType.isDuration()) {</span>
+<span class="source-line-no">393</span><span id="line-393">         o = readDuration(readString(r, isUrlParamValue));</span>
+<span class="source-line-no">394</span><span id="line-394">      } else if (sType.isPeriod()) {</span>
+<span class="source-line-no">395</span><span id="line-395">         o = readPeriod(readString(r, isUrlParamValue));</span>
+<span class="source-line-no">396</span><span id="line-396">      } else if (sType.canCreateNewInstanceFromString(outer)) {</span>
+<span class="source-line-no">397</span><span id="line-397">         var s = readString(r, isUrlParamValue);</span>
+<span class="source-line-no">398</span><span id="line-398">         if (nn(s))</span>
+<span class="source-line-no">399</span><span id="line-399">            o = sType.newInstanceFromString(outer, s);</span>
+<span class="source-line-no">400</span><span id="line-400">      } else if (c == '(') {</span>
+<span class="source-line-no">401</span><span id="line-401">         // It could be a non-bean with _type attribute.</span>
+<span class="source-line-no">402</span><span id="line-402">         var m = newGenericMap();</span>
+<span class="source-line-no">403</span><span id="line-403">         readIntoMap(r, m, string(), object(), pMeta);</span>
+<span class="source-line-no">404</span><span id="line-404">         if (m.containsKey(getBeanTypePropertyName(sType)))</span>
+<span class="source-line-no">405</span><span id="line-405">            o = cast(m, pMeta, eType);</span>
+<span class="source-line-no">406</span><span id="line-406">         else if (nn(sType.getProxyInvocationHandler()))</span>
+<span class="source-line-no">407</span><span id="line-407">            o = newBeanMap(outer, sType.inner()).load(m).getBean();</span>
+<span class="source-line-no">408</span><span id="line-408">         else</span>
+<span class="source-line-no">409</span><span id="line-409">            throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());</span>
+<span class="source-line-no">410</span><span id="line-410">      } else if (c == 'n') {</span>
+<span class="source-line-no">411</span><span id="line-411">         @SuppressWarnings({</span>
+<span class="source-line-no">412</span><span id="line-412">            "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
+<span class="source-line-no">413</span><span id="line-413">         })</span>
+<span class="source-line-no">414</span><span id="line-414">         int ignored = r.read();</span>
+<span class="source-line-no">415</span><span id="line-415">         readNull(r);</span>
+<span class="source-line-no">416</span><span id="line-416">      } else {</span>
+<span class="source-line-no">417</span><span id="line-417">         throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());</span>
+<span class="source-line-no">418</span><span id="line-418">      }</span>
+<span class="source-line-no">419</span><span id="line-419"></span>
+<span class="source-line-no">420</span><span id="line-420">      if (o == null &amp;&amp; sType.isPrimitive())</span>
+<span class="source-line-no">421</span><span id="line-421">         o = sType.getPrimitiveDefault();</span>
+<span class="source-line-no">422</span><span id="line-422">      if (nn(swap) &amp;&amp; nn(o))</span>
+<span class="source-line-no">423</span><span id="line-423">         o = unswap(swap, o, eType);</span>
 <span class="source-line-no">424</span><span id="line-424"></span>
-<span class="source-line-no">425</span><span id="line-425">      return (T)o;</span>
-<span class="source-line-no">426</span><span id="line-426">   }</span>
+<span class="source-line-no">425</span><span id="line-425">      if (nn(parentBean()))</span>
+<span class="source-line-no">426</span><span id="line-426">         setParent(eType, o, parentBean());</span>
 <span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">   @SuppressWarnings({</span>
-<span class="source-line-no">429</span><span id="line-429">      "java:S2447" // null is a valid UON value distinct from true/false; Boolean (boxed) is deliberately used for this tristate</span>
-<span class="source-line-no">430</span><span id="line-430">   })</span>
-<span class="source-line-no">431</span><span id="line-431">   private Boolean parseBoolean(UonReader r) throws IOException, ParseException {</span>
-<span class="source-line-no">432</span><span id="line-432">      var s = parseString(r, false);</span>
-<span class="source-line-no">433</span><span id="line-433">      if (s == null || s.equals("null"))</span>
-<span class="source-line-no">434</span><span id="line-434">         return null;</span>
-<span class="source-line-no">435</span><span id="line-435">      if (eqic(s, "true"))</span>
-<span class="source-line-no">436</span><span id="line-436">         return true;</span>
-<span class="source-line-no">437</span><span id="line-437">      if (eqic(s, "false"))</span>
-<span class="source-line-no">438</span><span id="line-438">         return false;</span>
-<span class="source-line-no">439</span><span id="line-439">      throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);</span>
-<span class="source-line-no">440</span><span id="line-440">   }</span>
-<span class="source-line-no">441</span><span id="line-441"></span>
-<span class="source-line-no">442</span><span id="line-442">   @SuppressWarnings({</span>
-<span class="source-line-no">443</span><span id="line-443">      "java:S1168",    // Intentionally returns null for empty/EOF or parseAttrName('%00') in this parser state machine.</span>
-<span class="source-line-no">444</span><span id="line-444">      "java:S2583",    // S1 checks c==-1/AMP for defensive completeness; while-guard makes these sub-expressions always-false</span>
-<span class="source-line-no">445</span><span id="line-445">      "java:S3776",    // Cognitive complexity acceptable for this specific logic</span>
-<span class="source-line-no">446</span><span id="line-446">      "java:S6541",    // Single-threaded session contexts do not require synchronization</span>
-<span class="source-line-no">447</span><span id="line-447">   })</span>
-<span class="source-line-no">448</span><span id="line-448">   private &lt;T&gt; BeanMap&lt;T&gt; parseIntoBeanMap(UonReader r, BeanMap&lt;T&gt; m) throws IOException, ParseException, ExecutableException {</span>
-<span class="source-line-no">449</span><span id="line-449"></span>
-<span class="source-line-no">450</span><span id="line-450">      int c = r.readSkipWs();</span>
-<span class="source-line-no">451</span><span id="line-451">      if (c == -1 || c == AMP)</span>
-<span class="source-line-no">452</span><span id="line-452">         return null;</span>
-<span class="source-line-no">453</span><span id="line-453">      if (c == 'n')</span>
-<span class="source-line-no">454</span><span id="line-454">         return (BeanMap&lt;T&gt;)parseNull(r);</span>
-<span class="source-line-no">455</span><span id="line-455">      if (c != '(')</span>
-<span class="source-line-no">456</span><span id="line-456">         throw new ParseException(this, "Expected '(' at beginning of object.");</span>
-<span class="source-line-no">457</span><span id="line-457"></span>
-<span class="source-line-no">458</span><span id="line-458">      // S1: Looking for attrName start.</span>
-<span class="source-line-no">459</span><span id="line-459">      // S2: Found attrName end, looking for =.</span>
-<span class="source-line-no">460</span><span id="line-460">      // S3: Found =, looking for valStart.</span>
-<span class="source-line-no">461</span><span id="line-461">      // S4: Looking for , or }</span>
-<span class="source-line-no">462</span><span id="line-462"></span>
-<span class="source-line-no">463</span><span id="line-463">      var state = S1;</span>
-<span class="source-line-no">464</span><span id="line-464">      var currAttr = "";</span>
-<span class="source-line-no">465</span><span id="line-465">      mark();</span>
-<span class="source-line-no">466</span><span id="line-466">      try {</span>
-<span class="source-line-no">467</span><span id="line-467">         while (true) {</span>
-<span class="source-line-no">468</span><span id="line-468">            c = r.read();</span>
-<span class="source-line-no">469</span><span id="line-469">            if (state == S1) {</span>
-<span class="source-line-no">470</span><span id="line-470">               if (c == ')' || c == -1 || c == AMP) {</span>
-<span class="source-line-no">471</span><span id="line-471">                  return m;</span>
-<span class="source-line-no">472</span><span id="line-472">               }</span>
-<span class="source-line-no">473</span><span id="line-473">               if (Character.isWhitespace(c))</span>
-<span class="source-line-no">474</span><span id="line-474">                  skipSpace(r);</span>
-<span class="source-line-no">475</span><span id="line-475">               else {</span>
-<span class="source-line-no">476</span><span id="line-476">                  r.unread();</span>
-<span class="source-line-no">477</span><span id="line-477">                  mark();</span>
-<span class="source-line-no">478</span><span id="line-478">                  currAttr = parseAttrName(r, decoding);</span>
-<span class="source-line-no">479</span><span id="line-479">                  if (currAttr == null) { // Value was '%00'</span>
-<span class="source-line-no">480</span><span id="line-480">                     return null;</span>
-<span class="source-line-no">481</span><span id="line-481">                  }</span>
-<span class="source-line-no">482</span><span id="line-482">                  state = S2;</span>
-<span class="source-line-no">483</span><span id="line-483">               }</span>
-<span class="source-line-no">484</span><span id="line-484">            } else if (state == S2) {</span>
-<span class="source-line-no">485</span><span id="line-485">               if (c == EQ || c == '=')</span>
-<span class="source-line-no">486</span><span id="line-486">                  state = S3;</span>
-<span class="source-line-no">487</span><span id="line-487">               else if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
-<span class="source-line-no">488</span><span id="line-488">                  m.put(currAttr, null);</span>
-<span class="source-line-no">489</span><span id="line-489">                  if (c == ')' || c == -1 || c == AMP) {</span>
-<span class="source-line-no">490</span><span id="line-490">                     return m;</span>
-<span class="source-line-no">491</span><span id="line-491">                  }</span>
-<span class="source-line-no">492</span><span id="line-492">                  state = S1;</span>
-<span class="source-line-no">493</span><span id="line-493">               }</span>
-<span class="source-line-no">494</span><span id="line-494">            } else if (state == S3) {</span>
-<span class="source-line-no">495</span><span id="line-495">               if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
-<span class="source-line-no">496</span><span id="line-496">                  if (! currAttr.equals(getBeanTypePropertyName((ClassMeta&lt;?&gt;) m.getBeanInfo()))) {</span>
-<span class="source-line-no">497</span><span id="line-497">                     var pMeta = m.getPropertyMeta(currAttr);</span>
-<span class="source-line-no">498</span><span id="line-498">                     if (pMeta == null) {</span>
-<span class="source-line-no">499</span><span id="line-499">                        onUnknownProperty(currAttr, m, null);</span>
-<span class="source-line-no">500</span><span id="line-500">                        unmark();</span>
-<span class="source-line-no">501</span><span id="line-501">                     } else {</span>
-<span class="source-line-no">502</span><span id="line-502">                        unmark();</span>
-<span class="source-line-no">503</span><span id="line-503">                        var value = convertToType("", (ClassMeta&lt;?&gt;) pMeta.getBeanInfo());</span>
-<span class="source-line-no">504</span><span id="line-504">                        try {</span>
-<span class="source-line-no">505</span><span id="line-505">                           pMeta.set(m, currAttr, value);</span>
-<span class="source-line-no">506</span><span id="line-506">                        } catch (BeanRuntimeException e) {</span>
-<span class="source-line-no">507</span><span id="line-507">                           onBeanSetterException(pMeta, e);</span>
-<span class="source-line-no">508</span><span id="line-508">                           throw e;</span>
-<span class="source-line-no">509</span><span id="line-509">                        }</span>
-<span class="source-line-no">510</span><span id="line-510">                     }</span>
-<span class="source-line-no">511</span><span id="line-511">                  }</span>
-<span class="source-line-no">512</span><span id="line-512">                  if (c == -1 || c == ')' || c == AMP)</span>
-<span class="source-line-no">513</span><span id="line-513">                     return m;</span>
-<span class="source-line-no">514</span><span id="line-514">                  state = S1;</span>
-<span class="source-line-no">515</span><span id="line-515">               } else {</span>
-<span class="source-line-no">516</span><span id="line-516">                  if (! currAttr.equals(getBeanTypePropertyName((ClassMeta&lt;?&gt;) m.getBeanInfo()))) {</span>
-<span class="source-line-no">517</span><span id="line-517">                     var pMeta = m.getPropertyMeta(currAttr);</span>
-<span class="source-line-no">518</span><span id="line-518">                     if (pMeta == null) {</span>
-<span class="source-line-no">519</span><span id="line-519">                        onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), false, null));</span>
-<span class="source-line-no">520</span><span id="line-520">                        unmark();</span>
-<span class="source-line-no">521</span><span id="line-521">                     } else {</span>
-<span class="source-line-no">522</span><span id="line-522">                        unmark();</span>
-<span class="source-line-no">523</span><span id="line-523">                        setCurrentProperty(pMeta);</span>
-<span class="source-line-no">524</span><span id="line-524">                        var cm = (ClassMeta&lt;?&gt;) pMeta.getBeanInfo();</span>
-<span class="source-line-no">525</span><span id="line-525">                        var value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);</span>
-<span class="source-line-no">526</span><span id="line-526">                        setName(cm, value, currAttr);</span>
-<span class="source-line-no">527</span><span id="line-527">                        try {</span>
-<span class="source-line-no">528</span><span id="line-528">                           pMeta.set(m, currAttr, value);</span>
-<span class="source-line-no">529</span><span id="line-529">                        } catch (BeanRuntimeException e) {</span>
-<span class="source-line-no">530</span><span id="line-530">                           onBeanSetterException(pMeta, e);</span>
-<span class="source-line-no">531</span><span id="line-531">                           throw e;</span>
-<span class="source-line-no">532</span><span id="line-532">                        }</span>
-<span class="source-line-no">533</span><span id="line-533">                        setCurrentProperty(null);</span>
-<span class="source-line-no">534</span><span id="line-534">                     }</span>
-<span class="source-line-no">535</span><span id="line-535">                  }</span>
-<span class="source-line-no">536</span><span id="line-536">                  state = S4;</span>
-<span class="source-line-no">537</span><span id="line-537">               }</span>
-<span class="source-line-no">538</span><span id="line-538">            } else if (state == S4) {</span>
-<span class="source-line-no">539</span><span id="line-539">               if (c == ',')</span>
-<span class="source-line-no">540</span><span id="line-540">                  state = S1;</span>
-<span class="source-line-no">541</span><span id="line-541">               else if (c == ')' || c == -1 || c == AMP) {</span>
-<span class="source-line-no">542</span><span id="line-542">                  return m;</span>
-<span class="source-line-no">543</span><span id="line-543">               }</span>
-<span class="source-line-no">544</span><span id="line-544">            }</span>
-<span class="source-line-no">545</span><span id="line-545">         }</span>
-<span class="source-line-no">546</span><span id="line-546">      } finally {</span>
-<span class="source-line-no">547</span><span id="line-547">         unmark();</span>
-<span class="source-line-no">548</span><span id="line-548">      }</span>
-<span class="source-line-no">549</span><span id="line-549">   }</span>
-<span class="source-line-no">550</span><span id="line-550"></span>
-<span class="source-line-no">551</span><span id="line-551">   @SuppressWarnings({</span>
-<span class="source-line-no">552</span><span id="line-552">      "java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.</span>
-<span class="source-line-no">553</span><span id="line-553">      "java:S1854",    // argIndex=0 is the valid starting arg index; Sonar FP on early-return paths that never read it</span>
-<span class="source-line-no">554</span><span id="line-554">      "java:S2583",    // State variables persist across loop iterations</span>
-<span class="source-line-no">555</span><span id="line-555">      "java:S2589",    // Final if (state==S3) is always true given prior check; exhaustive state error-reporting pattern</span>
-<span class="source-line-no">556</span><span id="line-556">      "java:S6541",    // Brain method acceptable for parser state machine</span>
-<span class="source-line-no">557</span><span id="line-557">      "java:S3776"     // Cognitive complexity acceptable for parser state machine</span>
-<span class="source-line-no">558</span><span id="line-558">   })</span>
-<span class="source-line-no">559</span><span id="line-559">   private &lt;E&gt; Collection&lt;E&gt; parseIntoCollection(UonReader r, Collection&lt;E&gt; l, ClassMeta&lt;E&gt; type, boolean isUrlParamValue, BeanPropertyMeta pMeta)</span>
-<span class="source-line-no">560</span><span id="line-560">      throws IOException, ParseException, ExecutableException {</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">      int c = r.readSkipWs();</span>
-<span class="source-line-no">563</span><span id="line-563">      if (c == -1 || c == AMP)</span>
-<span class="source-line-no">564</span><span id="line-564">         return null;</span>
-<span class="source-line-no">565</span><span id="line-565">      if (c == 'n')</span>
-<span class="source-line-no">566</span><span id="line-566">         return (Collection&lt;E&gt;)parseNull(r);</span>
-<span class="source-line-no">567</span><span id="line-567"></span>
-<span class="source-line-no">568</span><span id="line-568">      int argIndex = 0;</span>
-<span class="source-line-no">569</span><span id="line-569"></span>
-<span class="source-line-no">570</span><span id="line-570">      // If we're parsing a top-level parameter, we're allowed to have comma-delimited lists outside parenthesis (e.g. "&amp;foo=1,2,3&amp;bar=a,b,c")</span>
-<span class="source-line-no">571</span><span id="line-571">      // This is not allowed at lower levels since we use comma's as end delimiters.</span>
-<span class="source-line-no">572</span><span id="line-572">      boolean isInParens = (c == '@');</span>
-<span class="source-line-no">573</span><span id="line-573">      if (! isInParens) {</span>
-<span class="source-line-no">574</span><span id="line-574">         if (isUrlParamValue)</span>
-<span class="source-line-no">575</span><span id="line-575">            r.unread();</span>
-<span class="source-line-no">576</span><span id="line-576">         else</span>
-<span class="source-line-no">577</span><span id="line-577">            throw new ParseException(this, "Could not find '(' marking beginning of collection.");</span>
-<span class="source-line-no">578</span><span id="line-578">      } else {</span>
-<span class="source-line-no">579</span><span id="line-579">         @SuppressWarnings({</span>
-<span class="source-line-no">580</span><span id="line-580">            "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
-<span class="source-line-no">581</span><span id="line-581">         })</span>
-<span class="source-line-no">582</span><span id="line-582">         int ignored = r.read();</span>
-<span class="source-line-no">583</span><span id="line-583">      }</span>
-<span class="source-line-no">584</span><span id="line-584"></span>
-<span class="source-line-no">585</span><span id="line-585">      if (isInParens) {</span>
-<span class="source-line-no">586</span><span id="line-586">         // S1: Looking for starting of first entry.</span>
-<span class="source-line-no">587</span><span id="line-587">         // S2: Looking for starting of subsequent entries.</span>
-<span class="source-line-no">588</span><span id="line-588">         // S3: Looking for , or ) after first entry.</span>
+<span class="source-line-no">428</span><span id="line-428">      return (T)o;</span>
+<span class="source-line-no">429</span><span id="line-429">   }</span>
+<span class="source-line-no">430</span><span id="line-430"></span>
+<span class="source-line-no">431</span><span id="line-431">   @SuppressWarnings({</span>
+<span class="source-line-no">432</span><span id="line-432">      "java:S2447" // null is a valid UON value distinct from true/false; Boolean (boxed) is deliberately used for this tristate</span>
+<span class="source-line-no">433</span><span id="line-433">   })</span>
+<span class="source-line-no">434</span><span id="line-434">   private Boolean readBoolean(UonReader r) throws IOException, ParseException {</span>
+<span class="source-line-no">435</span><span id="line-435">      var s = readString(r, false);</span>
+<span class="source-line-no">436</span><span id="line-436">      if (s == null || s.equals("null"))</span>
+<span class="source-line-no">437</span><span id="line-437">         return null;</span>
+<span class="source-line-no">438</span><span id="line-438">      if (eqic(s, "true"))</span>
+<span class="source-line-no">439</span><span id="line-439">         return true;</span>
+<span class="source-line-no">440</span><span id="line-440">      if (eqic(s, "false"))</span>
+<span class="source-line-no">441</span><span id="line-441">         return false;</span>
+<span class="source-line-no">442</span><span id="line-442">      throw new ParseException(this, "Unrecognized syntax for boolean.  '%s'.", s);</span>
+<span class="source-line-no">443</span><span id="line-443">   }</span>
+<span class="source-line-no">444</span><span id="line-444"></span>
+<span class="source-line-no">445</span><span id="line-445">   @SuppressWarnings({</span>
+<span class="source-line-no">446</span><span id="line-446">      "java:S1168",    // Intentionally returns null for empty/EOF or readAttrName('%00') in this parser state machine.</span>
+<span class="source-line-no">447</span><span id="line-447">      "java:S2583",    // S1 checks c==-1/AMP for defensive completeness; while-guard makes these sub-expressions always-false</span>
+<span class="source-line-no">448</span><span id="line-448">      "java:S3776",    // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">449</span><span id="line-449">      "java:S6541",    // Single-threaded session contexts do not require synchronization</span>
+<span class="source-line-no">450</span><span id="line-450">   })</span>
+<span class="source-line-no">451</span><span id="line-451">   private &lt;T&gt; BeanMap&lt;T&gt; readIntoBeanMap(UonReader r, BeanMap&lt;T&gt; m) throws IOException, ParseException, ExecutableException {</span>
+<span class="source-line-no">452</span><span id="line-452"></span>
+<span class="source-line-no">453</span><span id="line-453">      int c = r.readSkipWs();</span>
+<span class="source-line-no">454</span><span id="line-454">      if (c == -1 || c == AMP)</span>
+<span class="source-line-no">455</span><span id="line-455">         return null;</span>
+<span class="source-line-no">456</span><span id="line-456">      if (c == 'n')</span>
+<span class="source-line-no">457</span><span id="line-457">         return (BeanMap&lt;T&gt;)readNull(r);</span>
+<span class="source-line-no">458</span><span id="line-458">      if (c != '(')</span>
+<span class="source-line-no">459</span><span id="line-459">         throw new ParseException(this, "Expected '(' at beginning of object.");</span>
+<span class="source-line-no">460</span><span id="line-460"></span>
+<span class="source-line-no">461</span><span id="line-461">      // S1: Looking for attrName start.</span>
+<span class="source-line-no">462</span><span id="line-462">      // S2: Found attrName end, looking for =.</span>
+<span class="source-line-no">463</span><span id="line-463">      // S3: Found =, looking for valStart.</span>
+<span class="source-line-no">464</span><span id="line-464">      // S4: Looking for , or }</span>
+<span class="source-line-no">465</span><span id="line-465"></span>
+<span class="source-line-no">466</span><span id="line-466">      var state = S1;</span>
+<span class="source-line-no">467</span><span id="line-467">      var currAttr = "";</span>
+<span class="source-line-no">468</span><span id="line-468">      var pb = swapParentBean(m.getBean(false));</span>
+<span class="source-line-no">469</span><span id="line-469">      mark();</span>
+<span class="source-line-no">470</span><span id="line-470">      try {</span>
+<span class="source-line-no">471</span><span id="line-471">         while (true) {</span>
+<span class="source-line-no">472</span><span id="line-472">            c = r.read();</span>
+<span class="source-line-no">473</span><span id="line-473">            if (state == S1) {</span>
+<span class="source-line-no">474</span><span id="line-474">               if (c == ')' || c == -1 || c == AMP) {</span>
+<span class="source-line-no">475</span><span id="line-475">                  return m;</span>
+<span class="source-line-no">476</span><span id="line-476">               }</span>
+<span class="source-line-no">477</span><span id="line-477">               if (Character.isWhitespace(c))</span>
+<span class="source-line-no">478</span><span id="line-478">                  skipSpace(r);</span>
+<span class="source-line-no">479</span><span id="line-479">               else {</span>
+<span class="source-line-no">480</span><span id="line-480">                  r.unread();</span>
+<span class="source-line-no">481</span><span id="line-481">                  mark();</span>
+<span class="source-line-no">482</span><span id="line-482">                  currAttr = readAttrName(r, decoding);</span>
+<span class="source-line-no">483</span><span id="line-483">                  if (currAttr == null) { // Value was '%00'</span>
+<span class="source-line-no">484</span><span id="line-484">                     return null;</span>
+<span class="source-line-no">485</span><span id="line-485">                  }</span>
+<span class="source-line-no">486</span><span id="line-486">                  state = S2;</span>
+<span class="source-line-no">487</span><span id="line-487">               }</span>
+<span class="source-line-no">488</span><span id="line-488">            } else if (state == S2) {</span>
+<span class="source-line-no">489</span><span id="line-489">               if (c == EQ || c == '=')</span>
+<span class="source-line-no">490</span><span id="line-490">                  state = S3;</span>
+<span class="source-line-no">491</span><span id="line-491">               else if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
+<span class="source-line-no">492</span><span id="line-492">                  m.put(currAttr, null);</span>
+<span class="source-line-no">493</span><span id="line-493">                  if (c == ')' || c == -1 || c == AMP) {</span>
+<span class="source-line-no">494</span><span id="line-494">                     return m;</span>
+<span class="source-line-no">495</span><span id="line-495">                  }</span>
+<span class="source-line-no">496</span><span id="line-496">                  state = S1;</span>
+<span class="source-line-no">497</span><span id="line-497">               }</span>
+<span class="source-line-no">498</span><span id="line-498">            } else if (state == S3) {</span>
+<span class="source-line-no">499</span><span id="line-499">               if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
+<span class="source-line-no">500</span><span id="line-500">                  if (! currAttr.equals(getBeanTypePropertyName((ClassMeta&lt;?&gt;) m.getBeanInfo()))) {</span>
+<span class="source-line-no">501</span><span id="line-501">                     var pMeta = m.getPropertyMeta(currAttr);</span>
+<span class="source-line-no">502</span><span id="line-502">                     if (pMeta == null) {</span>
+<span class="source-line-no">503</span><span id="line-503">                        onUnknownProperty(currAttr, m, null);</span>
+<span class="source-line-no">504</span><span id="line-504">                        unmark();</span>
+<span class="source-line-no">505</span><span id="line-505">                     } else {</span>
+<span class="source-line-no">506</span><span id="line-506">                        unmark();</span>
+<span class="source-line-no">507</span><span id="line-507">                        var value = convertToType("", (ClassMeta&lt;?&gt;) pMeta.getBeanInfo());</span>
+<span class="source-line-no">508</span><span id="line-508">                        try {</span>
+<span class="source-line-no">509</span><span id="line-509">                           pMeta.set(m, currAttr, value);</span>
+<span class="source-line-no">510</span><span id="line-510">                        } catch (BeanRuntimeException e) {</span>
+<span class="source-line-no">511</span><span id="line-511">                           onBeanSetterException(pMeta, e);</span>
+<span class="source-line-no">512</span><span id="line-512">                           throw e;</span>
+<span class="source-line-no">513</span><span id="line-513">                        }</span>
+<span class="source-line-no">514</span><span id="line-514">                     }</span>
+<span class="source-line-no">515</span><span id="line-515">                  }</span>
+<span class="source-line-no">516</span><span id="line-516">                  if (c == -1 || c == ')' || c == AMP)</span>
+<span class="source-line-no">517</span><span id="line-517">                     return m;</span>
+<span class="source-line-no">518</span><span id="line-518">                  state = S1;</span>
+<span class="source-line-no">519</span><span id="line-519">               } else {</span>
+<span class="source-line-no">520</span><span id="line-520">                  if (! currAttr.equals(getBeanTypePropertyName((ClassMeta&lt;?&gt;) m.getBeanInfo()))) {</span>
+<span class="source-line-no">521</span><span id="line-521">                     var pMeta = m.getPropertyMeta(currAttr);</span>
+<span class="source-line-no">522</span><span id="line-522">                     if (pMeta == null) {</span>
+<span class="source-line-no">523</span><span id="line-523">                        onUnknownProperty(currAttr, m, readAnything(object(), r.unread(), m.getBean(false), false, null));</span>
+<span class="source-line-no">524</span><span id="line-524">                        unmark();</span>
+<span class="source-line-no">525</span><span id="line-525">                     } else {</span>
+<span class="source-line-no">526</span><span id="line-526">                        unmark();</span>
+<span class="source-line-no">527</span><span id="line-527">                        setCurrentProperty(pMeta);</span>
+<span class="source-line-no">528</span><span id="line-528">                        var cm = (ClassMeta&lt;?&gt;) pMeta.getBeanInfo();</span>
+<span class="source-line-no">529</span><span id="line-529">                        var value = readAnything(cm, r.unread(), m.getBean(false), false, pMeta);</span>
+<span class="source-line-no">530</span><span id="line-530">                        setName(cm, value, currAttr);</span>
+<span class="source-line-no">531</span><span id="line-531">                        try {</span>
+<span class="source-line-no">532</span><span id="line-532">                           pMeta.set(m, currAttr, value);</span>
+<span class="source-line-no">533</span><span id="line-533">                        } catch (BeanRuntimeException e) {</span>
+<span class="source-line-no">534</span><span id="line-534">                           onBeanSetterException(pMeta, e);</span>
+<span class="source-line-no">535</span><span id="line-535">                           throw e;</span>
+<span class="source-line-no">536</span><span id="line-536">                        }</span>
+<span class="source-line-no">537</span><span id="line-537">                        setCurrentProperty(null);</span>
+<span class="source-line-no">538</span><span id="line-538">                     }</span>
+<span class="source-line-no">539</span><span id="line-539">                  }</span>
+<span class="source-line-no">540</span><span id="line-540">                  state = S4;</span>
+<span class="source-line-no">541</span><span id="line-541">               }</span>
+<span class="source-line-no">542</span><span id="line-542">            } else if (state == S4) {</span>
+<span class="source-line-no">543</span><span id="line-543">               if (c == ',')</span>
+<span class="source-line-no">544</span><span id="line-544">                  state = S1;</span>
+<span class="source-line-no">545</span><span id="line-545">               else if (c == ')' || c == -1 || c == AMP) {</span>
+<span class="source-line-no">546</span><span id="line-546">                  return m;</span>
+<span class="source-line-no">547</span><span id="line-547">               }</span>
+<span class="source-line-no">548</span><span id="line-548">            }</span>
+<span class="source-line-no">549</span><span id="line-549">         }</span>
+<span class="source-line-no">550</span><span id="line-550">      } finally {</span>
+<span class="source-line-no">551</span><span id="line-551">         unmark();</span>
+<span class="source-line-no">552</span><span id="line-552">         swapParentBean(pb);</span>
+<span class="source-line-no">553</span><span id="line-553">      }</span>
+<span class="source-line-no">554</span><span id="line-554">   }</span>
+<span class="source-line-no">555</span><span id="line-555"></span>
+<span class="source-line-no">556</span><span id="line-556">   @SuppressWarnings({</span>
+<span class="source-line-no">557</span><span id="line-557">      "java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.</span>
+<span class="source-line-no">558</span><span id="line-558">      "java:S1854",    // argIndex=0 is the valid starting arg index; Sonar FP on early-return paths that never read it</span>
+<span class="source-line-no">559</span><span id="line-559">      "java:S2583",    // State variables persist across loop iterations</span>
+<span class="source-line-no">560</span><span id="line-560">      "java:S2589",    // Final if (state==S3) is always true given prior check; exhaustive state error-reporting pattern</span>
+<span class="source-line-no">561</span><span id="line-561">      "java:S6541",    // Brain method acceptable for parser state machine</span>
+<span class="source-line-no">562</span><span id="line-562">      "java:S3776"     // Cognitive complexity acceptable for parser state machine</span>
+<span class="source-line-no">563</span><span id="line-563">   })</span>
+<span class="source-line-no">564</span><span id="line-564">   private &lt;E&gt; Collection&lt;E&gt; readIntoCollection(UonReader r, Collection&lt;E&gt; l, ClassMeta&lt;E&gt; type, boolean isUrlParamValue, BeanPropertyMeta pMeta)</span>
+<span class="source-line-no">565</span><span id="line-565">      throws IOException, ParseException, ExecutableException {</span>
+<span class="source-line-no">566</span><span id="line-566"></span>
+<span class="source-line-no">567</span><span id="line-567">      int c = r.readSkipWs();</span>
+<span class="source-line-no">568</span><span id="line-568">      if (c == -1 || c == AMP)</span>
+<span class="source-line-no">569</span><span id="line-569">         return null;</span>
+<span class="source-line-no">570</span><span id="line-570">      if (c == 'n')</span>
+<span class="source-line-no">571</span><span id="line-571">         return (Collection&lt;E&gt;)readNull(r);</span>
+<span class="source-line-no">572</span><span id="line-572"></span>
+<span class="source-line-no">573</span><span id="line-573">      int argIndex = 0;</span>
+<span class="source-line-no">574</span><span id="line-574"></span>
+<span class="source-line-no">575</span><span id="line-575">      // If we're parsing a top-level parameter, we're allowed to have comma-delimited lists outside parenthesis (e.g. "&amp;foo=1,2,3&amp;bar=a,b,c")</span>
+<span class="source-line-no">576</span><span id="line-576">      // This is not allowed at lower levels since we use comma's as end delimiters.</span>
+<span class="source-line-no">577</span><span id="line-577">      boolean isInParens = (c == '@');</span>
+<span class="source-line-no">578</span><span id="line-578">      if (! isInParens) {</span>
+<span class="source-line-no">579</span><span id="line-579">         if (isUrlParamValue)</span>
+<span class="source-line-no">580</span><span id="line-580">            r.unread();</span>
+<span class="source-line-no">581</span><span id="line-581">         else</span>
+<span class="source-line-no">582</span><span id="line-582">            throw new ParseException(this, "Could not find '(' marking beginning of collection.");</span>
+<span class="source-line-no">583</span><span id="line-583">      } else {</span>
+<span class="source-line-no">584</span><span id="line-584">         @SuppressWarnings({</span>
+<span class="source-line-no">585</span><span id="line-585">            "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
+<span class="source-line-no">586</span><span id="line-586">         })</span>
+<span class="source-line-no">587</span><span id="line-587">         int ignored = r.read();</span>
+<span class="source-line-no">588</span><span id="line-588">      }</span>
 <span class="source-line-no">589</span><span id="line-589"></span>
-<span class="source-line-no">590</span><span id="line-590">         var state = S1;</span>
-<span class="source-line-no">591</span><span id="line-591">         while (c != -1 &amp;&amp; c != AMP) {</span>
-<span class="source-line-no">592</span><span id="line-592">            c = r.read();</span>
-<span class="source-line-no">593</span><span id="line-593">            if (state == S1 || state == S2) {</span>
-<span class="source-line-no">594</span><span id="line-594">               if (c == ')') {</span>
-<span class="source-line-no">595</span><span id="line-595">                  if (state == S2) {</span>
-<span class="source-line-no">596</span><span id="line-596">                     l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));</span>
-<span class="source-line-no">597</span><span id="line-597">                     @SuppressWarnings({</span>
-<span class="source-line-no">598</span><span id="line-598">                        "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
-<span class="source-line-no">599</span><span id="line-599">                     })</span>
-<span class="source-line-no">600</span><span id="line-600">                     int ignored = r.read();</span>
-<span class="source-line-no">601</span><span id="line-601">                  }</span>
-<span class="source-line-no">602</span><span id="line-602">                  return l;</span>
-<span class="source-line-no">603</span><span id="line-603">               } else if (Character.isWhitespace(c)) {</span>
-<span class="source-line-no">604</span><span id="line-604">                  skipSpace(r);</span>
-<span class="source-line-no">605</span><span id="line-605">               } else {</span>
-<span class="source-line-no">606</span><span id="line-606">                  l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));</span>
-<span class="source-line-no">607</span><span id="line-607">                  state = S3;</span>
-<span class="source-line-no">608</span><span id="line-608">               }</span>
-<span class="source-line-no">609</span><span id="line-609">            } else if (state == S3) {</span>
-<span class="source-line-no">610</span><span id="line-610">               if (c == ',') {</span>
-<span class="source-line-no">611</span><span id="line-611">                  state = S2;</span>
-<span class="source-line-no">612</span><span id="line-612">               } else if (c == ')') {</span>
-<span class="source-line-no">613</span><span id="line-613">                  return l;</span>
-<span class="source-line-no">614</span><span id="line-614">               }</span>
-<span class="source-line-no">615</span><span id="line-615">            }</span>
-<span class="source-line-no">616</span><span id="line-616">         }</span>
-<span class="source-line-no">617</span><span id="line-617">         if (state == S1 || state == S2)</span>
-<span class="source-line-no">618</span><span id="line-618">            throw new ParseException(this, "Could not find start of entry in array.");</span>
-<span class="source-line-no">619</span><span id="line-619">         if (state == S3)</span>
-<span class="source-line-no">620</span><span id="line-620">            throw new ParseException(this, "Could not find end of entry in array.");</span>
-<span class="source-line-no">621</span><span id="line-621"></span>
-<span class="source-line-no">622</span><span id="line-622">      } else {</span>
-<span class="source-line-no">623</span><span id="line-623">         // S1: Looking for starting of entry.</span>
-<span class="source-line-no">624</span><span id="line-624">         // S2: Looking for , or &amp; or END after first entry.</span>
-<span class="source-line-no">625</span><span id="line-625"></span>
-<span class="source-line-no">626</span><span id="line-626">         var state = S1;</span>
-<span class="source-line-no">627</span><span id="line-627">         while (c != -1 &amp;&amp; c != AMP) {</span>
-<span class="source-line-no">628</span><span id="line-628">            c = r.read();</span>
-<span class="source-line-no">629</span><span id="line-629">            if (state == S1) {</span>
-<span class="source-line-no">630</span><span id="line-630">               if (Character.isWhitespace(c)) {</span>
-<span class="source-line-no">631</span><span id="line-631">                  skipSpace(r);</span>
-<span class="source-line-no">632</span><span id="line-632">               } else {</span>
-<span class="source-line-no">633</span><span id="line-633">                  l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));</span>
-<span class="source-line-no">634</span><span id="line-634">                  state = S2;</span>
-<span class="source-line-no">635</span><span id="line-635">               }</span>
-<span class="source-line-no">636</span><span id="line-636">            } else if (state == S2) {</span>
-<span class="source-line-no">637</span><span id="line-637">               if (c == ',') {</span>
-<span class="source-line-no">638</span><span id="line-638">                  state = S1;</span>
-<span class="source-line-no">639</span><span id="line-639">               } else if (Character.isWhitespace(c)) {</span>
-<span class="source-line-no">640</span><span id="line-640">                  skipSpace(r);</span>
-<span class="source-line-no">641</span><span id="line-641">               } else if (c == AMP || c == -1) {</span>
-<span class="source-line-no">642</span><span id="line-642">                  r.unread();</span>
-<span class="source-line-no">643</span><span id="line-643">                  return l;</span>
-<span class="source-line-no">644</span><span id="line-644">               }</span>
-<span class="source-line-no">645</span><span id="line-645">            }</span>
-<span class="source-line-no">646</span><span id="line-646">         }</span>
-<span class="source-line-no">647</span><span id="line-647">      }</span>
-<span class="source-line-no">648</span><span id="line-648"></span>
-<span class="source-line-no">649</span><span id="line-649">      return null;  // Unreachable.</span>
-<span class="source-line-no">650</span><span id="line-650">   }</span>
-<span class="source-line-no">651</span><span id="line-651"></span>
-<span class="source-line-no">652</span><span id="line-652">   @SuppressWarnings({</span>
-<span class="source-line-no">653</span><span id="line-653">      "java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.</span>
-<span class="source-line-no">654</span><span id="line-654">      "java:S2583",    // Defensive c==-1/AMP sub-checks inside the while(c!=-1 &amp;&amp; c!=AMP) loop; kept for state-machine completeness.</span>
-<span class="source-line-no">655</span><span id="line-655">      "java:S6541",    // Brain method acceptable for parser state machine</span>
-<span class="source-line-no">656</span><span id="line-656">      "java:S3776"     // Cognitive complexity acceptable for parser state machine</span>
-<span class="source-line-no">657</span><span id="line-657">   })</span>
-<span class="source-line-no">658</span><span id="line-658">   private &lt;K,V&gt; Map&lt;K,V&gt; parseIntoMap(UonReader r, Map&lt;K,V&gt; m, ClassMeta&lt;K&gt; keyType, ClassMeta&lt;V&gt; valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {</span>
-<span class="source-line-no">659</span><span id="line-659"></span>
-<span class="source-line-no">660</span><span id="line-660">      if (keyType == null)</span>
-<span class="source-line-no">661</span><span id="line-661">         keyType = (ClassMeta&lt;K&gt;)string();</span>
-<span class="source-line-no">662</span><span id="line-662"></span>
-<span class="source-line-no">663</span><span id="line-663">      int c = r.read();</span>
-<span class="source-line-no">664</span><span id="line-664">      if (c == -1 || c == AMP)</span>
-<span class="source-line-no">665</span><span id="line-665">         return null;</span>
-<span class="source-line-no">666</span><span id="line-666">      if (c == 'n')</span>
-<span class="source-line-no">667</span><span id="line-667">         return (Map&lt;K,V&gt;)parseNull(r);</span>
-<span class="source-line-no">668</span><span id="line-668">      if (c != '(')</span>
-<span class="source-line-no">669</span><span id="line-669">         throw new ParseException(this, "Expected '(' at beginning of object.");</span>
-<span class="source-line-no">670</span><span id="line-670"></span>
-<span class="source-line-no">671</span><span id="line-671">      // S1: Looking for attrName start.</span>
-<span class="source-line-no">672</span><span id="line-672">      // S2: Found attrName end, looking for =.</span>
-<span class="source-line-no">673</span><span id="line-673">      // S3: Found =, looking for valStart.</span>
-<span class="source-line-no">674</span><span id="line-674">      // S4: Looking for , or )</span>
+<span class="source-line-no">590</span><span id="line-590">      if (isInParens) {</span>
+<span class="source-line-no">591</span><span id="line-591">         // S1: Looking for starting of first entry.</span>
+<span class="source-line-no">592</span><span id="line-592">         // S2: Looking for starting of subsequent entries.</span>
+<span class="source-line-no">593</span><span id="line-593">         // S3: Looking for , or ) after first entry.</span>
+<span class="source-line-no">594</span><span id="line-594"></span>
+<span class="source-line-no">595</span><span id="line-595">         var state = S1;</span>
+<span class="source-line-no">596</span><span id="line-596">         while (c != -1 &amp;&amp; c != AMP) {</span>
+<span class="source-line-no">597</span><span id="line-597">            c = r.read();</span>
+<span class="source-line-no">598</span><span id="line-598">            if (state == S1 || state == S2) {</span>
+<span class="source-line-no">599</span><span id="line-599">               if (c == ')') {</span>
+<span class="source-line-no">600</span><span id="line-600">                  if (state == S2) {</span>
+<span class="source-line-no">601</span><span id="line-601">                     l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));</span>
+<span class="source-line-no">602</span><span id="line-602">                     @SuppressWarnings({</span>
+<span class="source-line-no">603</span><span id="line-603">                        "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
+<span class="source-line-no">604</span><span id="line-604">                     })</span>
+<span class="source-line-no">605</span><span id="line-605">                     int ignored = r.read();</span>
+<span class="source-line-no">606</span><span id="line-606">                  }</span>
+<span class="source-line-no">607</span><span id="line-607">                  return l;</span>
+<span class="source-line-no">608</span><span id="line-608">               } else if (Character.isWhitespace(c)) {</span>
+<span class="source-line-no">609</span><span id="line-609">                  skipSpace(r);</span>
+<span class="source-line-no">610</span><span id="line-610">               } else {</span>
+<span class="source-line-no">611</span><span id="line-611">                  l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));</span>
+<span class="source-line-no">612</span><span id="line-612">                  state = S3;</span>
+<span class="source-line-no">613</span><span id="line-613">               }</span>
+<span class="source-line-no">614</span><span id="line-614">            } else if (state == S3) {</span>
+<span class="source-line-no">615</span><span id="line-615">               if (c == ',') {</span>
+<span class="source-line-no">616</span><span id="line-616">                  state = S2;</span>
+<span class="source-line-no">617</span><span id="line-617">               } else if (c == ')') {</span>
+<span class="source-line-no">618</span><span id="line-618">                  return l;</span>
+<span class="source-line-no">619</span><span id="line-619">               }</span>
+<span class="source-line-no">620</span><span id="line-620">            }</span>
+<span class="source-line-no">621</span><span id="line-621">         }</span>
+<span class="source-line-no">622</span><span id="line-622">         if (state == S1 || state == S2)</span>
+<span class="source-line-no">623</span><span id="line-623">            throw new ParseException(this, "Could not find start of entry in array.");</span>
+<span class="source-line-no">624</span><span id="line-624">         if (state == S3)</span>
+<span class="source-line-no">625</span><span id="line-625">            throw new ParseException(this, "Could not find end of entry in array.");</span>
+<span class="source-line-no">626</span><span id="line-626"></span>
+<span class="source-line-no">627</span><span id="line-627">      } else {</span>
+<span class="source-line-no">628</span><span id="line-628">         // S1: Looking for starting of entry.</span>
+<span class="source-line-no">629</span><span id="line-629">         // S2: Looking for , or &amp; or END after first entry.</span>
+<span class="source-line-no">630</span><span id="line-630"></span>
+<span class="source-line-no">631</span><span id="line-631">         var state = S1;</span>
+<span class="source-line-no">632</span><span id="line-632">         while (c != -1 &amp;&amp; c != AMP) {</span>
+<span class="source-line-no">633</span><span id="line-633">            c = r.read();</span>
+<span class="source-line-no">634</span><span id="line-634">            if (state == S1) {</span>
+<span class="source-line-no">635</span><span id="line-635">               if (Character.isWhitespace(c)) {</span>
+<span class="source-line-no">636</span><span id="line-636">                  skipSpace(r);</span>
+<span class="source-line-no">637</span><span id="line-637">               } else {</span>
+<span class="source-line-no">638</span><span id="line-638">                  l.add((E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));</span>
+<span class="source-line-no">639</span><span id="line-639">                  state = S2;</span>
+<span class="source-line-no">640</span><span id="line-640">               }</span>
+<span class="source-line-no">641</span><span id="line-641">            } else if (state == S2) {</span>
+<span class="source-line-no">642</span><span id="line-642">               if (c == ',') {</span>
+<span class="source-line-no">643</span><span id="line-643">                  state = S1;</span>
+<span class="source-line-no">644</span><span id="line-644">               } else if (Character.isWhitespace(c)) {</span>
+<span class="source-line-no">645</span><span id="line-645">                  skipSpace(r);</span>
+<span class="source-line-no">646</span><span id="line-646">               } else if (c == AMP || c == -1) {</span>
+<span class="source-line-no">647</span><span id="line-647">                  r.unread();</span>
+<span class="source-line-no">648</span><span id="line-648">                  return l;</span>
+<span class="source-line-no">649</span><span id="line-649">               }</span>
+<span class="source-line-no">650</span><span id="line-650">            }</span>
+<span class="source-line-no">651</span><span id="line-651">         }</span>
+<span class="source-line-no">652</span><span id="line-652">      }</span>
+<span class="source-line-no">653</span><span id="line-653"></span>
+<span class="source-line-no">654</span><span id="line-654">      return null;  // Unreachable.</span>
+<span class="source-line-no">655</span><span id="line-655">   }</span>
+<span class="source-line-no">656</span><span id="line-656"></span>
+<span class="source-line-no">657</span><span id="line-657">   @SuppressWarnings({</span>
+<span class="source-line-no">658</span><span id="line-658">      "java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.</span>
+<span class="source-line-no">659</span><span id="line-659">      "java:S2583",    // Defensive c==-1/AMP sub-checks inside the while(c!=-1 &amp;&amp; c!=AMP) loop; kept for state-machine completeness.</span>
+<span class="source-line-no">660</span><span id="line-660">      "java:S6541",    // Brain method acceptable for parser state machine</span>
+<span class="source-line-no">661</span><span id="line-661">      "java:S3776"     // Cognitive complexity acceptable for parser state machine</span>
+<span class="source-line-no">662</span><span id="line-662">   })</span>
+<span class="source-line-no">663</span><span id="line-663">   private &lt;K,V&gt; Map&lt;K,V&gt; readIntoMap(UonReader r, Map&lt;K,V&gt; m, ClassMeta&lt;K&gt; keyType, ClassMeta&lt;V&gt; valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {</span>
+<span class="source-line-no">664</span><span id="line-664"></span>
+<span class="source-line-no">665</span><span id="line-665">      if (keyType == null)</span>
+<span class="source-line-no">666</span><span id="line-666">         keyType = (ClassMeta&lt;K&gt;)string();</span>
+<span class="source-line-no">667</span><span id="line-667"></span>
+<span class="source-line-no">668</span><span id="line-668">      int c = r.read();</span>
+<span class="source-line-no">669</span><span id="line-669">      if (c == -1 || c == AMP)</span>
+<span class="source-line-no">670</span><span id="line-670">         return null;</span>
+<span class="source-line-no">671</span><span id="line-671">      if (c == 'n')</span>
+<span class="source-line-no">672</span><span id="line-672">         return (Map&lt;K,V&gt;)readNull(r);</span>
+<span class="source-line-no">673</span><span id="line-673">      if (c != '(')</span>
+<span class="source-line-no">674</span><span id="line-674">         throw new ParseException(this, "Expected '(' at beginning of object.");</span>
 <span class="source-line-no">675</span><span id="line-675"></span>
-<span class="source-line-no">676</span><span id="line-676">      var state = S1;</span>
-<span class="source-line-no">677</span><span id="line-677">      K currAttr = null;</span>
-<span class="source-line-no">678</span><span id="line-678">      while (c != -1 &amp;&amp; c != AMP) {</span>
-<span class="source-line-no">679</span><span id="line-679">         c = r.read();</span>
-<span class="source-line-no">680</span><span id="line-680">         if (state == S1) {</span>
-<span class="source-line-no">681</span><span id="line-681">            if (c == ')')</span>
-<span class="source-line-no">682</span><span id="line-682">               return m;</span>
-<span class="source-line-no">683</span><span id="line-683">            if (Character.isWhitespace(c))</span>
-<span class="source-line-no">684</span><span id="line-684">               skipSpace(r);</span>
-<span class="source-line-no">685</span><span id="line-685">            else {</span>
-<span class="source-line-no">686</span><span id="line-686">               r.unread();</span>
-<span class="source-line-no">687</span><span id="line-687">               var attr = parseAttr(r, decoding);</span>
-<span class="source-line-no">688</span><span id="line-688">               currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);</span>
-<span class="source-line-no">689</span><span id="line-689">               state = S2;</span>
-<span class="source-line-no">690</span><span id="line-690">            }</span>
-<span class="source-line-no">691</span><span id="line-691">         } else if (state == S2) {</span>
-<span class="source-line-no">692</span><span id="line-692">            if (c == EQ || c == '=')</span>
-<span class="source-line-no">693</span><span id="line-693">               state = S3;</span>
-<span class="source-line-no">694</span><span id="line-694">            else if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
-<span class="source-line-no">695</span><span id="line-695">               if (currAttr == null) {</span>
-<span class="source-line-no">696</span><span id="line-696">                  // Value was '%00'</span>
-<span class="source-line-no">697</span><span id="line-697">                  r.unread();</span>
-<span class="source-line-no">698</span><span id="line-698">                  return null;</span>
-<span class="source-line-no">699</span><span id="line-699">               }</span>
-<span class="source-line-no">700</span><span id="line-700">               m.put(currAttr, null);</span>
-<span class="source-line-no">701</span><span id="line-701">               if (c == ')' || c == -1 || c == AMP)</span>
-<span class="source-line-no">702</span><span id="line-702">                  return m;</span>
-<span class="source-line-no">703</span><span id="line-703">               state = S1;</span>
-<span class="source-line-no">704</span><span id="line-704">            }</span>
-<span class="source-line-no">705</span><span id="line-705">         } else if (state == S3) {</span>
-<span class="source-line-no">706</span><span id="line-706">            if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
-<span class="source-line-no">707</span><span id="line-707">               V value = convertAttrToType(m, "", valueType);</span>
-<span class="source-line-no">708</span><span id="line-708">               m.put(currAttr, value);</span>
-<span class="source-line-no">709</span><span id="line-709">               if (c == -1 || c == ')' || c == AMP)</span>
-<span class="source-line-no">710</span><span id="line-710">                  return m;</span>
-<span class="source-line-no">711</span><span id="line-711">               state = S1;</span>
-<span class="source-line-no">712</span><span id="line-712">            } else {</span>
-<span class="source-line-no">713</span><span id="line-713">               V value = parseAnything(valueType, r.unread(), m, false, pMeta);</span>
-<span class="source-line-no">714</span><span id="line-714">               setName(valueType, value, currAttr);</span>
-<span class="source-line-no">715</span><span id="line-715">               m.put(currAttr, value);</span>
-<span class="source-line-no">716</span><span id="line-716">               state = S4;</span>
-<span class="source-line-no">717</span><span id="line-717">            }</span>
-<span class="source-line-no">718</span><span id="line-718">         } else if (state == S4) {</span>
-<span class="source-line-no">719</span><span id="line-719">            if (c == ',')</span>
-<span class="source-line-no">720</span><span id="line-720">               state = S1;</span>
-<span class="source-line-no">721</span><span id="line-721">            else if (c == ')' || c == -1 || c == AMP) {</span>
-<span class="source-line-no">722</span><span id="line-722">               return m;</span>
-<span class="source-line-no">723</span><span id="line-723">            }</span>
-<span class="source-line-no">724</span><span id="line-724">         }</span>
-<span class="source-line-no">725</span><span id="line-725">      }</span>
-<span class="source-line-no">726</span><span id="line-726"></span>
-<span class="source-line-no">727</span><span id="line-727">      return null; // Reachable via trailing comma at EOF (lenient parse of e.g. "(a=1,").</span>
-<span class="source-line-no">728</span><span id="line-728">   }</span>
-<span class="source-line-no">729</span><span id="line-729"></span>
-<span class="source-line-no">730</span><span id="line-730">   private Object parseNull(UonReader r) throws IOException, ParseException {</span>
-<span class="source-line-no">731</span><span id="line-731">      var s = parseString(r, false);</span>
-<span class="source-line-no">732</span><span id="line-732">      if ("ull".equals(s))</span>
-<span class="source-line-no">733</span><span id="line-733">         return null;</span>
-<span class="source-line-no">734</span><span id="line-734">      throw new ParseException(this, "Unexpected character sequence: ''{0}''", s);</span>
-<span class="source-line-no">735</span><span id="line-735">   }</span>
-<span class="source-line-no">736</span><span id="line-736"></span>
-<span class="source-line-no">737</span><span id="line-737">   private Number parseNumber(UonReader r, Class&lt;? extends Number&gt; c) throws IOException, ParseException {</span>
-<span class="source-line-no">738</span><span id="line-738">      var s = parseString(r, false);</span>
-<span class="source-line-no">739</span><span id="line-739">      if (s == null)</span>
-<span class="source-line-no">740</span><span id="line-740">         return null;</span>
-<span class="source-line-no">741</span><span id="line-741">      return StringUtils.parseNumber(s, c);</span>
-<span class="source-line-no">742</span><span id="line-742">   }</span>
-<span class="source-line-no">743</span><span id="line-743"></span>
-<span class="source-line-no">744</span><span id="line-744">   /*</span>
-<span class="source-line-no">745</span><span id="line-745">    * Parses a string of the form "'foo'"</span>
-<span class="source-line-no">746</span><span id="line-746">    * All whitespace within parenthesis are preserved.</span>
-<span class="source-line-no">747</span><span id="line-747">    */</span>
-<span class="source-line-no">748</span><span id="line-748">   private String parsePString(UonReader r) throws IOException, ParseException {</span>
-<span class="source-line-no">749</span><span id="line-749"></span>
-<span class="source-line-no">750</span><span id="line-750">      @SuppressWarnings({</span>
-<span class="source-line-no">751</span><span id="line-751">         "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
-<span class="source-line-no">752</span><span id="line-752">      })</span>
-<span class="source-line-no">753</span><span id="line-753">      int ignored = r.read();</span>
-<span class="source-line-no">754</span><span id="line-754">      r.mark();</span>
-<span class="source-line-no">755</span><span id="line-755">      int c = 0;</span>
-<span class="source-line-no">756</span><span id="line-756"></span>
-<span class="source-line-no">757</span><span id="line-757">      boolean isInEscape = false;</span>
-<span class="source-line-no">758</span><span id="line-758">      while (c != -1) {</span>
-<span class="source-line-no">759</span><span id="line-759">         c = r.read();</span>
-<span class="source-line-no">760</span><span id="line-760">         if (! isInEscape &amp;&amp; c == '\'')</span>
-<span class="source-line-no">761</span><span id="line-761">            return trim(r.getMarked(0, -1));</span>
-<span class="source-line-no">762</span><span id="line-762">         if (c == EQ)</span>
-<span class="source-line-no">763</span><span id="line-763">            r.replace('=');</span>
-<span class="source-line-no">764</span><span id="line-764">         isInEscape = isInEscape(c, r, isInEscape);</span>
-<span class="source-line-no">765</span><span id="line-765">      }</span>
-<span class="source-line-no">766</span><span id="line-766">      throw new ParseException(this, "Unmatched parenthesis");</span>
-<span class="source-line-no">767</span><span id="line-767">   }</span>
-<span class="source-line-no">768</span><span id="line-768"></span>
-<span class="source-line-no">769</span><span id="line-769">   /*</span>
-<span class="source-line-no">770</span><span id="line-770">    * Call this method after you've finished a parsing a string to make sure that if there's any</span>
-<span class="source-line-no">771</span><span id="line-771">    * remainder in the input, that it consists only of whitespace and comments.</span>
-<span class="source-line-no">772</span><span id="line-772">    */</span>
-<span class="source-line-no">773</span><span id="line-773">   private void validateEnd(UonReader r) throws IOException, ParseException {</span>
-<span class="source-line-no">774</span><span id="line-774">      if (! isValidateEnd())</span>
-<span class="source-line-no">775</span><span id="line-775">         return;</span>
-<span class="source-line-no">776</span><span id="line-776">      while (true) {</span>
-<span class="source-line-no">777</span><span id="line-777">         var c = r.read();</span>
-<span class="source-line-no">778</span><span id="line-778">         if (c == -1)</span>
-<span class="source-line-no">779</span><span id="line-779">            return;</span>
-<span class="source-line-no">780</span><span id="line-780">         if (! Character.isWhitespace(c))</span>
-<span class="source-line-no">781</span><span id="line-781">            throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);</span>
-<span class="source-line-no">782</span><span id="line-782">      }</span>
-<span class="source-line-no">783</span><span id="line-783">   }</span>
-<span class="source-line-no">784</span><span id="line-784"></span>
-<span class="source-line-no">785</span><span id="line-785">   @Override /* Overridden from ParserSession */</span>
-<span class="source-line-no">786</span><span id="line-786">   protected &lt;T&gt; T doParse(ParserPipe pipe, ClassMeta&lt;T&gt; type) throws IOException, ParseException, ExecutableException {</span>
-<span class="source-line-no">787</span><span id="line-787">      try (var r = getUonReader(pipe, decoding)) {</span>
-<span class="source-line-no">788</span><span id="line-788">         T o = parseAnything(type, r, getOuter(), true, null);</span>
-<span class="source-line-no">789</span><span id="line-789">         validateEnd(r);</span>
-<span class="source-line-no">790</span><span id="line-790">         return o;</span>
-<span class="source-line-no">791</span><span id="line-791">      }</span>
-<span class="source-line-no">792</span><span id="line-792">   }</span>
-<span class="source-line-no">793</span><span id="line-793"></span>
-<span class="source-line-no">794</span><span id="line-794">   @Override /* Overridden from ReaderParserSession */</span>
-<span class="source-line-no">795</span><span id="line-795">   protected &lt;E&gt; Collection&lt;E&gt; doParseIntoCollection(ParserPipe pipe, Collection&lt;E&gt; c, Type elementType) throws Exception {</span>
-<span class="source-line-no">796</span><span id="line-796">      try (var r = getUonReader(pipe, decoding)) {</span>
-<span class="source-line-no">797</span><span id="line-797">         c = parseIntoCollection(r, c, (ClassMeta&lt;E&gt;)getClassMeta(elementType), false, null);</span>
-<span class="source-line-no">798</span><span id="line-798">         validateEnd(r);</span>
-<span class="source-line-no">799</span><span id="line-799">         return c;</span>
-<span class="source-line-no">800</span><span id="line-800">      }</span>
-<span class="source-line-no">801</span><span id="line-801">   }</span>
-<span class="source-line-no">802</span><span id="line-802"></span>
-<span class="source-line-no">803</span><span id="line-803">   @Override /* Overridden from ReaderParserSession */</span>
-<span class="source-line-no">804</span><span id="line-804">   protected &lt;K,V&gt; Map&lt;K,V&gt; doParseIntoMap(ParserPipe pipe, Map&lt;K,V&gt; m, Type keyType, Type valueType) throws Exception {</span>
-<span class="source-line-no">805</span><span id="line-805">      try (var r = getUonReader(pipe, decoding)) {</span>
-<span class="source-line-no">806</span><span id="line-806">         m = parseIntoMap(r, m, (ClassMeta&lt;K&gt;)getClassMeta(keyType), (ClassMeta&lt;V&gt;)getClassMeta(valueType), null);</span>
-<span class="source-line-no">807</span><span id="line-807">         validateEnd(r);</span>
-<span class="source-line-no">808</span><span id="line-808">         return m;</span>
-<span class="source-line-no">809</span><span id="line-809">      }</span>
-<span class="source-line-no">810</span><span id="line-810">   }</span>
-<span class="source-line-no">811</span><span id="line-811"></span>
-<span class="source-line-no">812</span><span id="line-812">   /**</span>
-<span class="source-line-no">813</span><span id="line-813">    * Decode &lt;js&gt;"%xx"&lt;/js&gt; sequences.</span>
-<span class="source-line-no">814</span><span id="line-814">    *</span>
-<span class="source-line-no">815</span><span id="line-815">    * @see UonParser.Builder#decoding()</span>
-<span class="source-line-no">816</span><span id="line-816">    * @return</span>
-<span class="source-line-no">817</span><span id="line-817">    *    &lt;jk&gt;true&lt;/jk&gt; if URI encoded characters should be decoded, &lt;jk&gt;false&lt;/jk&gt; if they've already been decoded</span>
-<span class="source-line-no">818</span><span id="line-818">    *    before being passed to this parser.</span>
-<span class="source-line-no">819</span><span id="line-819">    */</span>
-<span class="source-line-no">820</span><span id="line-820">   protected final boolean isDecoding() { return decoding; }</span>
-<span class="source-line-no">821</span><span id="line-821"></span>
-<span class="source-line-no">822</span><span id="line-822">   /**</span>
-<span class="source-line-no">823</span><span id="line-823">    * Validate end.</span>
-<span class="source-line-no">824</span><span id="line-824">    *</span>
-<span class="source-line-no">825</span><span id="line-825">    * @see UonParser.Builder#validateEnd()</span>
-<span class="source-line-no">826</span><span id="line-826">    * @return</span>
-<span class="source-line-no">827</span><span id="line-827">    *    &lt;jk&gt;true&lt;/jk&gt; if after parsing a POJO from the input, verifies that the remaining input in</span>
-<span class="source-line-no">828</span><span id="line-828">    *    the stream consists of only comments or whitespace.</span>
-<span class="source-line-no">829</span><span id="line-829">    */</span>
-<span class="source-line-no">830</span><span id="line-830">   protected final boolean isValidateEnd() { return validateEnd; }</span>
-<span class="source-line-no">831</span><span id="line-831"></span>
-<span class="source-line-no">832</span><span id="line-832">   /**</span>
-<span class="source-line-no">833</span><span id="line-833">    * Convenience method for parsing an attribute from the specified parser.</span>
-<span class="source-line-no">834</span><span id="line-834">    *</span>
-<span class="source-line-no">835</span><span id="line-835">    * @param r The reader.</span>
-<span class="source-line-no">836</span><span id="line-836">    * @param encoded Whether the attribute is encoded.</span>
-<span class="source-line-no">837</span><span id="line-837">    * @return The parsed object</span>
-<span class="source-line-no">838</span><span id="line-838">    * @throws IOException Exception thrown by underlying stream.</span>
-<span class="source-line-no">839</span><span id="line-839">    * @throws ParseException Attribute was malformed.</span>
-<span class="source-line-no">840</span><span id="line-840">    */</span>
-<span class="source-line-no">841</span><span id="line-841">   protected final Object parseAttr(UonReader r, boolean encoded) throws IOException, ParseException {</span>
-<span class="source-line-no">842</span><span id="line-842">      return parseAttrName(r, encoded);</span>
-<span class="source-line-no">843</span><span id="line-843">   }</span>
-<span class="source-line-no">844</span><span id="line-844"></span>
-<span class="source-line-no">845</span><span id="line-845">   /**</span>
-<span class="source-line-no">846</span><span id="line-846">    * Parses an attribute name from the specified reader.</span>
-<span class="source-line-no">847</span><span id="line-847">    *</span>
-<span class="source-line-no">848</span><span id="line-848">    * @param r The reader.</span>
-<span class="source-line-no">849</span><span id="line-849">    * @param encoded Whether the attribute is encoded.</span>
-<span class="source-line-no">850</span><span id="line-850">    * @return The parsed attribute name.</span>
-<span class="source-line-no">851</span><span id="line-851">    * @throws IOException Exception thrown by underlying stream.</span>
-<span class="source-line-no">852</span><span id="line-852">    * @throws ParseException Attribute name was malformed.</span>
-<span class="source-line-no">853</span><span id="line-853">    */</span>
-<span class="source-line-no">854</span><span id="line-854">   @SuppressWarnings({</span>
-<span class="source-line-no">855</span><span id="line-855">      "java:S3776" // Cognitive complexity acceptable for parser state machine</span>
-<span class="source-line-no">856</span><span id="line-856">   })</span>
-<span class="source-line-no">857</span><span id="line-857">   protected final String parseAttrName(UonReader r, boolean encoded) throws IOException, ParseException {</span>
-<span class="source-line-no">858</span><span id="line-858"></span>
-<span class="source-line-no">859</span><span id="line-859">      // If string is of form 'xxx', we're looking for ' at the end.</span>
-<span class="source-line-no">860</span><span id="line-860">      // Otherwise, we're looking for '&amp;' or '=' or WS or -1 denoting the end of this string.</span>
-<span class="source-line-no">861</span><span id="line-861"></span>
-<span class="source-line-no">862</span><span id="line-862">      int c = r.peekSkipWs();</span>
-<span class="source-line-no">863</span><span id="line-863">      if (c == '\'')</span>
-<span class="source-line-no">864</span><span id="line-864">         return parsePString(r);</span>
+<span class="source-line-no">676</span><span id="line-676">      // S1: Looking for attrName start.</span>
+<span class="source-line-no">677</span><span id="line-677">      // S2: Found attrName end, looking for =.</span>
+<span class="source-line-no">678</span><span id="line-678">      // S3: Found =, looking for valStart.</span>
+<span class="source-line-no">679</span><span id="line-679">      // S4: Looking for , or )</span>
+<span class="source-line-no">680</span><span id="line-680"></span>
+<span class="source-line-no">681</span><span id="line-681">      var state = S1;</span>
+<span class="source-line-no">682</span><span id="line-682">      K currAttr = null;</span>
+<span class="source-line-no">683</span><span id="line-683">      while (c != -1 &amp;&amp; c != AMP) {</span>
+<span class="source-line-no">684</span><span id="line-684">         c = r.read();</span>
+<span class="source-line-no">685</span><span id="line-685">         if (state == S1) {</span>
+<span class="source-line-no">686</span><span id="line-686">            if (c == ')')</span>
+<span class="source-line-no">687</span><span id="line-687">               return m;</span>
+<span class="source-line-no">688</span><span id="line-688">            if (Character.isWhitespace(c))</span>
+<span class="source-line-no">689</span><span id="line-689">               skipSpace(r);</span>
+<span class="source-line-no">690</span><span id="line-690">            else {</span>
+<span class="source-line-no">691</span><span id="line-691">               r.unread();</span>
+<span class="source-line-no">692</span><span id="line-692">               var attr = readAttr(r, decoding);</span>
+<span class="source-line-no">693</span><span id="line-693">               currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);</span>
+<span class="source-line-no">694</span><span id="line-694">               state = S2;</span>
+<span class="source-line-no">695</span><span id="line-695">            }</span>
+<span class="source-line-no">696</span><span id="line-696">         } else if (state == S2) {</span>
+<span class="source-line-no">697</span><span id="line-697">            if (c == EQ || c == '=')</span>
+<span class="source-line-no">698</span><span id="line-698">               state = S3;</span>
+<span class="source-line-no">699</span><span id="line-699">            else if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
+<span class="source-line-no">700</span><span id="line-700">               if (currAttr == null) {</span>
+<span class="source-line-no">701</span><span id="line-701">                  // Value was '%00'</span>
+<span class="source-line-no">702</span><span id="line-702">                  r.unread();</span>
+<span class="source-line-no">703</span><span id="line-703">                  return null;</span>
+<span class="source-line-no">704</span><span id="line-704">               }</span>
+<span class="source-line-no">705</span><span id="line-705">               m.put(currAttr, null);</span>
+<span class="source-line-no">706</span><span id="line-706">               if (c == ')' || c == -1 || c == AMP)</span>
+<span class="source-line-no">707</span><span id="line-707">                  return m;</span>
+<span class="source-line-no">708</span><span id="line-708">               state = S1;</span>
+<span class="source-line-no">709</span><span id="line-709">            }</span>
+<span class="source-line-no">710</span><span id="line-710">         } else if (state == S3) {</span>
+<span class="source-line-no">711</span><span id="line-711">            if (c == -1 || c == ',' || c == ')' || c == AMP) {</span>
+<span class="source-line-no">712</span><span id="line-712">               V value = convertAttrToType(m, "", valueType);</span>
+<span class="source-line-no">713</span><span id="line-713">               m.put(currAttr, value);</span>
+<span class="source-line-no">714</span><span id="line-714">               if (c == -1 || c == ')' || c == AMP)</span>
+<span class="source-line-no">715</span><span id="line-715">                  return m;</span>
+<span class="source-line-no">716</span><span id="line-716">               state = S1;</span>
+<span class="source-line-no">717</span><span id="line-717">            } else {</span>
+<span class="source-line-no">718</span><span id="line-718">               V value = readAnything(valueType, r.unread(), m, false, pMeta);</span>
+<span class="source-line-no">719</span><span id="line-719">               setName(valueType, value, currAttr);</span>
+<span class="source-line-no">720</span><span id="line-720">               m.put(currAttr, value);</span>
+<span class="source-line-no">721</span><span id="line-721">               state = S4;</span>
+<span class="source-line-no">722</span><span id="line-722">            }</span>
+<span class="source-line-no">723</span><span id="line-723">         } else if (state == S4) {</span>
+<span class="source-line-no">724</span><span id="line-724">            if (c == ',')</span>
+<span class="source-line-no">725</span><span id="line-725">               state = S1;</span>
+<span class="source-line-no">726</span><span id="line-726">            else if (c == ')' || c == -1 || c == AMP) {</span>
+<span class="source-line-no">727</span><span id="line-727">               return m;</span>
+<span class="source-line-no">728</span><span id="line-728">            }</span>
+<span class="source-line-no">729</span><span id="line-729">         }</span>
+<span class="source-line-no">730</span><span id="line-730">      }</span>
+<span class="source-line-no">731</span><span id="line-731"></span>
+<span class="source-line-no">732</span><span id="line-732">      return null; // Reachable via trailing comma at EOF (lenient parse of e.g. "(a=1,").</span>
+<span class="source-line-no">733</span><span id="line-733">   }</span>
+<span class="source-line-no">734</span><span id="line-734"></span>
+<span class="source-line-no">735</span><span id="line-735">   private Object readNull(UonReader r) throws IOException, ParseException {</span>
+<span class="source-line-no">736</span><span id="line-736">      var s = readString(r, false);</span>
+<span class="source-line-no">737</span><span id="line-737">      if ("ull".equals(s))</span>
+<span class="source-line-no">738</span><span id="line-738">         return null;</span>
+<span class="source-line-no">739</span><span id="line-739">      throw new ParseException(this, "Unexpected character sequence: '%s'", s);</span>
+<span class="source-line-no">740</span><span id="line-740">   }</span>
+<span class="source-line-no">741</span><span id="line-741"></span>
+<span class="source-line-no">742</span><span id="line-742">   private Number readNumber(UonReader r, Class&lt;? extends Number&gt; c) throws IOException, ParseException {</span>
+<span class="source-line-no">743</span><span id="line-743">      var s = readString(r, false);</span>
+<span class="source-line-no">744</span><span id="line-744">      if (s == null)</span>
+<span class="source-line-no">745</span><span id="line-745">         return null;</span>
+<span class="source-line-no">746</span><span id="line-746">      return StringUtils.parseNumber(s, c);</span>
+<span class="source-line-no">747</span><span id="line-747">   }</span>
+<span class="source-line-no">748</span><span id="line-748"></span>
+<span class="source-line-no">749</span><span id="line-749">   /*</span>
+<span class="source-line-no">750</span><span id="line-750">    * Parses a string of the form "'foo'"</span>
+<span class="source-line-no">751</span><span id="line-751">    * All whitespace within parenthesis are preserved.</span>
+<span class="source-line-no">752</span><span id="line-752">    */</span>
+<span class="source-line-no">753</span><span id="line-753">   private String readPString(UonReader r) throws IOException, ParseException {</span>
+<span class="source-line-no">754</span><span id="line-754"></span>
+<span class="source-line-no">755</span><span id="line-755">      @SuppressWarnings({</span>
+<span class="source-line-no">756</span><span id="line-756">         "unused" // Intentionally unused; variable/parameter is required by the interface contract</span>
+<span class="source-line-no">757</span><span id="line-757">      })</span>
+<span class="source-line-no">758</span><span id="line-758">      int ignored = r.read();</span>
+<span class="source-line-no">759</span><span id="line-759">      r.mark();</span>
+<span class="source-line-no">760</span><span id="line-760">      int c = 0;</span>
+<span class="source-line-no">761</span><span id="line-761"></span>
+<span class="source-line-no">762</span><span id="line-762">      boolean isInEscape = false;</span>
+<span class="source-line-no">763</span><span id="line-763">      while (c != -1) {</span>
+<span class="source-line-no">764</span><span id="line-764">         c = r.read();</span>
+<span class="source-line-no">765</span><span id="line-765">         if (! isInEscape &amp;&amp; c == '\'')</span>
+<span class="source-line-no">766</span><span id="line-766">            return trim(r.getMarked(0, -1));</span>
+<span class="source-line-no">767</span><span id="line-767">         if (c == EQ)</span>
+<span class="source-line-no">768</span><span id="line-768">            r.replace('=');</span>
+<span class="source-line-no">769</span><span id="line-769">         isInEscape = isInEscape(c, r, isInEscape);</span>
+<span class="source-line-no">770</span><span id="line-770">      }</span>
+<span class="source-line-no">771</span><span id="line-771">      throw new ParseException(this, "Unmatched parenthesis");</span>
+<span class="source-line-no">772</span><span id="line-772">   }</span>
+<span class="source-line-no">773</span><span id="line-773"></span>
+<span class="source-line-no">774</span><span id="line-774">   /*</span>
+<span class="source-line-no">775</span><span id="line-775">    * Call this method after you've finished a parsing a string to make sure that if there's any</span>
+<span class="source-line-no">776</span><span id="line-776">    * remainder in the input, that it consists only of whitespace and comments.</span>
+<span class="source-line-no">777</span><span id="line-777">    */</span>
+<span class="source-line-no">778</span><span id="line-778">   private void validateEnd(UonReader r) throws IOException, ParseException {</span>
+<span class="source-line-no">779</span><span id="line-779">      if (! isValidateEnd())</span>
+<span class="source-line-no">780</span><span id="line-780">         return;</span>
+<span class="source-line-no">781</span><span id="line-781">      while (true) {</span>
+<span class="source-line-no">782</span><span id="line-782">         var c = r.read();</span>
+<span class="source-line-no">783</span><span id="line-783">         if (c == -1)</span>
+<span class="source-line-no">784</span><span id="line-784">            return;</span>
+<span class="source-line-no">785</span><span id="line-785">         if (! Character.isWhitespace(c))</span>
+<span class="source-line-no">786</span><span id="line-786">            throw new ParseException(this, "Remainder after parse: '%s'.", (char)c);</span>
+<span class="source-line-no">787</span><span id="line-787">      }</span>
+<span class="source-line-no">788</span><span id="line-788">   }</span>
+<span class="source-line-no">789</span><span id="line-789"></span>
+<span class="source-line-no">790</span><span id="line-790">   @Override /* Overridden from ParserSession */</span>
+<span class="source-line-no">791</span><span id="line-791">   protected &lt;T&gt; T doRead(ParserPipe pipe, ClassMeta&lt;T&gt; type) throws IOException, ParseException, ExecutableException {</span>
+<span class="source-line-no">792</span><span id="line-792">      try (var r = getUonReader(pipe, decoding)) {</span>
+<span class="source-line-no">793</span><span id="line-793">         T o = readAnything(type, r, getOuter(), true, null);</span>
+<span class="source-line-no">794</span><span id="line-794">         validateEnd(r);</span>
+<span class="source-line-no">795</span><span id="line-795">         return o;</span>
+<span class="source-line-no">796</span><span id="line-796">      }</span>
+<span class="source-line-no">797</span><span id="line-797">   }</span>
+<span class="source-line-no">798</span><span id="line-798"></span>
+<span class="source-line-no">799</span><span id="line-799">   @Override /* Overridden from ReaderParserSession */</span>
+<span class="source-line-no">800</span><span id="line-800">   protected &lt;E&gt; Collection&lt;E&gt; doReadIntoCollection(ParserPipe pipe, Collection&lt;E&gt; c, Type elementType) throws Exception {</span>
+<span class="source-line-no">801</span><span id="line-801">      try (var r = getUonReader(pipe, decoding)) {</span>
+<span class="source-line-no">802</span><span id="line-802">         c = readIntoCollection(r, c, (ClassMeta&lt;E&gt;)getClassMeta(elementType), false, null);</span>
+<span class="source-line-no">803</span><span id="line-803">         validateEnd(r);</span>
+<span class="source-line-no">804</span><span id="line-804">         return c;</span>
+<span class="source-line-no">805</span><span id="line-805">      }</span>
+<span class="source-line-no">806</span><span id="line-806">   }</span>
+<span class="source-line-no">807</span><span id="line-807"></span>
+<span class="source-line-no">808</span><span id="line-808">   @Override /* Overridden from ReaderParserSession */</span>
+<span class="source-line-no">809</span><span id="line-809">   protected &lt;K,V&gt; Map&lt;K,V&gt; doReadIntoMap(ParserPipe pipe, Map&lt;K,V&gt; m, Type keyType, Type valueType) throws Exception {</span>
+<span class="source-line-no">810</span><span id="line-810">      try (var r = getUonReader(pipe, decoding)) {</span>
+<span class="source-line-no">811</span><span id="line-811">         m = readIntoMap(r, m, (ClassMeta&lt;K&gt;)getClassMeta(keyType), (ClassMeta&lt;V&gt;)getClassMeta(valueType), null);</span>
+<span class="source-line-no">812</span><span id="line-812">         validateEnd(r);</span>
+<span class="source-line-no">813</span><span id="line-813">         return m;</span>
+<span class="source-line-no">814</span><span id="line-814">      }</span>
+<span class="source-line-no">815</span><span id="line-815">   }</span>
+<span class="source-line-no">816</span><span id="line-816"></span>
+<span class="source-line-no">817</span><span id="line-817">   /**</span>
+<span class="source-line-no">818</span><span id="line-818">    * Decode &lt;js&gt;"%xx"&lt;/js&gt; sequences.</span>
+<span class="source-line-no">819</span><span id="line-819">    *</span>
+<span class="source-line-no">820</span><span id="line-820">    * @see UonParser.Builder#decoding()</span>
+<span class="source-line-no">821</span><span id="line-821">    * @return</span>
+<span class="source-line-no">822</span><span id="line-822">    *    &lt;jk&gt;true&lt;/jk&gt; if URI encoded characters should be decoded, &lt;jk&gt;false&lt;/jk&gt; if they've already been decoded</span>
+<span class="source-line-no">823</span><span id="line-823">    *    before being passed to this parser.</span>
+<span class="source-line-no">824</span><span id="line-824">    */</span>
+<span class="source-line-no">825</span><span id="line-825">   protected final boolean isDecoding() { return decoding; }</span>
+<span class="source-line-no">826</span><span id="line-826"></span>
+<span class="source-line-no">827</span><span id="line-827">   /**</span>
+<span class="source-line-no">828</span><span id="line-828">    * Validate end.</span>
+<span class="source-line-no">829</span><span id="line-829">    *</span>
+<span class="source-line-no">830</span><span id="line-830">    * @see UonParser.Builder#validateEnd()</span>
+<span class="source-line-no">831</span><span id="line-831">    * @return</span>
+<span class="source-line-no">832</span><span id="line-832">    *    &lt;jk&gt;true&lt;/jk&gt; if after parsing a POJO from the input, verifies that the remaining input in</span>
+<span class="source-line-no">833</span><span id="line-833">    *    the stream consists of only comments or whitespace.</span>
+<span class="source-line-no">834</span><span id="line-834">    */</span>
+<span class="source-line-no">835</span><span id="line-835">   protected final boolean isValidateEnd() { return validateEnd; }</span>
+<span class="source-line-no">836</span><span id="line-836"></span>
+<span class="source-line-no">837</span><span id="line-837">   /**</span>
+<span class="source-line-no">838</span><span id="line-838">    * Convenience method for parsing an attribute from the specified parser.</span>
+<span class="source-line-no">839</span><span id="line-839">    *</span>
+<span class="source-line-no">840</span><span id="line-840">    * @param r The reader.</span>
+<span class="source-line-no">841</span><span id="line-841">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">842</span><span id="line-842">    * @param encoded Whether the attribute is encoded.</span>
+<span class="source-line-no">843</span><span id="line-843">    * @return The parsed object, or &lt;jk&gt;null&lt;/jk&gt; if the attribute was the literal &lt;js&gt;"null"&lt;/js&gt;.</span>
+<span class="source-line-no">844</span><span id="line-844">    * @throws IOException Exception thrown by underlying stream.</span>
+<span class="source-line-no">845</span><span id="line-845">    * @throws ParseException Attribute was malformed.</span>
+<span class="source-line-no">846</span><span id="line-846">    */</span>
+<span class="source-line-no">847</span><span id="line-847">   protected final Object readAttr(UonReader r, boolean encoded) throws IOException, ParseException {</span>
+<span class="source-line-no">848</span><span id="line-848">      return readAttrName(r, encoded);</span>
+<span class="source-line-no">849</span><span id="line-849">   }</span>
+<span class="source-line-no">850</span><span id="line-850"></span>
+<span class="source-line-no">851</span><span id="line-851">   /**</span>
+<span class="source-line-no">852</span><span id="line-852">    * Parses an attribute name from the specified reader.</span>
+<span class="source-line-no">853</span><span id="line-853">    *</span>
+<span class="source-line-no">854</span><span id="line-854">    * @param r The reader.</span>
+<span class="source-line-no">855</span><span id="line-855">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">856</span><span id="line-856">    * @param encoded Whether the attribute is encoded.</span>
+<span class="source-line-no">857</span><span id="line-857">    * @return The parsed attribute name, or &lt;jk&gt;null&lt;/jk&gt; if the attribute name was the literal &lt;js&gt;"null"&lt;/js&gt;.</span>
+<span class="source-line-no">858</span><span id="line-858">    * @throws IOException Exception thrown by underlying stream.</span>
+<span class="source-line-no">859</span><span id="line-859">    * @throws ParseException Attribute name was malformed.</span>
+<span class="source-line-no">860</span><span id="line-860">    */</span>
+<span class="source-line-no">861</span><span id="line-861">   @SuppressWarnings({</span>
+<span class="source-line-no">862</span><span id="line-862">      "java:S3776" // Cognitive complexity acceptable for parser state machine</span>
+<span class="source-line-no">863</span><span id="line-863">   })</span>
+<span class="source-line-no">864</span><span id="line-864">   protected final String readAttrName(UonReader r, boolean encoded) throws IOException, ParseException {</span>
 <span class="source-line-no">865</span><span id="line-865"></span>
-<span class="source-line-no">866</span><span id="line-866">      r.mark();</span>
-<span class="source-line-no">867</span><span id="line-867">      boolean isInEscape = false;</span>
-<span class="source-line-no">868</span><span id="line-868">      if (encoded) {</span>
-<span class="source-line-no">869</span><span id="line-869">         while (true) {</span>
-<span class="source-line-no">870</span><span id="line-870">            c = r.read();</span>
-<span class="source-line-no">871</span><span id="line-871">            if (! isInEscape) {</span>
-<span class="source-line-no">872</span><span id="line-872">               if (c == AMP || c == EQ || c == -1 || Character.isWhitespace(c)) {</span>
-<span class="source-line-no">873</span><span id="line-873">                  if (c != -1)</span>
-<span class="source-line-no">874</span><span id="line-874">                     r.unread();</span>
-<span class="source-line-no">875</span><span id="line-875">                  var s = r.getMarked();</span>
-<span class="source-line-no">876</span><span id="line-876">                  return ("null".equals(s) ? null : s);</span>
-<span class="source-line-no">877</span><span id="line-877">               }</span>
-<span class="source-line-no">878</span><span id="line-878">            } else if (c == AMP)</span>
-<span class="source-line-no">879</span><span id="line-879">               r.replace('&amp;');</span>
-<span class="source-line-no">880</span><span id="line-880">            else if (c == EQ)</span>
-<span class="source-line-no">881</span><span id="line-881">               r.replace('=');</span>
-<span class="source-line-no">882</span><span id="line-882">            isInEscape = isInEscape(c, r, isInEscape);</span>
-<span class="source-line-no">883</span><span id="line-883">         }</span>
-<span class="source-line-no">884</span><span id="line-884">      } else {</span>
-<span class="source-line-no">885</span><span id="line-885">         while (true) {</span>
-<span class="source-line-no">886</span><span id="line-886">            c = r.read();</span>
-<span class="source-line-no">887</span><span id="line-887">            if (! isInEscape &amp;&amp; (c == '=' || c == -1 || Character.isWhitespace(c))) {</span>
-<span class="source-line-no">888</span><span id="line-888">               if (c != -1)</span>
-<span class="source-line-no">889</span><span id="line-889">                  r.unread();</span>
-<span class="source-line-no">890</span><span id="line-890">               var s = r.getMarked();</span>
-<span class="source-line-no">891</span><span id="line-891">               return ("null".equals(s) ? null : trim(s));</span>
-<span class="source-line-no">892</span><span id="line-892">            }</span>
-<span class="source-line-no">893</span><span id="line-893">            isInEscape = isInEscape(c, r, isInEscape);</span>
-<span class="source-line-no">894</span><span id="line-894">         }</span>
-<span class="source-line-no">895</span><span id="line-895">      }</span>
-<span class="source-line-no">896</span><span id="line-896">   }</span>
-<span class="source-line-no">897</span><span id="line-897"></span>
-<span class="source-line-no">898</span><span id="line-898">   /**</span>
-<span class="source-line-no">899</span><span id="line-899">    * Parses a string value from the specified reader.</span>
-<span class="source-line-no">900</span><span id="line-900">    *</span>
-<span class="source-line-no">901</span><span id="line-901">    * @param r The input reader.</span>
-<span class="source-line-no">902</span><span id="line-902">    * @param isUrlParamValue Whether this is a URL parameter.</span>
-<span class="source-line-no">903</span><span id="line-903">    * @return The parsed string.</span>
-<span class="source-line-no">904</span><span id="line-904">    * @throws IOException Exception thrown by underlying stream.</span>
-<span class="source-line-no">905</span><span id="line-905">    * @throws ParseException Malformed input found.</span>
-<span class="source-line-no">906</span><span id="line-906">    */</span>
-<span class="source-line-no">907</span><span id="line-907">   protected final String parseString(UonReader r, boolean isUrlParamValue) throws IOException, ParseException {</span>
-<span class="source-line-no">908</span><span id="line-908"></span>
-<span class="source-line-no">909</span><span id="line-909">      // If string is of form 'xxx', we're looking for ' at the end.</span>
-<span class="source-line-no">910</span><span id="line-910">      // Otherwise, we're looking for ',' or ')' or -1 denoting the end of this string.</span>
-<span class="source-line-no">911</span><span id="line-911"></span>
-<span class="source-line-no">912</span><span id="line-912">      int c = r.peekSkipWs();</span>
-<span class="source-line-no">913</span><span id="line-913">      if (c == '\'')</span>
-<span class="source-line-no">914</span><span id="line-914">         return parsePString(r);</span>
-<span class="source-line-no">915</span><span id="line-915"></span>
-<span class="source-line-no">916</span><span id="line-916">      r.mark();</span>
-<span class="source-line-no">917</span><span id="line-917">      boolean isInEscape = false;</span>
-<span class="source-line-no">918</span><span id="line-918">      String s = null;</span>
-<span class="source-line-no">919</span><span id="line-919">      var endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);</span>
-<span class="source-line-no">920</span><span id="line-920">      while (c != -1) {</span>
-<span class="source-line-no">921</span><span id="line-921">         c = r.read();</span>
-<span class="source-line-no">922</span><span id="line-922">         if (! isInEscape &amp;&amp; endChars.contains(c)) {</span>
-<span class="source-line-no">923</span><span id="line-923">            // If this is a URL parameter value, we're looking for:  &amp;</span>
-<span class="source-line-no">924</span><span id="line-924">            // If not, we're looking for:  &amp;,)</span>
-<span class="source-line-no">925</span><span id="line-925">            r.unread();</span>
-<span class="source-line-no">926</span><span id="line-926">            c = -1;</span>
-<span class="source-line-no">927</span><span id="line-927">         }</span>
-<span class="source-line-no">928</span><span id="line-928">         if (c == -1)</span>
-<span class="source-line-no">929</span><span id="line-929">            s = r.getMarked();</span>
-<span class="source-line-no">930</span><span id="line-930">         else if (c == EQ)</span>
-<span class="source-line-no">931</span><span id="line-931">            r.replace('=');</span>
-<span class="source-line-no">932</span><span id="line-932">         else if (Character.isWhitespace(c) &amp;&amp; ! isUrlParamValue) {</span>
-<span class="source-line-no">933</span><span id="line-933">            s = r.getMarked(0, -1);</span>
-<span class="source-line-no">934</span><span id="line-934">            skipSpace(r);</span>
-<span class="source-line-no">935</span><span id="line-935">            c = -1;</span>
-<span class="source-line-no">936</span><span id="line-936">         }</span>
-<span class="source-line-no">937</span><span id="line-937">         isInEscape = isInEscape(c, r, isInEscape);</span>
-<span class="source-line-no">938</span><span id="line-938">      }</span>
-<span class="source-line-no">939</span><span id="line-939"></span>
-<span class="source-line-no">940</span><span id="line-940">      if (isUrlParamValue)</span>
-<span class="source-line-no">941</span><span id="line-941">         s = StringUtils.trim(s);</span>
-<span class="source-line-no">942</span><span id="line-942"></span>
-<span class="source-line-no">943</span><span id="line-943">      return ("null".equals(s) ? null : trim(s));</span>
-<span class="source-line-no">944</span><span id="line-944">   }</span>
-<span class="source-line-no">945</span><span id="line-945"></span>
-<span class="source-line-no">946</span><span id="line-946">   @Override /* Overridden from ReaderParserSession */</span>
-<span class="source-line-no">947</span><span id="line-947">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">948</span><span id="line-948">      return super.properties()</span>
-<span class="source-line-no">949</span><span id="line-949">         .a(PROP_decoding, decoding)</span>
-<span class="source-line-no">950</span><span id="line-950">         .a(PROP_validateEnd, validateEnd);</span>
-<span class="source-line-no">951</span><span id="line-951">   }</span>
-<span class="source-line-no">952</span><span id="line-952">}</span>
+<span class="source-line-no">866</span><span id="line-866">      // If string is of form 'xxx', we're looking for ' at the end.</span>
+<span class="source-line-no">867</span><span id="line-867">      // Otherwise, we're looking for '&amp;' or '=' or WS or -1 denoting the end of this string.</span>
+<span class="source-line-no">868</span><span id="line-868"></span>
+<span class="source-line-no">869</span><span id="line-869">      int c = r.peekSkipWs();</span>
+<span class="source-line-no">870</span><span id="line-870">      if (c == '\'')</span>
+<span class="source-line-no">871</span><span id="line-871">         return readPString(r);</span>
+<span class="source-line-no">872</span><span id="line-872"></span>
+<span class="source-line-no">873</span><span id="line-873">      r.mark();</span>
+<span class="source-line-no">874</span><span id="line-874">      boolean isInEscape = false;</span>
+<span class="source-line-no">875</span><span id="line-875">      if (encoded) {</span>
+<span class="source-line-no">876</span><span id="line-876">         while (true) {</span>
+<span class="source-line-no">877</span><span id="line-877">            c = r.read();</span>
+<span class="source-line-no">878</span><span id="line-878">            if (! isInEscape) {</span>
+<span class="source-line-no">879</span><span id="line-879">               if (c == AMP || c == EQ || c == -1 || Character.isWhitespace(c)) {</span>
+<span class="source-line-no">880</span><span id="line-880">                  if (c != -1)</span>
+<span class="source-line-no">881</span><span id="line-881">                     r.unread();</span>
+<span class="source-line-no">882</span><span id="line-882">                  var s = r.getMarked();</span>
+<span class="source-line-no">883</span><span id="line-883">                  return ("null".equals(s) ? null : s);</span>
+<span class="source-line-no">884</span><span id="line-884">               }</span>
+<span class="source-line-no">885</span><span id="line-885">            } else if (c == AMP)</span>
+<span class="source-line-no">886</span><span id="line-886">               r.replace('&amp;');</span>
+<span class="source-line-no">887</span><span id="line-887">            else if (c == EQ)</span>
+<span class="source-line-no">888</span><span id="line-888">               r.replace('=');</span>
+<span class="source-line-no">889</span><span id="line-889">            isInEscape = isInEscape(c, r, isInEscape);</span>
+<span class="source-line-no">890</span><span id="line-890">         }</span>
+<span class="source-line-no">891</span><span id="line-891">      } else {</span>
+<span class="source-line-no">892</span><span id="line-892">         while (true) {</span>
+<span class="source-line-no">893</span><span id="line-893">            c = r.read();</span>
+<span class="source-line-no">894</span><span id="line-894">            if (! isInEscape &amp;&amp; (c == '=' || c == -1 || Character.isWhitespace(c))) {</span>
+<span class="source-line-no">895</span><span id="line-895">               if (c != -1)</span>
+<span class="source-line-no">896</span><span id="line-896">                  r.unread();</span>
+<span class="source-line-no">897</span><span id="line-897">               var s = r.getMarked();</span>
+<span class="source-line-no">898</span><span id="line-898">               return ("null".equals(s) ? null : trim(s));</span>
+<span class="source-line-no">899</span><span id="line-899">            }</span>
+<span class="source-line-no">900</span><span id="line-900">            isInEscape = isInEscape(c, r, isInEscape);</span>
+<span class="source-line-no">901</span><span id="line-901">         }</span>
+<span class="source-line-no">902</span><span id="line-902">      }</span>
+<span class="source-line-no">903</span><span id="line-903">   }</span>
+<span class="source-line-no">904</span><span id="line-904"></span>
+<span class="source-line-no">905</span><span id="line-905">   /**</span>
+<span class="source-line-no">906</span><span id="line-906">    * Parses a string value from the specified reader.</span>
+<span class="source-line-no">907</span><span id="line-907">    *</span>
+<span class="source-line-no">908</span><span id="line-908">    * @param r The input reader.</span>
+<span class="source-line-no">909</span><span id="line-909">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">910</span><span id="line-910">    * @param isUrlParamValue Whether this is a URL parameter.</span>
+<span class="source-line-no">911</span><span id="line-911">    * @return The parsed string, or &lt;jk&gt;null&lt;/jk&gt; if the value was the literal &lt;js&gt;"null"&lt;/js&gt;.</span>
+<span class="source-line-no">912</span><span id="line-912">    * @throws IOException Exception thrown by underlying stream.</span>
+<span class="source-line-no">913</span><span id="line-913">    * @throws ParseException Malformed input found.</span>
+<span class="source-line-no">914</span><span id="line-914">    */</span>
+<span class="source-line-no">915</span><span id="line-915">   protected final String readString(UonReader r, boolean isUrlParamValue) throws IOException, ParseException {</span>
+<span class="source-line-no">916</span><span id="line-916"></span>
+<span class="source-line-no">917</span><span id="line-917">      // If string is of form 'xxx', we're looking for ' at the end.</span>
+<span class="source-line-no">918</span><span id="line-918">      // Otherwise, we're looking for ',' or ')' or -1 denoting the end of this string.</span>
+<span class="source-line-no">919</span><span id="line-919"></span>
+<span class="source-line-no">920</span><span id="line-920">      int c = r.peekSkipWs();</span>
+<span class="source-line-no">921</span><span id="line-921">      if (c == '\'')</span>
+<span class="source-line-no">922</span><span id="line-922">         return readPString(r);</span>
+<span class="source-line-no">923</span><span id="line-923"></span>
+<span class="source-line-no">924</span><span id="line-924">      r.mark();</span>
+<span class="source-line-no">925</span><span id="line-925">      boolean isInEscape = false;</span>
+<span class="source-line-no">926</span><span id="line-926">      String s = null;</span>
+<span class="source-line-no">927</span><span id="line-927">      var endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);</span>
+<span class="source-line-no">928</span><span id="line-928">      while (c != -1) {</span>
+<span class="source-line-no">929</span><span id="line-929">         c = r.read();</span>
+<span class="source-line-no">930</span><span id="line-930">         if (! isInEscape &amp;&amp; endChars.contains(c)) {</span>
+<span class="source-line-no">931</span><span id="line-931">            // If this is a URL parameter value, we're looking for:  &amp;</span>
+<span class="source-line-no">932</span><span id="line-932">            // If not, we're looking for:  &amp;,)</span>
+<span class="source-line-no">933</span><span id="line-933">            r.unread();</span>
+<span class="source-line-no">934</span><span id="line-934">            c = -1;</span>
+<span class="source-line-no">935</span><span id="line-935">         }</span>
+<span class="source-line-no">936</span><span id="line-936">         if (c == -1)</span>
+<span class="source-line-no">937</span><span id="line-937">            s = r.getMarked();</span>
+<span class="source-line-no">938</span><span id="line-938">         else if (c == EQ)</span>
+<span class="source-line-no">939</span><span id="line-939">            r.replace('=');</span>
+<span class="source-line-no">940</span><span id="line-940">         else if (Character.isWhitespace(c) &amp;&amp; ! isUrlParamValue) {</span>
+<span class="source-line-no">941</span><span id="line-941">            s = r.getMarked(0, -1);</span>
+<span class="source-line-no">942</span><span id="line-942">            skipSpace(r);</span>
+<span class="source-line-no">943</span><span id="line-943">            c = -1;</span>
+<span class="source-line-no">944</span><span id="line-944">         }</span>
+<span class="source-line-no">945</span><span id="line-945">         isInEscape = isInEscape(c, r, isInEscape);</span>
+<span class="source-line-no">946</span><span id="line-946">      }</span>
+<span class="source-line-no">947</span><span id="line-947"></span>
+<span class="source-line-no">948</span><span id="line-948">      if (isUrlParamValue)</span>
+<span class="source-line-no">949</span><span id="line-949">         s = StringUtils.trim(s);</span>
+<span class="source-line-no">950</span><span id="line-950"></span>
+<span class="source-line-no">951</span><span id="line-951">      return ("null".equals(s) ? null : trim(s));</span>
+<span class="source-line-no">952</span><span id="line-952">   }</span>
+<span class="source-line-no">953</span><span id="line-953"></span>
+<span class="source-line-no">954</span><span id="line-954">   @Override /* Overridden from ReaderParserSession */</span>
+<span class="source-line-no">955</span><span id="line-955">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">956</span><span id="line-956">      return super.properties()</span>
+<span class="source-line-no">957</span><span id="line-957">         .a(PROP_decoding, decoding)</span>
+<span class="source-line-no">958</span><span id="line-958">         .a(PROP_validateEnd, validateEnd);</span>
+<span class="source-line-no">959</span><span id="line-959">   }</span>
+<span class="source-line-no">960</span><span id="line-960">}</span>
 
 
 

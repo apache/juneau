@@ -233,377 +233,379 @@
 <span class="source-line-no">220</span><span id="line-220">    *</span>
 <span class="source-line-no">221</span><span id="line-221">    * @param pairs</span>
 <span class="source-line-no">222</span><span id="line-222">    *    The default entries.</span>
-<span class="source-line-no">223</span><span id="line-223">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">223</span><span id="line-223">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
 <span class="source-line-no">224</span><span id="line-224">    * @return This object.</span>
 <span class="source-line-no">225</span><span id="line-225">    */</span>
 <span class="source-line-no">226</span><span id="line-226">   public RequestPathParamList addDefault(List&lt;HttpPart&gt; pairs) {</span>
-<span class="source-line-no">227</span><span id="line-227">      for (var p : pairs) {</span>
-<span class="source-line-no">228</span><span id="line-228">         var name = p.getName();</span>
-<span class="source-line-no">229</span><span id="line-229">         var l = stream(name);</span>
-<span class="source-line-no">230</span><span id="line-230">         var hasAllBlanks = l.allMatch(x -&gt; Shorts.ie(x.getValue()));</span>
-<span class="source-line-no">231</span><span id="line-231">         if (hasAllBlanks) {</span>
-<span class="source-line-no">232</span><span id="line-232">            removeAll(getAll(name));</span>
-<span class="source-line-no">233</span><span id="line-233">            add(new RequestPathParam(req, name, vs.resolve(p.getValue())));</span>
-<span class="source-line-no">234</span><span id="line-234">         }</span>
-<span class="source-line-no">235</span><span id="line-235">      }</span>
-<span class="source-line-no">236</span><span id="line-236">      return this;</span>
-<span class="source-line-no">237</span><span id="line-237">   }</span>
-<span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">   /**</span>
-<span class="source-line-no">240</span><span id="line-240">    * Adds default entries to these parameters.</span>
-<span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * &lt;p&gt;</span>
-<span class="source-line-no">243</span><span id="line-243">    * Similar to {@link #set(String, Object)} but doesn't override existing values.</span>
-<span class="source-line-no">244</span><span id="line-244">    *</span>
-<span class="source-line-no">245</span><span id="line-245">    * @param pairs</span>
-<span class="source-line-no">246</span><span id="line-246">    *    The default entries.</span>
-<span class="source-line-no">247</span><span id="line-247">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">248</span><span id="line-248">    * @return This object.</span>
-<span class="source-line-no">249</span><span id="line-249">    */</span>
-<span class="source-line-no">250</span><span id="line-250">   public RequestPathParamList addDefault(HttpPart...pairs) {</span>
-<span class="source-line-no">251</span><span id="line-251">      return addDefault(l(pairs));</span>
-<span class="source-line-no">252</span><span id="line-252">   }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   /**</span>
-<span class="source-line-no">255</span><span id="line-255">    * Adds a default entry to the query parameters.</span>
-<span class="source-line-no">256</span><span id="line-256">    *</span>
-<span class="source-line-no">257</span><span id="line-257">    * @param name The name.</span>
-<span class="source-line-no">258</span><span id="line-258">    * @param value The value.</span>
-<span class="source-line-no">259</span><span id="line-259">    * @return This object.</span>
-<span class="source-line-no">260</span><span id="line-260">    */</span>
-<span class="source-line-no">261</span><span id="line-261">   public RequestPathParamList addDefault(String name, String value) {</span>
-<span class="source-line-no">262</span><span id="line-262">      return addDefault(HttpStringPart.of(name, value));</span>
-<span class="source-line-no">263</span><span id="line-263">   }</span>
-<span class="source-line-no">264</span><span id="line-264"></span>
-<span class="source-line-no">265</span><span id="line-265">   /**</span>
-<span class="source-line-no">266</span><span id="line-266">    * Sets case sensitivity for names in this list.</span>
-<span class="source-line-no">267</span><span id="line-267">    *</span>
-<span class="source-line-no">268</span><span id="line-268">    * @param value The new value for this setting.</span>
-<span class="source-line-no">269</span><span id="line-269">    * @return This object (for method chaining).</span>
-<span class="source-line-no">270</span><span id="line-270">    */</span>
-<span class="source-line-no">271</span><span id="line-271">   public RequestPathParamList caseSensitive(boolean value) {</span>
-<span class="source-line-no">272</span><span id="line-272">      caseSensitive = value;</span>
-<span class="source-line-no">273</span><span id="line-273">      return this;</span>
-<span class="source-line-no">274</span><span id="line-274">   }</span>
-<span class="source-line-no">275</span><span id="line-275"></span>
-<span class="source-line-no">276</span><span id="line-276">   /**</span>
-<span class="source-line-no">277</span><span id="line-277">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified name is present.</span>
-<span class="source-line-no">278</span><span id="line-278">    *</span>
-<span class="source-line-no">279</span><span id="line-279">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">280</span><span id="line-280">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified name is present.</span>
-<span class="source-line-no">281</span><span id="line-281">    */</span>
-<span class="source-line-no">282</span><span id="line-282">   public boolean contains(String name) {</span>
-<span class="source-line-no">283</span><span id="line-283">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">284</span><span id="line-284">      return stream(name).findAny().isPresent();</span>
-<span class="source-line-no">285</span><span id="line-285">   }</span>
-<span class="source-line-no">286</span><span id="line-286"></span>
-<span class="source-line-no">287</span><span id="line-287">   /**</span>
-<span class="source-line-no">288</span><span id="line-288">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
-<span class="source-line-no">289</span><span id="line-289">    *</span>
-<span class="source-line-no">290</span><span id="line-290">    * @param names The parameter names.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">291</span><span id="line-291">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
-<span class="source-line-no">292</span><span id="line-292">    */</span>
-<span class="source-line-no">293</span><span id="line-293">   public boolean containsAny(String...names) {</span>
-<span class="source-line-no">294</span><span id="line-294">      assertArgNotNull(ARG_names, names);</span>
-<span class="source-line-no">295</span><span id="line-295">      for (var n : names)</span>
-<span class="source-line-no">296</span><span id="line-296">         if (stream(n).findAny().isPresent())</span>
-<span class="source-line-no">297</span><span id="line-297">            return true;</span>
-<span class="source-line-no">298</span><span id="line-298">      return false;</span>
-<span class="source-line-no">299</span><span id="line-299">   }</span>
-<span class="source-line-no">300</span><span id="line-300"></span>
-<span class="source-line-no">301</span><span id="line-301">   /**</span>
-<span class="source-line-no">302</span><span id="line-302">    * Makes a copy of these parameters.</span>
-<span class="source-line-no">303</span><span id="line-303">    *</span>
-<span class="source-line-no">304</span><span id="line-304">    * @return A new parameters object.</span>
-<span class="source-line-no">305</span><span id="line-305">    */</span>
-<span class="source-line-no">306</span><span id="line-306">   public RequestPathParamList copy() {</span>
-<span class="source-line-no">307</span><span id="line-307">      return new RequestPathParamList(this);</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   /**</span>
-<span class="source-line-no">311</span><span id="line-311">    * Returns the path parameter as the specified bean type.</span>
-<span class="source-line-no">312</span><span id="line-312">    *</span>
-<span class="source-line-no">313</span><span id="line-313">    * &lt;p&gt;</span>
-<span class="source-line-no">314</span><span id="line-314">    * Type must have a name specified via the {@link Path} annotation</span>
-<span class="source-line-no">315</span><span id="line-315">    * and a public constructor that takes in either &lt;c&gt;value&lt;/c&gt; or &lt;c&gt;name,value&lt;/c&gt; as strings.</span>
-<span class="source-line-no">316</span><span id="line-316">    *</span>
-<span class="source-line-no">317</span><span id="line-317">    * @param &lt;T&gt; The bean type to create.</span>
-<span class="source-line-no">318</span><span id="line-318">    * @param type The bean type to create.</span>
-<span class="source-line-no">319</span><span id="line-319">    * @return The bean, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">320</span><span id="line-320">    */</span>
-<span class="source-line-no">321</span><span id="line-321">   public &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {</span>
-<span class="source-line-no">322</span><span id="line-322">      var cm = req.getMarshallingSession().getClassMeta(type);</span>
-<span class="source-line-no">323</span><span id="line-323">      var name = HttpParts.getName(PATH, cm).orElseThrow(() -&gt; rex("@Path(name) not found on class {0}", cn(type)));</span>
-<span class="source-line-no">324</span><span id="line-324">      return get(name).as(type);</span>
-<span class="source-line-no">325</span><span id="line-325">   }</span>
-<span class="source-line-no">326</span><span id="line-326"></span>
-<span class="source-line-no">327</span><span id="line-327">   /**</span>
-<span class="source-line-no">328</span><span id="line-328">    * Returns the last parameter with the specified name.</span>
-<span class="source-line-no">329</span><span id="line-329">    *</span>
-<span class="source-line-no">330</span><span id="line-330">    * &lt;p&gt;</span>
-<span class="source-line-no">331</span><span id="line-331">    * This is equivalent to {@link #getLast(String)}.</span>
-<span class="source-line-no">332</span><span id="line-332">    *</span>
-<span class="source-line-no">333</span><span id="line-333">    * @param name The parameter name.</span>
-<span class="source-line-no">334</span><span id="line-334">    * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.</span>
-<span class="source-line-no">335</span><span id="line-335">    */</span>
-<span class="source-line-no">336</span><span id="line-336">   public RequestPathParam get(String name) {</span>
-<span class="source-line-no">337</span><span id="line-337">      List&lt;RequestPathParam&gt; l = getAll(name);</span>
-<span class="source-line-no">338</span><span id="line-338">      if (l.isEmpty())</span>
-<span class="source-line-no">339</span><span id="line-339">         return new RequestPathParam(req, name, null).parser(parser);</span>
-<span class="source-line-no">340</span><span id="line-340">      if (l.size() == 1)</span>
-<span class="source-line-no">341</span><span id="line-341">         return l.get(0);</span>
-<span class="source-line-no">342</span><span id="line-342">      var sb = new StringBuilder(128);</span>
-<span class="source-line-no">343</span><span id="line-343">      for (var i = 0; i &lt; l.size(); i++) {</span>
-<span class="source-line-no">344</span><span id="line-344">         if (i &gt; 0)</span>
-<span class="source-line-no">345</span><span id="line-345">            sb.append(", ");</span>
-<span class="source-line-no">346</span><span id="line-346">         sb.append(l.get(i).getValue());</span>
-<span class="source-line-no">347</span><span id="line-347">      }</span>
-<span class="source-line-no">348</span><span id="line-348">      return new RequestPathParam(req, name, sb.toString()).parser(parser);</span>
-<span class="source-line-no">349</span><span id="line-349">   }</span>
-<span class="source-line-no">350</span><span id="line-350"></span>
-<span class="source-line-no">351</span><span id="line-351">   /**</span>
-<span class="source-line-no">352</span><span id="line-352">    * Returns all the parameters with the specified name.</span>
-<span class="source-line-no">353</span><span id="line-353">    *</span>
-<span class="source-line-no">354</span><span id="line-354">    * @param name The parameter name.</span>
-<span class="source-line-no">355</span><span id="line-355">    * @return The list of all parameters with the specified name, or an empty list if none are found.</span>
-<span class="source-line-no">356</span><span id="line-356">    *    &lt;br&gt;List is unmodifiable.</span>
-<span class="source-line-no">357</span><span id="line-357">    */</span>
-<span class="source-line-no">358</span><span id="line-358">   public List&lt;RequestPathParam&gt; getAll(String name) {</span>
-<span class="source-line-no">359</span><span id="line-359">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">360</span><span id="line-360">      return stream(name).toList();</span>
-<span class="source-line-no">361</span><span id="line-361">   }</span>
-<span class="source-line-no">362</span><span id="line-362"></span>
-<span class="source-line-no">363</span><span id="line-363">   /**</span>
-<span class="source-line-no">364</span><span id="line-364">    * Returns the first parameter with the specified name.</span>
-<span class="source-line-no">365</span><span id="line-365">    *</span>
-<span class="source-line-no">366</span><span id="line-366">    * &lt;p&gt;</span>
-<span class="source-line-no">367</span><span id="line-367">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestPathParam#isPresent()} can be used</span>
-<span class="source-line-no">368</span><span id="line-368">    * to test for the existence of the parameter.</span>
-<span class="source-line-no">369</span><span id="line-369">    *</span>
-<span class="source-line-no">370</span><span id="line-370">    * @param name The parameter name.</span>
-<span class="source-line-no">371</span><span id="line-371">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">372</span><span id="line-372">    */</span>
-<span class="source-line-no">373</span><span id="line-373">   public RequestPathParam getFirst(String name) {</span>
-<span class="source-line-no">374</span><span id="line-374">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">375</span><span id="line-375">      return stream(name).findFirst().orElseGet(() -&gt; new RequestPathParam(req, name, null).parser(parser));</span>
-<span class="source-line-no">376</span><span id="line-376">   }</span>
-<span class="source-line-no">377</span><span id="line-377"></span>
-<span class="source-line-no">378</span><span id="line-378">   /**</span>
-<span class="source-line-no">379</span><span id="line-379">    * Returns the last parameter with the specified name.</span>
-<span class="source-line-no">380</span><span id="line-380">    *</span>
-<span class="source-line-no">381</span><span id="line-381">    * &lt;p&gt;</span>
-<span class="source-line-no">382</span><span id="line-382">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestPathParam#isPresent()} can be used</span>
-<span class="source-line-no">383</span><span id="line-383">    * to test for the existence of the parameter.</span>
-<span class="source-line-no">384</span><span id="line-384">    *</span>
-<span class="source-line-no">385</span><span id="line-385">    * @param name The parameter name.</span>
-<span class="source-line-no">386</span><span id="line-386">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">387</span><span id="line-387">    */</span>
-<span class="source-line-no">388</span><span id="line-388">   public RequestPathParam getLast(String name) {</span>
-<span class="source-line-no">389</span><span id="line-389">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">390</span><span id="line-390">      var v = Holder.&lt;RequestPathParam&gt;empty();</span>
-<span class="source-line-no">391</span><span id="line-391">      stream(name).forEach(v::set);</span>
-<span class="source-line-no">392</span><span id="line-392">      return v.orElseGet(() -&gt; new RequestPathParam(req, name, null).parser(parser));</span>
-<span class="source-line-no">393</span><span id="line-393">   }</span>
-<span class="source-line-no">394</span><span id="line-394"></span>
-<span class="source-line-no">395</span><span id="line-395">   /**</span>
-<span class="source-line-no">396</span><span id="line-396">    * Returns all the unique header names in this list.</span>
-<span class="source-line-no">397</span><span id="line-397">    * @return The list of all unique header names in this list.</span>
-<span class="source-line-no">398</span><span id="line-398">    *    &lt;br&gt;List is unmodifiable.</span>
-<span class="source-line-no">399</span><span id="line-399">    */</span>
-<span class="source-line-no">400</span><span id="line-400">   public List&lt;String&gt; getNames() { return stream().map(RequestPathParam::getName).map(x -&gt; caseSensitive ? x : x.toLowerCase()).distinct().toList(); }</span>
-<span class="source-line-no">401</span><span id="line-401"></span>
-<span class="source-line-no">402</span><span id="line-402">   /**</span>
-<span class="source-line-no">403</span><span id="line-403">    * Returns the decoded remainder of the URL following any path pattern matches.</span>
-<span class="source-line-no">404</span><span id="line-404">    *</span>
-<span class="source-line-no">405</span><span id="line-405">    * &lt;p&gt;</span>
-<span class="source-line-no">406</span><span id="line-406">    * The behavior of path remainder is shown below given the path pattern "/foo/*":</span>
-<span class="source-line-no">407</span><span id="line-407">    * &lt;table class='styled'&gt;</span>
-<span class="source-line-no">408</span><span id="line-408">    *    &lt;tr&gt;</span>
-<span class="source-line-no">409</span><span id="line-409">    *       &lt;th&gt;URL&lt;/th&gt;</span>
-<span class="source-line-no">410</span><span id="line-410">    *       &lt;th&gt;Path Remainder&lt;/th&gt;</span>
-<span class="source-line-no">411</span><span id="line-411">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">412</span><span id="line-412">    *    &lt;tr&gt;</span>
-<span class="source-line-no">413</span><span id="line-413">    *       &lt;td&gt;&lt;c&gt;/foo&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">414</span><span id="line-414">    *       &lt;td&gt;&lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">415</span><span id="line-415">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">416</span><span id="line-416">    *    &lt;tr&gt;</span>
-<span class="source-line-no">417</span><span id="line-417">    *       &lt;td&gt;&lt;c&gt;/foo/&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">418</span><span id="line-418">    *       &lt;td&gt;&lt;js&gt;""&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">419</span><span id="line-419">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">420</span><span id="line-420">    *    &lt;tr&gt;</span>
-<span class="source-line-no">421</span><span id="line-421">    *       &lt;td&gt;&lt;c&gt;/foo//&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">422</span><span id="line-422">    *       &lt;td&gt;&lt;js&gt;"/"&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">423</span><span id="line-423">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">424</span><span id="line-424">    *    &lt;tr&gt;</span>
-<span class="source-line-no">425</span><span id="line-425">    *       &lt;td&gt;&lt;c&gt;/foo///&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">426</span><span id="line-426">    *       &lt;td&gt;&lt;js&gt;"//"&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">427</span><span id="line-427">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">428</span><span id="line-428">    *    &lt;tr&gt;</span>
-<span class="source-line-no">429</span><span id="line-429">    *       &lt;td&gt;&lt;c&gt;/foo/a/b&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">430</span><span id="line-430">    *       &lt;td&gt;&lt;js&gt;"a/b"&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">431</span><span id="line-431">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">432</span><span id="line-432">    *    &lt;tr&gt;</span>
-<span class="source-line-no">433</span><span id="line-433">    *       &lt;td&gt;&lt;c&gt;/foo//a/b/&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">434</span><span id="line-434">    *       &lt;td&gt;&lt;js&gt;"/a/b/"&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">435</span><span id="line-435">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">436</span><span id="line-436">    *    &lt;tr&gt;</span>
-<span class="source-line-no">437</span><span id="line-437">    *       &lt;td&gt;&lt;c&gt;/foo/a%2Fb&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">438</span><span id="line-438">    *       &lt;td&gt;&lt;js&gt;"a/b"&lt;/js&gt;&lt;/td&gt;</span>
-<span class="source-line-no">439</span><span id="line-439">    *    &lt;/tr&gt;</span>
-<span class="source-line-no">440</span><span id="line-440">    * &lt;/table&gt;</span>
-<span class="source-line-no">441</span><span id="line-441">    *</span>
-<span class="source-line-no">442</span><span id="line-442">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">443</span><span id="line-443">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">444</span><span id="line-444">    *    &lt;jc&gt;// REST method&lt;/jc&gt;</span>
-<span class="source-line-no">445</span><span id="line-445">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/foo/{bar}/*"&lt;/js&gt;)</span>
-<span class="source-line-no">446</span><span id="line-446">    *    &lt;jk&gt;public&lt;/jk&gt; String doGetById(RequestPathParamList &lt;jv&gt;path&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;bar&lt;/jv&gt;) {</span>
-<span class="source-line-no">447</span><span id="line-447">    *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;path&lt;/jv&gt;.remainder().orElse(&lt;jk&gt;null&lt;/jk&gt;);</span>
-<span class="source-line-no">448</span><span id="line-448">    *    }</span>
-<span class="source-line-no">449</span><span id="line-449">    * &lt;/p&gt;</span>
-<span class="source-line-no">450</span><span id="line-450">    *</span>
-<span class="source-line-no">451</span><span id="line-451">    * &lt;p&gt;</span>
-<span class="source-line-no">452</span><span id="line-452">    * The remainder can also be retrieved by calling &lt;code&gt;get(&lt;js&gt;"/**"&lt;/js&gt;)&lt;/code&gt;.</span>
-<span class="source-line-no">453</span><span id="line-453">    *</span>
-<span class="source-line-no">454</span><span id="line-454">    * @return The path remainder string.</span>
-<span class="source-line-no">455</span><span id="line-455">    */</span>
-<span class="source-line-no">456</span><span id="line-456">   public RequestPathParam getRemainder() {</span>
-<span class="source-line-no">457</span><span id="line-457">      return get("/*");</span>
-<span class="source-line-no">458</span><span id="line-458"></span>
-<span class="source-line-no">459</span><span id="line-459">   }</span>
+<span class="source-line-no">227</span><span id="line-227">      if (pairs == null)</span>
+<span class="source-line-no">228</span><span id="line-228">         return this;</span>
+<span class="source-line-no">229</span><span id="line-229">      for (var p : pairs) {</span>
+<span class="source-line-no">230</span><span id="line-230">         var name = p.getName();</span>
+<span class="source-line-no">231</span><span id="line-231">         var l = stream(name);</span>
+<span class="source-line-no">232</span><span id="line-232">         var hasAllBlanks = l.allMatch(x -&gt; Shorts.ie(x.getValue()));</span>
+<span class="source-line-no">233</span><span id="line-233">         if (hasAllBlanks) {</span>
+<span class="source-line-no">234</span><span id="line-234">            removeAll(getAll(name));</span>
+<span class="source-line-no">235</span><span id="line-235">            add(new RequestPathParam(req, name, vs.resolve(p.getValue())));</span>
+<span class="source-line-no">236</span><span id="line-236">         }</span>
+<span class="source-line-no">237</span><span id="line-237">      }</span>
+<span class="source-line-no">238</span><span id="line-238">      return this;</span>
+<span class="source-line-no">239</span><span id="line-239">   }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   /**</span>
+<span class="source-line-no">242</span><span id="line-242">    * Adds default entries to these parameters.</span>
+<span class="source-line-no">243</span><span id="line-243">    *</span>
+<span class="source-line-no">244</span><span id="line-244">    * &lt;p&gt;</span>
+<span class="source-line-no">245</span><span id="line-245">    * Similar to {@link #set(String, Object)} but doesn't override existing values.</span>
+<span class="source-line-no">246</span><span id="line-246">    *</span>
+<span class="source-line-no">247</span><span id="line-247">    * @param pairs</span>
+<span class="source-line-no">248</span><span id="line-248">    *    The default entries.</span>
+<span class="source-line-no">249</span><span id="line-249">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
+<span class="source-line-no">250</span><span id="line-250">    * @return This object.</span>
+<span class="source-line-no">251</span><span id="line-251">    */</span>
+<span class="source-line-no">252</span><span id="line-252">   public RequestPathParamList addDefault(HttpPart...pairs) {</span>
+<span class="source-line-no">253</span><span id="line-253">      return addDefault(l(pairs));</span>
+<span class="source-line-no">254</span><span id="line-254">   }</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">   /**</span>
+<span class="source-line-no">257</span><span id="line-257">    * Adds a default entry to the query parameters.</span>
+<span class="source-line-no">258</span><span id="line-258">    *</span>
+<span class="source-line-no">259</span><span id="line-259">    * @param name The name.</span>
+<span class="source-line-no">260</span><span id="line-260">    * @param value The value.</span>
+<span class="source-line-no">261</span><span id="line-261">    * @return This object.</span>
+<span class="source-line-no">262</span><span id="line-262">    */</span>
+<span class="source-line-no">263</span><span id="line-263">   public RequestPathParamList addDefault(String name, String value) {</span>
+<span class="source-line-no">264</span><span id="line-264">      return addDefault(HttpStringPart.of(name, value));</span>
+<span class="source-line-no">265</span><span id="line-265">   }</span>
+<span class="source-line-no">266</span><span id="line-266"></span>
+<span class="source-line-no">267</span><span id="line-267">   /**</span>
+<span class="source-line-no">268</span><span id="line-268">    * Sets case sensitivity for names in this list.</span>
+<span class="source-line-no">269</span><span id="line-269">    *</span>
+<span class="source-line-no">270</span><span id="line-270">    * @param value The new value for this setting.</span>
+<span class="source-line-no">271</span><span id="line-271">    * @return This object (for method chaining).</span>
+<span class="source-line-no">272</span><span id="line-272">    */</span>
+<span class="source-line-no">273</span><span id="line-273">   public RequestPathParamList caseSensitive(boolean value) {</span>
+<span class="source-line-no">274</span><span id="line-274">      caseSensitive = value;</span>
+<span class="source-line-no">275</span><span id="line-275">      return this;</span>
+<span class="source-line-no">276</span><span id="line-276">   }</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">   /**</span>
+<span class="source-line-no">279</span><span id="line-279">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified name is present.</span>
+<span class="source-line-no">280</span><span id="line-280">    *</span>
+<span class="source-line-no">281</span><span id="line-281">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">282</span><span id="line-282">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified name is present.</span>
+<span class="source-line-no">283</span><span id="line-283">    */</span>
+<span class="source-line-no">284</span><span id="line-284">   public boolean contains(String name) {</span>
+<span class="source-line-no">285</span><span id="line-285">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">286</span><span id="line-286">      return stream(name).findAny().isPresent();</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   /**</span>
+<span class="source-line-no">290</span><span id="line-290">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
+<span class="source-line-no">291</span><span id="line-291">    *</span>
+<span class="source-line-no">292</span><span id="line-292">    * @param names The parameter names.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">293</span><span id="line-293">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
+<span class="source-line-no">294</span><span id="line-294">    */</span>
+<span class="source-line-no">295</span><span id="line-295">   public boolean containsAny(String...names) {</span>
+<span class="source-line-no">296</span><span id="line-296">      assertArgNotNull(ARG_names, names);</span>
+<span class="source-line-no">297</span><span id="line-297">      for (var n : names)</span>
+<span class="source-line-no">298</span><span id="line-298">         if (stream(n).findAny().isPresent())</span>
+<span class="source-line-no">299</span><span id="line-299">            return true;</span>
+<span class="source-line-no">300</span><span id="line-300">      return false;</span>
+<span class="source-line-no">301</span><span id="line-301">   }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   /**</span>
+<span class="source-line-no">304</span><span id="line-304">    * Makes a copy of these parameters.</span>
+<span class="source-line-no">305</span><span id="line-305">    *</span>
+<span class="source-line-no">306</span><span id="line-306">    * @return A new parameters object.</span>
+<span class="source-line-no">307</span><span id="line-307">    */</span>
+<span class="source-line-no">308</span><span id="line-308">   public RequestPathParamList copy() {</span>
+<span class="source-line-no">309</span><span id="line-309">      return new RequestPathParamList(this);</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   /**</span>
+<span class="source-line-no">313</span><span id="line-313">    * Returns the path parameter as the specified bean type.</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * &lt;p&gt;</span>
+<span class="source-line-no">316</span><span id="line-316">    * Type must have a name specified via the {@link Path} annotation</span>
+<span class="source-line-no">317</span><span id="line-317">    * and a public constructor that takes in either &lt;c&gt;value&lt;/c&gt; or &lt;c&gt;name,value&lt;/c&gt; as strings.</span>
+<span class="source-line-no">318</span><span id="line-318">    *</span>
+<span class="source-line-no">319</span><span id="line-319">    * @param &lt;T&gt; The bean type to create.</span>
+<span class="source-line-no">320</span><span id="line-320">    * @param type The bean type to create.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @return The bean, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">322</span><span id="line-322">    */</span>
+<span class="source-line-no">323</span><span id="line-323">   public &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {</span>
+<span class="source-line-no">324</span><span id="line-324">      var cm = req.getMarshallingSession().getClassMeta(type);</span>
+<span class="source-line-no">325</span><span id="line-325">      var name = HttpParts.getName(PATH, cm).orElseThrow(() -&gt; rex("@Path(name) not found on class %s", cn(type)));</span>
+<span class="source-line-no">326</span><span id="line-326">      return get(name).as(type);</span>
+<span class="source-line-no">327</span><span id="line-327">   }</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">   /**</span>
+<span class="source-line-no">330</span><span id="line-330">    * Returns the last parameter with the specified name.</span>
+<span class="source-line-no">331</span><span id="line-331">    *</span>
+<span class="source-line-no">332</span><span id="line-332">    * &lt;p&gt;</span>
+<span class="source-line-no">333</span><span id="line-333">    * This is equivalent to {@link #getLast(String)}.</span>
+<span class="source-line-no">334</span><span id="line-334">    *</span>
+<span class="source-line-no">335</span><span id="line-335">    * @param name The parameter name.</span>
+<span class="source-line-no">336</span><span id="line-336">    * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.</span>
+<span class="source-line-no">337</span><span id="line-337">    */</span>
+<span class="source-line-no">338</span><span id="line-338">   public RequestPathParam get(String name) {</span>
+<span class="source-line-no">339</span><span id="line-339">      List&lt;RequestPathParam&gt; l = getAll(name);</span>
+<span class="source-line-no">340</span><span id="line-340">      if (l.isEmpty())</span>
+<span class="source-line-no">341</span><span id="line-341">         return new RequestPathParam(req, name, null).parser(parser);</span>
+<span class="source-line-no">342</span><span id="line-342">      if (l.size() == 1)</span>
+<span class="source-line-no">343</span><span id="line-343">         return l.get(0);</span>
+<span class="source-line-no">344</span><span id="line-344">      var sb = new StringBuilder(128);</span>
+<span class="source-line-no">345</span><span id="line-345">      for (var i = 0; i &lt; l.size(); i++) {</span>
+<span class="source-line-no">346</span><span id="line-346">         if (i &gt; 0)</span>
+<span class="source-line-no">347</span><span id="line-347">            sb.append(", ");</span>
+<span class="source-line-no">348</span><span id="line-348">         sb.append(l.get(i).getValue());</span>
+<span class="source-line-no">349</span><span id="line-349">      }</span>
+<span class="source-line-no">350</span><span id="line-350">      return new RequestPathParam(req, name, sb.toString()).parser(parser);</span>
+<span class="source-line-no">351</span><span id="line-351">   }</span>
+<span class="source-line-no">352</span><span id="line-352"></span>
+<span class="source-line-no">353</span><span id="line-353">   /**</span>
+<span class="source-line-no">354</span><span id="line-354">    * Returns all the parameters with the specified name.</span>
+<span class="source-line-no">355</span><span id="line-355">    *</span>
+<span class="source-line-no">356</span><span id="line-356">    * @param name The parameter name.</span>
+<span class="source-line-no">357</span><span id="line-357">    * @return The list of all parameters with the specified name, or an empty list if none are found.</span>
+<span class="source-line-no">358</span><span id="line-358">    *    &lt;br&gt;List is unmodifiable.</span>
+<span class="source-line-no">359</span><span id="line-359">    */</span>
+<span class="source-line-no">360</span><span id="line-360">   public List&lt;RequestPathParam&gt; getAll(String name) {</span>
+<span class="source-line-no">361</span><span id="line-361">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">362</span><span id="line-362">      return stream(name).toList();</span>
+<span class="source-line-no">363</span><span id="line-363">   }</span>
+<span class="source-line-no">364</span><span id="line-364"></span>
+<span class="source-line-no">365</span><span id="line-365">   /**</span>
+<span class="source-line-no">366</span><span id="line-366">    * Returns the first parameter with the specified name.</span>
+<span class="source-line-no">367</span><span id="line-367">    *</span>
+<span class="source-line-no">368</span><span id="line-368">    * &lt;p&gt;</span>
+<span class="source-line-no">369</span><span id="line-369">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestPathParam#isPresent()} can be used</span>
+<span class="source-line-no">370</span><span id="line-370">    * to test for the existence of the parameter.</span>
+<span class="source-line-no">371</span><span id="line-371">    *</span>
+<span class="source-line-no">372</span><span id="line-372">    * @param name The parameter name.</span>
+<span class="source-line-no">373</span><span id="line-373">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">374</span><span id="line-374">    */</span>
+<span class="source-line-no">375</span><span id="line-375">   public RequestPathParam getFirst(String name) {</span>
+<span class="source-line-no">376</span><span id="line-376">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">377</span><span id="line-377">      return stream(name).findFirst().orElseGet(() -&gt; new RequestPathParam(req, name, null).parser(parser));</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * Returns the last parameter with the specified name.</span>
+<span class="source-line-no">382</span><span id="line-382">    *</span>
+<span class="source-line-no">383</span><span id="line-383">    * &lt;p&gt;</span>
+<span class="source-line-no">384</span><span id="line-384">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestPathParam#isPresent()} can be used</span>
+<span class="source-line-no">385</span><span id="line-385">    * to test for the existence of the parameter.</span>
+<span class="source-line-no">386</span><span id="line-386">    *</span>
+<span class="source-line-no">387</span><span id="line-387">    * @param name The parameter name.</span>
+<span class="source-line-no">388</span><span id="line-388">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">389</span><span id="line-389">    */</span>
+<span class="source-line-no">390</span><span id="line-390">   public RequestPathParam getLast(String name) {</span>
+<span class="source-line-no">391</span><span id="line-391">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">392</span><span id="line-392">      var v = Holder.&lt;RequestPathParam&gt;empty();</span>
+<span class="source-line-no">393</span><span id="line-393">      stream(name).forEach(v::set);</span>
+<span class="source-line-no">394</span><span id="line-394">      return v.orElseGet(() -&gt; new RequestPathParam(req, name, null).parser(parser));</span>
+<span class="source-line-no">395</span><span id="line-395">   }</span>
+<span class="source-line-no">396</span><span id="line-396"></span>
+<span class="source-line-no">397</span><span id="line-397">   /**</span>
+<span class="source-line-no">398</span><span id="line-398">    * Returns all the unique header names in this list.</span>
+<span class="source-line-no">399</span><span id="line-399">    * @return The list of all unique header names in this list.</span>
+<span class="source-line-no">400</span><span id="line-400">    *    &lt;br&gt;List is unmodifiable.</span>
+<span class="source-line-no">401</span><span id="line-401">    */</span>
+<span class="source-line-no">402</span><span id="line-402">   public List&lt;String&gt; getNames() { return stream().map(RequestPathParam::getName).map(x -&gt; caseSensitive ? x : lcr(x)).distinct().toList(); }</span>
+<span class="source-line-no">403</span><span id="line-403"></span>
+<span class="source-line-no">404</span><span id="line-404">   /**</span>
+<span class="source-line-no">405</span><span id="line-405">    * Returns the decoded remainder of the URL following any path pattern matches.</span>
+<span class="source-line-no">406</span><span id="line-406">    *</span>
+<span class="source-line-no">407</span><span id="line-407">    * &lt;p&gt;</span>
+<span class="source-line-no">408</span><span id="line-408">    * The behavior of path remainder is shown below given the path pattern "/foo/*":</span>
+<span class="source-line-no">409</span><span id="line-409">    * &lt;table class='styled'&gt;</span>
+<span class="source-line-no">410</span><span id="line-410">    *    &lt;tr&gt;</span>
+<span class="source-line-no">411</span><span id="line-411">    *       &lt;th&gt;URL&lt;/th&gt;</span>
+<span class="source-line-no">412</span><span id="line-412">    *       &lt;th&gt;Path Remainder&lt;/th&gt;</span>
+<span class="source-line-no">413</span><span id="line-413">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">414</span><span id="line-414">    *    &lt;tr&gt;</span>
+<span class="source-line-no">415</span><span id="line-415">    *       &lt;td&gt;&lt;c&gt;/foo&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">416</span><span id="line-416">    *       &lt;td&gt;&lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">417</span><span id="line-417">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">418</span><span id="line-418">    *    &lt;tr&gt;</span>
+<span class="source-line-no">419</span><span id="line-419">    *       &lt;td&gt;&lt;c&gt;/foo/&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">420</span><span id="line-420">    *       &lt;td&gt;&lt;js&gt;""&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">421</span><span id="line-421">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">422</span><span id="line-422">    *    &lt;tr&gt;</span>
+<span class="source-line-no">423</span><span id="line-423">    *       &lt;td&gt;&lt;c&gt;/foo//&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">424</span><span id="line-424">    *       &lt;td&gt;&lt;js&gt;"/"&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">425</span><span id="line-425">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">426</span><span id="line-426">    *    &lt;tr&gt;</span>
+<span class="source-line-no">427</span><span id="line-427">    *       &lt;td&gt;&lt;c&gt;/foo///&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">428</span><span id="line-428">    *       &lt;td&gt;&lt;js&gt;"//"&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">429</span><span id="line-429">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">430</span><span id="line-430">    *    &lt;tr&gt;</span>
+<span class="source-line-no">431</span><span id="line-431">    *       &lt;td&gt;&lt;c&gt;/foo/a/b&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">432</span><span id="line-432">    *       &lt;td&gt;&lt;js&gt;"a/b"&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">433</span><span id="line-433">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">434</span><span id="line-434">    *    &lt;tr&gt;</span>
+<span class="source-line-no">435</span><span id="line-435">    *       &lt;td&gt;&lt;c&gt;/foo//a/b/&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">436</span><span id="line-436">    *       &lt;td&gt;&lt;js&gt;"/a/b/"&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">437</span><span id="line-437">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">438</span><span id="line-438">    *    &lt;tr&gt;</span>
+<span class="source-line-no">439</span><span id="line-439">    *       &lt;td&gt;&lt;c&gt;/foo/a%2Fb&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">440</span><span id="line-440">    *       &lt;td&gt;&lt;js&gt;"a/b"&lt;/js&gt;&lt;/td&gt;</span>
+<span class="source-line-no">441</span><span id="line-441">    *    &lt;/tr&gt;</span>
+<span class="source-line-no">442</span><span id="line-442">    * &lt;/table&gt;</span>
+<span class="source-line-no">443</span><span id="line-443">    *</span>
+<span class="source-line-no">444</span><span id="line-444">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">445</span><span id="line-445">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">446</span><span id="line-446">    *    &lt;jc&gt;// REST method&lt;/jc&gt;</span>
+<span class="source-line-no">447</span><span id="line-447">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/foo/{bar}/*"&lt;/js&gt;)</span>
+<span class="source-line-no">448</span><span id="line-448">    *    &lt;jk&gt;public&lt;/jk&gt; String doGetById(RequestPathParamList &lt;jv&gt;path&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;bar&lt;/jv&gt;) {</span>
+<span class="source-line-no">449</span><span id="line-449">    *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;path&lt;/jv&gt;.remainder().orElse(&lt;jk&gt;null&lt;/jk&gt;);</span>
+<span class="source-line-no">450</span><span id="line-450">    *    }</span>
+<span class="source-line-no">451</span><span id="line-451">    * &lt;/p&gt;</span>
+<span class="source-line-no">452</span><span id="line-452">    *</span>
+<span class="source-line-no">453</span><span id="line-453">    * &lt;p&gt;</span>
+<span class="source-line-no">454</span><span id="line-454">    * The remainder can also be retrieved by calling &lt;code&gt;get(&lt;js&gt;"/**"&lt;/js&gt;)&lt;/code&gt;.</span>
+<span class="source-line-no">455</span><span id="line-455">    *</span>
+<span class="source-line-no">456</span><span id="line-456">    * @return The path remainder string.</span>
+<span class="source-line-no">457</span><span id="line-457">    */</span>
+<span class="source-line-no">458</span><span id="line-458">   public RequestPathParam getRemainder() {</span>
+<span class="source-line-no">459</span><span id="line-459">      return get("/*");</span>
 <span class="source-line-no">460</span><span id="line-460"></span>
-<span class="source-line-no">461</span><span id="line-461">   /**</span>
-<span class="source-line-no">462</span><span id="line-462">    * Same as {@link #getRemainder()} but doesn't decode characters.</span>
-<span class="source-line-no">463</span><span id="line-463">    *</span>
-<span class="source-line-no">464</span><span id="line-464">    * &lt;p&gt;</span>
-<span class="source-line-no">465</span><span id="line-465">    * The undecoded remainder can also be retrieved by calling &lt;code&gt;get(&lt;js&gt;"/*"&lt;/js&gt;)&lt;/code&gt;.</span>
-<span class="source-line-no">466</span><span id="line-466">    *</span>
-<span class="source-line-no">467</span><span id="line-467">    * @return The un-decoded path remainder.</span>
-<span class="source-line-no">468</span><span id="line-468">    */</span>
-<span class="source-line-no">469</span><span id="line-469">   public RequestPathParam getRemainderUndecoded() { return get("/**"); }</span>
-<span class="source-line-no">470</span><span id="line-470"></span>
-<span class="source-line-no">471</span><span id="line-471">   /**</span>
-<span class="source-line-no">472</span><span id="line-472">    * Returns all headers in sorted order.</span>
-<span class="source-line-no">473</span><span id="line-473">    *</span>
-<span class="source-line-no">474</span><span id="line-474">    * @return The stream of all headers in sorted order.</span>
-<span class="source-line-no">475</span><span id="line-475">    */</span>
-<span class="source-line-no">476</span><span id="line-476">   public Stream&lt;RequestPathParam&gt; getSorted() {</span>
-<span class="source-line-no">477</span><span id="line-477">      Comparator&lt;RequestPathParam&gt; x;</span>
-<span class="source-line-no">478</span><span id="line-478">      if (caseSensitive)</span>
-<span class="source-line-no">479</span><span id="line-479">         x = Comparator.comparing(RequestPathParam::getName);</span>
-<span class="source-line-no">480</span><span id="line-480">      else</span>
-<span class="source-line-no">481</span><span id="line-481">         x = (x1, x2) -&gt; String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());</span>
-<span class="source-line-no">482</span><span id="line-482">      return stream().sorted(x);</span>
-<span class="source-line-no">483</span><span id="line-483">   }</span>
-<span class="source-line-no">484</span><span id="line-484"></span>
-<span class="source-line-no">485</span><span id="line-485">   /**</span>
-<span class="source-line-no">486</span><span id="line-486">    * Sets the parser to use for part values.</span>
-<span class="source-line-no">487</span><span id="line-487">    *</span>
-<span class="source-line-no">488</span><span id="line-488">    * @param value The new value for this setting.</span>
-<span class="source-line-no">489</span><span id="line-489">    * @return This object.</span>
-<span class="source-line-no">490</span><span id="line-490">    */</span>
-<span class="source-line-no">491</span><span id="line-491">   public RequestPathParamList parser(HttpPartParserSession value) {</span>
-<span class="source-line-no">492</span><span id="line-492">      parser = value;</span>
-<span class="source-line-no">493</span><span id="line-493">      forEach(x -&gt; x.parser(parser));</span>
-<span class="source-line-no">494</span><span id="line-494">      return this;</span>
-<span class="source-line-no">495</span><span id="line-495">   }</span>
-<span class="source-line-no">496</span><span id="line-496"></span>
-<span class="source-line-no">497</span><span id="line-497">   /**</span>
-<span class="source-line-no">498</span><span id="line-498">    * Remove parameters.</span>
-<span class="source-line-no">499</span><span id="line-499">    *</span>
-<span class="source-line-no">500</span><span id="line-500">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">501</span><span id="line-501">    * @return This object.</span>
-<span class="source-line-no">502</span><span id="line-502">    */</span>
-<span class="source-line-no">503</span><span id="line-503">   public RequestPathParamList remove(String name) {</span>
-<span class="source-line-no">504</span><span id="line-504">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">505</span><span id="line-505">      removeIf(x -&gt; eq(x.getName(), name));</span>
-<span class="source-line-no">506</span><span id="line-506">      return this;</span>
-<span class="source-line-no">507</span><span id="line-507">   }</span>
-<span class="source-line-no">508</span><span id="line-508"></span>
-<span class="source-line-no">509</span><span id="line-509">   /**</span>
-<span class="source-line-no">510</span><span id="line-510">    * Sets request header values.</span>
-<span class="source-line-no">511</span><span id="line-511">    *</span>
-<span class="source-line-no">512</span><span id="line-512">    * &lt;p&gt;</span>
-<span class="source-line-no">513</span><span id="line-513">    * Parameters are added to the end of the headers.</span>
-<span class="source-line-no">514</span><span id="line-514">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
-<span class="source-line-no">515</span><span id="line-515">    *</span>
-<span class="source-line-no">516</span><span id="line-516">    * @param parameters The parameters to set.  Must not be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">517</span><span id="line-517">    * @return This object.</span>
-<span class="source-line-no">518</span><span id="line-518">    */</span>
-<span class="source-line-no">519</span><span id="line-519">   public RequestPathParamList set(HttpPart...parameters) {</span>
-<span class="source-line-no">520</span><span id="line-520">      assertArgNotNull(ARG_headers, parameters);</span>
-<span class="source-line-no">521</span><span id="line-521">      for (var p : parameters)</span>
-<span class="source-line-no">522</span><span id="line-522">         remove(p.getName());</span>
+<span class="source-line-no">461</span><span id="line-461">   }</span>
+<span class="source-line-no">462</span><span id="line-462"></span>
+<span class="source-line-no">463</span><span id="line-463">   /**</span>
+<span class="source-line-no">464</span><span id="line-464">    * Same as {@link #getRemainder()} but doesn't decode characters.</span>
+<span class="source-line-no">465</span><span id="line-465">    *</span>
+<span class="source-line-no">466</span><span id="line-466">    * &lt;p&gt;</span>
+<span class="source-line-no">467</span><span id="line-467">    * The undecoded remainder can also be retrieved by calling &lt;code&gt;get(&lt;js&gt;"/*"&lt;/js&gt;)&lt;/code&gt;.</span>
+<span class="source-line-no">468</span><span id="line-468">    *</span>
+<span class="source-line-no">469</span><span id="line-469">    * @return The un-decoded path remainder.</span>
+<span class="source-line-no">470</span><span id="line-470">    */</span>
+<span class="source-line-no">471</span><span id="line-471">   public RequestPathParam getRemainderUndecoded() { return get("/**"); }</span>
+<span class="source-line-no">472</span><span id="line-472"></span>
+<span class="source-line-no">473</span><span id="line-473">   /**</span>
+<span class="source-line-no">474</span><span id="line-474">    * Returns all headers in sorted order.</span>
+<span class="source-line-no">475</span><span id="line-475">    *</span>
+<span class="source-line-no">476</span><span id="line-476">    * @return The stream of all headers in sorted order.</span>
+<span class="source-line-no">477</span><span id="line-477">    */</span>
+<span class="source-line-no">478</span><span id="line-478">   public Stream&lt;RequestPathParam&gt; getSorted() {</span>
+<span class="source-line-no">479</span><span id="line-479">      Comparator&lt;RequestPathParam&gt; x;</span>
+<span class="source-line-no">480</span><span id="line-480">      if (caseSensitive)</span>
+<span class="source-line-no">481</span><span id="line-481">         x = Comparator.comparing(RequestPathParam::getName);</span>
+<span class="source-line-no">482</span><span id="line-482">      else</span>
+<span class="source-line-no">483</span><span id="line-483">         x = (x1, x2) -&gt; String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());</span>
+<span class="source-line-no">484</span><span id="line-484">      return stream().sorted(x);</span>
+<span class="source-line-no">485</span><span id="line-485">   }</span>
+<span class="source-line-no">486</span><span id="line-486"></span>
+<span class="source-line-no">487</span><span id="line-487">   /**</span>
+<span class="source-line-no">488</span><span id="line-488">    * Sets the parser to use for part values.</span>
+<span class="source-line-no">489</span><span id="line-489">    *</span>
+<span class="source-line-no">490</span><span id="line-490">    * @param value The new value for this setting.</span>
+<span class="source-line-no">491</span><span id="line-491">    * @return This object.</span>
+<span class="source-line-no">492</span><span id="line-492">    */</span>
+<span class="source-line-no">493</span><span id="line-493">   public RequestPathParamList parser(HttpPartParserSession value) {</span>
+<span class="source-line-no">494</span><span id="line-494">      parser = value;</span>
+<span class="source-line-no">495</span><span id="line-495">      forEach(x -&gt; x.parser(parser));</span>
+<span class="source-line-no">496</span><span id="line-496">      return this;</span>
+<span class="source-line-no">497</span><span id="line-497">   }</span>
+<span class="source-line-no">498</span><span id="line-498"></span>
+<span class="source-line-no">499</span><span id="line-499">   /**</span>
+<span class="source-line-no">500</span><span id="line-500">    * Remove parameters.</span>
+<span class="source-line-no">501</span><span id="line-501">    *</span>
+<span class="source-line-no">502</span><span id="line-502">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">503</span><span id="line-503">    * @return This object.</span>
+<span class="source-line-no">504</span><span id="line-504">    */</span>
+<span class="source-line-no">505</span><span id="line-505">   public RequestPathParamList remove(String name) {</span>
+<span class="source-line-no">506</span><span id="line-506">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">507</span><span id="line-507">      removeIf(x -&gt; eq(x.getName(), name));</span>
+<span class="source-line-no">508</span><span id="line-508">      return this;</span>
+<span class="source-line-no">509</span><span id="line-509">   }</span>
+<span class="source-line-no">510</span><span id="line-510"></span>
+<span class="source-line-no">511</span><span id="line-511">   /**</span>
+<span class="source-line-no">512</span><span id="line-512">    * Sets request header values.</span>
+<span class="source-line-no">513</span><span id="line-513">    *</span>
+<span class="source-line-no">514</span><span id="line-514">    * &lt;p&gt;</span>
+<span class="source-line-no">515</span><span id="line-515">    * Parameters are added to the end of the headers.</span>
+<span class="source-line-no">516</span><span id="line-516">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
+<span class="source-line-no">517</span><span id="line-517">    *</span>
+<span class="source-line-no">518</span><span id="line-518">    * @param parameters The parameters to set.  Must not be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">519</span><span id="line-519">    * @return This object.</span>
+<span class="source-line-no">520</span><span id="line-520">    */</span>
+<span class="source-line-no">521</span><span id="line-521">   public RequestPathParamList set(HttpPart...parameters) {</span>
+<span class="source-line-no">522</span><span id="line-522">      assertArgNotNull(ARG_headers, parameters);</span>
 <span class="source-line-no">523</span><span id="line-523">      for (var p : parameters)</span>
-<span class="source-line-no">524</span><span id="line-524">         add(p);</span>
-<span class="source-line-no">525</span><span id="line-525">      return this;</span>
-<span class="source-line-no">526</span><span id="line-526">   }</span>
-<span class="source-line-no">527</span><span id="line-527"></span>
-<span class="source-line-no">528</span><span id="line-528">   /**</span>
-<span class="source-line-no">529</span><span id="line-529">    * Sets a parameter value.</span>
-<span class="source-line-no">530</span><span id="line-530">    *</span>
-<span class="source-line-no">531</span><span id="line-531">    * &lt;p&gt;</span>
-<span class="source-line-no">532</span><span id="line-532">    * Parameter is added to the end.</span>
-<span class="source-line-no">533</span><span id="line-533">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
-<span class="source-line-no">534</span><span id="line-534">    *</span>
-<span class="source-line-no">535</span><span id="line-535">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">536</span><span id="line-536">    * @param value</span>
-<span class="source-line-no">537</span><span id="line-537">    *    The parameter value.</span>
-<span class="source-line-no">538</span><span id="line-538">    *    &lt;br&gt;Converted to a string using {@link Object#toString()}.</span>
-<span class="source-line-no">539</span><span id="line-539">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">540</span><span id="line-540">    * @return This object.</span>
-<span class="source-line-no">541</span><span id="line-541">    */</span>
-<span class="source-line-no">542</span><span id="line-542">   public RequestPathParamList set(String name, Object value) {</span>
-<span class="source-line-no">543</span><span id="line-543">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">544</span><span id="line-544">      set(new RequestPathParam(req, name, s(value)).parser(parser));</span>
-<span class="source-line-no">545</span><span id="line-545">      return this;</span>
-<span class="source-line-no">546</span><span id="line-546">   }</span>
-<span class="source-line-no">547</span><span id="line-547"></span>
-<span class="source-line-no">548</span><span id="line-548">   /**</span>
-<span class="source-line-no">549</span><span id="line-549">    * Returns all headers with the specified name.</span>
-<span class="source-line-no">550</span><span id="line-550">    *</span>
-<span class="source-line-no">551</span><span id="line-551">    * @param name The header name.</span>
-<span class="source-line-no">552</span><span id="line-552">    * @return The stream of all headers with matching names.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">553</span><span id="line-553">    */</span>
-<span class="source-line-no">554</span><span id="line-554">   public Stream&lt;RequestPathParam&gt; stream(String name) {</span>
-<span class="source-line-no">555</span><span id="line-555">      return stream().filter(x -&gt; eq(x.getName(), name));</span>
-<span class="source-line-no">556</span><span id="line-556">   }</span>
-<span class="source-line-no">557</span><span id="line-557"></span>
-<span class="source-line-no">558</span><span id="line-558">   /**</span>
-<span class="source-line-no">559</span><span id="line-559">    * Returns a copy of this object but only with the specified param names copied.</span>
-<span class="source-line-no">560</span><span id="line-560">    *</span>
-<span class="source-line-no">561</span><span id="line-561">    * @param names The list to include in the copy.</span>
-<span class="source-line-no">562</span><span id="line-562">    * @return A new list object.</span>
-<span class="source-line-no">563</span><span id="line-563">    */</span>
-<span class="source-line-no">564</span><span id="line-564">   public RequestPathParamList subset(String...names) {</span>
-<span class="source-line-no">565</span><span id="line-565">      return new RequestPathParamList(this, names);</span>
-<span class="source-line-no">566</span><span id="line-566">   }</span>
-<span class="source-line-no">567</span><span id="line-567"></span>
-<span class="source-line-no">568</span><span id="line-568">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">569</span><span id="line-569">      var m = filteredBeanPropertyMap();</span>
-<span class="source-line-no">570</span><span id="line-570">      for (var n : getNames())</span>
-<span class="source-line-no">571</span><span id="line-571">         m.a(n, get(n).asString().orElse(null));</span>
-<span class="source-line-no">572</span><span id="line-572">      return m;</span>
-<span class="source-line-no">573</span><span id="line-573">   }</span>
-<span class="source-line-no">574</span><span id="line-574"></span>
-<span class="source-line-no">575</span><span id="line-575">   @Override</span>
-<span class="source-line-no">576</span><span id="line-576">   public boolean equals(Object o) {</span>
-<span class="source-line-no">577</span><span id="line-577">      return this == o || (o instanceof RequestPathParamList other &amp;&amp; super.equals(other));</span>
-<span class="source-line-no">578</span><span id="line-578">   }</span>
-<span class="source-line-no">579</span><span id="line-579"></span>
-<span class="source-line-no">580</span><span id="line-580">   @Override</span>
-<span class="source-line-no">581</span><span id="line-581">   public int hashCode() {</span>
-<span class="source-line-no">582</span><span id="line-582">      return super.hashCode();</span>
-<span class="source-line-no">583</span><span id="line-583">   }</span>
-<span class="source-line-no">584</span><span id="line-584"></span>
-<span class="source-line-no">585</span><span id="line-585">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">586</span><span id="line-586">   public String toString() {</span>
-<span class="source-line-no">587</span><span id="line-587">      return r(properties());</span>
-<span class="source-line-no">588</span><span id="line-588">   }</span>
-<span class="source-line-no">589</span><span id="line-589"></span>
-<span class="source-line-no">590</span><span id="line-590">   private boolean eq(String s1, String s2) {</span>
-<span class="source-line-no">591</span><span id="line-591">      return Shorts.eq(! caseSensitive, s1, s2);  // NOAI</span>
-<span class="source-line-no">592</span><span id="line-592">   }</span>
-<span class="source-line-no">593</span><span id="line-593">}</span>
+<span class="source-line-no">524</span><span id="line-524">         remove(p.getName());</span>
+<span class="source-line-no">525</span><span id="line-525">      for (var p : parameters)</span>
+<span class="source-line-no">526</span><span id="line-526">         add(p);</span>
+<span class="source-line-no">527</span><span id="line-527">      return this;</span>
+<span class="source-line-no">528</span><span id="line-528">   }</span>
+<span class="source-line-no">529</span><span id="line-529"></span>
+<span class="source-line-no">530</span><span id="line-530">   /**</span>
+<span class="source-line-no">531</span><span id="line-531">    * Sets a parameter value.</span>
+<span class="source-line-no">532</span><span id="line-532">    *</span>
+<span class="source-line-no">533</span><span id="line-533">    * &lt;p&gt;</span>
+<span class="source-line-no">534</span><span id="line-534">    * Parameter is added to the end.</span>
+<span class="source-line-no">535</span><span id="line-535">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
+<span class="source-line-no">536</span><span id="line-536">    *</span>
+<span class="source-line-no">537</span><span id="line-537">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">538</span><span id="line-538">    * @param value</span>
+<span class="source-line-no">539</span><span id="line-539">    *    The parameter value.</span>
+<span class="source-line-no">540</span><span id="line-540">    *    &lt;br&gt;Converted to a string using {@link Object#toString()}.</span>
+<span class="source-line-no">541</span><span id="line-541">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the parameter is set with a &lt;jk&gt;null&lt;/jk&gt; value).</span>
+<span class="source-line-no">542</span><span id="line-542">    * @return This object.</span>
+<span class="source-line-no">543</span><span id="line-543">    */</span>
+<span class="source-line-no">544</span><span id="line-544">   public RequestPathParamList set(String name, Object value) {</span>
+<span class="source-line-no">545</span><span id="line-545">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">546</span><span id="line-546">      set(new RequestPathParam(req, name, s(value)).parser(parser));</span>
+<span class="source-line-no">547</span><span id="line-547">      return this;</span>
+<span class="source-line-no">548</span><span id="line-548">   }</span>
+<span class="source-line-no">549</span><span id="line-549"></span>
+<span class="source-line-no">550</span><span id="line-550">   /**</span>
+<span class="source-line-no">551</span><span id="line-551">    * Returns all headers with the specified name.</span>
+<span class="source-line-no">552</span><span id="line-552">    *</span>
+<span class="source-line-no">553</span><span id="line-553">    * @param name The header name.</span>
+<span class="source-line-no">554</span><span id="line-554">    * @return The stream of all headers with matching names.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">555</span><span id="line-555">    */</span>
+<span class="source-line-no">556</span><span id="line-556">   public Stream&lt;RequestPathParam&gt; stream(String name) {</span>
+<span class="source-line-no">557</span><span id="line-557">      return stream().filter(x -&gt; eq(x.getName(), name));</span>
+<span class="source-line-no">558</span><span id="line-558">   }</span>
+<span class="source-line-no">559</span><span id="line-559"></span>
+<span class="source-line-no">560</span><span id="line-560">   /**</span>
+<span class="source-line-no">561</span><span id="line-561">    * Returns a copy of this object but only with the specified param names copied.</span>
+<span class="source-line-no">562</span><span id="line-562">    *</span>
+<span class="source-line-no">563</span><span id="line-563">    * @param names The list to include in the copy.</span>
+<span class="source-line-no">564</span><span id="line-564">    * @return A new list object.</span>
+<span class="source-line-no">565</span><span id="line-565">    */</span>
+<span class="source-line-no">566</span><span id="line-566">   public RequestPathParamList subset(String...names) {</span>
+<span class="source-line-no">567</span><span id="line-567">      return new RequestPathParamList(this, names);</span>
+<span class="source-line-no">568</span><span id="line-568">   }</span>
+<span class="source-line-no">569</span><span id="line-569"></span>
+<span class="source-line-no">570</span><span id="line-570">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">571</span><span id="line-571">      var m = filteredBeanPropertyMap();</span>
+<span class="source-line-no">572</span><span id="line-572">      for (var n : getNames())</span>
+<span class="source-line-no">573</span><span id="line-573">         m.a(n, get(n).asString().orElse(null));</span>
+<span class="source-line-no">574</span><span id="line-574">      return m;</span>
+<span class="source-line-no">575</span><span id="line-575">   }</span>
+<span class="source-line-no">576</span><span id="line-576"></span>
+<span class="source-line-no">577</span><span id="line-577">   @Override</span>
+<span class="source-line-no">578</span><span id="line-578">   public boolean equals(Object o) {</span>
+<span class="source-line-no">579</span><span id="line-579">      return this == o || (o instanceof RequestPathParamList o2 &amp;&amp; super.equals(o2));</span>
+<span class="source-line-no">580</span><span id="line-580">   }</span>
+<span class="source-line-no">581</span><span id="line-581"></span>
+<span class="source-line-no">582</span><span id="line-582">   @Override</span>
+<span class="source-line-no">583</span><span id="line-583">   public int hashCode() {</span>
+<span class="source-line-no">584</span><span id="line-584">      return super.hashCode();</span>
+<span class="source-line-no">585</span><span id="line-585">   }</span>
+<span class="source-line-no">586</span><span id="line-586"></span>
+<span class="source-line-no">587</span><span id="line-587">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">588</span><span id="line-588">   public String toString() {</span>
+<span class="source-line-no">589</span><span id="line-589">      return r(properties());</span>
+<span class="source-line-no">590</span><span id="line-590">   }</span>
+<span class="source-line-no">591</span><span id="line-591"></span>
+<span class="source-line-no">592</span><span id="line-592">   private boolean eq(String s1, String s2) {</span>
+<span class="source-line-no">593</span><span id="line-593">      return Shorts.eq(! caseSensitive, s1, s2);  // NOAI</span>
+<span class="source-line-no">594</span><span id="line-594">   }</span>
+<span class="source-line-no">595</span><span id="line-595">}</span>
 
 
 

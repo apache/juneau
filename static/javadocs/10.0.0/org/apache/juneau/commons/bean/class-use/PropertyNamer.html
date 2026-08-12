@@ -147,9 +147,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#propertyNamer(org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">propertyNamer</a><wbr>(<a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../BeanMeta.BeanMetaValue.html" title="class in org.apache.juneau.commons.bean">BeanMeta.BeanMetaValue</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanMeta.</span><code><a href="../BeanMeta.html#create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">create</a><wbr>(<a href="../BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;T&gt;&nbsp;cm,
+ <a href="../../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass,
+ <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Same as <a href="../BeanMeta.html#create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo)"><code>BeanMeta.create(BeanInfo, ClassInfo)</code></a> but allows an explicit <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> to override the one
+ that would otherwise be derived from the bean filter or <a href="../BeanConfigContext.html#getPropertyNamer()"><code>BeanConfigContext.getPropertyNamer()</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#propertyNamer(org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">propertyNamer</a><wbr>(<a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> used to derive property names.</div>
 </div>
 </div>
@@ -162,6 +170,22 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">BeanTypeAnnotation.Builder.</span><code><a href="../BeanTypeAnnotation.Builder.html#propertyNamer(java.lang.Class)" class="member-name-link">propertyNamer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the <a href="../BeanType.html#propertyNamer()"><code>BeanType.propertyNamer()</code></a> property on this annotation.</div>
+</div>
+</div>
+<div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.commons.bean</a> with parameters of type <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>protected </code></div>
+<div class="col-second even-row-color"><code><a href="../BeanMeta.html#%3Cinit%3E(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.bean.BeanFilter,java.lang.String%5B%5D,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">BeanMeta</a><wbr>(<a href="../BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="../BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;cm,
+ <a href="../BeanFilter.html" title="interface in org.apache.juneau.commons.bean">BeanFilter</a>&nbsp;bf,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;pNames,
+ <a href="../../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass,
+ <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamerOverride)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Same as <a href="../BeanMeta.html#%3Cinit%3E(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.bean.BeanFilter,java.lang.String%5B%5D,org.apache.juneau.commons.reflect.ClassInfo)"><code>BeanMeta(BeanInfo, BeanFilter, String[], ClassInfo)</code></a> but allows an explicit
+ <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> override.</div>
 </div>
 </div>
 </section>
@@ -195,10 +219,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>final &lt;T&gt;&nbsp;<a href="../BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarshallingSession.</span><code><a href="../../../marshall/MarshallingSession.html#toBeanMap(T,org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">toBeanMap</a><wbr>(T&nbsp;o,
- <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</code></div>
+<div class="col-first even-row-color"><code><a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;<a href="../../../marshall/ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ClassMeta.</span><code><a href="../../../marshall/ClassMeta.html#getBeanMeta(org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">getBeanMeta</a><wbr>(<a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Same as <a href="../../../marshall/ClassMeta.html#getBeanMeta()"><code>ClassMeta.getBeanMeta()</code></a> but derives property names using the supplied <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> instead of
+ the one configured on the owning context.</div>
+</div>
+<div class="col-first odd-row-color"><code>final &lt;T&gt;&nbsp;<a href="../BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshallingSession.</span><code><a href="../../../marshall/MarshallingSession.html#toBeanMap(T,org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">toBeanMap</a><wbr>(T&nbsp;o,
+ <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Wraps an object inside a <a href="../BeanMap.html" title="class in org.apache.juneau.commons.bean"><code>BeanMap</code></a> object (a modifiable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>).</div>
 </div>
 </div>

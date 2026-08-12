@@ -326,7 +326,7 @@ loadScripts(document, 'script');</script>
 <dd><code>creator</code> - The assertion that created this assertion.
    <br>Should be <jk>null</jk> if this is the top-level assertion.</dd>
 <dd><code>value</code> - The object being tested.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk>, in which case this assertion behaves as if testing a header with no value (e.g. <code>FluentObjectAssertion.isNull()</code> passes, transform methods yield <jk>null</jk>-valued assertions).</dd>
 <dd><code>returns</code> - The object to return after a test method is called.
    <br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
  used on the same assertion.</dd>
@@ -342,7 +342,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The object being tested.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk>, in which case this assertion behaves as if testing a header with no value (e.g. <code>FluentObjectAssertion.isNull()</code> passes, transform methods yield <jk>null</jk>-valued assertions).</dd>
 <dd><code>returns</code> - The object to return after a test method is called.
    <br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
  used on the same assertion.</dd>

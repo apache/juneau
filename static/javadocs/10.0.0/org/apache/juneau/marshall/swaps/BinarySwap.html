@@ -224,7 +224,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="../swap/ObjectSwap.html#match(org.apache.juneau.marshall.MarshallingSession)">match</a></code>&nbsp;in class&nbsp;<code><a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;byte[],<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>session</code> - The bean session.</dd>
+<dd><code>session</code> - The bean session. Can be <jk>null</jk> (returns <c>0</c>, or <c>1</c> if this swap has no media types configured).</dd>
 <dt>Returns:</dt>
 <dd>Zero if swap doesn't match the session, or a positive number if it does.</dd>
 </dl>

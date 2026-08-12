@@ -168,13 +168,18 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../html/HtmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.html">HtmlWriter</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../html/BasicHtmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.html">BasicHtmlWriter</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Specialized writer for serializing HTML.</div>
+<div class="block">Concrete <a href="../../html/HtmlWriter.html" title="class in org.apache.juneau.marshall.html"><code>HtmlWriter</code></a> leaf for standard HTML output.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../html/SimpleHtmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.html">SimpleHtmlWriter</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../html/HtmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.html">HtmlWriter</a>&lt;SELF extends <a href="../../html/HtmlWriter.html" title="class in org.apache.juneau.marshall.html">HtmlWriter</a>&lt;SELF&gt;&gt;</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Specialized writer for serializing HTML.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../html/SimpleHtmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.html">SimpleHtmlWriter</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Utility class for creating custom HTML.</div>
 </div>
 </div>
@@ -215,13 +220,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#serializeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#writeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;m,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
@@ -236,9 +241,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../json/JsonWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.json">JsonWriter</a></code></div>
+<div class="col-first even-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../json/BasicJsonWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.json">BasicJsonWriter</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Concrete <a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonWriter</code></a> leaf for standard JSON output.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../json/JsonWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;SELF extends <a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;SELF&gt;&gt;</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Specialized writer for serializing JSON.</div>
 </div>
 </div>
@@ -247,21 +257,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#serializeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#writeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;m,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonWriter.</span><code><a href="../../json/JsonWriter.html#uriValue(java.lang.Object)" class="member-name-link">uriValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Appends a URI to the output.</div>
-</div>
 </div>
 </section>
 </li>
@@ -284,125 +289,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.marshall.serializer">
 <h2>Uses of <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a> in <a href="../package-summary.html">org.apache.juneau.marshall.serializer</a></h2>
-<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.marshall.serializer</a> that return <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span></div>
+<div class="caption"><span>Classes in <a href="../package-summary.html">org.apache.juneau.marshall.serializer</a> with type parameters of type <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
+<div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#append(char)" class="member-name-link">append</a><wbr>(char&nbsp;c)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#append(char%5B%5D)" class="member-name-link">append</a><wbr>(char[]&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Appends the specified characters to this writer.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#append(int,char)" class="member-name-link">append</a><wbr>(int&nbsp;indent,
- char&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../SerializerWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;SELF extends <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;SELF&gt;&gt;</code></div>
 <div class="col-last even-row-color">
-<div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#append(int,java.lang.String)" class="member-name-link">append</a><wbr>(int&nbsp;indent,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#append(java.lang.Object)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#append(java.lang.String)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#appendIf(boolean,char)" class="member-name-link">appendIf</a><wbr>(boolean&nbsp;flag,
- char&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Writes the specified text to the writer if b is true.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#appendIf(boolean,java.lang.String)" class="member-name-link">appendIf</a><wbr>(boolean&nbsp;flag,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes the specified text to the writer if b is true.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#appendln(int,java.lang.String)" class="member-name-link">appendln</a><wbr>(int&nbsp;indent,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Writes an indent (if the <code>useWhitespace</code> setting is enabled), followed by text, followed by a newline
- (if the <code>useWhitespace</code> setting is enabled).</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#appendln(java.lang.String)" class="member-name-link">appendln</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes the specified text followed by a newline (if the <code>useWhitespace</code> setting is enabled).</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#appendUri(java.lang.Object)" class="member-name-link">appendUri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Appends the specified object as a URI.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#cr(int)" class="member-name-link">cr</a><wbr>(int&nbsp;depth)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Performs a carriage return.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#cre(int)" class="member-name-link">cre</a><wbr>(int&nbsp;depth)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Performs a carriage return at the end of a line.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#i(int)" class="member-name-link">i</a><wbr>(int&nbsp;indent)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes an indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#ie(int)" class="member-name-link">ie</a><wbr>(int&nbsp;indent)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Writes an end-of-line indent to the writer if the <code>useWhitespace</code> setting is enabled.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#nl(int)" class="member-name-link">nl</a><wbr>(int&nbsp;indent)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#nlIf(boolean,int)" class="member-name-link">nlIf</a><wbr>(boolean&nbsp;flag,
- int&nbsp;indent)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Writes a newline to the writer if the <code>useWhitespace</code> setting is enabled and the boolean flag is true.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#q()" class="member-name-link">q</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Adds the quote character specified by the <code>quoteChar</code> setting to the output.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#s()" class="member-name-link">s</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Adds a whitespace character to the output if the <code>useWhitespace</code> setting is enabled.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#sIf(boolean)" class="member-name-link">sIf</a><wbr>(boolean&nbsp;flag)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes a space if the boolean expression is <jk>true</jk> and <code>useWhitespace</code> is false.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#w(char)" class="member-name-link">w</a><wbr>(char&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Writes the specified character to the writer.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerWriter.</span><code><a href="../SerializerWriter.html#w(java.lang.String)" class="member-name-link">w</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Writes the specified string to the writer.</div>
+<div class="block">Simple wrapper around a standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> with additional methods.</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.marshall.serializer</a> with parameters of type <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span></div>
@@ -410,8 +305,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier</div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../SerializerWriter.html#%3Cinit%3E(org.apache.juneau.marshall.serializer.SerializerWriter)" class="member-name-link">SerializerWriter</a><wbr>(<a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&nbsp;w)</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
+<div class="col-second even-row-color"><code><a href="../SerializerWriter.html#%3Cinit%3E(org.apache.juneau.marshall.serializer.SerializerWriter)" class="member-name-link">SerializerWriter</a><wbr>(<a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;&nbsp;w)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Copy Constructor</div>
 </div>
@@ -448,21 +343,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Specialized writer for serializing UON-encoded text.</div>
 </div>
 </div>
-<div class="caption"><span>Methods in <a href="../../uon/package-summary.html">org.apache.juneau.marshall.uon</a> that return <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#serializeAnything(org.apache.juneau.marshall.uon.UonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../uon/UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a>&nbsp;out,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
- <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
- <a href="../../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Workhorse method.</div>
-</div>
-</div>
 </section>
 </li>
 <li>
@@ -473,9 +353,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../xml/XmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.xml">XmlWriter</a></code></div>
+<div class="col-first even-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../xml/BasicXmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.xml">BasicXmlWriter</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Concrete <a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml"><code>XmlWriter</code></a> leaf for standard XML output.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../xml/XmlWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&lt;SELF extends <a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&lt;SELF&gt;&gt;</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Specialized writer for serializing XML.</div>
 </div>
 </div>

@@ -512,18 +512,18 @@
 <span class="source-line-no">499</span><span id="line-499">       *    List&amp;lt;MyBean&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jsm&gt;createListOfMyBeans&lt;/jsm&gt;();</span>
 <span class="source-line-no">500</span><span id="line-500">       *</span>
 <span class="source-line-no">501</span><span id="line-501">       *    &lt;jc&gt;// Serialize to RDF/XML as loose resources&lt;/jc&gt;</span>
-<span class="source-line-no">502</span><span id="line-502">       *    String &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;list&lt;/jv&gt;);</span>
+<span class="source-line-no">502</span><span id="line-502">       *    String &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;list&lt;/jv&gt;);</span>
 <span class="source-line-no">503</span><span id="line-503">       *</span>
 <span class="source-line-no">504</span><span id="line-504">       *    &lt;jc&gt;// Parse back into a Java collection&lt;/jc&gt;</span>
-<span class="source-line-no">505</span><span id="line-505">       *    &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">505</span><span id="line-505">       *    &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">506</span><span id="line-506">       *</span>
 <span class="source-line-no">507</span><span id="line-507">       *    MyBean[] &lt;jv&gt;beans&lt;/jv&gt; = &lt;jsm&gt;createArrayOfMyBeans&lt;/jsm&gt;();</span>
 <span class="source-line-no">508</span><span id="line-508">       *</span>
 <span class="source-line-no">509</span><span id="line-509">       *    &lt;jc&gt;// Serialize to RDF/XML as loose resources&lt;/jc&gt;</span>
-<span class="source-line-no">510</span><span id="line-510">       *    &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;beans&lt;/jv&gt;);</span>
+<span class="source-line-no">510</span><span id="line-510">       *    &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;beans&lt;/jv&gt;);</span>
 <span class="source-line-no">511</span><span id="line-511">       *</span>
 <span class="source-line-no">512</span><span id="line-512">       *    &lt;jc&gt;// Parse back into a bean array&lt;/jc&gt;</span>
-<span class="source-line-no">513</span><span id="line-513">       *    &lt;jv&gt;beans&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">513</span><span id="line-513">       *    &lt;jv&gt;beans&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">514</span><span id="line-514">       * &lt;/p&gt;</span>
 <span class="source-line-no">515</span><span id="line-515">       *</span>
 <span class="source-line-no">516</span><span id="line-516">       * @return This object.</span>
@@ -565,18 +565,18 @@
 <span class="source-line-no">552</span><span id="line-552">       *    List&amp;lt;MyBean&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jsm&gt;createListOfMyBeans&lt;/jsm&gt;();</span>
 <span class="source-line-no">553</span><span id="line-553">       *</span>
 <span class="source-line-no">554</span><span id="line-554">       *    &lt;jc&gt;// Serialize to RDF/XML as loose resources&lt;/jc&gt;</span>
-<span class="source-line-no">555</span><span id="line-555">       *    String &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;list&lt;/jv&gt;);</span>
+<span class="source-line-no">555</span><span id="line-555">       *    String &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;list&lt;/jv&gt;);</span>
 <span class="source-line-no">556</span><span id="line-556">       *</span>
 <span class="source-line-no">557</span><span id="line-557">       *    &lt;jc&gt;// Parse back into a Java collection&lt;/jc&gt;</span>
-<span class="source-line-no">558</span><span id="line-558">       *    &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">558</span><span id="line-558">       *    &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">559</span><span id="line-559">       *</span>
 <span class="source-line-no">560</span><span id="line-560">       *    MyBean[] &lt;jv&gt;beans&lt;/jv&gt; = &lt;jsm&gt;createArrayOfMyBeans&lt;/jsm&gt;();</span>
 <span class="source-line-no">561</span><span id="line-561">       *</span>
 <span class="source-line-no">562</span><span id="line-562">       *    &lt;jc&gt;// Serialize to RDF/XML as loose resources&lt;/jc&gt;</span>
-<span class="source-line-no">563</span><span id="line-563">       *    &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;beans&lt;/jv&gt;);</span>
+<span class="source-line-no">563</span><span id="line-563">       *    &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;beans&lt;/jv&gt;);</span>
 <span class="source-line-no">564</span><span id="line-564">       *</span>
 <span class="source-line-no">565</span><span id="line-565">       *    &lt;jc&gt;// Parse back into a bean array&lt;/jc&gt;</span>
-<span class="source-line-no">566</span><span id="line-566">       *    &lt;jv&gt;beans&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">566</span><span id="line-566">       *    &lt;jv&gt;beans&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">567</span><span id="line-567">       * &lt;/p&gt;</span>
 <span class="source-line-no">568</span><span id="line-568">       *</span>
 <span class="source-line-no">569</span><span id="line-569">       * @param value</span>
@@ -1338,196 +1338,197 @@
 <span class="source-line-no">1325</span><span id="line-1325">    *</span>
 <span class="source-line-no">1326</span><span id="line-1326">    * @param builder</span>
 <span class="source-line-no">1327</span><span id="line-1327">    *    The builder for this object.</span>
-<span class="source-line-no">1328</span><span id="line-1328">    */</span>
-<span class="source-line-no">1329</span><span id="line-1329">   public RdfSerializer(Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">1330</span><span id="line-1330">      super(builder.produces(getProduces(builder)).accept(getAccept(builder)));</span>
-<span class="source-line-no">1331</span><span id="line-1331">      addLiteralTypes = builder.addLiteralTypes;</span>
-<span class="source-line-no">1332</span><span id="line-1332">      addRootProperty = builder.addRootProperty;</span>
-<span class="source-line-no">1333</span><span id="line-1333">      useXmlNamespaces = ! builder.disableUseXmlNamespaces;</span>
-<span class="source-line-no">1334</span><span id="line-1334">      looseCollections = builder.looseCollections;</span>
-<span class="source-line-no">1335</span><span id="line-1335">      autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;</span>
-<span class="source-line-no">1336</span><span id="line-1336">      language = builder.language;</span>
-<span class="source-line-no">1337</span><span id="line-1337">      juneauNs = builder.juneauNs;</span>
-<span class="source-line-no">1338</span><span id="line-1338">      juneauBpNs = builder.juneauBpNs;</span>
-<span class="source-line-no">1339</span><span id="line-1339">      collectionFormat = builder.collectionFormat;</span>
-<span class="source-line-no">1340</span><span id="line-1340">      namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;</span>
-<span class="source-line-no">1341</span><span id="line-1341">      addBeanTypesRdf = builder.addBeanTypesRdf;</span>
-<span class="source-line-no">1342</span><span id="line-1342">      jenaSettings = new TreeMap&lt;&gt;(builder.jenaSettings);</span>
-<span class="source-line-no">1343</span><span id="line-1343"></span>
-<span class="source-line-no">1344</span><span id="line-1344">      addBeanTypesEffective = addBeanTypesRdf || super.isAddBeanTypes();</span>
-<span class="source-line-no">1345</span><span id="line-1345">   }</span>
-<span class="source-line-no">1346</span><span id="line-1346"></span>
-<span class="source-line-no">1347</span><span id="line-1347">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">1348</span><span id="line-1348">   public Builder&lt;?&gt; copy() {</span>
-<span class="source-line-no">1349</span><span id="line-1349">      return new DefaultBuilder(this);</span>
-<span class="source-line-no">1350</span><span id="line-1350">   }</span>
-<span class="source-line-no">1351</span><span id="line-1351"></span>
-<span class="source-line-no">1352</span><span id="line-1352">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">1353</span><span id="line-1353">   public RdfSerializerSession.Builder createSession() {</span>
-<span class="source-line-no">1354</span><span id="line-1354">      return RdfSerializerSession.create(this);</span>
-<span class="source-line-no">1355</span><span id="line-1355">   }</span>
-<span class="source-line-no">1356</span><span id="line-1356"></span>
-<span class="source-line-no">1357</span><span id="line-1357">   /**</span>
-<span class="source-line-no">1358</span><span id="line-1358">    * Default namespaces.</span>
-<span class="source-line-no">1359</span><span id="line-1359">    *</span>
-<span class="source-line-no">1360</span><span id="line-1360">    * @see RdfSerializer.Builder#namespaces(Namespace...)</span>
-<span class="source-line-no">1361</span><span id="line-1361">    * @return</span>
-<span class="source-line-no">1362</span><span id="line-1362">    *    The default list of namespaces associated with this serializer.</span>
-<span class="source-line-no">1363</span><span id="line-1363">    */</span>
-<span class="source-line-no">1364</span><span id="line-1364">   public Namespace[] getNamespaces() { return namespaces; }</span>
-<span class="source-line-no">1365</span><span id="line-1365"></span>
-<span class="source-line-no">1366</span><span id="line-1366">   @Override /* Overridden from RdfMetaProvider */</span>
-<span class="source-line-no">1367</span><span id="line-1367">   public RdfBeanMeta getRdfBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
-<span class="source-line-no">1368</span><span id="line-1368">      return rdfBeanMetas.computeIfAbsent(bm, k -&gt; new RdfBeanMeta(k, this));</span>
-<span class="source-line-no">1369</span><span id="line-1369">   }</span>
-<span class="source-line-no">1370</span><span id="line-1370"></span>
-<span class="source-line-no">1371</span><span id="line-1371">   @Override /* Overridden from RdfMetaProvider */</span>
-<span class="source-line-no">1372</span><span id="line-1372">   public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">1373</span><span id="line-1373">      return rdfBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new RdfBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">1374</span><span id="line-1374">   }</span>
-<span class="source-line-no">1375</span><span id="line-1375"></span>
-<span class="source-line-no">1376</span><span id="line-1376">   @Override /* Overridden from RdfMetaProvider */</span>
-<span class="source-line-no">1377</span><span id="line-1377">   public RdfClassMeta getRdfClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">1378</span><span id="line-1378">      return rdfClassMetas.computeIfAbsent(cm, k -&gt; new RdfClassMeta(k, this));</span>
-<span class="source-line-no">1379</span><span id="line-1379">   }</span>
-<span class="source-line-no">1380</span><span id="line-1380"></span>
-<span class="source-line-no">1381</span><span id="line-1381">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">1382</span><span id="line-1382">   public RdfSerializerSession getSession() { return createSession().build(); }</span>
-<span class="source-line-no">1383</span><span id="line-1383"></span>
-<span class="source-line-no">1384</span><span id="line-1384">   @Override /* Overridden from XmlMetaProvider */</span>
-<span class="source-line-no">1385</span><span id="line-1385">   public XmlBeanMeta getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
-<span class="source-line-no">1386</span><span id="line-1386">      return xmlBeanMetas.computeIfAbsent(bm, k -&gt; new XmlBeanMeta(k, this));</span>
-<span class="source-line-no">1387</span><span id="line-1387">   }</span>
-<span class="source-line-no">1388</span><span id="line-1388"></span>
-<span class="source-line-no">1389</span><span id="line-1389">   @Override /* Overridden from XmlMetaProvider */</span>
-<span class="source-line-no">1390</span><span id="line-1390">   public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">1391</span><span id="line-1391">      return xmlBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new XmlBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">1392</span><span id="line-1392">   }</span>
-<span class="source-line-no">1393</span><span id="line-1393"></span>
-<span class="source-line-no">1394</span><span id="line-1394">   @Override /* Overridden from XmlMetaProvider */</span>
-<span class="source-line-no">1395</span><span id="line-1395">   public XmlClassMeta getXmlClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">1396</span><span id="line-1396">      return xmlClassMetas.computeIfAbsent(cm, k -&gt; new XmlClassMeta(k, this));</span>
-<span class="source-line-no">1397</span><span id="line-1397">   }</span>
-<span class="source-line-no">1398</span><span id="line-1398"></span>
-<span class="source-line-no">1399</span><span id="line-1399">   /**</span>
-<span class="source-line-no">1400</span><span id="line-1400">    * RDF format for representing collections and arrays.</span>
-<span class="source-line-no">1401</span><span id="line-1401">    *</span>
-<span class="source-line-no">1402</span><span id="line-1402">    * @see RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)</span>
-<span class="source-line-no">1403</span><span id="line-1403">    * @return</span>
-<span class="source-line-no">1404</span><span id="line-1404">    *    RDF format for representing collections and arrays.</span>
-<span class="source-line-no">1405</span><span id="line-1405">    */</span>
-<span class="source-line-no">1406</span><span id="line-1406">   protected final RdfCollectionFormat getCollectionFormat() { return collectionFormat; }</span>
-<span class="source-line-no">1407</span><span id="line-1407"></span>
-<span class="source-line-no">1408</span><span id="line-1408">   /**</span>
-<span class="source-line-no">1409</span><span id="line-1409">    * All Jena-related configuration properties.</span>
-<span class="source-line-no">1410</span><span id="line-1410">    *</span>
-<span class="source-line-no">1411</span><span id="line-1411">    * @return</span>
-<span class="source-line-no">1412</span><span id="line-1412">    *    A map of all Jena-related configuration properties.</span>
-<span class="source-line-no">1413</span><span id="line-1413">    */</span>
-<span class="source-line-no">1414</span><span id="line-1414">   protected final Map&lt;String,Object&gt; getJenaSettings() { return jenaSettings; }</span>
-<span class="source-line-no">1415</span><span id="line-1415"></span>
-<span class="source-line-no">1416</span><span id="line-1416">   /**</span>
-<span class="source-line-no">1417</span><span id="line-1417">    * Default XML namespace for bean properties.</span>
-<span class="source-line-no">1418</span><span id="line-1418">    *</span>
-<span class="source-line-no">1419</span><span id="line-1419">    * @see RdfSerializer.Builder#juneauBpNs(Namespace)</span>
-<span class="source-line-no">1420</span><span id="line-1420">    * @return</span>
-<span class="source-line-no">1421</span><span id="line-1421">    *    The XML namespace to use for bean properties.</span>
-<span class="source-line-no">1422</span><span id="line-1422">    */</span>
-<span class="source-line-no">1423</span><span id="line-1423">   protected final Namespace getJuneauBpNs() { return juneauBpNs; }</span>
-<span class="source-line-no">1424</span><span id="line-1424"></span>
-<span class="source-line-no">1425</span><span id="line-1425">   /**</span>
-<span class="source-line-no">1426</span><span id="line-1426">    * XML namespace for Juneau properties.</span>
-<span class="source-line-no">1427</span><span id="line-1427">    *</span>
-<span class="source-line-no">1428</span><span id="line-1428">    * @see RdfSerializer.Builder#juneauNs(Namespace)</span>
-<span class="source-line-no">1429</span><span id="line-1429">    * @return</span>
-<span class="source-line-no">1430</span><span id="line-1430">    *    The XML namespace to use for Juneau properties.</span>
-<span class="source-line-no">1431</span><span id="line-1431">    */</span>
-<span class="source-line-no">1432</span><span id="line-1432">   protected final Namespace getJuneauNs() { return juneauNs; }</span>
-<span class="source-line-no">1433</span><span id="line-1433"></span>
-<span class="source-line-no">1434</span><span id="line-1434">   /**</span>
-<span class="source-line-no">1435</span><span id="line-1435">    * RDF language.</span>
-<span class="source-line-no">1436</span><span id="line-1436">    *</span>
-<span class="source-line-no">1437</span><span id="line-1437">    * @see RdfSerializer.Builder#language(String)</span>
-<span class="source-line-no">1438</span><span id="line-1438">    * @return</span>
-<span class="source-line-no">1439</span><span id="line-1439">    *    The RDF language to use.</span>
-<span class="source-line-no">1440</span><span id="line-1440">    */</span>
-<span class="source-line-no">1441</span><span id="line-1441">   protected final String getLanguage() { return language; }</span>
-<span class="source-line-no">1442</span><span id="line-1442"></span>
-<span class="source-line-no">1443</span><span id="line-1443">   /**</span>
-<span class="source-line-no">1444</span><span id="line-1444">    * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
-<span class="source-line-no">1445</span><span id="line-1445">    *</span>
-<span class="source-line-no">1446</span><span id="line-1446">    * @see RdfSerializer.Builder#addBeanTypes()</span>
-<span class="source-line-no">1447</span><span id="line-1447">    * @return</span>
-<span class="source-line-no">1448</span><span id="line-1448">    *    &lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
-<span class="source-line-no">1449</span><span id="line-1449">    *    through reflection.</span>
-<span class="source-line-no">1450</span><span id="line-1450">    */</span>
-<span class="source-line-no">1451</span><span id="line-1451">   @Override</span>
-<span class="source-line-no">1452</span><span id="line-1452">   protected final boolean isAddBeanTypes() { return addBeanTypesEffective; }</span>
-<span class="source-line-no">1453</span><span id="line-1453"></span>
-<span class="source-line-no">1454</span><span id="line-1454">   /**</span>
-<span class="source-line-no">1455</span><span id="line-1455">    * Add XSI data types to non-&lt;c&gt;String&lt;/c&gt; literals.</span>
-<span class="source-line-no">1456</span><span id="line-1456">    *</span>
-<span class="source-line-no">1457</span><span id="line-1457">    * @see RdfSerializer.Builder#addLiteralTypes()</span>
-<span class="source-line-no">1458</span><span id="line-1458">    * @return</span>
-<span class="source-line-no">1459</span><span id="line-1459">    *    &lt;jk&gt;true&lt;/jk&gt; if XSI data types should be added to string literals.</span>
-<span class="source-line-no">1460</span><span id="line-1460">    */</span>
-<span class="source-line-no">1461</span><span id="line-1461">   protected final boolean isAddLiteralTypes() { return addLiteralTypes; }</span>
-<span class="source-line-no">1462</span><span id="line-1462"></span>
-<span class="source-line-no">1463</span><span id="line-1463">   /**</span>
-<span class="source-line-no">1464</span><span id="line-1464">    * Add RDF root identifier property to root node.</span>
-<span class="source-line-no">1465</span><span id="line-1465">    *</span>
-<span class="source-line-no">1466</span><span id="line-1466">    * @see RdfSerializer.Builder#addRootProperty()</span>
-<span class="source-line-no">1467</span><span id="line-1467">    * @return</span>
-<span class="source-line-no">1468</span><span id="line-1468">    *    &lt;jk&gt;true&lt;/jk&gt; if RDF property &lt;c&gt;http://www.apache.org/juneau/root&lt;/c&gt; is added with a value of &lt;js&gt;"true"&lt;/js&gt;</span>
-<span class="source-line-no">1469</span><span id="line-1469">    *    to identify the root node in the graph.</span>
-<span class="source-line-no">1470</span><span id="line-1470">    */</span>
-<span class="source-line-no">1471</span><span id="line-1471">   protected final boolean isAddRootProp() { return addRootProperty; }</span>
-<span class="source-line-no">1472</span><span id="line-1472"></span>
-<span class="source-line-no">1473</span><span id="line-1473">   /**</span>
-<span class="source-line-no">1474</span><span id="line-1474">    * Auto-detect namespace usage.</span>
-<span class="source-line-no">1475</span><span id="line-1475">    *</span>
-<span class="source-line-no">1476</span><span id="line-1476">    * @see RdfSerializer.Builder#disableAutoDetectNamespaces()</span>
-<span class="source-line-no">1477</span><span id="line-1477">    * @return</span>
-<span class="source-line-no">1478</span><span id="line-1478">    *    &lt;jk&gt;true&lt;/jk&gt; if namespaces usage should be detected before serialization.</span>
-<span class="source-line-no">1479</span><span id="line-1479">    */</span>
-<span class="source-line-no">1480</span><span id="line-1480">   protected final boolean isAutoDetectNamespaces() { return autoDetectNamespaces; }</span>
-<span class="source-line-no">1481</span><span id="line-1481"></span>
-<span class="source-line-no">1482</span><span id="line-1482">   /**</span>
-<span class="source-line-no">1483</span><span id="line-1483">    * Collections should be serialized and parsed as loose collections.</span>
-<span class="source-line-no">1484</span><span id="line-1484">    *</span>
-<span class="source-line-no">1485</span><span id="line-1485">    * @see RdfSerializer.Builder#looseCollections()</span>
-<span class="source-line-no">1486</span><span id="line-1486">    * @return</span>
-<span class="source-line-no">1487</span><span id="line-1487">    *    &lt;jk&gt;true&lt;/jk&gt; if collections of resources are handled as loose collections of resources in RDF instead of</span>
-<span class="source-line-no">1488</span><span id="line-1488">    *    resources that are children of an RDF collection (e.g. Sequence, Bag).</span>
-<span class="source-line-no">1489</span><span id="line-1489">    */</span>
-<span class="source-line-no">1490</span><span id="line-1490">   protected final boolean isLooseCollections() { return looseCollections; }</span>
-<span class="source-line-no">1491</span><span id="line-1491"></span>
-<span class="source-line-no">1492</span><span id="line-1492">   /**</span>
-<span class="source-line-no">1493</span><span id="line-1493">    * Reuse XML namespaces when RDF namespaces not specified.</span>
-<span class="source-line-no">1494</span><span id="line-1494">    *</span>
-<span class="source-line-no">1495</span><span id="line-1495">    * @see RdfSerializer.Builder#disableUseXmlNamespaces()</span>
-<span class="source-line-no">1496</span><span id="line-1496">    * @return</span>
-<span class="source-line-no">1497</span><span id="line-1497">    *    &lt;jk&gt;true&lt;/jk&gt; if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.</span>
-<span class="source-line-no">1498</span><span id="line-1498">    *    &lt;br&gt;Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.</span>
-<span class="source-line-no">1499</span><span id="line-1499">    */</span>
-<span class="source-line-no">1500</span><span id="line-1500">   protected final boolean isUseXmlNamespaces() { return useXmlNamespaces; }</span>
-<span class="source-line-no">1501</span><span id="line-1501"></span>
-<span class="source-line-no">1502</span><span id="line-1502">   @Override /* Overridden from WriterSerializer */</span>
-<span class="source-line-no">1503</span><span id="line-1503">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">1504</span><span id="line-1504">      return super.properties()</span>
-<span class="source-line-no">1505</span><span id="line-1505">         .a(PROP_addBeanTypes, addBeanTypes)</span>
-<span class="source-line-no">1506</span><span id="line-1506">         .a(PROP_addLiteralTypes, addLiteralTypes)</span>
-<span class="source-line-no">1507</span><span id="line-1507">         .a(PROP_addRootProperty, addRootProperty)</span>
-<span class="source-line-no">1508</span><span id="line-1508">         .a(PROP_autoDetectNamespaces, autoDetectNamespaces)</span>
-<span class="source-line-no">1509</span><span id="line-1509">         .a(PROP_collectionFormat, collectionFormat)</span>
-<span class="source-line-no">1510</span><span id="line-1510">         .a(PROP_juneauBpNs, juneauBpNs)</span>
-<span class="source-line-no">1511</span><span id="line-1511">         .a(PROP_juneauNs, juneauNs)</span>
-<span class="source-line-no">1512</span><span id="line-1512">         .a(PROP_language, language)</span>
-<span class="source-line-no">1513</span><span id="line-1513">         .a(PROP_looseCollections, looseCollections)</span>
-<span class="source-line-no">1514</span><span id="line-1514">         .a(PROP_namespaces, namespaces)</span>
-<span class="source-line-no">1515</span><span id="line-1515">         .a(PROP_useXmlNamespaces, useXmlNamespaces);</span>
-<span class="source-line-no">1516</span><span id="line-1516">   }</span>
-<span class="source-line-no">1517</span><span id="line-1517">}</span>
+<span class="source-line-no">1328</span><span id="line-1328">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1329</span><span id="line-1329">    */</span>
+<span class="source-line-no">1330</span><span id="line-1330">   public RdfSerializer(Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">1331</span><span id="line-1331">      super(builder.produces(getProduces(builder)).accept(getAccept(builder)));</span>
+<span class="source-line-no">1332</span><span id="line-1332">      addLiteralTypes = builder.addLiteralTypes;</span>
+<span class="source-line-no">1333</span><span id="line-1333">      addRootProperty = builder.addRootProperty;</span>
+<span class="source-line-no">1334</span><span id="line-1334">      useXmlNamespaces = ! builder.disableUseXmlNamespaces;</span>
+<span class="source-line-no">1335</span><span id="line-1335">      looseCollections = builder.looseCollections;</span>
+<span class="source-line-no">1336</span><span id="line-1336">      autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;</span>
+<span class="source-line-no">1337</span><span id="line-1337">      language = builder.language;</span>
+<span class="source-line-no">1338</span><span id="line-1338">      juneauNs = builder.juneauNs;</span>
+<span class="source-line-no">1339</span><span id="line-1339">      juneauBpNs = builder.juneauBpNs;</span>
+<span class="source-line-no">1340</span><span id="line-1340">      collectionFormat = builder.collectionFormat;</span>
+<span class="source-line-no">1341</span><span id="line-1341">      namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;</span>
+<span class="source-line-no">1342</span><span id="line-1342">      addBeanTypesRdf = builder.addBeanTypesRdf;</span>
+<span class="source-line-no">1343</span><span id="line-1343">      jenaSettings = new TreeMap&lt;&gt;(builder.jenaSettings);</span>
+<span class="source-line-no">1344</span><span id="line-1344"></span>
+<span class="source-line-no">1345</span><span id="line-1345">      addBeanTypesEffective = addBeanTypesRdf || super.isAddBeanTypes();</span>
+<span class="source-line-no">1346</span><span id="line-1346">   }</span>
+<span class="source-line-no">1347</span><span id="line-1347"></span>
+<span class="source-line-no">1348</span><span id="line-1348">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">1349</span><span id="line-1349">   public Builder&lt;?&gt; copy() {</span>
+<span class="source-line-no">1350</span><span id="line-1350">      return new DefaultBuilder(this);</span>
+<span class="source-line-no">1351</span><span id="line-1351">   }</span>
+<span class="source-line-no">1352</span><span id="line-1352"></span>
+<span class="source-line-no">1353</span><span id="line-1353">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">1354</span><span id="line-1354">   public RdfSerializerSession.Builder createSession() {</span>
+<span class="source-line-no">1355</span><span id="line-1355">      return RdfSerializerSession.create(this);</span>
+<span class="source-line-no">1356</span><span id="line-1356">   }</span>
+<span class="source-line-no">1357</span><span id="line-1357"></span>
+<span class="source-line-no">1358</span><span id="line-1358">   /**</span>
+<span class="source-line-no">1359</span><span id="line-1359">    * Default namespaces.</span>
+<span class="source-line-no">1360</span><span id="line-1360">    *</span>
+<span class="source-line-no">1361</span><span id="line-1361">    * @see RdfSerializer.Builder#namespaces(Namespace...)</span>
+<span class="source-line-no">1362</span><span id="line-1362">    * @return</span>
+<span class="source-line-no">1363</span><span id="line-1363">    *    The default list of namespaces associated with this serializer.</span>
+<span class="source-line-no">1364</span><span id="line-1364">    */</span>
+<span class="source-line-no">1365</span><span id="line-1365">   public Namespace[] getNamespaces() { return cp(namespaces); }</span>
+<span class="source-line-no">1366</span><span id="line-1366"></span>
+<span class="source-line-no">1367</span><span id="line-1367">   @Override /* Overridden from RdfMetaProvider */</span>
+<span class="source-line-no">1368</span><span id="line-1368">   public RdfBeanMeta getRdfBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
+<span class="source-line-no">1369</span><span id="line-1369">      return rdfBeanMetas.computeIfAbsent(bm, k -&gt; new RdfBeanMeta(k, this));</span>
+<span class="source-line-no">1370</span><span id="line-1370">   }</span>
+<span class="source-line-no">1371</span><span id="line-1371"></span>
+<span class="source-line-no">1372</span><span id="line-1372">   @Override /* Overridden from RdfMetaProvider */</span>
+<span class="source-line-no">1373</span><span id="line-1373">   public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">1374</span><span id="line-1374">      return rdfBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new RdfBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">1375</span><span id="line-1375">   }</span>
+<span class="source-line-no">1376</span><span id="line-1376"></span>
+<span class="source-line-no">1377</span><span id="line-1377">   @Override /* Overridden from RdfMetaProvider */</span>
+<span class="source-line-no">1378</span><span id="line-1378">   public RdfClassMeta getRdfClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">1379</span><span id="line-1379">      return rdfClassMetas.computeIfAbsent(cm, k -&gt; new RdfClassMeta(k, this));</span>
+<span class="source-line-no">1380</span><span id="line-1380">   }</span>
+<span class="source-line-no">1381</span><span id="line-1381"></span>
+<span class="source-line-no">1382</span><span id="line-1382">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">1383</span><span id="line-1383">   public RdfSerializerSession getSession() { return createSession().build(); }</span>
+<span class="source-line-no">1384</span><span id="line-1384"></span>
+<span class="source-line-no">1385</span><span id="line-1385">   @Override /* Overridden from XmlMetaProvider */</span>
+<span class="source-line-no">1386</span><span id="line-1386">   public XmlBeanMeta getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
+<span class="source-line-no">1387</span><span id="line-1387">      return xmlBeanMetas.computeIfAbsent(bm, k -&gt; new XmlBeanMeta(k, this));</span>
+<span class="source-line-no">1388</span><span id="line-1388">   }</span>
+<span class="source-line-no">1389</span><span id="line-1389"></span>
+<span class="source-line-no">1390</span><span id="line-1390">   @Override /* Overridden from XmlMetaProvider */</span>
+<span class="source-line-no">1391</span><span id="line-1391">   public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">1392</span><span id="line-1392">      return xmlBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new XmlBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">1393</span><span id="line-1393">   }</span>
+<span class="source-line-no">1394</span><span id="line-1394"></span>
+<span class="source-line-no">1395</span><span id="line-1395">   @Override /* Overridden from XmlMetaProvider */</span>
+<span class="source-line-no">1396</span><span id="line-1396">   public XmlClassMeta getXmlClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">1397</span><span id="line-1397">      return xmlClassMetas.computeIfAbsent(cm, k -&gt; new XmlClassMeta(k, this));</span>
+<span class="source-line-no">1398</span><span id="line-1398">   }</span>
+<span class="source-line-no">1399</span><span id="line-1399"></span>
+<span class="source-line-no">1400</span><span id="line-1400">   /**</span>
+<span class="source-line-no">1401</span><span id="line-1401">    * RDF format for representing collections and arrays.</span>
+<span class="source-line-no">1402</span><span id="line-1402">    *</span>
+<span class="source-line-no">1403</span><span id="line-1403">    * @see RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)</span>
+<span class="source-line-no">1404</span><span id="line-1404">    * @return</span>
+<span class="source-line-no">1405</span><span id="line-1405">    *    RDF format for representing collections and arrays.</span>
+<span class="source-line-no">1406</span><span id="line-1406">    */</span>
+<span class="source-line-no">1407</span><span id="line-1407">   protected final RdfCollectionFormat getCollectionFormat() { return collectionFormat; }</span>
+<span class="source-line-no">1408</span><span id="line-1408"></span>
+<span class="source-line-no">1409</span><span id="line-1409">   /**</span>
+<span class="source-line-no">1410</span><span id="line-1410">    * All Jena-related configuration properties.</span>
+<span class="source-line-no">1411</span><span id="line-1411">    *</span>
+<span class="source-line-no">1412</span><span id="line-1412">    * @return</span>
+<span class="source-line-no">1413</span><span id="line-1413">    *    A map of all Jena-related configuration properties.</span>
+<span class="source-line-no">1414</span><span id="line-1414">    */</span>
+<span class="source-line-no">1415</span><span id="line-1415">   protected final Map&lt;String,Object&gt; getJenaSettings() { return u(jenaSettings); }</span>
+<span class="source-line-no">1416</span><span id="line-1416"></span>
+<span class="source-line-no">1417</span><span id="line-1417">   /**</span>
+<span class="source-line-no">1418</span><span id="line-1418">    * Default XML namespace for bean properties.</span>
+<span class="source-line-no">1419</span><span id="line-1419">    *</span>
+<span class="source-line-no">1420</span><span id="line-1420">    * @see RdfSerializer.Builder#juneauBpNs(Namespace)</span>
+<span class="source-line-no">1421</span><span id="line-1421">    * @return</span>
+<span class="source-line-no">1422</span><span id="line-1422">    *    The XML namespace to use for bean properties.</span>
+<span class="source-line-no">1423</span><span id="line-1423">    */</span>
+<span class="source-line-no">1424</span><span id="line-1424">   protected final Namespace getJuneauBpNs() { return juneauBpNs; }</span>
+<span class="source-line-no">1425</span><span id="line-1425"></span>
+<span class="source-line-no">1426</span><span id="line-1426">   /**</span>
+<span class="source-line-no">1427</span><span id="line-1427">    * XML namespace for Juneau properties.</span>
+<span class="source-line-no">1428</span><span id="line-1428">    *</span>
+<span class="source-line-no">1429</span><span id="line-1429">    * @see RdfSerializer.Builder#juneauNs(Namespace)</span>
+<span class="source-line-no">1430</span><span id="line-1430">    * @return</span>
+<span class="source-line-no">1431</span><span id="line-1431">    *    The XML namespace to use for Juneau properties.</span>
+<span class="source-line-no">1432</span><span id="line-1432">    */</span>
+<span class="source-line-no">1433</span><span id="line-1433">   protected final Namespace getJuneauNs() { return juneauNs; }</span>
+<span class="source-line-no">1434</span><span id="line-1434"></span>
+<span class="source-line-no">1435</span><span id="line-1435">   /**</span>
+<span class="source-line-no">1436</span><span id="line-1436">    * RDF language.</span>
+<span class="source-line-no">1437</span><span id="line-1437">    *</span>
+<span class="source-line-no">1438</span><span id="line-1438">    * @see RdfSerializer.Builder#language(String)</span>
+<span class="source-line-no">1439</span><span id="line-1439">    * @return</span>
+<span class="source-line-no">1440</span><span id="line-1440">    *    The RDF language to use.</span>
+<span class="source-line-no">1441</span><span id="line-1441">    */</span>
+<span class="source-line-no">1442</span><span id="line-1442">   protected final String getLanguage() { return language; }</span>
+<span class="source-line-no">1443</span><span id="line-1443"></span>
+<span class="source-line-no">1444</span><span id="line-1444">   /**</span>
+<span class="source-line-no">1445</span><span id="line-1445">    * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
+<span class="source-line-no">1446</span><span id="line-1446">    *</span>
+<span class="source-line-no">1447</span><span id="line-1447">    * @see RdfSerializer.Builder#addBeanTypes()</span>
+<span class="source-line-no">1448</span><span id="line-1448">    * @return</span>
+<span class="source-line-no">1449</span><span id="line-1449">    *    &lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
+<span class="source-line-no">1450</span><span id="line-1450">    *    through reflection.</span>
+<span class="source-line-no">1451</span><span id="line-1451">    */</span>
+<span class="source-line-no">1452</span><span id="line-1452">   @Override</span>
+<span class="source-line-no">1453</span><span id="line-1453">   protected final boolean isAddBeanTypes() { return addBeanTypesEffective; }</span>
+<span class="source-line-no">1454</span><span id="line-1454"></span>
+<span class="source-line-no">1455</span><span id="line-1455">   /**</span>
+<span class="source-line-no">1456</span><span id="line-1456">    * Add XSI data types to non-&lt;c&gt;String&lt;/c&gt; literals.</span>
+<span class="source-line-no">1457</span><span id="line-1457">    *</span>
+<span class="source-line-no">1458</span><span id="line-1458">    * @see RdfSerializer.Builder#addLiteralTypes()</span>
+<span class="source-line-no">1459</span><span id="line-1459">    * @return</span>
+<span class="source-line-no">1460</span><span id="line-1460">    *    &lt;jk&gt;true&lt;/jk&gt; if XSI data types should be added to string literals.</span>
+<span class="source-line-no">1461</span><span id="line-1461">    */</span>
+<span class="source-line-no">1462</span><span id="line-1462">   protected final boolean isAddLiteralTypes() { return addLiteralTypes; }</span>
+<span class="source-line-no">1463</span><span id="line-1463"></span>
+<span class="source-line-no">1464</span><span id="line-1464">   /**</span>
+<span class="source-line-no">1465</span><span id="line-1465">    * Add RDF root identifier property to root node.</span>
+<span class="source-line-no">1466</span><span id="line-1466">    *</span>
+<span class="source-line-no">1467</span><span id="line-1467">    * @see RdfSerializer.Builder#addRootProperty()</span>
+<span class="source-line-no">1468</span><span id="line-1468">    * @return</span>
+<span class="source-line-no">1469</span><span id="line-1469">    *    &lt;jk&gt;true&lt;/jk&gt; if RDF property &lt;c&gt;http://www.apache.org/juneau/root&lt;/c&gt; is added with a value of &lt;js&gt;"true"&lt;/js&gt;</span>
+<span class="source-line-no">1470</span><span id="line-1470">    *    to identify the root node in the graph.</span>
+<span class="source-line-no">1471</span><span id="line-1471">    */</span>
+<span class="source-line-no">1472</span><span id="line-1472">   protected final boolean isAddRootProp() { return addRootProperty; }</span>
+<span class="source-line-no">1473</span><span id="line-1473"></span>
+<span class="source-line-no">1474</span><span id="line-1474">   /**</span>
+<span class="source-line-no">1475</span><span id="line-1475">    * Auto-detect namespace usage.</span>
+<span class="source-line-no">1476</span><span id="line-1476">    *</span>
+<span class="source-line-no">1477</span><span id="line-1477">    * @see RdfSerializer.Builder#disableAutoDetectNamespaces()</span>
+<span class="source-line-no">1478</span><span id="line-1478">    * @return</span>
+<span class="source-line-no">1479</span><span id="line-1479">    *    &lt;jk&gt;true&lt;/jk&gt; if namespaces usage should be detected before serialization.</span>
+<span class="source-line-no">1480</span><span id="line-1480">    */</span>
+<span class="source-line-no">1481</span><span id="line-1481">   protected final boolean isAutoDetectNamespaces() { return autoDetectNamespaces; }</span>
+<span class="source-line-no">1482</span><span id="line-1482"></span>
+<span class="source-line-no">1483</span><span id="line-1483">   /**</span>
+<span class="source-line-no">1484</span><span id="line-1484">    * Collections should be serialized and parsed as loose collections.</span>
+<span class="source-line-no">1485</span><span id="line-1485">    *</span>
+<span class="source-line-no">1486</span><span id="line-1486">    * @see RdfSerializer.Builder#looseCollections()</span>
+<span class="source-line-no">1487</span><span id="line-1487">    * @return</span>
+<span class="source-line-no">1488</span><span id="line-1488">    *    &lt;jk&gt;true&lt;/jk&gt; if collections of resources are handled as loose collections of resources in RDF instead of</span>
+<span class="source-line-no">1489</span><span id="line-1489">    *    resources that are children of an RDF collection (e.g. Sequence, Bag).</span>
+<span class="source-line-no">1490</span><span id="line-1490">    */</span>
+<span class="source-line-no">1491</span><span id="line-1491">   protected final boolean isLooseCollections() { return looseCollections; }</span>
+<span class="source-line-no">1492</span><span id="line-1492"></span>
+<span class="source-line-no">1493</span><span id="line-1493">   /**</span>
+<span class="source-line-no">1494</span><span id="line-1494">    * Reuse XML namespaces when RDF namespaces not specified.</span>
+<span class="source-line-no">1495</span><span id="line-1495">    *</span>
+<span class="source-line-no">1496</span><span id="line-1496">    * @see RdfSerializer.Builder#disableUseXmlNamespaces()</span>
+<span class="source-line-no">1497</span><span id="line-1497">    * @return</span>
+<span class="source-line-no">1498</span><span id="line-1498">    *    &lt;jk&gt;true&lt;/jk&gt; if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.</span>
+<span class="source-line-no">1499</span><span id="line-1499">    *    &lt;br&gt;Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.</span>
+<span class="source-line-no">1500</span><span id="line-1500">    */</span>
+<span class="source-line-no">1501</span><span id="line-1501">   protected final boolean isUseXmlNamespaces() { return useXmlNamespaces; }</span>
+<span class="source-line-no">1502</span><span id="line-1502"></span>
+<span class="source-line-no">1503</span><span id="line-1503">   @Override /* Overridden from WriterSerializer */</span>
+<span class="source-line-no">1504</span><span id="line-1504">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">1505</span><span id="line-1505">      return super.properties()</span>
+<span class="source-line-no">1506</span><span id="line-1506">         .a(PROP_addBeanTypes, addBeanTypes)</span>
+<span class="source-line-no">1507</span><span id="line-1507">         .a(PROP_addLiteralTypes, addLiteralTypes)</span>
+<span class="source-line-no">1508</span><span id="line-1508">         .a(PROP_addRootProperty, addRootProperty)</span>
+<span class="source-line-no">1509</span><span id="line-1509">         .a(PROP_autoDetectNamespaces, autoDetectNamespaces)</span>
+<span class="source-line-no">1510</span><span id="line-1510">         .a(PROP_collectionFormat, collectionFormat)</span>
+<span class="source-line-no">1511</span><span id="line-1511">         .a(PROP_juneauBpNs, juneauBpNs)</span>
+<span class="source-line-no">1512</span><span id="line-1512">         .a(PROP_juneauNs, juneauNs)</span>
+<span class="source-line-no">1513</span><span id="line-1513">         .a(PROP_language, language)</span>
+<span class="source-line-no">1514</span><span id="line-1514">         .a(PROP_looseCollections, looseCollections)</span>
+<span class="source-line-no">1515</span><span id="line-1515">         .a(PROP_namespaces, namespaces)</span>
+<span class="source-line-no">1516</span><span id="line-1516">         .a(PROP_useXmlNamespaces, useXmlNamespaces);</span>
+<span class="source-line-no">1517</span><span id="line-1517">   }</span>
+<span class="source-line-no">1518</span><span id="line-1518">}</span>
 
 
 

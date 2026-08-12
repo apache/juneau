@@ -56,17 +56,19 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.jetty.resources">org.apache.juneau.microservice.jetty.resources</a></div>
-<div class="col-last even-row-color">
-<div class="block">Predefined Jetty Microservice Resources</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp">org.apache.juneau.examples.mcp</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.examples.mcp.secured">org.apache.juneau.examples.mcp.secured</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp.spring">org.apache.juneau.examples.mcp.spring</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
+<div class="block">Example / demo Microservice REST Resources</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.resources">org.apache.juneau.microservice.resources</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
 <div class="col-last even-row-color">
-<div class="block">Predefined Microservice Resources</div>
+<div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
 <div class="col-last odd-row-color">
@@ -94,8 +96,15 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20250618">org.apache.juneau.rest.server.mcp.v20250618</a></div>
+<div class="col-last even-row-color">
+<div class="block">MCP <code>2025-06-18</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.metrics.micrometer">org.apache.juneau.rest.server.metrics.micrometer</a></div>
 <div class="col-last even-row-color">
@@ -122,21 +131,87 @@ loadScripts(document, 'script');</script>
 <section class="package-uses">
 <ul class="block-list">
 <li>
-<section class="detail" id="org.apache.juneau.microservice.jetty.resources">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../../../microservice/jetty/resources/package-summary.html">org.apache.juneau.microservice.jetty.resources</a></span></div>
+<section class="detail" id="org.apache.juneau.examples.mcp">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../../../examples/mcp/package-summary.html">org.apache.juneau.examples.mcp</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.microservice.jetty.resources">BasicUniversalConfig</a></div>
+<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.examples.mcp">BasicUniversalConfig</a></div>
 <div class="col-last even-row-color">
 <div class="block">Predefined configuration for a REST resource that supports all languages
  and provides common default configuration values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.microservice.jetty.resources">DefaultConfig</a></div>
+<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.examples.mcp">DefaultConfig</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.microservice.jetty.resources">DefaultHtmlConfig</a></div>
+<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.examples.mcp">DefaultHtmlConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.secured">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../../../examples/mcp/secured/package-summary.html">org.apache.juneau.examples.mcp.secured</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.examples.mcp.secured">BasicUniversalConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined configuration for a REST resource that supports all languages
+ and provides common default configuration values.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.examples.mcp.secured">DefaultConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.examples.mcp.secured">DefaultHtmlConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.spring">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../../../examples/mcp/spring/package-summary.html">org.apache.juneau.examples.mcp.spring</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.examples.mcp.spring">BasicUniversalConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined configuration for a REST resource that supports all languages
+ and provides common default configuration values.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.examples.mcp.spring">DefaultConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.examples.mcp.spring">DefaultHtmlConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.microservice.examples">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.microservice.examples">BasicUniversalConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined configuration for a REST resource that supports all languages
+ and provides common default configuration values.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.microservice.examples">DefaultConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.microservice.examples">DefaultHtmlConfig</a></div>
 <div class="col-last even-row-color">
 <div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
 </div>
@@ -159,28 +234,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.microservice.management">DefaultHtmlConfig</a></div>
-<div class="col-last even-row-color">
-<div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.microservice.resources">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.microservice.resources">BasicUniversalConfig</a></div>
-<div class="col-last even-row-color">
-<div class="block">Predefined configuration for a REST resource that supports all languages
- and provides common default configuration values.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.microservice.resources">DefaultConfig</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.microservice.resources">DefaultHtmlConfig</a></div>
 <div class="col-last even-row-color">
 <div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
 </div>
@@ -330,6 +383,50 @@ loadScripts(document, 'script');</script>
 <div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.rest.server.mcp">DefaultHtmlConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20250618">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../mcp/v20250618/package-summary.html">org.apache.juneau.rest.server.mcp.v20250618</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.rest.server.mcp.v20250618">BasicUniversalConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined configuration for a REST resource that supports all languages
+ and provides common default configuration values.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.rest.server.mcp.v20250618">DefaultConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.rest.server.mcp.v20250618">DefaultHtmlConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.config</a> used by <a href="../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicUniversalConfig.html#org.apache.juneau.rest.server.mcp.v20260728">BasicUniversalConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Predefined configuration for a REST resource that supports all languages
+ and provides common default configuration values.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/DefaultConfig.html#org.apache.juneau.rest.server.mcp.v20260728">DefaultConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Predefined REST configuration that defines common default values for all configurations.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/DefaultHtmlConfig.html#org.apache.juneau.rest.server.mcp.v20260728">DefaultHtmlConfig</a></div>
 <div class="col-last even-row-color">
 <div class="block">Predefined REST configuration that defines common default values for HTML Doc serializers.</div>
 </div>

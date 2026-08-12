@@ -74,22 +74,28 @@ loadScripts(document, 'script');</script>
 <h1 title="Interface McpToolHandler" class="title">Interface McpToolHandler</h1>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>Functional Interface:</dt>
-<dd>This is a functional interface and can therefore be used as the assignment target for a lambda expression or method reference.</dd>
-</dl>
 <hr>
-<div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/FunctionalInterface.html" title="class or interface in java.lang" class="external-link">@FunctionalInterface</a>
-</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpToolHandler.html#line-35">McpToolHandler</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpToolHandler.html#line-48">McpToolHandler</a></span></div>
 <div class="block">Handler for a single MCP tool.
 
  <p>
- Implementations declare a <a href="#descriptor()"><code>descriptor</code></a> (the <a href="../../../bean/mcp/Tool.html" title="class in org.apache.juneau.bean.mcp"><code>Tool</code></a> returned by <code>tools/list</code>)
- and a <a href="#call(java.util.Map,org.apache.juneau.commons.inject.BeanStore)"><code>call</code></a> body invoked when the matching <code>tools/call</code> method runs.
+ Implementations declare a <a href="#descriptor()"><code>descriptor</code></a> (returned from <code>tools/list</code>) and
+ a <a href="#call(java.util.Map,org.apache.juneau.commons.inject.BeanStore)"><code>call</code></a> body invoked when a matching <code>tools/call</code> arrives. Both
+ use the revision-neutral model, so a handler compiles against exactly one protocol revision's
+ worth of assumptions: none.
 
  <p>
- The <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> argument is the per-request bean store, allowing handlers to look up additional
- services (or the underlying <code>RestRequest</code>) without making this interface depend on REST runtime types.</div>
+ The <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> argument is the per-request bean store, letting handlers look up additional
+ services (or the underlying <code>RestRequest</code>) without this interface depending on REST runtime types.
+
+ <p>
+ This is a genuine two-method contract, not a single-method one: both <a href="#descriptor()"><code>descriptor()</code></a> and
+ <a href="#call(java.util.Map,org.apache.juneau.commons.inject.BeanStore)"><code>call(Map, BeanStore)</code></a> are abstract, so it is deliberately <b>not</b> annotated
+ <code>@FunctionalInterface</code> and a bare lambda cannot implement it. Routing calls <a href="#descriptor()"><code>descriptor()</code></a>
+ on every registered handler for both <code>tools/list</code> and <code>tools/call</code>, so a handler with no
+ usable descriptor is not a valid handler; making <a href="#descriptor()"><code>descriptor()</code></a> abstract catches that at compile
+ time instead of the first request to reach it at runtime. Use <a href="#of(org.apache.juneau.rest.server.mcp.McpToolSpec,java.util.function.BiFunction)"><code>of(McpToolSpec, BiFunction)</code></a> for
+ the common case of wiring both in a single expression.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -98,22 +104,28 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../../../bean/mcp/CallToolResult.html" title="class in org.apache.juneau.bean.mcp">CallToolResult</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="McpToolOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpToolOutcome</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#call(java.util.Map,org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">call</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;ctx)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Invokes the tool.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="../../../bean/mcp/Tool.html" title="class in org.apache.juneau.bean.mcp">Tool</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#descriptor()" class="member-name-link">descriptor</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="McpToolSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpToolSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#descriptor()" class="member-name-link">descriptor</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Returns the static descriptor for this tool.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#of(org.apache.juneau.rest.server.mcp.McpToolSpec,java.util.function.BiFunction)" class="member-name-link">of</a><wbr>(<a href="McpToolSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpToolSpec</a>&nbsp;descriptor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;,<wbr><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr><a href="McpToolOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpToolOutcome</a>&gt;&nbsp;call)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Builds a handler from a fixed descriptor and a <code>call</code> lambda.</div>
 </div>
 </div>
 </div>
@@ -130,14 +142,37 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="of(org.apache.juneau.rest.server.mcp.McpToolSpec,java.util.function.BiFunction)">
+<h3>of</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpToolHandler.html#line-64">of</a></span><wbr><span class="parameters">(<a href="McpToolSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpToolSpec</a>&nbsp;descriptor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;,<wbr><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr><a href="McpToolOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpToolOutcome</a>&gt;&nbsp;call)</span></div>
+<div class="block">Builds a handler from a fixed descriptor and a <code>call</code> lambda.
+
+ <p>
+ The sanctioned one-expression path for registering a tool: unlike a bare lambda (which cannot
+ satisfy this two-method interface at all), this factory wires both <a href="#descriptor()"><code>descriptor()</code></a> and
+ <a href="#call(java.util.Map,org.apache.juneau.commons.inject.BeanStore)"><code>call(Map, BeanStore)</code></a> from a single call.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>descriptor</code> - The static descriptor returned from every <a href="#descriptor()"><code>descriptor()</code></a> call. Must not be
+   <jk>null</jk> and must carry a non-blank <a href="McpToolSpec.html#getName()"><code>name</code></a> (routing matches
+   incoming <code>tools/call</code> requests on name, so a nameless tool would be silently unreachable).</dd>
+<dd><code>call</code> - The call body, invoked with the incoming arguments and the per-request bean store. Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new handler wiring both. Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="descriptor()">
 <h3>descriptor</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="../../../bean/mcp/Tool.html" title="class in org.apache.juneau.bean.mcp">Tool</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpToolHandler.html#line-47">descriptor</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="McpToolSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpToolSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpToolHandler.html#line-89">descriptor</a></span>()</div>
 <div class="block">Returns the static descriptor for this tool.
 
  <p>
- The <a href="../../../bean/mcp/Tool.html#getName()"><code>name</code></a> value is used by <a href="McpDispatcher.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpDispatcher</code></a> to route incoming
- <code>tools/call</code> requests, so each handler in an <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> must use a unique name.</div>
+ The <a href="McpToolSpec.html#getName()"><code>name</code></a> value is used by the bound <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpRevision</code></a> to route
+ incoming <code>tools/call</code> requests, so each handler in an <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> must use a
+ unique name.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The tool descriptor. Never <code>null</code>.</dd>
@@ -147,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="call(java.util.Map,org.apache.juneau.commons.inject.BeanStore)">
 <h3>call</h3>
-<div class="member-signature"><span class="return-type"><a href="../../../bean/mcp/CallToolResult.html" title="class in org.apache.juneau.bean.mcp">CallToolResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpToolHandler.html#line-58">call</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments,
+<div class="member-signature"><span class="return-type"><a href="McpToolOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpToolOutcome</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpToolHandler.html#line-98">call</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;arguments,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;ctx)</span></div>
 <div class="block">Invokes the tool.</div>
 <dl class="notes">

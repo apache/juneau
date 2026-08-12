@@ -77,14 +77,23 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">org.apache.juneau.server.config.repository.GitControl</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-36">GitControl</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-40">GitControl</a></span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></span></div>
 <div class="block">Git repository control operations for cloning, pulling, pushing, and committing.
 
  <p>
  Provides a simplified wrapper around JGit for server configuration repository management.
- Used to fetch configuration files from a remote Git repository.</div>
+ Used to fetch configuration files from a remote Git repository.
+
+ <p>
+ The underlying JGit <code>Repository</code> and <code>Git</code> handles are opened in the constructor and released by
+ <a href="#close()"><code>close()</code></a>, so instances must be used with try-with-resources to avoid leaking file/native handles.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -99,6 +108,14 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String)" class="member-name-link">GitControl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localPath,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;remotePath)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean)" class="member-name-link">GitControl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localPath,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;remotePath,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
+ boolean&nbsp;forcePush)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Constructor.</div>
 </div>
 </div>
@@ -131,18 +148,23 @@ loadScripts(document, 'script');</script>
 <div class="block">Clones the remote repository to the local path.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#commitToRepo(java.lang.String)" class="member-name-link">commitToRepo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#close()" class="member-name-link">close</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Commits staged changes with the specified message.</div>
+<div class="block">Closes the underlying JGit <code>Git</code> and <code>Repository</code> handles.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pullFromRepo()" class="member-name-link">pullFromRepo</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#commitToRepo(java.lang.String)" class="member-name-link">commitToRepo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Pulls the latest changes from the remote repository.</div>
+<div class="block">Commits staged changes with the specified message.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pushToRepo()" class="member-name-link">pushToRepo</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pullFromRepo()" class="member-name-link">pullFromRepo</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Pulls the latest changes from the remote repository.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pushToRepo()" class="member-name-link">pushToRepo</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Pushes all committed changes to the remote repository.</div>
 </div>
 </div>
@@ -165,14 +187,45 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>GitControl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-56">GitControl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localPath,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-62">GitControl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localPath,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;remotePath)</span>
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Constructor.</div>
+<div class="block">Constructor.
+
+ <p>
+ Equivalent to <a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean)"><code>GitControl(localPath, remotePath,
+ null, null, false)</code></a>: no credentials (anonymous transport) and non-force push.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>localPath</code> - Local directory path for the repository.</dd>
 <dd><code>remotePath</code> - Remote Git repository URI.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the repository cannot be opened.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean)">
+<h3>GitControl</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-81">GitControl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localPath,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;remotePath,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
+ boolean&nbsp;forcePush)</span>
+           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Constructor.
+
+ <p>
+ Credentials are supplied by the caller (typically from operator configuration or a secret store) rather than
+ hardcoded.  Pass <code>null</code> for <code>username</code> to use anonymous transport.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>localPath</code> - Local directory path for the repository.</dd>
+<dd><code>remotePath</code> - Remote Git repository URI.</dd>
+<dd><code>username</code> - Git username, or <jk>null</jk> for anonymous transport.</dd>
+<dd><code>password</code> - Git password/token.  Ignored when <code>username</code> is <jk>null</jk>.</dd>
+<dd><code>forcePush</code> - Whether <a href="#pushToRepo()"><code>pushToRepo()</code></a> performs a force-push (destructive remote history rewrite).
+   <br>Force-push is opt-in; defaults to <jk>false</jk> in the other constructors.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the repository cannot be opened.</dd>
 </dl>
@@ -187,9 +240,24 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="close()">
+<h3>close</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-100">close</a></span>()</div>
+<div class="block">Closes the underlying JGit <code>Git</code> and <code>Repository</code> handles.
+
+ <p>
+ The <code>Git</code> instance wraps an externally-supplied <code>Repository</code> (it does not close it on
+ <code>Git.close()</code>), so both are released explicitly here.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html#close()" title="class or interface in java.lang" class="external-link">close</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="addToRepo()">
 <h3>addToRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-69">addToRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-111">addToRepo</a></span>()
                throws <span class="exceptions">org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <div class="block">Stages all files for commit.</div>
 <dl class="notes">
@@ -201,12 +269,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="branch(java.lang.String)">
 <h3>branch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-80">branch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-122">branch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
             throws <span class="exceptions">org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <div class="block">Checks out the specified branch from origin.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - Branch name.</dd>
+<dd><code>name</code> - Branch name.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code>org.eclipse.jgit.api.errors.GitAPIException</code> - If checkout fails.</dd>
 </dl>
@@ -215,7 +283,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cloneRepo()">
 <h3>cloneRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-89">cloneRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-131">cloneRepo</a></span>()
                throws <span class="exceptions">org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <div class="block">Clones the remote repository to the local path.</div>
 <dl class="notes">
@@ -227,7 +295,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="commitToRepo(java.lang.String)">
 <h3>commitToRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-100">commitToRepo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-146">commitToRepo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span>
                   throws <span class="exceptions">org.eclipse.jgit.api.errors.JGitInternalException,
 org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <div class="block">Commits staged changes with the specified message.</div>
@@ -243,7 +311,7 @@ org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <li>
 <section class="detail" id="pullFromRepo()">
 <h3>pullFromRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-110">pullFromRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-156">pullFromRepo</a></span>()
                   throws <span class="exceptions">org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <div class="block">Pulls the latest changes from the remote repository.</div>
 <dl class="notes">
@@ -255,7 +323,7 @@ org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <li>
 <section class="detail" id="pushToRepo()">
 <h3>pushToRepo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-120">pushToRepo</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/server/config/repository/GitControl.html#line-166">pushToRepo</a></span>()
                 throws <span class="exceptions">org.eclipse.jgit.api.errors.JGitInternalException,
 org.eclipse.jgit.api.errors.GitAPIException</span></div>
 <div class="block">Pushes all committed changes to the remote repository.</div>

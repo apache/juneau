@@ -56,17 +56,19 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.jetty.resources">org.apache.juneau.microservice.jetty.resources</a></div>
-<div class="col-last even-row-color">
-<div class="block">Predefined Jetty Microservice Resources</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp">org.apache.juneau.examples.mcp</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.examples.mcp.secured">org.apache.juneau.examples.mcp.secured</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp.spring">org.apache.juneau.examples.mcp.spring</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
+<div class="block">Example / demo Microservice REST Resources</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.resources">org.apache.juneau.microservice.resources</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
 <div class="col-last even-row-color">
-<div class="block">Predefined Microservice Resources</div>
+<div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
 <div class="col-last odd-row-color">
@@ -90,8 +92,15 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20250618">org.apache.juneau.rest.server.mcp.v20250618</a></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>2025-06-18</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last even-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.metrics.micrometer">org.apache.juneau.rest.server.metrics.micrometer</a></div>
 <div class="col-last odd-row-color">
@@ -118,17 +127,93 @@ loadScripts(document, 'script');</script>
 <section class="class-uses">
 <ul class="block-list">
 <li>
-<section class="detail" id="org.apache.juneau.microservice.jetty.resources">
-<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../../../microservice/jetty/resources/package-summary.html">org.apache.juneau.microservice.jetty.resources</a></h2>
-<div class="caption"><span>Classes in <a href="../../../../microservice/jetty/resources/package-summary.html">org.apache.juneau.microservice.jetty.resources</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
+<section class="detail" id="org.apache.juneau.examples.mcp">
+<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../../../examples/mcp/package-summary.html">org.apache.juneau.examples.mcp</a></h2>
+<div class="caption"><span>Classes in <a href="../../../../examples/mcp/package-summary.html">org.apache.juneau.examples.mcp</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../../microservice/jetty/resources/DebugResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.jetty.resources">DebugResource</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../../../examples/mcp/ExampleMcpServer.html" class="type-name-link" title="class in org.apache.juneau.examples.mcp">ExampleMcpServer</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">A complete, runnable MCP <c>2026-07-28</c> server exposing every major surface of the protocol
+ over one tiny, coherent scenario: an in-memory <a href="../../../../examples/mcp/NoteStore.html" title="class in org.apache.juneau.examples.mcp"><code>notes</code></a> service.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.secured">
+<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../../../examples/mcp/secured/package-summary.html">org.apache.juneau.examples.mcp.secured</a></h2>
+<div class="caption"><span>Classes in <a href="../../../../examples/mcp/secured/package-summary.html">org.apache.juneau.examples.mcp.secured</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../../examples/mcp/secured/SecuredExampleMcpServer.html" class="type-name-link" title="class in org.apache.juneau.examples.mcp.secured">SecuredExampleMcpServer</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The OAuth 2.1-secured variant of <a href="../../../../examples/mcp/ExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp"><code>ExampleMcpServer</code></a>: identical notes-service surface (tools, prompt,
+ resources, resource template, subscriptions), but every <code>POST /</code> JSON-RPC call now requires a valid
+ bearer token.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.spring">
+<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../../../examples/mcp/spring/package-summary.html">org.apache.juneau.examples.mcp.spring</a></h2>
+<div class="caption"><span>Classes in <a href="../../../../examples/mcp/spring/package-summary.html">org.apache.juneau.examples.mcp.spring</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../../examples/mcp/spring/SpringExampleMcpServer.html" class="type-name-link" title="class in org.apache.juneau.examples.mcp.spring">SpringExampleMcpServer</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The Spring Boot flavor of the MCP server.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.microservice.examples">
+<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a></h2>
+<div class="caption"><span>Classes in <a href="../../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../../microservice/examples/ConfigResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.examples">ConfigResource</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Shows contents of the microservice configuration file.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../../microservice/examples/DebugResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.examples">DebugResource</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Microservice debug utilities.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../../microservice/examples/DirectoryResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.examples">DirectoryResource</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">REST resource that allows access to a file system directory.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../../microservice/examples/LogsResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.examples">LogsResource</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">REST resource for viewing and accessing log files.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../../microservice/examples/SampleRootResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.examples">SampleRootResource</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Sample root REST resource.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../../microservice/examples/ShutdownResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.examples">ShutdownResource</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Provides the capability to shut down this REST microservice through a REST call.</div>
 </div>
 </div>
 </section>
@@ -150,42 +235,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><code><a href="../../../../microservice/management/InfoResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.management">InfoResource</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Child-resource flavor of the <code>/info</code> endpoint.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.microservice.resources">
-<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a></h2>
-<div class="caption"><span>Classes in <a href="../../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../../microservice/resources/ConfigResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.resources">ConfigResource</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Shows contents of the microservice configuration file.</div>
-</div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../../../microservice/resources/DirectoryResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.resources">DirectoryResource</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">REST resource that allows access to a file system directory.</div>
-</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../../microservice/resources/LogsResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.resources">LogsResource</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">REST resource for viewing and accessing log files.</div>
-</div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../../../microservice/resources/SampleRootResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.resources">SampleRootResource</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sample root REST resource.</div>
-</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../../microservice/resources/ShutdownResource.html" class="type-name-link" title="class in org.apache.juneau.microservice.resources">ShutdownResource</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Provides the capability to shut down this REST microservice through a REST call.</div>
 </div>
 </div>
 </section>
@@ -218,6 +267,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../../../../petstore/rest/PetFreemarkerViewResource.html" class="type-name-link" title="class in org.apache.juneau.petstore.rest">PetFreemarkerViewResource</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Petstore FreeMarker view demo.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../../petstore/rest/PetHtmlResource.html" class="type-name-link" title="class in org.apache.juneau.petstore.rest">PetHtmlResource</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore-flavored demo of Juneau's HTML5 bean-builder DSL.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../../petstore/rest/PetInfoResource.html" class="type-name-link" title="class in org.apache.juneau.petstore.rest">PetInfoResource</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore-flavored demo of Juneau's REST-server utility beans.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../../../../petstore/rest/PetMustacheViewResource.html" class="type-name-link" title="class in org.apache.juneau.petstore.rest">PetMustacheViewResource</a></code></div>
@@ -316,9 +375,53 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../mcp/McpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpRestServlet</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../mcp/AbstractMcpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">AbstractMcpRestServlet</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Drop-in <a href="../../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> subclass that exposes a single MCP JSON-RPC endpoint at <code>POST /</code>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20250618">
+<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../mcp/v20250618/package-summary.html">org.apache.juneau.rest.server.mcp.v20250618</a></h2>
+<div class="caption"><span>Classes in <a href="../../mcp/v20250618/package-summary.html">org.apache.juneau.rest.server.mcp.v20250618</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../mcp/v20250618/McpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp.v20250618">McpRestServlet</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Abstract MCP servlet bound to protocol revision <code>2025-06-18</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../mcp/v20250618/SpringMcpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp.v20250618">SpringMcpRestServlet</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience base class exposing a <code>2025-06-18</code> MCP endpoint on a Spring Boot resource with full
+ Spring dependency-injection support.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<h2>Uses of <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a> in <a href="../../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></h2>
+<div class="caption"><span>Classes in <a href="../../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a> that implement <a href="../BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../mcp/v20260728/McpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpRestServlet</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Abstract MCP servlet bound to protocol revision <code>2026-07-28</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../mcp/v20260728/SpringMcpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp.v20260728">SpringMcpRestServlet</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience base class exposing a <code>2026-07-28</code> MCP endpoint on a Spring Boot resource with full
+ Spring dependency-injection support.</div>
 </div>
 </div>
 </section>

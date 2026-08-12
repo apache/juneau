@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The validator string value.</dd>
+<dd><code>value</code> - The validator string value. Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If attempting to set an invalid entity tag value.</dd>
 </dl>
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The validator string value.</dd>
+<dd><code>value</code> - The validator string value. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new header bean or <jk>null</jk> if the value was <jk>null</jk>.</dd>
 <dt>Throws:</dt>

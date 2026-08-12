@@ -76,8 +76,8 @@
 <span class="source-line-no">063</span><span id="line-63">   /**</span>
 <span class="source-line-no">064</span><span id="line-64">    * Creates a {@link BasicNamedAttribute} from a name/value pair string (e.g. &lt;js&gt;"Foo: bar"&lt;/js&gt;)</span>
 <span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param pair The pair string.</span>
-<span class="source-line-no">067</span><span id="line-67">    * @return A new {@link BasicNamedAttribute} object.</span>
+<span class="source-line-no">066</span><span id="line-66">    * @param pair The pair string.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">067</span><span id="line-67">    * @return A new {@link BasicNamedAttribute} object, or &lt;jk&gt;null&lt;/jk&gt; if the pair string was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">068</span><span id="line-68">    */</span>
 <span class="source-line-no">069</span><span id="line-69">   public static BasicNamedAttribute ofPair(String pair) {</span>
 <span class="source-line-no">070</span><span id="line-70">      if (pair == null)</span>

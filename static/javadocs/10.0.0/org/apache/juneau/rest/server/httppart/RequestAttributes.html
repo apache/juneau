@@ -270,7 +270,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The request creating this bean.</dd>
+<dd><code>req</code> - The request creating this bean.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -290,7 +290,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>pairs</code> - The default entries.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -299,12 +299,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addDefault(org.apache.juneau.rest.server.httppart.NamedAttribute...)">
 <h3>addDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-148">addDefault</a></span><wbr><span class="parameters">(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;pairs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-150">addDefault</a></span><wbr><span class="parameters">(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;pairs)</span></div>
 <div class="block">Adds default entries to the request attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>pairs</code> - The default entries.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -313,12 +313,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addDefault(org.apache.juneau.rest.server.httppart.NamedAttributeMap)">
 <h3>addDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-160">addDefault</a></span><wbr><span class="parameters">(<a href="NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a>&nbsp;pairs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-162">addDefault</a></span><wbr><span class="parameters">(<a href="NamedAttributeMap.html" title="class in org.apache.juneau.rest.server.httppart">NamedAttributeMap</a>&nbsp;pairs)</span></div>
 <div class="block">Adds default entries to the request attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>pairs</code> - The default entries.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -327,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addDefault(java.lang.String,java.lang.Object)">
 <h3>addDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-176">addDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-180">addDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds a default entry to the request attributes.</div>
 <dl class="notes">
@@ -342,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMap()">
 <h3>asMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-185">asMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-189">asMap</a></span>()</div>
 <div class="block">Returns the request attributes as a map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contains(java.lang.String...)">
 <h3>contains</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-201">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-205">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Returns <jk>true</jk> if the attributes with the specified names are present.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -366,7 +366,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="containsAny(java.lang.String...)">
 <h3>containsAny</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-215">containsAny</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-219">containsAny</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Returns <jk>true</jk> if the attribute with any of the specified names are present.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -379,20 +379,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttribute.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttribute</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-229">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttribute.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttribute</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-233">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the request attribute with the specified name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The attribute name.</dd>
 <dt>Returns:</dt>
-<dd>The parameter value, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if it doesn't exist.</dd>
+<dd>The request attribute, never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getAll()">
 <h3>getAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RequestAttribute.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttribute</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-238">getAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RequestAttribute.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttribute</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-242">getAll</a></span>()</div>
 <div class="block">Returns all the attribute on this request.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -403,7 +403,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(org.apache.juneau.rest.server.httppart.NamedAttribute...)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-254">remove</a></span><wbr><span class="parameters">(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;attributes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-258">remove</a></span><wbr><span class="parameters">(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;attributes)</span></div>
 <div class="block">Remove request attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -416,7 +416,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(java.lang.String...)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-266">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-270">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;name)</span></div>
 <div class="block">Remove request attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -429,7 +429,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(org.apache.juneau.rest.server.httppart.NamedAttribute...)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-280">set</a></span><wbr><span class="parameters">(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;attributes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-284">set</a></span><wbr><span class="parameters">(<a href="NamedAttribute.html" title="interface in org.apache.juneau.rest.server.httppart">NamedAttribute</a>...&nbsp;attributes)</span></div>
 <div class="block">Sets request attributes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -442,14 +442,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-296">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestAttributes.html" title="class in org.apache.juneau.rest.server.httppart">RequestAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-300">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Sets a request attribute.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The attribute name.  Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The attribute value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> (removes the attribute, per <code>HttpServletRequest.setAttribute</code> semantics).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -458,13 +458,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-302">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-306">properties</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-309">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestAttributes.html#line-313">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

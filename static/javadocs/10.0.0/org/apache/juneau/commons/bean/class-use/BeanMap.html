@@ -309,8 +309,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="../../../marshall/serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../../marshall/jcs/JcsSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../../marshall/json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code>protected <a href="../../../marshall/serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../../marshall/jcs/JcsSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../../marshall/json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -325,8 +325,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="../../../marshall/serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../../marshall/json/JsonSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../../marshall/json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code>protected <a href="../../../marshall/serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../../marshall/json/JsonSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../../marshall/json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -342,7 +342,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../../marshall/markdown/MarkdownSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../../marshall/markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../../marshall/markdown/MarkdownSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../../marshall/markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="../BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;bm,
  <a href="../../../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="../../../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;aType)</code></div>
@@ -350,7 +350,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Serializes a bean as a 2-column key/value Markdown table.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../../../marshall/markdown/MarkdownDocSerializerSession.html#serializeBeanWithHeadings(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,int)" class="member-name-link">serializeBeanWithHeadings</a><wbr>(<a href="../../../marshall/markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../../../marshall/markdown/MarkdownDocSerializerSession.html#writeBeanWithHeadings(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,int)" class="member-name-link">writeBeanWithHeadings</a><wbr>(<a href="../../../marshall/markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="../BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;bm,
  int&nbsp;level)</code></div>
 <div class="col-last odd-row-color">

@@ -268,7 +268,7 @@
 <span class="source-line-no">255</span><span id="line-255">    *</span>
 <span class="source-line-no">256</span><span id="line-256">    * @param value</span>
 <span class="source-line-no">257</span><span id="line-257">    *    The header value.</span>
-<span class="source-line-no">258</span><span id="line-258">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">258</span><span id="line-258">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">259</span><span id="line-259">    */</span>
 <span class="source-line-no">260</span><span id="line-260">   public Accept(MediaRanges value) {</span>
 <span class="source-line-no">261</span><span id="line-261">      super(NAME, value);</span>
@@ -280,7 +280,7 @@
 <span class="source-line-no">267</span><span id="line-267">    * @param value</span>
 <span class="source-line-no">268</span><span id="line-268">    *    The header value.</span>
 <span class="source-line-no">269</span><span id="line-269">    *    &lt;br&gt;Must be parsable by {@link MediaRanges#of(String)}.</span>
-<span class="source-line-no">270</span><span id="line-270">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">270</span><span id="line-270">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">271</span><span id="line-271">    */</span>
 <span class="source-line-no">272</span><span id="line-272">   public Accept(String value) {</span>
 <span class="source-line-no">273</span><span id="line-273">      super(NAME, value);</span>
@@ -294,7 +294,7 @@
 <span class="source-line-no">281</span><span id="line-281">    *</span>
 <span class="source-line-no">282</span><span id="line-282">    * @param value</span>
 <span class="source-line-no">283</span><span id="line-283">    *    The supplier of the header value.</span>
-<span class="source-line-no">284</span><span id="line-284">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">284</span><span id="line-284">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">285</span><span id="line-285">    */</span>
 <span class="source-line-no">286</span><span id="line-286">   public Accept(Supplier&lt;MediaRanges&gt; value) {</span>
 <span class="source-line-no">287</span><span id="line-287">      super(NAME, value);</span>

@@ -71,15 +71,23 @@
 <span class="source-line-no">058</span><span id="line-58">         w.append("null");</span>
 <span class="source-line-no">059</span><span id="line-59">      } else if (o instanceof Map || o instanceof Collection || o.getClass().isArray()) {</span>
 <span class="source-line-no">060</span><span id="line-60">         w.append(Json5.of(o));</span>
-<span class="source-line-no">061</span><span id="line-61">      } else {</span>
-<span class="source-line-no">062</span><span id="line-62">         w.append(req.getMarshallingSession().getClassMetaForObject(o).toString(o));</span>
-<span class="source-line-no">063</span><span id="line-63">      }</span>
-<span class="source-line-no">064</span><span id="line-64">      w.flush();</span>
-<span class="source-line-no">065</span><span id="line-65">      w.finish();</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">      return FINISHED;</span>
-<span class="source-line-no">068</span><span id="line-68">   }</span>
-<span class="source-line-no">069</span><span id="line-69">}</span>
+<span class="source-line-no">061</span><span id="line-61">      } else if (o instanceof Throwable &amp;&amp; ! opSession.getRestContext().isRenderResponseStackTraces()) {</span>
+<span class="source-line-no">062</span><span id="line-62">         // A thrown exception reached the plain-text renderer as the response content.  Emitting its</span>
+<span class="source-line-no">063</span><span id="line-63">         // toString() (class name + message) would leak internal detail to the client, so in production</span>
+<span class="source-line-no">064</span><span id="line-64">         // we write only the generic HTTP status text.  Structured detail remains in the 'Thrown'</span>
+<span class="source-line-no">065</span><span id="line-65">         // response header and server-side logs; enable renderResponseStackTraces for full in-response</span>
+<span class="source-line-no">066</span><span id="line-66">         // detail during development.</span>
+<span class="source-line-no">067</span><span id="line-67">         var statusText = RestUtils.getHttpResponseText(res.getStatus());</span>
+<span class="source-line-no">068</span><span id="line-68">         w.append(statusText == null ? "" : statusText);</span>
+<span class="source-line-no">069</span><span id="line-69">      } else {</span>
+<span class="source-line-no">070</span><span id="line-70">         w.append(req.getMarshallingSession().getClassMetaForObject(o).toString(o));</span>
+<span class="source-line-no">071</span><span id="line-71">      }</span>
+<span class="source-line-no">072</span><span id="line-72">      w.flush();</span>
+<span class="source-line-no">073</span><span id="line-73">      w.finish();</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">      return FINISHED;</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77">}</span>
 
 
 

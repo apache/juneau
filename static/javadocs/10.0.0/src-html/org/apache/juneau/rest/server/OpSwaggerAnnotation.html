@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -255,19 +255,19 @@
 <span class="source-line-no">242</span><span id="line-242"></span>
 <span class="source-line-no">243</span><span id="line-243">      Object(OpSwaggerAnnotation.Builder b) {</span>
 <span class="source-line-no">244</span><span id="line-244">         super(b);</span>
-<span class="source-line-no">245</span><span id="line-245">         description = copyOf(b.description);</span>
-<span class="source-line-no">246</span><span id="line-246">         consumes = copyOf(b.consumes);</span>
+<span class="source-line-no">245</span><span id="line-245">         description = cp(b.description);</span>
+<span class="source-line-no">246</span><span id="line-246">         consumes = cp(b.consumes);</span>
 <span class="source-line-no">247</span><span id="line-247">         deprecated = b.deprecated;</span>
 <span class="source-line-no">248</span><span id="line-248">         externalDocs = b.externalDocs;</span>
 <span class="source-line-no">249</span><span id="line-249">         ignore = b.ignore;</span>
 <span class="source-line-no">250</span><span id="line-250">         operationId = b.operationId;</span>
-<span class="source-line-no">251</span><span id="line-251">         parameters = copyOf(b.parameters);</span>
-<span class="source-line-no">252</span><span id="line-252">         produces = copyOf(b.produces);</span>
-<span class="source-line-no">253</span><span id="line-253">         responses = copyOf(b.responses);</span>
-<span class="source-line-no">254</span><span id="line-254">         schemes = copyOf(b.schemes);</span>
-<span class="source-line-no">255</span><span id="line-255">         summary = copyOf(b.summary);</span>
-<span class="source-line-no">256</span><span id="line-256">         tags = copyOf(b.tags);</span>
-<span class="source-line-no">257</span><span id="line-257">         value = copyOf(b.value);</span>
+<span class="source-line-no">251</span><span id="line-251">         parameters = cp(b.parameters);</span>
+<span class="source-line-no">252</span><span id="line-252">         produces = cp(b.produces);</span>
+<span class="source-line-no">253</span><span id="line-253">         responses = cp(b.responses);</span>
+<span class="source-line-no">254</span><span id="line-254">         schemes = cp(b.schemes);</span>
+<span class="source-line-no">255</span><span id="line-255">         summary = cp(b.summary);</span>
+<span class="source-line-no">256</span><span id="line-256">         tags = cp(b.tags);</span>
+<span class="source-line-no">257</span><span id="line-257">         value = cp(b.value);</span>
 <span class="source-line-no">258</span><span id="line-258">      }</span>
 <span class="source-line-no">259</span><span id="line-259"></span>
 <span class="source-line-no">260</span><span id="line-260">      @Override /* Overridden from OpSwagger */</span>

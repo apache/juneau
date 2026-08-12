@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-71">MediaType</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-72">MediaType</a></span>
 <span class="extends-implements">extends <a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></span></div>
 <div class="block">Provides schema and examples for the media type identified by its key.
 
@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEncoding(java.lang.String,org.apache.juneau.bean.openapi3.Encoding)" class="member-name-link">addEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds one or more values to the <property>variables</property> property.</div>
+<div class="block">Adds one or more values to the <property>encoding</property> property.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addExample(java.lang.String,org.apache.juneau.bean.openapi3.Example)" class="member-name-link">addExample</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
@@ -181,7 +181,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEncoding()" class="member-name-link">getEncoding</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property getter:  <property>variables</property>.</div>
+<div class="block">Bean property getter:  <property>encoding</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getExample()" class="member-name-link">getExample</a>()</code></div>
@@ -212,17 +212,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEncoding(java.util.Map)" class="member-name-link">setEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property setter:  <property>variables</property>.</div>
+<div class="block">Bean property setter:  <property>encoding</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setExample(java.lang.Object)" class="member-name-link">setExample</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property setter:  <property>examples</property>.</div>
+<div class="block">Bean property setter:  <property>x-example</property>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setExamples(java.util.Map)" class="member-name-link">setExamples</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Bean property setter:  <property>headers</property>.</div>
+<div class="block">Bean property setter:  <property>examples</property>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSchema(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">setSchema</a><wbr>(<a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</code></div>
@@ -262,14 +262,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MediaType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-97">MediaType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-98">MediaType</a></span>()</div>
 <div class="block">Default constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.bean.openapi3.MediaType)">
 <h3>MediaType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-104">MediaType</a></span><wbr><span class="parameters">(<a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-105">MediaType</a></span><wbr><span class="parameters">(<a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -288,14 +288,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addEncoding(java.lang.String,org.apache.juneau.bean.openapi3.Encoding)">
 <h3>addEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-122">addEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-123">addEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&nbsp;value)</span></div>
-<div class="block">Adds one or more values to the <property>variables</property> property.</div>
+<div class="block">Adds one or more values to the <property>encoding</property> property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The mapping key.  Must not be <jk>null</jk>.</dd>
+<dd><code>key</code> - The mapping key.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>value</code> - The values to add to this property.
-   <br>Must not be <jk>null</jk>.</dd>
+   <br>Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
 </dl>
@@ -304,13 +304,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addExample(java.lang.String,org.apache.juneau.bean.openapi3.Example)">
 <h3>addExample</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-136">addExample</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-137">addExample</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&nbsp;example)</span></div>
 <div class="block">Adds a single value to the <property>examples</property> property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The example name.  Must not be <jk>null</jk>.</dd>
-<dd><code>example</code> - The example.  Must not be <jk>null</jk>.</dd>
+<dd><code>name</code> - The example name.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
+<dd><code>example</code> - The example.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
 </dl>
@@ -319,7 +319,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-148">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-149">copy</a></span>()</div>
 <div class="block">Make a deep copy of this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -330,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,java.lang.Class)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-152">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-153">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#get(java.lang.String,java.lang.Class)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property getter.
@@ -353,8 +353,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getEncoding()">
 <h3>getEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-169">getEncoding</a></span>()</div>
-<div class="block">Bean property getter:  <property>variables</property>.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-170">getEncoding</a></span>()</div>
+<div class="block">Bean property getter:  <property>encoding</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The property value, or <jk>null</jk> if it is not set.</dd>
@@ -365,7 +365,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getExample()">
 <h3>getExample</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanProp</a>("x-example")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-176">getExample</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-177">getExample</a></span>()</div>
 <div class="block">Bean property getter:  <property>x-example</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -376,11 +376,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getExamples()">
 <h3>getExamples</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-187">getExamples</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-188">getExamples</a></span>()</div>
 <div class="block">Bean property getter:  <property>examples</property>.
 
  <p>
- The list of possible responses as they are returned from executing this operation.</div>
+ Examples of the media type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The property value, or <jk>null</jk> if it is not set.</dd>
@@ -390,7 +390,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema()">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-194">getSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-195">getSchema</a></span>()</div>
 <div class="block">Bean property getter:  <property>schema</property>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -401,7 +401,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="keySet()">
 <h3>keySet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-196">keySet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-197">keySet</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#keySet()">OpenApiElement</a></code></span></div>
 <div class="block">Returns all the keys on this element.</div>
 <dl class="notes">
@@ -416,7 +416,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-209">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-210">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">OpenApiElement</a></code></span></div>
 <div class="block">Generic property setter.
@@ -427,7 +427,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
@@ -437,8 +437,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setEncoding(java.util.Map)">
 <h3>setEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-232">setEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;&nbsp;value)</span></div>
-<div class="block">Bean property setter:  <property>variables</property>.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-233">setEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Encoding.html" title="class in org.apache.juneau.bean.openapi3">Encoding</a>&gt;&nbsp;value)</span></div>
+<div class="block">Bean property setter:  <property>encoding</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value for this property.
@@ -452,8 +452,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setExample(java.lang.Object)">
 <h3>setExample</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanProp</a>("x-example")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-247">setExample</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
-<div class="block">Bean property setter:  <property>examples</property>.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-248">setExample</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block">Bean property setter:  <property>x-example</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value for this property.
@@ -466,11 +466,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setExamples(java.util.Map)">
 <h3>setExamples</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-264">setExamples</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&gt;&nbsp;value)</span></div>
-<div class="block">Bean property setter:  <property>headers</property>.
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-265">setExamples</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="Example.html" title="class in org.apache.juneau.bean.openapi3">Example</a>&gt;&nbsp;value)</span></div>
+<div class="block">Bean property setter:  <property>examples</property>.
 
  <p>
- A list of examples that are sent with the response.</div>
+ Examples of the media type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value for this property.
@@ -483,7 +483,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSchema(org.apache.juneau.bean.openapi3.SchemaInfo)">
 <h3>setSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-279">setSchema</a></span><wbr><span class="parameters">(<a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-280">setSchema</a></span><wbr><span class="parameters">(<a href="SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>schema</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -497,7 +497,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict(java.lang.Object)">
 <h3>strict</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-284">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-285">strict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict(java.lang.Object)">OpenApiElement</a></code></span></div>
 <div class="block">Sets strict mode on this bean.</div>
 <dl class="notes">
@@ -515,7 +515,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="strict()">
 <h3>strict</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-290">strict</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MediaType.html" title="class in org.apache.juneau.bean.openapi3">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/openapi3/MediaType.html#line-291">strict</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="OpenApiElement.html#strict()">OpenApiElement</a></code></span></div>
 <div class="block">Sets strict mode on this bean.</div>
 <dl class="notes">

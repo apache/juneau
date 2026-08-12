@@ -101,6 +101,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Opens a new span for the in-flight request.</div>
 </div>
+<div class="col-first odd-row-color"><code>default <a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TracerHook.</span><code><a href="../TracerHook.html#startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)" class="member-name-link">startSpan</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
+ <a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier,
+ <a href="../TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing">TraceOperation</a>&nbsp;operation)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a new span for the in-flight request, given a pre-extracted non-HTTP
+ <a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a> and derived <a href="../TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing"><code>TraceOperation</code></a>.</div>
+</div>
 </div>
 </section>
 </li>
@@ -118,6 +126,11 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">OtelTracerHook.</span><code><a href="../otel/OtelTracerHook.html#startSpan(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">startSpan</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OtelTracerHook.</span><code><a href="../otel/OtelTracerHook.html#startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)" class="member-name-link">startSpan</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
+ <a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier,
+ <a href="../TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing">TraceOperation</a>&nbsp;operation)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>

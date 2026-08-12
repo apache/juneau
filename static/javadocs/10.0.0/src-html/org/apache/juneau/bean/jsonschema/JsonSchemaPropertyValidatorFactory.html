@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50">   public PropertyValidator create(Map&lt;String,Object&gt; schemaMap, Class&lt;?&gt; propertyType) {</span>
 <span class="source-line-no">051</span><span id="line-51">      if (ie(schemaMap))</span>
 <span class="source-line-no">052</span><span id="line-52">         return null;</span>
-<span class="source-line-no">053</span><span id="line-53">      var jm = (schemaMap instanceof JsonMap m) ? m : new JsonMap(schemaMap);</span>
+<span class="source-line-no">053</span><span id="line-53">      var jm = (schemaMap instanceof JsonMap schemaMap2) ? schemaMap2 : new JsonMap(schemaMap);</span>
 <span class="source-line-no">054</span><span id="line-54">      var schema = JsonSchemaBeanGenerator.toBean(jm);</span>
 <span class="source-line-no">055</span><span id="line-55">      return JsonSchemaValidator.of(schema);</span>
 <span class="source-line-no">056</span><span id="line-56">   }</span>

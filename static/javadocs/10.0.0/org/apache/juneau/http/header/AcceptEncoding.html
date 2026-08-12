@@ -130,9 +130,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">AcceptEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor with an eager value.</div>
+</div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.commons.http.StringRanges)" class="member-name-link">AcceptEncoding</a><wbr>(<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor with an already-parsed value.</div>
+</div>
 </div>
 </section>
 </li>
@@ -149,16 +153,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Static factory method for a header with an eager value.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(org.apache.juneau.commons.http.StringRanges)" class="member-name-link">of</a><wbr>(<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Static factory method for a header with an already-parsed value.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ofLazyParsed(java.util.function.Supplier)" class="member-name-link">ofLazyParsed</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&gt;&nbsp;supplier)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Static factory method for a header with a lazily-supplied, already-parsed value.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ofLazyWire(java.util.function.Supplier)" class="member-name-link">ofLazyWire</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;supplier)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Static factory method for a header with a lazily-supplied, unparsed wire value.</div>
+</div>
 </div>
 </div>
 </div>
@@ -207,13 +219,23 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>AcceptEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-41">AcceptEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-46">AcceptEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Constructor with an eager value.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The header value. May be <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.http.StringRanges)">
 <h3>AcceptEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-45">AcceptEncoding</a></span><wbr><span class="parameters">(<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-55">AcceptEncoding</a></span><wbr><span class="parameters">(<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&nbsp;value)</span></div>
+<div class="block">Constructor with an already-parsed value.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The parsed header value. May be <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -227,25 +249,53 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-53">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-69">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Static factory method for a header with an eager value.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The header value. May be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new instance. Never <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="of(org.apache.juneau.commons.http.StringRanges)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-57">of</a></span><wbr><span class="parameters">(<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-79">of</a></span><wbr><span class="parameters">(<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&nbsp;value)</span></div>
+<div class="block">Static factory method for a header with an already-parsed value.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The parsed header value. May be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new instance. Never <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ofLazyWire(java.util.function.Supplier)">
 <h3>ofLazyWire</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-61">ofLazyWire</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-89">ofLazyWire</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;supplier)</span></div>
+<div class="block">Static factory method for a header with a lazily-supplied, unparsed wire value.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>supplier</code> - Supplier for the raw header value string. Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new instance. Never <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ofLazyParsed(java.util.function.Supplier)">
 <h3>ofLazyParsed</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-65">ofLazyParsed</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AcceptEncoding.html" title="class in org.apache.juneau.http.header">AcceptEncoding</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/AcceptEncoding.html#line-99">ofLazyParsed</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../../commons/http/StringRanges.html" title="class in org.apache.juneau.commons.http">StringRanges</a>&gt;&nbsp;supplier)</span></div>
+<div class="block">Static factory method for a header with a lazily-supplied, already-parsed value.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>supplier</code> - Supplier for the parsed header value. Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new instance. Never <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 </ul>

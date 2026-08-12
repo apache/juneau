@@ -127,7 +127,7 @@
 <span class="source-line-no">114</span><span id="line-114"> *</span>
 <span class="source-line-no">115</span><span id="line-115"> *    &lt;jc&gt;// Serialize to value equivalent to JSON.&lt;/jc&gt;</span>
 <span class="source-line-no">116</span><span id="line-116"> *    &lt;jc&gt;// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"&lt;/jc&gt;</span>
-<span class="source-line-no">117</span><span id="line-117"> *    String &lt;jv&gt;uon&lt;/jv&gt; = UonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;);</span>
+<span class="source-line-no">117</span><span id="line-117"> *    String &lt;jv&gt;uon&lt;/jv&gt; = UonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;map&lt;/jv&gt;);</span>
 <span class="source-line-no">118</span><span id="line-118"> *</span>
 <span class="source-line-no">119</span><span id="line-119"> *    &lt;jc&gt;// Serialize a bean&lt;/jc&gt;</span>
 <span class="source-line-no">120</span><span id="line-120"> *    &lt;jk&gt;public class&lt;/jk&gt; Person {</span>
@@ -149,7 +149,7 @@
 <span class="source-line-no">136</span><span id="line-136"> *       &lt;js&gt;"NY"&lt;/js&gt;, 12345, &lt;jk&gt;false&lt;/jk&gt;);</span>
 <span class="source-line-no">137</span><span id="line-137"> *</span>
 <span class="source-line-no">138</span><span id="line-138"> *    &lt;jc&gt;// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"&lt;/jc&gt;</span>
-<span class="source-line-no">139</span><span id="line-139"> *    String &lt;jv&gt;uon&lt;/jv&gt; = UonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;person&lt;/jv&gt;);</span>
+<span class="source-line-no">139</span><span id="line-139"> *    String &lt;jv&gt;uon&lt;/jv&gt; = UonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;person&lt;/jv&gt;);</span>
 <span class="source-line-no">140</span><span id="line-140"> * &lt;/p&gt;</span>
 <span class="source-line-no">141</span><span id="line-141"> *</span>
 <span class="source-line-no">142</span><span id="line-142"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -294,10 +294,10 @@
 <span class="source-line-no">281</span><span id="line-281">       *    JsonMap &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"foo bar"&lt;/js&gt;);</span>
 <span class="source-line-no">282</span><span id="line-282">       *</span>
 <span class="source-line-no">283</span><span id="line-283">       *    &lt;jc&gt;// Produces: "(foo=foo bar)"&lt;/jc&gt;</span>
-<span class="source-line-no">284</span><span id="line-284">       *    String &lt;jv&gt;uon1&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;)</span>
+<span class="source-line-no">284</span><span id="line-284">       *    String &lt;jv&gt;uon1&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
 <span class="source-line-no">285</span><span id="line-285">       *</span>
 <span class="source-line-no">286</span><span id="line-286">       *    &lt;jc&gt;// Produces: "(foo=foo%20bar)"&lt;/jc&gt;</span>
-<span class="source-line-no">287</span><span id="line-287">       *    String &lt;jv&gt;uon2&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;)</span>
+<span class="source-line-no">287</span><span id="line-287">       *    String &lt;jv&gt;uon2&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
 <span class="source-line-no">288</span><span id="line-288">       * &lt;/p&gt;</span>
 <span class="source-line-no">289</span><span id="line-289">       *</span>
 <span class="source-line-no">290</span><span id="line-290">       * @return This object.</span>
@@ -355,10 +355,10 @@
 <span class="source-line-no">342</span><span id="line-342">       *    );</span>
 <span class="source-line-no">343</span><span id="line-343">       *</span>
 <span class="source-line-no">344</span><span id="line-344">       *    &lt;jc&gt;// Produces: "(foo=bar,baz=@(qux,'true','123'))"&lt;/jc&gt;</span>
-<span class="source-line-no">345</span><span id="line-345">       *    String &lt;jv&gt;uon1&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;)</span>
+<span class="source-line-no">345</span><span id="line-345">       *    String &lt;jv&gt;uon1&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
 <span class="source-line-no">346</span><span id="line-346">       *</span>
 <span class="source-line-no">347</span><span id="line-347">       *    &lt;jc&gt;// Produces: "foo=bar,baz=qux,true,123"&lt;/jc&gt;</span>
-<span class="source-line-no">348</span><span id="line-348">       *    String &lt;jv&gt;uon2&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;)</span>
+<span class="source-line-no">348</span><span id="line-348">       *    String &lt;jv&gt;uon2&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
 <span class="source-line-no">349</span><span id="line-349">       * &lt;/p&gt;</span>
 <span class="source-line-no">350</span><span id="line-350">       *</span>
 <span class="source-line-no">351</span><span id="line-351">       * &lt;p&gt;</span>
@@ -398,7 +398,7 @@
 <span class="source-line-no">385</span><span id="line-385">       *    );</span>
 <span class="source-line-no">386</span><span id="line-386">       *</span>
 <span class="source-line-no">387</span><span id="line-387">       *    &lt;jc&gt;// Produces: "foo=bar,baz=qux,true,123"&lt;/jc&gt;</span>
-<span class="source-line-no">388</span><span id="line-388">       *    String &lt;jv&gt;uon&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;)</span>
+<span class="source-line-no">388</span><span id="line-388">       *    String &lt;jv&gt;uon&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;map&lt;/jv&gt;)</span>
 <span class="source-line-no">389</span><span id="line-389">       * &lt;/p&gt;</span>
 <span class="source-line-no">390</span><span id="line-390">       *</span>
 <span class="source-line-no">391</span><span id="line-391">       * @return This object.</span>
@@ -544,20 +544,20 @@
 <span class="source-line-no">531</span><span id="line-531"></span>
 <span class="source-line-no">532</span><span id="line-532">   /**</span>
 <span class="source-line-no">533</span><span id="line-533">    * Convenience delegator that opens a whole-value {@link RecordWriter} over the output using</span>
-<span class="source-line-no">534</span><span id="line-534">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #serialize(Object)}).</span>
+<span class="source-line-no">534</span><span id="line-534">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
 <span class="source-line-no">535</span><span id="line-535">    *</span>
 <span class="source-line-no">536</span><span id="line-536">    * &lt;p&gt;</span>
-<span class="source-line-no">537</span><span id="line-537">    * The real implementation lives on {@link UonSerializerSession#serializeRecords(Object)}.</span>
+<span class="source-line-no">537</span><span id="line-537">    * The real implementation lives on {@link UonSerializerSession#writeRecords(Object)}.</span>
 <span class="source-line-no">538</span><span id="line-538">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
-<span class="source-line-no">539</span><span id="line-539">    * invoke {@link UonSerializerSession#serializeRecords(Object)} on the built session instead.</span>
+<span class="source-line-no">539</span><span id="line-539">    * invoke {@link UonSerializerSession#writeRecords(Object)} on the built session instead.</span>
 <span class="source-line-no">540</span><span id="line-540">    *</span>
 <span class="source-line-no">541</span><span id="line-541">    * @param output The output.</span>
 <span class="source-line-no">542</span><span id="line-542">    * @return A new {@link RecordWriter}.</span>
 <span class="source-line-no">543</span><span id="line-543">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">544</span><span id="line-544">    */</span>
 <span class="source-line-no">545</span><span id="line-545">   @Override /* RecordWritable */</span>
-<span class="source-line-no">546</span><span id="line-546">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">547</span><span id="line-547">      return getSession().serializeRecords(output);</span>
+<span class="source-line-no">546</span><span id="line-546">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">547</span><span id="line-547">      return getSession().writeRecords(output);</span>
 <span class="source-line-no">548</span><span id="line-548">   }</span>
 <span class="source-line-no">549</span><span id="line-549"></span>
 <span class="source-line-no">550</span><span id="line-550">   @Override /* RecordWritable */</span>
@@ -594,8 +594,8 @@
 <span class="source-line-no">581</span><span id="line-581">    * @throws SerializeException If a problem occurred while trying to parse the input.</span>
 <span class="source-line-no">582</span><span id="line-582">    * @throws SchemaValidationException If the output fails schema validation.</span>
 <span class="source-line-no">583</span><span id="line-583">    */</span>
-<span class="source-line-no">584</span><span id="line-584">   public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {</span>
-<span class="source-line-no">585</span><span id="line-585">      return getPartSession().serialize(partType, schema, value);</span>
+<span class="source-line-no">584</span><span id="line-584">   public String write(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {</span>
+<span class="source-line-no">585</span><span id="line-585">      return getPartSession().write(partType, schema, value);</span>
 <span class="source-line-no">586</span><span id="line-586">   }</span>
 <span class="source-line-no">587</span><span id="line-587"></span>
 <span class="source-line-no">588</span><span id="line-588">   /**</span>

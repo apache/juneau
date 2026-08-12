@@ -101,7 +101,9 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;unsetter,
  <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;clearer)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -131,7 +133,9 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;unsetter,
  <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;clearer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a new store from the specified functions.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#set(java.lang.String,java.lang.String)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -163,10 +167,18 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.UnaryOperator,java.util.function.BiConsumer,java.util.function.Consumer,org.apache.juneau.commons.function.Snippet)">
 <h3>FunctionalPropertyStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-45">FunctionalPropertyStore</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-53">FunctionalPropertyStore</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;unsetter,
  <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;clearer)</span></div>
+<div class="block">Constructor.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>reader</code> - The function used to read property values by name.  Must not be <jk>null</jk>.</dd>
+<dd><code>writer</code> - The function used to write property values.  Must not be <jk>null</jk>.</dd>
+<dd><code>unsetter</code> - The function used to remove a property by name.  Must not be <jk>null</jk>.</dd>
+<dd><code>clearer</code> - The function used to clear all properties.  Must not be <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -180,7 +192,7 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-61">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-69">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="PropertySource.html#get(java.lang.String)">PropertySource</a></code></span></div>
 <div class="block">Returns a property in this property source.</div>
 <dl class="notes">
@@ -201,7 +213,7 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.String)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-67">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-75">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="PropertyStore.html#set(java.lang.String,java.lang.String)">PropertyStore</a></code></span></div>
 <div class="block">Sets a property in this store.</div>
@@ -217,7 +229,7 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
 <li>
 <section class="detail" id="unset(java.lang.String)">
 <h3>unset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-72">unset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-80">unset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="PropertyStore.html#unset(java.lang.String)">PropertyStore</a></code></span></div>
 <div class="block">Removes a property from this store.</div>
 <dl class="notes">
@@ -231,7 +243,7 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
 <li>
 <section class="detail" id="clear()">
 <h3>clear</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-77">clear</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-85">clear</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="PropertyStore.html#clear()">PropertyStore</a></code></span></div>
 <div class="block">Clears all properties from this store.</div>
 <dl class="notes">
@@ -243,10 +255,20 @@ implements <a href="PropertyStore.html" title="interface in org.apache.juneau.co
 <li>
 <section class="detail" id="of(java.util.function.UnaryOperator,java.util.function.BiConsumer,java.util.function.Consumer,org.apache.juneau.commons.function.Snippet)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FunctionalPropertyStore.html" title="class in org.apache.juneau.commons.settings">FunctionalPropertyStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-82">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FunctionalPropertyStore.html" title="class in org.apache.juneau.commons.settings">FunctionalPropertyStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/FunctionalPropertyStore.html#line-99">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;unsetter,
  <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;clearer)</span></div>
+<div class="block">Creates a new store from the specified functions.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>reader</code> - The function used to read property values by name.  Must not be <jk>null</jk>.</dd>
+<dd><code>writer</code> - The function used to write property values.  Must not be <jk>null</jk>.</dd>
+<dd><code>unsetter</code> - The function used to remove a property by name.  Must not be <jk>null</jk>.</dd>
+<dd><code>clearer</code> - The function used to clear all properties.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new store.</dd>
+</dl>
 </section>
 </li>
 </ul>

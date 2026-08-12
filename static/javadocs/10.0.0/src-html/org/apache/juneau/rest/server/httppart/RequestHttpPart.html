@@ -143,9 +143,9 @@
 <span class="source-line-no">130</span><span id="line-130">                  return o(cc.newInstance(getName(), get()));</span>
 <span class="source-line-no">131</span><span id="line-131">            }</span>
 <span class="source-line-no">132</span><span id="line-132">         }</span>
-<span class="source-line-no">133</span><span id="line-133">         return o(parser.parse(HEADER, schema, orElse(null), type));</span>
+<span class="source-line-no">133</span><span id="line-133">         return o(parser.read(HEADER, schema, orElse(null), type));</span>
 <span class="source-line-no">134</span><span id="line-134">      } catch (ParseException e) {</span>
-<span class="source-line-no">135</span><span id="line-135">         throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());</span>
+<span class="source-line-no">135</span><span id="line-135">         throw new BadRequest(e, "Could not parse %s parameter '%s'.", partType.toString().toLowerCase(), getName());</span>
 <span class="source-line-no">136</span><span id="line-136">      }</span>
 <span class="source-line-no">137</span><span id="line-137">   }</span>
 <span class="source-line-no">138</span><span id="line-138"></span>
@@ -472,7 +472,7 @@
 <span class="source-line-no">459</span><span id="line-459">   /**</span>
 <span class="source-line-no">460</span><span id="line-460">    * Returns the value of this part.</span>
 <span class="source-line-no">461</span><span id="line-461">    *</span>
-<span class="source-line-no">462</span><span id="line-462">    * @return The value of this part.</span>
+<span class="source-line-no">462</span><span id="line-462">    * @return The value of this part, or &lt;jk&gt;null&lt;/jk&gt; if the part is not present.</span>
 <span class="source-line-no">463</span><span id="line-463">    */</span>
 <span class="source-line-no">464</span><span id="line-464">   public String getValue() { return value; }</span>
 <span class="source-line-no">465</span><span id="line-465"></span>
@@ -532,16 +532,16 @@
 <span class="source-line-no">519</span><span id="line-519"></span>
 <span class="source-line-no">520</span><span id="line-520">   @Override</span>
 <span class="source-line-no">521</span><span id="line-521">   public boolean equals(Object o) {</span>
-<span class="source-line-no">522</span><span id="line-522">      if (o instanceof org.apache.juneau.http.HttpPart hp)</span>
-<span class="source-line-no">523</span><span id="line-523">         return eq(getName(), hp.getName()) &amp;&amp; eq(getValue(), hp.getValue());</span>
-<span class="source-line-no">524</span><span id="line-524">      if (o instanceof HttpHeader hh)</span>
-<span class="source-line-no">525</span><span id="line-525">         return eq(getName(), hh.getName()) &amp;&amp; eq(getValue(), hh.getValue());</span>
+<span class="source-line-no">522</span><span id="line-522">      if (o instanceof org.apache.juneau.http.HttpPart o2)</span>
+<span class="source-line-no">523</span><span id="line-523">         return eq(getName(), o2.getName()) &amp;&amp; eq(getValue(), o2.getValue());</span>
+<span class="source-line-no">524</span><span id="line-524">      if (o instanceof HttpHeader o2)</span>
+<span class="source-line-no">525</span><span id="line-525">         return eq(getName(), o2.getName()) &amp;&amp; eq(getValue(), o2.getValue());</span>
 <span class="source-line-no">526</span><span id="line-526">      return false;</span>
 <span class="source-line-no">527</span><span id="line-527">   }</span>
 <span class="source-line-no">528</span><span id="line-528"></span>
 <span class="source-line-no">529</span><span id="line-529">   @Override</span>
 <span class="source-line-no">530</span><span id="line-530">   public int hashCode() {</span>
-<span class="source-line-no">531</span><span id="line-531">      return Objects.hash(getName(), getValue());</span>
+<span class="source-line-no">531</span><span id="line-531">      return h(getName(), getValue());</span>
 <span class="source-line-no">532</span><span id="line-532">   }</span>
 <span class="source-line-no">533</span><span id="line-533"></span>
 <span class="source-line-no">534</span><span id="line-534">   @Override /* Overridden from Object */</span>

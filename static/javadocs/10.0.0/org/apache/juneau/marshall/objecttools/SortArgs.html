@@ -153,7 +153,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.Collection)">
 <h3>SortArgs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-88">SortArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sortArgs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-90">SortArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sortArgs)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -170,7 +170,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>SortArgs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-113">SortArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sortArgs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-115">SortArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sortArgs)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -195,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.util.List)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools">SortArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-49">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools">SortArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-50">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;args)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -205,16 +205,17 @@ loadScripts(document, 'script');</script>
       <li><js>"column"</js> - Sort column ascending.
       <li><js>"column+"</js> - Sort column ascending.
       <li><js>"column-"</js> - Sort column descending.
-   </ul></dd>
+   </ul>
+   Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools"><code>SortArgs</code></a> object.</dd>
+<dd>A new <a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools"><code>SortArgs</code></a> object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="create(java.lang.String)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools">SortArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-68">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools">SortArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-70">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;args)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -224,16 +225,17 @@ loadScripts(document, 'script');</script>
       <li><js>"column"</js> - Sort column ascending.
       <li><js>"column+"</js> - Sort column ascending.
       <li><js>"column-"</js> - Sort column descending.
-   </ul></dd>
+   </ul>
+   Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools"><code>SortArgs</code></a> object.</dd>
+<dd>A new <a href="SortArgs.html" title="class in org.apache.juneau.marshall.objecttools"><code>SortArgs</code></a> object, or <jk>null</jk> if <c>args</c> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getSort()">
 <h3>getSort</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-126">getSort</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/SortArgs.html#line-128">getSort</a></span>()</div>
 <div class="block">The sort columns.
 
  <p>

@@ -71,12 +71,16 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.apache.juneau.http.classic.resource</a></div>
-<h1 title="Class BasicResource" class="title">Class BasicResource</h1>
+<h1 title="Class BasicResource" class="title">Class BasicResource&lt;SELF extends BasicResource&lt;SELF&gt;&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.apache.juneau.http.classic.resource.BasicResource</div>
+<div class="inheritance">org.apache.juneau.http.classic.resource.BasicResource&lt;SELF&gt;</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>SELF</code> - The self type for fluent setters.</dd>
+</dl>
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code>, <code><a href="HttpResource.html" title="interface in org.apache.juneau.http.classic.resource">HttpResource</a></code></dd>
@@ -87,7 +91,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../../commons/bean/BeanIgnore.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanIgnore</a>
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-49">BasicResource</a></span>
+</span><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-57">BasicResource</a>&lt;SELF extends BasicResource&lt;SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="HttpResource.html" title="interface in org.apache.juneau.http.classic.resource">HttpResource</a></span></div>
 <div class="block">A basic <a href="HttpResource.html" title="interface in org.apache.juneau.http.classic.resource"><code>HttpResource</code></a> implementation with additional features.
@@ -104,6 +108,10 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
       Externally-supplied/dynamic content.
  </ul>
 
+ <p>
+ This is a self-typed (CRTP) root: a leaf declares <c>class StringResource <jk>extends</jk> BasicResource&lt;StringResource&gt;</c>
+ and inherits leaf-typed fluent setters with no covariant overrides.
+
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  </ul></div>
@@ -115,18 +123,22 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <section class="constructor-summary" id="constructor-summary">
 <h2>Constructor Summary</h2>
 <div class="caption"><span>Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.http.HttpResponse)" class="member-name-link">BasicResource</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.classic.entity.BasicHttpEntity)" class="member-name-link">BasicResource</a><wbr>(<a href="../entity/BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&nbsp;entity)</code></div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.classic.entity.BasicHttpEntity)" class="member-name-link">BasicResource</a><wbr>(<a href="../entity/BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;?&gt;&nbsp;entity)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructor.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.classic.resource.BasicResource)" class="member-name-link">BasicResource</a><wbr>(<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&nbsp;copyFrom)</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.classic.resource.BasicResource)" class="member-name-link">BasicResource</a><wbr>(<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&lt;?&gt;&nbsp;copyFrom)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor.</div>
 </div>
@@ -138,19 +150,19 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addHeader(java.lang.String,java.lang.String)" class="member-name-link">addHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Appends the specified header to the end of the headers in this builder.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addHeaders(org.apache.http.Header...)" class="member-name-link">addHeaders</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Appends the specified headers to the end of the headers in this builder.</div>
@@ -160,38 +172,38 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Converts the contents of the entity of this resource as a byte array.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.FluentByteArrayAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.FluentByteArrayAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertBytes()" class="member-name-link">assertBytes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns an assertion on the contents of the entity of this resource.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertModifiable()" class="member-name-link">assertModifiable</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&lt;?&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertString()" class="member-name-link">assertString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> if the unmodifiable flag is set on this bean.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertString()" class="member-name-link">assertString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns an assertion on the contents of the entity of this resource.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asString()" class="member-name-link">asString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asString()" class="member-name-link">asString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Converts the contents of the entity of this resource as a string.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consumeContent()" class="member-name-link">consumeContent</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consumeContent()" class="member-name-link">consumeContent</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copy()" class="member-name-link">copy</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Creates a builder for this class initialized with the contents of this bean.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copyFrom(org.apache.http.HttpResponse)" class="member-name-link">copyFrom</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copyFrom(org.apache.http.HttpResponse)" class="member-name-link">copyFrom</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Copies the contents of the specified HTTP response to this builder.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#freeze()" class="member-name-link">freeze</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Deep-freeze hook invoked from a leaf's nested <code>Unmodifiable</code> constructor after the snapshot copy completes.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContent()" class="member-name-link">getContent</a>()</code></div>
@@ -229,77 +241,87 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if this bean is unmodifiable.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modify(java.lang.Runnable)" class="member-name-link">modify</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Single mutation funnel for direct-field state changes on this bean.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final <a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns this object cast to the self type.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCached()" class="member-name-link">setCached</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies that the contents of this resource should be cached into an internal byte array so that it can
  be read multiple times.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setChunked()" class="member-name-link">setChunked</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the 'chunked' flag value to <jk>true</jk>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setChunked(boolean)" class="member-name-link">setChunked</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the 'chunked' flag value.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(java.lang.Object)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the content on this entity bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(java.util.function.Supplier)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the content on this entity bean from a supplier.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContentEncoding(java.lang.String)" class="member-name-link">setContentEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the content encoding header on this entity bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContentEncoding(org.apache.juneau.http.classic.header.ContentEncoding)" class="member-name-link">setContentEncoding</a><wbr>(<a href="../header/ContentEncoding.html" title="class in org.apache.juneau.http.classic.header">ContentEncoding</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the content encoding header on this entity bean.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContentLength(long)" class="member-name-link">setContentLength</a><wbr>(long&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the content length on this entity bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContentType(java.lang.String)" class="member-name-link">setContentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the content type on this entity bean.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContentType(org.apache.juneau.http.classic.header.ContentType)" class="member-name-link">setContentType</a><wbr>(<a href="../header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the content type on this entity bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeader(java.lang.String,java.lang.String)" class="member-name-link">setHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the specified header in this builder.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeaders(org.apache.http.Header...)" class="member-name-link">setHeaders</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the specified headers in this builder.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeaders(org.apache.juneau.http.classic.header.HeaderList)" class="member-name-link">setHeaders</a><wbr>(<a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the specified headers in this builder.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies whether this bean should be unmodifiable.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Returns an unmodifiable snapshot of this bean.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeTo(java.io.OutputStream)" class="member-name-link">writeTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;outStream)</code></div>
@@ -324,30 +346,30 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.entity.BasicHttpEntity)">
 <h3>BasicResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-64">BasicResource</a></span><wbr><span class="parameters">(<a href="../entity/BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&nbsp;entity)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-72">BasicResource</a></span><wbr><span class="parameters">(<a href="../entity/BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;?&gt;&nbsp;entity)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>entity</code> - The entity that makes up this resource content.</dd>
+<dd><code>entity</code> - The entity that makes up this resource content.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.resource.BasicResource)">
 <h3>BasicResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-73">BasicResource</a></span><wbr><span class="parameters">(<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-81">BasicResource</a></span><wbr><span class="parameters">(<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The bean bean copied.</dd>
+<dd><code>copyFrom</code> - The bean being copied.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.http.HttpResponse)">
 <h3>BasicResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-87">BasicResource</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span>
-              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-95">BasicResource</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span>
+                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor.
 
  <p>
@@ -371,7 +393,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="addHeader(java.lang.String,java.lang.String)">
 <h3>addHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-102">addHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-110">addHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Appends the specified header to the end of the headers in this builder.
 
@@ -389,7 +411,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="addHeaders(org.apache.http.Header...)">
 <h3>addHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-114">addHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-122">addHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
 <div class="block">Appends the specified headers to the end of the headers in this builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -402,7 +424,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="asBytes()">
 <h3>asBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-143">asBytes</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-151">asBytes</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Converts the contents of the entity of this resource as a byte array.
 
@@ -419,8 +441,8 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="assertBytes()">
 <h3>assertBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentByteArrayAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-156">assertBytes</a></span>()
-                                                                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentByteArrayAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-164">assertBytes</a></span>()
+                                                                                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns an assertion on the contents of the entity of this resource.
 
  <p>
@@ -436,8 +458,8 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="assertString()">
 <h3>assertString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-169">assertString</a></span>()
-                                                                                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-177">assertString</a></span>()
+                                                                                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns an assertion on the contents of the entity of this resource.
 
  <p>
@@ -453,7 +475,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-182">asString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-190">asString</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Converts the contents of the entity of this resource as a string.
 
@@ -470,7 +492,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="consumeContent()">
 <h3>consumeContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-186">consumeContent</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-194">consumeContent</a></span>()
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -483,7 +505,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-199">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-207">copy</a></span>()</div>
 <div class="block">Creates a builder for this class initialized with the contents of this bean.
 
  <p>
@@ -497,12 +519,12 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="copyFrom(org.apache.http.HttpResponse)">
 <h3>copyFrom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-210">copyFrom</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span>
-                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-216">copyFrom</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span>
+              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Copies the contents of the specified HTTP response to this builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>response</code> - The response to copy from.  Must not be null.</dd>
+<dd><code>response</code> - The response to copy from.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -513,7 +535,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="getContent()">
 <h3>getContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-216">getContent</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-223">getContent</a></span>()
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span></div>
 <dl class="notes">
@@ -528,7 +550,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="getContentEncoding()">
 <h3>getContentEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-219">getContentEncoding</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-226">getContentEncoding</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#getContentEncoding--" title="class or interface in org.apache.http" class="external-link">getContentEncoding</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
@@ -538,7 +560,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="getContentLength()">
 <h3>getContentLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-222">getContentLength</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-229">getContentLength</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#getContentLength--" title="class or interface in org.apache.http" class="external-link">getContentLength</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
@@ -548,7 +570,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="getContentType()">
 <h3>getContentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-225">getContentType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-232">getContentType</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#getContentType--" title="class or interface in org.apache.http" class="external-link">getContentType</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
@@ -558,7 +580,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="getEntity()">
 <h3>getEntity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-233">getEntity</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-240">getEntity</a></span>()</div>
 <div class="block">Returns access to the underlying builder for the HTTP entity.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -569,7 +591,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="getHeaders()">
 <h3>getHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-235">getHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-242">getHeaders</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="HttpResource.html#getHeaders()">HttpResource</a></code></span></div>
 <div class="block">Returns the list of headers associated with this resource.
 
@@ -587,7 +609,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="isChunked()">
 <h3>isChunked</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-238">isChunked</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-245">isChunked</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#isChunked--" title="class or interface in org.apache.http" class="external-link">isChunked</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
@@ -597,7 +619,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="isRepeatable()">
 <h3>isRepeatable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-241">isRepeatable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-248">isRepeatable</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#isRepeatable--" title="class or interface in org.apache.http" class="external-link">isRepeatable</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
@@ -607,7 +629,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="isStreaming()">
 <h3>isStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-244">isStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-251">isStreaming</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#isStreaming--" title="class or interface in org.apache.http" class="external-link">isStreaming</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
@@ -617,7 +639,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="isUnmodifiable()">
 <h3>isUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-252">isUnmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-259">isUnmodifiable</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this bean is unmodifiable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -628,8 +650,8 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setCached()">
 <h3>setCached</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-261">setCached</a></span>()
-                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-268">setCached</a></span>()
+               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Specifies that the contents of this resource should be cached into an internal byte array so that it can
  be read multiple times.</div>
 <dl class="notes">
@@ -643,7 +665,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setChunked()">
 <h3>setChunked</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-276">setChunked</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-283">setChunked</a></span>()</div>
 <div class="block">Sets the 'chunked' flag value to <jk>true</jk>.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -659,7 +681,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setChunked(boolean)">
 <h3>setChunked</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-292">setChunked</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-299">setChunked</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Sets the 'chunked' flag value.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -677,11 +699,11 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setContent(java.lang.Object)">
 <h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-303">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-310">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Sets the content on this entity bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The entity content, can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The entity content.  Can be <jk>null</jk> (the effect depends on the concrete leaf type: e.g. treated as empty for <a href="../entity/StringEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>StringEntity</code></a>/<a href="../entity/ByteArrayEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>ByteArrayEntity</code></a>, or a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> on read for <a href="../entity/StreamEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>StreamEntity</code></a>/<a href="../entity/ReaderEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>ReaderEntity</code></a>/<a href="../entity/FileEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>FileEntity</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -690,7 +712,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setContent(java.util.function.Supplier)">
 <h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-318">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-325">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Sets the content on this entity bean from a supplier.
 
  <p>
@@ -698,7 +720,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
  serialization time.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The entity content, can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The entity content, can be <jk>null</jk> (treated as a supplier that always returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -707,7 +729,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setContentEncoding(org.apache.juneau.http.classic.header.ContentEncoding)">
 <h3>setContentEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-329">setContentEncoding</a></span><wbr><span class="parameters">(<a href="../header/ContentEncoding.html" title="class in org.apache.juneau.http.classic.header">ContentEncoding</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-336">setContentEncoding</a></span><wbr><span class="parameters">(<a href="../header/ContentEncoding.html" title="class in org.apache.juneau.http.classic.header">ContentEncoding</a>&nbsp;value)</span></div>
 <div class="block">Sets the content encoding header on this entity bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -720,7 +742,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setContentEncoding(java.lang.String)">
 <h3>setContentEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-340">setContentEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-347">setContentEncoding</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the content encoding header on this entity bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -733,7 +755,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setContentLength(long)">
 <h3>setContentLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-351">setContentLength</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-358">setContentLength</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <div class="block">Sets the content length on this entity bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -746,7 +768,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setContentType(org.apache.juneau.http.classic.header.ContentType)">
 <h3>setContentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-362">setContentType</a></span><wbr><span class="parameters">(<a href="../header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-369">setContentType</a></span><wbr><span class="parameters">(<a href="../header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;value)</span></div>
 <div class="block">Sets the content type on this entity bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -759,7 +781,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setContentType(java.lang.String)">
 <h3>setContentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-373">setContentType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-380">setContentType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the content type on this entity bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -772,7 +794,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setHeader(java.lang.String,java.lang.String)">
 <h3>setHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-388">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-395">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the specified header in this builder.
 
@@ -790,7 +812,7 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setHeaders(org.apache.http.Header...)">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-400">setHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-407">setHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
 <div class="block">Sets the specified headers in this builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -803,33 +825,34 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 <li>
 <section class="detail" id="setHeaders(org.apache.juneau.http.classic.header.HeaderList)">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-426">setHeaders</a></span><wbr><span class="parameters">(<a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-433">setHeaders</a></span><wbr><span class="parameters">(<a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a>&nbsp;value)</span></div>
 <div class="block">Sets the specified headers in this builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setUnmodifiable()">
-<h3>setUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="class in org.apache.juneau.http.classic.resource">BasicResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-438">setUnmodifiable</a></span>()</div>
-<div class="block">Specifies whether this bean should be unmodifiable.
+<section class="detail" id="unmodifiable()">
+<h3>unmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-445">unmodifiable</a></span>()</div>
+<div class="block">Returns an unmodifiable snapshot of this bean.
+
  <p>
- When enabled, attempting to set any properties on this bean will cause an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
+ D1 idempotency: if this bean is already an unmodifiable snapshot, it is returned as-is.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>This object.</dd>
+<dd>An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeTo(java.io.OutputStream)">
 <h3>writeTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-445">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;outStream)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-447">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;outStream)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -840,10 +863,43 @@ implements <a href="HttpResource.html" title="interface in org.apache.juneau.htt
 </section>
 </li>
 <li>
-<section class="detail" id="assertModifiable()">
-<h3>assertModifiable</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-453">assertModifiable</a></span>()</div>
-<div class="block">Throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> if the unmodifiable flag is set on this bean.</div>
+<section class="detail" id="self()">
+<h3>self</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-457">self</a></span>()</div>
+<div class="block">Returns this object cast to the self type.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="modify(java.lang.Runnable)">
+<h3>modify</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BasicResource.html" title="type parameter in BasicResource">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-473">modify</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</span></div>
+<div class="block">Single mutation funnel for direct-field state changes on this bean.
+
+ <p>
+ Each leaf's nested <code>Unmodifiable</code> snapshot overrides this method to throw.  Mutators that delegate to the
+ entity or header sub-beans are frozen by the <a href="#freeze()"><code>freeze()</code></a> deep-freeze of those sub-beans; this funnel
+ additionally covers the direct-field <a href="#setHeaders(org.apache.juneau.http.classic.header.HeaderList)"><code>setHeaders(HeaderList)</code></a> reassignment.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>mutation</code> - The state change to apply.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="freeze()">
+<h3>freeze</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/resource/BasicResource.html#line-485">freeze</a></span>()</div>
+<div class="block">Deep-freeze hook invoked from a leaf's nested <code>Unmodifiable</code> constructor after the snapshot copy completes.
+
+ <p>
+ The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
+ through the throwing <a href="#modify(java.lang.Runnable)"><code>modify(Runnable)</code></a> / frozen sub-beans and blow up during construction).</div>
 </section>
 </li>
 </ul>

@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30">   /**</span>
 <span class="source-line-no">031</span><span id="line-31">    * Returns and clears the last message.</span>
 <span class="source-line-no">032</span><span id="line-32">    *</span>
-<span class="source-line-no">033</span><span id="line-33">    * @return The captured message.</span>
+<span class="source-line-no">033</span><span id="line-33">    * @return The captured message, or &lt;jk&gt;null&lt;/jk&gt; if no message has been captured since the last reset.</span>
 <span class="source-line-no">034</span><span id="line-34">    */</span>
 <span class="source-line-no">035</span><span id="line-35">   public static String getAndReset() {</span>
 <span class="source-line-no">036</span><span id="line-36">      return LAST_MESSAGE.getAndSet(null);</span>

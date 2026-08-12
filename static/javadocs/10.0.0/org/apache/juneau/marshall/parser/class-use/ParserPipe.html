@@ -156,6 +156,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">YAML Marshalling Support</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.marshall">org.apache.juneau.petstore.marshall</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore-local marshalling support.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -168,7 +172,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ImageParser.</span><code><a href="../../../examples/parser/ImageParser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">ImageParser.</span><code><a href="../../../examples/parser/ImageParser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
  <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">
@@ -186,7 +190,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BsonParserSession.</span><code><a href="../../bson/BsonParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">BsonParserSession.</span><code><a href="../../bson/BsonParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -212,7 +216,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CborParserSession.</span><code><a href="../../cbor/CborParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">CborParserSession.</span><code><a href="../../cbor/CborParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -235,7 +239,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../../cbor/CborTokenReader.html#%3Cinit%3E(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.cbor.CborParserSession)" class="member-name-link">CborTokenReader</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../cbor/CborParserSession.html" title="class in org.apache.juneau.marshall.cbor">CborParserSession</a>&nbsp;session)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Constructor used by <a href="../../cbor/CborParserSession.html#parseTokens(java.lang.Object)"><code>CborParserSession.parseTokens(Object)</code></a> to plumb the calling
+<div class="block">Constructor used by <a href="../../cbor/CborParserSession.html#readTokens(java.lang.Object)"><code>CborParserSession.readTokens(Object)</code></a> to plumb the calling
  session through so that <a href="../../cbor/CborTokenReader.html#read(java.lang.Class)"><code>CborTokenReader.read(Class)</code></a> can delegate to the CBOR databind path.</div>
 </div>
 </div>
@@ -250,7 +254,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CsvParserSession.</span><code><a href="../../csv/CsvParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">CsvParserSession.</span><code><a href="../../csv/CsvParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static <a href="../../csv/CsvReader.html" title="class in org.apache.juneau.marshall.csv">CsvReader</a></code></div>
@@ -273,7 +277,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HjsonParserSession.</span><code><a href="../../hjson/HjsonParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">HjsonParserSession.</span><code><a href="../../hjson/HjsonParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -288,7 +292,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HoconParserSession.</span><code><a href="../../hocon/HoconParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">HoconParserSession.</span><code><a href="../../hocon/HoconParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -303,17 +307,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doParseIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doReadIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
@@ -330,7 +334,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">IniParserSession.</span><code><a href="../../ini/IniParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">IniParserSession.</span><code><a href="../../ini/IniParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -345,11 +349,11 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RdfParserSession.</span><code><a href="../../jena/RdfParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">RdfParserSession.</span><code><a href="../../jena/RdfParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RdfStreamParserSession.</span><code><a href="../../jena/RdfStreamParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">RdfStreamParserSession.</span><code><a href="../../jena/RdfStreamParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
@@ -364,17 +368,17 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doParseIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doReadIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
@@ -401,7 +405,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <a href="../../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="../../json/JsonParserSession.html" title="class in org.apache.juneau.marshall.json">JsonParserSession</a>&nbsp;session)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Constructor used by <a href="../../json/JsonParser.html#parseTokens(java.lang.Object)"><code>JsonParser.parseTokens(Object)</code></a> to plumb the calling parser's
+<div class="block">Constructor used by <a href="../../json/JsonParser.html#readTokens(java.lang.Object)"><code>JsonParser.readTokens(Object)</code></a> to plumb the calling parser's
  session in so that <a href="../../json/JsonTokenReader.html#read(java.lang.Class)"><code>JsonTokenReader.read(Class)</code></a> can delegate to the existing databind path.</div>
 </div>
 </div>
@@ -425,7 +429,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <a href="../../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="../../json5/Json5ParserSession.html" title="class in org.apache.juneau.marshall.json5">Json5ParserSession</a>&nbsp;session)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor used by <a href="../../json5/Json5ParserSession.html#parseTokens(java.lang.Object)"><code>Json5ParserSession.parseTokens(Object)</code></a> to plumb the calling
+<div class="block">Constructor used by <a href="../../json5/Json5ParserSession.html#readTokens(java.lang.Object)"><code>Json5ParserSession.readTokens(Object)</code></a> to plumb the calling
  session through so that <a href="../../json/JsonTokenReader.html#read(java.lang.Class)"><code>JsonTokenReader.read(Class)</code></a> can delegate to the JSON5 databind path.</div>
 </div>
 </div>
@@ -440,7 +444,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Json5lParserSession.</span><code><a href="../../json5l/Json5lParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">Json5lParserSession.</span><code><a href="../../json5l/Json5lParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -459,7 +463,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <a href="../../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="../../json5l/Json5lParserSession.html" title="class in org.apache.juneau.marshall.json5l">Json5lParserSession</a>&nbsp;session)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor used by <a href="../../json5l/Json5lParserSession.html#parseTokens(java.lang.Object)"><code>Json5lParserSession.parseTokens(Object)</code></a> to plumb the calling
+<div class="block">Constructor used by <a href="../../json5l/Json5lParserSession.html#readTokens(java.lang.Object)"><code>Json5lParserSession.readTokens(Object)</code></a> to plumb the calling
  session through so that <a href="../../json/JsonTokenReader.html#read(java.lang.Class)"><code>JsonTokenReader.read(Class)</code></a> can delegate to the JSON5L databind path.</div>
 </div>
 </div>
@@ -474,7 +478,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonlParserSession.</span><code><a href="../../jsonl/JsonlParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">JsonlParserSession.</span><code><a href="../../jsonl/JsonlParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -493,7 +497,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <a href="../../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="../../jsonl/JsonlParserSession.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParserSession</a>&nbsp;session)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor used by <a href="../../jsonl/JsonlParserSession.html#parseTokens(java.lang.Object)"><code>JsonlParserSession.parseTokens(Object)</code></a> to plumb the calling
+<div class="block">Constructor used by <a href="../../jsonl/JsonlParserSession.html#readTokens(java.lang.Object)"><code>JsonlParserSession.readTokens(Object)</code></a> to plumb the calling
  session through.</div>
 </div>
 </div>
@@ -508,11 +512,11 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownDocParserSession.</span><code><a href="../../markdown/MarkdownDocParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownDocParserSession.</span><code><a href="../../markdown/MarkdownDocParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownParserSession.</span><code><a href="../../markdown/MarkdownParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownParserSession.</span><code><a href="../../markdown/MarkdownParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
@@ -527,7 +531,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MsgPackParserSession.</span><code><a href="../../msgpack/MsgPackParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">MsgPackParserSession.</span><code><a href="../../msgpack/MsgPackParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -550,7 +554,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="col-second even-row-color"><code><a href="../../msgpack/MsgPackTokenReader.html#%3Cinit%3E(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.msgpack.MsgPackParserSession)" class="member-name-link">MsgPackTokenReader</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../msgpack/MsgPackParserSession.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackParserSession</a>&nbsp;session)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Constructor used by <a href="../../msgpack/MsgPackParserSession.html#parseTokens(java.lang.Object)"><code>MsgPackParserSession.parseTokens(Object)</code></a> to plumb the calling
+<div class="block">Constructor used by <a href="../../msgpack/MsgPackParserSession.html#readTokens(java.lang.Object)"><code>MsgPackParserSession.readTokens(Object)</code></a> to plumb the calling
  session through.</div>
 </div>
 </div>
@@ -565,7 +569,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OpenApiParserSession.</span><code><a href="../../oapi/OpenApiParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">OpenApiParserSession.</span><code><a href="../../oapi/OpenApiParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -580,7 +584,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ParquetParserSession.</span><code><a href="../../parquet/ParquetParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">ParquetParserSession.</span><code><a href="../../parquet/ParquetParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -624,20 +628,20 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Parser.</span><code><a href="../Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">Parser.</span><code><a href="../Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
  <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Workhorse method.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Workhorse method.</div>
 </div>
 <div class="col-first even-row-color"><code>protected &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doParseIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doReadIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</code></div>
 <div class="col-last even-row-color">
@@ -645,7 +649,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </div>
 <div class="col-first odd-row-color"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
@@ -653,11 +657,11 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Implementation method.</div>
 </div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doParseToBeanConsumer(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)" class="member-name-link">doParseToBeanConsumer</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#doReadToBeanConsumer(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)" class="member-name-link">doReadToBeanConsumer</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../../commons/function/BeanConsumer.html" title="interface in org.apache.juneau.commons.function">BeanConsumer</a>&lt;T&gt;&nbsp;consumer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;elementType)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Format-specific implementation for <a href="../ParserSession.html#parseToBeanConsumer(java.lang.Object,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)"><code>ParserSession.parseToBeanConsumer(java.lang.Object, org.apache.juneau.commons.function.BeanConsumer&lt;T&gt;, java.lang.Class&lt;T&gt;)</code></a>.</div>
+<div class="block">Format-specific implementation for <a href="../ParserSession.html#readToBeanConsumer(java.lang.Object,org.apache.juneau.commons.function.BeanConsumer,java.lang.Class)"><code>ParserSession.readToBeanConsumer(java.lang.Object, org.apache.juneau.commons.function.BeanConsumer&lt;T&gt;, java.lang.Class&lt;T&gt;)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../ParserSession.html#setPipe(org.apache.juneau.marshall.parser.ParserPipe)" class="member-name-link">setPipe</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</code></div>
@@ -692,7 +696,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PlainTextParserSession.</span><code><a href="../../plaintext/PlainTextParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">PlainTextParserSession.</span><code><a href="../../plaintext/PlainTextParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -707,7 +711,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SseParserSession.</span><code><a href="../../sse/SseParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">SseParserSession.</span><code><a href="../../sse/SseParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -722,7 +726,7 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TomlParserSession.</span><code><a href="../../toml/TomlParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">TomlParserSession.</span><code><a href="../../toml/TomlParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -737,17 +741,17 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doParseIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doReadIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
@@ -782,12 +786,12 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UrlEncodingParserSession.</span><code><a href="../../urlencoding/UrlEncodingParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">UrlEncodingParserSession.</span><code><a href="../../urlencoding/UrlEncodingParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UrlEncodingParserSession.</span><code><a href="../../urlencoding/UrlEncodingParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">UrlEncodingParserSession.</span><code><a href="../../urlencoding/UrlEncodingParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
@@ -815,17 +819,17 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../../xml/XmlParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../../xml/XmlParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../../xml/XmlParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doParseIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../../xml/XmlParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doReadIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../../xml/XmlParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../../xml/XmlParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
@@ -862,21 +866,39 @@ V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">YamlParserSession.</span><code><a href="../../yaml/YamlParserSession.html#doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">YamlParserSession.</span><code><a href="../../yaml/YamlParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected &lt;E&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">YamlParserSession.</span><code><a href="../../yaml/YamlParserSession.html#doParseIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doParseIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">YamlParserSession.</span><code><a href="../../yaml/YamlParserSession.html#doReadIntoCollection(org.apache.juneau.marshall.parser.ParserPipe,java.util.Collection,java.lang.reflect.Type)" class="member-name-link">doReadIntoCollection</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;elementType)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected &lt;K,<wbr>
 V&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">YamlParserSession.</span><code><a href="../../yaml/YamlParserSession.html#doParseIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doParseIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">YamlParserSession.</span><code><a href="../../yaml/YamlParserSession.html#doReadIntoMap(org.apache.juneau.marshall.parser.ParserPipe,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)" class="member-name-link">doReadIntoMap</a><wbr>(<a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;keyType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;valueType)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.marshall">
+<h2>Uses of <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a> in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a> with parameters of type <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetPhotoParser.</span><code><a href="../../../petstore/marshall/PetPhotoParser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+ <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+ <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Workhorse method.</div>
+</div>
 </div>
 </section>
 </li>

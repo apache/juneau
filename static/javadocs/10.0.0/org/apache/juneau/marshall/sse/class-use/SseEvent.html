@@ -60,8 +60,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Server-Sent Events (SSE) marshalling support — <code>text/event-stream</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.sse">org.apache.juneau.rest.server.sse</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.sse">org.apache.juneau.rest.server.sse</a></div>
+<div class="col-last even-row-color">
 <div class="block">Server-Sent Events (SSE) support for Juneau REST servers.</div>
 </div>
 </div>
@@ -108,6 +112,33 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">SseEventReader.</span><code><a href="../SseEventReader.html#toList()" class="member-name-link">toList</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Drains the remaining events into a list, then closes this reader.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp">
+<h2>Uses of <a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a> in <a href="../../../rest/server/mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/server/mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a> that return types with arguments of type <a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link">Flow.Publisher</a>&lt;<a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpStreamResult.</span><code><a href="../../../rest/server/mcp/McpStreamResult.html#stream()" class="member-name-link">stream</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the value of the <a href="../../../../../../org/apache/juneau/rest/server/mcp/McpStreamResult.html#param-stream"><code>stream</code></a> record component.</div>
+</div>
+</div>
+<div class="caption"><span>Constructor parameters in <a href="../../../rest/server/mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a> with type arguments of type <a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/mcp/McpStreamResult.html#%3Cinit%3E(java.util.concurrent.Flow.Publisher)" class="member-name-link">McpStreamResult</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link">Flow.Publisher</a>&lt;<a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&gt;&nbsp;stream)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates an instance of a <code>McpStreamResult</code> record class.</div>
 </div>
 </div>
 </section>

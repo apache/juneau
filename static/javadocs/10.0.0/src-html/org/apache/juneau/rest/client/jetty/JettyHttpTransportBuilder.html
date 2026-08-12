@@ -29,80 +29,82 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.client.jetty;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.eclipse.jetty.client.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">/**</span>
-<span class="source-line-no">022</span><span id="line-22"> * Fluent builder for {@link JettyHttpTransport}.</span>
-<span class="source-line-no">023</span><span id="line-23"> *</span>
-<span class="source-line-no">024</span><span id="line-24"> * &lt;p&gt;</span>
-<span class="source-line-no">025</span><span id="line-25"> * Obtain an instance via {@link JettyHttpTransport#builder()}.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack</span>
-<span class="source-line-no">029</span><span id="line-29"> * ({@code org.apache.juneau.marshall.ng.*}).</span>
-<span class="source-line-no">030</span><span id="line-30"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">031</span><span id="line-31"> * (and possibly earlier).</span>
-<span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;/ul&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * @since 9.2.1</span>
-<span class="source-line-no">038</span><span id="line-38"> */</span>
-<span class="source-line-no">039</span><span id="line-39">@SuppressWarnings({</span>
-<span class="source-line-no">040</span><span id="line-40">   "resource" // Builder methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">041</span><span id="line-41">})</span>
-<span class="source-line-no">042</span><span id="line-42">public final class JettyHttpTransportBuilder {</span>
-<span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">   HttpClient httpClient;</span>
-<span class="source-line-no">045</span><span id="line-45">   long responseTimeoutMs = 30_000;</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   JettyHttpTransportBuilder() {}</span>
+<span class="source-line-no">021</span><span id="line-21">import org.eclipse.jetty.client.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">/**</span>
+<span class="source-line-no">024</span><span id="line-24"> * Fluent builder for {@link JettyHttpTransport}.</span>
+<span class="source-line-no">025</span><span id="line-25"> *</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * Obtain an instance via {@link JettyHttpTransport#builder()}.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack</span>
+<span class="source-line-no">031</span><span id="line-31"> * ({@code org.apache.juneau.marshall.ng.*}).</span>
+<span class="source-line-no">032</span><span id="line-32"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
+<span class="source-line-no">033</span><span id="line-33"> * (and possibly earlier).</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * @since 9.2.1</span>
+<span class="source-line-no">040</span><span id="line-40"> */</span>
+<span class="source-line-no">041</span><span id="line-41">@SuppressWarnings({</span>
+<span class="source-line-no">042</span><span id="line-42">   "resource" // Builder methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">043</span><span id="line-43">})</span>
+<span class="source-line-no">044</span><span id="line-44">public final class JettyHttpTransportBuilder {</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">   HttpClient httpClient;</span>
+<span class="source-line-no">047</span><span id="line-47">   long responseTimeoutMs = 30_000;</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Sets the underlying {@link HttpClient} to use.</span>
-<span class="source-line-no">051</span><span id="line-51">    *</span>
-<span class="source-line-no">052</span><span id="line-52">    * &lt;p&gt;</span>
-<span class="source-line-no">053</span><span id="line-53">    * If not set, a default client is created via {@code new HttpClient()}.</span>
-<span class="source-line-no">054</span><span id="line-54">    *</span>
-<span class="source-line-no">055</span><span id="line-55">    * &lt;p&gt;</span>
-<span class="source-line-no">056</span><span id="line-56">    * If the provided client has not been started, {@link JettyHttpTransport} will start it automatically.</span>
-<span class="source-line-no">057</span><span id="line-57">    * When {@link JettyHttpTransport#close()} is called, the client will be stopped.</span>
-<span class="source-line-no">058</span><span id="line-58">    *</span>
-<span class="source-line-no">059</span><span id="line-59">    * @param value The client to use. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">060</span><span id="line-60">    * @return This object.</span>
-<span class="source-line-no">061</span><span id="line-61">    */</span>
-<span class="source-line-no">062</span><span id="line-62">   public JettyHttpTransportBuilder httpClient(HttpClient value) {</span>
-<span class="source-line-no">063</span><span id="line-63">      httpClient = value;</span>
-<span class="source-line-no">064</span><span id="line-64">      return this;</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * Sets the maximum time to wait for the response headers to arrive after the request is sent.</span>
-<span class="source-line-no">069</span><span id="line-69">    *</span>
-<span class="source-line-no">070</span><span id="line-70">    * &lt;p&gt;</span>
-<span class="source-line-no">071</span><span id="line-71">    * This timeout covers the time from when the request is fully sent until the first response line and headers</span>
-<span class="source-line-no">072</span><span id="line-72">    * are received.  It does not limit how long the response body may take to stream.</span>
-<span class="source-line-no">073</span><span id="line-73">    * Defaults to {@code 30_000} ms (30 seconds).</span>
-<span class="source-line-no">074</span><span id="line-74">    *</span>
-<span class="source-line-no">075</span><span id="line-75">    * @param value The timeout in milliseconds. Use {@code 0} or a negative value to wait indefinitely.</span>
-<span class="source-line-no">076</span><span id="line-76">    * @return This object.</span>
-<span class="source-line-no">077</span><span id="line-77">    */</span>
-<span class="source-line-no">078</span><span id="line-78">   public JettyHttpTransportBuilder responseTimeoutMs(long value) {</span>
-<span class="source-line-no">079</span><span id="line-79">      responseTimeoutMs = value;</span>
-<span class="source-line-no">080</span><span id="line-80">      return this;</span>
-<span class="source-line-no">081</span><span id="line-81">   }</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   /**</span>
-<span class="source-line-no">084</span><span id="line-84">    * Builds and returns the {@link JettyHttpTransport}.</span>
-<span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">087</span><span id="line-87">    * @throws Exception If the Jetty {@link HttpClient} cannot be started.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   public JettyHttpTransport build() throws Exception {</span>
-<span class="source-line-no">090</span><span id="line-90">      return new JettyHttpTransport(this);</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92">}</span>
+<span class="source-line-no">049</span><span id="line-49">   JettyHttpTransportBuilder() {}</span>
+<span class="source-line-no">050</span><span id="line-50"></span>
+<span class="source-line-no">051</span><span id="line-51">   /**</span>
+<span class="source-line-no">052</span><span id="line-52">    * Sets the underlying {@link HttpClient} to use.</span>
+<span class="source-line-no">053</span><span id="line-53">    *</span>
+<span class="source-line-no">054</span><span id="line-54">    * &lt;p&gt;</span>
+<span class="source-line-no">055</span><span id="line-55">    * If not set, a default client is created via {@code new HttpClient()}.</span>
+<span class="source-line-no">056</span><span id="line-56">    *</span>
+<span class="source-line-no">057</span><span id="line-57">    * &lt;p&gt;</span>
+<span class="source-line-no">058</span><span id="line-58">    * If the provided client has not been started, {@link JettyHttpTransport} will start it automatically.</span>
+<span class="source-line-no">059</span><span id="line-59">    * When {@link JettyHttpTransport#close()} is called, the client will be stopped.</span>
+<span class="source-line-no">060</span><span id="line-60">    *</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param value The client to use. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">062</span><span id="line-62">    * @return This object.</span>
+<span class="source-line-no">063</span><span id="line-63">    */</span>
+<span class="source-line-no">064</span><span id="line-64">   public JettyHttpTransportBuilder httpClient(HttpClient value) {</span>
+<span class="source-line-no">065</span><span id="line-65">      httpClient = assertArgNotNull("value", value);</span>
+<span class="source-line-no">066</span><span id="line-66">      return this;</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Sets the maximum time to wait for the response headers to arrive after the request is sent.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * &lt;p&gt;</span>
+<span class="source-line-no">073</span><span id="line-73">    * This timeout covers the time from when the request is fully sent until the first response line and headers</span>
+<span class="source-line-no">074</span><span id="line-74">    * are received.  It does not limit how long the response body may take to stream.</span>
+<span class="source-line-no">075</span><span id="line-75">    * Defaults to {@code 30_000} ms (30 seconds).</span>
+<span class="source-line-no">076</span><span id="line-76">    *</span>
+<span class="source-line-no">077</span><span id="line-77">    * @param value The timeout in milliseconds. Use {@code 0} or a negative value to wait indefinitely.</span>
+<span class="source-line-no">078</span><span id="line-78">    * @return This object.</span>
+<span class="source-line-no">079</span><span id="line-79">    */</span>
+<span class="source-line-no">080</span><span id="line-80">   public JettyHttpTransportBuilder responseTimeoutMs(long value) {</span>
+<span class="source-line-no">081</span><span id="line-81">      responseTimeoutMs = value;</span>
+<span class="source-line-no">082</span><span id="line-82">      return this;</span>
+<span class="source-line-no">083</span><span id="line-83">   }</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /**</span>
+<span class="source-line-no">086</span><span id="line-86">    * Builds and returns the {@link JettyHttpTransport}.</span>
+<span class="source-line-no">087</span><span id="line-87">    *</span>
+<span class="source-line-no">088</span><span id="line-88">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">089</span><span id="line-89">    * @throws Exception If the Jetty {@link HttpClient} cannot be started.</span>
+<span class="source-line-no">090</span><span id="line-90">    */</span>
+<span class="source-line-no">091</span><span id="line-91">   public JettyHttpTransport build() throws Exception {</span>
+<span class="source-line-no">092</span><span id="line-92">      return new JettyHttpTransport(this);</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94">}</span>
 
 
 

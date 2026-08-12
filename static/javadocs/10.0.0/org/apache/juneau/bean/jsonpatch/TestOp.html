@@ -167,8 +167,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Convenience constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The JSON Pointer target.</dd>
-<dd><code>value</code> - The value to test for.</dd>
+<dd><code>path</code> - The JSON Pointer target.  Can be <jk>null</jk> to leave the property unset.</dd>
+<dd><code>value</code> - The value to test for.  Can be <jk>null</jk> to leave the property unset.</dd>
 </dl>
 </section>
 </li>
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>value</property>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

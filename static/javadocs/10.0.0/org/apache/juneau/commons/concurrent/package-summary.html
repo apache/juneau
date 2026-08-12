@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="package-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -82,23 +86,39 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="caption"><span>Classes</span></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
+<div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="NullableReference.html" title="class in org.apache.juneau.commons.concurrent">NullableReference</a>&lt;V&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="InMemoryReplayCache.html" title="class in org.apache.juneau.commons.concurrent">InMemoryReplayCache</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Built-in default <a href="ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a>: a per-process, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html" title="class or interface in java.util.concurrent" class="external-link"><code>ConcurrentHashMap</code></a>-backed seen-identifier set with
+ self-eviction bounded by each record's own <code>expiresAtMs</code>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NullableReference.html" title="class in org.apache.juneau.commons.concurrent">NullableReference</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A thread-safe reference that combines <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference</code></a> with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>-like functionality.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent">SimpleLock</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent">ReplayCache</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">SPI for detecting reuse ("replay") of a one-time-use identifier.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="ReplayCache.FailMode.html" title="enum class in org.apache.juneau.commons.concurrent">ReplayCache.FailMode</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">The policy applied by <a href="ReplayCache.html#checkAndRecord(java.lang.String,long,org.apache.juneau.commons.concurrent.ReplayCache.FailMode,java.util.function.Consumer)"><code>ReplayCache.checkAndRecord(String, long, FailMode, Consumer)</code></a> when
+ <a href="ReplayCache.html#checkAndRecord(java.lang.String,long)"><code>ReplayCache.checkAndRecord(String, long)</code></a> throws (the backing store could not answer).</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SimpleLock.html" title="class in org.apache.juneau.commons.concurrent">SimpleLock</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A simple auto-closeable wrapper around a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>Lock</code></a> that automatically acquires the lock
  when created and releases it when closed.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SimpleReadWriteLock.html" title="class in org.apache.juneau.commons.concurrent">SimpleReadWriteLock</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SimpleReadWriteLock.html" title="class in org.apache.juneau.commons.concurrent">SimpleReadWriteLock</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">An extension of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/ReentrantReadWriteLock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>ReentrantReadWriteLock</code></a> with convenience methods for creating
  auto-closeable locks that work seamlessly with try-with-resources statements.</div>
+</div>
 </div>
 </div>
 </div>

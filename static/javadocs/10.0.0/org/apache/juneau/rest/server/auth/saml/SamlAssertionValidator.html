@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-102">SamlAssertionValidator</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-117">SamlAssertionValidator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Validates a SAML 2.0 <code>&lt;samlp:Response&gt;</code> document and produces a <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a> marked
  with <code>issuerType=SAML</code>.
@@ -88,12 +88,25 @@ loadScripts(document, 'script');</script>
  The validator enforces:
 
  <ul>
-   <li><b>Mandatory signature</b> on every assertion (or, optionally, on the <code>&lt;Response&gt;</code> envelope).
+   <li><b>Mandatory assertion signature</b> &mdash; every assertion must carry its own enveloped signature.
+      A response that signs only the <code>&lt;Response&gt;</code> envelope (and not the assertion) is rejected as
+      unsigned; response-envelope-level signatures are not supported.
    <li><b>Strict signature-algorithm allowlist</b> &mdash; only <code>rsa-sha256</code> and
-      <code>ecdsa-sha256</code> are accepted out of the box.  SHA-1 is permanently rejected.
+      <code>ecdsa-sha256</code> are accepted out of the box.  SHA-1 is permanently rejected.  The reference
+      <code>DigestMethod</code> is separately allowlisted (SHA-256/384/512), so a SHA-1 digest is rejected even
+      under a SHA-256 signature.
+   <li><b>Response status</b> &mdash; the <code>&lt;samlp:Status&gt;</code> must report the <code>Success</code> status code.
    <li><b>Clock skew</b> &mdash; defaults to 60 seconds tolerance on <code>NotBefore</code> /
       <code>NotOnOrAfter</code>; capped at 300 seconds.
    <li><b>Audience restriction</b> &mdash; <code>&lt;AudienceRestriction&gt;</code> must list the configured SP entity ID.
+   <li><b>Bearer subject confirmation</b> &mdash; when a <a href="SamlAssertionValidator.Builder.html#recipient(java.lang.String)"><code>recipient</code></a> (the SP
+      ACS URL) is configured, the assertion must carry a <code>bearer</code> <code>&lt;SubjectConfirmation&gt;</code> whose
+      <code>&lt;SubjectConfirmationData&gt;</code> matches the expected <code>Recipient</code>, is within its
+      <code>NotBefore</code>/<code>NotOnOrAfter</code> window, and satisfies the configured
+      <code>InResponseTo</code>/<code>Address</code> expectations.
+   <li><b>One-time use</b> &mdash; each assertion ID is recorded in a <a href="../../../../commons/concurrent/ReplayCache.html" title="interface in org.apache.juneau.commons.concurrent"><code>ReplayCache</code></a> and a second
+      presentation of the same ID is rejected.  The check is fail-closed: if the cache cannot answer, the
+      assertion is rejected.
    <li><b>Encrypted assertions</b> &mdash; if the response contains
       <code>&lt;EncryptedAssertion&gt;</code>, a <code>decryptionCredential</code> must be configured.
  </ul>
@@ -249,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ISSUER_TYPE_CLAIM">
 <h3>ISSUER_TYPE_CLAIM</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-109">ISSUER_TYPE_CLAIM</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-126">ISSUER_TYPE_CLAIM</a></span></div>
 <div class="block">Marker claim name on the returned <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -264,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ISSUER_TYPE_SAML">
 <h3>ISSUER_TYPE_SAML</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-112">ISSUER_TYPE_SAML</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-129">ISSUER_TYPE_SAML</a></span></div>
 <div class="block">Marker claim value identifying the principal as SAML-issued.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -287,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.saml.SamlAssertionValidator.Builder)">
 <h3>SamlAssertionValidator</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-296">SamlAssertionValidator</a></span><wbr><span class="parameters">(<a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-437">SamlAssertionValidator</a></span><wbr><span class="parameters">(<a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -306,7 +319,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-128">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAssertionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-161">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -317,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSpEntityId()">
 <h3>getSpEntityId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-313">getSpEntityId</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-459">getSpEntityId</a></span>()</div>
 <div class="block">Returns the SP entity ID this validator enforces in <code>&lt;AudienceRestriction&gt;</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -328,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getExpectedIssuer()">
 <h3>getExpectedIssuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-322">getExpectedIssuer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-468">getExpectedIssuer</a></span>()</div>
 <div class="block">Returns the expected IdP <code>&lt;Issuer&gt;</code> value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -339,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAlgorithms()">
 <h3>getAlgorithms</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-331">getAlgorithms</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-477">getAlgorithms</a></span>()</div>
 <div class="block">Returns the configured signature algorithm allowlist.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -350,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClockSkew()">
 <h3>getClockSkew</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-340">getClockSkew</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-486">getClockSkew</a></span>()</div>
 <div class="block">Returns the configured clock-skew tolerance.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -361,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validate(java.lang.String)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-353">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAssertionValidator.html#line-499">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml)</span>
                    throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML and returns the resolved principal.</div>
 <dl class="notes">

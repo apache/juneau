@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line-125">    *       .build();</span>
 <span class="source-line-no">126</span><span id="line-126">    * &lt;/p&gt;</span>
 <span class="source-line-no">127</span><span id="line-127">    *</span>
-<span class="source-line-no">128</span><span id="line-128">    * @param path The path to read from.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param path The path to read from.  Can be &lt;jk&gt;null&lt;/jk&gt; ({@link #build()} then throws an {@link IllegalStateException} unless {@link #allowNoFile()} is set).</span>
 <span class="source-line-no">129</span><span id="line-129">    * @return A new builder instance initialized with the specified path.</span>
 <span class="source-line-no">130</span><span id="line-130">    */</span>
 <span class="source-line-no">131</span><span id="line-131">   public static PathReaderBuilder create(Path path) {</span>
@@ -278,7 +278,7 @@
 <span class="source-line-no">265</span><span id="line-265">    *       .build();</span>
 <span class="source-line-no">266</span><span id="line-266">    * &lt;/p&gt;</span>
 <span class="source-line-no">267</span><span id="line-267">    *</span>
-<span class="source-line-no">268</span><span id="line-268">    * @param path The path to read from.</span>
+<span class="source-line-no">268</span><span id="line-268">    * @param path The path to read from.  Can be &lt;jk&gt;null&lt;/jk&gt; ({@link #build()} then throws an {@link IllegalStateException} unless {@link #allowNoFile()} is set).</span>
 <span class="source-line-no">269</span><span id="line-269">    * @return This object for method chaining.</span>
 <span class="source-line-no">270</span><span id="line-270">    */</span>
 <span class="source-line-no">271</span><span id="line-271">   public PathReaderBuilder path(Path path) {</span>

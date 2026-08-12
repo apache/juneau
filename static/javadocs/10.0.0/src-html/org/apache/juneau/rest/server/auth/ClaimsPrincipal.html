@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">      this.name = name;</span>
 <span class="source-line-no">084</span><span id="line-84">      this.claims = claims == null</span>
 <span class="source-line-no">085</span><span id="line-85">         ? Collections.emptyMap()</span>
-<span class="source-line-no">086</span><span id="line-86">         : Collections.unmodifiableMap(new LinkedHashMap&lt;&gt;(claims));</span>
+<span class="source-line-no">086</span><span id="line-86">         : u(cp(claims));</span>
 <span class="source-line-no">087</span><span id="line-87">   }</span>
 <span class="source-line-no">088</span><span id="line-88"></span>
 <span class="source-line-no">089</span><span id="line-89">   @Override /* Overridden from Principal */</span>
@@ -152,15 +152,15 @@
 <span class="source-line-no">139</span><span id="line-139">         return (T) v;</span>
 <span class="source-line-no">140</span><span id="line-140">      if (type == String.class)</span>
 <span class="source-line-no">141</span><span id="line-141">         return (T) v.toString();</span>
-<span class="source-line-no">142</span><span id="line-142">      if (v instanceof Number n) {</span>
+<span class="source-line-no">142</span><span id="line-142">      if (v instanceof Number v2) {</span>
 <span class="source-line-no">143</span><span id="line-143">         if (type == Integer.class || type == int.class)</span>
-<span class="source-line-no">144</span><span id="line-144">            return (T) Integer.valueOf(n.intValue());</span>
+<span class="source-line-no">144</span><span id="line-144">            return (T) Integer.valueOf(v2.intValue());</span>
 <span class="source-line-no">145</span><span id="line-145">         if (type == Long.class || type == long.class)</span>
-<span class="source-line-no">146</span><span id="line-146">            return (T) Long.valueOf(n.longValue());</span>
+<span class="source-line-no">146</span><span id="line-146">            return (T) Long.valueOf(v2.longValue());</span>
 <span class="source-line-no">147</span><span id="line-147">         if (type == Double.class || type == double.class)</span>
-<span class="source-line-no">148</span><span id="line-148">            return (T) Double.valueOf(n.doubleValue());</span>
+<span class="source-line-no">148</span><span id="line-148">            return (T) Double.valueOf(v2.doubleValue());</span>
 <span class="source-line-no">149</span><span id="line-149">         if (type == Float.class || type == float.class)</span>
-<span class="source-line-no">150</span><span id="line-150">            return (T) Float.valueOf(n.floatValue());</span>
+<span class="source-line-no">150</span><span id="line-150">            return (T) Float.valueOf(v2.floatValue());</span>
 <span class="source-line-no">151</span><span id="line-151">      }</span>
 <span class="source-line-no">152</span><span id="line-152">      return null;</span>
 <span class="source-line-no">153</span><span id="line-153">   }</span>

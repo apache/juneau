@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-42">BoundedLruTokenCache</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-44">BoundedLruTokenCache</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></span></div>
 <div class="block">Thread-safe bounded LRU implementation of <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a>.
@@ -169,7 +169,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retrieves a non-expired principal entry.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getToken(java.lang.String,java.time.Instant,java.time.Duration)" class="member-name-link">getToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;skew)</code></div>
@@ -189,8 +189,8 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <div class="block">Stores or replaces a principal entry.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#putToken(java.lang.String,org.apache.juneau.rest.server.auth.oauth.OAuthToken)" class="member-name-link">putToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- <a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&nbsp;token)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#putToken(java.lang.String,org.apache.juneau.rest.auth.oauth.flow.OAuthToken)" class="member-name-link">putToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&nbsp;token)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Stores or replaces a token entry.</div>
 </div>
@@ -219,7 +219,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="DEFAULT_MAX_ENTRIES">
 <h3>DEFAULT_MAX_ENTRIES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-45">DEFAULT_MAX_ENTRIES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-47">DEFAULT_MAX_ENTRIES</a></span></div>
 <div class="block">Default maximum entry count.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -242,7 +242,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="&lt;init&gt;(int)">
 <h3>BoundedLruTokenCache</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-77">BoundedLruTokenCache</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-79">BoundedLruTokenCache</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -261,7 +261,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth">BoundedLruTokenCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-52">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth">BoundedLruTokenCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-54">create</a></span>()</div>
 <div class="block">Static creator with the default max-entries.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -272,7 +272,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="create(int)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth">BoundedLruTokenCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-62">create</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth">BoundedLruTokenCache</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-64">create</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
 <div class="block">Static creator with a custom max-entries.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -285,7 +285,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="getMaxEntries()">
 <h3>getMaxEntries</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-93">getMaxEntries</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-95">getMaxEntries</a></span>()</div>
 <div class="block">Returns the configured maximum entry count.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -296,7 +296,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="putPrincipal(java.lang.String,java.security.Principal,java.time.Duration)">
 <h3>putPrincipal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-97">putPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-99">putPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TokenCache.html#putPrincipal(java.lang.String,java.security.Principal,java.time.Duration)">TokenCache</a></code></span></div>
@@ -314,7 +314,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="getPrincipal(java.lang.String)">
 <h3>getPrincipal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-110">getPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-112">getPrincipal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TokenCache.html#getPrincipal(java.lang.String)">TokenCache</a></code></span></div>
 <div class="block">Retrieves a non-expired principal entry.</div>
 <dl class="notes">
@@ -328,15 +328,15 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 </section>
 </li>
 <li>
-<section class="detail" id="putToken(java.lang.String,org.apache.juneau.rest.server.auth.oauth.OAuthToken)">
+<section class="detail" id="putToken(java.lang.String,org.apache.juneau.rest.auth.oauth.flow.OAuthToken)">
 <h3>putToken</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-125">putToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- <a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&nbsp;token)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TokenCache.html#putToken(java.lang.String,org.apache.juneau.rest.server.auth.oauth.OAuthToken)">TokenCache</a></code></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-127">putToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&nbsp;token)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TokenCache.html#putToken(java.lang.String,org.apache.juneau.rest.auth.oauth.flow.OAuthToken)">TokenCache</a></code></span></div>
 <div class="block">Stores or replaces a token entry.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="TokenCache.html#putToken(java.lang.String,org.apache.juneau.rest.server.auth.oauth.OAuthToken)">putToken</a></code>&nbsp;in interface&nbsp;<code><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></code></dd>
+<dd><code><a href="TokenCache.html#putToken(java.lang.String,org.apache.juneau.rest.auth.oauth.flow.OAuthToken)">putToken</a></code>&nbsp;in interface&nbsp;<code><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>key</code> - The cache key (typically a stable key derived from the flow parameters).</dd>
 <dd><code>token</code> - The token to cache.  Never <code>null</code>.</dd>
@@ -346,7 +346,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="getToken(java.lang.String,java.time.Instant,java.time.Duration)">
 <h3>getToken</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-134">getToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-136">getToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;skew)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TokenCache.html#getToken(java.lang.String,java.time.Instant,java.time.Duration)">TokenCache</a></code></span></div>
@@ -366,7 +366,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="invalidate(java.lang.String)">
 <h3>invalidate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-153">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-155">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TokenCache.html#invalidate(java.lang.String)">TokenCache</a></code></span></div>
 <div class="block">Removes the entry under the supplied key.  No-op if absent.</div>
 <dl class="notes">
@@ -380,7 +380,7 @@ implements <a href="TokenCache.html" title="interface in org.apache.juneau.rest.
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-161">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/BoundedLruTokenCache.html#line-163">size</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TokenCache.html#size()">TokenCache</a></code></span></div>
 <div class="block">Returns the current entry count.  Primarily for tests and metrics.</div>
 <dl class="notes">

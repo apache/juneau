@@ -186,11 +186,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Class...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestGuardList.Builder.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RestGuardList.Builder.html#line-67">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestGuardList.Builder.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RestGuardList.Builder.html#line-68">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;...&nbsp;values)</span></div>
 <div class="block">Appends the specified rest guard classes to the list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The values to add.</dd>
+<dd><code>values</code> - The values to add.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -199,11 +200,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.juneau.rest.server.guard.RestGuard...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestGuardList.Builder.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RestGuardList.Builder.html#line-82">append</a></span><wbr><span class="parameters">(<a href="RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestGuardList.Builder.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RestGuardList.Builder.html#line-84">append</a></span><wbr><span class="parameters">(<a href="RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>...&nbsp;values)</span></div>
 <div class="block">Appends the specified rest guard objects to the list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The values to add.</dd>
+<dd><code>values</code> - The values to add.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -212,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RestGuardList.Builder.html#line-93">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RestGuardList.Builder.html#line-95">build</a></span>()</div>
 <div class="block">Builds the list.</div>
 <dl class="notes">
 <dt>Returns:</dt>

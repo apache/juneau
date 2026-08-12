@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The file path to write to.</dd>
+<dd><code>path</code> - The file path to write to.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new builder instance initialized with the specified path.</dd>
 </dl>
@@ -404,7 +404,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cs</code> - The character encoding to use. The default is <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html#defaultCharset()" title="class or interface in java.nio.charset" class="external-link"><code>Charset.defaultCharset()</code></a>.</dd>
+<dd><code>cs</code> - The character encoding to use.  Can be <jk>null</jk> to use the default charset (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html#defaultCharset()" title="class or interface in java.nio.charset" class="external-link"><code>Charset.defaultCharset()</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>
@@ -472,7 +472,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The file path to write to.</dd>
+<dd><code>path</code> - The file path to write to.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>

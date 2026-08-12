@@ -99,8 +99,8 @@
 <span class="source-line-no">086</span><span id="line-86">    * Casts or wraps the specified throwable to the specified type.</span>
 <span class="source-line-no">087</span><span id="line-87">    *</span>
 <span class="source-line-no">088</span><span id="line-88">    * @param &lt;T&gt; The class to cast to.</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param type The class to cast to.</span>
-<span class="source-line-no">090</span><span id="line-90">    * @param t The throwable to cast.</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param type The class to cast to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">090</span><span id="line-90">    * @param t The throwable to cast.  Can be &lt;jk&gt;null&lt;/jk&gt; (produces a wrapper with a &lt;jk&gt;null&lt;/jk&gt; cause).</span>
 <span class="source-line-no">091</span><span id="line-91">    * @return Either the same exception if it's already the specified type, or a wrapped exception.</span>
 <span class="source-line-no">092</span><span id="line-92">    */</span>
 <span class="source-line-no">093</span><span id="line-93">   public static &lt;T&gt; T castException(Class&lt;T&gt; type, Throwable t) {</span>
@@ -111,8 +111,8 @@
 <span class="source-line-no">098</span><span id="line-98">    * Searches through the cause chain of an exception to find an exception of the specified type.</span>
 <span class="source-line-no">099</span><span id="line-99">    *</span>
 <span class="source-line-no">100</span><span id="line-100">    * @param &lt;T&gt; The cause type.</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param e The exception to search.</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param cause The cause type to search for.</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param e The exception to search.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns an empty {@link Optional}).</span>
+<span class="source-line-no">102</span><span id="line-102">    * @param cause The cause type to search for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">103</span><span id="line-103">    * @return An {@link Optional} containing the cause if found, or empty if not found.</span>
 <span class="source-line-no">104</span><span id="line-104">    */</span>
 <span class="source-line-no">105</span><span id="line-105">   public static &lt;T extends Throwable&gt; Optional&lt;T&gt; findCause(Throwable e, Class&lt;T&gt; cause) {</span>
@@ -127,7 +127,7 @@
 <span class="source-line-no">114</span><span id="line-114">   /**</span>
 <span class="source-line-no">115</span><span id="line-115">    * Convenience method for getting a stack trace as a string.</span>
 <span class="source-line-no">116</span><span id="line-116">    *</span>
-<span class="source-line-no">117</span><span id="line-117">    * @param t The throwable to get the stack trace from.</span>
+<span class="source-line-no">117</span><span id="line-117">    * @param t The throwable to get the stack trace from.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">118</span><span id="line-118">    * @return The same content that would normally be rendered via &lt;c&gt;t.printStackTrace()&lt;/c&gt;</span>
 <span class="source-line-no">119</span><span id="line-119">    */</span>
 <span class="source-line-no">120</span><span id="line-120">   public static String getStackTrace(Throwable t) {</span>
@@ -156,8 +156,8 @@
 <span class="source-line-no">143</span><span id="line-143">    *    }</span>
 <span class="source-line-no">144</span><span id="line-144">    * &lt;/p&gt;</span>
 <span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * @param t The throwable to print the stack trace for.</span>
-<span class="source-line-no">147</span><span id="line-147">    * @param pw The print writer to write to.</span>
+<span class="source-line-no">146</span><span id="line-146">    * @param t The throwable to print the stack trace for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @param pw The print writer to write to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">148</span><span id="line-148">    * @param maxDepth The maximum number of stack trace elements to print. If &lt;jk&gt;null&lt;/jk&gt; or negative, prints all elements.</span>
 <span class="source-line-no">149</span><span id="line-149">    */</span>
 <span class="source-line-no">150</span><span id="line-150">   public static void printStackTrace(Throwable t, PrintWriter pw, Integer maxDepth) {</span>
@@ -216,9 +216,9 @@
 <span class="source-line-no">203</span><span id="line-203">   /**</span>
 <span class="source-line-no">204</span><span id="line-204">    * Same as {@link Throwable#getCause()} but searches the throwable chain for an exception of the specified type.</span>
 <span class="source-line-no">205</span><span id="line-205">    *</span>
-<span class="source-line-no">206</span><span id="line-206">    * @param c The throwable type to search for.</span>
+<span class="source-line-no">206</span><span id="line-206">    * @param c The throwable type to search for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">207</span><span id="line-207">    * @param &lt;T&gt; The throwable type to search for.</span>
-<span class="source-line-no">208</span><span id="line-208">    * @param t The throwable to search.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @param t The throwable to search.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">209</span><span id="line-209">    * @return The exception, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
 <span class="source-line-no">210</span><span id="line-210">    */</span>
 <span class="source-line-no">211</span><span id="line-211">   public static &lt;T extends Throwable&gt; T getThrowableCause(Class&lt;T&gt; c, Throwable t) {</span>
@@ -233,8 +233,8 @@
 <span class="source-line-no">220</span><span id="line-220">   /**</span>
 <span class="source-line-no">221</span><span id="line-221">    * Calculates a 16-bit hash for the specified throwable based on it's stack trace.</span>
 <span class="source-line-no">222</span><span id="line-222">    *</span>
-<span class="source-line-no">223</span><span id="line-223">    * @param t The throwable to calculate the stack trace on.</span>
-<span class="source-line-no">224</span><span id="line-224">    * @param stopClass Optional stop class on which to stop calculation of a stack trace beyond when found.</span>
+<span class="source-line-no">223</span><span id="line-223">    * @param t The throwable to calculate the stack trace on.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;c&gt;0&lt;/c&gt;).</span>
+<span class="source-line-no">224</span><span id="line-224">    * @param stopClass Optional stop class on which to stop calculation of a stack trace beyond when found.  Can be &lt;jk&gt;null&lt;/jk&gt; (the entire stack trace, including causes, is used).</span>
 <span class="source-line-no">225</span><span id="line-225">    * @return A calculated hash.</span>
 <span class="source-line-no">226</span><span id="line-226">    */</span>
 <span class="source-line-no">227</span><span id="line-227">   public static int hash(Throwable t, String stopClass) {</span>
@@ -261,11 +261,11 @@
 <span class="source-line-no">248</span><span id="line-248">    * verbose logging is desired.</span>
 <span class="source-line-no">249</span><span id="line-249">    *</span>
 <span class="source-line-no">250</span><span id="line-250">    * @param &lt;T&gt; The throwable type.</span>
-<span class="source-line-no">251</span><span id="line-251">    * @param exception The throwable to (optionally) log.</span>
+<span class="source-line-no">251</span><span id="line-251">    * @param exception The throwable to (optionally) log.  Must not be &lt;jk&gt;null&lt;/jk&gt; when verbose exceptions are enabled; otherwise returned unchanged (may be &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">252</span><span id="line-252">    * @return The same throwable.</span>
 <span class="source-line-no">253</span><span id="line-253">    */</span>
 <span class="source-line-no">254</span><span id="line-254">   public static &lt;T extends Throwable&gt; T log(T exception) {</span>
-<span class="source-line-no">255</span><span id="line-255">      if (Boolean.TRUE.equals(VERBOSE.orElse(false))) LOG.warning(exception, getStackTrace(exception));</span>
+<span class="source-line-no">255</span><span id="line-255">      if (isTrue(VERBOSE.orElse(false))) LOG.warning(exception, getStackTrace(exception));</span>
 <span class="source-line-no">256</span><span id="line-256">      return exception;</span>
 <span class="source-line-no">257</span><span id="line-257">   }</span>
 <span class="source-line-no">258</span><span id="line-258"></span>
@@ -277,8 +277,8 @@
 <span class="source-line-no">264</span><span id="line-264">    * when exception messages contain circular references. The format is:</span>
 <span class="source-line-no">265</span><span id="line-265">    * "first-1000-chars&amp;lt;truncated-#-chars&amp;gt;last-1000-chars"</span>
 <span class="source-line-no">266</span><span id="line-266">    *</span>
-<span class="source-line-no">267</span><span id="line-267">    * @param t The throwable.</span>
-<span class="source-line-no">268</span><span id="line-268">    * @return The localized message of the throwable, truncated if necessary.</span>
+<span class="source-line-no">267</span><span id="line-267">    * @param t The throwable.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">268</span><span id="line-268">    * @return The localized message of the throwable, truncated if necessary, or &lt;jk&gt;null&lt;/jk&gt; if the throwable has no localized message.</span>
 <span class="source-line-no">269</span><span id="line-269">    */</span>
 <span class="source-line-no">270</span><span id="line-270">   public static String localizedMessage(Throwable t) {</span>
 <span class="source-line-no">271</span><span id="line-271">      String msg = t.getLocalizedMessage();</span>
@@ -290,7 +290,7 @@
 <span class="source-line-no">277</span><span id="line-277">      return msg.substring(0, 1000) + "&lt;truncated-" + truncated + "-chars&gt;" + msg.substring(msg.length() - 1000);</span>
 <span class="source-line-no">278</span><span id="line-278">   }</span>
 <span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">   /** Wraps or casts to RuntimeException. */</span>
+<span class="source-line-no">280</span><span id="line-280">   /** Wraps or casts to RuntimeException.  &lt;br&gt;A &lt;jk&gt;null&lt;/jk&gt; argument produces a {@link RuntimeException} with a &lt;jk&gt;null&lt;/jk&gt; cause. */</span>
 <span class="source-line-no">281</span><span id="line-281">   public static RuntimeException toRuntimeException(Throwable cause) {</span>
 <span class="source-line-no">282</span><span id="line-282">      return castException(RuntimeException.class, cause);</span>
 <span class="source-line-no">283</span><span id="line-283">   }</span>
@@ -298,7 +298,7 @@
 <span class="source-line-no">285</span><span id="line-285">   /**</span>
 <span class="source-line-no">286</span><span id="line-286">    * Creates a new {@link RuntimeException} from the specified cause (or returns it if already one).</span>
 <span class="source-line-no">287</span><span id="line-287">    *</span>
-<span class="source-line-no">288</span><span id="line-288">    * @param cause The caused-by exception.</span>
+<span class="source-line-no">288</span><span id="line-288">    * @param cause The caused-by exception.  Can be &lt;jk&gt;null&lt;/jk&gt; (produces a {@link RuntimeException} with a &lt;jk&gt;null&lt;/jk&gt; cause).</span>
 <span class="source-line-no">289</span><span id="line-289">    * @return A new {@link RuntimeException}, or the same exception if it's already of that type.</span>
 <span class="source-line-no">290</span><span id="line-290">    */</span>
 <span class="source-line-no">291</span><span id="line-291">   public static RuntimeException toRex(Throwable cause) {</span>
@@ -323,7 +323,7 @@
 <span class="source-line-no">310</span><span id="line-310">   @SuppressWarnings({</span>
 <span class="source-line-no">311</span><span id="line-311">      "java:S1181" // Need to catch Throwable to handle all exception types including Error</span>
 <span class="source-line-no">312</span><span id="line-312">   })</span>
-<span class="source-line-no">313</span><span id="line-313">   public static void safe(Snippet snippet, Function&lt;Throwable, RuntimeException&gt; exceptionMapper) {</span>
+<span class="source-line-no">313</span><span id="line-313">   public static void safe(Snippet snippet, Function&lt;Throwable,RuntimeException&gt; exceptionMapper) {</span>
 <span class="source-line-no">314</span><span id="line-314">      try {</span>
 <span class="source-line-no">315</span><span id="line-315">         snippet.run();</span>
 <span class="source-line-no">316</span><span id="line-316">      } catch (RuntimeException t) {</span>
@@ -351,7 +351,7 @@
 <span class="source-line-no">338</span><span id="line-338">   @SuppressWarnings({</span>
 <span class="source-line-no">339</span><span id="line-339">      "java:S1181" // Need to catch Throwable to handle all exception types including Error</span>
 <span class="source-line-no">340</span><span id="line-340">   })</span>
-<span class="source-line-no">341</span><span id="line-341">   public static &lt;T&gt; T safe(ThrowingSupplier&lt;T&gt; s, Function&lt;Throwable, RuntimeException&gt; exceptionMapper) {</span>
+<span class="source-line-no">341</span><span id="line-341">   public static &lt;T&gt; T safe(ThrowingSupplier&lt;T&gt; s, Function&lt;Throwable,RuntimeException&gt; exceptionMapper) {</span>
 <span class="source-line-no">342</span><span id="line-342">      try {</span>
 <span class="source-line-no">343</span><span id="line-343">         return s.get();</span>
 <span class="source-line-no">344</span><span id="line-344">      } catch (RuntimeException e) {</span>
@@ -421,7 +421,7 @@
 <span class="source-line-no">408</span><span id="line-408">   @SuppressWarnings({</span>
 <span class="source-line-no">409</span><span id="line-409">      "java:S1181" // Need to catch Throwable to handle all exception types including Error</span>
 <span class="source-line-no">410</span><span id="line-410">   })</span>
-<span class="source-line-no">411</span><span id="line-411">   public static &lt;T&gt; T safeSupplier(SupplierWithThrowable&lt;T&gt; supplier, Function&lt;Throwable, RuntimeException&gt; exceptionMapper) {</span>
+<span class="source-line-no">411</span><span id="line-411">   public static &lt;T&gt; T safeSupplier(SupplierWithThrowable&lt;T&gt; supplier, Function&lt;Throwable,RuntimeException&gt; exceptionMapper) {</span>
 <span class="source-line-no">412</span><span id="line-412">      try {</span>
 <span class="source-line-no">413</span><span id="line-413">         return supplier.get();</span>
 <span class="source-line-no">414</span><span id="line-414">      } catch (RuntimeException t) {</span>

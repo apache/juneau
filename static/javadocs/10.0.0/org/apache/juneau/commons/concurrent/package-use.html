@@ -60,6 +60,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Concurrent programming utilities including locks and synchronization primitives.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.auth.saml">org.apache.juneau.rest.server.auth.saml</a></div>
+<div class="col-last odd-row-color">
+<div class="block">SAML 2.0 assertion validation for the Juneau REST server, layered on the
+ <a href="../../rest/server/auth/AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> framework.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last even-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
@@ -73,6 +82,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">A thread-safe reference that combines <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference</code></a> with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>-like functionality.</div>
 </div>
+<div class="col-first odd-row-color"><a href="class-use/ReplayCache.html#org.apache.juneau.commons.concurrent">ReplayCache</a></div>
+<div class="col-last odd-row-color">
+<div class="block">SPI for detecting reuse ("replay") of a one-time-use identifier.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ReplayCache.FailMode.html#org.apache.juneau.commons.concurrent">ReplayCache.FailMode</a></div>
+<div class="col-last even-row-color">
+<div class="block">The policy applied by <a href="ReplayCache.html#checkAndRecord(java.lang.String,long,org.apache.juneau.commons.concurrent.ReplayCache.FailMode,java.util.function.Consumer)"><code>ReplayCache.checkAndRecord(String, long, FailMode, Consumer)</code></a> when
+ <a href="ReplayCache.html#checkAndRecord(java.lang.String,long)"><code>ReplayCache.checkAndRecord(String, long)</code></a> throws (the backing store could not answer).</div>
+</div>
 <div class="col-first odd-row-color"><a href="class-use/SimpleLock.html#org.apache.juneau.commons.concurrent">SimpleLock</a></div>
 <div class="col-last odd-row-color">
 <div class="block">A simple auto-closeable wrapper around a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>Lock</code></a> that automatically acquires the lock
@@ -82,6 +100,32 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">An extension of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/locks/ReentrantReadWriteLock.html" title="class or interface in java.util.concurrent.locks" class="external-link"><code>ReentrantReadWriteLock</code></a> with convenience methods for creating
  auto-closeable locks that work seamlessly with try-with-resources statements.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.auth.saml">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.concurrent</a> used by <a href="../../rest/server/auth/saml/package-summary.html">org.apache.juneau.rest.server.auth.saml</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/ReplayCache.html#org.apache.juneau.rest.server.auth.saml">ReplayCache</a></div>
+<div class="col-last even-row-color">
+<div class="block">SPI for detecting reuse ("replay") of a one-time-use identifier.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.concurrent</a> used by <a href="../../rest/server/mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/ReplayCache.html#org.apache.juneau.rest.server.mcp.v20260728">ReplayCache</a></div>
+<div class="col-last even-row-color">
+<div class="block">SPI for detecting reuse ("replay") of a one-time-use identifier.</div>
 </div>
 </div>
 </section>

@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * Handles aspects of matching and precedence ordering.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> */</span>
-<span class="source-line-no">036</span><span id="line-36">public abstract sealed class UrlPathMatcher implements Comparable&lt;UrlPathMatcher&gt; permits UrlPathMatcher.FileNameMatcher, UrlPathMatcher.PathMatcher {</span>
+<span class="source-line-no">036</span><span id="line-36">public abstract sealed class UrlPathMatcher implements Comparable&lt;UrlPathMatcher&gt; {</span>
 <span class="source-line-no">037</span><span id="line-37"></span>
 <span class="source-line-no">038</span><span id="line-38">   /**</span>
 <span class="source-line-no">039</span><span id="line-39">    * A file name pattern such as "favicon.ico" or "*.jsp".</span>
@@ -111,7 +111,7 @@
 <span class="source-line-no">098</span><span id="line-98">            this.pattern = patternString;</span>
 <span class="source-line-no">099</span><span id="line-99">         }</span>
 <span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">         var c = patternString.replaceAll("\\{[^\\}]+\\}", ".").replaceAll("\\w+", "X").replace(".", "W");</span>
+<span class="source-line-no">101</span><span id="line-101">         var c = patternString.replaceAll("\\{[^{}]+\\}", ".").replaceAll("\\w+", "X").replace(".", "W");</span>
 <span class="source-line-no">102</span><span id="line-102">         if (c.isEmpty())</span>
 <span class="source-line-no">103</span><span id="line-103">            c = "+";</span>
 <span class="source-line-no">104</span><span id="line-104">         if (! c.endsWith("/*"))</span>
@@ -195,7 +195,7 @@
 <span class="source-line-no">182</span><span id="line-182">   /**</span>
 <span class="source-line-no">183</span><span id="line-183">    * Constructs a matcher from the specified pattern string.</span>
 <span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * @param pattern The pattern string.</span>
+<span class="source-line-no">185</span><span id="line-185">    * @param pattern The pattern string. Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty pattern).</span>
 <span class="source-line-no">186</span><span id="line-186">    * @return A new matcher.</span>
 <span class="source-line-no">187</span><span id="line-187">    */</span>
 <span class="source-line-no">188</span><span id="line-188">   public static UrlPathMatcher of(String pattern) {</span>
@@ -237,7 +237,7 @@
 <span class="source-line-no">224</span><span id="line-224"></span>
 <span class="source-line-no">225</span><span id="line-225">   @Override /* Overridden from Object */</span>
 <span class="source-line-no">226</span><span id="line-226">   public boolean equals(Object o) {</span>
-<span class="source-line-no">227</span><span id="line-227">      return o instanceof UrlPathMatcher other &amp;&amp; compareTo(other) == 0;</span>
+<span class="source-line-no">227</span><span id="line-227">      return o instanceof UrlPathMatcher o2 &amp;&amp; compareTo(o2) == 0;</span>
 <span class="source-line-no">228</span><span id="line-228">   }</span>
 <span class="source-line-no">229</span><span id="line-229"></span>
 <span class="source-line-no">230</span><span id="line-230">   @Override /* Overridden from Object */</span>

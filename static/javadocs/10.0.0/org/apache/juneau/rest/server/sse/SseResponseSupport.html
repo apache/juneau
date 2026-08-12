@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-32">SseResponseSupport</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-33">SseResponseSupport</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></span></div>
 <div class="block">Fluent SSE response helper.</div>
@@ -169,12 +169,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestResponse)">
 <h3>SseResponseSupport</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-54">SseResponseSupport</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;response)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-55">SseResponseSupport</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;response)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>response</code> - The REST response.</dd>
+<dd><code>response</code> - The REST response. Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the writer could not be created.</dd>
 </dl>
@@ -191,7 +191,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="heartbeat(java.time.Duration)">
 <h3>heartbeat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-73">heartbeat</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;interval)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-74">heartbeat</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;interval)</span></div>
 <div class="block">Starts periodic heartbeat comments.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -204,7 +204,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="sendEvent(org.apache.juneau.marshall.sse.SseEvent)">
 <h3>sendEvent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-89">sendEvent</a></span><wbr><span class="parameters">(<a href="../../../marshall/sse/SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&nbsp;event)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-93">sendEvent</a></span><wbr><span class="parameters">(<a href="../../../marshall/sse/SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&nbsp;event)</span>
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends an SSE event.</div>
 <dl class="notes">
@@ -220,14 +220,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="sendEvent(java.lang.String,java.lang.Object)">
 <h3>sendEvent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-102">sendEvent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-106">sendEvent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;data)</span>
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends an SSE event from name+data values.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The event name.</dd>
-<dd><code>data</code> - The event data.</dd>
+<dd><code>name</code> - The event name. Can be <jk>null</jk> (dispatches as the default event type).</dd>
+<dd><code>data</code> - The event data. Can be <jk>null</jk> (no data lines emitted).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -238,12 +238,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="comment(java.lang.String)">
 <h3>comment</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-116">comment</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-120">comment</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span>
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Sends a heartbeat/comment line.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The comment value.</dd>
+<dd><code>value</code> - The comment value. Can be <jk>null</jk> (treated as an empty comment).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -254,7 +254,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="flush()">
 <h3>flush</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-127">flush</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-131">flush</a></span>()
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Flushes pending output.</div>
 <dl class="notes">
@@ -268,12 +268,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="sendFrom(org.apache.juneau.rest.server.sse.SseSubscription)">
 <h3>sendFrom</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-140">sendFrom</a></span><wbr><span class="parameters">(<a href="SseSubscription.html" title="class in org.apache.juneau.rest.server.sse">SseSubscription</a>&nbsp;subscription)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-144">sendFrom</a></span><wbr><span class="parameters">(<a href="SseSubscription.html" title="class in org.apache.juneau.rest.server.sse">SseSubscription</a>&nbsp;subscription)</span>
                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Drains a subscription until disconnect or interruption.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>subscription</code> - The subscription.</dd>
+<dd><code>subscription</code> - The subscription. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -284,7 +284,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-158">close</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/sse/SseResponseSupport.html#line-162">close</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html#close()" title="class or interface in java.lang" class="external-link">close</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>

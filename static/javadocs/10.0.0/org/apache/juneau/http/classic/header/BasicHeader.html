@@ -247,7 +247,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Object)">
 <h3>BasicHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-105">BasicHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-106">BasicHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -255,7 +255,8 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <dd><code>name</code> - The parameter name.</dd>
 <dd><code>value</code> - The parameter value.
    <br>Any non-String value will be converted to a String using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.
-   <br>Can also be an <l>Object</l> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a>.</dd>
+   <br>Can also be an <l>Object</l> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a>.
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -264,7 +265,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.function.Supplier)">
 <h3>BasicHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-128">BasicHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-129">BasicHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
 <div class="block">Constructor with delayed value.
 
@@ -274,7 +275,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The supplier of the header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -283,11 +284,11 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.header.BasicHeader)">
 <h3>BasicHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-141">BasicHeader</a></span><wbr><span class="parameters">(<a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-142">BasicHeader</a></span><wbr><span class="parameters">(<a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The object to copy.</dd>
+<dd><code>copyFrom</code> - The object to copy.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -307,8 +308,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>o</code> - The name value pair that makes up the header name and value.
-   The parameter value.
-   <br>Any non-String value will be converted to a String using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.</dd>
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new header bean.</dd>
 </dl>
@@ -335,7 +335,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-156">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-157">copy</a></span>()</div>
 <div class="block">Creates a copy of this header.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -346,7 +346,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertName()">
 <h3>assertName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-165">assertName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-166">assertName</a></span>()</div>
 <div class="block">Provides an object for performing assertions against the name of this header.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -357,7 +357,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="assertStringValue()">
 <h3>assertStringValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-174">assertStringValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="BasicHeader.html" title="class in org.apache.juneau.http.classic.header">BasicHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-175">assertStringValue</a></span>()</div>
 <div class="block">Provides an object for performing assertions against the value of this header.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -368,7 +368,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-183">asString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-184">asString</a></span>()</div>
 <div class="block">Returns the value of this header as a string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -379,7 +379,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-187">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-188">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -389,7 +389,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="equalsIgnoreCase(java.lang.String)">
 <h3>equalsIgnoreCase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-200">equalsIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;compare)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-201">equalsIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;compare)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified value is the same using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#equalsIgnoreCase(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>String.equalsIgnoreCase(String)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -402,7 +402,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="get()">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-212">get</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-213">get</a></span>()</div>
 <div class="block">If a value is present, returns the value, otherwise throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/NoSuchElementException.html" title="class or interface in java.util" class="external-link"><code>NoSuchElementException</code></a>.
 
  <p>
@@ -416,7 +416,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getElements()">
 <h3>getElements</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderElement.html" title="class or interface in org.apache.http" class="external-link">HeaderElement</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-216">getElements</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HeaderElement.html" title="class or interface in org.apache.http" class="external-link">HeaderElement</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-217">getElements</a></span>()
                             throws <span class="exceptions"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ParseException.html" title="class or interface in org.apache.http" class="external-link">ParseException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -429,7 +429,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-228">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-229">getName</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html#getName--" title="class or interface in org.apache.http" class="external-link">getName</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a></code></dd>
@@ -439,7 +439,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getValue()">
 <h3>getValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-231">getValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-232">getValue</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html#getValue--" title="class or interface in org.apache.http" class="external-link">getValue</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a></code></dd>
@@ -449,7 +449,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-238">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-239">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -459,7 +459,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="isNotEmpty()">
 <h3>isNotEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-252">isNotEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-253">isNotEmpty</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the value exists and is not empty.
 
  <p>
@@ -473,7 +473,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="isPresent()">
 <h3>isPresent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-262">isPresent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-263">isPresent</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the value exists.
 
  <p>
@@ -487,7 +487,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="orElse(java.lang.String)">
 <h3>orElse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-273">orElse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-274">orElse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;other)</span></div>
 <div class="block">If a value is present, returns the value, otherwise returns other.
 
  <p>
@@ -503,7 +503,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-277">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/BasicHeader.html#line-278">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

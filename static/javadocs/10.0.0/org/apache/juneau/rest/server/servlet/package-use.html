@@ -56,17 +56,19 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.jetty.resources">org.apache.juneau.microservice.jetty.resources</a></div>
-<div class="col-last even-row-color">
-<div class="block">Predefined Jetty Microservice Resources</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp">org.apache.juneau.examples.mcp</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.examples.mcp.secured">org.apache.juneau.examples.mcp.secured</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp.spring">org.apache.juneau.examples.mcp.spring</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
+<div class="block">Example / demo Microservice REST Resources</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.resources">org.apache.juneau.microservice.resources</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
 <div class="col-last even-row-color">
-<div class="block">Predefined Microservice Resources</div>
+<div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
 <div class="col-last odd-row-color">
@@ -96,8 +98,15 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20250618">org.apache.juneau.rest.server.mcp.v20250618</a></div>
+<div class="col-last even-row-color">
+<div class="block">MCP <code>2025-06-18</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.metrics.micrometer">org.apache.juneau.rest.server.metrics.micrometer</a></div>
 <div class="col-last even-row-color">
@@ -155,17 +164,68 @@ loadScripts(document, 'script');</script>
 <section class="package-uses">
 <ul class="block-list">
 <li>
-<section class="detail" id="org.apache.juneau.microservice.jetty.resources">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../../../microservice/jetty/resources/package-summary.html">org.apache.juneau.microservice.jetty.resources</a></span></div>
+<section class="detail" id="org.apache.juneau.examples.mcp">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../../../examples/mcp/package-summary.html">org.apache.juneau.examples.mcp</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/BasicRestServlet.html#org.apache.juneau.microservice.jetty.resources">BasicRestServlet</a></div>
+<div class="col-first even-row-color"><a href="class-use/BasicRestServlet.html#org.apache.juneau.examples.mcp">BasicRestServlet</a></div>
 <div class="col-last even-row-color">
 <div class="block">Subclass of <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> with default settings and standard endpoints defined.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.microservice.jetty.resources">RestServlet</a></div>
+<div class="col-first odd-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.examples.mcp">RestServlet</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Servlet implementation of a REST resource.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.secured">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../../../examples/mcp/secured/package-summary.html">org.apache.juneau.examples.mcp.secured</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicRestServlet.html#org.apache.juneau.examples.mcp.secured">BasicRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Subclass of <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> with default settings and standard endpoints defined.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.examples.mcp.secured">RestServlet</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Servlet implementation of a REST resource.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.spring">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../../../examples/mcp/spring/package-summary.html">org.apache.juneau.examples.mcp.spring</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.examples.mcp.spring">RestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Servlet implementation of a REST resource.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.microservice.examples">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicRestServlet.html#org.apache.juneau.microservice.examples">BasicRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Subclass of <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> with default settings and standard endpoints defined.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BasicRestServletGroup.html#org.apache.juneau.microservice.examples">BasicRestServletGroup</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Specialized subclass of <a href="BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> for showing "group" pages.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.microservice.examples">RestServlet</a></div>
+<div class="col-last even-row-color">
 <div class="block">Servlet implementation of a REST resource.</div>
 </div>
 </div>
@@ -201,27 +261,6 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.microservice.management">RestServlet</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Servlet implementation of a REST resource.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.microservice.resources">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/BasicRestServlet.html#org.apache.juneau.microservice.resources">BasicRestServlet</a></div>
-<div class="col-last even-row-color">
-<div class="block">Subclass of <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> with default settings and standard endpoints defined.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/BasicRestServletGroup.html#org.apache.juneau.microservice.resources">BasicRestServletGroup</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Specialized subclass of <a href="BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> for showing "group" pages.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.microservice.resources">RestServlet</a></div>
-<div class="col-last even-row-color">
 <div class="block">Servlet implementation of a REST resource.</div>
 </div>
 </div>
@@ -378,6 +417,40 @@ loadScripts(document, 'script');</script>
 <div class="block">Subclass of <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> with default settings and standard endpoints defined.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.rest.server.mcp">RestServlet</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Servlet implementation of a REST resource.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20250618">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../mcp/v20250618/package-summary.html">org.apache.juneau.rest.server.mcp.v20250618</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicRestServlet.html#org.apache.juneau.rest.server.mcp.v20250618">BasicRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Subclass of <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> with default settings and standard endpoints defined.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.rest.server.mcp.v20250618">RestServlet</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Servlet implementation of a REST resource.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.servlet</a> used by <a href="../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BasicRestServlet.html#org.apache.juneau.rest.server.mcp.v20260728">BasicRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Subclass of <a href="RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> with default settings and standard endpoints defined.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/RestServlet.html#org.apache.juneau.rest.server.mcp.v20260728">RestServlet</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Servlet implementation of a REST resource.</div>
 </div>

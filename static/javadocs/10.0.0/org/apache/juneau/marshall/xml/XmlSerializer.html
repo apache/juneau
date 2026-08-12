@@ -306,12 +306,9 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <div class="col-last even-row-color">
 <div class="block">Default serializer without namespaces, with single quotes, whitespace added.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected static final <a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#DEFAULT_XS_NAMESPACE" class="member-name-link">DEFAULT_XS_NAMESPACE</a></code></div>
+<div class="col-first odd-row-color"><code>protected final boolean</code></div>
+<div class="col-second odd-row-color"><code><a href="#enableNamespaces" class="member-name-link">enableNamespaces</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected final boolean</code></div>
-<div class="col-second even-row-color"><code><a href="#enableNamespaces" class="member-name-link">enableNamespaces</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-org.apache.juneau.marshall.serializer.WriterSerializer">Fields inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a></h3>
@@ -434,7 +431,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeRecords(java.lang.Object)" class="member-name-link">serializeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeRecords(java.lang.Object)" class="member-name-link">writeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator for the whole-value <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> using <b>default session
  arguments</b>.</div>
@@ -444,10 +441,10 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.WriterSerializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a></h3>
-<code><a href="../serializer/WriterSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/WriterSerializer.html#getFileCharset()">getFileCharset</a>, <a href="../serializer/WriterSerializer.html#getMaxIndent()">getMaxIndent</a>, <a href="../serializer/WriterSerializer.html#getQuoteChar()">getQuoteChar</a>, <a href="../serializer/WriterSerializer.html#getStreamCharset()">getStreamCharset</a>, <a href="../serializer/WriterSerializer.html#isUseWhitespace()">isUseWhitespace</a>, <a href="../serializer/WriterSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/WriterSerializer.html#println(java.lang.Object)">println</a>, <a href="../serializer/WriterSerializer.html#quoteChar()">quoteChar</a>, <a href="../serializer/WriterSerializer.html#serialize(java.lang.Object)">serialize</a>, <a href="../serializer/WriterSerializer.html#toString(java.lang.Object)">toString</a></code></div>
+<code><a href="../serializer/WriterSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/WriterSerializer.html#getMaxIndent()">getMaxIndent</a>, <a href="../serializer/WriterSerializer.html#getQuoteChar()">getQuoteChar</a>, <a href="../serializer/WriterSerializer.html#getStreamCharset()">getStreamCharset</a>, <a href="../serializer/WriterSerializer.html#isUseWhitespace()">isUseWhitespace</a>, <a href="../serializer/WriterSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/WriterSerializer.html#println(java.lang.Object)">println</a>, <a href="../serializer/WriterSerializer.html#quoteChar()">quoteChar</a>, <a href="../serializer/WriterSerializer.html#toString(java.lang.Object)">toString</a>, <a href="../serializer/WriterSerializer.html#write(java.lang.Object)">write</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.Serializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a></h3>
-<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doSerialize</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#serialize(java.lang.Object,java.lang.Object)">serialize</a>, <a href="../serializer/Serializer.html#serializeToString(java.lang.Object)">serializeToString</a></code></div>
+<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doWrite</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#write(java.lang.Object,java.lang.Object)">write</a>, <a href="../serializer/Serializer.html#writeToString(java.lang.Object)">writeToString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingTraverseContext">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingTraverseContext.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext</a></h3>
 <code><a href="../MarshallingTraverseContext.html#getDetectRecursions()">getDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#getIgnoreRecursions()">getIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#getInitialDepth()">getInitialDepth</a>, <a href="../MarshallingTraverseContext.html#getMaxDepth()">getMaxDepth</a>, <a href="../MarshallingTraverseContext.html#isDetectRecursions()">isDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#isIgnoreRecursions()">isIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#shouldDetectRecursions()">shouldDetectRecursions</a></code></div>
@@ -526,39 +523,33 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 </section>
 </li>
 <li>
-<section class="detail" id="DEFAULT_XS_NAMESPACE">
-<h3>DEFAULT_XS_NAMESPACE</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-607">DEFAULT_XS_NAMESPACE</a></span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="addBeanTypesXml">
 <h3>addBeanTypesXml</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-621">addBeanTypesXml</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-620">addBeanTypesXml</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="addJsonTags">
 <h3>addJsonTags</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-622">addJsonTags</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-621">addJsonTags</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="addNamespaceUrlsToRoot">
 <h3>addNamespaceUrlsToRoot</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-623">addNamespaceUrlsToRoot</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-622">addNamespaceUrlsToRoot</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="autoDetectNamespaces">
 <h3>autoDetectNamespaces</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-624">autoDetectNamespaces</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-623">autoDetectNamespaces</a></span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="enableNamespaces">
 <h3>enableNamespaces</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-625">enableNamespaces</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-624">enableNamespaces</a></span></div>
 </section>
 </li>
 </ul>
@@ -572,7 +563,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.xml.XmlSerializer.Builder)">
 <h3>XmlSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-641">XmlSerializer</a></span><wbr><span class="parameters">(<a href="XmlSerializer.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializer.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-640">XmlSerializer</a></span><wbr><span class="parameters">(<a href="XmlSerializer.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializer.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -591,7 +582,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="XmlSerializer.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializer.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-614">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="XmlSerializer.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializer.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-613">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -602,7 +593,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlSerializer.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializer.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-654">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlSerializer.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializer.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-653">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -619,7 +610,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializerSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-659">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlSerializerSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-658">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -637,7 +628,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlSerializerSession.html" title="class in org.apache.juneau.marshall.xml">XmlSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-664">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlSerializerSession.html" title="class in org.apache.juneau.marshall.xml">XmlSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-663">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -652,16 +643,16 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 </section>
 </li>
 <li>
-<section class="detail" id="serializeRecords(java.lang.Object)">
-<h3>serializeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-676">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeRecords(java.lang.Object)">
+<h3>writeRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-675">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the whole-value <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> using <b>default session
  arguments</b>.  The real implementation lives on
- <a href="XmlSerializerSession.html#serializeRecords(java.lang.Object)"><code>XmlSerializerSession.serializeRecords(Object)</code></a>.</div>
+ <a href="XmlSerializerSession.html#writeRecords(java.lang.Object)"><code>XmlSerializerSession.writeRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/RecordWritable.html#serializeRecords(java.lang.Object)">serializeRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
+<dd><code><a href="../stream/RecordWritable.html#writeRecords(java.lang.Object)">writeRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>
 <dt>Returns:</dt>
@@ -674,7 +665,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-686">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-685">isRecordStreaming</a></span>()</div>
 <div class="block">The XML record writer is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -687,7 +678,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getXmlBeanMeta(org.apache.juneau.commons.bean.BeanMeta)">
 <h3>getXmlBeanMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlBeanMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-689">getXmlBeanMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;&nbsp;bm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlBeanMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-688">getXmlBeanMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;&nbsp;bm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="XmlMetaProvider.html#getXmlBeanMeta(org.apache.juneau.commons.bean.BeanMeta)">XmlMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean.</div>
 <dl class="notes">
@@ -703,7 +694,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getXmlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getXmlBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-694">getXmlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.xml">XmlBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-693">getXmlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="XmlMetaProvider.html#getXmlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">XmlMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -719,7 +710,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getXmlClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getXmlClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlClassMeta.html" title="class in org.apache.juneau.marshall.xml">XmlClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-699">getXmlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlClassMeta.html" title="class in org.apache.juneau.marshall.xml">XmlClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-698">getXmlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="XmlMetaProvider.html#getXmlClassMeta(org.apache.juneau.marshall.ClassMeta)">XmlMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -735,7 +726,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getDefaultNamespace()">
 <h3>getDefaultNamespace</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-711">getDefaultNamespace</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-710">getDefaultNamespace</a></span>()</div>
 <div class="block">Default namespace.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -752,7 +743,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getNamespaces()">
 <h3>getNamespaces</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-722">getNamespaces</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-721">getNamespaces</a></span>()</div>
 <div class="block">Default namespaces.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -771,7 +762,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getTextNodeDelimiter()">
 <h3>getTextNodeDelimiter</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-732">getTextNodeDelimiter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-731">getTextNodeDelimiter</a></span>()</div>
 <div class="block">Text node delimiter.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -789,7 +780,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isAddBeanTypes()">
 <h3>isAddBeanTypes</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-742">isAddBeanTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-741">isAddBeanTypes</a></span>()</div>
 <div class="block">Add <js>"_type"</js> properties when needed.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -809,7 +800,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isAddNamespaceUrlsToRoot()">
 <h3>isAddNamespaceUrlsToRoot</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-752">isAddNamespaceUrlsToRoot</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-751">isAddNamespaceUrlsToRoot</a></span>()</div>
 <div class="block">Add namespace URLs to the root element.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -826,7 +817,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isAutoDetectNamespaces()">
 <h3>isAutoDetectNamespaces</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-761">isAutoDetectNamespaces</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-760">isAutoDetectNamespaces</a></span>()</div>
 <div class="block">Auto-detect namespace usage.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -843,7 +834,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isEnableNamespaces()">
 <h3>isEnableNamespaces</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-770">isEnableNamespaces</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-769">isEnableNamespaces</a></span>()</div>
 <div class="block">Enable support for XML namespaces.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -860,7 +851,7 @@ implements <a href="XmlMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-772">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlSerializer.html#line-771">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

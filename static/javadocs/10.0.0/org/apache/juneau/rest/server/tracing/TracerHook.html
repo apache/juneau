@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/FunctionalInterface.html" title="class or interface in java.lang" class="external-link">@FunctionalInterface</a>
-</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-82">TracerHook</a></span></div>
+</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-87">TracerHook</a></span></div>
 <div class="block">SPI for receiving per-request tracing events from <code>juneau-rest-server</code>.
 
  <p>
@@ -139,6 +139,10 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>See Also:</h5><ul>
    <li class='jc'><a href="NoOpTracerHook.html" title="class in org.apache.juneau.rest.server.tracing"><code>NoOpTracerHook</code></a>
    <li class='jc'><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a>
+   <li class='jc'><a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a>
+   <li class='jc'><a href="TraceContextExtractor.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TraceContextExtractor</code></a>
+   <li class='jc'><a href="TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing"><code>TraceOperation</code></a>
+   <li class='jc'><a href="TraceContexts.html" title="class in org.apache.juneau.rest.server.tracing"><code>TraceContexts</code></a>
    <li class='jc'><a href="../metrics/MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics"><code>MetricsRecorder</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  </ul></div>
@@ -160,15 +164,28 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#startSpan(java.lang.String)" class="member-name-link">startSpan</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spanName)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#inject(org.apache.juneau.http.tracing.TraceContextCarrier)" class="member-name-link">inject</a><wbr>(<a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Renders this hook's active trace context (if any) into <c>carrier</c>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#startSpan(java.lang.String)" class="member-name-link">startSpan</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spanName)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Opens a new span for a custom (non-request) observation.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#startSpan(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">startSpan</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#startSpan(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">startSpan</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Opens a new span for the in-flight request.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)" class="member-name-link">startSpan</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
+ <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier,
+ <a href="TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing">TraceOperation</a>&nbsp;operation)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Opens a new span for the in-flight request, given a pre-extracted non-HTTP
+ <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a> and derived <a href="TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing"><code>TraceOperation</code></a>.</div>
 </div>
 </div>
 </div>
@@ -187,7 +204,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="startSpan(org.apache.juneau.rest.server.RestRequest)">
 <h3>startSpan</h3>
-<div class="member-signature"><span class="return-type"><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-96">startSpan</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request)</span></div>
+<div class="member-signature"><span class="return-type"><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-104">startSpan</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request)</span></div>
 <div class="block">Opens a new span for the in-flight request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -205,7 +222,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="startSpan(java.lang.String)">
 <h3>startSpan</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-117">startSpan</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spanName)</span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-125">startSpan</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spanName)</span></div>
 <div class="block">Opens a new span for a custom (non-request) observation.
 
  <p>
@@ -225,6 +242,55 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>The opened <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a>. Never <jk>null</jk> &mdash; implementations that cannot open a
    span must return <a href="NoOpTracerHook.NoOpScope.html#INSTANCE"><code>NoOpTracerHook.NoOpScope.INSTANCE</code></a> so the close-in-finally contract holds.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)">
+<h3>startSpan</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-151">startSpan</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
+ <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier,
+ <a href="TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing">TraceOperation</a>&nbsp;operation)</span></div>
+<div class="block">Opens a new span for the in-flight request, given a pre-extracted non-HTTP
+ <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a> and derived <a href="TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing"><code>TraceOperation</code></a>.
+
+ <p>
+ Added as a source-compatible default overload so every existing <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>
+ implementation &mdash; including a bare lambda implementing only
+ <a href="#startSpan(org.apache.juneau.rest.server.RestRequest)"><code>startSpan(RestRequest)</code></a> &mdash; keeps compiling unchanged. The default implementation
+ simply delegates to <a href="#startSpan(org.apache.juneau.rest.server.RestRequest)"><code>startSpan(RestRequest)</code></a>, ignoring <c>carrier</c> and
+ <c>operation</c>; a bridge only needs to override this overload if it wants to honor a
+ non-HTTP carrier (for example MCP's <code>params._meta</code>) or name the span after
+ <c>operation</c> instead of its own HTTP-derived default.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>request</code> - The in-flight <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server"><code>RestRequest</code></a>. Never <jk>null</jk>.</dd>
+<dd><code>carrier</code> - The <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a> an active <code>TraceContextExtractor</code>
+   recognized among the resolved operation arguments, or <jk>null</jk> if none was recognized
+   (the bridge should then fall back to HTTP headers only).</dd>
+<dd><code>operation</code> - The <a href="TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing"><code>TraceOperation</code></a> an active <code>TraceContextExtractor</code> derived
+   for this invocation. Never <jk>null</jk>; <a href="TraceOperation.html#DEFAULT"><code>TraceOperation.DEFAULT</code></a> when the extractor
+   supplied no override.</dd>
+<dt>Returns:</dt>
+<dd>The opened <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a>. Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="inject(org.apache.juneau.http.tracing.TraceContextCarrier)">
+<h3>inject</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/TracerHook.html#line-167">inject</a></span><wbr><span class="parameters">(<a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier)</span></div>
+<div class="block">Renders this hook's active trace context (if any) into <c>carrier</c>.
+
+ <p>
+ The substrate for <a href="TraceContexts.html#inject(org.apache.juneau.rest.server.tracing.TracerHook,org.apache.juneau.http.tracing.TraceContextCarrier)"><code>TraceContexts.inject(TracerHook, TraceContextCarrier)</code></a>. The default
+ implementation is a no-op &mdash; <a href="NoOpTracerHook.html" title="class in org.apache.juneau.rest.server.tracing"><code>NoOpTracerHook</code></a> and any bridge that does not override
+ this method write nothing. A bridge with an actual trace context to render (for example the
+ OpenTelemetry bridge in <code>juneau-rest-server-tracing-otel</code>) overrides this to write
+ <code>traceparent</code> / <code>tracestate</code> / <code>baggage</code> keys via <a href="../../../http/tracing/TraceContextCarrier.html#set(java.lang.String,java.lang.String)"><code>TraceContextCarrier.set(String, String)</code></a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>carrier</code> - The <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a> to write into. Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

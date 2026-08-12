@@ -76,16 +76,16 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;updated)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates an <a href="../Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="../Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>setId(Id)</code></a>, <a href="../Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>setTitle(Text)</code></a>, and
- <a href="../Entry.html#setUpdated(java.util.Calendar)"><code>setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates an <a href="../Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="../CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="../CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="../CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">AtomBuilder.</span><code><a href="../AtomBuilder.html#entry(org.apache.juneau.bean.atom.Id,org.apache.juneau.bean.atom.Text,java.util.Calendar)" class="member-name-link">entry</a><wbr>(<a href="../Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;id,
  <a href="../Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;updated)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Creates an <a href="../Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="../Entry.html#setId(org.apache.juneau.bean.atom.Id)"><code>setId(Id)</code></a>, <a href="../Entry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>setTitle(Text)</code></a>, and
- <a href="../Entry.html#setUpdated(java.util.Calendar)"><code>setUpdated(Calendar)</code></a> attributes.</div>
+<div class="block">Creates an <a href="../Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a> element with the specified <a href="../CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)"><code>CommonEntry.setId(Id)</code></a>, <a href="../CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)"><code>CommonEntry.setTitle(Text)</code></a>, and
+ <a href="../CommonEntry.html#setUpdated(java.util.Calendar)"><code>CommonEntry.setUpdated(Calendar)</code></a> attributes.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a>[]</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Feed.</span><code><a href="../Feed.html#getEntries()" class="member-name-link">getEntries</a>()</code></div>
@@ -93,34 +93,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property getter:  <property>entries</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setAuthors(org.apache.juneau.bean.atom.Person...)" class="member-name-link">setAuthors</a><wbr>(<a href="../Person.html" title="class in org.apache.juneau.bean.atom">Person</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setBase(java.lang.Object)" class="member-name-link">setBase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setCategories(org.apache.juneau.bean.atom.Category...)" class="member-name-link">setCategories</a><wbr>(<a href="../Category.html" title="class in org.apache.juneau.bean.atom">Category</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setContent(org.apache.juneau.bean.atom.Content)" class="member-name-link">setContent</a><wbr>(<a href="../Content.html" title="class in org.apache.juneau.bean.atom">Content</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setContent(org.apache.juneau.bean.atom.Content)" class="member-name-link">setContent</a><wbr>(<a href="../Content.html" title="class in org.apache.juneau.bean.atom">Content</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>content</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setContributors(org.apache.juneau.bean.atom.Person...)" class="member-name-link">setContributors</a><wbr>(<a href="../Person.html" title="class in org.apache.juneau.bean.atom">Person</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setId(java.lang.String)" class="member-name-link">setId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setId(org.apache.juneau.bean.atom.Id)" class="member-name-link">setId</a><wbr>(<a href="../Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setLang(java.lang.String)" class="member-name-link">setLang</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setLinks(org.apache.juneau.bean.atom.Link...)" class="member-name-link">setLinks</a><wbr>(<a href="../Link.html" title="class in org.apache.juneau.bean.atom">Link</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setPublished(java.lang.String)" class="member-name-link">setPublished</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
@@ -131,12 +107,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>published</property>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setRights(java.lang.String)" class="member-name-link">setRights</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setRights(org.apache.juneau.bean.atom.Text)" class="member-name-link">setRights</a><wbr>(<a href="../Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setSource(org.apache.juneau.bean.atom.Source)" class="member-name-link">setSource</a><wbr>(<a href="../Source.html" title="class in org.apache.juneau.bean.atom">Source</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
@@ -152,18 +122,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>summary</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setTitle(java.lang.String)" class="member-name-link">setTitle</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setTitle(org.apache.juneau.bean.atom.Text)" class="member-name-link">setTitle</a><wbr>(<a href="../Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setUpdated(java.lang.String)" class="member-name-link">setUpdated</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Entry.</span><code><a href="../Entry.html#setUpdated(java.util.Calendar)" class="member-name-link">setUpdated</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.bean.atom</a> with parameters of type <a href="../Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span></div>
 <div class="summary-table three-column-summary">

@@ -29,43 +29,82 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.mcp;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.bean.mcp.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * Handler for a single MCP prompt.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * Implementations declare a {@link #descriptor() descriptor} (the {@link Prompt} returned by {@code prompts/list})</span>
-<span class="source-line-no">029</span><span id="line-29"> * and a {@link #get(Map, BeanStore) get} body invoked when the matching {@code prompts/get} method runs.</span>
-<span class="source-line-no">030</span><span id="line-30"> */</span>
-<span class="source-line-no">031</span><span id="line-31">@FunctionalInterface</span>
-<span class="source-line-no">032</span><span id="line-32">public interface McpPromptHandler {</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   /**</span>
-<span class="source-line-no">035</span><span id="line-35">    * Returns the static descriptor for this prompt.</span>
-<span class="source-line-no">036</span><span id="line-36">    *</span>
-<span class="source-line-no">037</span><span id="line-37">    * &lt;p&gt;</span>
-<span class="source-line-no">038</span><span id="line-38">    * The {@link Prompt#getName() name} value is used by {@link McpDispatcher} to route incoming</span>
-<span class="source-line-no">039</span><span id="line-39">    * {@code prompts/get} requests, so each handler in an {@link McpServerConfig} must use a unique name.</span>
-<span class="source-line-no">040</span><span id="line-40">    *</span>
-<span class="source-line-no">041</span><span id="line-41">    * @return The prompt descriptor. Never {@code null}.</span>
-<span class="source-line-no">042</span><span id="line-42">    */</span>
-<span class="source-line-no">043</span><span id="line-43">   default Prompt descriptor() {</span>
-<span class="source-line-no">044</span><span id="line-44">      throw new UnsupportedOperationException("descriptor() must be implemented by McpPromptHandler subclasses.");</span>
-<span class="source-line-no">045</span><span id="line-45">   }</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   /**</span>
-<span class="source-line-no">048</span><span id="line-48">    * Renders the prompt.</span>
-<span class="source-line-no">049</span><span id="line-49">    *</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param arguments The arguments object passed in the JSON-RPC params (never {@code null}; empty map when omitted).</span>
-<span class="source-line-no">051</span><span id="line-51">    * @param ctx Per-request bean store. Never {@code null}.</span>
-<span class="source-line-no">052</span><span id="line-52">    * @return The rendered prompt. Never {@code null}.</span>
-<span class="source-line-no">053</span><span id="line-53">    */</span>
-<span class="source-line-no">054</span><span id="line-54">   GetPromptResult get(Map&lt;String, Object&gt; arguments, BeanStore ctx);</span>
-<span class="source-line-no">055</span><span id="line-55">}</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * Handler for a single MCP prompt.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * Implementations declare a {@link #descriptor() descriptor} (the {@link McpPromptSpec} returned by</span>
+<span class="source-line-no">031</span><span id="line-31"> * {@code prompts/list}) and a {@link #get(Map, BeanStore) get} body invoked when the matching</span>
+<span class="source-line-no">032</span><span id="line-32"> * {@code prompts/get} method runs.</span>
+<span class="source-line-no">033</span><span id="line-33"> *</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * This is a genuine two-method contract, not a single-method one: both {@link #descriptor()} and</span>
+<span class="source-line-no">036</span><span id="line-36"> * {@link #get(Map, BeanStore)} are abstract, so it is deliberately &lt;b&gt;not&lt;/b&gt; annotated</span>
+<span class="source-line-no">037</span><span id="line-37"> * {@code @FunctionalInterface} and a bare lambda cannot implement it. Routing calls {@link #descriptor()}</span>
+<span class="source-line-no">038</span><span id="line-38"> * on every registered handler for both {@code prompts/list} and {@code prompts/get}, so a handler with no</span>
+<span class="source-line-no">039</span><span id="line-39"> * usable descriptor is not a valid handler; making {@link #descriptor()} abstract catches that at compile</span>
+<span class="source-line-no">040</span><span id="line-40"> * time instead of the first request to reach it at runtime. Use {@link #of(McpPromptSpec, BiFunction)} for</span>
+<span class="source-line-no">041</span><span id="line-41"> * the common case of wiring both in a single expression.</span>
+<span class="source-line-no">042</span><span id="line-42"> */</span>
+<span class="source-line-no">043</span><span id="line-43">public interface McpPromptHandler {</span>
+<span class="source-line-no">044</span><span id="line-44"></span>
+<span class="source-line-no">045</span><span id="line-45">   /**</span>
+<span class="source-line-no">046</span><span id="line-46">    * Builds a handler from a fixed descriptor and a {@code get} lambda.</span>
+<span class="source-line-no">047</span><span id="line-47">    *</span>
+<span class="source-line-no">048</span><span id="line-48">    * &lt;p&gt;</span>
+<span class="source-line-no">049</span><span id="line-49">    * The sanctioned one-expression path for registering a prompt: unlike a bare lambda (which cannot</span>
+<span class="source-line-no">050</span><span id="line-50">    * satisfy this two-method interface at all), this factory wires both {@link #descriptor()} and</span>
+<span class="source-line-no">051</span><span id="line-51">    * {@link #get(Map, BeanStore)} from a single call.</span>
+<span class="source-line-no">052</span><span id="line-52">    *</span>
+<span class="source-line-no">053</span><span id="line-53">    * @param descriptor The static descriptor returned from every {@link #descriptor()} call. Must not be</span>
+<span class="source-line-no">054</span><span id="line-54">    *    &lt;jk&gt;null&lt;/jk&gt; and must carry a non-blank {@link McpPromptSpec#getName() name} (routing matches</span>
+<span class="source-line-no">055</span><span id="line-55">    *    incoming {@code prompts/get} requests on name, so a nameless prompt would be silently unreachable).</span>
+<span class="source-line-no">056</span><span id="line-56">    * @param get The get body, invoked with the incoming arguments and the per-request bean store. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">057</span><span id="line-57">    * @return A new handler wiring both. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">058</span><span id="line-58">    */</span>
+<span class="source-line-no">059</span><span id="line-59">   static McpPromptHandler of(McpPromptSpec descriptor, BiFunction&lt;Map&lt;String,Object&gt;,BeanStore,McpPromptOutcome&gt; get) {</span>
+<span class="source-line-no">060</span><span id="line-60">      assertArgNotNull("descriptor", descriptor);</span>
+<span class="source-line-no">061</span><span id="line-61">      assertArgNotNullOrBlank("descriptor.getName()", descriptor.getName());</span>
+<span class="source-line-no">062</span><span id="line-62">      assertArgNotNull("get", get);</span>
+<span class="source-line-no">063</span><span id="line-63">      return new McpPromptHandler() {</span>
+<span class="source-line-no">064</span><span id="line-64">         @Override public McpPromptSpec descriptor() {</span>
+<span class="source-line-no">065</span><span id="line-65">            return descriptor;</span>
+<span class="source-line-no">066</span><span id="line-66">         }</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">         @Override public McpPromptOutcome get(Map&lt;String,Object&gt; arguments, BeanStore ctx) {</span>
+<span class="source-line-no">069</span><span id="line-69">            return get.apply(arguments, ctx);</span>
+<span class="source-line-no">070</span><span id="line-70">         }</span>
+<span class="source-line-no">071</span><span id="line-71">      };</span>
+<span class="source-line-no">072</span><span id="line-72">   }</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   /**</span>
+<span class="source-line-no">075</span><span id="line-75">    * Returns the static descriptor for this prompt.</span>
+<span class="source-line-no">076</span><span id="line-76">    *</span>
+<span class="source-line-no">077</span><span id="line-77">    * &lt;p&gt;</span>
+<span class="source-line-no">078</span><span id="line-78">    * The {@link McpPromptSpec#getName() name} value is used by the bound {@link McpRevision} to route</span>
+<span class="source-line-no">079</span><span id="line-79">    * incoming {@code prompts/get} requests, so each handler in an {@link McpServerConfig} must use a</span>
+<span class="source-line-no">080</span><span id="line-80">    * unique name.</span>
+<span class="source-line-no">081</span><span id="line-81">    *</span>
+<span class="source-line-no">082</span><span id="line-82">    * @return The prompt descriptor. Never {@code null}.</span>
+<span class="source-line-no">083</span><span id="line-83">    */</span>
+<span class="source-line-no">084</span><span id="line-84">   McpPromptSpec descriptor();</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /**</span>
+<span class="source-line-no">087</span><span id="line-87">    * Renders the prompt.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param arguments The arguments object passed in the JSON-RPC params (never {@code null}; empty map when omitted).</span>
+<span class="source-line-no">090</span><span id="line-90">    * @param ctx Per-request bean store. Never {@code null}.</span>
+<span class="source-line-no">091</span><span id="line-91">    * @return The rendered prompt. Never {@code null}.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   McpPromptOutcome get(Map&lt;String,Object&gt; arguments, BeanStore ctx);</span>
+<span class="source-line-no">094</span><span id="line-94">}</span>
 
 
 

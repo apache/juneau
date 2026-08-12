@@ -271,8 +271,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds one or more values to the <property>mapping</property> property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key.  Must not be <jk>null</jk>.</dd>
-<dd><code>value</code> - The value.  Must not be <jk>null</jk>.</dd>
+<dd><code>key</code> - The key.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
+<dd><code>value</code> - The value.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
 </dl>
@@ -319,7 +319,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property getter:  <property>mapping</property>.
 
  <p>
- The URL for the target documentation.</div>
+ An object to hold mappings between payload values and schema names or references.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The property value, or <jk>null</jk> if it is not set.</dd>
@@ -333,7 +333,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property getter:  <property>propertyName</property>.
 
  <p>
- A short description of the target documentation.</div>
+ The name of the property in the payload that will hold the discriminator value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The property value, or <jk>null</jk> if it is not set.</dd>
@@ -369,7 +369,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>
@@ -383,7 +383,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>mapping</property>.
 
  <p>
- The URL for the target documentation.</div>
+ An object to hold mappings between payload values and schema names or references.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value for this property.
@@ -402,7 +402,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>propertyName</property>.
 
  <p>
- A short description of the target documentation.</div>
+ The name of the property in the payload that will hold the discriminator value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value for this property.

@@ -140,11 +140,12 @@ implements <a href="../commons/settings/PropertySource.html" title="interface in
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.config.Config)">
 <h3>ConfigPropertySource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/ConfigPropertySource.html#line-35">ConfigPropertySource</a></span><wbr><span class="parameters">(<a href="Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;config)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/ConfigPropertySource.html#line-37">ConfigPropertySource</a></span><wbr><span class="parameters">(<a href="Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;config)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>config</code> - The wrapped config.</dd>
+<dd><code>config</code> - The wrapped config.
+   <br>Can be <jk>null</jk> (all lookups return <a href="../commons/settings/PropertyLookupResult.html#missing()"><code>PropertyLookupResult.missing()</code></a>).</dd>
 </dl>
 </section>
 </li>
@@ -159,7 +160,7 @@ implements <a href="../commons/settings/PropertySource.html" title="interface in
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/settings/PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/ConfigPropertySource.html#line-39">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/settings/PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/ConfigPropertySource.html#line-41">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../commons/settings/PropertySource.html#get(java.lang.String)">PropertySource</a></code></span></div>
 <div class="block">Returns a property in this property source.</div>
 <dl class="notes">

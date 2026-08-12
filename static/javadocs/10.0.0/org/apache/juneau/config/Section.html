@@ -190,14 +190,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asBean(java.lang.Class)">
 <h3>asBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-67">asBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-69">asBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span>
                        throws <span class="exceptions"><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Shortcut for calling <code>asBean(sectionName, c, <jk>false</jk>)</code>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean class to create.</dd>
 <dt>Parameters:</dt>
-<dd><code>c</code> - The bean class to create.</dd>
+<dd><code>c</code> - The bean class to create.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new bean instance, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if this section does not exist.</dd>
 <dt>Throws:</dt>
@@ -208,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asBean(java.lang.Class,boolean)">
 <h3>asBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-110">asBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-114">asBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
  boolean&nbsp;ignoreUnknownProperties)</span>
                        throws <span class="exceptions"><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Converts this config file section to the specified bean instance.
@@ -244,11 +245,12 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean class to create.</dd>
 <dt>Parameters:</dt>
-<dd><code>c</code> - The bean class to create.</dd>
+<dd><code>c</code> - The bean class to create.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>ignoreUnknownProperties</code> - If <jk>false</jk>, throws a <a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> if the section contains an entry that isn't a bean property
    name.</dd>
 <dt>Returns:</dt>
-<dd>A new bean instance, or <jk>null</jk> if this section doesn't exist.</dd>
+<dd>A new bean instance, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if this section doesn't exist.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Unknown property was encountered in section.</dd>
 </dl>
@@ -257,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asInterface(java.lang.Class)">
 <h3>asInterface</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-192">asInterface</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-199">asInterface</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Wraps this section inside a Java interface so that values in the section can be read and
  write using getters and setters.
 
@@ -316,16 +318,19 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The proxy interface class.</dd>
 <dt>Parameters:</dt>
-<dd><code>c</code> - The proxy interface class.</dd>
+<dd><code>c</code> - The proxy interface class.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The proxy interface.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If the class is not an interface.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="asMap()">
 <h3>asMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-220">asMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-227">asMap</a></span>()</div>
 <div class="block">Returns this section as a map.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -336,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isPresent()">
 <h3>isPresent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-237">isPresent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-244">isPresent</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this section exists.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -347,20 +352,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeToBean(java.lang.Object,boolean)">
 <h3>writeToBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Section.html" title="class in org.apache.juneau.config">Section</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-250">writeToBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;bean,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Section.html" title="class in org.apache.juneau.config">Section</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Section.html#line-258">writeToBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;bean,
  boolean&nbsp;ignoreUnknownProperties)</span>
                     throws <span class="exceptions"><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Copies the entries in this section to the specified bean by calling the public setters on that bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>bean</code> - The bean to set the properties on.</dd>
+<dd><code>bean</code> - The bean to set the properties on.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>ignoreUnknownProperties</code> - If <jk>true</jk>, don't throw an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> if this section contains a key that doesn't
    correspond to a setter method.</dd>
 <dt>Returns:</dt>
-<dd>An object map of the changes made to the bean.</dd>
+<dd>This object.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - If parser was not set on this config file or invalid properties were found in the section.</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code> - If configuration is read only.</dd>
 </dl>
 </section>
 </li>

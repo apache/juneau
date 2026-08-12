@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator</a>&lt;<a href="BeanInstantiator.html" title="type parameter in BeanInstantiator">T</a>&gt;</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.html#line-472">BeanInstantiator.Builder</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.html#line-473">BeanInstantiator.Builder</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder for <a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator</code></a>.
 
@@ -369,17 +369,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,org.apache.juneau.commons.inject.BeanStore,java.lang.String,java.lang.Object)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-519">Builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-520">Builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;beanType,
  <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;parentStore,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;enclosingInstance)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanType</code> - The bean type being created.</dd>
-<dd><code>parentStore</code> - The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.</dd>
-<dd><code>name</code> - The bean name. Can be <jk>null</jk>.</dd>
-<dd><code>enclosingInstance</code> - The enclosing instance object. Can be <jk>null</jk>.</dd>
+<dd><code>beanType</code> - The bean type being created.  Must not be <jk>null</jk>.</dd>
+<dd><code>parentStore</code> - The parent bean store to use for resolving dependencies. Can be <jk>null</jk> (the internal bean store then has no parent fallback).</dd>
+<dd><code>name</code> - The bean name. Can be <jk>null</jk> for unnamed beans.</dd>
+<dd><code>enclosingInstance</code> - The enclosing instance object. Can be <jk>null</jk> (the outer-instance skip rule is then never applied).</dd>
 </dl>
 </section>
 </li>
@@ -394,15 +394,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(java.lang.Class,T2)">
 <h3 id="add(java.lang.Class,java.lang.Object)">add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type">T2</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-536">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type">T2</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-537">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;type,
  T2&nbsp;bean)</span></div>
 <div class="block">Adds a bean to the internal bean store and returns it.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T2</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The bean type.</dd>
-<dd><code>bean</code> - The bean instance.</dd>
+<dd><code>type</code> - The bean type.  Must not be <jk>null</jk>.</dd>
+<dd><code>bean</code> - The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).</dd>
 <dt>Returns:</dt>
 <dd>The bean that was added.</dd>
 </dl>
@@ -411,15 +411,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBean(java.lang.Class,T2)">
 <h3 id="addBean(java.lang.Class,java.lang.Object)">addBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-550">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-551">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;type,
  T2&nbsp;bean)</span></div>
 <div class="block">Adds a bean to the internal bean store.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T2</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The bean type.</dd>
-<dd><code>bean</code> - The bean instance.</dd>
+<dd><code>type</code> - The bean type.  Must not be <jk>null</jk>.</dd>
+<dd><code>bean</code> - The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -428,7 +428,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBean(java.lang.Class,T2,java.lang.String)">
 <h3 id="addBean(java.lang.Class,java.lang.Object,java.lang.String)">addBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-565">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-566">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T2&gt;&nbsp;type,
  T2&nbsp;bean,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Adds a named bean to the internal bean store.</div>
@@ -436,8 +436,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T2</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The bean type.</dd>
-<dd><code>bean</code> - The bean instance.</dd>
+<dd><code>type</code> - The bean type.  Must not be <jk>null</jk>.</dd>
+<dd><code>bean</code> - The bean instance.  Can be <jk>null</jk> (stored as an explicit <jk>null</jk> binding, distinct from no binding at all).</dd>
 <dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -447,7 +447,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asOptional()">
 <h3>asOptional</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-621">asOptional</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-622">asOptional</a></span>()</div>
 <div class="block">Attempts to create the bean, returning an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> instead of throwing an exception on failure.
 
  <p>
@@ -503,7 +503,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMemoizer()">
 <h3>asMemoizer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../function/Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-672">asMemoizer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../function/Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-673">asMemoizer</a></span>()</div>
 <div class="block">Converts this creator into a memoizer.
 
  <p>
@@ -556,7 +556,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asSupplier()">
 <h3>asSupplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-681">asSupplier</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-682">asSupplier</a></span>()</div>
 <div class="block">Converts this creator into a supplier.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -567,7 +567,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type(java.lang.Class)">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-696">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-697">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;value)</span></div>
 <div class="block">Specifies a subclass of the bean type to create.
 
  <p>
@@ -586,7 +586,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type(org.apache.juneau.commons.reflect.ClassInfo)">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-716">type</a></span><wbr><span class="parameters">(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-717">type</a></span><wbr><span class="parameters">(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;value)</span></div>
 <div class="block">Specifies a subclass of the bean type to create, via a <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> reference.
 
  <p>
@@ -606,7 +606,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builder(java.lang.Class)">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-753">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-754">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Specifies the builder type to use for creating the bean.
 
  <p>
@@ -643,7 +643,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builder(java.lang.Object)">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-789">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-790">builder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Specifies an existing builder instance to use for creating the bean.
 
  <p>
@@ -678,7 +678,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builderClassNames(java.lang.String...)">
 <h3>builderClassNames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-824">builderClassNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-825">builderClassNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Specifies custom class names to look for when auto-detecting builder inner classes.
 
  <p>
@@ -713,7 +713,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builderMethodNames(java.lang.String...)">
 <h3>builderMethodNames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-858">builderMethodNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-859">builderMethodNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Specifies custom method names to look for when auto-detecting builder factory methods.
 
  <p>
@@ -748,7 +748,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="buildMethodNames(java.lang.String...)">
 <h3>buildMethodNames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-891">buildMethodNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-892">buildMethodNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Specifies custom method names to look for when calling build methods on builder instances.
 
  <p>
@@ -782,7 +782,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cached()">
 <h3>cached</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-922">cached</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-923">cached</a></span>()</div>
 <div class="block">Enables caching mode.
 
  <p>
@@ -813,7 +813,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="factoryAbstainOnNull()">
 <h3>factoryAbstainOnNull</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-963">factoryAbstainOnNull</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-964">factoryAbstainOnNull</a></span>()</div>
 <div class="block">Treat a <code>null</code> return value from a static factory method as a deliberate "abstain" signal.
 
  <p>
@@ -855,7 +855,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="preferZeroArgConstructor()">
 <h3>preferZeroArgConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1007">preferZeroArgConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1008">preferZeroArgConstructor</a></span>()</div>
 <div class="block">Prefer a zero-argument constructor when one exists, instead of injecting via the longest constructor.
 
  <p>
@@ -868,11 +868,11 @@ loadScripts(document, 'script');</script>
  <ul>
    <li><code>TreeMap()</code>
    <li><code>TreeMap(Comparator)</code>
-   <li><code>TreeMap(Map&lt;? extends K, ? extends V&gt;)</code>
+   <li><code>TreeMap(Map&lt;? extends K,? extends V&gt;)</code>
    <li><code>TreeMap(SortedMap)</code>
  </ul>
- The default selection picks the <code>Map</code> copy-constructor — but that <code>Map&lt;? extends K, ? extends V&gt;</code>
- parameter doesn't satisfy v2 inject-collection auto-resolution (which only handles <code>Map&lt;String, T&gt;</code>),
+ The default selection picks the <code>Map</code> copy-constructor — but that <code>Map&lt;? extends K,? extends V&gt;</code>
+ parameter doesn't satisfy v2 inject-collection auto-resolution (which only handles <code>Map&lt;String,T&gt;</code>),
  so injection fails at runtime even though <a href="../reflect/ParameterInfo.html#canResolve(org.apache.juneau.commons.inject.BeanStore,java.lang.Object...)"><code>ParameterInfo.canResolve(BeanStore, Object...)</code></a> optimistically
  said yes. Callers that just want "give me a fresh empty container" should use this flag.
 
@@ -900,7 +900,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1022">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1023">build</a></span>()</div>
 <div class="block">Compiles this builder into a <a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator</code></a>.
 
  <p>
@@ -916,7 +916,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run()">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1036">run</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1037">run</a></span>()</div>
 <div class="block">Shortcut for <code>build().run()</code>.
 
  <p>
@@ -933,7 +933,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="debug()">
 <h3>debug</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1121">debug</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1122">debug</a></span>()</div>
 <div class="block">Enables debug mode to track the bean creation process.
 
  <p>
@@ -973,7 +973,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="factoryMethodNames(java.lang.String...)">
 <h3>factoryMethodNames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1156">factoryMethodNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1157">factoryMethodNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Specifies custom static factory method names to look for when creating the bean.
 
  <p>
@@ -1009,7 +1009,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fallback(java.util.function.Supplier)">
 <h3>fallback</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1205">fallback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends <a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;fallback)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1206">fallback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends <a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;fallback)</span></div>
 <div class="block">Specifies a fallback supplier to use if bean creation fails.
 
  <p>
@@ -1059,7 +1059,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanSubType()">
 <h3>getBeanSubType</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1220">getBeanSubType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1221">getBeanSubType</a></span>()</div>
 <div class="block">Returns the bean subtype class info if specified, or the normal bean type if not.
 
  <p>
@@ -1074,7 +1074,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1232">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1233">getName</a></span>()</div>
 <div class="block">Returns the name of the bean being created.
 
  <p>
@@ -1088,7 +1088,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanSubTypes()">
 <h3>getBeanSubTypes</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1252">getBeanSubTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1253">getBeanSubTypes</a></span>()</div>
 <div class="block">Returns the list of bean subtype classes, including the bean subtype, bean type, and all classes in between.
 
  <p>
@@ -1110,7 +1110,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBuilder()">
 <h3>getBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;B&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;B&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1262">getBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;B&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;B&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1263">getBuilder</a></span>()</div>
 <div class="block">Returns the builder instance if one has been created or specified.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -1123,7 +1123,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBuilderType()">
 <h3>getBuilderType</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1275">getBuilderType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1276">getBuilderType</a></span>()</div>
 <div class="block">Returns the builder type class info determined by <code>findBuilderType()</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1134,7 +1134,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBuilderTypes()">
 <h3>getBuilderTypes</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1307">getBuilderTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1308">getBuilderTypes</a></span>()</div>
 <div class="block">Returns the list of builder types, including the primary builder type and any builder types found in the builder's parent hierarchy.
 
  <p>
@@ -1168,7 +1168,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDebugLog()">
 <h3>getDebugLog</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1342">getDebugLog</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1343">getDebugLog</a></span>()</div>
 <div class="block">Returns an unmodifiable list of debug log entries from the last bean creation attempt.
 
  <p>
@@ -1205,7 +1205,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="impl(T)">
 <h3 id="impl(java.lang.Object)">impl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1362">impl</a></span><wbr><span class="parameters">(<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1363">impl</a></span><wbr><span class="parameters">(<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&nbsp;value)</span></div>
 <div class="block">Specifies an existing bean implementation to use instead of creating a new instance.
 
  <p>
@@ -1219,7 +1219,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The bean implementation instance.</dd>
+<dd><code>value</code> - The bean implementation instance.  Can be <jk>null</jk>, in which case no explicit implementation is used.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -1228,7 +1228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="postCreateHook(java.util.function.Consumer)">
 <h3>postCreateHook</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1402">postCreateHook</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;hook)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1403">postCreateHook</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;hook)</span></div>
 <div class="block">Registers a post-creation hook to run after the bean is created.
 
  <p>
@@ -1270,7 +1270,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="silent()">
 <h3>silent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1420">silent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1421">silent</a></span>()</div>
 <div class="block">Suppresses warning-level log output from this builder.
 
  <p>
@@ -1288,7 +1288,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="description(java.lang.String)">
 <h3>description</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1434">description</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1435">description</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets a human-readable description used in log entries and error messages.
 
  <p>
@@ -1304,7 +1304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="wrap(java.util.function.UnaryOperator)">
 <h3>wrap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1458">wrap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;wrapper)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1459">wrap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;wrapper)</span></div>
 <div class="block">Registers a transformation to apply to the created bean before it is returned.
 
  <p>
@@ -1329,7 +1329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validate(java.util.function.Predicate,java.lang.String)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1475">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;predicate,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1476">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;predicate,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span></div>
 <div class="block">Registers a post-creation validator.
 
@@ -1348,7 +1348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="or(org.apache.juneau.commons.inject.BeanInstantiator.Builder)">
 <h3>or</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1492">or</a></span><wbr><span class="parameters">(<a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;? extends <a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;alternative)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1493">or</a></span><wbr><span class="parameters">(<a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;? extends <a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;&nbsp;alternative)</span></div>
 <div class="block">Registers an alternative <a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator.Builder</code></a> to consult if this builder fails to create the bean.
 
  <p>
@@ -1365,7 +1365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builderInitializer(java.util.function.Consumer)">
 <h3>builderInitializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1514">builderInitializer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;initializer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1515">builderInitializer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;initializer)</span></div>
 <div class="block">Registers a callback that is invoked on the builder instance before <code>build()</code> is called.
 
  <p>
@@ -1388,7 +1388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="injectBuilder()">
 <h3>injectBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1534">injectBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1535">injectBuilder</a></span>()</div>
 <div class="block">Enables <code>@Inject</code> / <code>@Autowired</code> field and method injection on the builder instance.
 
  <p>
@@ -1408,7 +1408,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="autoWireBuilder()">
 <h3>autoWireBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1557">autoWireBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1558">autoWireBuilder</a></span>()</div>
 <div class="block">Enables auto-wiring of bean store entries into matching setter methods on the builder.
 
  <p>
@@ -1432,7 +1432,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="noBuilder()">
 <h3>noBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1580">noBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1581">noBuilder</a></span>()</div>
 <div class="block">Disables builder-based bean creation entirely.
 
  <p>
@@ -1456,7 +1456,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="scope(org.apache.juneau.commons.inject.BeanInstantiator.Scope)">
 <h3>scope</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1595">scope</a></span><wbr><span class="parameters">(<a href="BeanInstantiator.Scope.html" title="enum class in org.apache.juneau.commons.inject">BeanInstantiator.Scope</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1596">scope</a></span><wbr><span class="parameters">(<a href="BeanInstantiator.Scope.html" title="enum class in org.apache.juneau.commons.inject">BeanInstantiator.Scope</a>&nbsp;value)</span></div>
 <div class="block">Sets the lifecycle scope of the bean being created.
 
  <p>
@@ -1473,7 +1473,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1609">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1610">copy</a></span>()</div>
 <div class="block">Returns a copy of this builder with the same configuration.
 
  <p>
@@ -1487,7 +1487,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reset()">
 <h3>reset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1659">reset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a>&lt;<a href="BeanInstantiator.Builder.html" title="type parameter in BeanInstantiator.Builder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#line-1660">reset</a></span>()</div>
 <div class="block">Resets the builder, builderType, and beanImpl suppliers.
 
  <p>

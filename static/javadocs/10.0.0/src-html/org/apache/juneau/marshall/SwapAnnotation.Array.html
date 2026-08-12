@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.lang.annotation.ElementType.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static java.lang.annotation.RetentionPolicy.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.lang.annotation.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -166,9 +166,9 @@
 <span class="source-line-no">153</span><span id="line-153"></span>
 <span class="source-line-no">154</span><span id="line-154">      Object(SwapAnnotation.Builder b) {</span>
 <span class="source-line-no">155</span><span id="line-155">         super(b);</span>
-<span class="source-line-no">156</span><span id="line-156">         description = copyOf(b.description);</span>
+<span class="source-line-no">156</span><span id="line-156">         description = cp(b.description);</span>
 <span class="source-line-no">157</span><span id="line-157">         impl = b.impl;</span>
-<span class="source-line-no">158</span><span id="line-158">         mediaTypes = copyOf(b.mediaTypes);</span>
+<span class="source-line-no">158</span><span id="line-158">         mediaTypes = cp(b.mediaTypes);</span>
 <span class="source-line-no">159</span><span id="line-159">         template = b.template;</span>
 <span class="source-line-no">160</span><span id="line-160">         value = b.value;</span>
 <span class="source-line-no">161</span><span id="line-161">      }</span>

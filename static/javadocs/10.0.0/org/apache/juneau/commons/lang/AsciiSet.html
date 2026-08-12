@@ -182,7 +182,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates an ASCII set with the specified characters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The characters to keep in this store.</dd>
+<dd><code>value</code> - The characters to keep in this store.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new object.</dd>
 </dl>
@@ -208,7 +208,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified string contains at least one character in this set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The string to test.</dd>
+<dd><code>value</code> - The string to test.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the string is not null and contains at least one character in this set.</dd>
 </dl>
@@ -234,7 +234,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified string contains only characters in this set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The string to test.</dd>
+<dd><code>value</code> - The string to test.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the string contains only characters in this set.
    <br>Nulls always return <jk>false</jk>.

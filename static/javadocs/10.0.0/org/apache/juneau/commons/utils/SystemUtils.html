@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-29">SystemUtils</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-31">SystemUtils</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">System utilities.</div>
 </section>
@@ -131,18 +131,18 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="shutdownMessage(java.util.function.Supplier)">
 <h3>shutdownMessage</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-55">shutdownMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;message)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-57">shutdownMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;message)</span></div>
 <div class="block">Adds a console message to display when the JVM shuts down.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>message</code> - The message to display.</dd>
+<dd><code>message</code> - The message to display.  Must not be <jk>null</jk> (evaluated at JVM shutdown).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="env(java.lang.String)">
 <h3>env</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../settings/StringSetting.html" title="class in org.apache.juneau.commons.settings">StringSetting</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-65">env</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../settings/StringSetting.html" title="class in org.apache.juneau.commons.settings">StringSetting</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-67">env</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Looks up a system property or environment variable.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -155,7 +155,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="env(java.lang.String,T)">
 <h3 id="env(java.lang.String,java.lang.Object)">env</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-77">env</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/SystemUtils.html#line-79">env</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  T&nbsp;def)</span></div>
 <div class="block">Looks up a system property or environment variable, returning a default if not found.</div>
 <dl class="notes">
@@ -163,7 +163,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The type to convert the value to.</dd>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The property name.</dd>
-<dd><code>def</code> - The default value.</dd>
+<dd><code>def</code> - The default value.  Can be <jk>null</jk> (returned as-is when the property is not found).</dd>
 <dt>Returns:</dt>
 <dd>The found value, or the default.</dd>
 </dl>

@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>c</code> - The class whose package will be added to the lookup paths.  Must not be <jk>null</jk>.</dd>
-<dd><code>path</code> - The absolute or relative subpath.</dd>
+<dd><code>path</code> - The absolute or relative subpath.  Can be <jk>null</jk> (the class's own package root is used with no subpath appended).</dd>
 <dd><code>recursive</code> - If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds a file system directory to the lookup paths.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The path relative to the working directory.  Must not be <jk>null</jk></dd>
+<dd><code>value</code> - The path relative to the working directory.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

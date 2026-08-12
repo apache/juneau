@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../json5/Json5TokenReader.html" title="class in org.apache.juneau.marshall.json5">Json5TokenReader</a></code>, <code><a href="../jsonl/JsonlTokenReader.html" title="class in org.apache.juneau.marshall.jsonl">JsonlTokenReader</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-48">JsonTokenReader</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-50">JsonTokenReader</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span></div>
 <div class="block">Reference implementation of the public <a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> surface for the JSON format.
@@ -250,7 +250,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
  <a href="JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="JsonParserSession.html" title="class in org.apache.juneau.marshall.json">JsonParserSession</a>&nbsp;session)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Constructor used by <a href="JsonParser.html#parseTokens(java.lang.Object)"><code>JsonParser.parseTokens(Object)</code></a> to plumb the calling parser's
+<div class="block">Constructor used by <a href="JsonParser.html#readTokens(java.lang.Object)"><code>JsonParser.readTokens(Object)</code></a> to plumb the calling parser's
  session in so that <a href="#read(java.lang.Class)"><code>read(Class)</code></a> can delegate to the existing databind path.</div>
 </div>
 </div>
@@ -353,8 +353,8 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseException(java.lang.String,java.lang.Object...)" class="member-name-link">parseException</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Builds a <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> with the given message + <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style
- arguments.</div>
+<div class="block">Builds a <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> with the given message + <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style
+ (<c>%s</c>) arguments.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#popContainer()" class="member-name-link">popContainer</a>()</code></div>
@@ -377,7 +377,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Same as <a href="../stream/TokenReader.html#read(java.lang.Class)"><code>TokenReader.read(Class)</code></a> but accepts a parameterized <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link"><code>Type</code></a> and optional type
- arguments (the same shape as <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.parse(Object, Type, Type...)</code></a>).</div>
+ arguments (the same shape as <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.read(Object, Type, Type...)</code></a>).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
@@ -458,7 +458,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="MSG_invalidNumber">
 <h3>MSG_invalidNumber</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-94">MSG_invalidNumber</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-96">MSG_invalidNumber</a></span></div>
 <div class="block">Error-message format string for invalid JSON numbers.  Used with
  <a href="#parseException(java.lang.String,java.lang.Object...)"><code>parseException(String, Object...)</code></a>.</div>
 <dl class="notes">
@@ -474,7 +474,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="MSG_unexpectedChar">
 <h3>MSG_unexpectedChar</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-100">MSG_unexpectedChar</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-102">MSG_unexpectedChar</a></span></div>
 <div class="block">Error-message format string for unexpected characters at the cursor's current position.
  Used with <a href="#parseException(java.lang.String,java.lang.Object...)"><code>parseException(String, Object...)</code></a>.</div>
 <dl class="notes">
@@ -490,7 +490,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="S00_expectValue">
 <h3>S00_expectValue</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-106">S00_expectValue</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-108">S00_expectValue</a></span></div>
 <div class="block">State-machine state: at root, after <c>[</c>, after <c>:</c>, or after <c>,</c> inside an
  array.  The next read should be a JSON value (object, array, or scalar).</div>
 <dl class="notes">
@@ -506,7 +506,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="S01_expectFieldName">
 <h3>S01_expectFieldName</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-112">S01_expectFieldName</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-114">S01_expectFieldName</a></span></div>
 <div class="block">State-machine state: after <c>{</c> or after <c>,</c> inside an object.  The next read
  should be a field name (string).</div>
 <dl class="notes">
@@ -522,7 +522,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="S02_expectColon">
 <h3>S02_expectColon</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-118">S02_expectColon</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-120">S02_expectColon</a></span></div>
 <div class="block">State-machine state: just emitted a <a href="../stream/TokenType.html#FIELD_NAME"><code>TokenType.FIELD_NAME</code></a>.  The next char should be
  <c>:</c>.</div>
 <dl class="notes">
@@ -538,7 +538,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="S03_expectCommaOrEndObject">
 <h3>S03_expectCommaOrEndObject</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-124">S03_expectCommaOrEndObject</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-126">S03_expectCommaOrEndObject</a></span></div>
 <div class="block">State-machine state: just emitted a value inside an object.  The next char should be
  <c>,</c> (followed by another field name) or <c>}</c>.</div>
 <dl class="notes">
@@ -554,7 +554,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="S04_expectCommaOrEndArray">
 <h3>S04_expectCommaOrEndArray</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-130">S04_expectCommaOrEndArray</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-132">S04_expectCommaOrEndArray</a></span></div>
 <div class="block">State-machine state: just emitted a value inside an array.  The next char should be
  <c>,</c> (followed by another value) or <c>]</c>.</div>
 <dl class="notes">
@@ -570,7 +570,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="S05_end">
 <h3>S05_end</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-136">S05_end</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-138">S05_end</a></span></div>
 <div class="block">State-machine state: the root document has been fully consumed.  The next call to
  <a href="#next()"><code>next()</code></a> returns <a href="../stream/TokenType.html#END_OF_STREAM"><code>TokenType.END_OF_STREAM</code></a>.</div>
 <dl class="notes">
@@ -586,63 +586,63 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="r">
 <h3>r</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../parser/ParserReader.html" title="class in org.apache.juneau.marshall.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-139">r</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../parser/ParserReader.html" title="class in org.apache.juneau.marshall.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-141">r</a></span></div>
 <div class="block">Underlying character-level reader; subclasses use this for direct <code>read</code>/<code>unread</code>/<code>mark</code>/<code>getMarked</code> calls during dialect-specific tokenization.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="settings">
 <h3>settings</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-144">settings</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-146">settings</a></span></div>
 <div class="block">Cursor-level settings (currently just <c>trimStrings</c>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="currentToken">
 <h3>currentToken</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../stream/TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-149">currentToken</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../stream/TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-151">currentToken</a></span></div>
 <div class="block">The token most recently emitted by <a href="#next()"><code>next()</code></a>.  Subclasses set this when overriding state-machine dispatch methods.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="state">
 <h3>state</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-152">state</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-154">state</a></span></div>
 <div class="block">Current state-machine state; one of the <code>STATE_*</code> constants.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="depth">
 <h3>depth</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-160">depth</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-162">depth</a></span></div>
 <div class="block">Current container nesting depth (0 = root).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="currentFieldName">
 <h3>currentFieldName</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-163">currentFieldName</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-165">currentFieldName</a></span></div>
 <div class="block">Field name buffer for the current <a href="../stream/TokenType.html#FIELD_NAME"><code>TokenType.FIELD_NAME</code></a> token.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="currentString">
 <h3>currentString</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-166">currentString</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-168">currentString</a></span></div>
 <div class="block">String value buffer for the current <a href="../stream/TokenType.html#VALUE_STRING"><code>TokenType.VALUE_STRING</code></a> token.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="currentNumberLexeme">
 <h3>currentNumberLexeme</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-169">currentNumberLexeme</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-171">currentNumberLexeme</a></span></div>
 <div class="block">Numeric lexeme buffer for the current <a href="../stream/TokenType.html#VALUE_NUMBER"><code>TokenType.VALUE_NUMBER</code></a> token (preserved verbatim from the input).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="currentBoolean">
 <h3>currentBoolean</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-174">currentBoolean</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-176">currentBoolean</a></span></div>
 <div class="block">Boolean value buffer for the current <a href="../stream/TokenType.html#VALUE_BOOLEAN"><code>TokenType.VALUE_BOOLEAN</code></a> token.</div>
 </section>
 </li>
@@ -657,7 +657,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe)">
 <h3>JsonTokenReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-182">JsonTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-184">JsonTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor with default <a href="JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenReader.Settings</code></a>.</div>
 <dl class="notes">
@@ -671,7 +671,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.json.JsonTokenReader.Settings)">
 <h3>JsonTokenReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-193">JsonTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-195">JsonTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor with explicit <a href="JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenReader.Settings</code></a>.</div>
@@ -687,11 +687,11 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.json.JsonTokenReader.Settings,org.apache.juneau.marshall.json.JsonParserSession)">
 <h3>JsonTokenReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-208">JsonTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-210">JsonTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="JsonParserSession.html" title="class in org.apache.juneau.marshall.json">JsonParserSession</a>&nbsp;session)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Constructor used by <a href="JsonParser.html#parseTokens(java.lang.Object)"><code>JsonParser.parseTokens(Object)</code></a> to plumb the calling parser's
+<div class="block">Constructor used by <a href="JsonParser.html#readTokens(java.lang.Object)"><code>JsonParser.readTokens(Object)</code></a> to plumb the calling parser's
  session in so that <a href="#read(java.lang.Class)"><code>read(Class)</code></a> can delegate to the existing databind path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -716,7 +716,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="next()">
 <h3>next</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-239">next</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-241">next</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#next()">TokenReader</a></code></span></div>
@@ -737,7 +737,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getCurrentToken()">
 <h3>getCurrentToken</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-272">getCurrentToken</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-274">getCurrentToken</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getCurrentToken()">TokenReader</a></code></span></div>
 <div class="block">Returns the current token type without advancing.</div>
 <dl class="notes">
@@ -752,7 +752,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getDepth()">
 <h3>getDepth</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-277">getDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-279">getDepth</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getDepth()">TokenReader</a></code></span></div>
 <div class="block">Returns the current depth of the cursor.
 
@@ -771,7 +771,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getFieldName()">
 <h3>getFieldName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-282">getFieldName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-284">getFieldName</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getFieldName()">TokenReader</a></code></span></div>
 <div class="block">Returns the field name when the current token is <a href="../stream/TokenType.html#FIELD_NAME"><code>TokenType.FIELD_NAME</code></a>.</div>
 <dl class="notes">
@@ -785,7 +785,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getString()">
 <h3>getString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-289">getString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-291">getString</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getString()">TokenReader</a></code></span></div>
 <div class="block">Returns the current scalar value as a string.
 
@@ -805,7 +805,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getNumber()">
 <h3>getNumber</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-302">getNumber</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-304">getNumber</a></span>()
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getNumber()">TokenReader</a></code></span></div>
 <div class="block">Returns the current numeric value as a parsed <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link"><code>Number</code></a>.
@@ -827,7 +827,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getNumberLexeme()">
 <h3>getNumberLexeme</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-312">getNumberLexeme</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-314">getNumberLexeme</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getNumberLexeme()">TokenReader</a></code></span></div>
 <div class="block">Returns the original numeric lexeme for the current numeric token.
 
@@ -845,7 +845,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getBool()">
 <h3>getBool</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-320">getBool</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-322">getBool</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getBool()">TokenReader</a></code></span></div>
 <div class="block">Returns the current boolean value.</div>
 <dl class="notes">
@@ -859,7 +859,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="getBinary()">
 <h3>getBinary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-328">getBinary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-330">getBinary</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#getBinary()">TokenReader</a></code></span></div>
 <div class="block">Returns the current binary value.
 
@@ -877,7 +877,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="canRead()">
 <h3>canRead</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-333">canRead</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-335">canRead</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#canRead()">TokenReader</a></code></span></div>
@@ -887,7 +887,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
  <p>
  This is the natural loop predicate when streaming records:
  <p class='bjava'>
-   <jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.parseTokens(<jv>input</jv>)) {
+   <jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readTokens(<jv>input</jv>)) {
       <jv>r</jv>.next();  <jc>// consume the opening [ </jc>
       <jk>while</jk> (<jv>r</jv>.canRead()) {
          Item <jv>item</jv> = <jv>r</jv>.read(Item.<jk>class</jk>);
@@ -913,7 +913,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="allowsTrailingComma()">
 <h3>allowsTrailingComma</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-427">allowsTrailingComma</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-429">allowsTrailingComma</a></span>()</div>
 <div class="block">Subclass extension point: returns whether trailing commas are accepted before <c>]</c> /
  <c>}</c>.
 
@@ -930,7 +930,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="read(java.lang.Class)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-431">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-433">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#read(java.lang.Class)">TokenReader</a></code></span></div>
@@ -975,7 +975,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="read(org.apache.juneau.marshall.ClassMeta)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-436">read</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-438">read</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#read(org.apache.juneau.marshall.ClassMeta)">TokenReader</a></code></span></div>
@@ -1000,13 +1000,13 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="read(java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-452">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-454">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#read(java.lang.reflect.Type,java.lang.reflect.Type...)">TokenReader</a></code></span></div>
 <div class="block">Same as <a href="../stream/TokenReader.html#read(java.lang.Class)"><code>TokenReader.read(Class)</code></a> but accepts a parameterized <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link"><code>Type</code></a> and optional type
- arguments (the same shape as <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.parse(Object, Type, Type...)</code></a>).</div>
+ arguments (the same shape as <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.read(Object, Type, Type...)</code></a>).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../stream/RecordReader.html#read(java.lang.reflect.Type,java.lang.reflect.Type...)">read</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></dd>
@@ -1028,7 +1028,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="skipChildren()">
 <h3>skipChildren</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-490">skipChildren</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-492">skipChildren</a></span>()
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#skipChildren()">TokenReader</a></code></span></div>
@@ -1051,7 +1051,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-502">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-504">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenReader.html#close()">TokenReader</a></code></span></div>
 <div class="block">Closes the underlying stream.
@@ -1075,7 +1075,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readValueStart(int)">
 <h3>readValueStart</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-520">readValueStart</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-522">readValueStart</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">State-machine dispatch: handles the next character at <a href="#S00_expectValue"><code>S00_expectValue</code></a>.
@@ -1095,7 +1095,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readFieldNameOrEndObject(int)">
 <h3>readFieldNameOrEndObject</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-573">readFieldNameOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-575">readFieldNameOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">State-machine dispatch: handles the next character at <a href="#S01_expectFieldName"><code>S01_expectFieldName</code></a>.
@@ -1115,7 +1115,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readCommaOrEndObject(int)">
 <h3>readCommaOrEndObject</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-615">readCommaOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-617">readCommaOrEndObject</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">State-machine dispatch: handles the next character at
@@ -1135,7 +1135,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readCommaOrEndArray(int)">
 <h3>readCommaOrEndArray</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-643">readCommaOrEndArray</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-645">readCommaOrEndArray</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">State-machine dispatch: handles the next character at
@@ -1155,7 +1155,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="afterValue()">
 <h3>afterValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-667">afterValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-669">afterValue</a></span>()</div>
 <div class="block">Sets the post-value state based on the enclosing container.
 
  <p>
@@ -1167,7 +1167,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readString()">
 <h3>readString</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-690">readString</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-692">readString</a></span>()
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Reads a double-quoted JSON string from the current input position.
@@ -1188,7 +1188,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readKeywordValue(int)">
 <h3>readKeywordValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-750">readKeywordValue</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-752">readKeywordValue</a></span><wbr><span class="parameters">(int&nbsp;c)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Reads one of the JSON keyword literals (<c>true</c>, <c>false</c>, <c>null</c>) starting
@@ -1206,11 +1206,11 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readNumberValue()">
 <h3>readNumberValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-785">readNumberValue</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-787">readNumberValue</a></span>()
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Reads a JSON number from the current input position.  Captures the lexeme via
- <a href="../parser/ParserReader.html#parseNumberString()"><code>ParserReader.parseNumberString()</code></a> and validates it; defers actual numeric parsing
+ <a href="../parser/ParserReader.html#readNumberString()"><code>ParserReader.readNumberString()</code></a> and validates it; defers actual numeric parsing
  to <a href="#getNumber()"><code>getNumber()</code></a> (lazy).  Sets <a href="#currentNumberLexeme"><code>currentNumberLexeme</code></a> and <a href="#currentToken"><code>currentToken</code></a>.</div>
 <dl class="notes">
 <dt>Throws:</dt>
@@ -1222,7 +1222,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="readSkipWsAndComments()">
 <h3>readSkipWsAndComments</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-826">readSkipWsAndComments</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-828">readSkipWsAndComments</a></span>()
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Reads the next non-whitespace, non-comment character or -1 at end of stream.</div>
@@ -1238,7 +1238,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="isNumberStart(int)">
 <h3>isNumberStart</h3>
-<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-870">isNumberStart</a></span><wbr><span class="parameters">(int&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-872">isNumberStart</a></span><wbr><span class="parameters">(int&nbsp;c)</span></div>
 <div class="block">Returns whether the given character could start a JSON number lexeme (digit or minus sign).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1251,7 +1251,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="isDigit(int)">
 <h3>isDigit</h3>
-<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-880">isDigit</a></span><wbr><span class="parameters">(int&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">protected static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-882">isDigit</a></span><wbr><span class="parameters">(int&nbsp;c)</span></div>
 <div class="block">Returns whether the given character is an ASCII decimal digit.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1264,7 +1264,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="pushContainer(boolean)">
 <h3>pushContainer</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-891">pushContainer</a></span><wbr><span class="parameters">(boolean&nbsp;isArray)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-893">pushContainer</a></span><wbr><span class="parameters">(boolean&nbsp;isArray)</span></div>
 <div class="block">Pushes a new container onto the cursor's depth stack.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1275,7 +1275,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="popContainer()">
 <h3>popContainer</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-911">popContainer</a></span>()
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-913">popContainer</a></span>()
                      throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Pops the top container off the cursor's depth stack.</div>
 <dl class="notes">
@@ -1288,7 +1288,7 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="isInArray()">
 <h3>isInArray</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-922">isInArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-924">isInArray</a></span>()</div>
 <div class="block">Returns whether the cursor's current container (the one most recently pushed) is an array.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1299,14 +1299,14 @@ implements <a href="../stream/TokenReader.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="parseException(java.lang.String,java.lang.Object...)">
 <h3>parseException</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-946">parseException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenReader.html#line-948">parseException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Builds a <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> with the given message + <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style
- arguments.  Used by all dispatch methods to surface input-malformed errors with consistent
+<div class="block">Builds a <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> with the given message + <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style
+ (<c>%s</c>) arguments.  Used by all dispatch methods to surface input-malformed errors with consistent
  formatting.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>message</code> - The exception message format string ({0}, {1}, ...).</dd>
+<dd><code>message</code> - The exception message format string (<c>%s</c>, <c>%d</c>, ...).</dd>
 <dd><code>args</code> - The format arguments.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> ready to throw.</dd>

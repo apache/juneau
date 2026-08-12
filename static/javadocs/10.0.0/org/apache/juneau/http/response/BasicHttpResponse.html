@@ -71,12 +71,16 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.apache.juneau.http.response</a></div>
-<h1 title="Class BasicHttpResponse" class="title">Class BasicHttpResponse</h1>
+<h1 title="Class BasicHttpResponse" class="title">Class BasicHttpResponse&lt;SELF extends BasicHttpResponse&lt;SELF&gt;&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.apache.juneau.http.response.BasicHttpResponse</div>
+<div class="inheritance">org.apache.juneau.http.response.BasicHttpResponse&lt;SELF&gt;</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>SELF</code> - The self type for fluent setters.</dd>
+</dl>
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="HttpResponseMessage.html" title="interface in org.apache.juneau.http.response">HttpResponseMessage</a></code></dd>
@@ -86,15 +90,25 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Accepted.html" title="class in org.apache.juneau.http.response">Accepted</a></code>, <code><a href="AlreadyReported.html" title="class in org.apache.juneau.http.response">AlreadyReported</a></code>, <code><a href="Continue.html" title="class in org.apache.juneau.http.response">Continue</a></code>, <code><a href="Created.html" title="class in org.apache.juneau.http.response">Created</a></code>, <code><a href="EarlyHints.html" title="class in org.apache.juneau.http.response">EarlyHints</a></code>, <code><a href="Found.html" title="class in org.apache.juneau.http.response">Found</a></code>, <code><a href="IMUsed.html" title="class in org.apache.juneau.http.response">IMUsed</a></code>, <code><a href="MovedPermanently.html" title="class in org.apache.juneau.http.response">MovedPermanently</a></code>, <code><a href="MultipleChoices.html" title="class in org.apache.juneau.http.response">MultipleChoices</a></code>, <code><a href="MultiStatus.html" title="class in org.apache.juneau.http.response">MultiStatus</a></code>, <code><a href="NoContent.html" title="class in org.apache.juneau.http.response">NoContent</a></code>, <code><a href="NonAuthoritativeInformation.html" title="class in org.apache.juneau.http.response">NonAuthoritativeInformation</a></code>, <code><a href="NotModified.html" title="class in org.apache.juneau.http.response">NotModified</a></code>, <code><a href="Ok.html" title="class in org.apache.juneau.http.response">Ok</a></code>, <code><a href="PartialContent.html" title="class in org.apache.juneau.http.response">PartialContent</a></code>, <code><a href="PermanentRedirect.html" title="class in org.apache.juneau.http.response">PermanentRedirect</a></code>, <code><a href="Processing.html" title="class in org.apache.juneau.http.response">Processing</a></code>, <code><a href="ResetContent.html" title="class in org.apache.juneau.http.response">ResetContent</a></code>, <code><a href="SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code>, <code><a href="SwitchingProtocols.html" title="class in org.apache.juneau.http.response">SwitchingProtocols</a></code>, <code><a href="TemporaryRedirect.html" title="class in org.apache.juneau.http.response">TemporaryRedirect</a></code>, <code><a href="UseProxy.html" title="class in org.apache.juneau.http.response">UseProxy</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-48">BasicHttpResponse</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-60">BasicHttpResponse</a>&lt;SELF extends BasicHttpResponse&lt;SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="HttpResponseMessage.html" title="interface in org.apache.juneau.http.response">HttpResponseMessage</a></span></div>
 <div class="block">Base class for concrete HTTP response objects in the <code>org.apache.juneau.http</code> stack.
 
  <p>
  Holds a status line, an optional body, and an ordered list of headers. Provides classic-style
- fluent setters that mutate state and return <code>this</code>, plus an <a href="#setUnmodifiable()"><code>setUnmodifiable()</code></a> latch
- that locks the instance against further changes.
+ fluent setters that mutate state and return <code>this</code>.
+
+ <p>
+ Immutability is expressed with the "funnel + nested <code>Unmodifiable</code> snapshot" paradigm: every mutator routes
+ through the single protected <a href="#modify(java.lang.Runnable)"><code>modify(Runnable)</code></a> choke-point, and each concrete leaf gets a nested
+ <code>X.Unmodifiable</code> whose only behavioral override is a throwing <code>modify(...)</code>.  A leaf's
+ <a href="#unmodifiable()"><code>unmodifiable()</code></a> factory returns a point-in-time snapshot of type <code>X.Unmodifiable</code>; any attempt to set a
+ property on it throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.
+
+ <p>
+ This is a self-typed (CRTP) root: a leaf declares <c>class Ok <jk>extends</jk> BasicHttpResponse&lt;Ok&gt;</c> and
+ inherits leaf-typed fluent setters with no covariant overrides.
 
  <p>
  <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
@@ -121,32 +135,32 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <div class="table-header col-first">Modifier</div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.HttpStatusLine)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor with no body.</div>
 </div>
-<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>protected </code></div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.HttpStatusLine,java.lang.String)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructor with a string body (UTF-8, <code>text/plain</code>).</div>
 </div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.HttpStatusLine,java.util.List,org.apache.juneau.http.HttpBody)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;&nbsp;headers,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor with headers and an optional body.</div>
 </div>
-<div class="col-first odd-row-color"><code>&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>protected </code></div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.HttpStatusLine,org.apache.juneau.http.HttpBody)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructor with a body.</div>
 </div>
 <div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.response.BasicHttpResponse)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a>&nbsp;copyFrom)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.response.BasicHttpResponse)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a>&lt;?&gt;&nbsp;copyFrom)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor.</div>
 </div>
@@ -158,164 +172,180 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addHeader(java.lang.String,java.lang.String)" class="member-name-link">addHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Appends a header to the end of the header list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addHeader(org.apache.juneau.http.HttpHeader)" class="member-name-link">addHeader</a><wbr>(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Appends a header to the end of the header list.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertModifiable()" class="member-name-link">assertModifiable</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> if this instance has been marked unmodifiable.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBody()" class="member-name-link">getBody</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#freeze()" class="member-name-link">freeze</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Deep-freeze hook invoked from the nested <code>Unmodifiable</code> constructor after the snapshot copy completes.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBody()" class="member-name-link">getBody</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the response body, or <jk>null</jk> if the response has no body.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns all response headers, in the order they were received.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocale()" class="member-name-link">getLocale</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocale()" class="member-name-link">getLocale</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the locale associated with this response, if any.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatusCode()" class="member-name-link">getStatusCode</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatusCode()" class="member-name-link">getStatusCode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the HTTP status code from the status line.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatusLine()" class="member-name-link">getStatusLine</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatusLine()" class="member-name-link">getStatusLine</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the status line of this response.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUnmodifiable()" class="member-name-link">isUnmodifiable</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns whether this instance is locked against modification.</div>
+<div class="block">Returns whether this instance is an unmodifiable snapshot.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modify(java.lang.Runnable)" class="member-name-link">modify</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Single mutation funnel — the only choke-point through which all state changes on this bean flow.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final <a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns this object cast to the self type.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBody(org.apache.juneau.http.HttpBody)" class="member-name-link">setBody</a><wbr>(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the response body.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(java.lang.String)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the response body to a plain-text string body (UTF-8, <code>text/plain</code>).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(org.apache.juneau.http.HttpBody)" class="member-name-link">setContent</a><wbr>(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the response body.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeader(java.lang.String,java.lang.String)" class="member-name-link">setHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a single header, replacing any existing header with the same name.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeader(org.apache.juneau.http.HttpHeader)" class="member-name-link">setHeader</a><wbr>(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a single header, replacing any existing header with the same name.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeaders(java.util.List)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;&nbsp;values)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Replaces all headers with the given list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeaders(org.apache.juneau.http.HttpHeader...)" class="member-name-link">setHeaders</a><wbr>(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Replaces all headers with the given array.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocale(java.util.Locale)" class="member-name-link">setLocale</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the locale associated with this response.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocation(java.lang.String)" class="member-name-link">setLocation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the value of the <code>Location</code> header.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocation(java.net.URI)" class="member-name-link">setLocation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the value of the <code>Location</code> header.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setProtocolVersion(org.apache.juneau.http.HttpProtocolVersion)" class="member-name-link">setProtocolVersion</a><wbr>(<a href="../HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the protocol version, preserving the existing status code and reason phrase.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setReasonPhrase(java.lang.String)" class="member-name-link">setReasonPhrase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the reason phrase, preserving the existing protocol version and status code.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setStatusCode(int)" class="member-name-link">setStatusCode</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the status code, preserving the existing protocol version and reason phrase.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setStatusLine(org.apache.juneau.http.HttpStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the status line.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Latches this instance so that subsequent calls to mutating setters throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a>.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Returns an unmodifiable snapshot of this bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withBody(java.lang.String)" class="member-name-link">withBody</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a new instance with the given string body replacing the current body.</div>
+<div class="block">Sets the body on this response as a plain-text string.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withBody(org.apache.juneau.http.HttpBody)" class="member-name-link">withBody</a><wbr>(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a new instance with the given body replacing the current body.</div>
+<div class="block">Sets the body on this response.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withHeader(java.lang.String,java.lang.String)" class="member-name-link">withHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a new instance with the given header name and value added.</div>
+<div class="block">Appends a header to this response.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withHeader(org.apache.juneau.http.HttpHeader)" class="member-name-link">withHeader</a><wbr>(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;header)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a new instance with the given header added.</div>
+<div class="block">Appends a header to this response.</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.http.response.HttpResponseMessage">Methods inherited from interface&nbsp;org.apache.juneau.http.response.<a href="HttpResponseMessage.html" title="interface in org.apache.juneau.http.response">HttpResponseMessage</a></h3>
 <code><a href="HttpResponseMessage.html#getFirstHeader(java.lang.String)">getFirstHeader</a>, <a href="HttpResponseMessage.html#getHeaders(java.lang.String)">getHeaders</a></code></div>
@@ -333,7 +363,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.HttpStatusLine)">
 <h3>BasicHttpResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-61">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-75">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine)</span></div>
 <div class="block">Constructor with no body.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -344,7 +374,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.HttpStatusLine,org.apache.juneau.http.HttpBody)">
 <h3>BasicHttpResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-71">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-88">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</span></div>
 <div class="block">Constructor with a body.</div>
 <dl class="notes">
@@ -357,7 +387,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.HttpStatusLine,java.lang.String)">
 <h3>BasicHttpResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-81">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-98">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body)</span></div>
 <div class="block">Constructor with a string body (UTF-8, <code>text/plain</code>).</div>
 <dl class="notes">
@@ -370,14 +400,14 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.HttpStatusLine,java.util.List,org.apache.juneau.http.HttpBody)">
 <h3>BasicHttpResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-92">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-109">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;statusLine,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;&nbsp;headers,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</span></div>
 <div class="block">Constructor with headers and an optional body.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>statusLine</code> - The status line. Must not be <jk>null</jk>.</dd>
-<dd><code>headers</code> - The response headers. Must not be <jk>null</jk>.</dd>
+<dd><code>headers</code> - The response headers. Can be <jk>null</jk> (treated as an empty list).</dd>
 <dd><code>body</code> - The response body. May be <jk>null</jk>.</dd>
 </dl>
 </section>
@@ -385,7 +415,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.response.BasicHttpResponse)">
 <h3>BasicHttpResponse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-103">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-120">BasicHttpResponse</a></span><wbr><span class="parameters">(<a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -404,7 +434,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getStatusLine()">
 <h3>getStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-114">getStatusLine</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-132">getStatusLine</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="HttpResponseMessage.html#getStatusLine()">HttpResponseMessage</a></code></span></div>
 <div class="block">Returns the status line of this response.</div>
 <dl class="notes">
@@ -418,7 +448,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getHeaders()">
 <h3>getHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-119">getHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-137">getHeaders</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="HttpResponseMessage.html#getHeaders()">HttpResponseMessage</a></code></span></div>
 <div class="block">Returns all response headers, in the order they were received.</div>
 <dl class="notes">
@@ -432,7 +462,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getBody()">
 <h3>getBody</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-124">getBody</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-142">getBody</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="HttpResponseMessage.html#getBody()">HttpResponseMessage</a></code></span></div>
 <div class="block">Returns the response body, or <jk>null</jk> if the response has no body.</div>
 <dl class="notes">
@@ -446,7 +476,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getStatusCode()">
 <h3>getStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-134">getStatusCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-152">getStatusCode</a></span>()</div>
 <div class="block">Returns the HTTP status code from the status line.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -457,7 +487,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getLocale()">
 <h3>getLocale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-143">getLocale</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-161">getLocale</a></span>()</div>
 <div class="block">Returns the locale associated with this response, if any.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -468,7 +498,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setStatusLine(org.apache.juneau.http.HttpStatusLine)">
 <h3>setStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-157">setStatusLine</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-175">setStatusLine</a></span><wbr><span class="parameters">(<a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
 <div class="block">Sets the status line.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -481,7 +511,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setStatusCode(int)">
 <h3>setStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-169">setStatusCode</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-185">setStatusCode</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the status code, preserving the existing protocol version and reason phrase.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -494,7 +524,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setReasonPhrase(java.lang.String)">
 <h3>setReasonPhrase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-181">setReasonPhrase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-195">setReasonPhrase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the reason phrase, preserving the existing protocol version and status code.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -507,7 +537,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setProtocolVersion(org.apache.juneau.http.HttpProtocolVersion)">
 <h3>setProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-193">setProtocolVersion</a></span><wbr><span class="parameters">(<a href="../HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-205">setProtocolVersion</a></span><wbr><span class="parameters">(<a href="../HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value)</span></div>
 <div class="block">Sets the protocol version, preserving the existing status code and reason phrase.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -520,7 +550,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setHeaders(java.util.List)">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-206">setHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-218">setHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;&nbsp;values)</span></div>
 <div class="block">Replaces all headers with the given list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -533,7 +563,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setHeaders(org.apache.juneau.http.HttpHeader...)">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-220">setHeaders</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-232">setHeaders</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</span></div>
 <div class="block">Replaces all headers with the given array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -546,7 +576,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setHeader(org.apache.juneau.http.HttpHeader)">
 <h3>setHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-234">setHeader</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-246">setHeader</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</span></div>
 <div class="block">Sets a single header, replacing any existing header with the same name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -559,7 +589,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setHeader(java.lang.String,java.lang.String)">
 <h3>setHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-247">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-257">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets a single header, replacing any existing header with the same name.</div>
 <dl class="notes">
@@ -574,7 +604,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="addHeader(org.apache.juneau.http.HttpHeader)">
 <h3>addHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-259">addHeader</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-267">addHeader</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</span></div>
 <div class="block">Appends a header to the end of the header list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -587,13 +617,13 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="addHeader(java.lang.String,java.lang.String)">
 <h3>addHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-272">addHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-278">addHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Appends a header to the end of the header list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - Header name.</dd>
-<dd><code>value</code> - Header value.</dd>
+<dd><code>name</code> - Header name. Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - Header value. May be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -602,7 +632,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setBody(org.apache.juneau.http.HttpBody)">
 <h3>setBody</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-284">setBody</a></span><wbr><span class="parameters">(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-288">setBody</a></span><wbr><span class="parameters">(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
 <div class="block">Sets the response body.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -615,7 +645,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setContent(java.lang.String)">
 <h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-296">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-298">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the response body to a plain-text string body (UTF-8, <code>text/plain</code>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -628,7 +658,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setContent(org.apache.juneau.http.HttpBody)">
 <h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-306">setContent</a></span><wbr><span class="parameters">(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-308">setContent</a></span><wbr><span class="parameters">(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
 <div class="block">Sets the response body.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -641,7 +671,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setLocale(java.util.Locale)">
 <h3>setLocale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-316">setLocale</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-318">setLocale</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</span></div>
 <div class="block">Sets the locale associated with this response.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -654,7 +684,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setLocation(java.lang.String)">
 <h3>setLocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-328">setLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-328">setLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the value of the <code>Location</code> header.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -667,7 +697,7 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="setLocation(java.net.URI)">
 <h3>setLocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-338">setLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-338">setLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the value of the <code>Location</code> header.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -678,10 +708,92 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
-<section class="detail" id="setUnmodifiable()">
-<h3>setUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-347">setUnmodifiable</a></span>()</div>
-<div class="block">Latches this instance so that subsequent calls to mutating setters throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a>.</div>
+<section class="detail" id="isUnmodifiable()">
+<h3>isUnmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-347">isUnmodifiable</a></span>()</div>
+<div class="block">Returns whether this instance is an unmodifiable snapshot.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if this bean is an <a href="../UnmodifiableBean.html" title="interface in org.apache.juneau.http"><code>UnmodifiableBean</code></a> snapshot.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="unmodifiable()">
+<h3>unmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-362">unmodifiable</a></span>()</div>
+<div class="block">Returns an unmodifiable snapshot of this bean.
+
+ <p>
+ The returned instance is a point-in-time copy of the leaf's nested <code>Unmodifiable</code> type; any attempt to set a
+ property on it throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.  This method is idempotent: if this bean is already
+ unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+ modifiable unless it was already unmodifiable).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="withBody(org.apache.juneau.http.HttpBody)">
+<h3>withBody</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-374">withBody</a></span><wbr><span class="parameters">(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
+<div class="block">Sets the body on this response.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new body. May be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="withBody(java.lang.String)">
+<h3>withBody</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-384">withBody</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Sets the body on this response as a plain-text string.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new body as a plain-text string. May be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="withHeader(org.apache.juneau.http.HttpHeader)">
+<h3>withHeader</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-394">withHeader</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;header)</span></div>
+<div class="block">Appends a header to this response.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>header</code> - The header to add. Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="withHeader(java.lang.String,java.lang.String)">
+<h3>withHeader</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-405">withHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Appends a header to this response.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - The header name. Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The header value. May be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="self()">
+<h3>self</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-418">self</a></span>()</div>
+<div class="block">Returns this object cast to the self type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -689,81 +801,58 @@ implements <a href="HttpResponseMessage.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
-<section class="detail" id="isUnmodifiable()">
-<h3>isUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-357">isUnmodifiable</a></span>()</div>
-<div class="block">Returns whether this instance is locked against modification.</div>
+<section class="detail" id="modify(java.lang.Runnable)">
+<h3>modify</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-435">modify</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</span></div>
+<div class="block">Single mutation funnel — the only choke-point through which all state changes on this bean flow.
+
+ <p>
+ Every fluent setter routes through this method.  The nested <code>Unmodifiable</code> snapshot overrides only this
+ method to throw, which freezes the entire mutation surface with a single override.</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>mutation</code> - The state change to apply.</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> if <a href="#setUnmodifiable()"><code>setUnmodifiable()</code></a> has been called.</dd>
+<dd>This object.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="assertModifiable()">
-<h3>assertModifiable</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-364">assertModifiable</a></span>()</div>
-<div class="block">Throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> if this instance has been marked unmodifiable.</div>
+<section class="detail" id="freeze()">
+<h3>freeze</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-448">freeze</a></span>()</div>
+<div class="block">Deep-freeze hook invoked from the nested <code>Unmodifiable</code> constructor after the snapshot copy completes.
+
+ <p>
+ The mutable sub-beans are frozen here by <b>direct field assignment</b> (never via a setter, which would route
+ through the throwing <a href="#modify(java.lang.Runnable)"><code>modify(Runnable)</code></a> and blow up during construction).  A leaf that adds its own mutable
+ sub-bean overrides this method (calling <code>super.freeze()</code> first).</div>
 </section>
 </li>
 <li>
-<section class="detail" id="withBody(org.apache.juneau.http.HttpBody)">
-<h3>withBody</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-379">withBody</a></span><wbr><span class="parameters">(<a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
-<div class="block">Returns a new instance with the given body replacing the current body.</div>
+<section class="detail" id="equals(java.lang.Object)">
+<h3>equals</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-452">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new body. May be <jk>null</jk>.</dd>
-<dt>Returns:</dt>
-<dd>A new instance. Never <jk>null</jk>.</dd>
+<dt>Overrides:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="withBody(java.lang.String)">
-<h3>withBody</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-391">withBody</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Returns a new instance with the given string body replacing the current body.</div>
+<section class="detail" id="hashCode()">
+<h3>hashCode</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-458">hashCode</a></span>()</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new body as a plain-text string. May be <jk>null</jk>.</dd>
-<dt>Returns:</dt>
-<dd>A new instance. Never <jk>null</jk>.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="withHeader(org.apache.juneau.http.HttpHeader)">
-<h3>withHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-401">withHeader</a></span><wbr><span class="parameters">(<a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;header)</span></div>
-<div class="block">Returns a new instance with the given header added.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>header</code> - The header to add. Must not be <jk>null</jk>.</dd>
-<dt>Returns:</dt>
-<dd>A new instance. Never <jk>null</jk>.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="withHeader(java.lang.String,java.lang.String)">
-<h3>withHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.response">BasicHttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-414">withHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Returns a new instance with the given header name and value added.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>name</code> - The header name. Must not be <jk>null</jk>.</dd>
-<dd><code>value</code> - The header value. May be <jk>null</jk>.</dd>
-<dt>Returns:</dt>
-<dd>A new instance. Never <jk>null</jk>.</dd>
+<dt>Overrides:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-418">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/BasicHttpResponse.html#line-463">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

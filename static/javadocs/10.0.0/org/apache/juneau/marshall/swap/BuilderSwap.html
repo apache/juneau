@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,java.lang.Class,java.lang.reflect.Constructor,java.lang.reflect.Constructor,org.apache.juneau.commons.reflect.MethodInfo,org.apache.juneau.commons.reflect.MethodInfo)">
 <h3>BuilderSwap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-209">BuilderSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectClass,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-217">BuilderSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectConstructor,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderConstructor,
@@ -202,10 +202,14 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>objectClass</code> - The object class created by the builder class.</dd>
 <dd><code>builderClass</code> - The builder class.</dd>
-<dd><code>objectConstructor</code> - The object constructor that takes in a builder as a parameter.</dd>
-<dd><code>builderConstructor</code> - The builder no-arg constructor.</dd>
-<dd><code>createBuilderMethod</code> - The static create() method on the object class.</dd>
-<dd><code>createObjectMethod</code> - The build() method on the builder class.</dd>
+<dd><code>objectConstructor</code> - The object constructor that takes in a builder as a parameter.
+   Can be <jk>null</jk> if the object is created via <code>createObjectMethod</code> instead.</dd>
+<dd><code>builderConstructor</code> - The builder no-arg constructor.
+   Can be <jk>null</jk> if the builder is created via <code>createBuilderMethod</code> instead.</dd>
+<dd><code>createBuilderMethod</code> - The static create() method on the object class.
+   Can be <jk>null</jk> if the builder is created via <code>builderConstructor</code> instead.</dd>
+<dd><code>createObjectMethod</code> - The build() method on the builder class.
+   Can be <jk>null</jk> if the object is created via <code>objectConstructor</code> instead.</dd>
 </dl>
 </section>
 </li>
@@ -226,7 +230,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a BuilderSwap from the specified builder class if it qualifies as one.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builderClass</code> - The potential builder class.</dd>
+<dd><code>builderClass</code> - The potential builder class. Must not be <jk>null</jk>.</dd>
 <dd><code>cVis</code> - Minimum constructor visibility.</dd>
 <dd><code>mVis</code> - Minimum method visibility.</dd>
 <dt>Returns:</dt>
@@ -244,8 +248,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a BuilderSwap from the specified object class if it has one.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>bc</code> - The bean context to use to look up annotations.</dd>
-<dd><code>objectClass</code> - The object class to check.</dd>
+<dd><code>bc</code> - The bean context to use to look up annotations. Must not be <jk>null</jk>.</dd>
+<dd><code>objectClass</code> - The object class to check. Must not be <jk>null</jk>.</dd>
 <dd><code>cVis</code> - Minimum constructor visibility.</dd>
 <dd><code>mVis</code> - Minimum method visibility.</dd>
 <dt>Returns:</dt>
@@ -256,7 +260,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build(org.apache.juneau.marshall.MarshallingSession,B,org.apache.juneau.marshall.ClassMeta)">
 <h3 id="build(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-228">build</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-236">build</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&nbsp;builder,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
         throws <span class="exceptions"><a href="../../commons/reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
@@ -276,7 +280,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.MarshallingSession,org.apache.juneau.marshall.ClassMeta)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-246">create</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-254">create</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
          throws <span class="exceptions"><a href="../../commons/reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
 <div class="block">Creates a new builder object.</div>
@@ -294,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBuilderClass()">
 <h3>getBuilderClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-261">getBuilderClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-269">getBuilderClass</a></span>()</div>
 <div class="block">The builder class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -305,7 +309,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBuilderClassMeta(org.apache.juneau.marshall.MarshallingSession)">
 <h3>getBuilderClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-274">getBuilderClassMeta</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-283">getBuilderClassMeta</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
 <div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> of the transformed class type.
 
  <p>
@@ -313,7 +317,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>session</code> - The bean context to use to get the class meta.
-   This is always going to be the same bean context that created this swap.</dd>
+   This is always going to be the same bean context that created this swap.
+   Must not be <jk>null</jk> on the first (uncached) call.</dd>
 <dt>Returns:</dt>
 <dd>The <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> of the transformed class type.</dd>
 </dl>
@@ -322,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getObjectClass()">
 <h3>getObjectClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-288">getObjectClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/BuilderSwap.html#line-297">getObjectClass</a></span>()</div>
 <div class="block">The object class.</div>
 <dl class="notes">
 <dt>Returns:</dt>

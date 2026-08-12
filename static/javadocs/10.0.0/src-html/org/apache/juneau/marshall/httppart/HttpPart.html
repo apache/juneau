@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64">   @Override /* Overridden from NameValuePair */</span>
 <span class="source-line-no">065</span><span id="line-65">   public String getValue() {</span>
 <span class="source-line-no">066</span><span id="line-66">      try {</span>
-<span class="source-line-no">067</span><span id="line-67">         return serializer.serialize(partType, schema, opart);</span>
+<span class="source-line-no">067</span><span id="line-67">         return serializer.write(partType, schema, opart);</span>
 <span class="source-line-no">068</span><span id="line-68">      } catch (Exception e) {</span>
 <span class="source-line-no">069</span><span id="line-69">         throw toRex(e);</span>
 <span class="source-line-no">070</span><span id="line-70">      }</span>

@@ -242,11 +242,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestChildren.Builder)">
 <h3>RestChildren</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-279">RestChildren</a></span><wbr><span class="parameters">(<a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-308">RestChildren</a></span><wbr><span class="parameters">(<a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder containing the settings for this object.</dd>
+<dd><code>builder</code> - The builder containing the settings for this object. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.rest.server.RestContext,org.apache.juneau.commons.inject.BeanStore,jakarta.servlet.ServletConfig)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-248">create</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;parent,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RestChildren.Builder.html" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-277">create</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;parent,
  <a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore,
  jakarta.servlet.ServletConfig&nbsp;servletConfig)</span></div>
 <div class="block">Static creator.</div>
@@ -279,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMap()">
 <h3>asMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-303">asMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-332">asMap</a></span>()</div>
 <div class="block">Returns the children in this object as a map.
 
  <p>
@@ -295,7 +295,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="destroy()">
 <h3>destroy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-313">destroy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-342">destroy</a></span>()</div>
 <div class="block">Called during servlet destruction on all children to invoke all <a href="RestDestroy.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestDestroy</code></a> and <code>Servlet.destroy()</code> methods.
 
  <p>
@@ -305,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findMatch(org.apache.juneau.rest.server.RestSession.Builder)">
 <h3>findMatch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="RestChildMatch.html" title="class in org.apache.juneau.rest.server">RestChildMatch</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-335">findMatch</a></span><wbr><span class="parameters">(<a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a>&nbsp;builder)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="RestChildMatch.html" title="class in org.apache.juneau.rest.server">RestChildMatch</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-364">findMatch</a></span><wbr><span class="parameters">(<a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a>&nbsp;builder)</span>
                                    throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Looks through the registered children of this object and returns the best match.
 
@@ -315,7 +315,7 @@ loadScripts(document, 'script');</script>
  (blocking concurrent first-requests until construction completes) and caches the result.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The HTTP call builder.</dd>
+<dd><code>builder</code> - The HTTP call builder. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The child that best matches the call, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if a match could not be made.</dd>
 <dt>Throws:</dt>
@@ -326,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="postInit()">
 <h3>postInit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-366">postInit</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-395">postInit</a></span>()
               throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Called during servlet initialization on all eager children to invoke all <a href="RestPostInit.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestPostInit</code></a> child-last methods.
 
@@ -341,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="postInitChildFirst()">
 <h3>postInitChildFirst</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-379">postInitChildFirst</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-408">postInitChildFirst</a></span>()
                         throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Called during servlet initialization on all eager children to invoke all <a href="RestPostInit.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestPostInit</code></a> child-first methods.
 
@@ -356,7 +356,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLazyEntries()">
 <h3>getLazyEntries</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>org.apache.juneau.rest.server.RestChildren.LazyChildEntry&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-392">getLazyEntries</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>org.apache.juneau.rest.server.RestChildren.LazyChildEntry&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-421">getLazyEntries</a></span>()</div>
 <div class="block">Returns the lazy child entries registered on this object.
 
  <p>
@@ -370,7 +370,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addChild(java.lang.Class)">
 <h3>addChild</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-419">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;resourceClass)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-448">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;resourceClass)</span>
                      throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Dynamically registers a child REST resource by class, instantiating it via the parent's <a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a>.
 
@@ -383,7 +383,7 @@ loadScripts(document, 'script');</script>
  are invoked before this method returns, mirroring the eager-init behavior of <code>@Rest(children = ...)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>resourceClass</code> - The <code>@Rest</code>-annotated resource class.</dd>
+<dd><code>resourceClass</code> - The <code>@Rest</code>-annotated resource class. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The newly-built child <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>.</dd>
 <dt>Throws:</dt>
@@ -395,7 +395,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addChild(java.lang.Object)">
 <h3>addChild</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-435">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;resource)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-464">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;resource)</span>
                      throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Dynamically registers a pre-instantiated child REST resource.
 
@@ -404,7 +404,7 @@ loadScripts(document, 'script');</script>
  on the resource's class composed against the parent's full path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance.</dd>
+<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The newly-built child <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>.</dd>
 <dt>Throws:</dt>
@@ -416,14 +416,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addChild(java.lang.Object,boolean)">
 <h3>addChild</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-449">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;resource,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-478">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;resource,
  boolean&nbsp;replace)</span>
                      throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Dynamically registers a pre-instantiated child REST resource, optionally replacing any existing child at the
  same resolved path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance.</dd>
+<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance. Must not be <jk>null</jk>.</dd>
 <dd><code>replace</code> - If <code>true</code>, an existing child at the same path is destroyed and removed before the new
    child is added. If <code>false</code>, an existing child causes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a>.</dd>
 <dt>Returns:</dt>
@@ -436,7 +436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addChild(java.lang.String,java.lang.Object)">
 <h3>addChild</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-466">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-495">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;resource)</span>
                      throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">Dynamically registers a pre-instantiated child REST resource at an explicit path.
@@ -447,7 +447,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>path</code> - The path segment under the parent at which to mount this child. Leading slashes are trimmed.</dd>
-<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance.</dd>
+<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The newly-built child <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>.</dd>
 <dt>Throws:</dt>
@@ -459,7 +459,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addChild(java.lang.String,java.lang.Object,boolean)">
 <h3>addChild</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-481">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-510">addChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;resource,
  boolean&nbsp;replace)</span>
                      throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
@@ -468,7 +468,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>path</code> - The path segment under the parent at which to mount this child. Leading slashes are trimmed.</dd>
-<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance.</dd>
+<dd><code>resource</code> - The <code>@Rest</code>-annotated resource instance. Must not be <jk>null</jk>.</dd>
 <dd><code>replace</code> - If <code>true</code>, an existing child at the same path is destroyed and removed before the new
    child is added. If <code>false</code>, an existing child causes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a>.</dd>
 <dt>Returns:</dt>
@@ -481,7 +481,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="removeChild(java.lang.String)">
 <h3>removeChild</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-497">removeChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-526">removeChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Removes the child registered at the given composed path.
 
  <p>
@@ -500,7 +500,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="removeChild(java.lang.Class)">
 <h3>removeChild</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-517">removeChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;resourceClass)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestChildren.html#line-546">removeChild</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;resourceClass)</span></div>
 <div class="block">Removes the first child whose resource class matches the given type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

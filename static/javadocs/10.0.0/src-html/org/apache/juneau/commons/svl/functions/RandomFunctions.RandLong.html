@@ -89,7 +89,7 @@
 <span class="source-line-no">076</span><span id="line-76">         return String.valueOf(ThreadLocalRandom.current().nextInt(max));</span>
 <span class="source-line-no">077</span><span id="line-77">      }</span>
 <span class="source-line-no">078</span><span id="line-78">      public String invoke(int min, int max) {</span>
-<span class="source-line-no">079</span><span id="line-79">         if (min &gt; max) throw iaex("randInt: min ({0}) must be &lt;= max ({1})", min, max);</span>
+<span class="source-line-no">079</span><span id="line-79">         if (min &gt; max) throw iaex("randInt: min (%s) must be &lt;= max (%s)", min, max);</span>
 <span class="source-line-no">080</span><span id="line-80">         return String.valueOf(ThreadLocalRandom.current().nextLong(min, (long) max + 1));</span>
 <span class="source-line-no">081</span><span id="line-81">      }</span>
 <span class="source-line-no">082</span><span id="line-82">   }</span>
@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85">   public static class RandLong extends TypedFunction {</span>
 <span class="source-line-no">086</span><span id="line-86">      @Override public String name() { return "randLong"; }</span>
 <span class="source-line-no">087</span><span id="line-87">      public String invoke(long min, long max) {</span>
-<span class="source-line-no">088</span><span id="line-88">         if (min &gt; max) throw iaex("randLong: min ({0}) must be &lt;= max ({1})", min, max);</span>
+<span class="source-line-no">088</span><span id="line-88">         if (min &gt; max) throw iaex("randLong: min (%s) must be &lt;= max (%s)", min, max);</span>
 <span class="source-line-no">089</span><span id="line-89">         if (max == Long.MAX_VALUE)</span>
 <span class="source-line-no">090</span><span id="line-90">            return String.valueOf(ThreadLocalRandom.current().nextLong(min, max));</span>
 <span class="source-line-no">091</span><span id="line-91">         return String.valueOf(ThreadLocalRandom.current().nextLong(min, max + 1));</span>

@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The <c>Accept</c> header value.</dd>
+<dd><code>value</code> - The <c>Accept</c> header value.  Can be <jk>null</jk> (treated as an empty string).</dd>
 </dl>
 </section>
 </li>
@@ -265,7 +265,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns a parsed <c>Accept</c> header value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The raw <c>Accept</c> header value.</dd>
+<dd><code>value</code> - The raw <c>Accept</c> header value.  Can be <jk>null</jk> or empty (returns <a href="#EMPTY"><code>EMPTY</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>A parsed <c>Accept</c> header value.</dd>
 </dl>
@@ -334,7 +334,7 @@ loadScripts(document, 'script');</script>
  See <a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects">ActivityPub / Retrieving Objects</a></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mediaTypes</code> - The media types to match against.</dd>
+<dd><code>mediaTypes</code> - The media types to match against.  Can be <jk>null</jk> (returns <c>-1</c>).</dd>
 <dt>Returns:</dt>
 <dd>The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.</dd>
 </dl>

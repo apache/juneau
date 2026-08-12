@@ -168,7 +168,7 @@
 <span class="source-line-no">155</span><span id="line-155">   public final String[] getNavLinks() { return ctx.navlinks; }</span>
 <span class="source-line-no">156</span><span id="line-156"></span>
 <span class="source-line-no">157</span><span id="line-157">   /**</span>
-<span class="source-line-no">158</span><span id="line-158">    * Calls the parent {@link #doSerialize(SerializerPipe, Object)} method which invokes just the HTML serializer.</span>
+<span class="source-line-no">158</span><span id="line-158">    * Calls the parent {@link #doWrite(SerializerPipe, Object)} method which invokes just the HTML serializer.</span>
 <span class="source-line-no">159</span><span id="line-159">    *</span>
 <span class="source-line-no">160</span><span id="line-160">    * @param out</span>
 <span class="source-line-no">161</span><span id="line-161">    *    Where to send the output from the serializer.</span>
@@ -180,7 +180,7 @@
 <span class="source-line-no">167</span><span id="line-167">   })</span>
 <span class="source-line-no">168</span><span id="line-168">   public void parentSerialize(Object out, Object o) throws Exception {</span>
 <span class="source-line-no">169</span><span id="line-169">      try (var pipe = createPipe(out)) {</span>
-<span class="source-line-no">170</span><span id="line-170">         super.doSerialize(pipe, o);</span>
+<span class="source-line-no">170</span><span id="line-170">         super.doWrite(pipe, o);</span>
 <span class="source-line-no">171</span><span id="line-171">      }</span>
 <span class="source-line-no">172</span><span id="line-172">   }</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
@@ -190,7 +190,7 @@
 <span class="source-line-no">177</span><span id="line-177">   }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
 <span class="source-line-no">179</span><span id="line-179">   @Override /* Overridden from Serializer */</span>
-<span class="source-line-no">180</span><span id="line-180">   protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
+<span class="source-line-no">180</span><span id="line-180">   protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
 <span class="source-line-no">181</span><span id="line-181"></span>
 <span class="source-line-no">182</span><span id="line-182">      try (var w = getHtmlWriter(out)) {</span>
 <span class="source-line-no">183</span><span id="line-183">         try {</span>

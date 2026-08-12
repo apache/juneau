@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-52">ObjectIntrospector</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-51">ObjectIntrospector</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">POJO method introspector.
 
@@ -90,8 +90,8 @@ loadScripts(document, 'script');</script>
  <p class='bjava'>
    String <jv>string1</jv> = <js>"foobar"</js>;
    String <jv>string2</jv> = ObjectIntrospector
-      .create(<jv>string</jv>)
-      .invoke(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
+      .create(<jv>string1</jv>)
+      .invokeMethod(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
  </p>
  <p>
    The arguments passed to the identified method are POJOs serialized in JSON format.  Arbitrarily complex arguments can be passed
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object)">
 <h3>ObjectIntrospector</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-81">ObjectIntrospector</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-80">ObjectIntrospector</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Shortcut for calling <code><jk>new</jk> ObjectIntrospector(o, <jk>null</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -202,14 +202,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object,org.apache.juneau.marshall.parser.ReaderParser)">
 <h3>ObjectIntrospector</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-92">ObjectIntrospector</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-91">ObjectIntrospector</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
  <a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>&nbsp;parser)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>object</code> - The object on which Java methods will be invoked.</dd>
+<dd><code>object</code> - The object on which Java methods will be invoked.  Can be <jk>null</jk> (subsequent method invocations return <jk>null</jk>).</dd>
 <dd><code>parser</code> - The parser to use to parse the method arguments.
- If <jk>null</jk>, <a href="../json/JsonParser.html#DEFAULT"><code>JsonParser.DEFAULT</code></a> is used.</dd>
+ If <jk>null</jk>, <a href="../json5/Json5Parser.html#DEFAULT"><code>Json5Parser.DEFAULT</code></a> is used.</dd>
 </dl>
 </section>
 </li>
@@ -224,7 +224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.lang.Object)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-59">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-58">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -237,13 +237,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.lang.Object,org.apache.juneau.marshall.parser.ReaderParser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-69">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-68">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>&nbsp;parser)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>o</code> - The object on which Java methods will be invoked.</dd>
-<dd><code>parser</code> - The parser to use to parse the method arguments.</dd>
+<dd><code>parser</code> - The parser to use to parse the method arguments.  If <jk>null</jk>, <a href="../json5/Json5Parser.html#DEFAULT"><code>Json5Parser.DEFAULT</code></a> is used.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectIntrospector</code></a> object.</dd>
 </dl>
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invokeMethod(java.lang.Class,java.lang.reflect.Method,java.io.Reader)">
 <h3>invokeMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-133">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;returnType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-132">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;returnType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;args)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/InvocationTargetException.html" title="class or interface in java.lang.reflect" class="external-link">InvocationTargetException</a>,
@@ -299,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invokeMethod(java.lang.Class,java.lang.String,java.lang.String)">
 <h3>invokeMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-169">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;returnType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-168">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;returnType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;args)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NoSuchMethodException.html" title="class or interface in java.lang" class="external-link">NoSuchMethodException</a>,
@@ -345,7 +345,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invokeMethod(java.lang.reflect.Method,java.io.Reader)">
 <h3>invokeMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-206">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-205">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;args)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/InvocationTargetException.html" title="class or interface in java.lang.reflect" class="external-link">InvocationTargetException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a>,
@@ -388,7 +388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invokeMethod(java.lang.String,java.lang.String)">
 <h3>invokeMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-243">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/objecttools/ObjectIntrospector.html#line-242">invokeMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;args)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NoSuchMethodException.html" title="class or interface in java.lang" class="external-link">NoSuchMethodException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a>,

@@ -64,9 +64,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">HTTP Response Exception Beans</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.resources">org.apache.juneau.microservice.resources</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
 <div class="col-last even-row-color">
-<div class="block">Predefined Microservice Resources</div>
+<div class="block">Example / demo Microservice REST Resources</div>
 </div>
 </div>
 <section class="class-uses">
@@ -101,6 +101,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.http.classic.response">
 <h2>Uses of <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a></h2>
+<div class="caption"><span>Subclasses of <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../InternalServerError.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.response">InternalServerError.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response"><code>InternalServerError</code></a> exception.</div>
+</div>
+</div>
 <div class="caption"><span>Fields in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a> declared as <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -164,7 +175,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">InternalServerError.</span><code><a href="../InternalServerError.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">InternalServerError.</span><code><a href="../InternalServerError.html#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">InternalServerError.</span><code><a href="../InternalServerError.html#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.http.classic.response</a> with parameters of type <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a></span></div>
@@ -177,19 +188,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor.</div>
 </div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-second odd-row-color"><code><a href="../InternalServerError.Unmodifiable.html#%3Cinit%3E(org.apache.juneau.http.classic.response.InternalServerError)" class="member-name-link">Unmodifiable</a><wbr>(<a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a>&nbsp;copyFrom)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.microservice.resources">
-<h2>Uses of <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a> in <a href="../../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a></h2>
-<div class="caption"><span>Methods in <a href="../../../../microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a> that throw <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a></span></div>
+<section class="detail" id="org.apache.juneau.microservice.examples">
+<h2>Uses of <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a> in <a href="../../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a></h2>
+<div class="caption"><span>Methods in <a href="../../../../microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a> that throw <a href="../InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>org.apache.juneau.microservice.resources.DirectoryResource.RedirectToRoot</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/resources/DirectoryResource.html#updateFile(java.io.InputStream,java.lang.String)" class="member-name-link">updateFile</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&nbsp;is,
+<div class="col-first even-row-color"><code>org.apache.juneau.microservice.examples.DirectoryResource.RedirectToRoot</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DirectoryResource.</span><code><a href="../../../../microservice/examples/DirectoryResource.html#updateFile(java.io.InputStream,java.lang.String)" class="member-name-link">updateFile</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&nbsp;is,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Adds or overwrites a file on the file system.</div>

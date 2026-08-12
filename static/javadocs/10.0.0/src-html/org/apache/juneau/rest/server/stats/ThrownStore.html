@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87">      /**</span>
 <span class="source-line-no">088</span><span id="line-88">       * Overrides the bean returned by the {@link #build()} method with a pre-instantiated instance.</span>
 <span class="source-line-no">089</span><span id="line-89">       *</span>
-<span class="source-line-no">090</span><span id="line-90">       * @param value The setting value.</span>
+<span class="source-line-no">090</span><span id="line-90">       * @param value The setting value. Can be &lt;jk&gt;null&lt;/jk&gt; (the {@link #build()} method instantiates the {@link #type(Class) type} instead).</span>
 <span class="source-line-no">091</span><span id="line-91">       * @return This object.</span>
 <span class="source-line-no">092</span><span id="line-92">       */</span>
 <span class="source-line-no">093</span><span id="line-93">      public Builder impl(Object value) {</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">       * Parent stores are used for aggregating statistics across multiple child stores.</span>
 <span class="source-line-no">103</span><span id="line-103">       * &lt;br&gt;The {@link ThrownStore#GLOBAL} store can be used for aggregating all thrown exceptions in a single JVM.</span>
 <span class="source-line-no">104</span><span id="line-104">       *</span>
-<span class="source-line-no">105</span><span id="line-105">       * @param value The parent store.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">105</span><span id="line-105">       * @param value The parent store.  Can be &lt;jk&gt;null&lt;/jk&gt; for a root store with no parent chain.</span>
 <span class="source-line-no">106</span><span id="line-106">       * @return This object.</span>
 <span class="source-line-no">107</span><span id="line-107">       */</span>
 <span class="source-line-no">108</span><span id="line-108">      public Builder parent(ThrownStore value) {</span>
@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124">      /**</span>
 <span class="source-line-no">125</span><span id="line-125">       * Overrides the bean type produced by the {@link #build()} method.</span>
 <span class="source-line-no">126</span><span id="line-126">       *</span>
-<span class="source-line-no">127</span><span id="line-127">       * @param value The setting value.</span>
+<span class="source-line-no">127</span><span id="line-127">       * @param value The setting value. Can be &lt;jk&gt;null&lt;/jk&gt; (defaults to {@link ThrownStore}).</span>
 <span class="source-line-no">128</span><span id="line-128">       * @return This object.</span>
 <span class="source-line-no">129</span><span id="line-129">       */</span>
 <span class="source-line-no">130</span><span id="line-130">      @SuppressWarnings({</span>
@@ -204,7 +204,7 @@
 <span class="source-line-no">191</span><span id="line-191">   /**</span>
 <span class="source-line-no">192</span><span id="line-192">    * Constructor.</span>
 <span class="source-line-no">193</span><span id="line-193">    *</span>
-<span class="source-line-no">194</span><span id="line-194">    * @param builder The builder for this object.</span>
+<span class="source-line-no">194</span><span id="line-194">    * @param builder The builder for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">195</span><span id="line-195">    */</span>
 <span class="source-line-no">196</span><span id="line-196">   public ThrownStore(Builder builder) {</span>
 <span class="source-line-no">197</span><span id="line-197">      this.parent = o(builder.parent);</span>
@@ -240,7 +240,7 @@
 <span class="source-line-no">227</span><span id="line-227">    *</span>
 <span class="source-line-no">228</span><span id="line-228">    * @return The list of all stack traces in this database, cloned and sorted by count descending.</span>
 <span class="source-line-no">229</span><span id="line-229">    */</span>
-<span class="source-line-no">230</span><span id="line-230">   public List&lt;ThrownStats&gt; getStats() { return db.values().stream().map(ThrownStats::copy).sorted(comparingInt(ThrownStats::getCount).reversed()).toList(); }</span>
+<span class="source-line-no">230</span><span id="line-230">   public List&lt;ThrownStats&gt; getStats() { return db.values().stream().map(ThrownStats::copyOrNull).sorted(comparingInt(ThrownStats::getCount).reversed()).toList(); }</span>
 <span class="source-line-no">231</span><span id="line-231"></span>
 <span class="source-line-no">232</span><span id="line-232">   /**</span>
 <span class="source-line-no">233</span><span id="line-233">    * Retrieves the stack trace information for the exception with the specified hash as calculated by {@link #hash(Throwable)}.</span>
@@ -250,13 +250,13 @@
 <span class="source-line-no">237</span><span id="line-237">    */</span>
 <span class="source-line-no">238</span><span id="line-238">   public Optional&lt;ThrownStats&gt; getStats(long hash) {</span>
 <span class="source-line-no">239</span><span id="line-239">      ThrownStats s = db.get(hash);</span>
-<span class="source-line-no">240</span><span id="line-240">      return o(s == null ? null : ThrownStats.copy(s));</span>
+<span class="source-line-no">240</span><span id="line-240">      return o(ThrownStats.copyOrNull(s));</span>
 <span class="source-line-no">241</span><span id="line-241">   }</span>
 <span class="source-line-no">242</span><span id="line-242"></span>
 <span class="source-line-no">243</span><span id="line-243">   /**</span>
 <span class="source-line-no">244</span><span id="line-244">    * Retrieves the stats for the specified thrown exception.</span>
 <span class="source-line-no">245</span><span id="line-245">    *</span>
-<span class="source-line-no">246</span><span id="line-246">    * @param e The exception.</span>
+<span class="source-line-no">246</span><span id="line-246">    * @param e The exception. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">247</span><span id="line-247">    * @return A clone of the stats, never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">248</span><span id="line-248">    */</span>
 <span class="source-line-no">249</span><span id="line-249">   public Optional&lt;ThrownStats&gt; getStats(Throwable e) {</span>
@@ -305,7 +305,7 @@
 <span class="source-line-no">292</span><span id="line-292">    * them to simple strings.</span>
 <span class="source-line-no">293</span><span id="line-293">    *</span>
 <span class="source-line-no">294</span><span id="line-294">    *</span>
-<span class="source-line-no">295</span><span id="line-295">    * @param t The throwable to create the stack trace for.</span>
+<span class="source-line-no">295</span><span id="line-295">    * @param t The throwable to create the stack trace for. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">296</span><span id="line-296">    * @return A modifiable list of strings.</span>
 <span class="source-line-no">297</span><span id="line-297">    */</span>
 <span class="source-line-no">298</span><span id="line-298">   protected List&lt;String&gt; createStackTrace(Throwable t) {</span>
@@ -318,7 +318,7 @@
 <span class="source-line-no">305</span><span id="line-305">    * &lt;p&gt;</span>
 <span class="source-line-no">306</span><span id="line-306">    * Subclasses can override this method to provide their own implementation.</span>
 <span class="source-line-no">307</span><span id="line-307">    *</span>
-<span class="source-line-no">308</span><span id="line-308">    * @param t The throwable to calculate the stack trace on.</span>
+<span class="source-line-no">308</span><span id="line-308">    * @param t The throwable to calculate the stack trace on. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">309</span><span id="line-309">    * @return A calculated hash.</span>
 <span class="source-line-no">310</span><span id="line-310">    */</span>
 <span class="source-line-no">311</span><span id="line-311">   protected long hash(Throwable t) {</span>
@@ -348,7 +348,7 @@
 <span class="source-line-no">335</span><span id="line-335">    * The default implementation simply replaces &lt;js&gt;"\\$.*"&lt;/js&gt; with &lt;js&gt;"..."&lt;/js&gt; which should take care of stuff like stack</span>
 <span class="source-line-no">336</span><span id="line-336">    * trace elements of lambda expressions.</span>
 <span class="source-line-no">337</span><span id="line-337">    *</span>
-<span class="source-line-no">338</span><span id="line-338">    * @param e The stack trace element to convert.</span>
+<span class="source-line-no">338</span><span id="line-338">    * @param e The stack trace element to convert. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">339</span><span id="line-339">    * @return The converted stack trace element.</span>
 <span class="source-line-no">340</span><span id="line-340">    */</span>
 <span class="source-line-no">341</span><span id="line-341">   protected String normalize(StackTraceElement e) {</span>

@@ -86,15 +86,14 @@ loadScripts(document, 'script');</script>
    <li class='jc'><a href="OAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>OAuthFilter</code></a>
       &mdash; servlet filter that recognizes <code>Authorization: Bearer ...</code> OAuth tokens.
    <li class='jc'><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a>
-      &mdash; cache SPI used by the validator (and flow helpers); default impl
+      &mdash; cache SPI used by the validator (and the caching flow decorator); default impl
       <a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>BoundedLruTokenCache</code></a>.
-   <li class='jc'><a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>OAuthToken</code></a>
-      &mdash; immutable token record produced by every flow helper.
+   <li class='jc'><a href="CachingClientCredentialsFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>CachingClientCredentialsFlow</code></a>
+      &mdash; server-side caching decorator layering a <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a>
+      over the role-neutral <code>OAuthClientCredentialsFlow</code>.
    <li class='jp'><a href="flow/package-summary.html"><code>flow</code></a>
-      &mdash; client-side flow helpers (client-credentials, authorization-code with PKCE, refresh-token,
-      and the discouraged resource-owner password-credentials).
-   <li class='jp'><a href="oidc/package-summary.html"><code>oidc</code></a>
-      &mdash; OIDC discovery client + metadata record.
+      &mdash; the discouraged resource-owner password-credentials flow (the role-neutral grant flows and the
+      <code>OAuthToken</code> record live in module <code>juneau-rest-auth-oauth-flow</code>).
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
@@ -122,18 +121,14 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="flow/package-summary.html">org.apache.juneau.rest.server.auth.oauth.flow</a></div>
 <div class="col-last odd-row-color">
-<div class="block">OAuth 2.0 client-side flow helpers.</div>
+<div class="block">Server-only OAuth 2.0 flow helpers.</div>
 </div>
-<div class="col-first even-row-color"><a href="oidc/package-summary.html">org.apache.juneau.rest.server.auth.oauth.oidc</a></div>
+<div class="col-first even-row-color"><a href="../jwt/package-summary.html">org.apache.juneau.rest.server.auth.jwt</a></div>
 <div class="col-last even-row-color">
-<div class="block">OpenID Connect Discovery 1.0 client.</div>
-</div>
-<div class="col-first odd-row-color"><a href="../jwt/package-summary.html">org.apache.juneau.rest.server.auth.jwt</a></div>
-<div class="col-last odd-row-color">
 <div class="block">JWT bearer-token validation backed by <code>com.nimbusds:nimbus-jose-jwt</code>.</div>
 </div>
-<div class="col-first even-row-color"><a href="../saml/package-summary.html">org.apache.juneau.rest.server.auth.saml</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="../saml/package-summary.html">org.apache.juneau.rest.server.auth.saml</a></div>
+<div class="col-last odd-row-color">
 <div class="block">SAML 2.0 assertion validation for the Juneau REST server, layered on the
  <a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> framework.</div>
 </div>
@@ -142,7 +137,7 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab4" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab4', 2)" class="table-tab">Record Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
 <div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
@@ -150,6 +145,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth">BoundedLruTokenCache</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Thread-safe bounded LRU implementation of <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CachingClientCredentialsFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth">CachingClientCredentialsFlow</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Server-side caching decorator layering an optional <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a> over the role-neutral
+ <a href="../../../auth/oauth/flow/OAuthClientCredentialsFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthClientCredentialsFlow</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CachingClientCredentialsFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">CachingClientCredentialsFlow.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Builder.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -171,12 +175,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Builder for <a href="OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>OAuthIntrospectionValidator</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab4">
-<div class="block">Immutable record returned by every OAuth 2.0 flow helper on a successful token acquisition.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">SPI for caching the result of an OAuth introspection or token-acquisition call.</div>
 </div>
 </div>

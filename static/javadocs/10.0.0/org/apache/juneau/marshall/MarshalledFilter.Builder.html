@@ -279,7 +279,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Applies the information in the specified list of <a href="Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> annotations to this filter.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotations</code> - The annotations to apply.</dd>
+<dd><code>annotations</code> - The annotations to apply.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -296,7 +296,7 @@ loadScripts(document, 'script');</script>
  that used to live on <a href="Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> before the bean-layer split.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotations</code> - The annotations to apply.</dd>
+<dd><code>annotations</code> - The annotations to apply.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -413,7 +413,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean implementation class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this setting.</dd>
+<dd><code>value</code> - The new value for this setting.  Can be <jk>null</jk> to clear any previously-set implementation class.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -488,7 +488,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this setting.</dd>
+<dd><code>value</code> - The new value for this setting.  Can be <jk>null</jk> to clear any previously-set interface class.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -648,7 +648,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this setting.</dd>
+<dd><code>value</code> - The new value for this setting.  Can be <jk>null</jk> to clear any previously-set stop class.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

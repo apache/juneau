@@ -74,7 +74,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../RestContext.ContextKind.Child.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Child</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">A routed child resource (mounted via <a href="../Rest.html#children()"><code>@Rest(children)</code></a>); isolated resolution.</div>
+<div class="block">A routed child resource (mounted via <a href="../Rest.html#children()"><code>Rest.children()</code></a>/<a href="../Rest.html#childrenDefs()"><code>Rest.childrenDefs()</code></a>); isolated
+ resolution, with an optional host-seeded <code>@Child</code> payload injected at the least-derived slot of
+ its own annotation chain (see the class javadoc above).</div>
 </div>
 <div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../RestContext.ContextKind.Mixin.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Mixin</a></code></div>
@@ -92,19 +94,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="../RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestContext.ContextKind.</span><code><a href="../RestContext.ContextKind.html#CHILD" class="member-name-link">CHILD</a></code></div>
+<div class="col-first even-row-color"><code>protected final <a href="../RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#contextKind" class="member-name-link">contextKind</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Shared <a href="../RestContext.ContextKind.Child.html" title="class in org.apache.juneau.rest.server"><code>RestContext.ContextKind.Child</code></a> singleton (the path override travels in <a href="../RestContext.Args.html#path()"><code>RestContext.Args.path()</code></a>, not here).</div>
-</div>
-<div class="col-first odd-row-color"><code>protected final <a href="../RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#contextKind" class="member-name-link">contextKind</a></code></div>
-<div class="col-last odd-row-color">
 <div class="block">The build-time kind of this context (never <code>null</code>).</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="../RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestContext.ContextKind.</span><code><a href="../RestContext.ContextKind.html#ROOT" class="member-name-link">ROOT</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static final <a href="../RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestContext.ContextKind.</span><code><a href="../RestContext.ContextKind.html#ROOT" class="member-name-link">ROOT</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Shared <a href="../RestContext.ContextKind.Root.html" title="class in org.apache.juneau.rest.server"><code>RestContext.ContextKind.Root</code></a> singleton (the common case).</div>
 </div>
 </div>

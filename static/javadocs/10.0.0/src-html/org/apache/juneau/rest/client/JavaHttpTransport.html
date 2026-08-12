@@ -142,26 +142,28 @@
 <span class="source-line-no">129</span><span id="line-129">            writer.setDaemon(true);</span>
 <span class="source-line-no">130</span><span id="line-130">            writer.start();</span>
 <span class="source-line-no">131</span><span id="line-131">            return in;</span>
-<span class="source-line-no">132</span><span id="line-132">         } catch (IOException e) {</span>
+<span class="source-line-no">132</span><span id="line-132">         } catch (IOException e) { // HTT: new PipedOutputStream(in) can only throw here if `in` is already connected to another output stream, which is structurally impossible for the just-constructed, never-shared PipedInputStream one line above -- defensive-only</span>
 <span class="source-line-no">133</span><span id="line-133">            try {</span>
-<span class="source-line-no">134</span><span id="line-134">               in.close();</span>
-<span class="source-line-no">135</span><span id="line-135">            } catch (IOException e2) {</span>
-<span class="source-line-no">136</span><span id="line-136">               e.addSuppressed(e2);</span>
-<span class="source-line-no">137</span><span id="line-137">            }</span>
-<span class="source-line-no">138</span><span id="line-138">            throw new UncheckedIOException(e);</span>
+<span class="source-line-no">134</span><span id="line-134">               in.close(); // HTT: unreachable -- see line 132</span>
+<span class="source-line-no">135</span><span id="line-135">            } catch (IOException e2) { // HTT: unreachable -- see line 132</span>
+<span class="source-line-no">136</span><span id="line-136">               e.addSuppressed(e2); // HTT: unreachable -- see line 132</span>
+<span class="source-line-no">137</span><span id="line-137">            } // HTT: unreachable -- see line 132</span>
+<span class="source-line-no">138</span><span id="line-138">            throw new UncheckedIOException(e); // HTT: unreachable -- see line 132</span>
 <span class="source-line-no">139</span><span id="line-139">         }</span>
 <span class="source-line-no">140</span><span id="line-140">      });</span>
 <span class="source-line-no">141</span><span id="line-141">   }</span>
 <span class="source-line-no">142</span><span id="line-142"></span>
 <span class="source-line-no">143</span><span id="line-143">   private static TransportResponse buildTransportResponse(HttpResponse&lt;InputStream&gt; jdkResponse) {</span>
-<span class="source-line-no">144</span><span id="line-144">      var builder = TransportResponse.builder()</span>
-<span class="source-line-no">145</span><span id="line-145">         .statusCode(jdkResponse.statusCode())</span>
-<span class="source-line-no">146</span><span id="line-146">         .body(jdkResponse.body());</span>
-<span class="source-line-no">147</span><span id="line-147">      jdkResponse.headers().map().forEach((name, values) -&gt;</span>
-<span class="source-line-no">148</span><span id="line-148">         values.forEach(value -&gt; builder.header(name, value)));</span>
-<span class="source-line-no">149</span><span id="line-149">      return builder.build();</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151">}</span>
+<span class="source-line-no">144</span><span id="line-144">      var body = jdkResponse.body();</span>
+<span class="source-line-no">145</span><span id="line-145">      var builder = TransportResponse.builder()</span>
+<span class="source-line-no">146</span><span id="line-146">         .statusCode(jdkResponse.statusCode())</span>
+<span class="source-line-no">147</span><span id="line-147">         .body(body)</span>
+<span class="source-line-no">148</span><span id="line-148">         .closeCallback(body);</span>
+<span class="source-line-no">149</span><span id="line-149">      jdkResponse.headers().map().forEach((name, values) -&gt;</span>
+<span class="source-line-no">150</span><span id="line-150">         values.forEach(value -&gt; builder.header(name, value)));</span>
+<span class="source-line-no">151</span><span id="line-151">      return builder.build();</span>
+<span class="source-line-no">152</span><span id="line-152">   }</span>
+<span class="source-line-no">153</span><span id="line-153">}</span>
 
 
 

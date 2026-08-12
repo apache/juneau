@@ -80,6 +80,10 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>Record Components:</dt>
+<dd><code><span id="param-def">def</span></code> - The normalized declaration that produced this sub-context — carries the host-declared seed payload.</dd>
+</dl>
+<dl class="notes">
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></dd>
 </dl>
@@ -88,10 +92,12 @@ loadScripts(document, 'script');</script>
 <dd><a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.html#line-386">RestContext.ContextKind.Child</a></span>()
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.html#line-451">RestContext.ContextKind.Child</a></span>(<a href="RestContext.ResolvedChild.html" title="class in org.apache.juneau.rest.server">RestContext.ResolvedChild</a>&nbsp;def)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></span></div>
-<div class="block">A routed child resource (mounted via <a href="Rest.html#children()"><code>@Rest(children)</code></a>); isolated resolution.</div>
+<div class="block">A routed child resource (mounted via <a href="Rest.html#children()"><code>Rest.children()</code></a>/<a href="Rest.html#childrenDefs()"><code>Rest.childrenDefs()</code></a>); isolated
+ resolution, with an optional host-seeded <code>@Child</code> payload injected at the least-derived slot of
+ its own annotation chain (see the class javadoc above).</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,7 +116,7 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <h2>Field Summary</h2>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-org.apache.juneau.rest.server.RestContext.ContextKind">Fields inherited from interface&nbsp;org.apache.juneau.rest.server.<a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></h3>
-<code><a href="RestContext.ContextKind.html#CHILD">CHILD</a>, <a href="RestContext.ContextKind.html#ROOT">ROOT</a></code></div>
+<code><a href="RestContext.ContextKind.html#ROOT">ROOT</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -121,7 +127,7 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">Child</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.rest.server.RestContext.ResolvedChild)" class="member-name-link">Child</a><wbr>(<a href="RestContext.ResolvedChild.html" title="class in org.apache.juneau.rest.server">RestContext.ResolvedChild</a>&nbsp;def)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>Child</code> record class.</div>
 </div>
@@ -139,19 +145,24 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestContext.ResolvedChild.html" title="class in org.apache.juneau.rest.server">RestContext.ResolvedChild</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#def()" class="member-name-link">def</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <a href="#param-def"><code>def</code></a> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
 </div>
@@ -172,10 +183,14 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestContext.ResolvedChild)">
 <h3>Child</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-386">Child</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-451">Child</a></span><wbr><span class="parameters">(<a href="RestContext.ResolvedChild.html" title="class in org.apache.juneau.rest.server">RestContext.ResolvedChild</a>&nbsp;def)</span></div>
 <div class="block">Creates an instance of a <code>Child</code> record class.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>def</code> - the value for the <a href="#param-def"><code>def</code></a> record component</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -189,7 +204,7 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-386">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-451">toString</a></span>()</div>
 <div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -202,7 +217,7 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-386">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-451">hashCode</a></span>()</div>
 <div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -215,8 +230,8 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-386">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. </div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-451">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -224,6 +239,17 @@ implements <a href="RestContext.ContextKind.html" title="interface in org.apache
 <dd><code>o</code> - the object with which to compare</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> if this object is the same as the <code>o</code> argument; <code>false</code> otherwise.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="def()">
+<h3>def</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.ResolvedChild.html" title="class in org.apache.juneau.rest.server">RestContext.ResolvedChild</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.Child.html#line-451">def</a></span>()</div>
+<div class="block">Returns the value of the <a href="#param-def"><code>def</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-def"><code>def</code></a> record component</dd>
 </dl>
 </section>
 </li>

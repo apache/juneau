@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Allow.html" title="class in org.apache.juneau.http.header">Allow</a></code>, <code><a href="ContentLanguage.html" title="class in org.apache.juneau.http.header">ContentLanguage</a></code>, <code><a href="Thrown.html" title="class in org.apache.juneau.http.header">Thrown</a></code>, <code><a href="Upgrade.html" title="class in org.apache.juneau.http.header">Upgrade</a></code>, <code><a href="Vary.html" title="class in org.apache.juneau.http.header">Vary</a></code>, <code><a href="Via.html" title="class in org.apache.juneau.http.header">Via</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-32">HttpCsvHeader</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-31">HttpCsvHeader</a></span>
 <span class="extends-implements">extends <a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header">HttpHeaderBean</a></span></div>
 <div class="block">Base for simple comma-separated token lists.</div>
 <dl class="notes">
@@ -128,16 +128,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String)" class="member-name-link">HttpCsvHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
 <div class="col-first odd-row-color"><code>protected </code></div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String...)" class="member-name-link">HttpCsvHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor.</div>
+</div>
 <div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.util.function.Supplier,int)" class="member-name-link">HttpCsvHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;supplier,
  int&nbsp;lazyMode)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor with lazy value supplier.</div>
+</div>
 </div>
 </section>
 </li>
@@ -167,7 +173,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getValue()" class="member-name-link">getValue</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the header value, or <jk>null</jk> if the header has no value.</div>
+<div class="block">Returns the comma-delimited wire-format value of this header.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header">HttpCsvHeader</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String,java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
@@ -183,10 +189,14 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#orElse(java.lang.String%5B%5D)" class="member-name-link">orElse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;other)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the parsed tokens of this header, or the specified default if unset.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toArray()" class="member-name-link">toArray</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the parsed tokens of this header.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toList()" class="member-name-link">toList</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -213,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="LAZY_WIRE_STRING">
 <h3>LAZY_WIRE_STRING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-38">LAZY_WIRE_STRING</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-37">LAZY_WIRE_STRING</a></span></div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -227,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="LAZY_TOKENS">
 <h3>LAZY_TOKENS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-39">LAZY_TOKENS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-38">LAZY_TOKENS</a></span></div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -249,23 +259,42 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>HttpCsvHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-67">HttpCsvHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-72">HttpCsvHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Constructor.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - Header name. Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - Wire value. Can be <jk>null</jk> or empty, in which case the parsed tokens are <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String...)">
 <h3>HttpCsvHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-74">HttpCsvHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-85">HttpCsvHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="block">Constructor.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - Header name. Must not be <jk>null</jk>.</dd>
+<dd><code>values</code> - The token values. Can be <jk>null</jk>, in which case the parsed tokens are <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.function.Supplier,int)">
 <h3>HttpCsvHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-81">HttpCsvHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-99">HttpCsvHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;supplier,
  int&nbsp;lazyMode)</span></div>
+<div class="block">Constructor with lazy value supplier.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - Header name. Must not be <jk>null</jk>.</dd>
+<dd><code>supplier</code> - The lazy value supplier. Must not be <jk>null</jk>.</dd>
+<dd><code>lazyMode</code> - Either <a href="#LAZY_WIRE_STRING"><code>LAZY_WIRE_STRING</code></a> or <a href="#LAZY_TOKENS"><code>LAZY_TOKENS</code></a>.</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -279,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header">HttpCsvHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-52">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header">HttpCsvHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-51">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;wireValue)</span></div>
 <div class="block">Creates an <a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header"><code>HttpCsvHeader</code></a> by parsing the given comma-delimited wire value.</div>
 <dl class="notes">
@@ -294,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.String...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header">HttpCsvHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-63">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header">HttpCsvHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-62">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;typedValues)</span></div>
 <div class="block">Creates an <a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header"><code>HttpCsvHeader</code></a> with the given typed values.</div>
 <dl class="notes">
@@ -309,59 +338,70 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asArray()">
 <h3>asArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-95">asArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-113">asArray</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="asList()">
 <h3>asList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-99">asList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-117">asList</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="contains(java.lang.String)">
 <h3>contains</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-103">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;val)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-121">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;val)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="containsIgnoreCase(java.lang.String)">
 <h3>containsIgnoreCase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-113">containsIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;val)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-131">containsIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;val)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="getValue()">
 <h3>getValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-123">getValue</a></span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpHeader.html#getValue()">HttpHeader</a></code></span></div>
-<div class="block">Returns the header value, or <jk>null</jk> if the header has no value.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-146">getValue</a></span>()</div>
+<div class="block">Returns the comma-delimited wire-format value of this header.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../HttpHeader.html#getValue()">getValue</a></code>&nbsp;in interface&nbsp;<code><a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a></code></dd>
 <dt>Overrides:</dt>
 <dd><code><a href="HttpHeaderBean.html#getValue()">getValue</a></code>&nbsp;in class&nbsp;<code><a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header">HttpHeaderBean</a></code></dd>
 <dt>Returns:</dt>
-<dd>The header value, possibly <jk>null</jk>.</dd>
+<dd>The wire value, or <jk>null</jk> if the value is unset.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="orElse(java.lang.String[])">
 <h3>orElse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-129">orElse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-158">orElse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;other)</span></div>
+<div class="block">Returns the parsed tokens of this header, or the specified default if unset.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>other</code> - The default value. Can be <jk>null</jk> to allow a <jk>null</jk> result when the header is unset.</dd>
+<dt>Returns:</dt>
+<dd>The parsed tokens, or <c>other</c> if the value is unset. Can be <jk>null</jk> if <c>other</c> is <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toArray()">
 <h3>toArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-134">toArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-168">toArray</a></span>()</div>
+<div class="block">Returns the parsed tokens of this header.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The parsed tokens, or <jk>null</jk> if the value is unset.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toList()">
 <h3>toList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-138">toList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpCsvHeader.html#line-172">toList</a></span>()</div>
 </section>
 </li>
 </ul>

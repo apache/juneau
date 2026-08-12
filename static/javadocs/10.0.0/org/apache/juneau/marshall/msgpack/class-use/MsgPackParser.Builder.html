@@ -83,14 +83,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new builder for this object.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../MsgPackParser.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackParser.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MsgPackParser.Builder.</span><code><a href="../MsgPackParser.Builder.html#nativeMode()" class="member-name-link">nativeMode</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MsgPackParser.Builder.</span><code><a href="../MsgPackParser.Builder.html#maxLength(int)" class="member-name-link">maxLength</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Surfaces the MsgPack <code>ext</code> type byte as token-level metadata on
- <a href="../../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursors returned by <a href="../MsgPackParserSession.html#parseTokens(java.lang.Object)"><code>MsgPackParserSession.parseTokens(Object)</code></a>.</div>
+<div class="block">The maximum allowed wire-declared length (in bytes) for MessagePack binary and string payloads.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../MsgPackParser.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackParser.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MsgPackParser.Builder.</span><code><a href="../MsgPackParser.Builder.html#nativeMode(boolean)" class="member-name-link">nativeMode</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MsgPackParser.Builder.</span><code><a href="../MsgPackParser.Builder.html#nativeMode()" class="member-name-link">nativeMode</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">Surfaces the MsgPack <code>ext</code> type byte as token-level metadata on
+ <a href="../../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursors returned by <a href="../MsgPackParserSession.html#readTokens(java.lang.Object)"><code>MsgPackParserSession.readTokens(Object)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../MsgPackParser.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackParser.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MsgPackParser.Builder.</span><code><a href="../MsgPackParser.Builder.html#nativeMode(boolean)" class="member-name-link">nativeMode</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../MsgPackParser.Builder.html#nativeMode()"><code>nativeMode()</code></a> but allows you to explicitly specify the value.</div>
 </div>
 </div>

@@ -53,8 +53,8 @@
 <span class="source-line-no">040</span><span id="line-40"> *</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> * Same as {@link HtmlSerializer}, except wraps the response in &lt;code&gt;&lt;xt&gt;&amp;lt;html&amp;gt;&lt;/code&gt;,</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/code&gt;, and &lt;code&gt;&lt;xt&gt;&amp;lt;body&amp;gt;&lt;/code&gt; tags so that it can be rendered in a browser.</span>
+<span class="source-line-no">043</span><span id="line-43"> * Same as {@link HtmlSerializer}, except wraps the response in &lt;code&gt;&lt;xt&gt;&amp;lt;html&amp;gt;&lt;/xt&gt;&lt;/code&gt;,</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;&lt;/code&gt;, and &lt;code&gt;&lt;xt&gt;&amp;lt;body&amp;gt;&lt;/xt&gt;&lt;/code&gt; tags so that it can be rendered in a browser.</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * Configurable properties are typically specified via &lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;.</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111">      private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");</span>
 <span class="source-line-no">112</span><span id="line-112"></span>
 <span class="source-line-no">113</span><span id="line-113">      private static &lt;T&gt; List&lt;T&gt; copy(List&lt;T&gt; s) {</span>
-<span class="source-line-no">114</span><span id="line-114">         return s == null || s.isEmpty() ? null : copyOf(s);</span>
+<span class="source-line-no">114</span><span id="line-114">         return s == null || s.isEmpty() ? null : cp(s);</span>
 <span class="source-line-no">115</span><span id="line-115">      }</span>
 <span class="source-line-no">116</span><span id="line-116"></span>
 <span class="source-line-no">117</span><span id="line-117">      private static &lt;T&gt; List&lt;T&gt; copy(T[] s) {</span>
@@ -971,7 +971,7 @@
 <span class="source-line-no">958</span><span id="line-958">      style = nn(builder.style) ? toArray(builder.style) : EMPTY_ARRAY;</span>
 <span class="source-line-no">959</span><span id="line-959">      stylesheet = nn(builder.stylesheet) ? toArray(builder.stylesheet) : EMPTY_ARRAY;</span>
 <span class="source-line-no">960</span><span id="line-960">      template = builder.template;</span>
-<span class="source-line-no">961</span><span id="line-961">      widgets = builder.widgets == null ? Collections.emptyList() : copyOf(builder.widgets);</span>
+<span class="source-line-no">961</span><span id="line-961">      widgets = builder.widgets == null ? Collections.emptyList() : cp(builder.widgets);</span>
 <span class="source-line-no">962</span><span id="line-962"></span>
 <span class="source-line-no">963</span><span id="line-963">      templateBean = newInstance(template);</span>
 <span class="source-line-no">964</span><span id="line-964">      widgetMap = new HtmlWidgetMap();</span>

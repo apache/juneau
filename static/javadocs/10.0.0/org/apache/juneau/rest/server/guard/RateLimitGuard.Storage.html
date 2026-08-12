@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="RateLimitGuard.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-489">RateLimitGuard.Storage</a></span></div>
+<div class="type-signature"><span class="modifiers">public static interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-493">RateLimitGuard.Storage</a></span></div>
 <div class="block">SPI for storing per-key token-bucket state.
 
  <p>
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tryAcquire(java.lang.String,int,double)">
 <h3>tryAcquire</h3>
-<div class="member-signature"><span class="return-type"><a href="RateLimitGuard.Storage.AcquireResult.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage.AcquireResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-499">tryAcquire</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="return-type"><a href="RateLimitGuard.Storage.AcquireResult.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage.AcquireResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-503">tryAcquire</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;capacity,
  double&nbsp;permitsPerSecond)</span></div>
 <div class="block">Attempts to acquire one token from the bucket associated with the given key.</div>
@@ -182,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="evict(java.time.Duration)">
 <h3>evict</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-510">evict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-514">evict</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl)</span></div>
 <div class="block">Evicts buckets idle for longer than the given TTL.
 
  <p>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="snapshot()">
 <h3>snapshot</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RateLimitGuard.BucketState.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.BucketState</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-536">snapshot</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RateLimitGuard.BucketState.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.BucketState</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-540">snapshot</a></span>()</div>
 <div class="block">Returns a point-in-time view of every per-key bucket currently held by this storage backend.
 
  <p>
@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="inMemory()">
 <h3>inMemory</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-545">inMemory</a></span>()</div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-549">inMemory</a></span>()</div>
 <div class="block">Creates a new in-memory storage backend with the default size cap (100 000 keys).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="inMemory(int)">
 <h3>inMemory</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-555">inMemory</a></span><wbr><span class="parameters">(int&nbsp;maxKeys)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.Storage.html#line-559">inMemory</a></span><wbr><span class="parameters">(int&nbsp;maxKeys)</span></div>
 <div class="block">Creates a new in-memory storage backend with a custom size cap.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

@@ -32,102 +32,101 @@
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import java.text.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * A {@link RuntimeException} wrapper around common reflection exceptions.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * This exception is used to wrap checked exceptions that commonly occur when using Java reflection APIs,</span>
-<span class="source-line-no">029</span><span id="line-29"> * converting them into unchecked exceptions for easier handling in bean-processing code.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Wrapped Exceptions:&lt;/h5&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;ul&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;{@link InstantiationException}</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;{@link IllegalAccessException}</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;{@link IllegalArgumentException}</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;{@link InvocationTargetException}</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;{@link NoSuchMethodException}</span>
-<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;{@link SecurityException}</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * The exception message can optionally include the class name of the bean that caused the exception,</span>
-<span class="source-line-no">043</span><span id="line-43"> * making it easier to identify the source of reflection errors in complex bean hierarchies.</span>
-<span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *    &lt;jk&gt;try&lt;/jk&gt; {</span>
-<span class="source-line-no">048</span><span id="line-48"> *       Constructor&amp;lt;?&amp;gt; &lt;jv&gt;c&lt;/jv&gt; = MyBean.&lt;jk&gt;class&lt;/jk&gt;.getConstructor();</span>
-<span class="source-line-no">049</span><span id="line-49"> *       &lt;jv&gt;c&lt;/jv&gt;.newInstance();</span>
-<span class="source-line-no">050</span><span id="line-50"> *    } &lt;jk&gt;catch&lt;/jk&gt; (Exception &lt;jv&gt;e&lt;/jv&gt;) {</span>
-<span class="source-line-no">051</span><span id="line-51"> *       &lt;jk&gt;throw new&lt;/jk&gt; BeanRuntimeException(&lt;jv&gt;e&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"Failed to instantiate bean"&lt;/js&gt;);</span>
-<span class="source-line-no">052</span><span id="line-52"> *    }</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;/p&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> */</span>
-<span class="source-line-no">055</span><span id="line-55">public class BeanRuntimeException extends RuntimeException {</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   private static String getMessage(Throwable cause, Class&lt;?&gt; c, String msg, Object...args) {</span>
-<span class="source-line-no">060</span><span id="line-60">      if (nn(msg))</span>
-<span class="source-line-no">061</span><span id="line-61">         return (c == null ? "" : cn(c) + ": ") + f(msg, args);</span>
-<span class="source-line-no">062</span><span id="line-62">      if (nn(cause))</span>
-<span class="source-line-no">063</span><span id="line-63">         return (c == null ? "" : cn(c) + ": ") + cause.getMessage();</span>
-<span class="source-line-no">064</span><span id="line-64">      return null;</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * Constructor.</span>
-<span class="source-line-no">069</span><span id="line-69">    *</span>
-<span class="source-line-no">070</span><span id="line-70">    * @param c The class name of the bean that caused the exception.</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param message The error message.</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param args Arguments passed in to the {@code String.format()} method.</span>
-<span class="source-line-no">073</span><span id="line-73">    */</span>
-<span class="source-line-no">074</span><span id="line-74">   public BeanRuntimeException(Class&lt;?&gt; c, String message, Object...args) {</span>
-<span class="source-line-no">075</span><span id="line-75">      this(null, c, message, args);</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * Constructor.</span>
-<span class="source-line-no">080</span><span id="line-80">    *</span>
-<span class="source-line-no">081</span><span id="line-81">    * @param message The error message.</span>
-<span class="source-line-no">082</span><span id="line-82">    */</span>
-<span class="source-line-no">083</span><span id="line-83">   public BeanRuntimeException(String message) {</span>
-<span class="source-line-no">084</span><span id="line-84">      this((Throwable)null, null, message);</span>
-<span class="source-line-no">085</span><span id="line-85">   }</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   /**</span>
-<span class="source-line-no">088</span><span id="line-88">    * Constructor.</span>
-<span class="source-line-no">089</span><span id="line-89">    *</span>
-<span class="source-line-no">090</span><span id="line-90">    * @param message The error message.</span>
-<span class="source-line-no">091</span><span id="line-91">    * @param args Arguments passed in to the {@code String.format()} method.</span>
-<span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   public BeanRuntimeException(String message, Object...args) {</span>
-<span class="source-line-no">094</span><span id="line-94">      this(null, null, message, args);</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * Constructor.</span>
-<span class="source-line-no">099</span><span id="line-99">    *</span>
-<span class="source-line-no">100</span><span id="line-100">    * @param cause The initial cause of the exception.</span>
-<span class="source-line-no">101</span><span id="line-101">    */</span>
-<span class="source-line-no">102</span><span id="line-102">   public BeanRuntimeException(Throwable cause) {</span>
-<span class="source-line-no">103</span><span id="line-103">      this(cause, null, null);</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   /**</span>
-<span class="source-line-no">107</span><span id="line-107">    * Constructor.</span>
-<span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * @param cause The cause of this exception.</span>
-<span class="source-line-no">110</span><span id="line-110">    * @param c The class name of the bean that caused the exception.</span>
-<span class="source-line-no">111</span><span id="line-111">    * @param message The {@link MessageFormat}-style message.</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param args Optional {@link MessageFormat}-style arguments.</span>
-<span class="source-line-no">113</span><span id="line-113">    */</span>
-<span class="source-line-no">114</span><span id="line-114">   public BeanRuntimeException(Throwable cause, Class&lt;?&gt; c, String message, Object...args) {</span>
-<span class="source-line-no">115</span><span id="line-115">      super(getMessage(cause, c, message, args), cause);</span>
-<span class="source-line-no">116</span><span id="line-116">   }</span>
-<span class="source-line-no">117</span><span id="line-117">}</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">/**</span>
+<span class="source-line-no">024</span><span id="line-24"> * A {@link RuntimeException} wrapper around common reflection exceptions.</span>
+<span class="source-line-no">025</span><span id="line-25"> *</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * This exception is used to wrap checked exceptions that commonly occur when using Java reflection APIs,</span>
+<span class="source-line-no">028</span><span id="line-28"> * converting them into unchecked exceptions for easier handling in bean-processing code.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Wrapped Exceptions:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;ul&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;{@link InstantiationException}</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;{@link IllegalAccessException}</span>
+<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;{@link IllegalArgumentException}</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;{@link InvocationTargetException}</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;{@link NoSuchMethodException}</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;{@link SecurityException}</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * The exception message can optionally include the class name of the bean that caused the exception,</span>
+<span class="source-line-no">042</span><span id="line-42"> * making it easier to identify the source of reflection errors in complex bean hierarchies.</span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;jk&gt;try&lt;/jk&gt; {</span>
+<span class="source-line-no">047</span><span id="line-47"> *       Constructor&amp;lt;?&amp;gt; &lt;jv&gt;c&lt;/jv&gt; = MyBean.&lt;jk&gt;class&lt;/jk&gt;.getConstructor();</span>
+<span class="source-line-no">048</span><span id="line-48"> *       &lt;jv&gt;c&lt;/jv&gt;.newInstance();</span>
+<span class="source-line-no">049</span><span id="line-49"> *    } &lt;jk&gt;catch&lt;/jk&gt; (Exception &lt;jv&gt;e&lt;/jv&gt;) {</span>
+<span class="source-line-no">050</span><span id="line-50"> *       &lt;jk&gt;throw new&lt;/jk&gt; BeanRuntimeException(&lt;jv&gt;e&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"Failed to instantiate bean"&lt;/js&gt;);</span>
+<span class="source-line-no">051</span><span id="line-51"> *    }</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> */</span>
+<span class="source-line-no">054</span><span id="line-54">public class BeanRuntimeException extends RuntimeException {</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   private static String getMessage(Throwable cause, Class&lt;?&gt; c, String msg, Object...args) {</span>
+<span class="source-line-no">059</span><span id="line-59">      if (nn(msg))</span>
+<span class="source-line-no">060</span><span id="line-60">         return (c == null ? "" : cn(c) + ": ") + f(msg, args);</span>
+<span class="source-line-no">061</span><span id="line-61">      if (nn(cause))</span>
+<span class="source-line-no">062</span><span id="line-62">         return (c == null ? "" : cn(c) + ": ") + cause.getMessage();</span>
+<span class="source-line-no">063</span><span id="line-63">      return null;</span>
+<span class="source-line-no">064</span><span id="line-64">   }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Constructor.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param c The class name of the bean that caused the exception.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case it is omitted from the message.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @param message The error message.</span>
+<span class="source-line-no">071</span><span id="line-71">    * @param args Arguments passed in to the {@code String.format()} method.</span>
+<span class="source-line-no">072</span><span id="line-72">    */</span>
+<span class="source-line-no">073</span><span id="line-73">   public BeanRuntimeException(Class&lt;?&gt; c, String message, Object...args) {</span>
+<span class="source-line-no">074</span><span id="line-74">      this(null, c, message, args);</span>
+<span class="source-line-no">075</span><span id="line-75">   }</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">   /**</span>
+<span class="source-line-no">078</span><span id="line-78">    * Constructor.</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * @param message The error message.</span>
+<span class="source-line-no">081</span><span id="line-81">    */</span>
+<span class="source-line-no">082</span><span id="line-82">   public BeanRuntimeException(String message) {</span>
+<span class="source-line-no">083</span><span id="line-83">      this((Throwable)null, null, message);</span>
+<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /**</span>
+<span class="source-line-no">087</span><span id="line-87">    * Constructor.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param message The error message.</span>
+<span class="source-line-no">090</span><span id="line-90">    * @param args Arguments passed in to the {@code String.format()} method.</span>
+<span class="source-line-no">091</span><span id="line-91">    */</span>
+<span class="source-line-no">092</span><span id="line-92">   public BeanRuntimeException(String message, Object...args) {</span>
+<span class="source-line-no">093</span><span id="line-93">      this(null, null, message, args);</span>
+<span class="source-line-no">094</span><span id="line-94">   }</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   /**</span>
+<span class="source-line-no">097</span><span id="line-97">    * Constructor.</span>
+<span class="source-line-no">098</span><span id="line-98">    *</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param cause The initial cause of the exception.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   public BeanRuntimeException(Throwable cause) {</span>
+<span class="source-line-no">102</span><span id="line-102">      this(cause, null, null);</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /**</span>
+<span class="source-line-no">106</span><span id="line-106">    * Constructor.</span>
+<span class="source-line-no">107</span><span id="line-107">    *</span>
+<span class="source-line-no">108</span><span id="line-108">    * @param cause The cause of this exception.</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param c The class name of the bean that caused the exception.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case it is omitted from the message.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param message The {@link String#format(String, Object...) String.format}-style message (&lt;c&gt;%s&lt;/c&gt; placeholders).</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
+<span class="source-line-no">112</span><span id="line-112">    */</span>
+<span class="source-line-no">113</span><span id="line-113">   public BeanRuntimeException(Throwable cause, Class&lt;?&gt; c, String message, Object...args) {</span>
+<span class="source-line-no">114</span><span id="line-114">      super(getMessage(cause, c, message, args), cause);</span>
+<span class="source-line-no">115</span><span id="line-115">   }</span>
+<span class="source-line-no">116</span><span id="line-116">}</span>
 
 
 

@@ -270,7 +270,7 @@ implements <a href="BeanStore.html" title="interface in org.apache.juneau.common
  <a href="#getBeanSupplier(java.lang.Class)"><code>getBeanSupplier(Class)</code></a> calls until it is popped.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>overlay</code> - The bean store to push.  Must not be <jk>null</jk>.</dd>
+<dd><code>overlay</code> - The bean store to push.  Must not be <jk>null</jk> or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -347,7 +347,7 @@ implements <a href="BeanStore.html" title="interface in org.apache.juneau.common
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The bean type.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd>The bean, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if no bean of the specified type and name exists.</dd>
 </dl>
@@ -403,7 +403,7 @@ implements <a href="BeanStore.html" title="interface in org.apache.juneau.common
 <dd><code><a href="BeanStore.html#hasBean(java.lang.Class,java.lang.String)">hasBean</a></code>&nbsp;in interface&nbsp;<code><a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The bean type.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if this store contains a bean of the specified type and name.</dd>
 </dl>
@@ -447,7 +447,7 @@ implements <a href="BeanStore.html" title="interface in org.apache.juneau.common
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The bean type.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd>The supplier, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if no supplier of the specified type and name exists.</dd>
 </dl>

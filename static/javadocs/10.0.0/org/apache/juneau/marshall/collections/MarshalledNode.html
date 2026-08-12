@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
  family, but any <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>/<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> is accepted.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to wrap. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to wrap. Can be <jk>null</jk> (creates a <i>null</i> node).</dd>
 <dt>Returns:</dt>
 <dd>A new node wrapping the value, never <jk>null</jk>.</dd>
 </dl>
@@ -444,7 +444,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the raw backing value wrapped by this node.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The raw backing value. Can be <jk>null</jk>.</dd>
+<dd>The raw backing value, or <jk>null</jk> if this is a <i>null</i> node.</dd>
 </dl>
 </section>
 </li>

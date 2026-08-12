@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line-110"></span>
 <span class="source-line-no">111</span><span id="line-111">      Instance(LicenseAnnotation.Builder b) {</span>
 <span class="source-line-no">112</span><span id="line-112">         super(b);</span>
-<span class="source-line-no">113</span><span id="line-113">         description = copyOf(b.description);</span>
+<span class="source-line-no">113</span><span id="line-113">         description = cp(b.description);</span>
 <span class="source-line-no">114</span><span id="line-114">         name = b.name;</span>
 <span class="source-line-no">115</span><span id="line-115">         url = b.url;</span>
 <span class="source-line-no">116</span><span id="line-116">      }</span>
@@ -140,7 +140,7 @@
 <span class="source-line-no">127</span><span id="line-127"></span>
 <span class="source-line-no">128</span><span id="line-128">      @Override /* Overridden from annotation */</span>
 <span class="source-line-no">129</span><span id="line-129">      public String[] description() {</span>
-<span class="source-line-no">130</span><span id="line-130">         return description;</span>
+<span class="source-line-no">130</span><span id="line-130">         return cp(description);</span>
 <span class="source-line-no">131</span><span id="line-131">      }</span>
 <span class="source-line-no">132</span><span id="line-132">   }</span>
 <span class="source-line-no">133</span><span id="line-133"></span>

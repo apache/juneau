@@ -207,9 +207,9 @@ implements <a href="PropertyNamer.html" title="interface in org.apache.juneau.co
 <dt>Specified by:</dt>
 <dd><code><a href="PropertyNamer.html#getPropertyName(java.lang.String)">getPropertyName</a></code>&nbsp;in interface&nbsp;<code><a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>name</code> - The original bean property name.</dd>
+<dd><code>name</code> - The original bean property name.  Can be <jk>null</jk> (implementations should then return <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The converted property name.</dd>
+<dd>The converted property name, or <jk>null</jk> if the input was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

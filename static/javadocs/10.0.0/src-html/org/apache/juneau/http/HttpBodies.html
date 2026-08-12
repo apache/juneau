@@ -159,7 +159,7 @@
 <span class="source-line-no">146</span><span id="line-146">   /**</span>
 <span class="source-line-no">147</span><span id="line-147">    * Creates a URL-encoded form body from alternating name/value string pairs.</span>
 <span class="source-line-no">148</span><span id="line-148">    *</span>
-<span class="source-line-no">149</span><span id="line-149">    * @param pairs Alternating name/value strings. Length must be even.</span>
+<span class="source-line-no">149</span><span id="line-149">    * @param pairs Alternating name/value strings. Must not be &lt;jk&gt;null&lt;/jk&gt;. Length must be even.</span>
 <span class="source-line-no">150</span><span id="line-150">    * @return A new body. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">151</span><span id="line-151">    */</span>
 <span class="source-line-no">152</span><span id="line-152">   public static PartList formBodyOfPairs(String... pairs) {</span>

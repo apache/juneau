@@ -196,20 +196,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">YAML Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.marshall">org.apache.juneau.petstore.marshall</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Petstore-local marshalling support.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Client API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.mock.classic">org.apache.juneau.rest.mock.classic</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.mock.classic">org.apache.juneau.rest.mock.classic</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Mocked REST client and supporting classes for in-JVM testing built on the classic Apache HttpClient API.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Remote Procedure Call API</div>
 </div>
 </div>
@@ -1119,7 +1123,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../parser/ReaderParser.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">ReaderParser</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Subclass of <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> for characters-based parsers.</div>
+<div class="block">Subclass of <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> for character-based parsers.</div>
 </div>
 </div>
 </section>
@@ -1395,6 +1399,27 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../yaml/YamlSerializer.Readable.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlSerializer.Readable</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Default serializer, with whitespace.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.marshall">
+<h2>Uses of <a href="../Context.html" title="class in org.apache.juneau.marshall">Context</a> in <a href="../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a></h2>
+<div class="caption"><span>Subclasses of <a href="../Context.html" title="class in org.apache.juneau.marshall">Context</a> in <a href="../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../petstore/marshall/PetPhotoParser.html" class="type-name-link" title="class in org.apache.juneau.petstore.marshall">PetPhotoParser</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Parses <code>image/png</code>/<code>image/jpg</code> byte streams into <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link"><code>BufferedImage</code></a> pet photos.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../petstore/marshall/PetPhotoSerializer.html" class="type-name-link" title="class in org.apache.juneau.petstore.marshall">PetPhotoSerializer</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link"><code>BufferedImage</code></a> pet photos to <code>image/png</code>/<code>image/jpeg</code> byte streams.</div>
 </div>
 </div>
 </section>

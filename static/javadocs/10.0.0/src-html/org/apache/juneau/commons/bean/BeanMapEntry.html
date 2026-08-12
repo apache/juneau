@@ -133,51 +133,52 @@
 <span class="source-line-no">120</span><span id="line-120">    * {@code @Swap(value)} annotation, the value being passed in must be a String</span>
 <span class="source-line-no">121</span><span id="line-121">    * containing an ISO8601 date-time string value.</span>
 <span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @return  The set value after it's been converted.</span>
-<span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   @Override /* Overridden from Map.Entry */</span>
-<span class="source-line-no">126</span><span id="line-126">   public Object setValue(Object value) {</span>
-<span class="source-line-no">127</span><span id="line-127">      return meta.set(this.beanMap, pName, value);</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the given object is a {@link java.util.Map.Entry} with equal key and value.</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
-<span class="source-line-no">134</span><span id="line-134">    * This follows the {@link java.util.Map.Entry} equality contract: two entries are equal if both their</span>
-<span class="source-line-no">135</span><span id="line-135">    * keys and values compare equal via {@link Objects#equals}.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * @param obj The object to compare against.</span>
-<span class="source-line-no">138</span><span id="line-138">    * @return &lt;jk&gt;true&lt;/jk&gt; if equal.</span>
-<span class="source-line-no">139</span><span id="line-139">    */</span>
-<span class="source-line-no">140</span><span id="line-140">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">141</span><span id="line-141">   public boolean equals(Object obj) {</span>
-<span class="source-line-no">142</span><span id="line-142">      if (this == obj)</span>
-<span class="source-line-no">143</span><span id="line-143">         return true;</span>
-<span class="source-line-no">144</span><span id="line-144">      if (!(obj instanceof Map.Entry&lt;?,?&gt; other))</span>
-<span class="source-line-no">145</span><span id="line-145">         return false;</span>
-<span class="source-line-no">146</span><span id="line-146">      return eq(getKey(), other.getKey()) &amp;&amp; eq(getValue(), other.getValue());</span>
-<span class="source-line-no">147</span><span id="line-147">   }</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   /**</span>
-<span class="source-line-no">150</span><span id="line-150">    * Returns the hash code for this entry, consistent with the {@link java.util.Map.Entry} contract.</span>
-<span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">    * The hash code is computed as {@code key.hashCode() ^ value.hashCode()}, matching the</span>
-<span class="source-line-no">154</span><span id="line-154">    * contract that equal entries must have equal hash codes.</span>
-<span class="source-line-no">155</span><span id="line-155">    *</span>
-<span class="source-line-no">156</span><span id="line-156">    * @return The hash code.</span>
-<span class="source-line-no">157</span><span id="line-157">    */</span>
-<span class="source-line-no">158</span><span id="line-158">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">159</span><span id="line-159">   public int hashCode() {</span>
-<span class="source-line-no">160</span><span id="line-160">      return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">164</span><span id="line-164">   public String toString() {</span>
-<span class="source-line-no">165</span><span id="line-165">      return this.getKey() + "=" + this.getValue();</span>
-<span class="source-line-no">166</span><span id="line-166">   }</span>
-<span class="source-line-no">167</span><span id="line-167">}</span>
+<span class="source-line-no">123</span><span id="line-123">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to set the property to &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">124</span><span id="line-124">    * @return  The set value after it's been converted.</span>
+<span class="source-line-no">125</span><span id="line-125">    */</span>
+<span class="source-line-no">126</span><span id="line-126">   @Override /* Overridden from Map.Entry */</span>
+<span class="source-line-no">127</span><span id="line-127">   public Object setValue(Object value) {</span>
+<span class="source-line-no">128</span><span id="line-128">      return meta.set(this.beanMap, pName, value);</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   /**</span>
+<span class="source-line-no">132</span><span id="line-132">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the given object is a {@link java.util.Map.Entry} with equal key and value.</span>
+<span class="source-line-no">133</span><span id="line-133">    *</span>
+<span class="source-line-no">134</span><span id="line-134">    * &lt;p&gt;</span>
+<span class="source-line-no">135</span><span id="line-135">    * This follows the {@link java.util.Map.Entry} equality contract: two entries are equal if both their</span>
+<span class="source-line-no">136</span><span id="line-136">    * keys and values compare equal via {@link Objects#equals}.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * @param obj The object to compare against.</span>
+<span class="source-line-no">139</span><span id="line-139">    * @return &lt;jk&gt;true&lt;/jk&gt; if equal.</span>
+<span class="source-line-no">140</span><span id="line-140">    */</span>
+<span class="source-line-no">141</span><span id="line-141">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">142</span><span id="line-142">   public boolean equals(Object obj) {</span>
+<span class="source-line-no">143</span><span id="line-143">      if (this == obj)</span>
+<span class="source-line-no">144</span><span id="line-144">         return true;</span>
+<span class="source-line-no">145</span><span id="line-145">      if (!(obj instanceof Map.Entry&lt;?,?&gt; obj2))</span>
+<span class="source-line-no">146</span><span id="line-146">         return false;</span>
+<span class="source-line-no">147</span><span id="line-147">      return eq(getKey(), obj2.getKey()) &amp;&amp; eq(getValue(), obj2.getValue());</span>
+<span class="source-line-no">148</span><span id="line-148">   }</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">   /**</span>
+<span class="source-line-no">151</span><span id="line-151">    * Returns the hash code for this entry, consistent with the {@link java.util.Map.Entry} contract.</span>
+<span class="source-line-no">152</span><span id="line-152">    *</span>
+<span class="source-line-no">153</span><span id="line-153">    * &lt;p&gt;</span>
+<span class="source-line-no">154</span><span id="line-154">    * The hash code is computed as {@code key.hashCode() ^ value.hashCode()}, matching the</span>
+<span class="source-line-no">155</span><span id="line-155">    * contract that equal entries must have equal hash codes.</span>
+<span class="source-line-no">156</span><span id="line-156">    *</span>
+<span class="source-line-no">157</span><span id="line-157">    * @return The hash code.</span>
+<span class="source-line-no">158</span><span id="line-158">    */</span>
+<span class="source-line-no">159</span><span id="line-159">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">160</span><span id="line-160">   public int hashCode() {</span>
+<span class="source-line-no">161</span><span id="line-161">      return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());</span>
+<span class="source-line-no">162</span><span id="line-162">   }</span>
+<span class="source-line-no">163</span><span id="line-163"></span>
+<span class="source-line-no">164</span><span id="line-164">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">165</span><span id="line-165">   public String toString() {</span>
+<span class="source-line-no">166</span><span id="line-166">      return this.getKey() + "=" + this.getValue();</span>
+<span class="source-line-no">167</span><span id="line-167">   }</span>
+<span class="source-line-no">168</span><span id="line-168">}</span>
 
 
 

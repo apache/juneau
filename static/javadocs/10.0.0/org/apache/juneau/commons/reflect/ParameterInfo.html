@@ -384,8 +384,8 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <a href="ExecutableInfo.html#getParameters()"><code>ExecutableInfo.getParameters()</code></a> or <a href="#of(java.lang.reflect.Parameter)"><code>of(Parameter)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>executable</code> - The ExecutableInfo (MethodInfo or ConstructorInfo) that contains this parameter.</dd>
-<dd><code>inner</code> - The parameter being wrapped.</dd>
+<dd><code>executable</code> - The ExecutableInfo (MethodInfo or ConstructorInfo) that contains this parameter. Must not be <jk>null</jk>.</dd>
+<dd><code>inner</code> - The parameter being wrapped. Must not be <jk>null</jk>.</dd>
 <dd><code>index</code> - The zero-based index of this parameter in the method/constructor signature.</dd>
 <dd><code>type</code> - The ClassInfo representing the parameter type.</dd>
 </dl>

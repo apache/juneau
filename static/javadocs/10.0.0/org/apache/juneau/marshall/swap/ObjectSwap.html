@@ -385,7 +385,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mediaTypes</code> - The media types that this swap is associated with.</dd>
+<dd><code>mediaTypes</code> - The media types that this swap is associated with. Can be <jk>null</jk> to make this swap applicable to all media types.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -420,7 +420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSwapClassMeta(org.apache.juneau.marshall.MarshallingSession)">
 <h3>getSwapClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-221">getSwapClassMeta</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-222">getSwapClassMeta</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
 <div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> of the transformed class type.
 
  <p>
@@ -428,7 +428,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>session</code> - The bean context to use to get the class meta.
-   This is always going to be the same bean context that created this swap.</dd>
+   This is always going to be the same bean context that created this swap.
+   Must not be <jk>null</jk> on the first (uncached) call.</dd>
 <dt>Returns:</dt>
 <dd>The <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> of the transformed class type.</dd>
 </dl>
@@ -437,35 +438,35 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNormalObject(java.lang.Object)">
 <h3>isNormalObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-235">isNormalObject</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-236">isNormalObject</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Checks if the specified object is an instance of the normal class defined on this swap.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object to check.</dd>
+<dd><code>o</code> - The object to check. Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
-   <jk>null</jk> always return <jk>false</jk>.</dd>
+   A <jk>null</jk> value always returns <jk>false</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isSwappedObject(java.lang.Object)">
 <h3>isSwappedObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-249">isSwappedObject</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-250">isSwappedObject</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Checks if the specified object is an instance of the swap class defined on this swap.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object to check.</dd>
+<dd><code>o</code> - The object to check. Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
-   <jk>null</jk> always return <jk>false</jk>.</dd>
+   A <jk>null</jk> value always returns <jk>false</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="match(org.apache.juneau.marshall.MarshallingSession)">
 <h3>match</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-277">match</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-278">match</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
 <div class="block">Returns a number indicating how well this swap matches the specified session.
 
  <p>
@@ -485,7 +486,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>session</code> - The bean session.</dd>
+<dd><code>session</code> - The bean session. Can be <jk>null</jk> (returns <c>0</c>, or <c>1</c> if this swap has no media types configured).</dd>
 <dt>Returns:</dt>
 <dd>Zero if swap doesn't match the session, or a positive number if it does.</dd>
 </dl>
@@ -494,7 +495,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.marshall.MarshallingSession,T)">
 <h3 id="swap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object)">swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">S</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-319">swap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">S</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-320">swap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a>&nbsp;o)</span>
        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">If this transform is to be used to serialize non-serializable objects, it must implement this method.
@@ -532,7 +533,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.marshall.MarshallingSession,T,java.lang.String)">
 <h3 id="swap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,java.lang.String)">swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">S</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-335">swap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">S</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-336">swap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span>
        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -553,7 +554,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-342">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-343">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -563,7 +564,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta)">
 <h3 id="unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">unswap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-362">unswap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-363">unswap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="ObjectSwap.html" title="type parameter in ObjectSwap">S</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -587,7 +588,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)">
 <h3 id="unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String)">unswap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-386">unswap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-387">unswap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="ObjectSwap.html" title="type parameter in ObjectSwap">S</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span>
@@ -613,7 +614,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="withTemplate()">
 <h3>withTemplate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-411">withTemplate</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-412">withTemplate</a></span>()</div>
 <div class="block">Returns additional context information for this swap.
 
  <p>
@@ -637,7 +638,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="withTemplate(java.lang.String)">
 <h3>withTemplate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;<a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-425">withTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;<a href="ObjectSwap.html" title="type parameter in ObjectSwap">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/ObjectSwap.html#line-426">withTemplate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span></div>
 <div class="block">Sets the template string on this swap.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -645,7 +646,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>template</code> - The template string on this swap.</dd>
+<dd><code>template</code> - The template string on this swap. Can be <jk>null</jk> to unset the template.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

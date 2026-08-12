@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-61">ParserPipe</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-59">ParserPipe</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></span></div>
 <div class="block">A wrapper around an object that a parser reads its input from.
@@ -94,7 +94,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a>
    <li><code><jk>byte</jk>[]</code>
-   <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>
    <li><code><jk>null</jk></code>
  </ul>
 
@@ -103,14 +102,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <ul>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a>
    <li><code><jk>byte</jk>[]</code>
-   <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> - Hex-encoded bytes.  (not BASE-64!)
    <li><code><jk>null</jk></code>
  </ul>
 
  <p>
- Note that Readers and InputStreams will NOT be automatically closed when <a href="#close()"><code>close()</code></a> is called, but
- streams and readers created from other types (e.g. Files) WILL be automatically closed.
+ Note that Readers and InputStreams will NOT be automatically closed when <a href="#close()"><code>close()</code></a> is called
+ unless the <code>autoCloseStreams</code> setting is enabled.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
@@ -130,13 +128,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="col-last even-row-color">
 <div class="block">Shortcut constructor, typically for straight string input.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.Object,boolean,boolean,boolean,boolean,java.nio.charset.Charset,java.nio.charset.Charset)" class="member-name-link">ParserPipe</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.Object,boolean,boolean,boolean,boolean,java.nio.charset.Charset)" class="member-name-link">ParserPipe</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  boolean&nbsp;debug,
  boolean&nbsp;strict,
  boolean&nbsp;autoCloseStreams,
  boolean&nbsp;unbuffered,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;streamCharset,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;fileCharset)</code></div>
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;streamCharset)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructor for reader-based parsers.</div>
 </div>
@@ -225,21 +222,22 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object)">
 <h3>ParserPipe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-88">ParserPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-87">ParserPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span></div>
 <div class="block">Shortcut constructor, typically for straight string input.
 
  <p>
- Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>);</code></div>
+ Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>input</code> - The input object.</dd>
+<dd><code>input</code> - The input object.
+   <br>Can be <jk>null</jk> (the pipe wraps no data; <a href="#getReader()"><code>getReader()</code></a>/<a href="#getInputStream()"><code>getInputStream()</code></a> return <jk>null</jk>).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object,boolean,boolean,boolean,org.apache.juneau.marshall.BinaryFormat)">
 <h3>ParserPipe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-108">ParserPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-109">ParserPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  boolean&nbsp;debug,
  boolean&nbsp;autoCloseStreams,
  boolean&nbsp;unbuffered,
@@ -247,7 +245,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Constructor for stream-based parsers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>input</code> - The parser input object.</dd>
+<dd><code>input</code> - The parser input object.
+   <br>Can be <jk>null</jk> (the pipe wraps no data; <a href="#getReader()"><code>getReader()</code></a>/<a href="#getInputStream()"><code>getInputStream()</code></a> return <jk>null</jk>).</dd>
 <dd><code>debug</code> - If <jk>true</jk>, the input contents will be copied locally and accessible via the <a href="#getInputAsString()"><code>getInputAsString()</code></a>
    method.
    This allows the contents of the pipe to be accessed when a problem occurs.</dd>
@@ -255,24 +254,25 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <dd><code>unbuffered</code> - If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
    multiple times.
    <br>Otherwise, we read character data into a reusable buffer.</dd>
-<dd><code>binaryFormat</code> - The binary format of input strings when converted to bytes.</dd>
+<dd><code>binaryFormat</code> - The binary format of input strings when converted to bytes.
+   <br>Can be <jk>null</jk> (string input converts to an empty byte array).</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.Object,boolean,boolean,boolean,boolean,java.nio.charset.Charset,java.nio.charset.Charset)">
+<section class="detail" id="&lt;init&gt;(java.lang.Object,boolean,boolean,boolean,boolean,java.nio.charset.Charset)">
 <h3>ParserPipe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-143">ParserPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-144">ParserPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  boolean&nbsp;debug,
  boolean&nbsp;strict,
  boolean&nbsp;autoCloseStreams,
  boolean&nbsp;unbuffered,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;streamCharset,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;fileCharset)</span></div>
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;streamCharset)</span></div>
 <div class="block">Constructor for reader-based parsers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>input</code> - The parser input object.</dd>
+<dd><code>input</code> - The parser input object.
+   <br>Can be <jk>null</jk> (the pipe wraps no data; <a href="#getReader()"><code>getReader()</code></a>/<a href="#getInputStream()"><code>getInputStream()</code></a> return <jk>null</jk>).</dd>
 <dd><code>debug</code> - If <jk>true</jk>, the input contents will be copied locally and accessible via the <a href="#getInputAsString()"><code>getInputAsString()</code></a>
    method.
    This allows the contents of the pipe to be accessed when a problem occurs.</dd>
@@ -283,8 +283,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <dd><code>unbuffered</code> - If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
    multiple times.
    <br>Otherwise, we read character data into a reusable buffer.</dd>
-<dd><code>fileCharset</code> - The charset to expect when reading from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>Files</code></a>.</dd>
-<dd><code>streamCharset</code> - The charset to expect when reading from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStreams</code></a>.</dd>
+<dd><code>streamCharset</code> - The charset to expect when reading from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStreams</code></a>.
+   <br>Can be <jk>null</jk> (defaults to UTF-8).</dd>
 </dl>
 </section>
 </li>
@@ -299,7 +299,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-165">asString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-162">asString</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the contents of this pipe as a string.</div>
 <dl class="notes">
@@ -313,7 +313,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-171">close</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-168">close</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html#close()" title="class or interface in java.lang" class="external-link">close</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
@@ -325,7 +325,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getBufferedReader()">
 <h3>getBufferedReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-190">getBufferedReader</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-187">getBufferedReader</a></span>()
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the contents of this pipe as a buffered reader.
 
@@ -342,7 +342,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInputAsString()">
 <h3>getInputAsString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-200">getInputAsString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-197">getInputAsString</a></span>()</div>
 <div class="block">Returns the input to this parser as a plain string.
 
  <p>
@@ -356,7 +356,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getInputStream()">
 <h3>getInputStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-211">getInputStream</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-208">getInputStream</a></span>()
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Wraps the specified input object inside an input stream.
 
@@ -373,12 +373,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getParserReader()">
 <h3>getParserReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.marshall.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-255">getParserReader</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserReader.html" title="class in org.apache.juneau.marshall.parser">ParserReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-243">getParserReader</a></span>()
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Converts this pipe into a <a href="ParserReader.html" title="class in org.apache.juneau.marshall.parser"><code>ParserReader</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The converted pipe.</dd>
+<dd>The converted pipe, or <jk>null</jk> if the input object is <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying stream.</dd>
 </dl>
@@ -387,7 +387,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="getReader()">
 <h3>getReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-270">getReader</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-258">getReader</a></span>()
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Wraps the specified input object inside a reader.
 
@@ -404,7 +404,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isString()">
 <h3>isString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-332">isString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-305">isString</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the contents passed into this pipe was a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -415,14 +415,15 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="setPositionable(org.apache.juneau.marshall.parser.Positionable)">
 <h3>setPositionable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-342">setPositionable</a></span><wbr><span class="parameters">(<a href="Positionable.html" title="interface in org.apache.juneau.marshall.parser">Positionable</a>&nbsp;positionable)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserPipe.html#line-316">setPositionable</a></span><wbr><span class="parameters">(<a href="Positionable.html" title="interface in org.apache.juneau.marshall.parser">Positionable</a>&nbsp;positionable)</span></div>
 <div class="block">Sets the ParserReader/ParserInputStream/XmlReader constructed from this pipe.
 
  <p>
  Used for gathering the failure position when <a href="ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> is thrown.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>positionable</code> - The ParserReader/ParserInputStream/XmlReader constructed from this pipe.</dd>
+<dd><code>positionable</code> - The ParserReader/ParserInputStream/XmlReader constructed from this pipe.
+   <br>Can be <jk>null</jk> (the failure position reported on <a href="ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a> is <code>Position.UNKNOWN</code>).</dd>
 </dl>
 </section>
 </li>

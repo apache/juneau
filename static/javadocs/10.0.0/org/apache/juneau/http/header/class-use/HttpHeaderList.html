@@ -75,9 +75,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../HttpHeaderList.Void.html" class="type-name-link" title="class in org.apache.juneau.http.header">HttpHeaderList.Void</a></code></div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../HttpHeaderList.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.header">HttpHeaderList.Unmodifiable</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">An unmodifiable snapshot of a <a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header"><code>HttpHeaderList</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../HttpHeaderList.Void.html" class="type-name-link" title="class in org.apache.juneau.http.header">HttpHeaderList.Void</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Represents no header list in annotations.</div>
 </div>
 </div>
@@ -114,10 +119,30 @@ loadScripts(document, 'script');</script>
 <div class="block">Appends the given headers in order.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#caseSensitive(boolean)" class="member-name-link">caseSensitive</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#append(java.lang.String,java.lang.String)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#append(java.lang.String,java.util.function.Supplier)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#append(java.util.List)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&gt;&nbsp;values)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#append(org.apache.juneau.http.HttpHeader)" class="member-name-link">append</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#append(org.apache.juneau.http.HttpHeader...)" class="member-name-link">append</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#caseSensitive(boolean)" class="member-name-link">caseSensitive</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets whether header-name comparisons are case-sensitive.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#caseSensitive(boolean)" class="member-name-link">caseSensitive</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last even-row-color">
@@ -155,21 +180,34 @@ loadScripts(document, 'script');</script>
 <div class="block">Removes all headers with the given name.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#set(java.lang.String,java.lang.String)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#removeAll(java.lang.String)" class="member-name-link">removeAll</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#set(java.lang.String,java.lang.String)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Sets a header with the given name and value, replacing any prior entry with the same name.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#set(org.apache.juneau.http.HttpHeader)" class="member-name-link">set</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#set(org.apache.juneau.http.HttpHeader)" class="member-name-link">set</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the given header, replacing any prior entry with the same name.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#set(org.apache.juneau.http.HttpHeader...)" class="member-name-link">set</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#set(org.apache.juneau.http.HttpHeader...)" class="member-name-link">set</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the given headers, each replacing any prior entry with the same name.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#set(java.lang.String,java.lang.String)" class="member-name-link">set</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#set(org.apache.juneau.http.HttpHeader)" class="member-name-link">set</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#set(org.apache.juneau.http.HttpHeader...)" class="member-name-link">set</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#setDefault(java.lang.String,java.lang.String)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -185,6 +223,21 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#setDefault(org.apache.juneau.http.HttpHeader...)" class="member-name-link">setDefault</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the given headers as defaults, in order.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#setDefault(java.lang.String,java.lang.String)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#setDefault(org.apache.juneau.http.HttpHeader)" class="member-name-link">setDefault</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpHeaderList.Unmodifiable.</span><code><a href="../HttpHeaderList.Unmodifiable.html#setDefault(org.apache.juneau.http.HttpHeader...)" class="member-name-link">setDefault</a><wbr>(<a href="../../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;values)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpHeaderList.</span><code><a href="../HttpHeaderList.html#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns an unmodifiable snapshot of this list.</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.http.header</a> with parameters of type <a href="../HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a></span></div>

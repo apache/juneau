@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30">import java.util.*;</span>
 <span class="source-line-no">031</span><span id="line-31"></span>
 <span class="source-line-no">032</span><span id="line-32">import org.apache.http.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.marshall.urlencoding.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.marshall.marshaller.*;</span>
 <span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.rest.server.util.*;</span>
 <span class="source-line-no">035</span><span id="line-35"></span>
 <span class="source-line-no">036</span><span id="line-36">import jakarta.servlet.*;</span>
@@ -380,7 +380,7 @@
 <span class="source-line-no">367</span><span id="line-367">   @Override /* Overridden from HttpServletRequest */</span>
 <span class="source-line-no">368</span><span id="line-368">   public ServletInputStream getInputStream() throws IOException {</span>
 <span class="source-line-no">369</span><span id="line-369">      if (nn(formDataMap))</span>
-<span class="source-line-no">370</span><span id="line-370">         content = UrlEncodingSerializer.DEFAULT.toString(formDataMap).getBytes();</span>
+<span class="source-line-no">370</span><span id="line-370">         content = UrlEncoding.of(formDataMap).getBytes();</span>
 <span class="source-line-no">371</span><span id="line-371">      return new BoundedServletInputStream(new ByteArrayInputStream(content), Integer.MAX_VALUE);</span>
 <span class="source-line-no">372</span><span id="line-372">   }</span>
 <span class="source-line-no">373</span><span id="line-373"></span>
@@ -724,7 +724,7 @@
 <span class="source-line-no">711</span><span id="line-711">    * &lt;p&gt;</span>
 <span class="source-line-no">712</span><span id="line-712">    * See {@link org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)} for an example.</span>
 <span class="source-line-no">713</span><span id="line-713">    *</span>
-<span class="source-line-no">714</span><span id="line-714">    * @param pathVars The</span>
+<span class="source-line-no">714</span><span id="line-714">    * @param pathVars The parent path variables to add. Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
 <span class="source-line-no">715</span><span id="line-715">    * @return This object.</span>
 <span class="source-line-no">716</span><span id="line-716">    * @see org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)</span>
 <span class="source-line-no">717</span><span id="line-717">    */</span>
@@ -853,7 +853,7 @@
 <span class="source-line-no">840</span><span id="line-840">   }</span>
 <span class="source-line-no">841</span><span id="line-841"></span>
 <span class="source-line-no">842</span><span id="line-842">   /**</span>
-<span class="source-line-no">843</span><span id="line-843">    * Adds the specified role on this request.</span>
+<span class="source-line-no">843</span><span id="line-843">    * Sets the specified role on this request.</span>
 <span class="source-line-no">844</span><span id="line-844">    *</span>
 <span class="source-line-no">845</span><span id="line-845">    * @param role The role to add to this request (e.g. &lt;js&gt;"ROLE_ADMIN"&lt;/js&gt;).</span>
 <span class="source-line-no">846</span><span id="line-846">    * @return This object.</span>
@@ -864,7 +864,7 @@
 <span class="source-line-no">851</span><span id="line-851">   }</span>
 <span class="source-line-no">852</span><span id="line-852"></span>
 <span class="source-line-no">853</span><span id="line-853">   /**</span>
-<span class="source-line-no">854</span><span id="line-854">    * Adds the specified roles on this request.</span>
+<span class="source-line-no">854</span><span id="line-854">    * Sets the specified roles on this request.</span>
 <span class="source-line-no">855</span><span id="line-855">    *</span>
 <span class="source-line-no">856</span><span id="line-856">    * @param roles The roles to add to this request (e.g. &lt;js&gt;"ROLE_ADMIN"&lt;/js&gt;).</span>
 <span class="source-line-no">857</span><span id="line-857">    * @return This object.</span>

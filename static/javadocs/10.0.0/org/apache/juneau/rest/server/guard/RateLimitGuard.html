@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-97">RateLimitGuard</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-101">RateLimitGuard</a></span>
 <span class="extends-implements">extends <a href="RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a></span></div>
 <div class="block">Token-bucket <a href="RestGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RestGuard</code></a> that throttles requests on a configurable per-request key.
 
@@ -141,7 +141,10 @@ loadScripts(document, 'script');</script>
 
  <p>
  Refill math uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#nanoTime()" title="class or interface in java.lang" class="external-link"><code>System.nanoTime()</code></a>.  This is monotonic and safe across wall-clock jumps but does not
- map to a calendar instant, which slightly complicates debugging when the bucket is in an unexpected state.
+ map to a calendar instant, which slightly complicates debugging when the bucket is in an unexpected state.  The
+ nanosecond source is pluggable on <code>RateLimitGuard.InMemoryStorage</code> (package-private constructor overload) so tests can
+ pin the refill window with a deterministic clock instead of racing real wall-clock time; production code always
+ goes through the single-arg constructor, which defaults to <code>System::nanoTime</code>.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">REST Server — Rate-Limiting and Request-Id Propagation</a>
@@ -312,7 +315,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="HEADER_LIMIT">
 <h3>HEADER_LIMIT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-103">HEADER_LIMIT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-107">HEADER_LIMIT</a></span></div>
 <div class="block">Response header name for the advisory ceiling (tokens per refill window).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -327,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="HEADER_REMAINING">
 <h3>HEADER_REMAINING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-106">HEADER_REMAINING</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-110">HEADER_REMAINING</a></span></div>
 <div class="block">Response header name for the advisory tokens remaining after this call.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -342,7 +345,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="HEADER_RESET">
 <h3>HEADER_RESET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-109">HEADER_RESET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-113">HEADER_RESET</a></span></div>
 <div class="block">Response header name for the advisory seconds until the bucket is fully refilled.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -357,7 +360,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="HEADER_RETRY_AFTER">
 <h3>HEADER_RETRY_AFTER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-112">HEADER_RETRY_AFTER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-116">HEADER_RETRY_AFTER</a></span></div>
 <div class="block">Standard HTTP <code>Retry-After</code> header name.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -380,7 +383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.guard.RateLimitGuard.Builder)">
 <h3>RateLimitGuard</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-127">RateLimitGuard</a></span><wbr><span class="parameters">(<a href="RateLimitGuard.Builder.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-131">RateLimitGuard</a></span><wbr><span class="parameters">(<a href="RateLimitGuard.Builder.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -399,7 +402,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Builder.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-147">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Builder.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-151">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -410,7 +413,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="guard(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>guard</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-151">guard</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-155">guard</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RestGuard.html#guard(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">RestGuard</a></code></span></div>
 <div class="block">Checks the current HTTP request and throws a <a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response"><code>BasicHttpException</code></a> if the guard does not permit the request.
@@ -436,7 +439,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isRequestAllowed(org.apache.juneau.rest.server.RestRequest)">
 <h3>isRequestAllowed</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-173">isRequestAllowed</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-177">isRequestAllowed</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="RestGuard.html#isRequestAllowed(org.apache.juneau.rest.server.RestRequest)">RestGuard</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if the specified request can pass through this guard.</div>
 <dl class="notes">
@@ -452,7 +455,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getCapacity()">
 <h3>getCapacity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-420">getCapacity</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-424">getCapacity</a></span>()</div>
 <div class="block">Returns the bucket capacity (the maximum number of tokens a bucket can hold).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -465,7 +468,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPermitsPerSecond()">
 <h3>getPermitsPerSecond</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-430">getPermitsPerSecond</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-434">getPermitsPerSecond</a></span>()</div>
 <div class="block">Returns the steady-state refill rate in permits per second.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -478,7 +481,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isXForwardedForAware()">
 <h3>isXForwardedForAware</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-440">isXForwardedForAware</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-444">isXForwardedForAware</a></span>()</div>
 <div class="block">Returns whether <code>X-Forwarded-For</code>-aware key resolution is enabled.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -491,7 +494,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getExemptPaths()">
 <h3>getExemptPaths</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-450">getExemptPaths</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-454">getExemptPaths</a></span>()</div>
 <div class="block">Returns the set of request paths that bypass throttling.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -504,7 +507,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStorage()">
 <h3>getStorage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-460">getStorage</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RateLimitGuard.Storage.html" title="interface in org.apache.juneau.rest.server.guard">RateLimitGuard.Storage</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-464">getStorage</a></span>()</div>
 <div class="block">Returns the bucket-state storage backend in use by this guard.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -517,7 +520,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="snapshot()">
 <h3>snapshot</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RateLimitGuard.BucketState.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.BucketState</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-475">snapshot</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RateLimitGuard.BucketState.html" title="class in org.apache.juneau.rest.server.guard">RateLimitGuard.BucketState</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/guard/RateLimitGuard.html#line-479">snapshot</a></span>()</div>
 <div class="block">Convenience accessor for <a href="RateLimitGuard.Storage.html#snapshot()"><code>RateLimitGuard.Storage.snapshot()</code></a> on the underlying storage backend.
 
  <p>

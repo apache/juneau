@@ -282,7 +282,7 @@
 <span class="source-line-no">269</span><span id="line-269">                  add(key, value);</span>
 <span class="source-line-no">270</span><span id="line-270">               });</span>
 <span class="source-line-no">271</span><span id="line-271">            } else {</span>
-<span class="source-line-no">272</span><span id="line-272">               throw rex("Object of type {0} could not be converted to type {1}", cn(o), "Map");</span>
+<span class="source-line-no">272</span><span id="line-272">               throw rex("Object of type %s could not be converted to type %s", cn(o), "Map");</span>
 <span class="source-line-no">273</span><span id="line-273">            }</span>
 <span class="source-line-no">274</span><span id="line-274">         }</span>
 <span class="source-line-no">275</span><span id="line-275">      }</span>
@@ -770,7 +770,7 @@
 <span class="source-line-no">757</span><span id="line-757">         return (K)o;</span>
 <span class="source-line-no">758</span><span id="line-758">      if (nn(keyFunction))</span>
 <span class="source-line-no">759</span><span id="line-759">         return keyFunction.apply(o);</span>
-<span class="source-line-no">760</span><span id="line-760">      throw rex("Object of type {0} could not be converted to key type {1}", cn(o), cn(keyType));</span>
+<span class="source-line-no">760</span><span id="line-760">      throw rex("Object of type %s could not be converted to key type %s", cn(o), cn(keyType));</span>
 <span class="source-line-no">761</span><span id="line-761">   }</span>
 <span class="source-line-no">762</span><span id="line-762"></span>
 <span class="source-line-no">763</span><span id="line-763">   /**</span>
@@ -787,7 +787,7 @@
 <span class="source-line-no">774</span><span id="line-774">         return (V)o;</span>
 <span class="source-line-no">775</span><span id="line-775">      if (nn(valueFunction))</span>
 <span class="source-line-no">776</span><span id="line-776">         return valueFunction.apply(o);</span>
-<span class="source-line-no">777</span><span id="line-777">      throw rex("Object of type {0} could not be converted to value type {1}", cn(o), cn(valueType));</span>
+<span class="source-line-no">777</span><span id="line-777">      throw rex("Object of type %s could not be converted to value type %s", cn(o), cn(valueType));</span>
 <span class="source-line-no">778</span><span id="line-778">   }</span>
 <span class="source-line-no">779</span><span id="line-779">}</span>
 

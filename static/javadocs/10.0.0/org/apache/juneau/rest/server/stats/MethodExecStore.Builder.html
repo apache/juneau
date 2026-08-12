@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Overrides the bean returned by the <a href="#build()"><code>build()</code></a> method with a pre-instantiated instance.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The setting value.</dd>
+<dd><code>value</code> - The setting value. Can be <jk>null</jk> (the <a href="#build()"><code>build()</code></a> method instantiates the <a href="#type(java.lang.Class)"><code>type</code></a> instead).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -263,7 +263,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Overrides the bean type produced by the <a href="#build()"><code>build()</code></a> method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The setting value.</dd>
+<dd><code>value</code> - The setting value. Can be <jk>null</jk> (defaults to <a href="MethodExecStore.html" title="class in org.apache.juneau.rest.server.stats"><code>MethodExecStore</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

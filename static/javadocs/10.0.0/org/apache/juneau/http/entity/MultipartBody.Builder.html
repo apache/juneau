@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="MultipartBody.html" title="class in org.apache.juneau.http.entity">MultipartBody</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-204">MultipartBody.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.html#line-214">MultipartBody.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for <a href="MultipartBody.html" title="class in org.apache.juneau.http.entity"><code>MultipartBody</code></a>.
 
@@ -154,7 +154,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="boundary(java.lang.String)">
 <h3>boundary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-217">boundary</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-227">boundary</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets a custom multipart boundary string (defaults to a random UUID-derived value).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -167,7 +167,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="field(java.lang.String,java.lang.String)">
 <h3>field</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-229">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-239">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a plain-text form field.</div>
 <dl class="notes">
@@ -182,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="file(java.lang.String,java.io.File,java.lang.String)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-242">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-252">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType)</span></div>
 <div class="block">Adds a file upload part.</div>
@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="part(org.apache.juneau.http.entity.MultipartBody.MultipartPart)">
 <h3>part</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-253">part</a></span><wbr><span class="parameters">(<a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a>&nbsp;part)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.Builder.html" title="class in org.apache.juneau.http.entity">MultipartBody.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-263">part</a></span><wbr><span class="parameters">(<a href="MultipartBody.MultipartPart.html" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a>&nbsp;part)</span></div>
 <div class="block">Adds a custom part.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.html" title="class in org.apache.juneau.http.entity">MultipartBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-263">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultipartBody.html" title="class in org.apache.juneau.http.entity">MultipartBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/entity/MultipartBody.Builder.html#line-273">build</a></span>()</div>
 <div class="block">Builds and returns the <a href="MultipartBody.html" title="class in org.apache.juneau.http.entity"><code>MultipartBody</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

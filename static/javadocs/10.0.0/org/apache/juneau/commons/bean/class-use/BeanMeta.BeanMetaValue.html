@@ -77,6 +77,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Creates a <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> instance for the specified bean type info.</div>
 </div>
+<div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;<a href="../BeanMeta.BeanMetaValue.html" title="class in org.apache.juneau.commons.bean">BeanMeta.BeanMetaValue</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanMeta.</span><code><a href="../BeanMeta.html#create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">create</a><wbr>(<a href="../BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;T&gt;&nbsp;cm,
+ <a href="../../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass,
+ <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Same as <a href="../BeanMeta.html#create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo)"><code>BeanMeta.create(BeanInfo, ClassInfo)</code></a> but allows an explicit <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> to override the one
+ that would otherwise be derived from the bean filter or <a href="../BeanConfigContext.html#getPropertyNamer()"><code>BeanConfigContext.getPropertyNamer()</code></a>.</div>
+</div>
 </div>
 </section>
 </li>

@@ -283,33 +283,33 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeArrayRecords(java.lang.Object)" class="member-name-link">serializeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeArrayRecords(java.lang.Object)" class="member-name-link">writeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator for the buffered array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> (uses default
- session args; see <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>).</div>
+ session args; see <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeArrayRecords(java.lang.Object,int)" class="member-name-link">serializeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeArrayRecords(java.lang.Object,int)" class="member-name-link">writeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
  int&nbsp;expectedCount)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator for the streaming, count-prefixed array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a>
- (uses default session args; see <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>).</div>
+ (uses default session args; see <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator that opens a <a href="MsgPackTokenWriter.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackTokenWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)"><code>OutputStreamSerializer.serialize(Object)</code></a>).</div>
+ <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#write(java.lang.Object)"><code>OutputStreamSerializer.write(Object)</code></a>).</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.OutputStreamSerializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/OutputStreamSerializer.html" title="class in org.apache.juneau.marshall.serializer">OutputStreamSerializer</a></h3>
-<code><a href="../serializer/OutputStreamSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/OutputStreamSerializer.html#getBinaryFormat()">getBinaryFormat</a>, <a href="../serializer/OutputStreamSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)">serialize</a></code></div>
+<code><a href="../serializer/OutputStreamSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/OutputStreamSerializer.html#getBinaryFormat()">getBinaryFormat</a>, <a href="../serializer/OutputStreamSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/OutputStreamSerializer.html#write(java.lang.Object)">write</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.Serializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a></h3>
-<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doSerialize</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#serialize(java.lang.Object,java.lang.Object)">serialize</a>, <a href="../serializer/Serializer.html#serializeToString(java.lang.Object)">serializeToString</a></code></div>
+<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doWrite</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#write(java.lang.Object,java.lang.Object)">write</a>, <a href="../serializer/Serializer.html#writeToString(java.lang.Object)">writeToString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingTraverseContext">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingTraverseContext.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext</a></h3>
 <code><a href="../MarshallingTraverseContext.html#getDetectRecursions()">getDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#getIgnoreRecursions()">getIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#getInitialDepth()">getInitialDepth</a>, <a href="../MarshallingTraverseContext.html#getMaxDepth()">getMaxDepth</a>, <a href="../MarshallingTraverseContext.html#isDetectRecursions()">isDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#isIgnoreRecursions()">isIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#shouldDetectRecursions()">shouldDetectRecursions</a></code></div>
@@ -333,7 +333,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <code><a href="../../commons/function/ThrowingFunction.html#apply(T)">apply</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.TokenWritable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></h3>
-<code><a href="../stream/TokenWritable.html#serializeRecords(java.lang.Object)">serializeRecords</a></code></div>
+<code><a href="../stream/TokenWritable.html#writeRecords(java.lang.Object)">writeRecords</a></code></div>
 </section>
 </li>
 </ul>
@@ -348,28 +348,28 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-198">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-200">DEFAULT</a></span></div>
 <div class="block">Default serializer, all default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_SPACED_HEX">
 <h3>DEFAULT_SPACED_HEX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-200">DEFAULT_SPACED_HEX</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-202">DEFAULT_SPACED_HEX</a></span></div>
 <div class="block">Default serializer, all default settings, spaced-hex string output.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_BASE64">
 <h3>DEFAULT_BASE64</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-203">DEFAULT_BASE64</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-205">DEFAULT_BASE64</a></span></div>
 <div class="block">Default serializer, all default settings, spaced-hex string output.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="addBeanTypesMsgPack">
 <h3>addBeanTypesMsgPack</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-214">addBeanTypesMsgPack</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-216">addBeanTypesMsgPack</a></span></div>
 </section>
 </li>
 </ul>
@@ -383,7 +383,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.msgpack.MsgPackSerializer.Builder)">
 <h3>MsgPackSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-224">MsgPackSerializer</a></span><wbr><span class="parameters">(<a href="MsgPackSerializer.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-226">MsgPackSerializer</a></span><wbr><span class="parameters">(<a href="MsgPackSerializer.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -402,7 +402,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-210">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-212">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -413,7 +413,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-229">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackSerializer.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-231">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -430,7 +430,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-234">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-236">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -448,7 +448,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getMsgPackBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getMsgPackBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-239">getMsgPackBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-241">getMsgPackBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MsgPackMetaProvider.html#getMsgPackBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">MsgPackMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -464,7 +464,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getMsgPackClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getMsgPackClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackClassMeta.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-246">getMsgPackClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackClassMeta.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-248">getMsgPackClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MsgPackMetaProvider.html#getMsgPackClassMeta(org.apache.juneau.marshall.ClassMeta)">MsgPackMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -480,7 +480,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackSerializerSession.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-251">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MsgPackSerializerSession.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-253">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -495,21 +495,21 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
-<section class="detail" id="serializeTokens(java.lang.Object)">
-<h3>serializeTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-268">serializeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeTokens(java.lang.Object)">
+<h3>writeTokens</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-270">writeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="MsgPackTokenWriter.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackTokenWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)"><code>OutputStreamSerializer.serialize(Object)</code></a>).
+ <b>default session arguments</b> (mirrors <a href="../serializer/OutputStreamSerializer.html#write(java.lang.Object)"><code>OutputStreamSerializer.write(Object)</code></a>).
 
  <p>
- The real implementation lives on <a href="MsgPackSerializerSession.html#serializeTokens(java.lang.Object)"><code>MsgPackSerializerSession.serializeTokens(Object)</code></a>.
+ The real implementation lives on <a href="MsgPackSerializerSession.html#writeTokens(java.lang.Object)"><code>MsgPackSerializerSession.writeTokens(Object)</code></a>.
  Callers that need request-derived configuration (locale, timezone, schema, swaps) should
  call <a href="#createSession()"><code>createSession()</code></a> and invoke
- <a href="MsgPackSerializerSession.html#serializeTokens(java.lang.Object)"><code>MsgPackSerializerSession.serializeTokens(Object)</code></a> on the built session instead.</div>
+ <a href="MsgPackSerializerSession.html#writeTokens(java.lang.Object)"><code>MsgPackSerializerSession.writeTokens(Object)</code></a> on the built session instead.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/TokenWritable.html#serializeTokens(java.lang.Object)">serializeTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></code></dd>
+<dd><code><a href="../stream/TokenWritable.html#writeTokens(java.lang.Object)">writeTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>
 <dt>Returns:</dt>
@@ -522,7 +522,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="isAddBeanTypes()">
 <h3>isAddBeanTypes</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-273">isAddBeanTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-275">isAddBeanTypes</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/Serializer.html#isAddBeanTypes()">Serializer</a></code></span></div>
 <div class="block">Add <js>"_type"</js> properties when needed.</div>
 <dl class="notes">
@@ -543,7 +543,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-276">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-278">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">
@@ -555,16 +555,16 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
-<section class="detail" id="serializeArrayRecords(java.lang.Object)">
-<h3>serializeArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-291">serializeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeArrayRecords(java.lang.Object)">
+<h3>writeArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-293">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the buffered array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> (uses default
- session args; see <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>).  Real impl on
- <a href="MsgPackSerializerSession.html#serializeArrayRecords(java.lang.Object)"><code>MsgPackSerializerSession.serializeArrayRecords(Object)</code></a>.</div>
+ session args; see <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>).  Real impl on
+ <a href="MsgPackSerializerSession.html#writeArrayRecords(java.lang.Object)"><code>MsgPackSerializerSession.writeArrayRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordWritable.html#serializeArrayRecords(java.lang.Object)">serializeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordWritable.html#writeArrayRecords(java.lang.Object)">writeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>
 <dt>Returns:</dt>
@@ -577,7 +577,7 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="isArrayRecordStreaming()">
 <h3>isArrayRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-296">isArrayRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-298">isArrayRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/ArrayRecordWritable.html#isArrayRecordStreaming()">ArrayRecordWritable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
@@ -590,17 +590,17 @@ implements <a href="MsgPackMetaProvider.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
-<section class="detail" id="serializeArrayRecords(java.lang.Object,int)">
-<h3>serializeArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-309">serializeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
+<section class="detail" id="writeArrayRecords(java.lang.Object,int)">
+<h3>writeArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/msgpack/MsgPackSerializer.html#line-311">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
  int&nbsp;expectedCount)</span>
-                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the streaming, count-prefixed array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a>
- (uses default session args; see <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>).  Real impl on
- <a href="MsgPackSerializerSession.html#serializeArrayRecords(java.lang.Object,int)"><code>MsgPackSerializerSession.serializeArrayRecords(Object, int)</code></a>.</div>
+ (uses default session args; see <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>).  Real impl on
+ <a href="MsgPackSerializerSession.html#writeArrayRecords(java.lang.Object,int)"><code>MsgPackSerializerSession.writeArrayRecords(Object, int)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordWritable.html#serializeArrayRecords(java.lang.Object,int)">serializeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordWritable.html#writeArrayRecords(java.lang.Object,int)">writeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output (must be an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a>).</dd>
 <dd><code>expectedCount</code> - The number of elements that will be written.</dd>

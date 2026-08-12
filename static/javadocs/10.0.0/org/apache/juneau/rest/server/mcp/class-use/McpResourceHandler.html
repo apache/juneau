@@ -58,8 +58,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -67,6 +66,18 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.rest.server.mcp">
 <h2>Uses of <a href="../McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a> in <a href="../package-summary.html">org.apache.juneau.rest.server.mcp</a></h2>
+<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server.mcp</a> that return <a href="../McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpResourceHandler.</span><code><a href="../McpResourceHandler.html#of(org.apache.juneau.rest.server.mcp.McpResourceSpec,java.util.function.BiFunction)" class="member-name-link">of</a><wbr>(<a href="../McpResourceSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceSpec</a>&nbsp;descriptor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr><a href="../McpResourceOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpResourceOutcome</a>&gt;&nbsp;read)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds a handler from a fixed descriptor and a <code>read</code> lambda.</div>
+</div>
+</div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server.mcp</a> that return types with arguments of type <a href="../McpResourceHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpResourceHandler</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>

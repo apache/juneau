@@ -349,7 +349,7 @@ loadScripts(document, 'script');</script>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>request</code> - The request object.</dd>
 <dd><code>response</code> - The response object.</dd>
-<dd><code>header</code> - The wrapped header.  Can be <jk>null</jk>.</dd>
+<dd><code>header</code> - The wrapped header.  Can be <jk>null</jk> (treated as an absent header with no value and no elements).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -374,7 +374,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>type</code> - The type to convert to.</dd>
 <dt>Returns:</dt>
-<dd>The converted type, or <jk>null</jk> if header is not present.</dd>
+<dd>The converted type, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if the header is not present.</dd>
 </dl>
 </section>
 </li>
@@ -389,7 +389,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>type</code> - The type to convert to.</dd>
 <dt>Returns:</dt>
-<dd>The converted type, or <jk>null</jk> if header is not present.</dd>
+<dd>The converted type, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if the header is not present.</dd>
 </dl>
 </section>
 </li>
@@ -409,7 +409,7 @@ loadScripts(document, 'script');</script>
 <dd><code>type</code> - The type to convert to.</dd>
 <dd><code>args</code> - The type parameters.</dd>
 <dt>Returns:</dt>
-<dd>The converted type, or <jk>null</jk> if header is not present.</dd>
+<dd>The converted type, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if the header is not present.</dd>
 </dl>
 </section>
 </li>
@@ -877,7 +877,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new part parser to use for this header.
-   <br>If <jk>null</jk>, <a href="../../../marshall/httppart/SimplePartParser.html#DEFAULT"><code>SimplePartParser.DEFAULT</code></a> will be used.</dd>
+   <br>If <jk>null</jk>, <a href="../../../marshall/httppart/SimplePartParser.html#DEFAULT_SESSION"><code>SimplePartParser.DEFAULT_SESSION</code></a> will be used.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

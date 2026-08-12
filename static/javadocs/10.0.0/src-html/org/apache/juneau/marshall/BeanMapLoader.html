@@ -57,8 +57,8 @@
 <span class="source-line-no">044</span><span id="line-44">    * Equivalent to the legacy {@code BeanMap.load(String)} method.</span>
 <span class="source-line-no">045</span><span id="line-45">    *</span>
 <span class="source-line-no">046</span><span id="line-46">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">047</span><span id="line-47">    * @param m The bean map to populate.</span>
-<span class="source-line-no">048</span><span id="line-48">    * @param input The text that will get parsed into a map and then added to {@code m}.</span>
+<span class="source-line-no">047</span><span id="line-47">    * @param m The bean map to populate. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">048</span><span id="line-48">    * @param input The text that will get parsed into a map and then added to {@code m}. Can be &lt;jk&gt;null&lt;/jk&gt; (nothing is added).</span>
 <span class="source-line-no">049</span><span id="line-49">    * @return The supplied bean map for fluent chaining.</span>
 <span class="source-line-no">050</span><span id="line-50">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">051</span><span id="line-51">    */</span>
@@ -74,8 +74,8 @@
 <span class="source-line-no">061</span><span id="line-61">    * Equivalent to the legacy {@code BeanMap.load(Reader, ReaderParser)} method.</span>
 <span class="source-line-no">062</span><span id="line-62">    *</span>
 <span class="source-line-no">063</span><span id="line-63">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param m The bean map to populate.</span>
-<span class="source-line-no">065</span><span id="line-65">    * @param r The reader containing serialized text.</span>
+<span class="source-line-no">064</span><span id="line-64">    * @param m The bean map to populate. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">065</span><span id="line-65">    * @param r The reader containing serialized text. Can be &lt;jk&gt;null&lt;/jk&gt; (nothing is added).</span>
 <span class="source-line-no">066</span><span id="line-66">    * @param p The parser to use to parse the text.</span>
 <span class="source-line-no">067</span><span id="line-67">    * @return The supplied bean map for fluent chaining.</span>
 <span class="source-line-no">068</span><span id="line-68">    * @throws ParseException Malformed input encountered.</span>

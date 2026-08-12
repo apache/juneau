@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="ContextSession.html" title="class in org.apache.juneau.marshall">ContextSession</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-65">ContextSession.Builder</a>&lt;SELF extends ContextSession.Builder&lt;SELF&gt;&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-64">ContextSession.Builder</a>&lt;SELF extends ContextSession.Builder&lt;SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="self()">
 <h3>self</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ContextSession.Builder.html" title="type parameter in ContextSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.Builder.html#line-75">self</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ContextSession.Builder.html" title="type parameter in ContextSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.Builder.html#line-74">self</a></span>()</div>
 <div class="block">Returns this object cast to the self (CRTP) type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -221,10 +221,11 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The target type.</dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to convert.</dd>
+<dd><code>value</code> - The value to convert.
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dd><code>type</code> - The target class.</dd>
 <dt>Returns:</dt>
-<dd>The converted value.</dd>
+<dd>The converted value, or <jk>null</jk> if the input value was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

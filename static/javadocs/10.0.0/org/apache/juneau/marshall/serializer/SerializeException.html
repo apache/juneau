@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-38">SerializeException</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-37">SerializeException</a></span>
 <span class="extends-implements">extends <a href="../BasicRuntimeException.html" title="class in org.apache.juneau.marshall">BasicRuntimeException</a></span></div>
 <div class="block">General exception thrown whenever an error occurs during serialization.
 
@@ -153,7 +153,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRootCause()" class="member-name-link">getRootCause</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the highest-level <c>ParseException</c> in the stack trace.</div>
+<div class="block">Returns the highest-level <c>SerializeException</c> in the stack trace.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initCause(java.lang.Throwable)" class="member-name-link">initCause</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
@@ -192,52 +192,56 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.serializer.SerializerSession,java.lang.Exception)">
 <h3>SerializeException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-80">SerializeException</a></span><wbr><span class="parameters">(<a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-82">SerializeException</a></span><wbr><span class="parameters">(<a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a>&nbsp;causedBy)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>session</code> - The serializer session to extract information from.</dd>
-<dd><code>causedBy</code> - The inner exception.</dd>
+<dd><code>session</code> - The serializer session to extract information from.
+   Can be <jk>null</jk> (the message is not augmented with location info).</dd>
+<dd><code>causedBy</code> - The inner exception.
+   Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.serializer.SerializerSession,java.lang.String,java.lang.Object...)">
 <h3>SerializeException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-91">SerializeException</a></span><wbr><span class="parameters">(<a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-94">SerializeException</a></span><wbr><span class="parameters">(<a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>session</code> - The serializer session to extract information from.</dd>
-<dd><code>message</code> - The exception message containing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>session</code> - The serializer session to extract information from.
+   Can be <jk>null</jk> (the message is not augmented with location info).</dd>
+<dd><code>message</code> - The exception message containing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style (<c>%s</c>) arguments.</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Object...)">
 <h3>SerializeException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-101">SerializeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-104">SerializeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>message</code> - The exception message containing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>message</code> - The exception message containing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style (<c>%s</c>) arguments.</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Throwable)">
 <h3>SerializeException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-110">SerializeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;causedBy)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-114">SerializeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;causedBy)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>causedBy</code> - The inner exception.</dd>
+<dd><code>causedBy</code> - The inner exception.
+   Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -261,28 +265,29 @@ loadScripts(document, 'script');</script>
  Otherwise we create a new <a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializeException</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>e</code> - The exception being wrapped or unwrapped.</dd>
+<dd><code>e</code> - The exception being wrapped or unwrapped.
+   Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializeException</code></a>.</dd>
+<dd>The specified throwable wrapped or unwrapped as a <a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializeException</code></a> (may be the same instance if it already was one).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getRootCause()">
 <h3>getRootCause</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-120">getRootCause</a></span>()</div>
-<div class="block">Returns the highest-level <c>ParseException</c> in the stack trace.
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-124">getRootCause</a></span>()</div>
+<div class="block">Returns the highest-level <c>SerializeException</c> in the stack trace.
  Useful for JUnit testing of error conditions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The root parse exception, or this exception if there isn't one.</dd>
+<dd>The root serialize exception, or this exception if there isn't one.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="initCause(java.lang.Throwable)">
 <h3>initCause</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-133">initCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-137">initCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
 <div class="block">Sets the inner cause for this exception.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -297,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMessage(java.lang.String,java.lang.Object...)">
 <h3>setMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-139">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/SerializeException.html#line-143">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../commons/BasicRuntimeException.html#setMessage(java.lang.String,java.lang.Object...)">BasicRuntimeException</a></code></span></div>
 <div class="block">Sets the detail message on this exception.</div>

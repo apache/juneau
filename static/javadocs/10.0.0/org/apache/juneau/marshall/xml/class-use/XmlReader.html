@@ -78,18 +78,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#getElementText(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">getElementText</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Identical to <a href="../../html/HtmlParserSession.html#parseText(org.apache.juneau.marshall.xml.XmlReader)"><code>HtmlParserSession.parseText(XmlReader)</code></a> except assumes the current event is the opening tag.</div>
+<div class="block">Identical to <a href="../../html/HtmlParserSession.html#readText(org.apache.juneau.marshall.xml.XmlReader)"><code>HtmlParserSession.readText(XmlReader)</code></a> except assumes the current event is the opening tag.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected boolean</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#isWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">isWhitespaceElement</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#parseText(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">parseText</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#readText(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">readText</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Parses CHARACTERS data.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#parseWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">parseWhitespaceElement</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HtmlParserSession.</span><code><a href="../../html/HtmlParserSession.html#readWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">readWhitespaceElement</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the current element is a whitespace element.</div>
 </div>
 <div class="col-first even-row-color"><code>protected &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../XmlParserSession.html#parseAnything(org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.marshall.xml.XmlReader,java.lang.Object,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">parseAnything</a><wbr>(<a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;eType,
+<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../XmlParserSession.html#readAnything(org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.marshall.xml.XmlReader,java.lang.Object,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">readAnything</a><wbr>(<a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;currAttr,
  <a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer,
@@ -134,12 +134,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Workhorse method.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../XmlParserSession.html#parseText(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">parseText</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../XmlParserSession.html#readText(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">readText</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Parses the current element as text.</div>
 </div>
 <div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../XmlParserSession.html#parseWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">parseWhitespaceElement</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">XmlParserSession.</span><code><a href="../XmlParserSession.html#readWhitespaceElement(org.apache.juneau.marshall.xml.XmlReader)" class="member-name-link">readWhitespaceElement</a><wbr>(<a href="../XmlReader.html" title="class in org.apache.juneau.marshall.xml">XmlReader</a>&nbsp;r)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Parses the current whitespace element.</div>
 </div>

@@ -113,10 +113,10 @@
 <span class="source-line-no">100</span><span id="line-100">   }</span>
 <span class="source-line-no">101</span><span id="line-101"></span>
 <span class="source-line-no">102</span><span id="line-102">   private Args(List&lt;String&gt; positional, Map&lt;String,List&lt;String&gt;&gt; options, boolean caseSensitive) {</span>
-<span class="source-line-no">103</span><span id="line-103">      this.positional = Collections.unmodifiableList(positional);</span>
+<span class="source-line-no">103</span><span id="line-103">      this.positional = u(positional);</span>
 <span class="source-line-no">104</span><span id="line-104">      var copy = new LinkedHashMap&lt;String,List&lt;String&gt;&gt;();</span>
-<span class="source-line-no">105</span><span id="line-105">      options.forEach((k,v) -&gt; copy.put(k, Collections.unmodifiableList(v)));</span>
-<span class="source-line-no">106</span><span id="line-106">      this.options = Collections.unmodifiableMap(copy);</span>
+<span class="source-line-no">105</span><span id="line-105">      options.forEach((k,v) -&gt; copy.put(k, u(v)));</span>
+<span class="source-line-no">106</span><span id="line-106">      this.options = u(copy);</span>
 <span class="source-line-no">107</span><span id="line-107">      this.caseSensitive = caseSensitive;</span>
 <span class="source-line-no">108</span><span id="line-108">   }</span>
 <span class="source-line-no">109</span><span id="line-109"></span>
@@ -372,11 +372,11 @@
 <span class="source-line-no">359</span><span id="line-359">                  var eq = body.indexOf('=');</span>
 <span class="source-line-no">360</span><span id="line-360">                  var key = normalizeKey(body.substring(0, eq));</span>
 <span class="source-line-no">361</span><span id="line-361">                  var value = body.substring(eq + 1);</span>
-<span class="source-line-no">362</span><span id="line-362">                  options.computeIfAbsent(key, k -&gt; new ArrayList&lt;&gt;()).add(value);</span>
+<span class="source-line-no">362</span><span id="line-362">                  options.computeIfAbsent(key, k -&gt; l()).add(value);</span>
 <span class="source-line-no">363</span><span id="line-363">                  currentKey = null;</span>
 <span class="source-line-no">364</span><span id="line-364">               } else {</span>
 <span class="source-line-no">365</span><span id="line-365">                  currentKey = normalizeKey(body);</span>
-<span class="source-line-no">366</span><span id="line-366">                  options.computeIfAbsent(currentKey, k -&gt; new ArrayList&lt;&gt;());</span>
+<span class="source-line-no">366</span><span id="line-366">                  options.computeIfAbsent(currentKey, k -&gt; l());</span>
 <span class="source-line-no">367</span><span id="line-367">               }</span>
 <span class="source-line-no">368</span><span id="line-368">            }</span>
 <span class="source-line-no">369</span><span id="line-369">         }</span>
@@ -388,7 +388,7 @@
 <span class="source-line-no">375</span><span id="line-375">         if (customPrefix != null) {</span>
 <span class="source-line-no">376</span><span id="line-376">            p = list(customPrefix);</span>
 <span class="source-line-no">377</span><span id="line-377">         } else {</span>
-<span class="source-line-no">378</span><span id="line-378">            p = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">378</span><span id="line-378">            p = l();</span>
 <span class="source-line-no">379</span><span id="line-379">            if (allowLongFlags)</span>
 <span class="source-line-no">380</span><span id="line-380">               p.add("--");</span>
 <span class="source-line-no">381</span><span id="line-381">            if (allowShortFlags)</span>

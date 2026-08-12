@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProviderSession.html#line-52">BasicOpenApiProviderSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProviderSession.html#line-53">BasicOpenApiProviderSession</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A single session of generating an OpenAPI 3.1 document.
 
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestContext,java.util.Locale,org.apache.juneau.marshall.cp.FileFinder,org.apache.juneau.marshall.cp.Messages,org.apache.juneau.commons.svl.VarResolverSession,org.apache.juneau.marshall.jsonschema.JsonSchemaGeneratorSession)">
 <h3>BasicOpenApiProviderSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProviderSession.html#line-129">BasicOpenApiProviderSession</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProviderSession.html#line-131">BasicOpenApiProviderSession</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale,
  <a href="../../../marshall/cp/FileFinder.html" title="interface in org.apache.juneau.marshall.cp">FileFinder</a>&nbsp;ff,
  <a href="../../../marshall/cp/Messages.html" title="class in org.apache.juneau.marshall.cp">Messages</a>&nbsp;messages,
@@ -165,7 +165,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>context</code> - The context of the REST object we're generating an OpenAPI doc for.</dd>
+<dd><code>context</code> - The context of the REST object we're generating an OpenAPI doc for.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>locale</code> - The language of the document we're asking for.</dd>
 <dd><code>ff</code> - The file finder to use for finding JSON files.</dd>
 <dd><code>messages</code> - The messages to use for finding localized strings.</dd>
@@ -185,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOpenApi()">
 <h3>getOpenApi</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProviderSession.html#line-139">getOpenApi</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProviderSession.html#line-141">getOpenApi</a></span>()
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Generates the OpenAPI 3.1 document.</div>
 <dl class="notes">

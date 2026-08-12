@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-40">RestOpInvoker</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-42">RestOpInvoker</a></span>
 <span class="extends-implements">extends <a href="stats/MethodInvoker.html" title="class in org.apache.juneau.rest.server.stats">MethodInvoker</a></span></div>
 <div class="block">A specialized invoker for methods that are called during a servlet request.
 
@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">invoke</a><wbr>(<a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Invokes this method from the specified <a href="RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a>.</div>
+<div class="block">Invokes this method from the specified <a href="RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeOp(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">invokeOp</a><wbr>(<a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
@@ -160,7 +160,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.reflect.Method,org.apache.juneau.rest.server.arg.RestOpArg[],org.apache.juneau.rest.server.stats.MethodExecStats)">
 <h3>RestOpInvoker</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-52">RestOpInvoker</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-54">RestOpInvoker</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
  <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>[]&nbsp;opArgs,
  <a href="stats/MethodExecStats.html" title="class in org.apache.juneau.rest.server.stats">MethodExecStats</a>&nbsp;stats)</span></div>
 <div class="block">Constructor.</div>
@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.reflect.Method,org.apache.juneau.rest.server.arg.RestOpArg[],org.apache.juneau.rest.server.stats.MethodExecStats,java.util.function.Supplier)">
 <h3>RestOpInvoker</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-64">RestOpInvoker</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-66">RestOpInvoker</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
  <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>[]&nbsp;opArgs,
  <a href="stats/MethodExecStats.html" title="class in org.apache.juneau.rest.server.stats">MethodExecStats</a>&nbsp;stats,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;resourceSupplier)</span></div>
@@ -200,12 +200,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invoke(org.apache.juneau.rest.server.RestOpSession)">
 <h3>invoke</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-76">invoke</a></span><wbr><span class="parameters">(<a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-78">invoke</a></span><wbr><span class="parameters">(<a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Invokes this method from the specified <a href="RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a>.</div>
+<div class="block">Invokes this method from the specified <a href="RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>opSession</code> - The REST call.</dd>
+<dd><code>opSession</code> - The REST call. Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - If an error occurred during either parameter resolution or method invocation.</dd>
 </dl>
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invokeOp(org.apache.juneau.rest.server.RestOpSession)">
 <h3>invokeOp</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-109">invokeOp</a></span><wbr><span class="parameters">(<a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestOpInvoker.html#line-111">invokeOp</a></span><wbr><span class="parameters">(<a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Invokes this method as the main <code>@RestOp</code> handler from the specified <a href="RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a>,
  firing per-request observability hooks (<a href="metrics/MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics"><code>MetricsRecorder</code></a> and <a href="tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>) around the
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
  and outcome — not the synchronous "future returned" moment.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>opSession</code> - The REST call.</dd>
+<dd><code>opSession</code> - The REST call. Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - If an error occurred during either parameter resolution or method invocation.</dd>
 </dl>

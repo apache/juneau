@@ -146,8 +146,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>m</code> - The bean map to populate.</dd>
-<dd><code>input</code> - The text that will get parsed into a map and then added to <code>m</code>.</dd>
+<dd><code>m</code> - The bean map to populate. Must not be <jk>null</jk>.</dd>
+<dd><code>input</code> - The text that will get parsed into a map and then added to <code>m</code>. Can be <jk>null</jk> (nothing is added).</dd>
 <dt>Returns:</dt>
 <dd>The supplied bean map for fluent chaining.</dd>
 <dt>Throws:</dt>
@@ -170,8 +170,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>m</code> - The bean map to populate.</dd>
-<dd><code>r</code> - The reader containing serialized text.</dd>
+<dd><code>m</code> - The bean map to populate. Must not be <jk>null</jk>.</dd>
+<dd><code>r</code> - The reader containing serialized text. Can be <jk>null</jk> (nothing is added).</dd>
 <dd><code>p</code> - The parser to use to parse the text.</dd>
 <dt>Returns:</dt>
 <dd>The supplied bean map for fluent chaining.</dd>

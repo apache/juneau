@@ -282,14 +282,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="zdt">
 <h3>zdt</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-794">zdt</a></span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-797">zdt</a></span></div>
 <div class="block">The ZonedDateTime value</div>
 </section>
 </li>
 <li>
 <section class="detail" id="precision">
 <h3>precision</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-797">precision</a></span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-800">precision</a></span></div>
 <div class="block">The precision of this time value</div>
 </section>
 </li>
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.time.ZonedDateTime,java.time.temporal.ChronoField)">
 <h3>GranularZonedDateTime</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-805">GranularZonedDateTime</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a>&nbsp;zdt,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-808">GranularZonedDateTime</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a>&nbsp;zdt,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a>&nbsp;precision)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -325,7 +325,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.util.Date,java.time.temporal.ChronoField)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-114">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a>&nbsp;date,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-115">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a>&nbsp;date,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a>&nbsp;precision)</span></div>
 <div class="block">Creates a GranularZonedDateTime from a Date with the specified precision.
 
@@ -333,19 +333,20 @@ loadScripts(document, 'script');</script>
  The date is converted to a ZonedDateTime using the system default timezone.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>date</code> - The date to convert.</dd>
-<dd><code>precision</code> - The precision of the time value.</dd>
+<dd><code>date</code> - The date to convert.  Must not be <jk>null</jk> (a <jk>null</jk> value throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
+<dd><code>precision</code> - The precision of the time value.  Not validated — a <jk>null</jk> value is stored as-is and
+   only surfaces later (e.g. <a href="#roll(int)"><code>roll(int)</code></a> throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> when precision is <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>A new GranularZonedDateTime instance.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if date or precision is null.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - if date is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="of(java.util.Date,java.time.temporal.ChronoField,java.time.ZoneId)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-130">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a>&nbsp;date,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-132">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a>&nbsp;date,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a>&nbsp;precision,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link">ZoneId</a>&nbsp;zoneId)</span></div>
 <div class="block">Creates a GranularZonedDateTime from a Date with the specified precision and timezone.
@@ -354,20 +355,21 @@ loadScripts(document, 'script');</script>
  The date is converted to a ZonedDateTime using the specified timezone.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>date</code> - The date to convert.</dd>
-<dd><code>precision</code> - The precision of the time value.</dd>
-<dd><code>zoneId</code> - The timezone to use.</dd>
+<dd><code>date</code> - The date to convert.  Must not be <jk>null</jk> (a <jk>null</jk> value throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
+<dd><code>precision</code> - The precision of the time value.  Not validated — a <jk>null</jk> value is stored as-is and
+   only surfaces later (e.g. <a href="#roll(int)"><code>roll(int)</code></a> throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> when precision is <jk>null</jk>).</dd>
+<dd><code>zoneId</code> - The timezone to use.  Must not be <jk>null</jk> (a <jk>null</jk> value throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>A new GranularZonedDateTime instance.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if date, precision, or zoneId is null.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - if date or zoneId is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-177">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-179">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Parses an ISO8601 timestamp string into a GranularZonedDateTime.
 
  <p>
@@ -418,7 +420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.time.Clock)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-214">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-216">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">Parses an ISO8601 timestamp string into a GranularZonedDateTime with a custom clock.
 
@@ -460,7 +462,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.time.ZoneId,java.time.Clock)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-268">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-270">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link">ZoneId</a>&nbsp;defaultZoneId,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">Parses an ISO8601 timestamp string into a GranularZonedDateTime with a default timezone and custom clock.
@@ -518,7 +520,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.time.ZonedDateTime,java.time.temporal.ChronoField)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-721">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a>&nbsp;date,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-724">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a>&nbsp;date,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a>&nbsp;precision)</span></div>
 <div class="block">Creates a GranularZonedDateTime from a ZonedDateTime with the specified precision.
 
@@ -527,19 +529,19 @@ loadScripts(document, 'script');</script>
  a ZonedDateTime and want to specify its precision.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>date</code> - The ZonedDateTime value.</dd>
-<dd><code>precision</code> - The precision of the time value.</dd>
+<dd><code>date</code> - The ZonedDateTime value.  Not validated — a <jk>null</jk> value is stored as-is.</dd>
+<dd><code>precision</code> - The precision of the time value.  Not validated — a <jk>null</jk> value is stored as-is.
+   <br>Neither argument is null-checked here; a <jk>null</jk> value only surfaces later (e.g. <a href="#roll(int)"><code>roll(int)</code></a>
+   or <a href="#toString()"><code>toString()</code></a> throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> when the corresponding field is <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>A new GranularZonedDateTime instance.</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if date or precision is null.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-815">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-818">copy</a></span>()</div>
 <div class="block">Creates a copy of this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -550,7 +552,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getZonedDateTime()">
 <h3>getZonedDateTime</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-824">getZonedDateTime</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-827">getZonedDateTime</a></span>()</div>
 <div class="block">Returns the ZonedDateTime value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -561,7 +563,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPrecision()">
 <h3>getPrecision</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-845">getPrecision</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-848">getPrecision</a></span>()</div>
 <div class="block">Returns the precision of this time value.
 
  <p>
@@ -586,7 +588,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-847">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-850">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -596,7 +598,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="roll(java.time.temporal.ChronoField,int)">
 <h3>roll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-885">roll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a>&nbsp;field,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-888">roll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link">ChronoField</a>&nbsp;field,
  int&nbsp;amount)</span></div>
 <div class="block">Rolls this time value by the specified amount using the specified field.
 
@@ -638,7 +640,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="roll(int)">
 <h3>roll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-911">roll</a></span><wbr><span class="parameters">(int&nbsp;amount)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/time/GranularZonedDateTime.html#line-914">roll</a></span><wbr><span class="parameters">(int&nbsp;amount)</span></div>
 <div class="block">Rolls this time value by the specified amount using the current precision.
 
  <p>

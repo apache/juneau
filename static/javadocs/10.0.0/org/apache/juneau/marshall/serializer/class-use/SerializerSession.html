@@ -169,6 +169,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">YAML Marshalling Support</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.marshall">org.apache.juneau.petstore.marshall</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore-local marshalling support.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -181,7 +185,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ImageSerializer.</span><code><a href="../../../examples/serializer/ImageSerializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">ImageSerializer.</span><code><a href="../../../examples/serializer/ImageSerializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">
@@ -574,7 +578,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">
@@ -680,7 +684,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a single-shot <a href="../../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that delegates <code>write(Object)</code> calls to the
- session's <a href="../SerializerSession.html#serialize(java.lang.Object,java.lang.Object)"><code>serialize(...)</code></a> entry point.</div>
+ session's <a href="../SerializerSession.html#write(java.lang.Object,java.lang.Object)"><code>write(...)</code></a> entry point.</div>
 </div>
 </div>
 </section>
@@ -766,6 +770,24 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../../yaml/YamlSerializerSession.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlSerializerSession</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Session object that lives for the duration of a single use of <a href="../../yaml/YamlSerializer.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlSerializer</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.marshall">
+<h2>Uses of <a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a> in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a> with parameters of type <a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetPhotoSerializer.</span><code><a href="../../../petstore/marshall/PetPhotoSerializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+ <a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified pipe.</div>
 </div>
 </div>
 </section>

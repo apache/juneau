@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-31">EntityTags</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-30">EntityTags</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A list of <a href="EntityTag.html" title="class in org.apache.juneau.http.header"><code>EntityTag</code></a> beans.</div>
 </section>
@@ -180,7 +180,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="EMPTY">
 <h3>EMPTY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EntityTags.html" title="class in org.apache.juneau.http.header">EntityTags</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-34">EMPTY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EntityTags.html" title="class in org.apache.juneau.http.header">EntityTags</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-33">EMPTY</a></span></div>
 <div class="block">Represents an empty entity tags object.</div>
 </section>
 </li>
@@ -195,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.header.EntityTag...)">
 <h3>EntityTags</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-66">EntityTags</a></span><wbr><span class="parameters">(<a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-65">EntityTags</a></span><wbr><span class="parameters">(<a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>...&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -206,11 +206,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>EntityTags</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-76">EntityTags</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-75">EntityTags</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The header value.</dd>
+<dd><code>value</code> - The header value. Can be <jk>null</jk> (treated as empty).</dd>
 </dl>
 </section>
 </li>
@@ -225,61 +225,61 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(org.apache.juneau.http.header.EntityTag...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EntityTags.html" title="class in org.apache.juneau.http.header">EntityTags</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-44">of</a></span><wbr><span class="parameters">(<a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EntityTags.html" title="class in org.apache.juneau.http.header">EntityTags</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-43">of</a></span><wbr><span class="parameters">(<a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>...&nbsp;value)</span></div>
 <div class="block">Returns a parsed entity tags header value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The header value.</dd>
+<dd><code>value</code> - The header value. Can be <jk>null</jk>, in which case <jk>null</jk> is returned.</dd>
 <dt>Returns:</dt>
-<dd>A parsed header value.</dd>
+<dd>A parsed header value, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EntityTags.html" title="class in org.apache.juneau.http.header">EntityTags</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-54">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EntityTags.html" title="class in org.apache.juneau.http.header">EntityTags</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-53">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Returns a parsed entity tags header value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The raw header value.</dd>
+<dd><code>value</code> - The raw header value. Can be <jk>null</jk> or empty, in which case <a href="#EMPTY"><code>EMPTY</code></a> is returned.</dd>
 <dt>Returns:</dt>
-<dd>A parsed header value.</dd>
+<dd>A parsed header value. Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toArray()">
 <h3>toArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-89">toArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-88">toArray</a></span>()</div>
 <div class="block">Returns the entity tags in this object as an array.
 
  <p>
  Returns a copy of the entity tags.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The entity tags in this object as an array.  Can be <jk>null</jk>.</dd>
+<dd>The entity tags in this object as an array.  Can be <jk>null</jk> if this object was constructed with a <jk>null</jk> array.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toList()">
 <h3>toList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-101">toList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EntityTag.html" title="class in org.apache.juneau.http.header">EntityTag</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-100">toList</a></span>()</div>
 <div class="block">Returns the entity tags in this object as a list.
 
  <p>
  Returns an unmodifiable list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The entity tags in this object as a list.  Can be <jk>null</jk>.</dd>
+<dd>The entity tags in this object as a list.  Can be <jk>null</jk> if this object was constructed with a <jk>null</jk> array.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-105">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-104">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-110">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-109">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -299,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-115">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/EntityTags.html#line-114">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

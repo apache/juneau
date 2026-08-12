@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Use the default parser to parse JSONL into a list of POJOs&lt;/jc&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *    List&amp;lt;MyBean&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = JsonlParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.parse(&lt;jv&gt;jsonlInput&lt;/jv&gt;, List.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">052</span><span id="line-52"> *    List&amp;lt;MyBean&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = JsonlParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;jsonlInput&lt;/jv&gt;, List.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;jc&gt;// Create a custom parser&lt;/jc&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    JsonlParser &lt;jv&gt;parser&lt;/jv&gt; = JsonlParser.&lt;jsm&gt;create&lt;/jsm&gt;().build();</span>

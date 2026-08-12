@@ -228,11 +228,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.MarshallingTraverseContext.Builder)">
 <h3>MarshallingTraverseContext</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-297">MarshallingTraverseContext</a></span><wbr><span class="parameters">(<a href="MarshallingTraverseContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-307">MarshallingTraverseContext</a></span><wbr><span class="parameters">(<a href="MarshallingTraverseContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.  Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -247,7 +247,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="MarshallingTraverseContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-308">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="MarshallingTraverseContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-318">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -264,7 +264,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInitialDepth()">
 <h3>getInitialDepth</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-318">getInitialDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-328">getInitialDepth</a></span>()</div>
 <div class="block">Initial depth.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -281,12 +281,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMaxDepth()">
 <h3>getMaxDepth</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-328">getMaxDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-339">getMaxDepth</a></span>()</div>
 <div class="block">Max traversal depth.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The depth at which traversal is aborted if depth is reached in the POJO tree.
-   <br>If this depth is exceeded, an exception is thrown.</dd>
+<dd>The depth beyond which nodes in the POJO tree are dropped (truncated) from the output.
+   <br>Values deeper than this limit are silently omitted rather than causing an exception to be thrown.
+   <br>This is a size guard, not a cycle detector.</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">
@@ -299,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDetectRecursions()">
 <h3>isDetectRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-337">isDetectRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-348">isDetectRecursions</a></span>()</div>
 <div class="block">Automatically detect POJO recursions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -316,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="shouldDetectRecursions()">
 <h3>shouldDetectRecursions</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-343">shouldDetectRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-354">shouldDetectRecursions</a></span>()</div>
 <div class="block">Whether recursion detection is effectively enabled during traversal.
  This is <a href="#isDetectRecursions()"><code>isDetectRecursions()</code></a> OR <a href="#isIgnoreRecursions()"><code>isIgnoreRecursions()</code></a> OR <a href="Context.html#isDebug()"><code>Context.isDebug()</code></a>.</div>
 </section>
@@ -324,7 +325,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreRecursions()">
 <h3>isIgnoreRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-353">isIgnoreRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-364">isIgnoreRecursions</a></span>()</div>
 <div class="block">Ignore recursion errors.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -342,7 +343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDetectRecursions()">
 <h3>getDetectRecursions</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-360">getDetectRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-371">getDetectRecursions</a></span>()</div>
 <div class="block">Detect recursions flag (raw value).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -353,7 +354,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getIgnoreRecursions()">
 <h3>getIgnoreRecursions</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-367">getIgnoreRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-378">getIgnoreRecursions</a></span>()</div>
 <div class="block">Ignore recursions flag (raw value).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -364,7 +365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-369">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseContext.html#line-380">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

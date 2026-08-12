@@ -112,54 +112,57 @@
 <span class="source-line-no">099</span><span id="line-99">    *</span>
 <span class="source-line-no">100</span><span id="line-100">    * @param os The OutputStream to wrap. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">101</span><span id="line-101">    */</span>
-<span class="source-line-no">102</span><span id="line-102">   public NoCloseOutputStream(OutputStream os) {</span>
-<span class="source-line-no">103</span><span id="line-103">      this.os = assertArgNotNull(ARG_os, os);</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   /**</span>
-<span class="source-line-no">107</span><span id="line-107">    * Flushes the stream but does not close the underlying OutputStream.</span>
-<span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * &lt;p&gt;</span>
-<span class="source-line-no">110</span><span id="line-110">    * This method flushes any buffered data to the underlying stream but does not close it.</span>
-<span class="source-line-no">111</span><span id="line-111">    * The underlying stream remains open and can continue to be used after this method is called.</span>
-<span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">115</span><span id="line-115">    *    FileOutputStream &lt;jv&gt;fos&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FileOutputStream(&lt;js&gt;"file.txt"&lt;/js&gt;);</span>
-<span class="source-line-no">116</span><span id="line-116">    *    NoCloseOutputStream &lt;jv&gt;wrapper&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; NoCloseOutputStream(&lt;jv&gt;fos&lt;/jv&gt;);</span>
-<span class="source-line-no">117</span><span id="line-117">    *    &lt;jv&gt;wrapper&lt;/jv&gt;.close();  &lt;jc&gt;// Flushes but doesn't close fos&lt;/jc&gt;</span>
-<span class="source-line-no">118</span><span id="line-118">    *    &lt;jv&gt;fos&lt;/jv&gt;.write(&lt;js&gt;"still works"&lt;/js&gt;.getBytes());  &lt;jc&gt;// fos is still open&lt;/jc&gt;</span>
-<span class="source-line-no">119</span><span id="line-119">    * &lt;/p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    *</span>
-<span class="source-line-no">121</span><span id="line-121">    * @throws IOException If an I/O error occurs while flushing.</span>
-<span class="source-line-no">122</span><span id="line-122">    */</span>
-<span class="source-line-no">123</span><span id="line-123">   @Override /* Overridden from OutputStream */</span>
-<span class="source-line-no">124</span><span id="line-124">   public void close() throws IOException {</span>
-<span class="source-line-no">125</span><span id="line-125">      os.flush();</span>
-<span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   @Override /* Overridden from OutputStream */</span>
-<span class="source-line-no">129</span><span id="line-129">   public void flush() throws IOException {</span>
-<span class="source-line-no">130</span><span id="line-130">      os.flush();</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">   @Override /* Overridden from OutputStream */</span>
-<span class="source-line-no">134</span><span id="line-134">   public void write(byte[] b) throws IOException {</span>
-<span class="source-line-no">135</span><span id="line-135">      assertArgNotNull(ARG_b, b);</span>
-<span class="source-line-no">136</span><span id="line-136">      os.write(b);</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   @Override /* Overridden from OutputStream */</span>
-<span class="source-line-no">140</span><span id="line-140">   public void write(byte[] b, int off, int len) throws IOException {</span>
-<span class="source-line-no">141</span><span id="line-141">      assertArgNotNull(ARG_b, b);</span>
-<span class="source-line-no">142</span><span id="line-142">      os.write(b, off, len);</span>
-<span class="source-line-no">143</span><span id="line-143">   }</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   @Override /* Overridden from OutputStream */</span>
-<span class="source-line-no">146</span><span id="line-146">   public void write(int b) throws IOException {</span>
-<span class="source-line-no">147</span><span id="line-147">      os.write(b);</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149">}</span>
+<span class="source-line-no">102</span><span id="line-102">   @SuppressWarnings({</span>
+<span class="source-line-no">103</span><span id="line-103">      "resource" // Intentionally not owned; this wrapper deliberately does not close the underlying stream</span>
+<span class="source-line-no">104</span><span id="line-104">   })</span>
+<span class="source-line-no">105</span><span id="line-105">   public NoCloseOutputStream(OutputStream os) {</span>
+<span class="source-line-no">106</span><span id="line-106">      this.os = assertArgNotNull(ARG_os, os);</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   /**</span>
+<span class="source-line-no">110</span><span id="line-110">    * Flushes the stream but does not close the underlying OutputStream.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * &lt;p&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * This method flushes any buffered data to the underlying stream but does not close it.</span>
+<span class="source-line-no">114</span><span id="line-114">    * The underlying stream remains open and can continue to be used after this method is called.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">117</span><span id="line-117">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    *    FileOutputStream &lt;jv&gt;fos&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FileOutputStream(&lt;js&gt;"file.txt"&lt;/js&gt;);</span>
+<span class="source-line-no">119</span><span id="line-119">    *    NoCloseOutputStream &lt;jv&gt;wrapper&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; NoCloseOutputStream(&lt;jv&gt;fos&lt;/jv&gt;);</span>
+<span class="source-line-no">120</span><span id="line-120">    *    &lt;jv&gt;wrapper&lt;/jv&gt;.close();  &lt;jc&gt;// Flushes but doesn't close fos&lt;/jc&gt;</span>
+<span class="source-line-no">121</span><span id="line-121">    *    &lt;jv&gt;fos&lt;/jv&gt;.write(&lt;js&gt;"still works"&lt;/js&gt;.getBytes());  &lt;jc&gt;// fos is still open&lt;/jc&gt;</span>
+<span class="source-line-no">122</span><span id="line-122">    * &lt;/p&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    *</span>
+<span class="source-line-no">124</span><span id="line-124">    * @throws IOException If an I/O error occurs while flushing.</span>
+<span class="source-line-no">125</span><span id="line-125">    */</span>
+<span class="source-line-no">126</span><span id="line-126">   @Override /* Overridden from OutputStream */</span>
+<span class="source-line-no">127</span><span id="line-127">   public void close() throws IOException {</span>
+<span class="source-line-no">128</span><span id="line-128">      os.flush();</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   @Override /* Overridden from OutputStream */</span>
+<span class="source-line-no">132</span><span id="line-132">   public void flush() throws IOException {</span>
+<span class="source-line-no">133</span><span id="line-133">      os.flush();</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   @Override /* Overridden from OutputStream */</span>
+<span class="source-line-no">137</span><span id="line-137">   public void write(byte[] b) throws IOException {</span>
+<span class="source-line-no">138</span><span id="line-138">      assertArgNotNull(ARG_b, b);</span>
+<span class="source-line-no">139</span><span id="line-139">      os.write(b);</span>
+<span class="source-line-no">140</span><span id="line-140">   }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   @Override /* Overridden from OutputStream */</span>
+<span class="source-line-no">143</span><span id="line-143">   public void write(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">144</span><span id="line-144">      assertArgNotNull(ARG_b, b);</span>
+<span class="source-line-no">145</span><span id="line-145">      os.write(b, off, len);</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   @Override /* Overridden from OutputStream */</span>
+<span class="source-line-no">149</span><span id="line-149">   public void write(int b) throws IOException {</span>
+<span class="source-line-no">150</span><span id="line-150">      os.write(b);</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152">}</span>
 
 
 

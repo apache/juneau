@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -42,7 +46,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -51,7 +55,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
 <div class="nav-list-search"><label for="search-input">SEARCH:</label>
@@ -87,10 +91,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="../../rest/server/auth/AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></code></dd>
+<dd><code><a href="../../rest/server/auth/AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></code>, <code><a href="Unauthorized.Unmodifiable.html" title="class in org.apache.juneau.http.response">Unauthorized.Unmodifiable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-37">Unauthorized</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-41">Unauthorized</a></span>
 <span class="extends-implements">extends <a href="BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block">Represents an <c>HTTP 401 Unauthorized</c> error response.
 
@@ -119,6 +123,23 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="Unauthorized.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.response">Unauthorized.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="Unauthorized.html" title="class in org.apache.juneau.http.response"><code>Unauthorized</code></a> exception.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -156,7 +177,7 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.Object...)" class="member-name-link">Unauthorized</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor with a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>- or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
+<div class="block">Constructor with a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
 </div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.Throwable)" class="member-name-link">Unauthorized</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
 <div class="col-last even-row-color">
@@ -166,7 +187,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor with a cause and a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>- or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
+<div class="block">Constructor with a cause and a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
 </div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.response.Unauthorized)" class="member-name-link">Unauthorized</a><wbr>(<a href="Unauthorized.html" title="class in org.apache.juneau.http.response">Unauthorized</a>&nbsp;copyFrom)</code></div>
 <div class="col-last even-row-color">
@@ -179,15 +200,30 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
+<div id="method-summary-table">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Unauthorized.html" title="class in org.apache.juneau.http.response">Unauthorized</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns an unmodifiable snapshot of this bean.</div>
+</div>
+</div>
+</div>
+</div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.http.response.BasicHttpException">Methods inherited from class&nbsp;org.apache.juneau.http.response.<a href="BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></h3>
-<code><a href="BasicHttpException.html#addHeader(java.lang.String,java.lang.String)">addHeader</a>, <a href="BasicHttpException.html#addHeader(org.apache.juneau.http.HttpHeader)">addHeader</a>, <a href="BasicHttpException.html#assertModifiable()">assertModifiable</a>, <a href="BasicHttpException.html#getBody()">getBody</a>, <a href="BasicHttpException.html#getFullStackMessage(boolean)">getFullStackMessage</a>, <a href="BasicHttpException.html#getHeaders()">getHeaders</a>, <a href="BasicHttpException.html#getLocale()">getLocale</a>, <a href="BasicHttpException.html#getMessage()">getMessage</a>, <a href="BasicHttpException.html#getRootCause()">getRootCause</a>, <a href="BasicHttpException.html#getStatusCode()">getStatusCode</a>, <a href="BasicHttpException.html#getStatusLine()">getStatusLine</a>, <a href="BasicHttpException.html#isUnmodifiable()">isUnmodifiable</a>, <a href="BasicHttpException.html#setBody(org.apache.juneau.http.HttpBody)">setBody</a>, <a href="BasicHttpException.html#setContent(java.lang.String)">setContent</a>, <a href="BasicHttpException.html#setContent(org.apache.juneau.http.HttpBody)">setContent</a>, <a href="BasicHttpException.html#setHeader(java.lang.String,java.lang.String)">setHeader</a>, <a href="BasicHttpException.html#setHeader(org.apache.juneau.http.HttpHeader)">setHeader</a>, <a href="BasicHttpException.html#setHeaders(java.util.List)">setHeaders</a>, <a href="BasicHttpException.html#setHeaders(org.apache.juneau.http.HttpHeader...)">setHeaders</a>, <a href="BasicHttpException.html#setLocale(java.util.Locale)">setLocale</a>, <a href="BasicHttpException.html#setProtocolVersion(org.apache.juneau.http.HttpProtocolVersion)">setProtocolVersion</a>, <a href="BasicHttpException.html#setReasonPhrase(java.lang.String)">setReasonPhrase</a>, <a href="BasicHttpException.html#setStatusCode(int)">setStatusCode</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.juneau.http.HttpStatusLine)">setStatusLine</a>, <a href="BasicHttpException.html#setUnmodifiable()">setUnmodifiable</a>, <a href="BasicHttpException.html#toString()">toString</a></code></div>
+<code><a href="BasicHttpException.html#addHeader(java.lang.String,java.lang.String)">addHeader</a>, <a href="BasicHttpException.html#addHeader(org.apache.juneau.http.HttpHeader)">addHeader</a>, <a href="BasicHttpException.html#equals(java.lang.Object)">equals</a>, <a href="BasicHttpException.html#freeze()">freeze</a>, <a href="BasicHttpException.html#getBody()">getBody</a>, <a href="BasicHttpException.html#getFullStackMessage(boolean)">getFullStackMessage</a>, <a href="BasicHttpException.html#getHeaders()">getHeaders</a>, <a href="BasicHttpException.html#getLocale()">getLocale</a>, <a href="BasicHttpException.html#getMessage()">getMessage</a>, <a href="BasicHttpException.html#getRootCause()">getRootCause</a>, <a href="BasicHttpException.html#getStatusCode()">getStatusCode</a>, <a href="BasicHttpException.html#getStatusLine()">getStatusLine</a>, <a href="BasicHttpException.html#hashCode()">hashCode</a>, <a href="BasicHttpException.html#isUnmodifiable()">isUnmodifiable</a>, <a href="BasicHttpException.html#modify(java.lang.Runnable)">modify</a>, <a href="BasicHttpException.html#setBody(org.apache.juneau.http.HttpBody)">setBody</a>, <a href="BasicHttpException.html#setContent(java.lang.String)">setContent</a>, <a href="BasicHttpException.html#setContent(org.apache.juneau.http.HttpBody)">setContent</a>, <a href="BasicHttpException.html#setHeader(java.lang.String,java.lang.String)">setHeader</a>, <a href="BasicHttpException.html#setHeader(org.apache.juneau.http.HttpHeader)">setHeader</a>, <a href="BasicHttpException.html#setHeaders(java.util.List)">setHeaders</a>, <a href="BasicHttpException.html#setHeaders(org.apache.juneau.http.HttpHeader...)">setHeaders</a>, <a href="BasicHttpException.html#setLocale(java.util.Locale)">setLocale</a>, <a href="BasicHttpException.html#setProtocolVersion(org.apache.juneau.http.HttpProtocolVersion)">setProtocolVersion</a>, <a href="BasicHttpException.html#setReasonPhrase(java.lang.String)">setReasonPhrase</a>, <a href="BasicHttpException.html#setStatusCode(int)">setStatusCode</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.juneau.http.HttpStatusLine)">setStatusLine</a>, <a href="BasicHttpException.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Throwable">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#addSuppressed(java.lang.Throwable)" title="class or interface in java.lang" class="external-link">addSuppressed</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#fillInStackTrace()" title="class or interface in java.lang" class="external-link">fillInStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getCause()" title="class or interface in java.lang" class="external-link">getCause</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getLocalizedMessage()" title="class or interface in java.lang" class="external-link">getLocalizedMessage</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getStackTrace()" title="class or interface in java.lang" class="external-link">getStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getSuppressed()" title="class or interface in java.lang" class="external-link">getSuppressed</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#initCause(java.lang.Throwable)" title="class or interface in java.lang" class="external-link">initCause</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#printStackTrace()" title="class or interface in java.lang" class="external-link">printStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#printStackTrace(java.io.PrintStream)" title="class or interface in java.lang" class="external-link">printStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#printStackTrace(java.io.PrintWriter)" title="class or interface in java.lang" class="external-link">printStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#setStackTrace(java.lang.StackTraceElement%5B%5D)" title="class or interface in java.lang" class="external-link">setStackTrace</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.http.response.HttpResponseMessage">Methods inherited from interface&nbsp;org.apache.juneau.http.response.<a href="HttpResponseMessage.html" title="interface in org.apache.juneau.http.response">HttpResponseMessage</a></h3>
 <code><a href="HttpResponseMessage.html#getFirstHeader(java.lang.String)">getFirstHeader</a>, <a href="HttpResponseMessage.html#getHeaders(java.lang.String)">getHeaders</a></code></div>
@@ -205,7 +241,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="STATUS_CODE">
 <h3>STATUS_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-42">STATUS_CODE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-49">STATUS_CODE</a></span></div>
 <div class="block">HTTP status code</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -220,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="REASON_PHRASE">
 <h3>REASON_PHRASE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-45">REASON_PHRASE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-52">REASON_PHRASE</a></span></div>
 <div class="block">Reason phrase</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -243,20 +279,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Unauthorized</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-50">Unauthorized</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-57">Unauthorized</a></span>()</div>
 <div class="block">Constructor with no message.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Object...)">
 <h3>Unauthorized</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-61">Unauthorized</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-68">Unauthorized</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Constructor with a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>- or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
+<div class="block">Constructor with a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>msg</code> - The detail message. May be <jk>null</jk>.
-    Treated as a format pattern when <code>args</code> is non-empty. Supports both <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a> (<code>{0}</code>) and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a> (<code>%s</code>) placeholders.</dd>
+    Treated as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style format string (<c>%s</c> placeholders) when <code>args</code> is non-empty.</dd>
 <dd><code>args</code> - Optional message arguments.</dd>
 </dl>
 </section>
@@ -264,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Throwable)">
 <h3>Unauthorized</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-70">Unauthorized</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-77">Unauthorized</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
 <div class="block">Constructor with a cause.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -275,15 +311,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>Unauthorized</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-82">Unauthorized</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-89">Unauthorized</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Constructor with a cause and a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>- or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
+<div class="block">Constructor with a cause and a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>cause</code> - The cause. May be <jk>null</jk>.</dd>
 <dd><code>msg</code> - The detail message. May be <jk>null</jk>.
-    Treated as a format pattern when <code>args</code> is non-empty. Supports both <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a> (<code>{0}</code>) and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a> (<code>%s</code>) placeholders.</dd>
+    Treated as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style format string (<c>%s</c> placeholders) when <code>args</code> is non-empty.</dd>
 <dd><code>args</code> - Optional message arguments.</dd>
 </dl>
 </section>
@@ -291,11 +327,39 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.response.Unauthorized)">
 <h3>Unauthorized</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-91">Unauthorized</a></span><wbr><span class="parameters">(<a href="Unauthorized.html" title="class in org.apache.juneau.http.response">Unauthorized</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-98">Unauthorized</a></span><wbr><span class="parameters">(<a href="Unauthorized.html" title="class in org.apache.juneau.http.response">Unauthorized</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>copyFrom</code> - The instance to copy. Must not be <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<!-- ============ METHOD DETAIL ========== -->
+<li>
+<section class="method-details" id="method-detail">
+<h2>Method Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="unmodifiable()">
+<h3>unmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Unauthorized.html" title="class in org.apache.juneau.http.response">Unauthorized</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/Unauthorized.html#line-102">unmodifiable</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#unmodifiable()">BasicHttpException</a></code></span></div>
+<div class="block">Returns an unmodifiable snapshot of this bean.
+
+ <p>
+ The returned instance is a point-in-time copy of the leaf's nested <code>Unmodifiable</code> type; any attempt to set a
+ property on it throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.  This method is idempotent: if this bean is already
+ unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+ modifiable unless it was already unmodifiable).</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="BasicHttpException.html#unmodifiable()">unmodifiable</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></code></dd>
+<dt>Returns:</dt>
+<dd>An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</dd>
 </dl>
 </section>
 </li>

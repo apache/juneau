@@ -152,8 +152,8 @@
 <span class="source-line-no">139</span><span id="line-139">   /**</span>
 <span class="source-line-no">140</span><span id="line-140">    * Constructor.</span>
 <span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * @param req The request creating this bean.</span>
-<span class="source-line-no">143</span><span id="line-143">    * @param query The raw parsed query parameter values.</span>
+<span class="source-line-no">142</span><span id="line-142">    * @param req The request creating this bean.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">143</span><span id="line-143">    * @param query The raw parsed query parameter values.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">144</span><span id="line-144">    * @param caseSensitive Whether case-sensitive name matching is enabled.</span>
 <span class="source-line-no">145</span><span id="line-145">    */</span>
 <span class="source-line-no">146</span><span id="line-146">   public RequestQueryParamList(RestRequest req, Map&lt;String,String[]&gt; query, boolean caseSensitive) {</span>
@@ -248,358 +248,360 @@
 <span class="source-line-no">235</span><span id="line-235">    *</span>
 <span class="source-line-no">236</span><span id="line-236">    * @param pairs</span>
 <span class="source-line-no">237</span><span id="line-237">    *    The default entries.</span>
-<span class="source-line-no">238</span><span id="line-238">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">238</span><span id="line-238">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
 <span class="source-line-no">239</span><span id="line-239">    * @return This object.</span>
 <span class="source-line-no">240</span><span id="line-240">    */</span>
 <span class="source-line-no">241</span><span id="line-241">   public RequestQueryParamList addDefault(List&lt;? extends HttpPart&gt; pairs) {</span>
-<span class="source-line-no">242</span><span id="line-242">      for (var p : pairs) {</span>
-<span class="source-line-no">243</span><span id="line-243">         var name = p.getName();</span>
-<span class="source-line-no">244</span><span id="line-244">         var l = stream(name);</span>
-<span class="source-line-no">245</span><span id="line-245">         var hasAllBlanks = l.allMatch(x -&gt; Shorts.ie(x.getValue()));</span>
-<span class="source-line-no">246</span><span id="line-246">         if (hasAllBlanks) {</span>
-<span class="source-line-no">247</span><span id="line-247">            removeAll(getAll(name));</span>
-<span class="source-line-no">248</span><span id="line-248">            add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));</span>
-<span class="source-line-no">249</span><span id="line-249">         }</span>
-<span class="source-line-no">250</span><span id="line-250">      }</span>
-<span class="source-line-no">251</span><span id="line-251">      return this;</span>
-<span class="source-line-no">252</span><span id="line-252">   }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   /**</span>
-<span class="source-line-no">255</span><span id="line-255">    * Adds default entries to these parameters.</span>
-<span class="source-line-no">256</span><span id="line-256">    *</span>
-<span class="source-line-no">257</span><span id="line-257">    * &lt;p&gt;</span>
-<span class="source-line-no">258</span><span id="line-258">    * Similar to {@link #set(String, Object)} but doesn't override existing values.</span>
-<span class="source-line-no">259</span><span id="line-259">    *</span>
-<span class="source-line-no">260</span><span id="line-260">    * @param pairs</span>
-<span class="source-line-no">261</span><span id="line-261">    *    The default entries.</span>
-<span class="source-line-no">262</span><span id="line-262">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">263</span><span id="line-263">    * @return This object.</span>
-<span class="source-line-no">264</span><span id="line-264">    */</span>
-<span class="source-line-no">265</span><span id="line-265">   public RequestQueryParamList addDefault(HttpPart...pairs) {</span>
-<span class="source-line-no">266</span><span id="line-266">      return addDefault(l(pairs));</span>
-<span class="source-line-no">267</span><span id="line-267">   }</span>
-<span class="source-line-no">268</span><span id="line-268"></span>
-<span class="source-line-no">269</span><span id="line-269">   /**</span>
-<span class="source-line-no">270</span><span id="line-270">    * Adds a default entry to the query parameters.</span>
-<span class="source-line-no">271</span><span id="line-271">    *</span>
-<span class="source-line-no">272</span><span id="line-272">    * @param name The name.</span>
-<span class="source-line-no">273</span><span id="line-273">    * @param value The value.</span>
-<span class="source-line-no">274</span><span id="line-274">    * @return This object.</span>
-<span class="source-line-no">275</span><span id="line-275">    */</span>
-<span class="source-line-no">276</span><span id="line-276">   public RequestQueryParamList addDefault(String name, String value) {</span>
-<span class="source-line-no">277</span><span id="line-277">      return addDefault(HttpStringPart.of(name, value));</span>
-<span class="source-line-no">278</span><span id="line-278">   }</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">   /**</span>
-<span class="source-line-no">281</span><span id="line-281">    * Converts this object to a query string.</span>
-<span class="source-line-no">282</span><span id="line-282">    *</span>
-<span class="source-line-no">283</span><span id="line-283">    * &lt;p&gt;</span>
-<span class="source-line-no">284</span><span id="line-284">    * Returned query string does not start with &lt;js&gt;'?'&lt;/js&gt;.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @return A new query string, or an empty string if this object is empty.</span>
-<span class="source-line-no">287</span><span id="line-287">    */</span>
-<span class="source-line-no">288</span><span id="line-288">   public String asQueryString() {</span>
-<span class="source-line-no">289</span><span id="line-289">      var sb = new StringBuilder();</span>
-<span class="source-line-no">290</span><span id="line-290">      for (var e : this) {</span>
-<span class="source-line-no">291</span><span id="line-291">         if (!sb.isEmpty())</span>
-<span class="source-line-no">292</span><span id="line-292">            sb.append("&amp;");</span>
-<span class="source-line-no">293</span><span id="line-293">         sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));</span>
-<span class="source-line-no">294</span><span id="line-294">      }</span>
-<span class="source-line-no">295</span><span id="line-295">      return sb.toString();</span>
-<span class="source-line-no">296</span><span id="line-296">   }</span>
-<span class="source-line-no">297</span><span id="line-297"></span>
-<span class="source-line-no">298</span><span id="line-298">   /**</span>
-<span class="source-line-no">299</span><span id="line-299">    * Sets case sensitivity for names in this list.</span>
-<span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * @param value The new value for this setting.</span>
-<span class="source-line-no">302</span><span id="line-302">    * @return This object (for method chaining).</span>
-<span class="source-line-no">303</span><span id="line-303">    */</span>
-<span class="source-line-no">304</span><span id="line-304">   public RequestQueryParamList caseSensitive(boolean value) {</span>
-<span class="source-line-no">305</span><span id="line-305">      caseSensitive = value;</span>
-<span class="source-line-no">306</span><span id="line-306">      return this;</span>
-<span class="source-line-no">307</span><span id="line-307">   }</span>
-<span class="source-line-no">308</span><span id="line-308"></span>
-<span class="source-line-no">309</span><span id="line-309">   /**</span>
-<span class="source-line-no">310</span><span id="line-310">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified name is present.</span>
-<span class="source-line-no">311</span><span id="line-311">    *</span>
-<span class="source-line-no">312</span><span id="line-312">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">313</span><span id="line-313">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified names are present.</span>
-<span class="source-line-no">314</span><span id="line-314">    */</span>
-<span class="source-line-no">315</span><span id="line-315">   public boolean contains(String name) {</span>
-<span class="source-line-no">316</span><span id="line-316">      return stream(name).findAny().isPresent();</span>
-<span class="source-line-no">317</span><span id="line-317">   }</span>
-<span class="source-line-no">318</span><span id="line-318"></span>
-<span class="source-line-no">319</span><span id="line-319">   /**</span>
-<span class="source-line-no">320</span><span id="line-320">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
-<span class="source-line-no">321</span><span id="line-321">    *</span>
-<span class="source-line-no">322</span><span id="line-322">    * @param names The parameter names.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">323</span><span id="line-323">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
-<span class="source-line-no">324</span><span id="line-324">    */</span>
-<span class="source-line-no">325</span><span id="line-325">   public boolean containsAny(String...names) {</span>
-<span class="source-line-no">326</span><span id="line-326">      assertArgNotNull(ARG_names, names);</span>
-<span class="source-line-no">327</span><span id="line-327">      for (var n : names)</span>
-<span class="source-line-no">328</span><span id="line-328">         if (stream(n).findAny().isPresent())</span>
-<span class="source-line-no">329</span><span id="line-329">            return true;</span>
-<span class="source-line-no">330</span><span id="line-330">      return false;</span>
-<span class="source-line-no">331</span><span id="line-331">   }</span>
-<span class="source-line-no">332</span><span id="line-332"></span>
-<span class="source-line-no">333</span><span id="line-333">   /**</span>
-<span class="source-line-no">334</span><span id="line-334">    * Makes a copy of these parameters.</span>
-<span class="source-line-no">335</span><span id="line-335">    *</span>
-<span class="source-line-no">336</span><span id="line-336">    * @return A new parameters object.</span>
-<span class="source-line-no">337</span><span id="line-337">    */</span>
-<span class="source-line-no">338</span><span id="line-338">   public RequestQueryParamList copy() {</span>
-<span class="source-line-no">339</span><span id="line-339">      return new RequestQueryParamList(this);</span>
-<span class="source-line-no">340</span><span id="line-340">   }</span>
-<span class="source-line-no">341</span><span id="line-341"></span>
-<span class="source-line-no">342</span><span id="line-342">   /**</span>
-<span class="source-line-no">343</span><span id="line-343">    * Returns the query parameter as the specified bean type.</span>
-<span class="source-line-no">344</span><span id="line-344">    *</span>
-<span class="source-line-no">345</span><span id="line-345">    * &lt;p&gt;</span>
-<span class="source-line-no">346</span><span id="line-346">    * Type must have a name specified via the {@link Query} annotation</span>
-<span class="source-line-no">347</span><span id="line-347">    * and a public constructor that takes in either &lt;c&gt;value&lt;/c&gt; or &lt;c&gt;name,value&lt;/c&gt; as strings.</span>
-<span class="source-line-no">348</span><span id="line-348">    *</span>
-<span class="source-line-no">349</span><span id="line-349">    * @param &lt;T&gt; The bean type to create.</span>
-<span class="source-line-no">350</span><span id="line-350">    * @param type The bean type to create.</span>
-<span class="source-line-no">351</span><span id="line-351">    * @return The bean, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">352</span><span id="line-352">    */</span>
-<span class="source-line-no">353</span><span id="line-353">   public &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {</span>
-<span class="source-line-no">354</span><span id="line-354">      var cm = req.getMarshallingSession().getClassMeta(type);</span>
-<span class="source-line-no">355</span><span id="line-355">      var name = HttpParts.getName(QUERY, cm).orElseThrow(() -&gt; rex("@Query(name) not found on class {0}", cn(type)));</span>
-<span class="source-line-no">356</span><span id="line-356">      return get(name).as(type);</span>
-<span class="source-line-no">357</span><span id="line-357">   }</span>
-<span class="source-line-no">358</span><span id="line-358"></span>
-<span class="source-line-no">359</span><span id="line-359">   /**</span>
-<span class="source-line-no">360</span><span id="line-360">    * Returns the condensed header with the specified name.</span>
-<span class="source-line-no">361</span><span id="line-361">    *</span>
-<span class="source-line-no">362</span><span id="line-362">    * &lt;p&gt;</span>
-<span class="source-line-no">363</span><span id="line-363">    * If multiple headers are present, they will be combined into a single comma-delimited list.</span>
-<span class="source-line-no">364</span><span id="line-364">    *</span>
-<span class="source-line-no">365</span><span id="line-365">    * @param name The header name.</span>
-<span class="source-line-no">366</span><span id="line-366">    * @return The header, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">367</span><span id="line-367">    */</span>
-<span class="source-line-no">368</span><span id="line-368">   public RequestQueryParam get(String name) {</span>
-<span class="source-line-no">369</span><span id="line-369">      List&lt;RequestQueryParam&gt; l = getAll(name);</span>
-<span class="source-line-no">370</span><span id="line-370">      if (l.isEmpty())</span>
-<span class="source-line-no">371</span><span id="line-371">         return new RequestQueryParam(req, name, null).parser(parser);</span>
-<span class="source-line-no">372</span><span id="line-372">      if (l.size() == 1)</span>
-<span class="source-line-no">373</span><span id="line-373">         return l.get(0);</span>
-<span class="source-line-no">374</span><span id="line-374">      var sb = new StringBuilder(128);</span>
-<span class="source-line-no">375</span><span id="line-375">      for (var i = 0; i &lt; l.size(); i++) {</span>
-<span class="source-line-no">376</span><span id="line-376">         if (i &gt; 0)</span>
-<span class="source-line-no">377</span><span id="line-377">            sb.append(", ");</span>
-<span class="source-line-no">378</span><span id="line-378">         sb.append(l.get(i).getValue());</span>
-<span class="source-line-no">379</span><span id="line-379">      }</span>
-<span class="source-line-no">380</span><span id="line-380">      return new RequestQueryParam(req, name, sb.toString()).parser(parser);</span>
-<span class="source-line-no">381</span><span id="line-381">   }</span>
-<span class="source-line-no">382</span><span id="line-382"></span>
-<span class="source-line-no">383</span><span id="line-383">   /**</span>
-<span class="source-line-no">384</span><span id="line-384">    * Returns all the parameters with the specified name.</span>
-<span class="source-line-no">385</span><span id="line-385">    *</span>
-<span class="source-line-no">386</span><span id="line-386">    * @param name The parameter name.</span>
-<span class="source-line-no">387</span><span id="line-387">    * @return The list of all parameters with the specified name, or an empty list if none are found.</span>
-<span class="source-line-no">388</span><span id="line-388">    *    &lt;br&gt;List is unmodifiable.</span>
-<span class="source-line-no">389</span><span id="line-389">    */</span>
-<span class="source-line-no">390</span><span id="line-390">   public List&lt;RequestQueryParam&gt; getAll(String name) {</span>
-<span class="source-line-no">391</span><span id="line-391">      return stream(name).toList();</span>
-<span class="source-line-no">392</span><span id="line-392">   }</span>
-<span class="source-line-no">393</span><span id="line-393"></span>
-<span class="source-line-no">394</span><span id="line-394">   /**</span>
-<span class="source-line-no">395</span><span id="line-395">    * Returns the first parameter with the specified name.</span>
-<span class="source-line-no">396</span><span id="line-396">    *</span>
-<span class="source-line-no">397</span><span id="line-397">    * &lt;p&gt;</span>
-<span class="source-line-no">398</span><span id="line-398">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestQueryParam#isPresent()} can be used</span>
-<span class="source-line-no">399</span><span id="line-399">    * to test for the existence of the parameter.</span>
-<span class="source-line-no">400</span><span id="line-400">    *</span>
-<span class="source-line-no">401</span><span id="line-401">    * @param name The parameter name.</span>
-<span class="source-line-no">402</span><span id="line-402">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">403</span><span id="line-403">    */</span>
-<span class="source-line-no">404</span><span id="line-404">   public RequestQueryParam getFirst(String name) {</span>
-<span class="source-line-no">405</span><span id="line-405">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">406</span><span id="line-406">      return stream(name).findFirst().orElseGet(() -&gt; new RequestQueryParam(req, name, null).parser(parser));</span>
-<span class="source-line-no">407</span><span id="line-407">   }</span>
-<span class="source-line-no">408</span><span id="line-408"></span>
-<span class="source-line-no">409</span><span id="line-409">   /**</span>
-<span class="source-line-no">410</span><span id="line-410">    * Returns the last parameter with the specified name.</span>
-<span class="source-line-no">411</span><span id="line-411">    *</span>
-<span class="source-line-no">412</span><span id="line-412">    * &lt;p&gt;</span>
-<span class="source-line-no">413</span><span id="line-413">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestQueryParam#isPresent()} can be used</span>
-<span class="source-line-no">414</span><span id="line-414">    * to test for the existence of the parameter.</span>
-<span class="source-line-no">415</span><span id="line-415">    *</span>
-<span class="source-line-no">416</span><span id="line-416">    * @param name The parameter name.</span>
-<span class="source-line-no">417</span><span id="line-417">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">418</span><span id="line-418">    */</span>
-<span class="source-line-no">419</span><span id="line-419">   public RequestQueryParam getLast(String name) {</span>
-<span class="source-line-no">420</span><span id="line-420">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">421</span><span id="line-421">      var v = Holder.&lt;RequestQueryParam&gt;empty();</span>
-<span class="source-line-no">422</span><span id="line-422">      stream(name).forEach(v::set);</span>
-<span class="source-line-no">423</span><span id="line-423">      return v.orElseGet(() -&gt; new RequestQueryParam(req, name, null).parser(parser));</span>
-<span class="source-line-no">424</span><span id="line-424">   }</span>
-<span class="source-line-no">425</span><span id="line-425"></span>
-<span class="source-line-no">426</span><span id="line-426">   /**</span>
-<span class="source-line-no">427</span><span id="line-427">    * Returns all the unique header names in this list.</span>
-<span class="source-line-no">428</span><span id="line-428">    * @return The list of all unique header names in this list.</span>
-<span class="source-line-no">429</span><span id="line-429">    *    &lt;br&gt;List is unmodifiable.</span>
-<span class="source-line-no">430</span><span id="line-430">    */</span>
-<span class="source-line-no">431</span><span id="line-431">   public List&lt;String&gt; getNames() { return stream().map(RequestQueryParam::getName).map(x -&gt; caseSensitive ? x : x.toLowerCase()).distinct().toList(); }</span>
-<span class="source-line-no">432</span><span id="line-432"></span>
-<span class="source-line-no">433</span><span id="line-433">   /**</span>
-<span class="source-line-no">434</span><span id="line-434">    * Locates the position/limit query arguments ({@code &amp;amp;p=}, {@code &amp;amp;l=}) in the query string and returns them as a {@link PageArgs} object.</span>
-<span class="source-line-no">435</span><span id="line-435">    *</span>
-<span class="source-line-no">436</span><span id="line-436">    * @return</span>
-<span class="source-line-no">437</span><span id="line-437">    *    A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
-<span class="source-line-no">438</span><span id="line-438">    */</span>
-<span class="source-line-no">439</span><span id="line-439">   public Optional&lt;PageArgs&gt; getPageArgs() { return o(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">   /**</span>
-<span class="source-line-no">442</span><span id="line-442">    * Locates the search query argument ({@code &amp;amp;s=}) in the query string and returns them as a {@link SearchArgs} object.</span>
-<span class="source-line-no">443</span><span id="line-443">    *</span>
-<span class="source-line-no">444</span><span id="line-444">    * @return</span>
-<span class="source-line-no">445</span><span id="line-445">    *    A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
-<span class="source-line-no">446</span><span id="line-446">    */</span>
-<span class="source-line-no">447</span><span id="line-447">   public Optional&lt;SearchArgs&gt; getSearchArgs() { return o(SearchArgs.create(get("s").asString().orElse(null))); }</span>
-<span class="source-line-no">448</span><span id="line-448"></span>
-<span class="source-line-no">449</span><span id="line-449">   /**</span>
-<span class="source-line-no">450</span><span id="line-450">    * Locates the sort query argument ({@code &amp;amp;o=}) in the query string and returns them as a {@link SortArgs} object.</span>
-<span class="source-line-no">451</span><span id="line-451">    *</span>
-<span class="source-line-no">452</span><span id="line-452">    * @return</span>
-<span class="source-line-no">453</span><span id="line-453">    *    A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
-<span class="source-line-no">454</span><span id="line-454">    */</span>
-<span class="source-line-no">455</span><span id="line-455">   public Optional&lt;SortArgs&gt; getSortArgs() { return o(SortArgs.create(get("o").asString().orElse(null))); }</span>
-<span class="source-line-no">456</span><span id="line-456"></span>
-<span class="source-line-no">457</span><span id="line-457">   /**</span>
-<span class="source-line-no">458</span><span id="line-458">    * Returns all headers in sorted order.</span>
-<span class="source-line-no">459</span><span id="line-459">    *</span>
-<span class="source-line-no">460</span><span id="line-460">    * @return The stream of all headers in sorted order.</span>
-<span class="source-line-no">461</span><span id="line-461">    */</span>
-<span class="source-line-no">462</span><span id="line-462">   public Stream&lt;RequestQueryParam&gt; getSorted() {</span>
-<span class="source-line-no">463</span><span id="line-463">      Comparator&lt;RequestQueryParam&gt; x;</span>
-<span class="source-line-no">464</span><span id="line-464">      if (caseSensitive)</span>
-<span class="source-line-no">465</span><span id="line-465">         x = Comparator.comparing(RequestQueryParam::getName);</span>
-<span class="source-line-no">466</span><span id="line-466">      else</span>
-<span class="source-line-no">467</span><span id="line-467">         x = (x1, x2) -&gt; String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());</span>
-<span class="source-line-no">468</span><span id="line-468">      return stream().sorted(x);</span>
-<span class="source-line-no">469</span><span id="line-469">   }</span>
-<span class="source-line-no">470</span><span id="line-470"></span>
-<span class="source-line-no">471</span><span id="line-471">   /**</span>
-<span class="source-line-no">472</span><span id="line-472">    * Locates the view query argument ({@code &amp;amp;v=}) in the query string and returns them as a {@link ViewArgs} object.</span>
-<span class="source-line-no">473</span><span id="line-473">    *</span>
-<span class="source-line-no">474</span><span id="line-474">    * @return</span>
-<span class="source-line-no">475</span><span id="line-475">    *    A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
-<span class="source-line-no">476</span><span id="line-476">    */</span>
-<span class="source-line-no">477</span><span id="line-477">   public Optional&lt;ViewArgs&gt; getViewArgs() { return o(ViewArgs.create(get("v").asString().orElse(null))); }</span>
-<span class="source-line-no">478</span><span id="line-478"></span>
-<span class="source-line-no">479</span><span id="line-479">   /**</span>
-<span class="source-line-no">480</span><span id="line-480">    * Sets the parser to use for part values.</span>
-<span class="source-line-no">481</span><span id="line-481">    *</span>
-<span class="source-line-no">482</span><span id="line-482">    * @param value The new value for this setting.</span>
-<span class="source-line-no">483</span><span id="line-483">    * @return This object.</span>
-<span class="source-line-no">484</span><span id="line-484">    */</span>
-<span class="source-line-no">485</span><span id="line-485">   public RequestQueryParamList parser(HttpPartParserSession value) {</span>
-<span class="source-line-no">486</span><span id="line-486">      parser = value;</span>
-<span class="source-line-no">487</span><span id="line-487">      forEach(x -&gt; x.parser(parser));</span>
-<span class="source-line-no">488</span><span id="line-488">      return this;</span>
-<span class="source-line-no">489</span><span id="line-489">   }</span>
-<span class="source-line-no">490</span><span id="line-490"></span>
-<span class="source-line-no">491</span><span id="line-491">   /**</span>
-<span class="source-line-no">492</span><span id="line-492">    * Remove parameters.</span>
-<span class="source-line-no">493</span><span id="line-493">    *</span>
-<span class="source-line-no">494</span><span id="line-494">    * @param name The parameter names.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">495</span><span id="line-495">    * @return This object.</span>
-<span class="source-line-no">496</span><span id="line-496">    */</span>
-<span class="source-line-no">497</span><span id="line-497">   public RequestQueryParamList remove(String name) {</span>
-<span class="source-line-no">498</span><span id="line-498">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">499</span><span id="line-499">      removeIf(x -&gt; eq(x.getName(), name));</span>
-<span class="source-line-no">500</span><span id="line-500">      return this;</span>
-<span class="source-line-no">501</span><span id="line-501">   }</span>
-<span class="source-line-no">502</span><span id="line-502"></span>
-<span class="source-line-no">503</span><span id="line-503">   /**</span>
-<span class="source-line-no">504</span><span id="line-504">    * Sets request header values.</span>
-<span class="source-line-no">505</span><span id="line-505">    *</span>
-<span class="source-line-no">506</span><span id="line-506">    * &lt;p&gt;</span>
-<span class="source-line-no">507</span><span id="line-507">    * Parameters are added to the end of the headers.</span>
-<span class="source-line-no">508</span><span id="line-508">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
-<span class="source-line-no">509</span><span id="line-509">    *</span>
-<span class="source-line-no">510</span><span id="line-510">    * @param parameters The parameters to set.  Must not be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">511</span><span id="line-511">    * @return This object.</span>
-<span class="source-line-no">512</span><span id="line-512">    */</span>
-<span class="source-line-no">513</span><span id="line-513">   public RequestQueryParamList set(HttpPart...parameters) {</span>
-<span class="source-line-no">514</span><span id="line-514">      assertArgNotNull(ARG_headers, parameters);</span>
-<span class="source-line-no">515</span><span id="line-515">      for (var p : parameters)</span>
-<span class="source-line-no">516</span><span id="line-516">         remove(p.getName());</span>
+<span class="source-line-no">242</span><span id="line-242">      if (pairs == null)</span>
+<span class="source-line-no">243</span><span id="line-243">         return this;</span>
+<span class="source-line-no">244</span><span id="line-244">      for (var p : pairs) {</span>
+<span class="source-line-no">245</span><span id="line-245">         var name = p.getName();</span>
+<span class="source-line-no">246</span><span id="line-246">         var l = stream(name);</span>
+<span class="source-line-no">247</span><span id="line-247">         var hasAllBlanks = l.allMatch(x -&gt; Shorts.ie(x.getValue()));</span>
+<span class="source-line-no">248</span><span id="line-248">         if (hasAllBlanks) {</span>
+<span class="source-line-no">249</span><span id="line-249">            removeAll(getAll(name));</span>
+<span class="source-line-no">250</span><span id="line-250">            add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));</span>
+<span class="source-line-no">251</span><span id="line-251">         }</span>
+<span class="source-line-no">252</span><span id="line-252">      }</span>
+<span class="source-line-no">253</span><span id="line-253">      return this;</span>
+<span class="source-line-no">254</span><span id="line-254">   }</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">   /**</span>
+<span class="source-line-no">257</span><span id="line-257">    * Adds default entries to these parameters.</span>
+<span class="source-line-no">258</span><span id="line-258">    *</span>
+<span class="source-line-no">259</span><span id="line-259">    * &lt;p&gt;</span>
+<span class="source-line-no">260</span><span id="line-260">    * Similar to {@link #set(String, Object)} but doesn't override existing values.</span>
+<span class="source-line-no">261</span><span id="line-261">    *</span>
+<span class="source-line-no">262</span><span id="line-262">    * @param pairs</span>
+<span class="source-line-no">263</span><span id="line-263">    *    The default entries.</span>
+<span class="source-line-no">264</span><span id="line-264">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
+<span class="source-line-no">265</span><span id="line-265">    * @return This object.</span>
+<span class="source-line-no">266</span><span id="line-266">    */</span>
+<span class="source-line-no">267</span><span id="line-267">   public RequestQueryParamList addDefault(HttpPart...pairs) {</span>
+<span class="source-line-no">268</span><span id="line-268">      return addDefault(l(pairs));</span>
+<span class="source-line-no">269</span><span id="line-269">   }</span>
+<span class="source-line-no">270</span><span id="line-270"></span>
+<span class="source-line-no">271</span><span id="line-271">   /**</span>
+<span class="source-line-no">272</span><span id="line-272">    * Adds a default entry to the query parameters.</span>
+<span class="source-line-no">273</span><span id="line-273">    *</span>
+<span class="source-line-no">274</span><span id="line-274">    * @param name The name.</span>
+<span class="source-line-no">275</span><span id="line-275">    * @param value The value.</span>
+<span class="source-line-no">276</span><span id="line-276">    * @return This object.</span>
+<span class="source-line-no">277</span><span id="line-277">    */</span>
+<span class="source-line-no">278</span><span id="line-278">   public RequestQueryParamList addDefault(String name, String value) {</span>
+<span class="source-line-no">279</span><span id="line-279">      return addDefault(HttpStringPart.of(name, value));</span>
+<span class="source-line-no">280</span><span id="line-280">   }</span>
+<span class="source-line-no">281</span><span id="line-281"></span>
+<span class="source-line-no">282</span><span id="line-282">   /**</span>
+<span class="source-line-no">283</span><span id="line-283">    * Converts this object to a query string.</span>
+<span class="source-line-no">284</span><span id="line-284">    *</span>
+<span class="source-line-no">285</span><span id="line-285">    * &lt;p&gt;</span>
+<span class="source-line-no">286</span><span id="line-286">    * Returned query string does not start with &lt;js&gt;'?'&lt;/js&gt;.</span>
+<span class="source-line-no">287</span><span id="line-287">    *</span>
+<span class="source-line-no">288</span><span id="line-288">    * @return A new query string, or an empty string if this object is empty.</span>
+<span class="source-line-no">289</span><span id="line-289">    */</span>
+<span class="source-line-no">290</span><span id="line-290">   public String asQueryString() {</span>
+<span class="source-line-no">291</span><span id="line-291">      var sb = new StringBuilder();</span>
+<span class="source-line-no">292</span><span id="line-292">      for (var e : this) {</span>
+<span class="source-line-no">293</span><span id="line-293">         if (!sb.isEmpty())</span>
+<span class="source-line-no">294</span><span id="line-294">            sb.append("&amp;");</span>
+<span class="source-line-no">295</span><span id="line-295">         sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));</span>
+<span class="source-line-no">296</span><span id="line-296">      }</span>
+<span class="source-line-no">297</span><span id="line-297">      return sb.toString();</span>
+<span class="source-line-no">298</span><span id="line-298">   }</span>
+<span class="source-line-no">299</span><span id="line-299"></span>
+<span class="source-line-no">300</span><span id="line-300">   /**</span>
+<span class="source-line-no">301</span><span id="line-301">    * Sets case sensitivity for names in this list.</span>
+<span class="source-line-no">302</span><span id="line-302">    *</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param value The new value for this setting.</span>
+<span class="source-line-no">304</span><span id="line-304">    * @return This object (for method chaining).</span>
+<span class="source-line-no">305</span><span id="line-305">    */</span>
+<span class="source-line-no">306</span><span id="line-306">   public RequestQueryParamList caseSensitive(boolean value) {</span>
+<span class="source-line-no">307</span><span id="line-307">      caseSensitive = value;</span>
+<span class="source-line-no">308</span><span id="line-308">      return this;</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   /**</span>
+<span class="source-line-no">312</span><span id="line-312">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified name is present.</span>
+<span class="source-line-no">313</span><span id="line-313">    *</span>
+<span class="source-line-no">314</span><span id="line-314">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">315</span><span id="line-315">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameters with the specified names are present.</span>
+<span class="source-line-no">316</span><span id="line-316">    */</span>
+<span class="source-line-no">317</span><span id="line-317">   public boolean contains(String name) {</span>
+<span class="source-line-no">318</span><span id="line-318">      return stream(name).findAny().isPresent();</span>
+<span class="source-line-no">319</span><span id="line-319">   }</span>
+<span class="source-line-no">320</span><span id="line-320"></span>
+<span class="source-line-no">321</span><span id="line-321">   /**</span>
+<span class="source-line-no">322</span><span id="line-322">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
+<span class="source-line-no">323</span><span id="line-323">    *</span>
+<span class="source-line-no">324</span><span id="line-324">    * @param names The parameter names.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">325</span><span id="line-325">    * @return &lt;jk&gt;true&lt;/jk&gt; if the parameter with any of the specified names are present.</span>
+<span class="source-line-no">326</span><span id="line-326">    */</span>
+<span class="source-line-no">327</span><span id="line-327">   public boolean containsAny(String...names) {</span>
+<span class="source-line-no">328</span><span id="line-328">      assertArgNotNull(ARG_names, names);</span>
+<span class="source-line-no">329</span><span id="line-329">      for (var n : names)</span>
+<span class="source-line-no">330</span><span id="line-330">         if (stream(n).findAny().isPresent())</span>
+<span class="source-line-no">331</span><span id="line-331">            return true;</span>
+<span class="source-line-no">332</span><span id="line-332">      return false;</span>
+<span class="source-line-no">333</span><span id="line-333">   }</span>
+<span class="source-line-no">334</span><span id="line-334"></span>
+<span class="source-line-no">335</span><span id="line-335">   /**</span>
+<span class="source-line-no">336</span><span id="line-336">    * Makes a copy of these parameters.</span>
+<span class="source-line-no">337</span><span id="line-337">    *</span>
+<span class="source-line-no">338</span><span id="line-338">    * @return A new parameters object.</span>
+<span class="source-line-no">339</span><span id="line-339">    */</span>
+<span class="source-line-no">340</span><span id="line-340">   public RequestQueryParamList copy() {</span>
+<span class="source-line-no">341</span><span id="line-341">      return new RequestQueryParamList(this);</span>
+<span class="source-line-no">342</span><span id="line-342">   }</span>
+<span class="source-line-no">343</span><span id="line-343"></span>
+<span class="source-line-no">344</span><span id="line-344">   /**</span>
+<span class="source-line-no">345</span><span id="line-345">    * Returns the query parameter as the specified bean type.</span>
+<span class="source-line-no">346</span><span id="line-346">    *</span>
+<span class="source-line-no">347</span><span id="line-347">    * &lt;p&gt;</span>
+<span class="source-line-no">348</span><span id="line-348">    * Type must have a name specified via the {@link Query} annotation</span>
+<span class="source-line-no">349</span><span id="line-349">    * and a public constructor that takes in either &lt;c&gt;value&lt;/c&gt; or &lt;c&gt;name,value&lt;/c&gt; as strings.</span>
+<span class="source-line-no">350</span><span id="line-350">    *</span>
+<span class="source-line-no">351</span><span id="line-351">    * @param &lt;T&gt; The bean type to create.</span>
+<span class="source-line-no">352</span><span id="line-352">    * @param type The bean type to create.</span>
+<span class="source-line-no">353</span><span id="line-353">    * @return The bean, or {@link Optional#empty()} if the parameter is not present.</span>
+<span class="source-line-no">354</span><span id="line-354">    */</span>
+<span class="source-line-no">355</span><span id="line-355">   public &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {</span>
+<span class="source-line-no">356</span><span id="line-356">      var cm = req.getMarshallingSession().getClassMeta(type);</span>
+<span class="source-line-no">357</span><span id="line-357">      var name = HttpParts.getName(QUERY, cm).orElseThrow(() -&gt; rex("@Query(name) not found on class %s", cn(type)));</span>
+<span class="source-line-no">358</span><span id="line-358">      return get(name).as(type);</span>
+<span class="source-line-no">359</span><span id="line-359">   }</span>
+<span class="source-line-no">360</span><span id="line-360"></span>
+<span class="source-line-no">361</span><span id="line-361">   /**</span>
+<span class="source-line-no">362</span><span id="line-362">    * Returns the condensed header with the specified name.</span>
+<span class="source-line-no">363</span><span id="line-363">    *</span>
+<span class="source-line-no">364</span><span id="line-364">    * &lt;p&gt;</span>
+<span class="source-line-no">365</span><span id="line-365">    * If multiple headers are present, they will be combined into a single comma-delimited list.</span>
+<span class="source-line-no">366</span><span id="line-366">    *</span>
+<span class="source-line-no">367</span><span id="line-367">    * @param name The header name.</span>
+<span class="source-line-no">368</span><span id="line-368">    * @return The header, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">369</span><span id="line-369">    */</span>
+<span class="source-line-no">370</span><span id="line-370">   public RequestQueryParam get(String name) {</span>
+<span class="source-line-no">371</span><span id="line-371">      List&lt;RequestQueryParam&gt; l = getAll(name);</span>
+<span class="source-line-no">372</span><span id="line-372">      if (l.isEmpty())</span>
+<span class="source-line-no">373</span><span id="line-373">         return new RequestQueryParam(req, name, null).parser(parser);</span>
+<span class="source-line-no">374</span><span id="line-374">      if (l.size() == 1)</span>
+<span class="source-line-no">375</span><span id="line-375">         return l.get(0);</span>
+<span class="source-line-no">376</span><span id="line-376">      var sb = new StringBuilder(128);</span>
+<span class="source-line-no">377</span><span id="line-377">      for (var i = 0; i &lt; l.size(); i++) {</span>
+<span class="source-line-no">378</span><span id="line-378">         if (i &gt; 0)</span>
+<span class="source-line-no">379</span><span id="line-379">            sb.append(", ");</span>
+<span class="source-line-no">380</span><span id="line-380">         sb.append(l.get(i).getValue());</span>
+<span class="source-line-no">381</span><span id="line-381">      }</span>
+<span class="source-line-no">382</span><span id="line-382">      return new RequestQueryParam(req, name, sb.toString()).parser(parser);</span>
+<span class="source-line-no">383</span><span id="line-383">   }</span>
+<span class="source-line-no">384</span><span id="line-384"></span>
+<span class="source-line-no">385</span><span id="line-385">   /**</span>
+<span class="source-line-no">386</span><span id="line-386">    * Returns all the parameters with the specified name.</span>
+<span class="source-line-no">387</span><span id="line-387">    *</span>
+<span class="source-line-no">388</span><span id="line-388">    * @param name The parameter name.</span>
+<span class="source-line-no">389</span><span id="line-389">    * @return The list of all parameters with the specified name, or an empty list if none are found.</span>
+<span class="source-line-no">390</span><span id="line-390">    *    &lt;br&gt;List is unmodifiable.</span>
+<span class="source-line-no">391</span><span id="line-391">    */</span>
+<span class="source-line-no">392</span><span id="line-392">   public List&lt;RequestQueryParam&gt; getAll(String name) {</span>
+<span class="source-line-no">393</span><span id="line-393">      return stream(name).toList();</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395"></span>
+<span class="source-line-no">396</span><span id="line-396">   /**</span>
+<span class="source-line-no">397</span><span id="line-397">    * Returns the first parameter with the specified name.</span>
+<span class="source-line-no">398</span><span id="line-398">    *</span>
+<span class="source-line-no">399</span><span id="line-399">    * &lt;p&gt;</span>
+<span class="source-line-no">400</span><span id="line-400">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestQueryParam#isPresent()} can be used</span>
+<span class="source-line-no">401</span><span id="line-401">    * to test for the existence of the parameter.</span>
+<span class="source-line-no">402</span><span id="line-402">    *</span>
+<span class="source-line-no">403</span><span id="line-403">    * @param name The parameter name.</span>
+<span class="source-line-no">404</span><span id="line-404">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">405</span><span id="line-405">    */</span>
+<span class="source-line-no">406</span><span id="line-406">   public RequestQueryParam getFirst(String name) {</span>
+<span class="source-line-no">407</span><span id="line-407">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">408</span><span id="line-408">      return stream(name).findFirst().orElseGet(() -&gt; new RequestQueryParam(req, name, null).parser(parser));</span>
+<span class="source-line-no">409</span><span id="line-409">   }</span>
+<span class="source-line-no">410</span><span id="line-410"></span>
+<span class="source-line-no">411</span><span id="line-411">   /**</span>
+<span class="source-line-no">412</span><span id="line-412">    * Returns the last parameter with the specified name.</span>
+<span class="source-line-no">413</span><span id="line-413">    *</span>
+<span class="source-line-no">414</span><span id="line-414">    * &lt;p&gt;</span>
+<span class="source-line-no">415</span><span id="line-415">    * Note that this method never returns &lt;jk&gt;null&lt;/jk&gt; and that {@link RequestQueryParam#isPresent()} can be used</span>
+<span class="source-line-no">416</span><span id="line-416">    * to test for the existence of the parameter.</span>
+<span class="source-line-no">417</span><span id="line-417">    *</span>
+<span class="source-line-no">418</span><span id="line-418">    * @param name The parameter name.</span>
+<span class="source-line-no">419</span><span id="line-419">    * @return The parameter.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">420</span><span id="line-420">    */</span>
+<span class="source-line-no">421</span><span id="line-421">   public RequestQueryParam getLast(String name) {</span>
+<span class="source-line-no">422</span><span id="line-422">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">423</span><span id="line-423">      var v = Holder.&lt;RequestQueryParam&gt;empty();</span>
+<span class="source-line-no">424</span><span id="line-424">      stream(name).forEach(v::set);</span>
+<span class="source-line-no">425</span><span id="line-425">      return v.orElseGet(() -&gt; new RequestQueryParam(req, name, null).parser(parser));</span>
+<span class="source-line-no">426</span><span id="line-426">   }</span>
+<span class="source-line-no">427</span><span id="line-427"></span>
+<span class="source-line-no">428</span><span id="line-428">   /**</span>
+<span class="source-line-no">429</span><span id="line-429">    * Returns all the unique header names in this list.</span>
+<span class="source-line-no">430</span><span id="line-430">    * @return The list of all unique header names in this list.</span>
+<span class="source-line-no">431</span><span id="line-431">    *    &lt;br&gt;List is unmodifiable.</span>
+<span class="source-line-no">432</span><span id="line-432">    */</span>
+<span class="source-line-no">433</span><span id="line-433">   public List&lt;String&gt; getNames() { return stream().map(RequestQueryParam::getName).map(x -&gt; caseSensitive ? x : lcr(x)).distinct().toList(); }</span>
+<span class="source-line-no">434</span><span id="line-434"></span>
+<span class="source-line-no">435</span><span id="line-435">   /**</span>
+<span class="source-line-no">436</span><span id="line-436">    * Locates the position/limit query arguments ({@code &amp;amp;p=}, {@code &amp;amp;l=}) in the query string and returns them as a {@link PageArgs} object.</span>
+<span class="source-line-no">437</span><span id="line-437">    *</span>
+<span class="source-line-no">438</span><span id="line-438">    * @return</span>
+<span class="source-line-no">439</span><span id="line-439">    *    A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
+<span class="source-line-no">440</span><span id="line-440">    */</span>
+<span class="source-line-no">441</span><span id="line-441">   public Optional&lt;PageArgs&gt; getPageArgs() { return o(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }</span>
+<span class="source-line-no">442</span><span id="line-442"></span>
+<span class="source-line-no">443</span><span id="line-443">   /**</span>
+<span class="source-line-no">444</span><span id="line-444">    * Locates the search query argument ({@code &amp;amp;s=}) in the query string and returns them as a {@link SearchArgs} object.</span>
+<span class="source-line-no">445</span><span id="line-445">    *</span>
+<span class="source-line-no">446</span><span id="line-446">    * @return</span>
+<span class="source-line-no">447</span><span id="line-447">    *    A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
+<span class="source-line-no">448</span><span id="line-448">    */</span>
+<span class="source-line-no">449</span><span id="line-449">   public Optional&lt;SearchArgs&gt; getSearchArgs() { return o(SearchArgs.create(get("s").asString().orElse(null))); }</span>
+<span class="source-line-no">450</span><span id="line-450"></span>
+<span class="source-line-no">451</span><span id="line-451">   /**</span>
+<span class="source-line-no">452</span><span id="line-452">    * Locates the sort query argument ({@code &amp;amp;o=}) in the query string and returns them as a {@link SortArgs} object.</span>
+<span class="source-line-no">453</span><span id="line-453">    *</span>
+<span class="source-line-no">454</span><span id="line-454">    * @return</span>
+<span class="source-line-no">455</span><span id="line-455">    *    A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
+<span class="source-line-no">456</span><span id="line-456">    */</span>
+<span class="source-line-no">457</span><span id="line-457">   public Optional&lt;SortArgs&gt; getSortArgs() { return o(SortArgs.create(get("o").asString().orElse(null))); }</span>
+<span class="source-line-no">458</span><span id="line-458"></span>
+<span class="source-line-no">459</span><span id="line-459">   /**</span>
+<span class="source-line-no">460</span><span id="line-460">    * Returns all headers in sorted order.</span>
+<span class="source-line-no">461</span><span id="line-461">    *</span>
+<span class="source-line-no">462</span><span id="line-462">    * @return The stream of all headers in sorted order.</span>
+<span class="source-line-no">463</span><span id="line-463">    */</span>
+<span class="source-line-no">464</span><span id="line-464">   public Stream&lt;RequestQueryParam&gt; getSorted() {</span>
+<span class="source-line-no">465</span><span id="line-465">      Comparator&lt;RequestQueryParam&gt; x;</span>
+<span class="source-line-no">466</span><span id="line-466">      if (caseSensitive)</span>
+<span class="source-line-no">467</span><span id="line-467">         x = Comparator.comparing(RequestQueryParam::getName);</span>
+<span class="source-line-no">468</span><span id="line-468">      else</span>
+<span class="source-line-no">469</span><span id="line-469">         x = (x1, x2) -&gt; String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());</span>
+<span class="source-line-no">470</span><span id="line-470">      return stream().sorted(x);</span>
+<span class="source-line-no">471</span><span id="line-471">   }</span>
+<span class="source-line-no">472</span><span id="line-472"></span>
+<span class="source-line-no">473</span><span id="line-473">   /**</span>
+<span class="source-line-no">474</span><span id="line-474">    * Locates the view query argument ({@code &amp;amp;v=}) in the query string and returns them as a {@link ViewArgs} object.</span>
+<span class="source-line-no">475</span><span id="line-475">    *</span>
+<span class="source-line-no">476</span><span id="line-476">    * @return</span>
+<span class="source-line-no">477</span><span id="line-477">    *    A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.</span>
+<span class="source-line-no">478</span><span id="line-478">    */</span>
+<span class="source-line-no">479</span><span id="line-479">   public Optional&lt;ViewArgs&gt; getViewArgs() { return o(ViewArgs.create(get("v").asString().orElse(null))); }</span>
+<span class="source-line-no">480</span><span id="line-480"></span>
+<span class="source-line-no">481</span><span id="line-481">   /**</span>
+<span class="source-line-no">482</span><span id="line-482">    * Sets the parser to use for part values.</span>
+<span class="source-line-no">483</span><span id="line-483">    *</span>
+<span class="source-line-no">484</span><span id="line-484">    * @param value The new value for this setting.</span>
+<span class="source-line-no">485</span><span id="line-485">    * @return This object.</span>
+<span class="source-line-no">486</span><span id="line-486">    */</span>
+<span class="source-line-no">487</span><span id="line-487">   public RequestQueryParamList parser(HttpPartParserSession value) {</span>
+<span class="source-line-no">488</span><span id="line-488">      parser = value;</span>
+<span class="source-line-no">489</span><span id="line-489">      forEach(x -&gt; x.parser(parser));</span>
+<span class="source-line-no">490</span><span id="line-490">      return this;</span>
+<span class="source-line-no">491</span><span id="line-491">   }</span>
+<span class="source-line-no">492</span><span id="line-492"></span>
+<span class="source-line-no">493</span><span id="line-493">   /**</span>
+<span class="source-line-no">494</span><span id="line-494">    * Remove parameters.</span>
+<span class="source-line-no">495</span><span id="line-495">    *</span>
+<span class="source-line-no">496</span><span id="line-496">    * @param name The parameter names.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">497</span><span id="line-497">    * @return This object.</span>
+<span class="source-line-no">498</span><span id="line-498">    */</span>
+<span class="source-line-no">499</span><span id="line-499">   public RequestQueryParamList remove(String name) {</span>
+<span class="source-line-no">500</span><span id="line-500">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">501</span><span id="line-501">      removeIf(x -&gt; eq(x.getName(), name));</span>
+<span class="source-line-no">502</span><span id="line-502">      return this;</span>
+<span class="source-line-no">503</span><span id="line-503">   }</span>
+<span class="source-line-no">504</span><span id="line-504"></span>
+<span class="source-line-no">505</span><span id="line-505">   /**</span>
+<span class="source-line-no">506</span><span id="line-506">    * Sets request header values.</span>
+<span class="source-line-no">507</span><span id="line-507">    *</span>
+<span class="source-line-no">508</span><span id="line-508">    * &lt;p&gt;</span>
+<span class="source-line-no">509</span><span id="line-509">    * Parameters are added to the end of the headers.</span>
+<span class="source-line-no">510</span><span id="line-510">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
+<span class="source-line-no">511</span><span id="line-511">    *</span>
+<span class="source-line-no">512</span><span id="line-512">    * @param parameters The parameters to set.  Must not be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">513</span><span id="line-513">    * @return This object.</span>
+<span class="source-line-no">514</span><span id="line-514">    */</span>
+<span class="source-line-no">515</span><span id="line-515">   public RequestQueryParamList set(HttpPart...parameters) {</span>
+<span class="source-line-no">516</span><span id="line-516">      assertArgNotNull(ARG_headers, parameters);</span>
 <span class="source-line-no">517</span><span id="line-517">      for (var p : parameters)</span>
-<span class="source-line-no">518</span><span id="line-518">         add(p);</span>
-<span class="source-line-no">519</span><span id="line-519">      return this;</span>
-<span class="source-line-no">520</span><span id="line-520">   }</span>
-<span class="source-line-no">521</span><span id="line-521"></span>
-<span class="source-line-no">522</span><span id="line-522">   /**</span>
-<span class="source-line-no">523</span><span id="line-523">    * Sets a parameter value.</span>
-<span class="source-line-no">524</span><span id="line-524">    *</span>
-<span class="source-line-no">525</span><span id="line-525">    * &lt;p&gt;</span>
-<span class="source-line-no">526</span><span id="line-526">    * Parameter is added to the end.</span>
-<span class="source-line-no">527</span><span id="line-527">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
-<span class="source-line-no">528</span><span id="line-528">    *</span>
-<span class="source-line-no">529</span><span id="line-529">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">530</span><span id="line-530">    * @param value</span>
-<span class="source-line-no">531</span><span id="line-531">    *    The parameter value.</span>
-<span class="source-line-no">532</span><span id="line-532">    *    &lt;br&gt;Converted to a string using {@link Object#toString()}.</span>
-<span class="source-line-no">533</span><span id="line-533">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">534</span><span id="line-534">    * @return This object.</span>
-<span class="source-line-no">535</span><span id="line-535">    */</span>
-<span class="source-line-no">536</span><span id="line-536">   public RequestQueryParamList set(String name, Object value) {</span>
-<span class="source-line-no">537</span><span id="line-537">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">538</span><span id="line-538">      set(new RequestQueryParam(req, name, s(value)).parser(parser));</span>
-<span class="source-line-no">539</span><span id="line-539">      return this;</span>
-<span class="source-line-no">540</span><span id="line-540">   }</span>
-<span class="source-line-no">541</span><span id="line-541"></span>
-<span class="source-line-no">542</span><span id="line-542">   /**</span>
-<span class="source-line-no">543</span><span id="line-543">    * Returns all headers with the specified name.</span>
-<span class="source-line-no">544</span><span id="line-544">    *</span>
-<span class="source-line-no">545</span><span id="line-545">    * @param name The header name.</span>
-<span class="source-line-no">546</span><span id="line-546">    * @return The stream of all headers with matching names.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">547</span><span id="line-547">    */</span>
-<span class="source-line-no">548</span><span id="line-548">   public Stream&lt;RequestQueryParam&gt; stream(String name) {</span>
-<span class="source-line-no">549</span><span id="line-549">      return stream().filter(x -&gt; eq(x.getName(), name));</span>
-<span class="source-line-no">550</span><span id="line-550">   }</span>
-<span class="source-line-no">551</span><span id="line-551"></span>
-<span class="source-line-no">552</span><span id="line-552">   /**</span>
-<span class="source-line-no">553</span><span id="line-553">    * Returns a copy of this object but only with the specified param names copied.</span>
-<span class="source-line-no">554</span><span id="line-554">    *</span>
-<span class="source-line-no">555</span><span id="line-555">    * @param names The list to include in the copy.</span>
-<span class="source-line-no">556</span><span id="line-556">    * @return A new list object.</span>
-<span class="source-line-no">557</span><span id="line-557">    */</span>
-<span class="source-line-no">558</span><span id="line-558">   public RequestQueryParamList subset(String...names) {</span>
-<span class="source-line-no">559</span><span id="line-559">      return new RequestQueryParamList(this, names);</span>
-<span class="source-line-no">560</span><span id="line-560">   }</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">563</span><span id="line-563">      // @formatter:off</span>
-<span class="source-line-no">564</span><span id="line-564">      var m = filteredBeanPropertyMap();</span>
-<span class="source-line-no">565</span><span id="line-565">      for (var n : getNames())</span>
-<span class="source-line-no">566</span><span id="line-566">         m.a(n, get(n).asString().orElse(null));</span>
-<span class="source-line-no">567</span><span id="line-567">      return m;</span>
-<span class="source-line-no">568</span><span id="line-568">      // @formatter:on</span>
-<span class="source-line-no">569</span><span id="line-569">   }</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">   @Override</span>
-<span class="source-line-no">572</span><span id="line-572">   public boolean equals(Object o) {</span>
-<span class="source-line-no">573</span><span id="line-573">      return this == o || (o instanceof RequestQueryParamList other &amp;&amp; super.equals(other));</span>
-<span class="source-line-no">574</span><span id="line-574">   }</span>
-<span class="source-line-no">575</span><span id="line-575"></span>
-<span class="source-line-no">576</span><span id="line-576">   @Override</span>
-<span class="source-line-no">577</span><span id="line-577">   public int hashCode() {</span>
-<span class="source-line-no">578</span><span id="line-578">      return super.hashCode();</span>
-<span class="source-line-no">579</span><span id="line-579">   }</span>
-<span class="source-line-no">580</span><span id="line-580"></span>
-<span class="source-line-no">581</span><span id="line-581">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">582</span><span id="line-582">   public String toString() {</span>
-<span class="source-line-no">583</span><span id="line-583">      return r(properties());</span>
-<span class="source-line-no">584</span><span id="line-584">   }</span>
-<span class="source-line-no">585</span><span id="line-585"></span>
-<span class="source-line-no">586</span><span id="line-586">   private boolean eq(String s1, String s2) {</span>
-<span class="source-line-no">587</span><span id="line-587">      return Shorts.eq(! caseSensitive, s1, s2);  // NOAI</span>
-<span class="source-line-no">588</span><span id="line-588">   }</span>
-<span class="source-line-no">589</span><span id="line-589">}</span>
+<span class="source-line-no">518</span><span id="line-518">         remove(p.getName());</span>
+<span class="source-line-no">519</span><span id="line-519">      for (var p : parameters)</span>
+<span class="source-line-no">520</span><span id="line-520">         add(p);</span>
+<span class="source-line-no">521</span><span id="line-521">      return this;</span>
+<span class="source-line-no">522</span><span id="line-522">   }</span>
+<span class="source-line-no">523</span><span id="line-523"></span>
+<span class="source-line-no">524</span><span id="line-524">   /**</span>
+<span class="source-line-no">525</span><span id="line-525">    * Sets a parameter value.</span>
+<span class="source-line-no">526</span><span id="line-526">    *</span>
+<span class="source-line-no">527</span><span id="line-527">    * &lt;p&gt;</span>
+<span class="source-line-no">528</span><span id="line-528">    * Parameter is added to the end.</span>
+<span class="source-line-no">529</span><span id="line-529">    * &lt;br&gt;Any previous parameters with the same name are removed.</span>
+<span class="source-line-no">530</span><span id="line-530">    *</span>
+<span class="source-line-no">531</span><span id="line-531">    * @param name The parameter name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">532</span><span id="line-532">    * @param value</span>
+<span class="source-line-no">533</span><span id="line-533">    *    The parameter value.</span>
+<span class="source-line-no">534</span><span id="line-534">    *    &lt;br&gt;Converted to a string using {@link Object#toString()}.</span>
+<span class="source-line-no">535</span><span id="line-535">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (the parameter is set with a &lt;jk&gt;null&lt;/jk&gt; value).</span>
+<span class="source-line-no">536</span><span id="line-536">    * @return This object.</span>
+<span class="source-line-no">537</span><span id="line-537">    */</span>
+<span class="source-line-no">538</span><span id="line-538">   public RequestQueryParamList set(String name, Object value) {</span>
+<span class="source-line-no">539</span><span id="line-539">      assertArgNotNull(ARG_name, name);</span>
+<span class="source-line-no">540</span><span id="line-540">      set(new RequestQueryParam(req, name, s(value)).parser(parser));</span>
+<span class="source-line-no">541</span><span id="line-541">      return this;</span>
+<span class="source-line-no">542</span><span id="line-542">   }</span>
+<span class="source-line-no">543</span><span id="line-543"></span>
+<span class="source-line-no">544</span><span id="line-544">   /**</span>
+<span class="source-line-no">545</span><span id="line-545">    * Returns all headers with the specified name.</span>
+<span class="source-line-no">546</span><span id="line-546">    *</span>
+<span class="source-line-no">547</span><span id="line-547">    * @param name The header name.</span>
+<span class="source-line-no">548</span><span id="line-548">    * @return The stream of all headers with matching names.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">549</span><span id="line-549">    */</span>
+<span class="source-line-no">550</span><span id="line-550">   public Stream&lt;RequestQueryParam&gt; stream(String name) {</span>
+<span class="source-line-no">551</span><span id="line-551">      return stream().filter(x -&gt; eq(x.getName(), name));</span>
+<span class="source-line-no">552</span><span id="line-552">   }</span>
+<span class="source-line-no">553</span><span id="line-553"></span>
+<span class="source-line-no">554</span><span id="line-554">   /**</span>
+<span class="source-line-no">555</span><span id="line-555">    * Returns a copy of this object but only with the specified param names copied.</span>
+<span class="source-line-no">556</span><span id="line-556">    *</span>
+<span class="source-line-no">557</span><span id="line-557">    * @param names The list to include in the copy.</span>
+<span class="source-line-no">558</span><span id="line-558">    * @return A new list object.</span>
+<span class="source-line-no">559</span><span id="line-559">    */</span>
+<span class="source-line-no">560</span><span id="line-560">   public RequestQueryParamList subset(String...names) {</span>
+<span class="source-line-no">561</span><span id="line-561">      return new RequestQueryParamList(this, names);</span>
+<span class="source-line-no">562</span><span id="line-562">   }</span>
+<span class="source-line-no">563</span><span id="line-563"></span>
+<span class="source-line-no">564</span><span id="line-564">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">565</span><span id="line-565">      // @formatter:off</span>
+<span class="source-line-no">566</span><span id="line-566">      var m = filteredBeanPropertyMap();</span>
+<span class="source-line-no">567</span><span id="line-567">      for (var n : getNames())</span>
+<span class="source-line-no">568</span><span id="line-568">         m.a(n, get(n).asString().orElse(null));</span>
+<span class="source-line-no">569</span><span id="line-569">      return m;</span>
+<span class="source-line-no">570</span><span id="line-570">      // @formatter:on</span>
+<span class="source-line-no">571</span><span id="line-571">   }</span>
+<span class="source-line-no">572</span><span id="line-572"></span>
+<span class="source-line-no">573</span><span id="line-573">   @Override</span>
+<span class="source-line-no">574</span><span id="line-574">   public boolean equals(Object o) {</span>
+<span class="source-line-no">575</span><span id="line-575">      return this == o || (o instanceof RequestQueryParamList o2 &amp;&amp; super.equals(o2));</span>
+<span class="source-line-no">576</span><span id="line-576">   }</span>
+<span class="source-line-no">577</span><span id="line-577"></span>
+<span class="source-line-no">578</span><span id="line-578">   @Override</span>
+<span class="source-line-no">579</span><span id="line-579">   public int hashCode() {</span>
+<span class="source-line-no">580</span><span id="line-580">      return super.hashCode();</span>
+<span class="source-line-no">581</span><span id="line-581">   }</span>
+<span class="source-line-no">582</span><span id="line-582"></span>
+<span class="source-line-no">583</span><span id="line-583">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">584</span><span id="line-584">   public String toString() {</span>
+<span class="source-line-no">585</span><span id="line-585">      return r(properties());</span>
+<span class="source-line-no">586</span><span id="line-586">   }</span>
+<span class="source-line-no">587</span><span id="line-587"></span>
+<span class="source-line-no">588</span><span id="line-588">   private boolean eq(String s1, String s2) {</span>
+<span class="source-line-no">589</span><span id="line-589">      return Shorts.eq(! caseSensitive, s1, s2);  // NOAI</span>
+<span class="source-line-no">590</span><span id="line-590">   }</span>
+<span class="source-line-no">591</span><span id="line-591">}</span>
 
 
 

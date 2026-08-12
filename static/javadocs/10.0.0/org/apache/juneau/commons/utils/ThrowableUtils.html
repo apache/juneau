@@ -313,8 +313,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The class to cast to.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The class to cast to.</dd>
-<dd><code>t</code> - The throwable to cast.</dd>
+<dd><code>type</code> - The class to cast to.  Must not be <jk>null</jk>.</dd>
+<dd><code>t</code> - The throwable to cast.  Can be <jk>null</jk> (produces a wrapper with a <jk>null</jk> cause).</dd>
 <dt>Returns:</dt>
 <dd>Either the same exception if it's already the specified type, or a wrapped exception.</dd>
 </dl>
@@ -330,8 +330,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The cause type.</dd>
 <dt>Parameters:</dt>
-<dd><code>e</code> - The exception to search.</dd>
-<dd><code>cause</code> - The cause type to search for.</dd>
+<dd><code>e</code> - The exception to search.  Can be <jk>null</jk> (returns an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>).</dd>
+<dd><code>cause</code> - The cause type to search for.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>An <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> containing the cause if found, or empty if not found.</dd>
 </dl>
@@ -344,7 +344,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Convenience method for getting a stack trace as a string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The throwable to get the stack trace from.</dd>
+<dd><code>t</code> - The throwable to get the stack trace from.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The same content that would normally be rendered via <c>t.printStackTrace()</c></dd>
 </dl>
@@ -374,8 +374,8 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The throwable to print the stack trace for.</dd>
-<dd><code>pw</code> - The print writer to write to.</dd>
+<dd><code>t</code> - The throwable to print the stack trace for.  Must not be <jk>null</jk>.</dd>
+<dd><code>pw</code> - The print writer to write to.  Must not be <jk>null</jk>.</dd>
 <dd><code>maxDepth</code> - The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.</dd>
 </dl>
 </section>
@@ -421,8 +421,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The throwable type to search for.</dd>
 <dt>Parameters:</dt>
-<dd><code>c</code> - The throwable type to search for.</dd>
-<dd><code>t</code> - The throwable to search.</dd>
+<dd><code>c</code> - The throwable type to search for.  Must not be <jk>null</jk>.</dd>
+<dd><code>t</code> - The throwable to search.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The exception, or <jk>null</jk> if not found.</dd>
 </dl>
@@ -436,8 +436,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Calculates a 16-bit hash for the specified throwable based on it's stack trace.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The throwable to calculate the stack trace on.</dd>
-<dd><code>stopClass</code> - Optional stop class on which to stop calculation of a stack trace beyond when found.</dd>
+<dd><code>t</code> - The throwable to calculate the stack trace on.  Can be <jk>null</jk> (returns <c>0</c>).</dd>
+<dd><code>stopClass</code> - Optional stop class on which to stop calculation of a stack trace beyond when found.  Can be <jk>null</jk> (the entire stack trace, including causes, is used).</dd>
 <dt>Returns:</dt>
 <dd>A calculated hash.</dd>
 </dl>
@@ -458,7 +458,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The throwable type.</dd>
 <dt>Parameters:</dt>
-<dd><code>exception</code> - The throwable to (optionally) log.</dd>
+<dd><code>exception</code> - The throwable to (optionally) log.  Must not be <jk>null</jk> when verbose exceptions are enabled; otherwise returned unchanged (may be <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The same throwable.</dd>
 </dl>
@@ -476,9 +476,9 @@ loadScripts(document, 'script');</script>
  "first-1000-chars&lt;truncated-#-chars&gt;last-1000-chars"</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The throwable.</dd>
+<dd><code>t</code> - The throwable.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The localized message of the throwable, truncated if necessary.</dd>
+<dd>The localized message of the throwable, truncated if necessary, or <jk>null</jk> if the throwable has no localized message.</dd>
 </dl>
 </section>
 </li>
@@ -486,7 +486,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="toRuntimeException(java.lang.Throwable)">
 <h3>toRuntimeException</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-281">toRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Wraps or casts to RuntimeException.</div>
+<div class="block">Wraps or casts to RuntimeException.  <br>A <jk>null</jk> argument produces a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> with a <jk>null</jk> cause.</div>
 </section>
 </li>
 <li>
@@ -496,7 +496,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> from the specified cause (or returns it if already one).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cause</code> - The caused-by exception.</dd>
+<dd><code>cause</code> - The caused-by exception.  Can be <jk>null</jk> (produces a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> with a <jk>null</jk> cause).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>, or the same exception if it's already of that type.</dd>
 </dl>

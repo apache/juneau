@@ -105,7 +105,7 @@
 <span class="source-line-no">092</span><span id="line-92">    */</span>
 <span class="source-line-no">093</span><span id="line-93">   public String orElse(String defaultValue) {</span>
 <span class="source-line-no">094</span><span id="line-94">      var value = getValue();</span>
-<span class="source-line-no">095</span><span id="line-95">      return value != null ? value : defaultValue;</span>
+<span class="source-line-no">095</span><span id="line-95">      return or(value, defaultValue);</span>
 <span class="source-line-no">096</span><span id="line-96">   }</span>
 <span class="source-line-no">097</span><span id="line-97"></span>
 <span class="source-line-no">098</span><span id="line-98">   /**</span>

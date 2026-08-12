@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="CsvMetaProvider.html" title="interface in org.apache.juneau.marshall.csv">CsvMetaProvider</a></code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-78">CsvSerializer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-79">CsvSerializer</a></span>
 <span class="extends-implements">extends <a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>
 implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.marshall.csv">CsvMetaProvider</a>, <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></span></div>
 <div class="block">Serializes POJO models to CSV (Comma Separated Values) format.
@@ -271,20 +271,20 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeRecords(java.lang.Object)" class="member-name-link">serializeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeRecords(java.lang.Object)" class="member-name-link">writeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../serializer/WriterSerializer.html#serialize(java.lang.Object)"><code>WriterSerializer.serialize(Object)</code></a>).</div>
+ <b>default session arguments</b> (mirrors <a href="../serializer/WriterSerializer.html#write(java.lang.Object)"><code>WriterSerializer.write(Object)</code></a>).</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.WriterSerializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a></h3>
-<code><a href="../serializer/WriterSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/WriterSerializer.html#getFileCharset()">getFileCharset</a>, <a href="../serializer/WriterSerializer.html#getMaxIndent()">getMaxIndent</a>, <a href="../serializer/WriterSerializer.html#getQuoteChar()">getQuoteChar</a>, <a href="../serializer/WriterSerializer.html#getStreamCharset()">getStreamCharset</a>, <a href="../serializer/WriterSerializer.html#isUseWhitespace()">isUseWhitespace</a>, <a href="../serializer/WriterSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/WriterSerializer.html#println(java.lang.Object)">println</a>, <a href="../serializer/WriterSerializer.html#properties()">properties</a>, <a href="../serializer/WriterSerializer.html#quoteChar()">quoteChar</a>, <a href="../serializer/WriterSerializer.html#serialize(java.lang.Object)">serialize</a>, <a href="../serializer/WriterSerializer.html#toString(java.lang.Object)">toString</a></code></div>
+<code><a href="../serializer/WriterSerializer.html#applyThrows(java.lang.Object)">applyThrows</a>, <a href="../serializer/WriterSerializer.html#getMaxIndent()">getMaxIndent</a>, <a href="../serializer/WriterSerializer.html#getQuoteChar()">getQuoteChar</a>, <a href="../serializer/WriterSerializer.html#getStreamCharset()">getStreamCharset</a>, <a href="../serializer/WriterSerializer.html#isUseWhitespace()">isUseWhitespace</a>, <a href="../serializer/WriterSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/WriterSerializer.html#println(java.lang.Object)">println</a>, <a href="../serializer/WriterSerializer.html#properties()">properties</a>, <a href="../serializer/WriterSerializer.html#quoteChar()">quoteChar</a>, <a href="../serializer/WriterSerializer.html#toString(java.lang.Object)">toString</a>, <a href="../serializer/WriterSerializer.html#write(java.lang.Object)">write</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.Serializer">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a></h3>
-<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doSerialize</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddBeanTypes()">isAddBeanTypes</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#serialize(java.lang.Object,java.lang.Object)">serialize</a>, <a href="../serializer/Serializer.html#serializeToString(java.lang.Object)">serializeToString</a></code></div>
+<code><a href="../serializer/Serializer.html#createSerializerBuilder(java.lang.Class)">createSerializerBuilder</a>, <a href="../serializer/Serializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doWrite</a>, <a href="../serializer/Serializer.html#forEachAcceptMediaType(java.util.function.Consumer)">forEachAcceptMediaType</a>, <a href="../serializer/Serializer.html#getListener()">getListener</a>, <a href="../serializer/Serializer.html#getMediaTypeRanges()">getMediaTypeRanges</a>, <a href="../serializer/Serializer.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../serializer/Serializer.html#getResponseHeaders(org.apache.juneau.marshall.serializer.SerializerSession)">getResponseHeaders</a>, <a href="../serializer/Serializer.html#getUriContext()">getUriContext</a>, <a href="../serializer/Serializer.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/Serializer.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/Serializer.html#isAddBeanTypes()">isAddBeanTypes</a>, <a href="../serializer/Serializer.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/Serializer.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/Serializer.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/Serializer.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/Serializer.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/Serializer.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/Serializer.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/Serializer.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/Serializer.html#write(java.lang.Object,java.lang.Object)">write</a>, <a href="../serializer/Serializer.html#writeToString(java.lang.Object)">writeToString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingTraverseContext">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingTraverseContext.html" title="class in org.apache.juneau.marshall">MarshallingTraverseContext</a></h3>
 <code><a href="../MarshallingTraverseContext.html#getDetectRecursions()">getDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#getIgnoreRecursions()">getIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#getInitialDepth()">getInitialDepth</a>, <a href="../MarshallingTraverseContext.html#getMaxDepth()">getMaxDepth</a>, <a href="../MarshallingTraverseContext.html#isDetectRecursions()">isDetectRecursions</a>, <a href="../MarshallingTraverseContext.html#isIgnoreRecursions()">isIgnoreRecursions</a>, <a href="../MarshallingTraverseContext.html#shouldDetectRecursions()">shouldDetectRecursions</a></code></div>
@@ -317,7 +317,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CsvSerializer.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-192">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CsvSerializer.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-193">DEFAULT</a></span></div>
 <div class="block">Default serializer, all default settings.</div>
 </section>
 </li>
@@ -332,7 +332,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.csv.CsvSerializer.Builder)">
 <h3>CsvSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-214">CsvSerializer</a></span><wbr><span class="parameters">(<a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-215">CsvSerializer</a></span><wbr><span class="parameters">(<a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -351,7 +351,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-199">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-200">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -362,7 +362,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getByteArrayFormat()">
 <h3>getByteArrayFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-226">getByteArrayFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-227">getByteArrayFormat</a></span>()</div>
 <div class="block">Returns the format for serializing <code>byte[]</code> arrays in CSV cells.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -373,7 +373,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isAllowNestedStructures()">
 <h3>isAllowNestedStructures</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-235">isAllowNestedStructures</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-236">isAllowNestedStructures</a></span>()</div>
 <div class="block">Returns whether inline <code>{key:val}</code> and <code>[val;val]</code> notation is enabled.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -384,7 +384,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getNullValue()">
 <h3>getNullValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-244">getNullValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-245">getNullValue</a></span>()</div>
 <div class="block">Returns the string written for null values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -395,7 +395,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-248">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializer.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-249">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -412,7 +412,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-253">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-254">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -430,7 +430,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getCsvBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getCsvBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.csv">CsvBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-258">getCsvBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.csv">CsvBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-259">getCsvBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="CsvMetaProvider.html#getCsvBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">CsvMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -446,7 +446,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getCsvClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getCsvClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvClassMeta.html" title="class in org.apache.juneau.marshall.csv">CsvClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-265">getCsvClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvClassMeta.html" title="class in org.apache.juneau.marshall.csv">CsvClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-266">getCsvClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="CsvMetaProvider.html#getCsvClassMeta(org.apache.juneau.marshall.ClassMeta)">CsvMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -462,7 +462,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializerSession.html" title="class in org.apache.juneau.marshall.csv">CsvSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-270">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvSerializerSession.html" title="class in org.apache.juneau.marshall.csv">CsvSerializerSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-271">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -477,12 +477,12 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 </section>
 </li>
 <li>
-<section class="detail" id="serializeRecords(java.lang.Object)">
-<h3>serializeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-291">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeRecords(java.lang.Object)">
+<h3>writeRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-292">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../serializer/WriterSerializer.html#serialize(java.lang.Object)"><code>WriterSerializer.serialize(Object)</code></a>).
+ <b>default session arguments</b> (mirrors <a href="../serializer/WriterSerializer.html#write(java.lang.Object)"><code>WriterSerializer.write(Object)</code></a>).
 
  <p>
  CSV is naturally row-oriented &mdash; each <a href="../stream/RecordWriter.html#write(java.lang.Object)"><code>write(...)</code></a> call appends
@@ -490,12 +490,12 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
  implementation is a Phase 3b deferred item, so <a href="#isRecordStreaming()"><code>isRecordStreaming()</code></a> returns <jk>false</jk>.
 
  <p>
- The real implementation lives on <a href="CsvSerializerSession.html#serializeRecords(java.lang.Object)"><code>CsvSerializerSession.serializeRecords(Object)</code></a>.  Callers that
+ The real implementation lives on <a href="CsvSerializerSession.html#writeRecords(java.lang.Object)"><code>CsvSerializerSession.writeRecords(Object)</code></a>.  Callers that
  need request-derived configuration should call <a href="#createSession()"><code>createSession()</code></a> and invoke
- <a href="CsvSerializerSession.html#serializeRecords(java.lang.Object)"><code>CsvSerializerSession.serializeRecords(Object)</code></a> on the built session instead.</div>
+ <a href="CsvSerializerSession.html#writeRecords(java.lang.Object)"><code>CsvSerializerSession.writeRecords(Object)</code></a> on the built session instead.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/RecordWritable.html#serializeRecords(java.lang.Object)">serializeRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
+<dd><code><a href="../stream/RecordWritable.html#writeRecords(java.lang.Object)">writeRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>
 <dt>Returns:</dt>
@@ -508,14 +508,14 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-296">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvSerializer.html#line-297">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#isRecordStreaming()">RecordWritable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../stream/RecordWritable.html#isRecordStreaming()">isRecordStreaming</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if <a href="../stream/RecordWritable.html#serializeRecords(java.lang.Object)"><code>RecordWritable.serializeRecords(Object)</code></a> returns an O(1)-memory streaming
+<dd><jk>true</jk> if <a href="../stream/RecordWritable.html#writeRecords(java.lang.Object)"><code>RecordWritable.writeRecords(Object)</code></a> returns an O(1)-memory streaming
    cursor; <jk>false</jk> for buffered (whole-value) formats backed by
    <a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>.</dd>
 </dl>

@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-63">RequestVar</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-65">RequestVar</a></span>
 <span class="extends-implements">extends <a href="../../../commons/svl/MultipartResolvingVar.html" title="class in org.apache.juneau.commons.svl">MultipartResolvingVar</a></span></div>
 <div class="block">Request attribute variable resolver.
 
@@ -101,6 +101,8 @@ loadScripts(document, 'script');</script>
    <li><js>"pathInfo"</js> - Value returned by <code>HttpServletRequestWrapper.getPathInfo()</code>
    <li><js>"requestParentURI"</js> - Value returned by <a href="../../../marshall/UriContext.html#getRootRelativePathInfoParent()"><code>UriContext.getRootRelativePathInfoParent()</code></a>
    <li><js>"requestURI"</js> - Value returned by <code>HttpServletRequestWrapper.getRequestURI()</code>
+   <li><js>"servletClass"</js> - The fully-qualified name of the resource class (see <a href="../RestContext.html#getResourceClass()"><code>RestContext.getResourceClass()</code></a>)
+   <li><js>"servletClassSimple"</js> - The simple name of the resource class (see <a href="../RestContext.html#getResourceClass()"><code>RestContext.getResourceClass()</code></a>)
    <li><js>"servletParentURI"</js> - Value returned by <a href="../../../marshall/UriContext.html#getRootRelativeServletPathParent()"><code>UriContext.getRootRelativeServletPathParent()</code></a>
    <li><js>"servletPath"</js> - See <a href="../RestRequest.html#getServletPath()"><code>RestRequest.getServletPath()</code></a>
    <li><js>"servletURI"</js> - See <a href="../../../marshall/UriContext.html#getRootRelativeServletPath()"><code>UriContext.getRootRelativeServletPath()</code></a>
@@ -217,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="NAME">
 <h3>NAME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-66">NAME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-68">NAME</a></span></div>
 <div class="block">The name of this variable.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -240,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RequestVar</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-71">RequestVar</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-73">RequestVar</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -255,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="canResolve(org.apache.juneau.commons.svl.VarResolverSession)">
 <h3>canResolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-75">canResolve</a></span><wbr><span class="parameters">(<a href="../../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-77">canResolve</a></span><wbr><span class="parameters">(<a href="../../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/svl/Var.html#canResolve(org.apache.juneau.commons.svl.VarResolverSession)">Var</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this variable can be resolved in the specified session.
 
@@ -274,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-80">resolve</a></span><wbr><span class="parameters">(<a href="../../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-82">resolve</a></span><wbr><span class="parameters">(<a href="../../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/svl/Var.html#resolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)">Var</a></code></span></div>
 <div class="block">The interface that needs to be implemented for subclasses of <a href="../../../commons/svl/SimpleVar.html" title="class in org.apache.juneau.commons.svl"><code>SimpleVar</code></a>.</div>
@@ -292,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowNested()">
 <h3>allowNested</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-119">allowNested</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-121">allowNested</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/svl/Var.html#allowNested()">Var</a></code></span></div>
 <div class="block">Returns whether nested variables are supported by this variable.
 
@@ -314,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowRecurse()">
 <h3>allowRecurse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-124">allowRecurse</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/vars/RequestVar.html#line-126">allowRecurse</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/svl/Var.html#allowRecurse()">Var</a></code></span></div>
 <div class="block">Returns whether variables in the resolved contents of this variable should also be resolved.
 

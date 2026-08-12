@@ -374,7 +374,7 @@ implements <a href="JsonSchemaMetaProvider.html" title="interface in org.apache.
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.  Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -511,7 +511,7 @@ implements <a href="JsonSchemaMetaProvider.html" title="interface in org.apache.
  <br>Ignored types return <jk>null</jk> on the call to <a href="JsonSchemaGeneratorSession.html#getSchema(java.lang.reflect.Type)"><code>JsonSchemaGeneratorSession.getSchema(ClassMeta)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The type to check.</dd>
+<dd><code>cm</code> - The type to check.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified type is ignored.</dd>
 </dl>

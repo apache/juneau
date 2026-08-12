@@ -227,7 +227,7 @@
 <span class="source-line-no">214</span><span id="line-214">       *    &lt;jv&gt;set&lt;/jv&gt;.add(&lt;js&gt;"123"&lt;/js&gt;);  &lt;jc&gt;// Element will be converted from String to Integer&lt;/jc&gt;</span>
 <span class="source-line-no">215</span><span id="line-215">       * &lt;/p&gt;</span>
 <span class="source-line-no">216</span><span id="line-216">       *</span>
-<span class="source-line-no">217</span><span id="line-217">       * @param value The element conversion function. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">217</span><span id="line-217">       * @param value The element conversion function. Can be &lt;jk&gt;null&lt;/jk&gt; (elements are then used as-is without conversion).</span>
 <span class="source-line-no">218</span><span id="line-218">       * @return This object for method chaining.</span>
 <span class="source-line-no">219</span><span id="line-219">       */</span>
 <span class="source-line-no">220</span><span id="line-220">      public Builder&lt;E&gt; elementFunction(Function&lt;Object,E&gt; value) {</span>
@@ -564,8 +564,8 @@
 <span class="source-line-no">551</span><span id="line-551">         for (var o : values) {</span>
 <span class="source-line-no">552</span><span id="line-552">            if (o == null)</span>
 <span class="source-line-no">553</span><span id="line-553">               continue;</span>
-<span class="source-line-no">554</span><span id="line-554">            if (o instanceof Collection&lt;?&gt; c) {</span>
-<span class="source-line-no">555</span><span id="line-555">               addAllConverted(c);</span>
+<span class="source-line-no">554</span><span id="line-554">            if (o instanceof Collection&lt;?&gt; o2) {</span>
+<span class="source-line-no">555</span><span id="line-555">               addAllConverted(o2);</span>
 <span class="source-line-no">556</span><span id="line-556">            } else if (o.getClass().isArray()) {</span>
 <span class="source-line-no">557</span><span id="line-557">               for (int i = 0; i &lt; java.lang.reflect.Array.getLength(o); i++) {</span>
 <span class="source-line-no">558</span><span id="line-558">                  addConverted(java.lang.reflect.Array.get(o, i));</span>
@@ -585,12 +585,12 @@
 <span class="source-line-no">572</span><span id="line-572">      if (element == null) {</span>
 <span class="source-line-no">573</span><span id="line-573">         // Allow null for non-primitive types</span>
 <span class="source-line-no">574</span><span id="line-574">         if (elementType.isPrimitive())</span>
-<span class="source-line-no">575</span><span id="line-575">            throw rex("Cannot set null element for primitive type {0}", elementType.getName());</span>
+<span class="source-line-no">575</span><span id="line-575">            throw rex("Cannot set null element for primitive type %s", elementType.getName());</span>
 <span class="source-line-no">576</span><span id="line-576">         return null;</span>
 <span class="source-line-no">577</span><span id="line-577">      }</span>
 <span class="source-line-no">578</span><span id="line-578">      if (elementType.isInstance(element))</span>
 <span class="source-line-no">579</span><span id="line-579">         return elementType.cast(element);</span>
-<span class="source-line-no">580</span><span id="line-580">      throw rex("Object of type {0} could not be converted to element type {1}", cn(element), cn(elementType));</span>
+<span class="source-line-no">580</span><span id="line-580">      throw rex("Object of type %s could not be converted to element type %s", cn(element), cn(elementType));</span>
 <span class="source-line-no">581</span><span id="line-581">   }</span>
 <span class="source-line-no">582</span><span id="line-582"></span>
 <span class="source-line-no">583</span><span id="line-583">   @Override</span>

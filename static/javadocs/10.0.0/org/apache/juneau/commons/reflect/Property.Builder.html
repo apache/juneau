@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the producer (getter) using a function.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>producer</code> - The producer function. Can be <jk>null</jk>.</dd>
+<dd><code>producer</code> - The producer function. Can be <jk>null</jk> to leave the property unreadable.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the consumer (setter) using a throwing consumer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>consumer</code> - The consumer function. Can be <jk>null</jk>.</dd>
+<dd><code>consumer</code> - The consumer function. Can be <jk>null</jk> to leave the property unwritable.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

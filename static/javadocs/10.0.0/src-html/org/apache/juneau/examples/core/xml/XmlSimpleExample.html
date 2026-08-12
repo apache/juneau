@@ -58,11 +58,11 @@
 <span class="source-line-no">045</span><span id="line-45">       * &lt;id&gt;id&lt;/id&gt;</span>
 <span class="source-line-no">046</span><span id="line-46">       * &lt;/object&gt;</span>
 <span class="source-line-no">047</span><span id="line-47">       */</span>
-<span class="source-line-no">048</span><span id="line-48">      var serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojo);</span>
+<span class="source-line-no">048</span><span id="line-48">      var serial = XmlSerializer.DEFAULT_SQ_READABLE.write(pojo);</span>
 <span class="source-line-no">049</span><span id="line-49">      Logger.getLogger(XmlSimpleExample.class).info(serial);</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">      // Deserialize back to Pojo instance</span>
-<span class="source-line-no">052</span><span id="line-52">      var obj = XmlParser.DEFAULT.parse(serial, Pojo.class);</span>
+<span class="source-line-no">052</span><span id="line-52">      var obj = XmlParser.DEFAULT.read(serial, Pojo.class);</span>
 <span class="source-line-no">053</span><span id="line-53"></span>
 <span class="source-line-no">054</span><span id="line-54">      assert obj.getId().equals(pojo.getId());</span>
 <span class="source-line-no">055</span><span id="line-55">      assert obj.getName().equals(pojo.getName());</span>

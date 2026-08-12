@@ -284,7 +284,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The key conversion function. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The key conversion function. Can be <jk>null</jk> (keys are then used as-is without conversion).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>
@@ -313,7 +313,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value conversion function. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value conversion function. Can be <jk>null</jk> (values are then used as-is without conversion).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>
@@ -342,8 +342,8 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>keyFunction</code> - The key conversion function. Can be <jk>null</jk>.</dd>
-<dd><code>valueFunction</code> - The value conversion function. Can be <jk>null</jk>.</dd>
+<dd><code>keyFunction</code> - The key conversion function. Can be <jk>null</jk> (keys are then used as-is without conversion).</dd>
+<dd><code>valueFunction</code> - The value conversion function. Can be <jk>null</jk> (values are then used as-is without conversion).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>

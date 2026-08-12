@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -593,26 +593,26 @@
 <span class="source-line-no">580</span><span id="line-580"></span>
 <span class="source-line-no">581</span><span id="line-581">      Object(RestOpAnnotation.Builder b) {</span>
 <span class="source-line-no">582</span><span id="line-582">         super(b);</span>
-<span class="source-line-no">583</span><span id="line-583">         description = copyOf(b.description);</span>
+<span class="source-line-no">583</span><span id="line-583">         description = cp(b.description);</span>
 <span class="source-line-no">584</span><span id="line-584">         clientVersion = b.clientVersion;</span>
-<span class="source-line-no">585</span><span id="line-585">         consumes = copyOf(b.consumes);</span>
-<span class="source-line-no">586</span><span id="line-586">         converters = copyOf(b.converters);</span>
+<span class="source-line-no">585</span><span id="line-585">         consumes = cp(b.consumes);</span>
+<span class="source-line-no">586</span><span id="line-586">         converters = cp(b.converters);</span>
 <span class="source-line-no">587</span><span id="line-587">         debug = b.debug;</span>
 <span class="source-line-no">588</span><span id="line-588">         defaultAccept = b.defaultAccept;</span>
 <span class="source-line-no">589</span><span id="line-589">         defaultCharset = b.defaultCharset;</span>
 <span class="source-line-no">590</span><span id="line-590">         defaultContentType = b.defaultContentType;</span>
-<span class="source-line-no">591</span><span id="line-591">         defaultRequestFormData = copyOf(b.defaultRequestFormData);</span>
-<span class="source-line-no">592</span><span id="line-592">         defaultRequestQueryData = copyOf(b.defaultRequestQueryData);</span>
-<span class="source-line-no">593</span><span id="line-593">         defaultRequestAttributes = copyOf(b.defaultRequestAttributes);</span>
-<span class="source-line-no">594</span><span id="line-594">         defaultRequestHeaders = copyOf(b.defaultRequestHeaders);</span>
-<span class="source-line-no">595</span><span id="line-595">         defaultResponseHeaders = copyOf(b.defaultResponseHeaders);</span>
-<span class="source-line-no">596</span><span id="line-596">         encoders = copyOf(b.encoders);</span>
-<span class="source-line-no">597</span><span id="line-597">         guards = copyOf(b.guards);</span>
-<span class="source-line-no">598</span><span id="line-598">         matchers = copyOf(b.matchers);</span>
+<span class="source-line-no">591</span><span id="line-591">         defaultRequestFormData = cp(b.defaultRequestFormData);</span>
+<span class="source-line-no">592</span><span id="line-592">         defaultRequestQueryData = cp(b.defaultRequestQueryData);</span>
+<span class="source-line-no">593</span><span id="line-593">         defaultRequestAttributes = cp(b.defaultRequestAttributes);</span>
+<span class="source-line-no">594</span><span id="line-594">         defaultRequestHeaders = cp(b.defaultRequestHeaders);</span>
+<span class="source-line-no">595</span><span id="line-595">         defaultResponseHeaders = cp(b.defaultResponseHeaders);</span>
+<span class="source-line-no">596</span><span id="line-596">         encoders = cp(b.encoders);</span>
+<span class="source-line-no">597</span><span id="line-597">         guards = cp(b.guards);</span>
+<span class="source-line-no">598</span><span id="line-598">         matchers = cp(b.matchers);</span>
 <span class="source-line-no">599</span><span id="line-599">         maxInput = b.maxInput;</span>
 <span class="source-line-no">600</span><span id="line-600">         method = b.method;</span>
-<span class="source-line-no">601</span><span id="line-601">         parsers = copyOf(b.parsers);</span>
-<span class="source-line-no">602</span><span id="line-602">         path = copyOf(b.path);</span>
+<span class="source-line-no">601</span><span id="line-601">         parsers = cp(b.parsers);</span>
+<span class="source-line-no">602</span><span id="line-602">         path = cp(b.path);</span>
 <span class="source-line-no">603</span><span id="line-603">         observability = b.observability;</span>
 <span class="source-line-no">604</span><span id="line-604">         metricName = b.metricName;</span>
 <span class="source-line-no">605</span><span id="line-605">         metricTags = b.metricTags;</span>
@@ -620,13 +620,13 @@
 <span class="source-line-no">607</span><span id="line-607">         virtualThreads = b.virtualThreads;</span>
 <span class="source-line-no">608</span><span id="line-608">         asyncTimeoutMillis = b.asyncTimeoutMillis;</span>
 <span class="source-line-no">609</span><span id="line-609">         asyncCompletionExecutor = b.asyncCompletionExecutor;</span>
-<span class="source-line-no">610</span><span id="line-610">         produces = copyOf(b.produces);</span>
-<span class="source-line-no">611</span><span id="line-611">         allowedSerializerOptions = copyOf(b.allowedSerializerOptions);</span>
-<span class="source-line-no">612</span><span id="line-612">         allowedParserOptions = copyOf(b.allowedParserOptions);</span>
-<span class="source-line-no">613</span><span id="line-613">         noInherit = copyOf(b.noInherit);</span>
+<span class="source-line-no">610</span><span id="line-610">         produces = cp(b.produces);</span>
+<span class="source-line-no">611</span><span id="line-611">         allowedSerializerOptions = cp(b.allowedSerializerOptions);</span>
+<span class="source-line-no">612</span><span id="line-612">         allowedParserOptions = cp(b.allowedParserOptions);</span>
+<span class="source-line-no">613</span><span id="line-613">         noInherit = cp(b.noInherit);</span>
 <span class="source-line-no">614</span><span id="line-614">         roleGuard = b.roleGuard;</span>
 <span class="source-line-no">615</span><span id="line-615">         rolesDeclared = b.rolesDeclared;</span>
-<span class="source-line-no">616</span><span id="line-616">         serializers = copyOf(b.serializers);</span>
+<span class="source-line-no">616</span><span id="line-616">         serializers = cp(b.serializers);</span>
 <span class="source-line-no">617</span><span id="line-617">         summary = b.summary;</span>
 <span class="source-line-no">618</span><span id="line-618">         swagger = b.swagger;</span>
 <span class="source-line-no">619</span><span id="line-619">         value = b.value;</span>

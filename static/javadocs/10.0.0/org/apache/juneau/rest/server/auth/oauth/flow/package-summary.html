@@ -15,11 +15,7 @@
 <script type="text/javascript" src="../../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="package-declaration-page">
-<script type="text/javascript">var evenRowColor = "even-row-color";
-var oddRowColor = "odd-row-color";
-var tableTab = "table-tab";
-var activeTableTab = "active-table-tab";
-var pathtoroot = "../../../../../../../../";
+<script type="text/javascript">var pathtoroot = "../../../../../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -67,17 +63,16 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">org.apache.juneau.rest.server.auth.oauth.flow</span></div>
 <section class="package-description" id="package-description">
-<div class="block">OAuth 2.0 client-side flow helpers.
+<div class="block">Server-only OAuth 2.0 flow helpers.
 
  <p>
- Thin facades over Nimbus SDK grant types and <code>TokenRequest</code>.  Each helper exposes a Juneau-style
- builder and returns a Juneau-native <a href="../OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>OAuthToken</code></a> record.
+ The role-neutral grant flows (client-credentials, authorization-code with PKCE, refresh-token) plus the shared
+ <code>Flows</code> / <code>OAuthToken</code> / <code>OAuthFlowException</code> primitives live in
+ <code>org.apache.juneau.rest.auth.oauth.flow</code> (module <code>juneau-rest-auth-oauth-flow</code>).  This package retains
+ only the server-side flow that has no client-side counterpart.
 
  <h5 class='topic'>Flow inventory</h5>
  <ul>
-   <li class='jc'><a href="OAuthClientCredentialsFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow"><code>OAuthClientCredentialsFlow</code></a>
-   <li class='jc'><a href="OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a> (with PKCE)
-   <li class='jc'><a href="OAuthRefreshTokenFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow"><code>OAuthRefreshTokenFlow</code></a>
    <li class='jc'><a href="OAuthResourceOwnerFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow"><code>OAuthResourceOwnerFlow</code></a> (discouraged)
  </ul></div>
 <dl class="notes">
@@ -97,56 +92,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">OAuth 2.0 / OIDC integration for the Juneau REST server.</div>
 </div>
-<div class="col-first odd-row-color"><a href="../oidc/package-summary.html">org.apache.juneau.rest.server.auth.oauth.oidc</a></div>
-<div class="col-last odd-row-color">
-<div class="block">OpenID Connect Discovery 1.0 client.</div>
-</div>
 </div>
 </div>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exceptions</button></div>
-<div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
+<div class="caption"><span>Classes</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthAuthorizationCodeFlow</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Authorization-code grant (RFC 6749 &sect;4.1) flow helper with mandatory PKCE per RFC 7636.</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OAuthResourceOwnerFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">Deprecated.
+<div class="deprecation-comment">Use <a href="../../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a> (with PKCE) wherever possible.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OAuthAuthorizationCodeFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthAuthorizationCodeFlow.Builder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Builder.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OAuthClientCredentialsFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthClientCredentialsFlow</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Client-credentials grant (RFC 6749 &sect;4.4) flow helper.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OAuthClientCredentialsFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthClientCredentialsFlow.Builder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Builder.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="OAuthFlowException.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthFlowException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
-<div class="block">Runtime exception thrown by any OAuth flow helper when the IdP rejects the request, the HTTP round-trip
- fails, or the response can't be parsed.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OAuthRefreshTokenFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthRefreshTokenFlow</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Refresh-token grant (RFC 6749 &sect;6) flow helper.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OAuthRefreshTokenFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthRefreshTokenFlow.Builder</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Builder.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OAuthResourceOwnerFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">Deprecated.
-<div class="deprecation-comment">Use <a href="OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a> (with PKCE) wherever possible.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OAuthResourceOwnerFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow.Builder</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">Deprecated.</div>
-</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OAuthResourceOwnerFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow.Builder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">Deprecated.</div>
 </div>
 </div>
 </li>

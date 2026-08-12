@@ -134,7 +134,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ReaderParserSession.Builder">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/ReaderParserSession.Builder.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession.Builder</a></h3>
-<code><a href="../parser/ReaderParserSession.Builder.html#fileCharset(java.nio.charset.Charset)">fileCharset</a>, <a href="../parser/ReaderParserSession.Builder.html#property(java.lang.String,java.lang.Object)">property</a>, <a href="../parser/ReaderParserSession.Builder.html#streamCharset(java.nio.charset.Charset)">streamCharset</a></code></div>
+<code><a href="../parser/ReaderParserSession.Builder.html#property(java.lang.String,java.lang.Object)">property</a>, <a href="../parser/ReaderParserSession.Builder.html#streamCharset(java.nio.charset.Charset)">streamCharset</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ParserSession.Builder">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/ParserSession.Builder.html" title="class in org.apache.juneau.marshall.parser">ParserSession.Builder</a></h3>
 <code><a href="../parser/ParserSession.Builder.html#javaMethod(java.lang.reflect.Method)">javaMethod</a>, <a href="../parser/ParserSession.Builder.html#nulls(org.apache.juneau.marshall.Nulls)">nulls</a>, <a href="../parser/ParserSession.Builder.html#outer(java.lang.Object)">outer</a>, <a href="../parser/ParserSession.Builder.html#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)">schema</a>, <a href="../parser/ParserSession.Builder.html#schemaDefault(org.apache.juneau.marshall.httppart.HttpPartSchema)">schemaDefault</a>, <a href="../parser/ParserSession.Builder.html#trimStrings(boolean)">trimStrings</a></code></div>
@@ -161,11 +161,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.jena.RdfParser)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfParserSession.Builder.html#line-72">Builder</a></span><wbr><span class="parameters">(<a href="RdfParser.html" title="class in org.apache.juneau.marshall.jena">RdfParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfParserSession.Builder.html#line-73">Builder</a></span><wbr><span class="parameters">(<a href="RdfParser.html" title="class in org.apache.juneau.marshall.jena">RdfParser</a>&nbsp;ctx)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>ctx</code> - The context creating this session.</dd>
+<dd><code>ctx</code> - The context creating this session.
+   <br>Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -180,7 +181,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RdfParserSession.html" title="class in org.apache.juneau.marshall.jena">RdfParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfParserSession.Builder.html#line-77">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RdfParserSession.html" title="class in org.apache.juneau.marshall.jena">RdfParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfParserSession.Builder.html#line-78">build</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../MarshallingSession.Builder.html#build()">MarshallingSession.Builder</a></code></span></div>
 <div class="block">Build the object.</div>
 <dl class="notes">

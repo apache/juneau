@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.plaintext;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -93,7 +93,7 @@
 <span class="source-line-no">080</span><span id="line-80"></span>
 <span class="source-line-no">081</span><span id="line-81">      Object(PlainTextAnnotation.Builder b) {</span>
 <span class="source-line-no">082</span><span id="line-82">         super(b);</span>
-<span class="source-line-no">083</span><span id="line-83">         this.description = copyOf(b.description);</span>
+<span class="source-line-no">083</span><span id="line-83">         this.description = cp(b.description);</span>
 <span class="source-line-no">084</span><span id="line-84">      }</span>
 <span class="source-line-no">085</span><span id="line-85"></span>
 <span class="source-line-no">086</span><span id="line-86">      @Override /* Overridden from annotation */</span>

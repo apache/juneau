@@ -63,14 +63,14 @@
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">   @Override /* Overridden from ReactiveStreamsAdapter */</span>
 <span class="source-line-no">052</span><span id="line-52">   public Adaptation adapt(Object value) {</span>
-<span class="source-line-no">053</span><span id="line-53">      if (value instanceof Single&lt;?&gt; s)</span>
-<span class="source-line-no">054</span><span id="line-54">         return Adaptation.single(s.toCompletionStage());</span>
-<span class="source-line-no">055</span><span id="line-55">      if (value instanceof Maybe&lt;?&gt; m)</span>
-<span class="source-line-no">056</span><span id="line-56">         return Adaptation.single(m.toCompletionStage(null));</span>
-<span class="source-line-no">057</span><span id="line-57">      if (value instanceof Completable c)</span>
-<span class="source-line-no">058</span><span id="line-58">         return Adaptation.single(c.toCompletionStage(null));</span>
-<span class="source-line-no">059</span><span id="line-59">      if (value instanceof Flowable&lt;?&gt; f)</span>
-<span class="source-line-no">060</span><span id="line-60">         return Adaptation.stream(FlowAdapters.toFlowPublisher(f));</span>
+<span class="source-line-no">053</span><span id="line-53">      if (value instanceof Single&lt;?&gt; value2)</span>
+<span class="source-line-no">054</span><span id="line-54">         return Adaptation.single(value2.toCompletionStage());</span>
+<span class="source-line-no">055</span><span id="line-55">      if (value instanceof Maybe&lt;?&gt; value2)</span>
+<span class="source-line-no">056</span><span id="line-56">         return Adaptation.single(value2.toCompletionStage(null));</span>
+<span class="source-line-no">057</span><span id="line-57">      if (value instanceof Completable value2)</span>
+<span class="source-line-no">058</span><span id="line-58">         return Adaptation.single(value2.toCompletionStage(null));</span>
+<span class="source-line-no">059</span><span id="line-59">      if (value instanceof Flowable&lt;?&gt; value2)</span>
+<span class="source-line-no">060</span><span id="line-60">         return Adaptation.stream(FlowAdapters.toFlowPublisher(value2));</span>
 <span class="source-line-no">061</span><span id="line-61">      var o = (Observable&lt;?&gt;) value;</span>
 <span class="source-line-no">062</span><span id="line-62">      return Adaptation.stream(FlowAdapters.toFlowPublisher(o.toFlowable(BackpressureStrategy.BUFFER)));</span>
 <span class="source-line-no">063</span><span id="line-63">   }</span>

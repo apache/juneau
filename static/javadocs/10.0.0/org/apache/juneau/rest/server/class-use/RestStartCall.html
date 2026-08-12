@@ -60,6 +60,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">REST Server API</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -86,6 +90,30 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">RestStartCallAnnotation.Builder.</span><code><a href="../RestStartCallAnnotation.Builder.html#build()" class="member-name-link">build</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Instantiates a new <a href="../RestStartCall.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestStartCall</code></a> object initialized with this builder.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<h2>Uses of <a href="../RestStartCall.html" title="annotation interface in org.apache.juneau.rest.server">RestStartCall</a> in <a href="../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></h2>
+<div class="caption"><span>Methods in <a href="../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a> with annotations of type <a href="../RestStartCall.html" title="annotation interface in org.apache.juneau.rest.server">RestStartCall</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>default void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpEndpoint.</span><code><a href="../mcp/v20260728/McpEndpoint.html#mcpResourceServerAuth(org.apache.juneau.rest.server.RestContext,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)" class="member-name-link">mcpResourceServerAuth</a><wbr>(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx,
+ jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">OAuth 2.1 resource-server bearer gate for the mixin's MCP <code>POST /mcp</code> endpoint (READY-312f F2).</div>
+</div>
+<div class="col-first odd-row-color"><code>final void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpRestServlet.</span><code><a href="../mcp/v20260728/McpRestServlet.html#mcpResourceServerAuth(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)" class="member-name-link">mcpResourceServerAuth</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">OAuth 2.1 resource-server bearer gate for the MCP <code>POST /</code> endpoint (READY-312f F2).</div>
 </div>
 </div>
 </section>

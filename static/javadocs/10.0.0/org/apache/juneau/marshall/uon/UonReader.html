@@ -163,7 +163,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ParserReader">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/ParserReader.html" title="class in org.apache.juneau.marshall.parser">ParserReader</a></h3>
-<code><a href="../parser/ParserReader.html#close()">close</a>, <a href="../parser/ParserReader.html#delete()">delete</a>, <a href="../parser/ParserReader.html#delete(int)">delete</a>, <a href="../parser/ParserReader.html#getMarked()">getMarked</a>, <a href="../parser/ParserReader.html#getMarked(int,int)">getMarked</a>, <a href="../parser/ParserReader.html#getPosition()">getPosition</a>, <a href="../parser/ParserReader.html#mark()">mark</a>, <a href="../parser/ParserReader.html#parseNumberString()">parseNumberString</a>, <a href="../parser/ParserReader.html#peek()">peek</a>, <a href="../parser/ParserReader.html#peekSkipWs()">peekSkipWs</a>, <a href="../parser/ParserReader.html#read()">read</a>, <a href="../parser/ParserReader.html#read(int)">read</a>, <a href="../parser/ParserReader.html#readCodePoint()">readCodePoint</a>, <a href="../parser/ParserReader.html#readSkipWs()">readSkipWs</a>, <a href="../parser/ParserReader.html#replace(char)">replace</a>, <a href="../parser/ParserReader.html#replace(int,int)">replace</a></code></div>
+<code><a href="../parser/ParserReader.html#close()">close</a>, <a href="../parser/ParserReader.html#delete()">delete</a>, <a href="../parser/ParserReader.html#delete(int)">delete</a>, <a href="../parser/ParserReader.html#getMarked()">getMarked</a>, <a href="../parser/ParserReader.html#getMarked(int,int)">getMarked</a>, <a href="../parser/ParserReader.html#getPosition()">getPosition</a>, <a href="../parser/ParserReader.html#mark()">mark</a>, <a href="../parser/ParserReader.html#peek()">peek</a>, <a href="../parser/ParserReader.html#peekSkipWs()">peekSkipWs</a>, <a href="../parser/ParserReader.html#read()">read</a>, <a href="../parser/ParserReader.html#read(int)">read</a>, <a href="../parser/ParserReader.html#readCodePoint()">readCodePoint</a>, <a href="../parser/ParserReader.html#readNumberString()">readNumberString</a>, <a href="../parser/ParserReader.html#readSkipWs()">readSkipWs</a>, <a href="../parser/ParserReader.html#replace(char)">replace</a>, <a href="../parser/ParserReader.html#replace(int,int)">replace</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.io.Reader">Methods inherited from class&nbsp;java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#mark(int)" title="class or interface in java.io" class="external-link">mark</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#markSupported()" title="class or interface in java.io" class="external-link">markSupported</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#nullReader()" title="class or interface in java.io" class="external-link">nullReader</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#read(char%5B%5D)" title="class or interface in java.io" class="external-link">read</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#read(java.nio.CharBuffer)" title="class or interface in java.io" class="external-link">read</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#ready()" title="class or interface in java.io" class="external-link">ready</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#reset()" title="class or interface in java.io" class="external-link">reset</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#skip(long)" title="class or interface in java.io" class="external-link">skip</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html#transferTo(java.io.Writer)" title="class or interface in java.io" class="external-link">transferTo</a></code></div>
@@ -184,13 +184,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe,boolean)">
 <h3>UonReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonReader.html#line-73">UonReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonReader.html#line-74">UonReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  boolean&nbsp;decodeChars)</span>
           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pipe</code> - The parser input.</dd>
+<dd><code>pipe</code> - The parser input.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>decodeChars</code> - Whether the input is URL-encoded.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying stream.</dd>
@@ -208,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(char[],int,int)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonReader.html#line-84">read</a></span><wbr><span class="parameters">(char[]&nbsp;cbuf,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonReader.html#line-85">read</a></span><wbr><span class="parameters">(char[]&nbsp;cbuf,
  int&nbsp;off,
  int&nbsp;len)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -228,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unread()">
 <h3>unread</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonReader.html" title="class in org.apache.juneau.marshall.uon">UonReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonReader.html#line-183">unread</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UonReader.html" title="class in org.apache.juneau.marshall.uon">UonReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonReader.html#line-184">unread</a></span>()
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../parser/ParserReader.html#unread()">ParserReader</a></code></span></div>
 <div class="block">Pushes the last read character back into the stream.</div>

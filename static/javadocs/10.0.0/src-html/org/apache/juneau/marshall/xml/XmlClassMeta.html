@@ -54,62 +54,64 @@
 <span class="source-line-no">041</span><span id="line-41">    * Constructor.</span>
 <span class="source-line-no">042</span><span id="line-42">    *</span>
 <span class="source-line-no">043</span><span id="line-43">    * @param cm The class that this annotation is defined on.</span>
-<span class="source-line-no">044</span><span id="line-44">    * @param mp XML metadata provider (for finding information about other artifacts).</span>
-<span class="source-line-no">045</span><span id="line-45">    */</span>
-<span class="source-line-no">046</span><span id="line-46">   public XmlClassMeta(ClassMeta&lt;?&gt; cm, XmlMetaProvider mp) {</span>
-<span class="source-line-no">047</span><span id="line-47">      super(cm);</span>
-<span class="source-line-no">048</span><span id="line-48">      List&lt;Xml&gt; xmls = list();</span>
-<span class="source-line-no">049</span><span id="line-49">      List&lt;XmlSchema&gt; schemas = list();</span>
-<span class="source-line-no">050</span><span id="line-50">      if (nn(cm)) {</span>
-<span class="source-line-no">051</span><span id="line-51">         cm.forEachAnnotation(Xml.class, x -&gt; true, xmls::add);</span>
-<span class="source-line-no">052</span><span id="line-52">         cm.forEachAnnotation(XmlSchema.class, x -&gt; true, schemas::add);</span>
-<span class="source-line-no">053</span><span id="line-53">      }</span>
-<span class="source-line-no">054</span><span id="line-54">      this.namespace = XmlUtils.findNamespace(xmls, schemas);</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">   String childNameTemp = null;</span>
-<span class="source-line-no">057</span><span id="line-57">   var formatValue = XmlFormat.DEFAULT;</span>
-<span class="source-line-no">058</span><span id="line-58">   for (var a : xmls) {</span>
-<span class="source-line-no">059</span><span id="line-59">      if (a.format() != XmlFormat.DEFAULT)</span>
-<span class="source-line-no">060</span><span id="line-60">         formatValue = a.format();</span>
-<span class="source-line-no">061</span><span id="line-61">      if (! a.childName().isEmpty())</span>
-<span class="source-line-no">062</span><span id="line-62">         childNameTemp = a.childName();</span>
-<span class="source-line-no">063</span><span id="line-63">   }</span>
-<span class="source-line-no">064</span><span id="line-64">   this.format = formatValue;</span>
-<span class="source-line-no">065</span><span id="line-65">   this.childName = childNameTemp;</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /**</span>
-<span class="source-line-no">069</span><span id="line-69">    * Returns the XML namespace associated with this class.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * &lt;p&gt;</span>
-<span class="source-line-no">072</span><span id="line-72">    * Namespace is determined in the following order of {@link Xml#prefix() @Xml(prefix)} annotation:</span>
-<span class="source-line-no">073</span><span id="line-73">    * &lt;ol&gt;</span>
-<span class="source-line-no">074</span><span id="line-74">    *    &lt;li&gt;Class.</span>
-<span class="source-line-no">075</span><span id="line-75">    *    &lt;li&gt;Package.</span>
-<span class="source-line-no">076</span><span id="line-76">    *    &lt;li&gt;Superclasses.</span>
-<span class="source-line-no">077</span><span id="line-77">    *    &lt;li&gt;Superclass packages.</span>
-<span class="source-line-no">078</span><span id="line-78">    *    &lt;li&gt;Interfaces.</span>
-<span class="source-line-no">079</span><span id="line-79">    *    &lt;li&gt;Interface packages.</span>
-<span class="source-line-no">080</span><span id="line-80">    * &lt;/ol&gt;</span>
-<span class="source-line-no">081</span><span id="line-81">    *</span>
-<span class="source-line-no">082</span><span id="line-82">    * @return The namespace associated with this class, or &lt;jk&gt;null&lt;/jk&gt; if no namespace is associated with it.</span>
-<span class="source-line-no">083</span><span id="line-83">    */</span>
-<span class="source-line-no">084</span><span id="line-84">   public Namespace getNamespace() { return namespace; }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Returns the {@link Xml#childName() @Xml(childName)} annotation defined on the class.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @return The value of the annotation, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   protected String getChildName() { return childName; }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Returns the {@link Xml#format() @Xml(format)} annotation defined on the class.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.</span>
-<span class="source-line-no">097</span><span id="line-97">    */</span>
-<span class="source-line-no">098</span><span id="line-98">   protected XmlFormat getFormat() { return format; }</span>
-<span class="source-line-no">099</span><span id="line-99">}</span>
+<span class="source-line-no">044</span><span id="line-44">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no {@link Xml @Xml}/{@link XmlSchema @XmlSchema} annotations are looked up; namespace,</span>
+<span class="source-line-no">045</span><span id="line-45">    *    format, and child-name default accordingly).</span>
+<span class="source-line-no">046</span><span id="line-46">    * @param mp XML metadata provider (for finding information about other artifacts).</span>
+<span class="source-line-no">047</span><span id="line-47">    */</span>
+<span class="source-line-no">048</span><span id="line-48">   public XmlClassMeta(ClassMeta&lt;?&gt; cm, XmlMetaProvider mp) {</span>
+<span class="source-line-no">049</span><span id="line-49">      super(cm);</span>
+<span class="source-line-no">050</span><span id="line-50">      List&lt;Xml&gt; xmls = list();</span>
+<span class="source-line-no">051</span><span id="line-51">      List&lt;XmlSchema&gt; schemas = list();</span>
+<span class="source-line-no">052</span><span id="line-52">      if (nn(cm)) {</span>
+<span class="source-line-no">053</span><span id="line-53">         cm.forEachAnnotation(Xml.class, x -&gt; true, xmls::add);</span>
+<span class="source-line-no">054</span><span id="line-54">         cm.forEachAnnotation(XmlSchema.class, x -&gt; true, schemas::add);</span>
+<span class="source-line-no">055</span><span id="line-55">      }</span>
+<span class="source-line-no">056</span><span id="line-56">      this.namespace = XmlUtils.findNamespace(xmls, schemas);</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   String childNameTemp = null;</span>
+<span class="source-line-no">059</span><span id="line-59">   var formatValue = XmlFormat.DEFAULT;</span>
+<span class="source-line-no">060</span><span id="line-60">   for (var a : xmls) {</span>
+<span class="source-line-no">061</span><span id="line-61">      if (a.format() != XmlFormat.DEFAULT)</span>
+<span class="source-line-no">062</span><span id="line-62">         formatValue = a.format();</span>
+<span class="source-line-no">063</span><span id="line-63">      if (! a.childName().isEmpty())</span>
+<span class="source-line-no">064</span><span id="line-64">         childNameTemp = a.childName();</span>
+<span class="source-line-no">065</span><span id="line-65">   }</span>
+<span class="source-line-no">066</span><span id="line-66">   this.format = formatValue;</span>
+<span class="source-line-no">067</span><span id="line-67">   this.childName = childNameTemp;</span>
+<span class="source-line-no">068</span><span id="line-68">   }</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">   /**</span>
+<span class="source-line-no">071</span><span id="line-71">    * Returns the XML namespace associated with this class.</span>
+<span class="source-line-no">072</span><span id="line-72">    *</span>
+<span class="source-line-no">073</span><span id="line-73">    * &lt;p&gt;</span>
+<span class="source-line-no">074</span><span id="line-74">    * Namespace is determined in the following order of {@link Xml#prefix() @Xml(prefix)} annotation:</span>
+<span class="source-line-no">075</span><span id="line-75">    * &lt;ol&gt;</span>
+<span class="source-line-no">076</span><span id="line-76">    *    &lt;li&gt;Class.</span>
+<span class="source-line-no">077</span><span id="line-77">    *    &lt;li&gt;Package.</span>
+<span class="source-line-no">078</span><span id="line-78">    *    &lt;li&gt;Superclasses.</span>
+<span class="source-line-no">079</span><span id="line-79">    *    &lt;li&gt;Superclass packages.</span>
+<span class="source-line-no">080</span><span id="line-80">    *    &lt;li&gt;Interfaces.</span>
+<span class="source-line-no">081</span><span id="line-81">    *    &lt;li&gt;Interface packages.</span>
+<span class="source-line-no">082</span><span id="line-82">    * &lt;/ol&gt;</span>
+<span class="source-line-no">083</span><span id="line-83">    *</span>
+<span class="source-line-no">084</span><span id="line-84">    * @return The namespace associated with this class, or &lt;jk&gt;null&lt;/jk&gt; if no namespace is associated with it.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public Namespace getNamespace() { return namespace; }</span>
+<span class="source-line-no">087</span><span id="line-87"></span>
+<span class="source-line-no">088</span><span id="line-88">   /**</span>
+<span class="source-line-no">089</span><span id="line-89">    * Returns the {@link Xml#childName() @Xml(childName)} annotation defined on the class.</span>
+<span class="source-line-no">090</span><span id="line-90">    *</span>
+<span class="source-line-no">091</span><span id="line-91">    * @return The value of the annotation, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   protected String getChildName() { return childName; }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Returns the {@link Xml#format() @Xml(format)} annotation defined on the class.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.</span>
+<span class="source-line-no">099</span><span id="line-99">    */</span>
+<span class="source-line-no">100</span><span id="line-100">   protected XmlFormat getFormat() { return format; }</span>
+<span class="source-line-no">101</span><span id="line-101">}</span>
 
 
 

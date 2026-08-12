@@ -241,7 +241,7 @@
 <span class="source-line-no">228</span><span id="line-228">      } catch (IOException | BasicHttpException ex) {</span>
 <span class="source-line-no">229</span><span id="line-229">         throw ex;</span>
 <span class="source-line-no">230</span><span id="line-230">      } catch (Exception ex) {</span>
-<span class="source-line-no">231</span><span id="line-231">         throw new InternalServerError(ex, "Thymeleaf render failed for ''{0}''", safeTemplate);</span>
+<span class="source-line-no">231</span><span id="line-231">         throw new InternalServerError(ex, "Thymeleaf render failed for '%s'", safeTemplate);</span>
 <span class="source-line-no">232</span><span id="line-232">      }</span>
 <span class="source-line-no">233</span><span id="line-233">   }</span>
 <span class="source-line-no">234</span><span id="line-234"></span>
@@ -269,7 +269,7 @@
 <span class="source-line-no">256</span><span id="line-256">         bp = "/" + bp;</span>
 <span class="source-line-no">257</span><span id="line-257">      if (resolved.startsWith(bp))</span>
 <span class="source-line-no">258</span><span id="line-258">         return resolved.substring(bp.length());</span>
-<span class="source-line-no">259</span><span id="line-259">      throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
+<span class="source-line-no">259</span><span id="line-259">      throw iaex("Resolved path '%s' does not start with base '%s'", resolved, bp);</span>
 <span class="source-line-no">260</span><span id="line-260">   }</span>
 <span class="source-line-no">261</span><span id="line-261"></span>
 <span class="source-line-no">262</span><span id="line-262">   /**</span>

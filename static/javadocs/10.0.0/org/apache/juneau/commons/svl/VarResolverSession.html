@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>context</code> - The <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> context object that contains the <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Vars</code></a> and context objects associated with
    that resolver.</dd>
-<dd><code>beanStore</code> - The bean store to use for resolving beans needed by vars.</dd>
+<dd><code>beanStore</code> - The bean store to use for resolving beans needed by vars.  Can be <jk>null</jk> (this session will then have no parent bean store, and only beans explicitly added via <a href="#bean(java.lang.Class,T)"><code>bean(Class, Object)</code></a> will be resolvable).</dd>
 </dl>
 </section>
 </li>
@@ -262,7 +262,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Resolve all variables in the specified string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The string to resolve variables in.</dd>
+<dd><code>s</code> - The string to resolve variables in.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The new string with all variables resolved, or the same string if no variables were found.
    <br>Returns <jk>null</jk> if the input was <jk>null</jk>.</dd>
@@ -320,9 +320,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Resolves the specified strings in the string array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>in</code> - The string array containing variables to resolve.</dd>
+<dd><code>in</code> - The string array containing variables to resolve.  Must not be <jk>null</jk> or a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown, though individual elements can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>An array with resolved strings.</dd>
+<dd>An array with resolved strings.  Elements are <jk>null</jk> where the corresponding input element was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -346,10 +346,10 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The value type.</dd>
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object.</dd>
+<dd><code>o</code> - The object.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The same object if no resolution was needed, otherwise a new object or data structure if resolution was
- needed.</dd>
+ needed.  Returns <jk>null</jk> if the input was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -366,8 +366,8 @@ loadScripts(document, 'script');</script>
  to construct a large string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The string to resolve variables in.</dd>
-<dd><code>out</code> - The writer to write to.</dd>
+<dd><code>s</code> - The string to resolve variables in.  Can be <jk>null</jk>, in which case the writer is left unchanged.</dd>
+<dd><code>out</code> - The writer to write to.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The same writer.</dd>
 <dt>Throws:</dt>
@@ -398,7 +398,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> with the specified name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The var name (e.g. <js>"S"</js>).</dd>
+<dd><code>name</code> - The var name (e.g. <js>"S"</js>).  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> instance, or <jk>null</jk> if no <c>Var</c> is associated with the specified name.</dd>
 </dl>

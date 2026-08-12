@@ -360,7 +360,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - Initial value.</dd>
+<dd><code>t</code> - Initial value.  Can be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -399,7 +399,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Convenience method for checking if the specified type is this class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The type to check.</dd>
+<dd><code>t</code> - The type to check.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified type is this class.</dd>
 </dl>
@@ -433,7 +433,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the generic parameter type of the Holder type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The type to find the parameter type of.</dd>
+<dd><code>t</code> - The type to find the parameter type of.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Holder</c>.</dd>
 </dl>
@@ -446,7 +446,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the unwrapped type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The type to unwrap.</dd>
+<dd><code>t</code> - The type to unwrap.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The unwrapped type, or the same type if the type isn't <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a>.</dd>
 </dl>
@@ -546,7 +546,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The new value.</dd>
+<dd><code>t</code> - The new value.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The value before it was set.</dd>
 </dl>
@@ -727,7 +727,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the contents of this value or the default value if <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>def</code> - The default value.</dd>
+<dd><code>def</code> - The default value.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The contents of this value or the default value if <jk>null</jk>.</dd>
 </dl>
@@ -813,7 +813,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>condition</code> - The condition to check.</dd>
-<dd><code>t</code> - The value to set if condition is <jk>true</jk>.</dd>
+<dd><code>t</code> - The value to set if condition is <jk>true</jk>.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

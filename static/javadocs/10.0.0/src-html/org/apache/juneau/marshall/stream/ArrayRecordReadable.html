@@ -59,15 +59,15 @@
 <span class="source-line-no">046</span><span id="line-46">    * @return A new element-streamed {@link RecordReader}.</span>
 <span class="source-line-no">047</span><span id="line-47">    * @throws IOException If a problem occurred reading the underlying input.</span>
 <span class="source-line-no">048</span><span id="line-48">    */</span>
-<span class="source-line-no">049</span><span id="line-49">   RecordReader parseArrayRecords(Object input) throws IOException;</span>
+<span class="source-line-no">049</span><span id="line-49">   RecordReader readArrayRecords(Object input) throws IOException;</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">   /**</span>
-<span class="source-line-no">052</span><span id="line-52">    * Variant of {@link #parseArrayRecords(Object)} that accepts a caller-specified root element</span>
+<span class="source-line-no">052</span><span id="line-52">    * Variant of {@link #readArrayRecords(Object)} that accepts a caller-specified root element</span>
 <span class="source-line-no">053</span><span id="line-53">    * name.  Used by HTML/XML when the wire format is e.g. {@code &lt;items&gt;&lt;item&gt;...} and the caller</span>
 <span class="source-line-no">054</span><span id="line-54">    * needs to declare which child element is the array element.</span>
 <span class="source-line-no">055</span><span id="line-55">    *</span>
 <span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
-<span class="source-line-no">057</span><span id="line-57">    * The default ignores the root name and delegates to {@link #parseArrayRecords(Object)}.</span>
+<span class="source-line-no">057</span><span id="line-57">    * The default ignores the root name and delegates to {@link #readArrayRecords(Object)}.</span>
 <span class="source-line-no">058</span><span id="line-58">    *</span>
 <span class="source-line-no">059</span><span id="line-59">    * @param input The input.</span>
 <span class="source-line-no">060</span><span id="line-60">    * @param rootElementName The element name whose children are array elements.  May be</span>
@@ -75,8 +75,8 @@
 <span class="source-line-no">062</span><span id="line-62">    * @return A new element-streamed {@link RecordReader}.</span>
 <span class="source-line-no">063</span><span id="line-63">    * @throws IOException If a problem occurred reading the underlying input.</span>
 <span class="source-line-no">064</span><span id="line-64">    */</span>
-<span class="source-line-no">065</span><span id="line-65">   default RecordReader parseArrayRecords(Object input, String rootElementName) throws IOException {</span>
-<span class="source-line-no">066</span><span id="line-66">      return parseArrayRecords(input);</span>
+<span class="source-line-no">065</span><span id="line-65">   default RecordReader readArrayRecords(Object input, String rootElementName) throws IOException {</span>
+<span class="source-line-no">066</span><span id="line-66">      return readArrayRecords(input);</span>
 <span class="source-line-no">067</span><span id="line-67">   }</span>
 <span class="source-line-no">068</span><span id="line-68"></span>
 <span class="source-line-no">069</span><span id="line-69">   /**</span>

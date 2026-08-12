@@ -155,8 +155,8 @@ loadScripts(document, 'script');</script>
  <a href="TokenType.html#END_ARRAY"><code>TokenType.END_ARRAY</code></a> on <a href="RecordReader.html#close()"><code>close()</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cursor</code> - The token reader to wrap.  Owned by the returned RecordReader; closing the
-   RecordReader closes the cursor.</dd>
+<dd><code>cursor</code> - The token reader to wrap.  Must not be <jk>null</jk>.  Owned by the returned
+   RecordReader; closing the RecordReader closes the cursor.</dd>
 <dt>Returns:</dt>
 <dd>A streaming array-element <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a>.</dd>
 <dt>Throws:</dt>
@@ -179,8 +179,8 @@ loadScripts(document, 'script');</script>
  closing array bracket and closes the underlying cursor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cursor</code> - The token writer to wrap.  Owned by the returned RecordWriter; closing the
-   RecordWriter closes the cursor.</dd>
+<dd><code>cursor</code> - The token writer to wrap.  Must not be <jk>null</jk>.  Owned by the returned
+   RecordWriter; closing the RecordWriter closes the cursor.</dd>
 <dt>Returns:</dt>
 <dd>A streaming array-element <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a>.</dd>
 <dt>Throws:</dt>

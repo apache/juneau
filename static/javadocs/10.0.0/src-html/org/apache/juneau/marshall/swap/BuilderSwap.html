@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46">   /**</span>
 <span class="source-line-no">047</span><span id="line-47">    * Creates a BuilderSwap from the specified builder class if it qualifies as one.</span>
 <span class="source-line-no">048</span><span id="line-48">    *</span>
-<span class="source-line-no">049</span><span id="line-49">    * @param builderClass The potential builder class.</span>
+<span class="source-line-no">049</span><span id="line-49">    * @param builderClass The potential builder class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">050</span><span id="line-50">    * @param cVis Minimum constructor visibility.</span>
 <span class="source-line-no">051</span><span id="line-51">    * @param mVis Minimum method visibility.</span>
 <span class="source-line-no">052</span><span id="line-52">    * @return A new swap instance, or &lt;jk&gt;null&lt;/jk&gt; if class wasn't a builder class.</span>
@@ -105,8 +105,8 @@
 <span class="source-line-no">092</span><span id="line-92">   /**</span>
 <span class="source-line-no">093</span><span id="line-93">    * Creates a BuilderSwap from the specified object class if it has one.</span>
 <span class="source-line-no">094</span><span id="line-94">    *</span>
-<span class="source-line-no">095</span><span id="line-95">    * @param bc The bean context to use to look up annotations.</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param objectClass The object class to check.</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param bc The bean context to use to look up annotations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">096</span><span id="line-96">    * @param objectClass The object class to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">097</span><span id="line-97">    * @param cVis Minimum constructor visibility.</span>
 <span class="source-line-no">098</span><span id="line-98">    * @param mVis Minimum method visibility.</span>
 <span class="source-line-no">099</span><span id="line-99">    * @return A new swap instance, or &lt;jk&gt;null&lt;/jk&gt; if class didn't have a builder class.</span>
@@ -214,92 +214,101 @@
 <span class="source-line-no">201</span><span id="line-201">    *</span>
 <span class="source-line-no">202</span><span id="line-202">    * @param objectClass The object class created by the builder class.</span>
 <span class="source-line-no">203</span><span id="line-203">    * @param builderClass The builder class.</span>
-<span class="source-line-no">204</span><span id="line-204">    * @param objectConstructor The object constructor that takes in a builder as a parameter.</span>
-<span class="source-line-no">205</span><span id="line-205">    * @param builderConstructor The builder no-arg constructor.</span>
-<span class="source-line-no">206</span><span id="line-206">    * @param createBuilderMethod The static create() method on the object class.</span>
-<span class="source-line-no">207</span><span id="line-207">    * @param createObjectMethod The build() method on the builder class.</span>
-<span class="source-line-no">208</span><span id="line-208">    */</span>
-<span class="source-line-no">209</span><span id="line-209">   protected BuilderSwap(Class&lt;T&gt; objectClass, Class&lt;B&gt; builderClass, Constructor&lt;T&gt; objectConstructor, Constructor&lt;B&gt; builderConstructor, MethodInfo createBuilderMethod,</span>
-<span class="source-line-no">210</span><span id="line-210">      MethodInfo createObjectMethod) {</span>
-<span class="source-line-no">211</span><span id="line-211">      this.objectClass = objectClass;</span>
-<span class="source-line-no">212</span><span id="line-212">      this.builderClass = builderClass;</span>
-<span class="source-line-no">213</span><span id="line-213">      this.objectConstructor = objectConstructor;</span>
-<span class="source-line-no">214</span><span id="line-214">      this.builderConstructor = builderConstructor;</span>
-<span class="source-line-no">215</span><span id="line-215">      this.createBuilderMethod = createBuilderMethod;</span>
-<span class="source-line-no">216</span><span id="line-216">      this.createObjectMethod = createObjectMethod;</span>
-<span class="source-line-no">217</span><span id="line-217">   }</span>
-<span class="source-line-no">218</span><span id="line-218"></span>
-<span class="source-line-no">219</span><span id="line-219">   /**</span>
-<span class="source-line-no">220</span><span id="line-220">    * Creates a new object from the specified builder.</span>
-<span class="source-line-no">221</span><span id="line-221">    *</span>
-<span class="source-line-no">222</span><span id="line-222">    * @param session The current bean session.</span>
-<span class="source-line-no">223</span><span id="line-223">    * @param builder The object builder.</span>
-<span class="source-line-no">224</span><span id="line-224">    * @param hint A hint about the class type.</span>
-<span class="source-line-no">225</span><span id="line-225">    * @return A new object.</span>
-<span class="source-line-no">226</span><span id="line-226">    * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
-<span class="source-line-no">227</span><span id="line-227">    */</span>
-<span class="source-line-no">228</span><span id="line-228">   public T build(MarshallingSession session, B builder, ClassMeta&lt;?&gt; hint) throws ExecutableException {</span>
-<span class="source-line-no">229</span><span id="line-229">      if (nn(createObjectMethod))</span>
-<span class="source-line-no">230</span><span id="line-230">         return (T)createObjectMethod.invoke(builder);</span>
-<span class="source-line-no">231</span><span id="line-231">      try {</span>
-<span class="source-line-no">232</span><span id="line-232">         return objectConstructor.newInstance(builder);</span>
-<span class="source-line-no">233</span><span id="line-233">      } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {</span>
-<span class="source-line-no">234</span><span id="line-234">         throw new ExecutableException(e);</span>
-<span class="source-line-no">235</span><span id="line-235">      }</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
-<span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">   /**</span>
-<span class="source-line-no">239</span><span id="line-239">    * Creates a new builder object.</span>
-<span class="source-line-no">240</span><span id="line-240">    *</span>
-<span class="source-line-no">241</span><span id="line-241">    * @param session The current bean session.</span>
-<span class="source-line-no">242</span><span id="line-242">    * @param hint A hint about the class type.</span>
-<span class="source-line-no">243</span><span id="line-243">    * @return A new object.</span>
-<span class="source-line-no">244</span><span id="line-244">    * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
-<span class="source-line-no">245</span><span id="line-245">    */</span>
-<span class="source-line-no">246</span><span id="line-246">   public B create(MarshallingSession session, ClassMeta&lt;?&gt; hint) throws ExecutableException {</span>
-<span class="source-line-no">247</span><span id="line-247">      if (nn(createBuilderMethod))</span>
-<span class="source-line-no">248</span><span id="line-248">         return (B)createBuilderMethod.invoke(null);</span>
-<span class="source-line-no">249</span><span id="line-249">      try {</span>
-<span class="source-line-no">250</span><span id="line-250">         return builderConstructor.newInstance();</span>
-<span class="source-line-no">251</span><span id="line-251">      } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {</span>
-<span class="source-line-no">252</span><span id="line-252">         throw new ExecutableException(e);</span>
-<span class="source-line-no">253</span><span id="line-253">      }</span>
-<span class="source-line-no">254</span><span id="line-254">   }</span>
-<span class="source-line-no">255</span><span id="line-255"></span>
-<span class="source-line-no">256</span><span id="line-256">   /**</span>
-<span class="source-line-no">257</span><span id="line-257">    * The builder class.</span>
-<span class="source-line-no">258</span><span id="line-258">    *</span>
-<span class="source-line-no">259</span><span id="line-259">    * @return The builder class.</span>
-<span class="source-line-no">260</span><span id="line-260">    */</span>
-<span class="source-line-no">261</span><span id="line-261">   public Class&lt;B&gt; getBuilderClass() { return builderClass; }</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">   /**</span>
-<span class="source-line-no">264</span><span id="line-264">    * Returns the {@link ClassMeta} of the transformed class type.</span>
-<span class="source-line-no">265</span><span id="line-265">    *</span>
-<span class="source-line-no">266</span><span id="line-266">    * &lt;p&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    * This value is cached for quick lookup.</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * @param session</span>
-<span class="source-line-no">270</span><span id="line-270">    *    The bean context to use to get the class meta.</span>
-<span class="source-line-no">271</span><span id="line-271">    *    This is always going to be the same bean context that created this swap.</span>
-<span class="source-line-no">272</span><span id="line-272">    * @return The {@link ClassMeta} of the transformed class type.</span>
-<span class="source-line-no">273</span><span id="line-273">    */</span>
-<span class="source-line-no">274</span><span id="line-274">   @SuppressWarnings({</span>
-<span class="source-line-no">275</span><span id="line-275">      "java:S1452"  // Wildcard required - ClassMeta&lt;?&gt; for builder class type</span>
-<span class="source-line-no">276</span><span id="line-276">   })</span>
-<span class="source-line-no">277</span><span id="line-277">   public ClassMeta&lt;?&gt; getBuilderClassMeta(MarshallingSession session) {</span>
-<span class="source-line-no">278</span><span id="line-278">      if (builderClassMeta == null)</span>
-<span class="source-line-no">279</span><span id="line-279">         builderClassMeta = session.getClassMeta(getBuilderClass());</span>
-<span class="source-line-no">280</span><span id="line-280">      return builderClassMeta;</span>
-<span class="source-line-no">281</span><span id="line-281">   }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * The object class.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @return The object class.</span>
-<span class="source-line-no">287</span><span id="line-287">    */</span>
-<span class="source-line-no">288</span><span id="line-288">   public Class&lt;T&gt; getObjectClass() { return objectClass; }</span>
-<span class="source-line-no">289</span><span id="line-289">}</span>
+<span class="source-line-no">204</span><span id="line-204">    * @param objectConstructor</span>
+<span class="source-line-no">205</span><span id="line-205">    *    The object constructor that takes in a builder as a parameter.</span>
+<span class="source-line-no">206</span><span id="line-206">    *    Can be &lt;jk&gt;null&lt;/jk&gt; if the object is created via {@code createObjectMethod} instead.</span>
+<span class="source-line-no">207</span><span id="line-207">    * @param builderConstructor</span>
+<span class="source-line-no">208</span><span id="line-208">    *    The builder no-arg constructor.</span>
+<span class="source-line-no">209</span><span id="line-209">    *    Can be &lt;jk&gt;null&lt;/jk&gt; if the builder is created via {@code createBuilderMethod} instead.</span>
+<span class="source-line-no">210</span><span id="line-210">    * @param createBuilderMethod</span>
+<span class="source-line-no">211</span><span id="line-211">    *    The static create() method on the object class.</span>
+<span class="source-line-no">212</span><span id="line-212">    *    Can be &lt;jk&gt;null&lt;/jk&gt; if the builder is created via {@code builderConstructor} instead.</span>
+<span class="source-line-no">213</span><span id="line-213">    * @param createObjectMethod</span>
+<span class="source-line-no">214</span><span id="line-214">    *    The build() method on the builder class.</span>
+<span class="source-line-no">215</span><span id="line-215">    *    Can be &lt;jk&gt;null&lt;/jk&gt; if the object is created via {@code objectConstructor} instead.</span>
+<span class="source-line-no">216</span><span id="line-216">    */</span>
+<span class="source-line-no">217</span><span id="line-217">   protected BuilderSwap(Class&lt;T&gt; objectClass, Class&lt;B&gt; builderClass, Constructor&lt;T&gt; objectConstructor, Constructor&lt;B&gt; builderConstructor, MethodInfo createBuilderMethod,</span>
+<span class="source-line-no">218</span><span id="line-218">      MethodInfo createObjectMethod) {</span>
+<span class="source-line-no">219</span><span id="line-219">      this.objectClass = objectClass;</span>
+<span class="source-line-no">220</span><span id="line-220">      this.builderClass = builderClass;</span>
+<span class="source-line-no">221</span><span id="line-221">      this.objectConstructor = objectConstructor;</span>
+<span class="source-line-no">222</span><span id="line-222">      this.builderConstructor = builderConstructor;</span>
+<span class="source-line-no">223</span><span id="line-223">      this.createBuilderMethod = createBuilderMethod;</span>
+<span class="source-line-no">224</span><span id="line-224">      this.createObjectMethod = createObjectMethod;</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">   /**</span>
+<span class="source-line-no">228</span><span id="line-228">    * Creates a new object from the specified builder.</span>
+<span class="source-line-no">229</span><span id="line-229">    *</span>
+<span class="source-line-no">230</span><span id="line-230">    * @param session The current bean session.</span>
+<span class="source-line-no">231</span><span id="line-231">    * @param builder The object builder.</span>
+<span class="source-line-no">232</span><span id="line-232">    * @param hint A hint about the class type.</span>
+<span class="source-line-no">233</span><span id="line-233">    * @return A new object.</span>
+<span class="source-line-no">234</span><span id="line-234">    * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
+<span class="source-line-no">235</span><span id="line-235">    */</span>
+<span class="source-line-no">236</span><span id="line-236">   public T build(MarshallingSession session, B builder, ClassMeta&lt;?&gt; hint) throws ExecutableException {</span>
+<span class="source-line-no">237</span><span id="line-237">      if (nn(createObjectMethod))</span>
+<span class="source-line-no">238</span><span id="line-238">         return (T)createObjectMethod.invoke(builder);</span>
+<span class="source-line-no">239</span><span id="line-239">      try {</span>
+<span class="source-line-no">240</span><span id="line-240">         return objectConstructor.newInstance(builder);</span>
+<span class="source-line-no">241</span><span id="line-241">      } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {</span>
+<span class="source-line-no">242</span><span id="line-242">         throw new ExecutableException(e);</span>
+<span class="source-line-no">243</span><span id="line-243">      }</span>
+<span class="source-line-no">244</span><span id="line-244">   }</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">   /**</span>
+<span class="source-line-no">247</span><span id="line-247">    * Creates a new builder object.</span>
+<span class="source-line-no">248</span><span id="line-248">    *</span>
+<span class="source-line-no">249</span><span id="line-249">    * @param session The current bean session.</span>
+<span class="source-line-no">250</span><span id="line-250">    * @param hint A hint about the class type.</span>
+<span class="source-line-no">251</span><span id="line-251">    * @return A new object.</span>
+<span class="source-line-no">252</span><span id="line-252">    * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
+<span class="source-line-no">253</span><span id="line-253">    */</span>
+<span class="source-line-no">254</span><span id="line-254">   public B create(MarshallingSession session, ClassMeta&lt;?&gt; hint) throws ExecutableException {</span>
+<span class="source-line-no">255</span><span id="line-255">      if (nn(createBuilderMethod))</span>
+<span class="source-line-no">256</span><span id="line-256">         return (B)createBuilderMethod.invoke(null);</span>
+<span class="source-line-no">257</span><span id="line-257">      try {</span>
+<span class="source-line-no">258</span><span id="line-258">         return builderConstructor.newInstance();</span>
+<span class="source-line-no">259</span><span id="line-259">      } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {</span>
+<span class="source-line-no">260</span><span id="line-260">         throw new ExecutableException(e);</span>
+<span class="source-line-no">261</span><span id="line-261">      }</span>
+<span class="source-line-no">262</span><span id="line-262">   }</span>
+<span class="source-line-no">263</span><span id="line-263"></span>
+<span class="source-line-no">264</span><span id="line-264">   /**</span>
+<span class="source-line-no">265</span><span id="line-265">    * The builder class.</span>
+<span class="source-line-no">266</span><span id="line-266">    *</span>
+<span class="source-line-no">267</span><span id="line-267">    * @return The builder class.</span>
+<span class="source-line-no">268</span><span id="line-268">    */</span>
+<span class="source-line-no">269</span><span id="line-269">   public Class&lt;B&gt; getBuilderClass() { return builderClass; }</span>
+<span class="source-line-no">270</span><span id="line-270"></span>
+<span class="source-line-no">271</span><span id="line-271">   /**</span>
+<span class="source-line-no">272</span><span id="line-272">    * Returns the {@link ClassMeta} of the transformed class type.</span>
+<span class="source-line-no">273</span><span id="line-273">    *</span>
+<span class="source-line-no">274</span><span id="line-274">    * &lt;p&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">    * This value is cached for quick lookup.</span>
+<span class="source-line-no">276</span><span id="line-276">    *</span>
+<span class="source-line-no">277</span><span id="line-277">    * @param session</span>
+<span class="source-line-no">278</span><span id="line-278">    *    The bean context to use to get the class meta.</span>
+<span class="source-line-no">279</span><span id="line-279">    *    This is always going to be the same bean context that created this swap.</span>
+<span class="source-line-no">280</span><span id="line-280">    *    Must not be &lt;jk&gt;null&lt;/jk&gt; on the first (uncached) call.</span>
+<span class="source-line-no">281</span><span id="line-281">    * @return The {@link ClassMeta} of the transformed class type.</span>
+<span class="source-line-no">282</span><span id="line-282">    */</span>
+<span class="source-line-no">283</span><span id="line-283">   @SuppressWarnings({</span>
+<span class="source-line-no">284</span><span id="line-284">      "java:S1452"  // Wildcard required - ClassMeta&lt;?&gt; for builder class type</span>
+<span class="source-line-no">285</span><span id="line-285">   })</span>
+<span class="source-line-no">286</span><span id="line-286">   public ClassMeta&lt;?&gt; getBuilderClassMeta(MarshallingSession session) {</span>
+<span class="source-line-no">287</span><span id="line-287">      if (builderClassMeta == null)</span>
+<span class="source-line-no">288</span><span id="line-288">         builderClassMeta = session.getClassMeta(getBuilderClass());</span>
+<span class="source-line-no">289</span><span id="line-289">      return builderClassMeta;</span>
+<span class="source-line-no">290</span><span id="line-290">   }</span>
+<span class="source-line-no">291</span><span id="line-291"></span>
+<span class="source-line-no">292</span><span id="line-292">   /**</span>
+<span class="source-line-no">293</span><span id="line-293">    * The object class.</span>
+<span class="source-line-no">294</span><span id="line-294">    *</span>
+<span class="source-line-no">295</span><span id="line-295">    * @return The object class.</span>
+<span class="source-line-no">296</span><span id="line-296">    */</span>
+<span class="source-line-no">297</span><span id="line-297">   public Class&lt;T&gt; getObjectClass() { return objectClass; }</span>
+<span class="source-line-no">298</span><span id="line-298">}</span>
 
 
 

@@ -340,7 +340,7 @@
 <span class="source-line-no">327</span><span id="line-327">      // Instance</span>
 <span class="source-line-no">328</span><span id="line-328">      //--------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">329</span><span id="line-329"></span>
-<span class="source-line-no">330</span><span id="line-330">      private final Map&lt;String,List&lt;String&gt;&gt; directives = new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">330</span><span id="line-330">      private final Map&lt;String,List&lt;String&gt;&gt; directives = m();</span>
 <span class="source-line-no">331</span><span id="line-331">      private boolean reportOnly;</span>
 <span class="source-line-no">332</span><span id="line-332"></span>
 <span class="source-line-no">333</span><span id="line-333">      /**</span>
@@ -504,7 +504,7 @@
 <span class="source-line-no">491</span><span id="line-491">       * Replaces any previously-registered source list for the same directive while preserving its original position.</span>
 <span class="source-line-no">492</span><span id="line-492">       *</span>
 <span class="source-line-no">493</span><span id="line-493">       * @param name The directive name (e.g. &lt;js&gt;"worker-src"&lt;/js&gt;). Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">494</span><span id="line-494">       * @param sources The source expressions. May be empty (renders the bare directive name).</span>
+<span class="source-line-no">494</span><span id="line-494">       * @param sources The source expressions. May be empty or &lt;jk&gt;null&lt;/jk&gt; (renders the bare directive name).</span>
 <span class="source-line-no">495</span><span id="line-495">       * @return This object.</span>
 <span class="source-line-no">496</span><span id="line-496">       * @throws IllegalArgumentException If {@code name} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">497</span><span id="line-497">       */</span>
@@ -513,7 +513,7 @@
 <span class="source-line-no">500</span><span id="line-500">         var n = name.trim();</span>
 <span class="source-line-no">501</span><span id="line-501">         if (n.isEmpty())</span>
 <span class="source-line-no">502</span><span id="line-502">            throw iaex("directive name must not be blank");</span>
-<span class="source-line-no">503</span><span id="line-503">         directives.put(n, new ArrayList&lt;&gt;(Arrays.asList(sources)));</span>
+<span class="source-line-no">503</span><span id="line-503">         directives.put(n, sources == null ? l() : new ArrayList&lt;&gt;(Arrays.asList(sources)));</span>
 <span class="source-line-no">504</span><span id="line-504">         return this;</span>
 <span class="source-line-no">505</span><span id="line-505">      }</span>
 <span class="source-line-no">506</span><span id="line-506"></span>

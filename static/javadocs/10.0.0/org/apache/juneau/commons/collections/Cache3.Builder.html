@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Specifies the default supplier function for computing values when keys are not found.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The default supplier function. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The default supplier function. Can be <jk>null</jk>, in which case <a href="Cache3.html#get(K1,K2,K3)"><code>Cache3.get(Object,Object,Object)</code></a> will throw a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> (use <a href="Cache3.html#get(K1,K2,K3,java.util.function.Supplier)"><code>Cache3.get(Object, Object, Object, java.util.function.Supplier)</code></a> instead to supply one per call).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>

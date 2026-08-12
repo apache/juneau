@@ -57,12 +57,12 @@
 <span class="source-line-no">044</span><span id="line-44">    * @return A new element-streamed {@link RecordWriter}.</span>
 <span class="source-line-no">045</span><span id="line-45">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">046</span><span id="line-46">    */</span>
-<span class="source-line-no">047</span><span id="line-47">   RecordWriter serializeArrayRecords(Object output) throws IOException;</span>
+<span class="source-line-no">047</span><span id="line-47">   RecordWriter writeArrayRecords(Object output) throws IOException;</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
 <span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Variant of {@link #serializeArrayRecords(Object)} for length-prefixed binary formats that</span>
+<span class="source-line-no">050</span><span id="line-50">    * Variant of {@link #writeArrayRecords(Object)} for length-prefixed binary formats that</span>
 <span class="source-line-no">051</span><span id="line-51">    * require the element count up front (msgpack, bson).  Other formats may ignore the count and</span>
-<span class="source-line-no">052</span><span id="line-52">    * behave the same as {@link #serializeArrayRecords(Object)}.</span>
+<span class="source-line-no">052</span><span id="line-52">    * behave the same as {@link #writeArrayRecords(Object)}.</span>
 <span class="source-line-no">053</span><span id="line-53">    *</span>
 <span class="source-line-no">054</span><span id="line-54">    * @param output The output.</span>
 <span class="source-line-no">055</span><span id="line-55">    * @param expectedCount The number of elements that will be written.  Must match the number of</span>
@@ -70,8 +70,8 @@
 <span class="source-line-no">057</span><span id="line-57">    * @return A new element-streamed {@link RecordWriter}.</span>
 <span class="source-line-no">058</span><span id="line-58">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">059</span><span id="line-59">    */</span>
-<span class="source-line-no">060</span><span id="line-60">   default RecordWriter serializeArrayRecords(Object output, int expectedCount) throws IOException {</span>
-<span class="source-line-no">061</span><span id="line-61">      return serializeArrayRecords(output);</span>
+<span class="source-line-no">060</span><span id="line-60">   default RecordWriter writeArrayRecords(Object output, int expectedCount) throws IOException {</span>
+<span class="source-line-no">061</span><span id="line-61">      return writeArrayRecords(output);</span>
 <span class="source-line-no">062</span><span id="line-62">   }</span>
 <span class="source-line-no">063</span><span id="line-63"></span>
 <span class="source-line-no">064</span><span id="line-64">   /**</span>

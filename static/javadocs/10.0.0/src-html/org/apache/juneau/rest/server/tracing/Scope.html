@@ -88,7 +88,31 @@
 <span class="source-line-no">075</span><span id="line-75">    */</span>
 <span class="source-line-no">076</span><span id="line-76">   @Override</span>
 <span class="source-line-no">077</span><span id="line-77">   void close();</span>
-<span class="source-line-no">078</span><span id="line-78">}</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Records a JSON-RPC-level error outcome on this span.</span>
+<span class="source-line-no">081</span><span id="line-81">    *</span>
+<span class="source-line-no">082</span><span id="line-82">    * &lt;p&gt;</span>
+<span class="source-line-no">083</span><span id="line-83">    * A dated MCP adapter dispatches every request over HTTP {@code 200}, so an application-level</span>
+<span class="source-line-no">084</span><span id="line-84">    * JSON-RPC error (for example an unknown tool name) never reaches {@link #setStatusCode(int)}</span>
+<span class="source-line-no">085</span><span id="line-85">    * with anything but {@code 200} and never throws into {@link #setError(Throwable)}. This method</span>
+<span class="source-line-no">086</span><span id="line-86">    * gives such a caller a neutral way to observe that outcome on the span &amp;mdash; called from the</span>
+<span class="source-line-no">087</span><span id="line-87">    * request-scoped tracing observation before a JSON-RPC error response is returned, distinct from</span>
+<span class="source-line-no">088</span><span id="line-88">    * both the HTTP status path and the thrown-exception path.</span>
+<span class="source-line-no">089</span><span id="line-89">    *</span>
+<span class="source-line-no">090</span><span id="line-90">    * &lt;p&gt;</span>
+<span class="source-line-no">091</span><span id="line-91">    * Added as a source-compatible default so every existing {@link Scope} implementation keeps</span>
+<span class="source-line-no">092</span><span id="line-92">    * compiling unchanged. The default implementation is a no-op; a bridge that wants to classify</span>
+<span class="source-line-no">093</span><span id="line-93">    * JSON-RPC errors on the span (for example the OpenTelemetry bridge in</span>
+<span class="source-line-no">094</span><span id="line-94">    * {@code juneau-rest-server-tracing-otel}) overrides it.</span>
+<span class="source-line-no">095</span><span id="line-95">    *</span>
+<span class="source-line-no">096</span><span id="line-96">    * @param code The JSON-RPC error code (e.g. {@code -32601}).</span>
+<span class="source-line-no">097</span><span id="line-97">    * @param message The JSON-RPC error message. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">098</span><span id="line-98">    */</span>
+<span class="source-line-no">099</span><span id="line-99">   default void recordRpcError(int code, String message) {</span>
+<span class="source-line-no">100</span><span id="line-100">      // Intentionally empty; see method-level javadoc.</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102">}</span>
 
 
 

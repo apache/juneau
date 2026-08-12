@@ -189,12 +189,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.html.HtmlMetaProvider)">
 <h3>HtmlClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-51">HtmlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-52">HtmlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm,
  <a href="HtmlMetaProvider.html" title="interface in org.apache.juneau.marshall.html">HtmlMetaProvider</a>&nbsp;mp)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The class that this annotation is defined on.</dd>
+<dd><code>cm</code> - The class that this annotation is defined on.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>mp</code> - HTML metadata provider (for finding information about other artifacts).</dd>
 </dl>
 </section>
@@ -210,18 +211,18 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRender()">
 <h3>getRender</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlRender.html" title="class in org.apache.juneau.marshall.html">HtmlRender</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-87">getRender</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlRender.html" title="class in org.apache.juneau.marshall.html">HtmlRender</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-88">getRender</a></span>()</div>
 <div class="block">Returns the <a href="Html.html#render()"><code>@Html(render)</code></a> annotation defined on the class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The value of the annotation.</dd>
+<dd>The value of the annotation, or <jk>null</jk> if not specified.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isNoTableHeaders()">
 <h3>isNoTableHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-94">isNoTableHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-95">isNoTableHeaders</a></span>()</div>
 <div class="block">Returns the <a href="Html.html#noTableHeaders()"><code>@Html(noTableHeaders)</code></a> annotation defined on the class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -232,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFormat()">
 <h3>getFormat</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="HtmlFormat.html" title="enum class in org.apache.juneau.marshall.html">HtmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-101">getFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="HtmlFormat.html" title="enum class in org.apache.juneau.marshall.html">HtmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-102">getFormat</a></span>()</div>
 <div class="block">Returns the <a href="Html.html#format()"><code>@Html(format)</code></a> annotation defined on the class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -243,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isHtml()">
 <h3>isHtml</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-108">isHtml</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-109">isHtml</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#HTML"><code>HtmlFormat.HTML</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -254,7 +255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isHtmlCdc()">
 <h3>isHtmlCdc</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-115">isHtmlCdc</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-116">isHtmlCdc</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#HTML_CDC"><code>HtmlFormat.HTML_CDC</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -265,7 +266,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isHtmlSdc()">
 <h3>isHtmlSdc</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-122">isHtmlSdc</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-123">isHtmlSdc</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#HTML_SDC"><code>HtmlFormat.HTML_SDC</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -276,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNoTables()">
 <h3>isNoTables</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-129">isNoTables</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-130">isNoTables</a></span>()</div>
 <div class="block">Returns the <a href="Html.html#noTables()"><code>@Html(noTables)</code></a> annotation defined on the class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -287,7 +288,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isPlainText()">
 <h3>isPlainText</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-136">isPlainText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-137">isPlainText</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#PLAIN_TEXT"><code>HtmlFormat.PLAIN_TEXT</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -298,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isXml()">
 <h3>isXml</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-143">isXml</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlClassMeta.html#line-144">isXml</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#XML"><code>HtmlFormat.XML</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

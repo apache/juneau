@@ -426,8 +426,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  obtain MethodInfo instances from <code>ClassInfo.getMethod(Method)</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>declaringClass</code> - The ClassInfo for the class that declares this method.</dd>
-<dd><code>inner</code> - The method being wrapped.</dd>
+<dd><code>declaringClass</code> - The ClassInfo for the class that declares this method. Must not be <jk>null</jk>.</dd>
+<dd><code>inner</code> - The method being wrapped. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -630,7 +630,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <dt>Type Parameters:</dt>
 <dd><code>A</code> - The annotation type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The annotation type to filter by.</dd>
+<dd><code>type</code> - The annotation type to filter by. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A stream of matching annotation infos in child-to-parent order.
    <br>Repeatable annotations are expanded into individual instances.</dd>

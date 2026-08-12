@@ -526,12 +526,12 @@ C extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The expected type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The expected class type.</dd>
-<dd><code>o</code> - The object to check.</dd>
+<dd><code>type</code> - The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>).</dd>
+<dd><code>o</code> - The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The object cast to the specified type.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Thrown if the object is not an instance of the specified type.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Thrown if the object is not an instance of the specified type, or if either argument is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -557,9 +557,9 @@ C extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The expected type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The expected class type.</dd>
-<dd><code>o</code> - The object to check.</dd>
-<dd><code>exceptionSupplier</code> - The supplier that provides the exception to throw if validation fails.</dd>
+<dd><code>type</code> - The expected class type.  Must not be <jk>null</jk> (a <jk>null</jk> type throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>).</dd>
+<dd><code>o</code> - The object to check.  Must not be <jk>null</jk> (a <jk>null</jk> object throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>).</dd>
+<dd><code>exceptionSupplier</code> - The supplier that provides the exception to throw if validation fails.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The object cast to the specified type.</dd>
 <dt>Throws:</dt>
@@ -580,8 +580,8 @@ C extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/
 <dd><code>E</code> - The element type.</dd>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The argument name.</dd>
-<dd><code>type</code> - The expected parent class.</dd>
-<dd><code>value</code> - The array value being checked.</dd>
+<dd><code>type</code> - The expected parent class.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> type throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
+<dd><code>value</code> - The array value being checked.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> array throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The value cast to the specified array type.</dd>
 <dt>Throws:</dt>
@@ -600,8 +600,8 @@ C extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The value type.</dd>
 <dt>Parameters:</dt>
-<dd><code>actual</code> - The actual value.</dd>
-<dd><code>expected</code> - The expected values.</dd>
+<dd><code>actual</code> - The actual value.  Can be <jk>null</jk> (matches a <jk>null</jk> entry in the expected values).</dd>
+<dd><code>expected</code> - The expected values.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> array throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The actual value if it matches one of the expected values.</dd>
 <dt>Throws:</dt>

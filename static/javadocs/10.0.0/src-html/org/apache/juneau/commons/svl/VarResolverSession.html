@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100">    * @param context</span>
 <span class="source-line-no">101</span><span id="line-101">    *    The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with</span>
 <span class="source-line-no">102</span><span id="line-102">    *    that resolver.</span>
-<span class="source-line-no">103</span><span id="line-103">    * @param beanStore The bean store to use for resolving beans needed by vars.</span>
+<span class="source-line-no">103</span><span id="line-103">    * @param beanStore The bean store to use for resolving beans needed by vars.  Can be &lt;jk&gt;null&lt;/jk&gt; (this session will then have no parent bean store, and only beans explicitly added via {@link #bean(Class, Object)} will be resolvable).</span>
 <span class="source-line-no">104</span><span id="line-104">    *</span>
 <span class="source-line-no">105</span><span id="line-105">    */</span>
 <span class="source-line-no">106</span><span id="line-106">   public VarResolverSession(VarResolver context, WritableBeanStore beanStore) {</span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141">    * Resolve all variables in the specified string.</span>
 <span class="source-line-no">142</span><span id="line-142">    *</span>
 <span class="source-line-no">143</span><span id="line-143">    * @param s</span>
-<span class="source-line-no">144</span><span id="line-144">    *    The string to resolve variables in.</span>
+<span class="source-line-no">144</span><span id="line-144">    *    The string to resolve variables in.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">145</span><span id="line-145">    * @return</span>
 <span class="source-line-no">146</span><span id="line-146">    *    The new string with all variables resolved, or the same string if no variables were found.</span>
 <span class="source-line-no">147</span><span id="line-147">    *    &lt;br&gt;Returns &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -208,8 +208,8 @@
 <span class="source-line-no">195</span><span id="line-195">   /**</span>
 <span class="source-line-no">196</span><span id="line-196">    * Resolves the specified strings in the string array.</span>
 <span class="source-line-no">197</span><span id="line-197">    *</span>
-<span class="source-line-no">198</span><span id="line-198">    * @param in The string array containing variables to resolve.</span>
-<span class="source-line-no">199</span><span id="line-199">    * @return An array with resolved strings.</span>
+<span class="source-line-no">198</span><span id="line-198">    * @param in The string array containing variables to resolve.  Must not be &lt;jk&gt;null&lt;/jk&gt; or a {@link NullPointerException} is thrown, though individual elements can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">199</span><span id="line-199">    * @return An array with resolved strings.  Elements are &lt;jk&gt;null&lt;/jk&gt; where the corresponding input element was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">200</span><span id="line-200">    */</span>
 <span class="source-line-no">201</span><span id="line-201">   public String[] resolve(String[] in) {</span>
 <span class="source-line-no">202</span><span id="line-202">      var out = new String[in.length];</span>
@@ -233,9 +233,9 @@
 <span class="source-line-no">220</span><span id="line-220">    * &lt;/ul&gt;</span>
 <span class="source-line-no">221</span><span id="line-221">    *</span>
 <span class="source-line-no">222</span><span id="line-222">    * @param &lt;T&gt; The value type.</span>
-<span class="source-line-no">223</span><span id="line-223">    * @param o The object.</span>
+<span class="source-line-no">223</span><span id="line-223">    * @param o The object.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">224</span><span id="line-224">    * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was</span>
-<span class="source-line-no">225</span><span id="line-225">    * needed.</span>
+<span class="source-line-no">225</span><span id="line-225">    * needed.  Returns &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">226</span><span id="line-226">    */</span>
 <span class="source-line-no">227</span><span id="line-227">   @SuppressWarnings({</span>
 <span class="source-line-no">228</span><span id="line-228">      "rawtypes",   // Raw types necessary for generic resolution</span>
@@ -307,8 +307,8 @@
 <span class="source-line-no">294</span><span id="line-294">    * More efficient than first parsing to a string and then serializing to the writer since this method doesn't need</span>
 <span class="source-line-no">295</span><span id="line-295">    * to construct a large string.</span>
 <span class="source-line-no">296</span><span id="line-296">    *</span>
-<span class="source-line-no">297</span><span id="line-297">    * @param s The string to resolve variables in.</span>
-<span class="source-line-no">298</span><span id="line-298">    * @param out The writer to write to.</span>
+<span class="source-line-no">297</span><span id="line-297">    * @param s The string to resolve variables in.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the writer is left unchanged.</span>
+<span class="source-line-no">298</span><span id="line-298">    * @param out The writer to write to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">299</span><span id="line-299">    * @return The same writer.</span>
 <span class="source-line-no">300</span><span id="line-300">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">301</span><span id="line-301">    */</span>
@@ -338,7 +338,7 @@
 <span class="source-line-no">325</span><span id="line-325">   /**</span>
 <span class="source-line-no">326</span><span id="line-326">    * Returns the {@link Var} with the specified name.</span>
 <span class="source-line-no">327</span><span id="line-327">    *</span>
-<span class="source-line-no">328</span><span id="line-328">    * @param name The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).</span>
+<span class="source-line-no">328</span><span id="line-328">    * @param name The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">329</span><span id="line-329">    * @return The {@link Var} instance, or &lt;jk&gt;null&lt;/jk&gt; if no &lt;c&gt;Var&lt;/c&gt; is associated with the specified name.</span>
 <span class="source-line-no">330</span><span id="line-330">    */</span>
 <span class="source-line-no">331</span><span id="line-331">   protected Var getVar(String name) {</span>

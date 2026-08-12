@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">      /**</span>
 <span class="source-line-no">116</span><span id="line-116">       * Applies the information in the specified list of {@link Marshalled @Marshalled} annotations to this filter.</span>
 <span class="source-line-no">117</span><span id="line-117">       *</span>
-<span class="source-line-no">118</span><span id="line-118">       * @param annotations The annotations to apply.</span>
+<span class="source-line-no">118</span><span id="line-118">       * @param annotations The annotations to apply.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">119</span><span id="line-119">       * @return This object.</span>
 <span class="source-line-no">120</span><span id="line-120">       */</span>
 <span class="source-line-no">121</span><span id="line-121">      public Builder applyAnnotations(List&lt;Marshalled&gt; annotations) {</span>
@@ -155,7 +155,7 @@
 <span class="source-line-no">142</span><span id="line-142">       * Carries the bean-modeling attributes (property lists, ordering, fluent setters, stop class, etc.)</span>
 <span class="source-line-no">143</span><span id="line-143">       * that used to live on {@link Marshalled @Marshalled} before the bean-layer split.</span>
 <span class="source-line-no">144</span><span id="line-144">       *</span>
-<span class="source-line-no">145</span><span id="line-145">       * @param annotations The annotations to apply.</span>
+<span class="source-line-no">145</span><span id="line-145">       * @param annotations The annotations to apply.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">146</span><span id="line-146">       * @return This object.</span>
 <span class="source-line-no">147</span><span id="line-147">       */</span>
 <span class="source-line-no">148</span><span id="line-148">      @SuppressWarnings({</span>
@@ -290,7 +290,7 @@
 <span class="source-line-no">277</span><span id="line-277">      /**</span>
 <span class="source-line-no">278</span><span id="line-278">       * Bean implementation class.</span>
 <span class="source-line-no">279</span><span id="line-279">       *</span>
-<span class="source-line-no">280</span><span id="line-280">       * @param value The new value for this setting.</span>
+<span class="source-line-no">280</span><span id="line-280">       * @param value The new value for this setting.  Can be &lt;jk&gt;null&lt;/jk&gt; to clear any previously-set implementation class.</span>
 <span class="source-line-no">281</span><span id="line-281">       * @return This object.</span>
 <span class="source-line-no">282</span><span id="line-282">       */</span>
 <span class="source-line-no">283</span><span id="line-283">      public Builder implClass(Class&lt;?&gt; value) {</span>
@@ -361,7 +361,7 @@
 <span class="source-line-no">348</span><span id="line-348">       *    &lt;li class='ja'&gt;{@link BeanType#interfaceClass()}</span>
 <span class="source-line-no">349</span><span id="line-349">       * &lt;/ul&gt;</span>
 <span class="source-line-no">350</span><span id="line-350">       *</span>
-<span class="source-line-no">351</span><span id="line-351">       * @param value The new value for this setting.</span>
+<span class="source-line-no">351</span><span id="line-351">       * @param value The new value for this setting.  Can be &lt;jk&gt;null&lt;/jk&gt; to clear any previously-set interface class.</span>
 <span class="source-line-no">352</span><span id="line-352">       * @return This object.</span>
 <span class="source-line-no">353</span><span id="line-353">       */</span>
 <span class="source-line-no">354</span><span id="line-354">      public Builder interfaceClass(Class&lt;?&gt; value) {</span>
@@ -514,7 +514,7 @@
 <span class="source-line-no">501</span><span id="line-501">       *    &lt;li class='ja'&gt;{@link BeanType#stopClass()}</span>
 <span class="source-line-no">502</span><span id="line-502">       * &lt;/ul&gt;</span>
 <span class="source-line-no">503</span><span id="line-503">       *</span>
-<span class="source-line-no">504</span><span id="line-504">       * @param value The new value for this setting.</span>
+<span class="source-line-no">504</span><span id="line-504">       * @param value The new value for this setting.  Can be &lt;jk&gt;null&lt;/jk&gt; to clear any previously-set stop class.</span>
 <span class="source-line-no">505</span><span id="line-505">       * @return This object.</span>
 <span class="source-line-no">506</span><span id="line-506">       */</span>
 <span class="source-line-no">507</span><span id="line-507">      public Builder stopClass(Class&lt;?&gt; value) {</span>
@@ -616,10 +616,10 @@
 <span class="source-line-no">603</span><span id="line-603">   protected MarshalledFilter(Builder builder) {</span>
 <span class="source-line-no">604</span><span id="line-604">      this.beanClass = builder.beanClass;</span>
 <span class="source-line-no">605</span><span id="line-605">      this.typeName = builder.typeName;</span>
-<span class="source-line-no">606</span><span id="line-606">      this.properties = copyOf(builder.properties);</span>
-<span class="source-line-no">607</span><span id="line-607">      this.excludeProperties = copyOf(builder.excludeProperties);</span>
-<span class="source-line-no">608</span><span id="line-608">      this.readOnlyProperties = copyOf(builder.readOnlyProperties);</span>
-<span class="source-line-no">609</span><span id="line-609">      this.writeOnlyProperties = copyOf(builder.writeOnlyProperties);</span>
+<span class="source-line-no">606</span><span id="line-606">      this.properties = u(cp(builder.properties));</span>
+<span class="source-line-no">607</span><span id="line-607">      this.excludeProperties = u(cp(builder.excludeProperties));</span>
+<span class="source-line-no">608</span><span id="line-608">      this.readOnlyProperties = u(cp(builder.readOnlyProperties));</span>
+<span class="source-line-no">609</span><span id="line-609">      this.writeOnlyProperties = u(cp(builder.writeOnlyProperties));</span>
 <span class="source-line-no">610</span><span id="line-610">      this.example = builder.example;</span>
 <span class="source-line-no">611</span><span id="line-611">      this.implClass = builder.implClass;</span>
 <span class="source-line-no">612</span><span id="line-612">      this.interfaceClass = builder.interfaceClass;</span>
@@ -627,7 +627,7 @@
 <span class="source-line-no">614</span><span id="line-614">      this.unsortedProperties = builder.unsortedProperties;</span>
 <span class="source-line-no">615</span><span id="line-615">      this.fluentSetters = builder.fluentSetters;</span>
 <span class="source-line-no">616</span><span id="line-616">      this.propertyNamer = builder.propertyNamer.asOptional().orElse(null);</span>
-<span class="source-line-no">617</span><span id="line-617">      this.beanDictionary = builder.dictionary == null ? list() : u(copyOf(builder.dictionary));</span>
+<span class="source-line-no">617</span><span id="line-617">      this.beanDictionary = builder.dictionary == null ? u(list()) : u(cp(builder.dictionary));</span>
 <span class="source-line-no">618</span><span id="line-618">      this.interceptor = builder.interceptor.asOptional().orElse(BeanInterceptor.DEFAULT);</span>
 <span class="source-line-no">619</span><span id="line-619">   }</span>
 <span class="source-line-no">620</span><span id="line-620"></span>
@@ -683,7 +683,7 @@
 <span class="source-line-no">670</span><span id="line-670">    * Returns the set and order of names of properties associated with a bean class.</span>
 <span class="source-line-no">671</span><span id="line-671">    *</span>
 <span class="source-line-no">672</span><span id="line-672">    * @return</span>
-<span class="source-line-no">673</span><span id="line-673">    *    The names of the properties associated with a bean class, or and empty set if all bean properties should</span>
+<span class="source-line-no">673</span><span id="line-673">    *    The names of the properties associated with a bean class, or an empty set if all bean properties should</span>
 <span class="source-line-no">674</span><span id="line-674">    *    be used.</span>
 <span class="source-line-no">675</span><span id="line-675">    */</span>
 <span class="source-line-no">676</span><span id="line-676">   @Override</span>
@@ -741,7 +741,7 @@
 <span class="source-line-no">728</span><span id="line-728">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the properties defined on this bean class should be ordered alphabetically.</span>
 <span class="source-line-no">729</span><span id="line-729">    *</span>
 <span class="source-line-no">730</span><span id="line-730">    * &lt;p&gt;</span>
-<span class="source-line-no">731</span><span id="line-731">    * This method is only used when the {@link #getProperties()} method returns &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">731</span><span id="line-731">    * This method is only used when the {@link #getProperties()} method returns an empty set.</span>
 <span class="source-line-no">732</span><span id="line-732">    * Otherwise, the ordering of the properties in the returned value is used.</span>
 <span class="source-line-no">733</span><span id="line-733">    *</span>
 <span class="source-line-no">734</span><span id="line-734">    * @return &lt;jk&gt;true&lt;/jk&gt; if this bean opts out of alphabetical property sorting.</span>

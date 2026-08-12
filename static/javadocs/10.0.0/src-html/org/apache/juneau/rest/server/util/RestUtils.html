@@ -122,8 +122,8 @@
 <span class="source-line-no">109</span><span id="line-109">   /**</span>
 <span class="source-line-no">110</span><span id="line-110">    * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.</span>
 <span class="source-line-no">111</span><span id="line-111">    *</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param req The HTTP request</span>
-<span class="source-line-no">113</span><span id="line-113">    * @return The un-decoded path info.</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param req The HTTP request. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @return The un-decoded path info, or &lt;jk&gt;null&lt;/jk&gt; if there is no extra path information.</span>
 <span class="source-line-no">114</span><span id="line-114">    */</span>
 <span class="source-line-no">115</span><span id="line-115">   public static String getPathInfoUndecoded(HttpServletRequest req) {</span>
 <span class="source-line-no">116</span><span id="line-116">      var requestURI = req.getRequestURI();</span>
@@ -169,28 +169,28 @@
 <span class="source-line-no">156</span><span id="line-156">    * @throws ParseException If the string appears to be JSON but contains invalid JSON syntax.</span>
 <span class="source-line-no">157</span><span id="line-157">    */</span>
 <span class="source-line-no">158</span><span id="line-158">   public static Object parseIfJson(String value) throws ParseException {</span>
-<span class="source-line-no">159</span><span id="line-159">      return isProbablyJson(value) ? Json5Parser.DEFAULT.parse(value, Object.class) : value;</span>
+<span class="source-line-no">159</span><span id="line-159">      return isProbablyJson(value) ? Json5Parser.DEFAULT.read(value, Object.class) : value;</span>
 <span class="source-line-no">160</span><span id="line-160">   }</span>
 <span class="source-line-no">161</span><span id="line-161"></span>
 <span class="source-line-no">162</span><span id="line-162">   /**</span>
 <span class="source-line-no">163</span><span id="line-163">    * Parses a URL query string or form-data content from a string.</span>
 <span class="source-line-no">164</span><span id="line-164">    *</span>
 <span class="source-line-no">165</span><span id="line-165">    * &lt;p&gt;</span>
-<span class="source-line-no">166</span><span id="line-166">    * Parses key-value pairs from a query string format (e.g., &lt;c&gt;key1=value1&amp;key2=value2&lt;/c&gt;).</span>
+<span class="source-line-no">166</span><span id="line-166">    * Parses key-value pairs from a query string format (e.g., &lt;c&gt;key1=value1&amp;amp;key2=value2&lt;/c&gt;).</span>
 <span class="source-line-no">167</span><span id="line-167">    * Supports multiple values for the same key, which are collected into a &lt;jk&gt;List&lt;/jk&gt;.</span>
 <span class="source-line-no">168</span><span id="line-168">    *</span>
 <span class="source-line-no">169</span><span id="line-169">    * &lt;p&gt;</span>
 <span class="source-line-no">170</span><span id="line-170">    * Special cases:</span>
 <span class="source-line-no">171</span><span id="line-171">    * &lt;ul&gt;</span>
 <span class="source-line-no">172</span><span id="line-172">    *    &lt;li&gt;Empty or &lt;jk&gt;null&lt;/jk&gt; strings return an empty map&lt;/li&gt;</span>
-<span class="source-line-no">173</span><span id="line-173">    *    &lt;li&gt;Keys without values (e.g., &lt;c&gt;key1&amp;key2&lt;/c&gt;) are stored with &lt;jk&gt;null&lt;/jk&gt; values&lt;/li&gt;</span>
+<span class="source-line-no">173</span><span id="line-173">    *    &lt;li&gt;Keys without values (e.g., &lt;c&gt;key1&amp;amp;key2&lt;/c&gt;) are stored with &lt;jk&gt;null&lt;/jk&gt; values&lt;/li&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">    *    &lt;li&gt;Keys with empty values (e.g., &lt;c&gt;key=&lt;/c&gt;) are stored with empty strings&lt;/li&gt;</span>
 <span class="source-line-no">175</span><span id="line-175">    *    &lt;li&gt;Multiple occurrences of the same key append values to the list&lt;/li&gt;</span>
 <span class="source-line-no">176</span><span id="line-176">    * &lt;/ul&gt;</span>
 <span class="source-line-no">177</span><span id="line-177">    *</span>
 <span class="source-line-no">178</span><span id="line-178">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">179</span><span id="line-179">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">180</span><span id="line-180">    *    Map&amp;lt;String,List&amp;lt;String&amp;gt;&amp;gt; &lt;jv&gt;params&lt;/jv&gt; = parseQuery(&lt;js&gt;"f1=v1&amp;f2=v2&amp;f1=v3"&lt;/js&gt;);</span>
+<span class="source-line-no">180</span><span id="line-180">    *    Map&amp;lt;String,List&amp;lt;String&amp;gt;&amp;gt; &lt;jv&gt;params&lt;/jv&gt; = parseQuery(&lt;js&gt;"f1=v1&amp;amp;f2=v2&amp;amp;f1=v3"&lt;/js&gt;);</span>
 <span class="source-line-no">181</span><span id="line-181">    *    &lt;jv&gt;params&lt;/jv&gt;.get(&lt;js&gt;"f1"&lt;/js&gt;);  &lt;jc&gt;// Returns [v1, v3]&lt;/jc&gt;</span>
 <span class="source-line-no">182</span><span id="line-182">    *    &lt;jv&gt;params&lt;/jv&gt;.get(&lt;js&gt;"f2"&lt;/js&gt;);  &lt;jc&gt;// Returns [v2]&lt;/jc&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    * &lt;/p&gt;</span>
@@ -207,14 +207,14 @@
 <span class="source-line-no">194</span><span id="line-194">    * Parses a URL query string or form-data content from a reader.</span>
 <span class="source-line-no">195</span><span id="line-195">    *</span>
 <span class="source-line-no">196</span><span id="line-196">    * &lt;p&gt;</span>
-<span class="source-line-no">197</span><span id="line-197">    * Parses key-value pairs from a query string format (e.g., &lt;c&gt;key1=value1&amp;key2=value2&lt;/c&gt;).</span>
+<span class="source-line-no">197</span><span id="line-197">    * Parses key-value pairs from a query string format (e.g., &lt;c&gt;key1=value1&amp;amp;key2=value2&lt;/c&gt;).</span>
 <span class="source-line-no">198</span><span id="line-198">    * Supports multiple values for the same key, which are collected into a &lt;jk&gt;List&lt;/jk&gt;.</span>
 <span class="source-line-no">199</span><span id="line-199">    *</span>
 <span class="source-line-no">200</span><span id="line-200">    * &lt;p&gt;</span>
 <span class="source-line-no">201</span><span id="line-201">    * Special cases:</span>
 <span class="source-line-no">202</span><span id="line-202">    * &lt;ul&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    *    &lt;li&gt;&lt;jk&gt;null&lt;/jk&gt; readers return an empty map&lt;/li&gt;</span>
-<span class="source-line-no">204</span><span id="line-204">    *    &lt;li&gt;Keys without values (e.g., &lt;c&gt;key1&amp;key2&lt;/c&gt;) are stored with &lt;jk&gt;null&lt;/jk&gt; values&lt;/li&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    *    &lt;li&gt;Keys without values (e.g., &lt;c&gt;key1&amp;amp;key2&lt;/c&gt;) are stored with &lt;jk&gt;null&lt;/jk&gt; values&lt;/li&gt;</span>
 <span class="source-line-no">205</span><span id="line-205">    *    &lt;li&gt;Keys with empty values (e.g., &lt;c&gt;key=&lt;/c&gt;) are stored with empty strings&lt;/li&gt;</span>
 <span class="source-line-no">206</span><span id="line-206">    *    &lt;li&gt;Multiple occurrences of the same key append values to the list&lt;/li&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    * &lt;/ul&gt;</span>
@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">210</span><span id="line-210">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">211</span><span id="line-211">    *    &lt;jc&gt;// Parse from a reader&lt;/jc&gt;</span>
-<span class="source-line-no">212</span><span id="line-212">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; StringReader(&lt;js&gt;"f1=v1&amp;f2=v2"&lt;/js&gt;);</span>
+<span class="source-line-no">212</span><span id="line-212">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; StringReader(&lt;js&gt;"f1=v1&amp;amp;f2=v2"&lt;/js&gt;);</span>
 <span class="source-line-no">213</span><span id="line-213">    *    Map&amp;lt;String,List&amp;lt;String&amp;gt;&amp;gt; &lt;jv&gt;params&lt;/jv&gt; = parseQuery(&lt;jv&gt;reader&lt;/jv&gt;);</span>
 <span class="source-line-no">214</span><span id="line-214">    *    &lt;jv&gt;params&lt;/jv&gt;.get(&lt;js&gt;"f1"&lt;/js&gt;);  &lt;jc&gt;// Returns [v1]&lt;/jc&gt;</span>
 <span class="source-line-no">215</span><span id="line-215">    * &lt;/p&gt;</span>
@@ -309,7 +309,7 @@
 <span class="source-line-no">296</span><span id="line-296">    *    &lt;li&gt;Leading slash is added if needed.</span>
 <span class="source-line-no">297</span><span id="line-297">    * &lt;/ul&gt;</span>
 <span class="source-line-no">298</span><span id="line-298">    *</span>
-<span class="source-line-no">299</span><span id="line-299">    * @param s The value to convert.</span>
+<span class="source-line-no">299</span><span id="line-299">    * @param s The value to convert. Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty string, yielding an empty result).</span>
 <span class="source-line-no">300</span><span id="line-300">    * @return The converted path.</span>
 <span class="source-line-no">301</span><span id="line-301">    */</span>
 <span class="source-line-no">302</span><span id="line-302">   public static String toValidContextPath(String s) {</span>
@@ -336,13 +336,13 @@
 <span class="source-line-no">323</span><span id="line-323">    * &lt;p&gt;</span>
 <span class="source-line-no">324</span><span id="line-324">    * The path-info follows the servlet path but precedes the query string.</span>
 <span class="source-line-no">325</span><span id="line-325">    *</span>
-<span class="source-line-no">326</span><span id="line-326">    * @param value The value to validate.</span>
+<span class="source-line-no">326</span><span id="line-326">    * @param value The value to validate. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">327</span><span id="line-327">    * @return The validated value (may be &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">328</span><span id="line-328">    * @throws RuntimeException If the value is not a valid path-info path.</span>
 <span class="source-line-no">329</span><span id="line-329">    */</span>
 <span class="source-line-no">330</span><span id="line-330">   public static String validatePathInfo(String value) {</span>
 <span class="source-line-no">331</span><span id="line-331">      if (value != null &amp;&amp; (value.isEmpty() || value.charAt(0) != '/'))</span>
-<span class="source-line-no">332</span><span id="line-332">         throw rex("Value is not a valid path-info path: [{0}]", value);</span>
+<span class="source-line-no">332</span><span id="line-332">         throw rex("Value is not a valid path-info path: [%s]", value);</span>
 <span class="source-line-no">333</span><span id="line-333">      return value;</span>
 <span class="source-line-no">334</span><span id="line-334">   }</span>
 <span class="source-line-no">335</span><span id="line-335"></span>
@@ -365,9 +365,9 @@
 <span class="source-line-no">352</span><span id="line-352">    */</span>
 <span class="source-line-no">353</span><span id="line-353">   public static String validateServletPath(String value) {</span>
 <span class="source-line-no">354</span><span id="line-354">      if (value == null)</span>
-<span class="source-line-no">355</span><span id="line-355">         throw rex("Value is not a valid servlet path: [{0}]", value);</span>
+<span class="source-line-no">355</span><span id="line-355">         throw rex("Value is not a valid servlet path: [%s]", value);</span>
 <span class="source-line-no">356</span><span id="line-356">      if (! value.isEmpty() &amp;&amp; (value.equals("/") || value.charAt(value.length() - 1) == '/' || value.charAt(0) != '/'))</span>
-<span class="source-line-no">357</span><span id="line-357">         throw rex("Value is not a valid servlet path: [{0}]", value);</span>
+<span class="source-line-no">357</span><span id="line-357">         throw rex("Value is not a valid servlet path: [%s]", value);</span>
 <span class="source-line-no">358</span><span id="line-358">      return value;</span>
 <span class="source-line-no">359</span><span id="line-359">   }</span>
 <span class="source-line-no">360</span><span id="line-360"></span>

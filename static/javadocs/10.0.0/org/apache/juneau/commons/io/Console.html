@@ -78,12 +78,12 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/Console.html#line-29">Console</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/Console.html#line-27">Console</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A utility for logging formatted messages to the console.
 
  <p>
- Uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a> for formatting messages with arguments.</div>
+ Uses printf-style (<code>%s</code>/<code>%d</code>/…) formatting for messages with arguments.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -130,23 +130,23 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="err(java.lang.String,java.lang.Object...)">
 <h3>err</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/Console.html#line-59">err</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/Console.html#line-57">err</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Prints a message with arguments to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#err" title="class or interface in java.lang" class="external-link"><code>System.err</code></a>.
 
  <p>
- Arguments are formatted using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>.
+ Arguments are formatted using printf-style (<code>%s</code>) placeholders.
 
  <p>
  Useful for debug messages.
 
  <h5 class='figure'>Example:</h5>
  <p class='bjava'>
-   Console.<jsm>err</jsm>(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
+   Console.<jsm>err</jsm>(<js>"myPojo=%s"</js>, <jv>myPojo</jv>);
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>msg</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-styled message.</dd>
+<dd><code>msg</code> - The printf-styled message.</dd>
 <dd><code>args</code> - The arguments sent to the formatter.</dd>
 </dl>
 </section>
@@ -154,23 +154,23 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="out(java.lang.String,java.lang.Object...)">
 <h3>out</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/Console.html#line-80">out</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/Console.html#line-78">out</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Prints a message with arguments to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#out" title="class or interface in java.lang" class="external-link"><code>System.out</code></a>.
 
  <p>
- Arguments are formatted using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>.
+ Arguments are formatted using printf-style (<code>%s</code>) placeholders.
 
  <p>
  Useful for debug messages.
 
  <h5 class='figure'>Example:</h5>
  <p class='bjava'>
-   Console.<jsm>out</jsm>(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
+   Console.<jsm>out</jsm>(<js>"myPojo=%s"</js>, <jv>myPojo</jv>);
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>msg</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-styled message.</dd>
+<dd><code>msg</code> - The printf-styled message.</dd>
 <dd><code>args</code> - The arguments sent to the formatter.</dd>
 </dl>
 </section>

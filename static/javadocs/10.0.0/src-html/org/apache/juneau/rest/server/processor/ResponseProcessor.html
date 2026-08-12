@@ -73,8 +73,8 @@
 <span class="source-line-no">060</span><span id="line-60"> *          &lt;ja&gt;@Override&lt;/ja&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *          &lt;jk&gt;public int&lt;/jk&gt; process(RestOpSession &lt;jv&gt;opSession&lt;/jv&gt;) {</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> *             RestResponse &lt;jv&gt;res&lt;/jv&gt; = &lt;jv&gt;opSession&lt;/jv&gt;.getRestResponse();</span>
-<span class="source-line-no">064</span><span id="line-64"> *             Foo &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;res&lt;/jv&gt;.getOutput(Foo.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">063</span><span id="line-63"> *             RestResponse &lt;jv&gt;res&lt;/jv&gt; = &lt;jv&gt;opSession&lt;/jv&gt;.getResponse();</span>
+<span class="source-line-no">064</span><span id="line-64"> *             Foo &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;res&lt;/jv&gt;.getContent(Foo.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
 <span class="source-line-no">066</span><span id="line-66"> *             &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;foo&lt;/jv&gt; == &lt;jk&gt;null&lt;/jk&gt;)</span>
 <span class="source-line-no">067</span><span id="line-67"> *                &lt;jk&gt;return&lt;/jk&gt; &lt;jsf&gt;NEXT&lt;/jsf&gt;;  &lt;jc&gt;// Let the next processor handle it.&lt;/jc&gt;</span>

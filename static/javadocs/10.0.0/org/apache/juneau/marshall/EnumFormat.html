@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-48">EnumFormat</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-49">EnumFormat</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a>&gt;</span></div>
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>Enum</code></a> values.
 
@@ -229,63 +229,63 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NOT_SET">
 <h3>NOT_SET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-51">NOT_SET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-55">NOT_SET</a></span></div>
 <div class="block">Sentinel meaning "no value configured" — falls through to the next-higher precedence level.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="TO_STRING">
 <h3>TO_STRING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-54">TO_STRING</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-58">TO_STRING</a></span></div>
 <div class="block">Calls <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a> on the enum value (the default).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="NAME">
 <h3>NAME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-57">NAME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-61">NAME</a></span></div>
 <div class="block">Calls <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html#name()" title="class or interface in java.lang" class="external-link"><code>Enum.name()</code></a> on the enum value.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="LOWER_HYPHEN">
 <h3>LOWER_HYPHEN</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-60">LOWER_HYPHEN</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-64">LOWER_HYPHEN</a></span></div>
 <div class="block">Lower-case hyphenated form: <code>MY_ENUM_VALUE</code> → <code>"my-enum-value"</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="UPPER_HYPHEN">
 <h3>UPPER_HYPHEN</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-63">UPPER_HYPHEN</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-67">UPPER_HYPHEN</a></span></div>
 <div class="block">Upper-case hyphenated form: <code>MY_ENUM_VALUE</code> → <code>"MY-ENUM-VALUE"</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="LOWER_UNDERSCORE">
 <h3>LOWER_UNDERSCORE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-66">LOWER_UNDERSCORE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-70">LOWER_UNDERSCORE</a></span></div>
 <div class="block">Lower-case underscored form: <code>MY_ENUM_VALUE</code> → <code>"my_enum_value"</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="LOWER">
 <h3>LOWER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-69">LOWER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-73">LOWER</a></span></div>
 <div class="block">Lower-case form using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html#ROOT" title="class or interface in java.util" class="external-link"><code>Locale.ROOT</code></a>: <code>MY_ENUM_VALUE</code> → <code>"my_enum_value"</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="UPPER">
 <h3>UPPER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-72">UPPER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-76">UPPER</a></span></div>
 <div class="block">Upper-case form using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html#ROOT" title="class or interface in java.util" class="external-link"><code>Locale.ROOT</code></a>: equivalent to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html#name()" title="class or interface in java.lang" class="external-link"><code>Enum.name()</code></a> for canonical UPPER_SNAKE enum names.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ORDINAL">
 <h3>ORDINAL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-75">ORDINAL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-79">ORDINAL</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html#ordinal()" title="class or interface in java.lang" class="external-link"><code>Enum.ordinal()</code></a> as a numeric value.</div>
 </section>
 </li>
@@ -300,7 +300,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-48">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-49">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -312,7 +312,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-48">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-49">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -331,11 +331,11 @@ not permitted.)</div>
 <li>
 <section class="detail" id="format(java.lang.Enum)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-83">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-89">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Formats the specified enum value using this format.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The enum value.  Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The enum value.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The formatted wire representation, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
 </dl>
@@ -344,7 +344,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="parse(java.lang.String,java.lang.Class)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;</span>&nbsp;<span class="return-type">E</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-116">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;</span>&nbsp;<span class="return-type">E</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-122">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass)</span></div>
 <div class="block">Parses the specified wire value into an enum constant of the specified class.
 
@@ -362,7 +362,7 @@ not permitted.)</div>
 <dt>Type Parameters:</dt>
 <dd><code>E</code> - The enum class type.</dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value.  Can be <jk>null</jk> or blank.</dd>
+<dd><code>value</code> - The wire value.  Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
 <dd><code>enumClass</code> - The enum class.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The parsed enum constant, or <jk>null</jk> if <code>value</code> is <jk>null</jk> or blank.</dd>
@@ -374,7 +374,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isNumeric()">
 <h3>isNumeric</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-161">isNumeric</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/EnumFormat.html#line-168">isNumeric</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this format is numeric on the wire.</div>
 <dl class="notes">
 <dt>Returns:</dt>

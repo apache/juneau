@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="MockHttpTransport.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.html#line-169">MockHttpTransport.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.html#line-172">MockHttpTransport.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for <a href="MockHttpTransport.html" title="class in org.apache.juneau.rest.mock"><code>MockHttpTransport</code></a>.</div>
 <dl class="notes">
@@ -146,7 +146,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="on(java.lang.String,java.lang.String,org.apache.juneau.rest.mock.MockHttpTransport.RequestHandler)">
 <h3>on</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.Builder.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-185">on</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.Builder.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-188">on</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="MockHttpTransport.RequestHandler.html" title="interface in org.apache.juneau.rest.mock">MockHttpTransport.RequestHandler</a>&nbsp;handler)</span></div>
 <div class="block">Registers a handler for the given HTTP method and path.</div>
@@ -163,14 +163,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fallback(org.apache.juneau.rest.mock.MockHttpTransport.RequestHandler)">
 <h3>fallback</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.Builder.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-199">fallback</a></span><wbr><span class="parameters">(<a href="MockHttpTransport.RequestHandler.html" title="interface in org.apache.juneau.rest.mock">MockHttpTransport.RequestHandler</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.Builder.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-205">fallback</a></span><wbr><span class="parameters">(<a href="MockHttpTransport.RequestHandler.html" title="interface in org.apache.juneau.rest.mock">MockHttpTransport.RequestHandler</a>&nbsp;value)</span></div>
 <div class="block">Sets a fallback handler used when no route matches.
 
  <p>
  Without a fallback, unmatched requests receive a <code>404</code> response.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The fallback handler. Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The fallback handler.
+   <br>Can be <jk>null</jk> — a <jk>null</jk> fallback is the intentional default (unmatched requests get a <code>404</code>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -179,7 +180,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="recordRequests()">
 <h3>recordRequests</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.Builder.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-210">recordRequests</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.Builder.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-216">recordRequests</a></span>()</div>
 <div class="block">Enables recording of all received requests so they can be retrieved via
  <a href="MockHttpTransport.html#getRecordedRequests()"><code>MockHttpTransport.getRecordedRequests()</code></a>.</div>
 <dl class="notes">
@@ -191,7 +192,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-220">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockHttpTransport.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#line-226">build</a></span>()</div>
 <div class="block">Builds and returns the <a href="MockHttpTransport.html" title="class in org.apache.juneau.rest.mock"><code>MockHttpTransport</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

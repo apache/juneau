@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-78">EncoderSet</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-75">EncoderSet</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Represents the set of <a href="Encoder.html" title="class in org.apache.juneau.marshall.encoders"><code>encoders</code></a> keyed by codings.
 
@@ -110,11 +110,8 @@ loadScripts(document, 'script');</script>
       .add(GzipEncoder.<jk>class</jk>)
       .build();
 
-   <jc>// Should return "gzip"</jc>
-   String <jv>matchedCoding</jv> = <jv>encoders</jv>.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
-
-   <jc>// Get the encoder</jc>
-   Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<jv>matchedCoding</jv>);
+   <jc>// Get the encoder for "gzip"</jc>
+   Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
  </p>
 
  <h5 class='section'>Notes:</h5><ul>
@@ -201,7 +198,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="EncoderMatch.html" title="class in org.apache.juneau.marshall.encoders">EncoderMatch</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEncoderMatch(java.lang.String)" class="member-name-link">getEncoderMatch</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;acceptEncoding)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the coding string for the matching encoder that can handle the specified <c>Accept-Encoding</c>
+<div class="block">Returns the encoder match for the encoder that can handle the specified <c>Accept-Encoding</c>
  or <c>Content-Encoding</c> header value.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
@@ -229,7 +226,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.encoders.EncoderSet.Builder)">
 <h3>EncoderSet</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-349">EncoderSet</a></span><wbr><span class="parameters">(<a href="EncoderSet.Builder.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-344">EncoderSet</a></span><wbr><span class="parameters">(<a href="EncoderSet.Builder.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -248,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EncoderSet.Builder.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-309">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EncoderSet.Builder.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-304">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -259,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.commons.inject.BeanStore)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EncoderSet.Builder.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-319">create</a></span><wbr><span class="parameters">(<a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EncoderSet.Builder.html" title="class in org.apache.juneau.marshall.encoders">EncoderSet.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-314">create</a></span><wbr><span class="parameters">(<a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -272,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getEncoder(java.lang.String)">
 <h3>getEncoder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-371">getEncoder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encoding)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-366">getEncoder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encoding)</span></div>
 <div class="block">Returns the encoder registered with the specified coding (e.g. <js>"gzip"</js>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -285,8 +282,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getEncoderMatch(java.lang.String)">
 <h3>getEncoderMatch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EncoderMatch.html" title="class in org.apache.juneau.marshall.encoders">EncoderMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-389">getEncoderMatch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;acceptEncoding)</span></div>
-<div class="block">Returns the coding string for the matching encoder that can handle the specified <c>Accept-Encoding</c>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EncoderMatch.html" title="class in org.apache.juneau.marshall.encoders">EncoderMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-384">getEncoderMatch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;acceptEncoding)</span></div>
+<div class="block">Returns the encoder match for the encoder that can handle the specified <c>Accept-Encoding</c>
  or <c>Content-Encoding</c> header value.
 
  <p>
@@ -298,14 +295,14 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>acceptEncoding</code> - The <c>Accept-Encoding</c> or <c>Content-Encoding</c> value.</dd>
 <dt>Returns:</dt>
-<dd>The coding value (e.g. <js>"gzip"</js>).</dd>
+<dd>The matching encoder, or <jk>null</jk> if no encoders can handle the specified value.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getSupportedEncodings()">
 <h3>getSupportedEncodings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-410">getSupportedEncodings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/encoders/EncoderSet.html#line-405">getSupportedEncodings</a></span>()</div>
 <div class="block">Returns the set of codings supported by all encoders in this group.</div>
 <dl class="notes">
 <dt>Returns:</dt>

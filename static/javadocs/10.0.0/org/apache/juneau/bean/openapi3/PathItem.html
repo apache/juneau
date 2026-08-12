@@ -407,7 +407,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the DELETE operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The DELETE operation.</dd>
+<dd>The DELETE operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -418,7 +418,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the description.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The description.</dd>
+<dd>The description, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -429,7 +429,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the GET operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The GET operation.</dd>
+<dd>The GET operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -440,7 +440,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the HEAD operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The HEAD operation.</dd>
+<dd>The HEAD operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -451,7 +451,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the OPTIONS operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The OPTIONS operation.</dd>
+<dd>The OPTIONS operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -462,7 +462,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the parameters list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The parameters list.</dd>
+<dd>The parameters list, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -473,7 +473,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the PATCH operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The PATCH operation.</dd>
+<dd>The PATCH operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -484,7 +484,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the POST operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The POST operation.</dd>
+<dd>The POST operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -495,7 +495,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the PUT operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The PUT operation.</dd>
+<dd>The PUT operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -506,7 +506,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the servers list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The servers list.</dd>
+<dd>The servers list, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -517,7 +517,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the summary.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The summary.</dd>
+<dd>The summary, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -528,7 +528,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the TRACE operation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The TRACE operation.</dd>
+<dd>The TRACE operation, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
@@ -561,7 +561,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="OpenApiElement.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in class&nbsp;<code><a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>

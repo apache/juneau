@@ -166,7 +166,7 @@ implements <a href="HttpPartSerializer.html" title="interface in org.apache.june
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -219,12 +219,12 @@ implements <a href="HttpPartSerializer.html" title="interface in org.apache.june
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)">
-<h3>serialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartSerializer.html#line-95">serialize</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<section class="detail" id="write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)">
+<h3>write</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/httppart/BaseHttpPartSerializer.html#line-95">write</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
-                 throws <span class="exceptions"><a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a>,
+             throws <span class="exceptions"><a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <div class="block">Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
  form-data parameter, or URI path variable.
@@ -236,7 +236,7 @@ implements <a href="HttpPartSerializer.html" title="interface in org.apache.june
 <dd><code>partType</code> - The category of value being serialized.
    <br>Can be <jk>null</jk> (will default to <a href="../../commons/httppart/HttpPartType.html#OTHER"><code>HttpPartType.OTHER</code></a>).</dd>
 <dd><code>schema</code> - Schema information about the part.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartSerializerSession</code></a>.
    <br>Not all part serializers use the schema information.</dd>
 <dd><code>value</code> - The value being serialized.
    <br>Can be <jk>null</jk> (will return <jk>null</jk>).</dd>

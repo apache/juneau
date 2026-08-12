@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-35">LogConfig</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-37">LogConfig</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Can be used for configuration of simple logging in the microservice.
 
@@ -134,50 +134,55 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates a copy of this log configuration.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#count(int)" class="member-name-link">count</a><wbr>(int&nbsp;count)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#copyOrNull(org.apache.juneau.microservice.LogConfig)" class="member-name-link">copyOrNull</a><wbr>(<a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#count(int)" class="member-name-link">count</a><wbr>(int&nbsp;count)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The number of log files to use.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a new instance of this config.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fileLevel(java.util.logging.Level)" class="member-name-link">fileLevel</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;fileLevel)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fileLevel(java.util.logging.Level)" class="member-name-link">fileLevel</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;fileLevel)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The default logging level for the log file.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatter(java.util.logging.Formatter)" class="member-name-link">formatter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Formatter.html" title="class or interface in java.util.logging" class="external-link">Formatter</a>&nbsp;formatter)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatter(java.util.logging.Formatter)" class="member-name-link">formatter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Formatter.html" title="class or interface in java.util.logging" class="external-link">Formatter</a>&nbsp;formatter)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The log entry formatter.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#level(java.lang.String,java.util.logging.Level)" class="member-name-link">level</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logger,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#level(java.lang.String,java.util.logging.Level)" class="member-name-link">level</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logger,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Default logging level for logger.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#levels(java.util.Map)" class="member-name-link">levels</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&gt;&nbsp;levels)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#levels(java.util.Map)" class="member-name-link">levels</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&gt;&nbsp;levels)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Default logging levels for loggers.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#limit(int)" class="member-name-link">limit</a><wbr>(int&nbsp;limit)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#limit(int)" class="member-name-link">limit</a><wbr>(int&nbsp;limit)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The maximum number of bytes to write to any one log file.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logDir(java.lang.String)" class="member-name-link">logDir</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logDir)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logDir(java.lang.String)" class="member-name-link">logDir</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logDir)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The location of the log directory to create the log file.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logFile(java.lang.String)" class="member-name-link">logFile</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logFile)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logFile(java.lang.String)" class="member-name-link">logFile</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logFile)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the name of the log file on the file system to store the log file for this microservice.</div>
 </div>
 </div>
@@ -200,7 +205,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.microservice.LogConfig)">
 <h3>LogConfig</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-62">LogConfig</a></span><wbr><span class="parameters">(<a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-64">LogConfig</a></span><wbr><span class="parameters">(<a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -219,7 +224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-42">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-44">create</a></span>()</div>
 <div class="block">Creates a new instance of this config.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -230,7 +235,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append()">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-81">append</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-83">append</a></span>()</div>
 <div class="block">Specified append mode for the log file.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -241,11 +246,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consoleLevel(java.util.logging.Level)">
 <h3>consoleLevel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-92">consoleLevel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;consoleLevel)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-94">consoleLevel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;consoleLevel)</span></div>
 <div class="block">The default logging level for the console.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>consoleLevel</code> - The logging level.</dd>
+<dd><code>consoleLevel</code> - The logging level.  Can be <jk>null</jk> (uses the <js>"Logging/consoleLevel"</js> configuration value).</dd>
 <dt>Returns:</dt>
 <dd>This object (for method chaining).</dd>
 </dl>
@@ -254,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-102">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-104">copy</a></span>()</div>
 <div class="block">Creates a copy of this log configuration.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -263,9 +268,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="copyOrNull(org.apache.juneau.microservice.LogConfig)">
+<h3>copyOrNull</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-114">copyOrNull</a></span><wbr><span class="parameters">(<a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a>&nbsp;value)</span></div>
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The value to copy.  Can be <jk>null</jk> (in which case <jk>null</jk> is returned).</dd>
+<dt>Returns:</dt>
+<dd>A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="count(int)">
 <h3>count</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-112">count</a></span><wbr><span class="parameters">(int&nbsp;count)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-124">count</a></span><wbr><span class="parameters">(int&nbsp;count)</span></div>
 <div class="block">The number of log files to use.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -278,11 +296,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fileLevel(java.util.logging.Level)">
 <h3>fileLevel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-123">fileLevel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;fileLevel)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-135">fileLevel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;fileLevel)</span></div>
 <div class="block">The default logging level for the log file.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>fileLevel</code> - The logging level.</dd>
+<dd><code>fileLevel</code> - The logging level.  Can be <jk>null</jk> (uses the <js>"Logging/fileLevel"</js> configuration value).</dd>
 <dt>Returns:</dt>
 <dd>This object (for method chaining).</dd>
 </dl>
@@ -291,11 +309,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatter(java.util.logging.Formatter)">
 <h3>formatter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-144">formatter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Formatter.html" title="class or interface in java.util.logging" class="external-link">Formatter</a>&nbsp;formatter)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-156">formatter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Formatter.html" title="class or interface in java.util.logging" class="external-link">Formatter</a>&nbsp;formatter)</span></div>
 <div class="block">The log entry formatter.
 
  <p>
- If not specified, uses the following values pulled from the configuration to construct a <a href="resources/LogEntryFormatter.html" title="class in org.apache.juneau.microservice.resources"><code>LogEntryFormatter</code></a>:
+ If not specified, uses the following values pulled from the configuration to construct a <a href="logging/LogEntryFormatter.html" title="class in org.apache.juneau.microservice.logging"><code>LogEntryFormatter</code></a>:
  <ul>
    <li><js><js>"Logging/format"</js> (default is <js>"[{date} {level}] {msg}%n"</js>)
    <li><js><js>"Logging/dateFormat"</js> (default is <js>"yyyy.MM.dd hh:mm:ss"</js>)
@@ -303,13 +321,13 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>formatter</code> - The log entry formatter.</dd>
+<dd><code>formatter</code> - The log entry formatter.  Can be <jk>null</jk> (a <a href="logging/LogEntryFormatter.html" title="class in org.apache.juneau.microservice.logging"><code>LogEntryFormatter</code></a> is built from the configuration).</dd>
 <dt>Returns:</dt>
 <dd>This object (for method chaining).</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
-<li><a href="resources/LogEntryFormatter.html" title="class in org.apache.juneau.microservice.resources"><code>LogEntryFormatter</code></a></li>
+<li><a href="logging/LogEntryFormatter.html" title="class in org.apache.juneau.microservice.logging"><code>LogEntryFormatter</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -318,7 +336,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="level(java.lang.String,java.util.logging.Level)">
 <h3>level</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-156">level</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logger,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-168">level</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logger,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level)</span></div>
 <div class="block">Default logging level for logger.</div>
 <dl class="notes">
@@ -333,11 +351,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="levels(java.util.Map)">
 <h3>levels</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-167">levels</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&gt;&nbsp;levels)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-179">levels</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&gt;&nbsp;levels)</span></div>
 <div class="block">Default logging levels for loggers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>levels</code> - A map of logger names to logger levels.</dd>
+<dd><code>levels</code> - A map of logger names to logger levels.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object (for method chaining).</dd>
 </dl>
@@ -346,7 +364,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="limit(int)">
 <h3>limit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-178">limit</a></span><wbr><span class="parameters">(int&nbsp;limit)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-190">limit</a></span><wbr><span class="parameters">(int&nbsp;limit)</span></div>
 <div class="block">The maximum number of bytes to write to any one log file.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -359,7 +377,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="logDir(java.lang.String)">
 <h3>logDir</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-193">logDir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logDir)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-205">logDir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logDir)</span></div>
 <div class="block">The location of the log directory to create the log file.
 
  <p>
@@ -367,7 +385,7 @@ loadScripts(document, 'script');</script>
  If not specified, uses the JVM working directory.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>logDir</code> - The log directory location as a path relative to the working directory.</dd>
+<dd><code>logDir</code> - The log directory location as a path relative to the working directory.  Can be <jk>null</jk> (uses the <js>"Logging/logDir"</js> configuration value).</dd>
 <dt>Returns:</dt>
 <dd>This object (for method chaining).</dd>
 </dl>
@@ -376,7 +394,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="logFile(java.lang.String)">
 <h3>logFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-208">logFile</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logFile)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/LogConfig.html#line-220">logFile</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logFile)</span></div>
 <div class="block">Returns the name of the log file on the file system to store the log file for this microservice.
 
  <p>
@@ -384,7 +402,7 @@ loadScripts(document, 'script');</script>
  If not specified, no file system logging will be used.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>logFile</code> - The log file.</dd>
+<dd><code>logFile</code> - The log file.  Can be <jk>null</jk> (uses the <js>"Logging/logFile"</js> configuration value; if unset, no file logging is used).</dd>
 <dt>Returns:</dt>
 <dd>This object (for method chaining).</dd>
 </dl>

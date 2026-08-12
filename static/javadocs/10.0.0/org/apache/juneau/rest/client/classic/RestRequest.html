@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../mock/classic/MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-110">RestRequest</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-109">RestRequest</a></span>
 <span class="extends-implements">extends <a href="../../../marshall/MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>
 implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/methods/HttpUriRequest.html" title="class or interface in org.apache.http.client.methods" class="external-link">HttpUriRequest</a>, <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/methods/Configurable.html" title="class or interface in org.apache.http.client.methods" class="external-link">Configurable</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></span></div>
 <div class="block">Represents a request to a remote REST resource.
@@ -1530,7 +1530,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 
  Header values are ignored.
  <br>If there is more than one matching header in the message the last element of <a href="#getHeaders(java.lang.String)"><code>getHeaders(String)</code></a> is returned.
- <br>If there is no matching header in the message null is returned.</div>
+ <br>If there is no matching header in the message, <jk>null</jk> is returned.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpMessage.html#getLastHeader-java.lang.String-" title="class or interface in org.apache.http" class="external-link">getLastHeader</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpMessage.html" title="class or interface in org.apache.http" class="external-link">HttpMessage</a></code></dd>
@@ -2148,7 +2148,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <dt>Parameters:</dt>
 <dd><code>level</code> - The log level.
    <br>Cannot be <jk>null</jk>.</dd>
-<dd><code>msg</code> - The message with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.
+<dd><code>msg</code> - The message with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style (<c>%s</c>) arguments.
    <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>args</code> - The arguments.
    <br>Can contain <jk>null</jk> values.</dd>
@@ -2170,8 +2170,8 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <dd><code>level</code> - The log level.
    <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>t</code> - The throwable cause.
-   <br>Can be <jk>null</jk>.</dd>
-<dd><code>msg</code> - The message with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.
+   <br>Can be <jk>null</jk> (no exception details are logged).</dd>
+<dd><code>msg</code> - The message with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style (<c>%s</c>) arguments.
    <br>Cannot be <jk>null</jk>.</dd>
 <dd><code>args</code> - The arguments.
    <br>Can contain <jk>null</jk> values.</dd>
@@ -2870,7 +2870,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="runFuture()">
 <h3>runFuture</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link">Future</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client.classic">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2248">runFuture</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Future.html" title="class or interface in java.util.concurrent" class="external-link">Future</a>&lt;<a href="RestResponse.html" title="class in org.apache.juneau.rest.client.classic">RestResponse</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2268">runFuture</a></span>()
                                throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Same as <a href="#run()"><code>run()</code></a> but allows you to run the call asynchronously.
 
@@ -2903,7 +2903,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="serializer(java.lang.Class)">
 <h3>serializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2269">serializer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;&nbsp;serializer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2289">serializer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;&nbsp;serializer)</span></div>
 <div class="block">Specifies the serializer to use on the request body.
 
  <p>
@@ -2927,7 +2927,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="serializer(org.apache.juneau.marshall.serializer.Serializer)">
 <h3>serializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2291">serializer</a></span><wbr><span class="parameters">(<a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2311">serializer</a></span><wbr><span class="parameters">(<a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer)</span></div>
 <div class="block">Specifies the serializer to use on the request body.
 
  <p>
@@ -2951,7 +2951,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="setHeader(org.apache.http.Header)">
 <h3>setHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2304">setHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2324">setHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;header)</span></div>
 <div class="block">Overwrites the first header with the same name.
 
  The new header will be appended to the end of the list, if no header with the given name can be found.</div>
@@ -2967,7 +2967,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="setHeader(java.lang.String,java.lang.String)">
 <h3>setHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2319">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2339">setHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Overwrites the first header with the same name.
 
@@ -2986,7 +2986,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="setHeaders(org.apache.http.Header[])">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2331">setHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]&nbsp;headers)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2351">setHeaders</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>[]&nbsp;headers)</span></div>
 <div class="block">Overwrites all the headers in the message.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -3003,7 +3003,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <h3>setParams</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="10.0",
             <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2343">setParams</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/params/HttpParams.html" title="class or interface in org.apache.http.params" class="external-link">HttpParams</a>&nbsp;params)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2363">setParams</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/params/HttpParams.html" title="class or interface in org.apache.http.params" class="external-link">HttpParams</a>&nbsp;params)</span></div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
 <div class="deprecation-comment">Use constructor parameters of configuration API provided by HttpClient.</div>
 </div>
@@ -3020,7 +3020,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="suppressLogging()">
 <h3>suppressLogging</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2357">suppressLogging</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2377">suppressLogging</a></span>()</div>
 <div class="block">Causes logging to be suppressed for the duration of this request.
 
  <p>
@@ -3034,7 +3034,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="target(org.apache.http.HttpHost)">
 <h3>target</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2370">target</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpHost.html" title="class or interface in org.apache.http" class="external-link">HttpHost</a>&nbsp;target)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2390">target</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpHost.html" title="class or interface in org.apache.http" class="external-link">HttpHost</a>&nbsp;target)</span></div>
 <div class="block">Specifies the target host for the request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3049,7 +3049,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uon()">
 <h3>uon</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2405">uon</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2425">uon</a></span>()</div>
 <div class="block">Convenience method for specifying UON as the marshalling transmission media type for this request only.
 
  <p>
@@ -3085,7 +3085,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uri(java.lang.Object)">
 <h3>uri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2439">uri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2459">uri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span>
                 throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Sets the URI for this request.
 
@@ -3123,7 +3123,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uriFragment(java.lang.String)">
 <h3>uriFragment</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2464">uriFragment</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fragment)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2484">uriFragment</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fragment)</span></div>
 <div class="block">Sets the URI fragment.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3137,7 +3137,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uriHost(java.lang.String)">
 <h3>uriHost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2476">uriHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2496">uriHost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;host)</span></div>
 <div class="block">Sets the URI host.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3151,7 +3151,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uriPort(int)">
 <h3>uriPort</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2487">uriPort</a></span><wbr><span class="parameters">(int&nbsp;port)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2507">uriPort</a></span><wbr><span class="parameters">(int&nbsp;port)</span></div>
 <div class="block">Sets the URI port.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3164,7 +3164,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uriScheme(java.lang.String)">
 <h3>uriScheme</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2499">uriScheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2519">uriScheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scheme)</span></div>
 <div class="block">Sets the URI scheme.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3178,7 +3178,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uriUserInfo(java.lang.String)">
 <h3>uriUserInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2511">uriUserInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userInfo)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2531">uriUserInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userInfo)</span></div>
 <div class="block">Sets the URI user info.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3192,7 +3192,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="uriUserInfo(java.lang.String,java.lang.String)">
 <h3>uriUserInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2525">uriUserInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2545">uriUserInfo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
 <div class="block">Sets the URI user info.</div>
 <dl class="notes">
@@ -3209,7 +3209,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="urlEnc()">
 <h3>urlEnc</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2558">urlEnc</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2578">urlEnc</a></span>()</div>
 <div class="block">Convenience method for specifying URL-Encoding as the marshalling transmission media type for this request only.
 
  <p>
@@ -3243,7 +3243,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="xml()">
 <h3>xml</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2588">xml</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2608">xml</a></span>()</div>
 <div class="block">Convenience method for specifying XML as the marshalling transmission media type for this request only.
 
  <p>
@@ -3275,7 +3275,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="createHeader(java.lang.String,java.lang.Object,org.apache.juneau.marshall.httppart.HttpPartSerializer,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Boolean)">
 <h3>createHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2626">createHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2646">createHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&nbsp;serializer,
  <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
@@ -3296,7 +3296,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="createInnerRequest(java.lang.String,java.net.URI,boolean)">
 <h3>createInnerRequest</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/methods/HttpRequestBase.html" title="class or interface in org.apache.http.client.methods" class="external-link">HttpRequestBase</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2647">createInnerRequest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/methods/HttpRequestBase.html" title="class or interface in org.apache.http.client.methods" class="external-link">HttpRequestBase</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2667">createInnerRequest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
  boolean&nbsp;hasBody)</span></div>
 <div class="block">Constructs the <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/methods/HttpRequestBase.html" title="class or interface in org.apache.http.client.methods" class="external-link"><code>HttpRequestBase</code></a> object that ends up being passed to the client execute method.
@@ -3316,7 +3316,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="createPart(java.lang.String,java.lang.Object,org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSerializer,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Boolean)">
 <h3>createPart</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2664">createPart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2684">createPart</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
  <a href="../../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&nbsp;serializer,
@@ -3339,7 +3339,7 @@ implements <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/ht
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2680">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestRequest.html#line-2700">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../marshall/ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

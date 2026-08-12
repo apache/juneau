@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
  <br>It has 1 abstract method to implement...
  <ul class='spaced-list'>
    <li>
-      <a href="SerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)"><code>SerializerSession.doSerialize(SerializerPipe, Object)</code></a>
+      <a href="SerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)"><code>SerializerSession.doWrite(SerializerPipe, Object)</code></a>
  </ul>
 
  <h5 class='section'>Notes:</h5><ul>
@@ -187,52 +187,47 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createPipe(java.lang.Object)" class="member-name-link">createPipe</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Wraps the specified input object into a <a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser"><code>ParserPipe</code></a> object so that it can be easily converted into
- a stream or reader.</div>
+<div class="block">Wraps the specified output object into a <a href="SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerPipe</code></a> object so that it can be easily converted into
+ a stream or writer.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFileCharset()" class="member-name-link">getFileCharset</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxIndent()" class="member-name-link">getMaxIndent</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the file charset defined on this session.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxIndent()" class="member-name-link">getMaxIndent</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Maximum indentation.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected char</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getQuoteChar()" class="member-name-link">getQuoteChar</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected char</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getQuoteChar()" class="member-name-link">getQuoteChar</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Quote character.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStreamCharset()" class="member-name-link">getStreamCharset</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStreamCharset()" class="member-name-link">getStreamCharset</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the stream charset defined on this session.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseWhitespace()" class="member-name-link">isUseWhitespace</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseWhitespace()" class="member-name-link">isUseWhitespace</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Use whitespace.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isWriterSerializer()" class="member-name-link">isWriterSerializer</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isWriterSerializer()" class="member-name-link">isWriterSerializer</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if this serializer subclasses from <a href="WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer"><code>WriterSerializer</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serialize(java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience method for serializing an object to a <c>String</c>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeToString(java.lang.Object)" class="member-name-link">serializeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeToString(java.lang.Object)" class="member-name-link">writeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shortcut method for serializing an object to a String.</div>
 </div>
 </div>
@@ -240,7 +235,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.SerializerSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></h3>
-<code><a href="SerializerSession.html#addVarBean(java.lang.Class,T)">addVarBean</a>, <a href="SerializerSession.html#canIgnoreValue(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="SerializerSession.html#canIgnoreValue(org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="SerializerSession.html#create(org.apache.juneau.marshall.serializer.Serializer)">create</a>, <a href="SerializerSession.html#createBeanTypeNameProperty(org.apache.juneau.commons.bean.BeanMap,java.lang.String)">createBeanTypeNameProperty</a>, <a href="SerializerSession.html#createDefaultVarResolverSession()">createDefaultVarResolverSession</a>, <a href="SerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doSerialize</a>, <a href="SerializerSession.html#forEachEntry(java.util.Collection,java.util.function.Consumer)">forEachEntry</a>, <a href="SerializerSession.html#forEachEntry(java.util.Map,java.util.function.Consumer)">forEachEntry</a>, <a href="SerializerSession.html#forEachStreamableEntry(java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.util.function.Consumer)">forEachStreamableEntry</a>, <a href="SerializerSession.html#generalize(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">generalize</a>, <a href="SerializerSession.html#getBeanTypeName(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)">getBeanTypeName</a>, <a href="SerializerSession.html#getCalendarFormat()">getCalendarFormat</a>, <a href="SerializerSession.html#getDateFormat()">getDateFormat</a>, <a href="SerializerSession.html#getDurationFormat()">getDurationFormat</a>, <a href="SerializerSession.html#getExpectedRootType(java.lang.Object)">getExpectedRootType</a>, <a href="SerializerSession.html#getJavaMethod()">getJavaMethod</a>, <a href="SerializerSession.html#getListener()">getListener</a>, <a href="SerializerSession.html#getListener(java.lang.Class)">getListener</a>, <a href="SerializerSession.html#getLocaleFormat()">getLocaleFormat</a>, <a href="SerializerSession.html#getPeriodFormat()">getPeriodFormat</a>, <a href="SerializerSession.html#getResponseHeaders()">getResponseHeaders</a>, <a href="SerializerSession.html#getSchema()">getSchema</a>, <a href="SerializerSession.html#getTemporalFormat()">getTemporalFormat</a>, <a href="SerializerSession.html#getTimeZoneFormat()">getTimeZoneFormat</a>, <a href="SerializerSession.html#getUriContext()">getUriContext</a>, <a href="SerializerSession.html#getUriRelativity()">getUriRelativity</a>, <a href="SerializerSession.html#getUriResolution()">getUriResolution</a>, <a href="SerializerSession.html#getUriResolver()">getUriResolver</a>, <a href="SerializerSession.html#getVarResolver()">getVarResolver</a>, <a href="SerializerSession.html#handleThrown(T)">handleThrown</a>, <a href="SerializerSession.html#isAddBeanTypes()">isAddBeanTypes</a>, <a href="SerializerSession.html#isAddRootType()">isAddRootType</a>, <a href="SerializerSession.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="SerializerSession.html#isNonDefault()">isNonDefault</a>, <a href="SerializerSession.html#isSortCollections()">isSortCollections</a>, <a href="SerializerSession.html#isSortMaps()">isSortMaps</a>, <a href="SerializerSession.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="SerializerSession.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="SerializerSession.html#isTrimStrings()">isTrimStrings</a>, <a href="SerializerSession.html#onBeanGetterException(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.Throwable)">onBeanGetterException</a>, <a href="SerializerSession.html#onError(java.lang.Throwable,java.lang.String,java.lang.Object...)">onError</a>, <a href="SerializerSession.html#push2(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">push2</a>, <a href="SerializerSession.html#relativizeUri(java.lang.Object,java.lang.Object)">relativizeUri</a>, <a href="SerializerSession.html#resolve(java.lang.String)">resolve</a>, <a href="SerializerSession.html#resolveUri(java.lang.Object)">resolveUri</a>, <a href="SerializerSession.html#serialize(java.lang.Object,java.lang.Object)">serialize</a>, <a href="SerializerSession.html#serializeCalendar(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">serializeCalendar</a>, <a href="SerializerSession.html#serializeDate(java.util.Date,org.apache.juneau.marshall.ClassMeta)">serializeDate</a>, <a href="SerializerSession.html#serializeDuration(java.time.Duration)">serializeDuration</a>, <a href="SerializerSession.html#serializePeriod(java.time.Period)">serializePeriod</a>, <a href="SerializerSession.html#serializeTemporal(java.time.temporal.TemporalAccessor,org.apache.juneau.marshall.ClassMeta)">serializeTemporal</a>, <a href="SerializerSession.html#sort(java.util.Collection)">sort</a>, <a href="SerializerSession.html#sort(java.util.List)">sort</a>, <a href="SerializerSession.html#sort(java.util.Map)">sort</a>, <a href="SerializerSession.html#swap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object)">swap</a>, <a href="SerializerSession.html#toList(java.lang.Class,java.lang.Object)">toList</a>, <a href="SerializerSession.html#toListFromStreamable(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">toListFromStreamable</a>, <a href="SerializerSession.html#toString(java.lang.Object)">toString</a>, <a href="SerializerSession.html#trim(java.lang.Object)">trim</a>, <a href="SerializerSession.html#unwrapSupplier(java.lang.Object,int)">unwrapSupplier</a></code></div>
+<code><a href="SerializerSession.html#addVarBean(java.lang.Class,T)">addVarBean</a>, <a href="SerializerSession.html#canIgnoreValue(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="SerializerSession.html#canIgnoreValue(org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="SerializerSession.html#create(org.apache.juneau.marshall.serializer.Serializer)">create</a>, <a href="SerializerSession.html#createBeanTypeNameProperty(org.apache.juneau.commons.bean.BeanMap,java.lang.String)">createBeanTypeNameProperty</a>, <a href="SerializerSession.html#createDefaultVarResolverSession()">createDefaultVarResolverSession</a>, <a href="SerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doWrite</a>, <a href="SerializerSession.html#forEachEntry(java.util.Collection,java.util.function.Consumer)">forEachEntry</a>, <a href="SerializerSession.html#forEachEntry(java.util.Map,java.util.function.Consumer)">forEachEntry</a>, <a href="SerializerSession.html#forEachStreamableEntry(java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.util.function.Consumer)">forEachStreamableEntry</a>, <a href="SerializerSession.html#generalize(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">generalize</a>, <a href="SerializerSession.html#getBeanTypeName(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)">getBeanTypeName</a>, <a href="SerializerSession.html#getCalendarFormat()">getCalendarFormat</a>, <a href="SerializerSession.html#getDateFormat()">getDateFormat</a>, <a href="SerializerSession.html#getDurationFormat()">getDurationFormat</a>, <a href="SerializerSession.html#getExpectedRootType(java.lang.Object)">getExpectedRootType</a>, <a href="SerializerSession.html#getJavaMethod()">getJavaMethod</a>, <a href="SerializerSession.html#getListener()">getListener</a>, <a href="SerializerSession.html#getListener(java.lang.Class)">getListener</a>, <a href="SerializerSession.html#getLocaleFormat()">getLocaleFormat</a>, <a href="SerializerSession.html#getPeriodFormat()">getPeriodFormat</a>, <a href="SerializerSession.html#getResponseHeaders()">getResponseHeaders</a>, <a href="SerializerSession.html#getSchema()">getSchema</a>, <a href="SerializerSession.html#getTemporalFormat()">getTemporalFormat</a>, <a href="SerializerSession.html#getTimeZoneFormat()">getTimeZoneFormat</a>, <a href="SerializerSession.html#getUriContext()">getUriContext</a>, <a href="SerializerSession.html#getUriRelativity()">getUriRelativity</a>, <a href="SerializerSession.html#getUriResolution()">getUriResolution</a>, <a href="SerializerSession.html#getUriResolver()">getUriResolver</a>, <a href="SerializerSession.html#getVarResolver()">getVarResolver</a>, <a href="SerializerSession.html#handleThrown(T)">handleThrown</a>, <a href="SerializerSession.html#isAddBeanTypes()">isAddBeanTypes</a>, <a href="SerializerSession.html#isAddRootType()">isAddRootType</a>, <a href="SerializerSession.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="SerializerSession.html#isNonDefault()">isNonDefault</a>, <a href="SerializerSession.html#isSortCollections()">isSortCollections</a>, <a href="SerializerSession.html#isSortMaps()">isSortMaps</a>, <a href="SerializerSession.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="SerializerSession.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="SerializerSession.html#isTrimStrings()">isTrimStrings</a>, <a href="SerializerSession.html#onBeanGetterException(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.Throwable)">onBeanGetterException</a>, <a href="SerializerSession.html#onError(java.lang.Throwable,java.lang.String,java.lang.Object...)">onError</a>, <a href="SerializerSession.html#push2(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">push2</a>, <a href="SerializerSession.html#relativizeUri(java.lang.Object,java.lang.Object)">relativizeUri</a>, <a href="SerializerSession.html#resolve(java.lang.String)">resolve</a>, <a href="SerializerSession.html#resolveUri(java.lang.Object)">resolveUri</a>, <a href="SerializerSession.html#sort(java.util.Collection)">sort</a>, <a href="SerializerSession.html#sort(java.util.List)">sort</a>, <a href="SerializerSession.html#sort(java.util.Map)">sort</a>, <a href="SerializerSession.html#swap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object)">swap</a>, <a href="SerializerSession.html#toList(java.lang.Class,java.lang.Object)">toList</a>, <a href="SerializerSession.html#toListFromStreamable(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">toListFromStreamable</a>, <a href="SerializerSession.html#toString(java.lang.Object)">toString</a>, <a href="SerializerSession.html#trim(java.lang.Object)">trim</a>, <a href="SerializerSession.html#unwrapSupplier(java.lang.Object,int)">unwrapSupplier</a>, <a href="SerializerSession.html#write(java.lang.Object,java.lang.Object)">write</a>, <a href="SerializerSession.html#writeCalendar(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">writeCalendar</a>, <a href="SerializerSession.html#writeDate(java.util.Date,org.apache.juneau.marshall.ClassMeta)">writeDate</a>, <a href="SerializerSession.html#writeDuration(java.time.Duration)">writeDuration</a>, <a href="SerializerSession.html#writePeriod(java.time.Period)">writePeriod</a>, <a href="SerializerSession.html#writeTemporal(java.time.temporal.TemporalAccessor,org.apache.juneau.marshall.ClassMeta)">writeTemporal</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingTraverseSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingTraverseSession.html" title="class in org.apache.juneau.marshall">MarshallingTraverseSession</a></h3>
 <code><a href="../MarshallingTraverseSession.html#getInitialDepth()">getInitialDepth</a>, <a href="../MarshallingTraverseSession.html#getLastLocation()">getLastLocation</a>, <a href="../MarshallingTraverseSession.html#getMaxDepth()">getMaxDepth</a>, <a href="../MarshallingTraverseSession.html#getOptionalType(org.apache.juneau.marshall.ClassMeta)">getOptionalType</a>, <a href="../MarshallingTraverseSession.html#getOptionalValue(java.lang.Object)">getOptionalValue</a>, <a href="../MarshallingTraverseSession.html#getStack(boolean)">getStack</a>, <a href="../MarshallingTraverseSession.html#isDetectRecursions()">isDetectRecursions</a>, <a href="../MarshallingTraverseSession.html#isIgnoreRecursions()">isIgnoreRecursions</a>, <a href="../MarshallingTraverseSession.html#isOptional(org.apache.juneau.marshall.ClassMeta)">isOptional</a>, <a href="../MarshallingTraverseSession.html#isRoot()">isRoot</a>, <a href="../MarshallingTraverseSession.html#pop()">pop</a>, <a href="../MarshallingTraverseSession.html#push(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">push</a>, <a href="../MarshallingTraverseSession.html#setCurrentClass(org.apache.juneau.marshall.ClassMeta)">setCurrentClass</a>, <a href="../MarshallingTraverseSession.html#setCurrentProperty(org.apache.juneau.commons.bean.BeanPropertyMeta)">setCurrentProperty</a>, <a href="../MarshallingTraverseSession.html#willExceedDepth()">willExceedDepth</a>, <a href="../MarshallingTraverseSession.html#willRecurse(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">willRecurse</a></code></div>
@@ -270,11 +265,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.serializer.WriterSerializerSession.Builder)">
 <h3>WriterSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-247">WriterSerializerSession</a></span><wbr><span class="parameters">(<a href="WriterSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializerSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-218">WriterSerializerSession</a></span><wbr><span class="parameters">(<a href="WriterSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializerSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.
+   <br>Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -289,7 +285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.serializer.WriterSerializer)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="WriterSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializerSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-229">create</a></span><wbr><span class="parameters">(<a href="WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="WriterSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializerSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-200">create</a></span><wbr><span class="parameters">(<a href="WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -301,20 +297,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getFileCharset()">
-<h3>getFileCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-261">getFileCharset</a></span>()</div>
-<div class="block">Returns the file charset defined on this session.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the file charset defined on this session.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="getStreamCharset()">
 <h3>getStreamCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-268">getStreamCharset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-231">getStreamCharset</a></span>()</div>
 <div class="block">Returns the stream charset defined on this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -325,7 +310,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isWriterSerializer()">
 <h3>isWriterSerializer</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-270">isWriterSerializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-233">isWriterSerializer</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#isWriterSerializer()">SerializerSession</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this serializer subclasses from <a href="WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer"><code>WriterSerializer</code></a>.</div>
 <dl class="notes">
@@ -337,14 +322,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="serialize(java.lang.Object)">
-<h3>serialize</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-280">serialize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
-                       throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
+<section class="detail" id="write(java.lang.Object)">
+<h3>write</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-243">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+                   throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <div class="block">Convenience method for serializing an object to a <c>String</c>.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="SerializerSession.html#serialize(java.lang.Object)">serialize</a></code>&nbsp;in class&nbsp;<code><a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></code></dd>
+<dd><code><a href="SerializerSession.html#write(java.lang.Object)">write</a></code>&nbsp;in class&nbsp;<code><a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>o</code> - The object to serialize.</dd>
 <dt>Returns:</dt>
@@ -355,15 +340,15 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="serializeToString(java.lang.Object)">
-<h3>serializeToString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-291">serializeToString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
-                               throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#serializeToString(java.lang.Object)">SerializerSession</a></code></span></div>
+<section class="detail" id="writeToString(java.lang.Object)">
+<h3>writeToString</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-254">writeToString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+                           throws <span class="exceptions"><a href="SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#writeToString(java.lang.Object)">SerializerSession</a></code></span></div>
 <div class="block">Shortcut method for serializing an object to a String.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="SerializerSession.html#serializeToString(java.lang.Object)">serializeToString</a></code>&nbsp;in class&nbsp;<code><a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></code></dd>
+<dd><code><a href="SerializerSession.html#writeToString(java.lang.Object)">writeToString</a></code>&nbsp;in class&nbsp;<code><a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>o</code> - The object to serialize.</dd>
 <dt>Returns:</dt>
@@ -378,10 +363,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createPipe(java.lang.Object)">
 <h3>createPipe</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-296">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-259">createPipe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SerializerSession.html#createPipe(java.lang.Object)">SerializerSession</a></code></span></div>
-<div class="block">Wraps the specified input object into a <a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser"><code>ParserPipe</code></a> object so that it can be easily converted into
- a stream or reader.</div>
+<div class="block">Wraps the specified output object into a <a href="SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerPipe</code></a> object so that it can be easily converted into
+ a stream or writer.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="SerializerSession.html#createPipe(java.lang.Object)">createPipe</a></code>&nbsp;in class&nbsp;<code><a href="SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></code></dd>
@@ -391,23 +376,17 @@ loadScripts(document, 'script');</script>
    <ul>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> - Output will be written as UTF-8 encoded stream.
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> - Output will be written as system-default encoded stream.
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a>
    </ul>
-   <br>For byte-based serializers, this can be any of the following types:
-   <ul>
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a>
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>
-   </ul></dd>
+   <br>For byte-based serializers, this must be an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a>.</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser"><code>ParserPipe</code></a> wrapper around the specified input object.</dd>
+<dd>A new <a href="SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerPipe</code></a> wrapper around the specified output object.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getMaxIndent()">
 <h3>getMaxIndent</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-308">getMaxIndent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-271">getMaxIndent</a></span>()</div>
 <div class="block">Maximum indentation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -424,7 +403,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getQuoteChar()">
 <h3>getQuoteChar</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-317">getQuoteChar</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-280">getQuoteChar</a></span>()</div>
 <div class="block">Quote character.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -441,11 +420,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUseWhitespace()">
 <h3>isUseWhitespace</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-326">isUseWhitespace</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-289">isUseWhitespace</a></span>()</div>
 <div class="block">Use whitespace.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The character used for quoting attributes and values.</dd>
+<dd><jk>true</jk> if whitespace is added to the output to improve readability.</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">
@@ -458,7 +437,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-328">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/serializer/WriterSerializerSession.html#line-291">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

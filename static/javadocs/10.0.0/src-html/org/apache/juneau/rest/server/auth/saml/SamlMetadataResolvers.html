@@ -29,155 +29,209 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth.saml;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.net.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import java.net.http.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import java.nio.file.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import javax.xml.parsers.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import org.opensaml.saml.metadata.resolver.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.opensaml.saml.metadata.resolver.impl.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.w3c.dom.*;</span>
-<span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">import net.shibboleth.shared.component.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import net.shibboleth.shared.resolver.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import net.shibboleth.shared.xml.impl.*;</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35">/**</span>
-<span class="source-line-no">036</span><span id="line-36"> * Convenience factories for building {@link MetadataResolver} instances backed by an OpenSAML implementation.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * Juneau ships &lt;i&gt;convenience factories only&lt;/i&gt; &amp;mdash; no bundled default</span>
-<span class="source-line-no">040</span><span id="line-40"> * {@link MetadataResolver} singleton.  Applications either:</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;ul&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Call {@link #file(File)} for a local SAML metadata file (typical dev/staging setup).</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Call {@link #url(String)} for a remote {@code /metadata} endpoint (typical production setup).</span>
-<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Build their own {@link MetadataResolver} directly using OpenSAML APIs (advanced).</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> * Both factories return resolvers that are &lt;b&gt;already initialized&lt;/b&gt; &amp;mdash; ready to hand to</span>
-<span class="source-line-no">049</span><span id="line-49"> * {@link SamlAssertionValidator.Builder#metadataResolver(MetadataResolver)} immediately.</span>
-<span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;p&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> * The URL factory uses the JDK {@link HttpClient} (Java 17) to fetch the metadata blob once at construction</span>
-<span class="source-line-no">054</span><span id="line-54"> * time and wraps the parsed DOM in a {@link DOMMetadataResolver}.  No background refresh is performed; applications</span>
-<span class="source-line-no">055</span><span id="line-55"> * that need periodic refresh should construct their own {@code HTTPMetadataResolver} (from</span>
-<span class="source-line-no">056</span><span id="line-56"> * {@code opensaml-saml-impl}) with an Apache HttpClient + refresh policy.</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.net.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.net.http.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.nio.file.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.security.cert.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.time.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">import javax.xml.parsers.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.commons.utils.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.opensaml.saml.metadata.resolver.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.opensaml.saml.metadata.resolver.filter.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.opensaml.saml.metadata.resolver.filter.impl.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.opensaml.saml.metadata.resolver.impl.*;</span>
+<span class="source-line-no">035</span><span id="line-35">import org.opensaml.security.credential.impl.*;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.opensaml.security.criteria.*;</span>
+<span class="source-line-no">037</span><span id="line-37">import org.opensaml.security.x509.*;</span>
+<span class="source-line-no">038</span><span id="line-38">import org.opensaml.xmlsec.config.impl.*;</span>
+<span class="source-line-no">039</span><span id="line-39">import org.opensaml.xmlsec.signature.support.impl.*;</span>
+<span class="source-line-no">040</span><span id="line-40">import org.w3c.dom.*;</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">import net.shibboleth.shared.component.*;</span>
+<span class="source-line-no">043</span><span id="line-43">import net.shibboleth.shared.resolver.*;</span>
+<span class="source-line-no">044</span><span id="line-44">import net.shibboleth.shared.xml.impl.*;</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">/**</span>
+<span class="source-line-no">047</span><span id="line-47"> * Convenience factories for building {@link MetadataResolver} instances backed by an OpenSAML implementation.</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * Juneau ships &lt;i&gt;convenience factories only&lt;/i&gt; &amp;mdash; no bundled default</span>
+<span class="source-line-no">051</span><span id="line-51"> * {@link MetadataResolver} singleton.  Applications either:</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;ul&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> *    &lt;li&gt;Call {@link #file(File)} for a local SAML metadata file (typical dev/staging setup).</span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;li&gt;Call {@link #url(String)} for a remote {@code /metadata} endpoint (typical production setup).</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;Build their own {@link MetadataResolver} directly using OpenSAML APIs (advanced).</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * @since 10.0.0</span>
-<span class="source-line-no">059</span><span id="line-59"> */</span>
-<span class="source-line-no">060</span><span id="line-60">public final class SamlMetadataResolvers {</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   private SamlMetadataResolvers() {}</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   /**</span>
-<span class="source-line-no">065</span><span id="line-65">    * Creates a {@link MetadataResolver} that loads SAML 2.0 metadata from the given file.</span>
-<span class="source-line-no">066</span><span id="line-66">    *</span>
-<span class="source-line-no">067</span><span id="line-67">    * &lt;p&gt;</span>
-<span class="source-line-no">068</span><span id="line-68">    * The file is parsed at construction time and re-parsed on disk modification by the underlying</span>
-<span class="source-line-no">069</span><span id="line-69">    * {@link FilesystemMetadataResolver}.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param file The metadata XML file on the local filesystem.  Must exist and be readable.</span>
-<span class="source-line-no">072</span><span id="line-72">    * @return An initialized {@link MetadataResolver}.</span>
-<span class="source-line-no">073</span><span id="line-73">    * @throws IOException If the file cannot be parsed or initialized.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   public static MetadataResolver file(File file) throws IOException {</span>
-<span class="source-line-no">076</span><span id="line-76">      if (file == null)</span>
-<span class="source-line-no">077</span><span id="line-77">         throw new IllegalArgumentException("file must not be null");</span>
-<span class="source-line-no">078</span><span id="line-78">      if (!file.isFile()) // HTT: false branch (file present) requires valid SAML metadata XML; covered by integration tests</span>
-<span class="source-line-no">079</span><span id="line-79">         throw new FileNotFoundException("SAML metadata file not found: " + file);</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">      OpenSamlBootstrap.ensureInitialized();</span>
-<span class="source-line-no">082</span><span id="line-82">      try {</span>
-<span class="source-line-no">083</span><span id="line-83">         var parserPool = new BasicParserPool();</span>
-<span class="source-line-no">084</span><span id="line-84">         parserPool.initialize();</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">         var resolver = new FilesystemMetadataResolver(file);</span>
-<span class="source-line-no">087</span><span id="line-87">         resolver.setId(file.getAbsolutePath());</span>
-<span class="source-line-no">088</span><span id="line-88">         resolver.setParserPool(parserPool);</span>
-<span class="source-line-no">089</span><span id="line-89">         resolver.setRequireValidMetadata(true);</span>
-<span class="source-line-no">090</span><span id="line-90">         resolver.initialize();</span>
-<span class="source-line-no">091</span><span id="line-91">         return resolver;</span>
-<span class="source-line-no">092</span><span id="line-92">      } catch (ComponentInitializationException | ResolverException e) {</span>
-<span class="source-line-no">093</span><span id="line-93">         throw new IOException("Failed to initialize FilesystemMetadataResolver for " + file, e);</span>
-<span class="source-line-no">094</span><span id="line-94">      }</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;p&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * Both factories return resolvers that are &lt;b&gt;already initialized&lt;/b&gt; &amp;mdash; ready to hand to</span>
+<span class="source-line-no">060</span><span id="line-60"> * {@link SamlAssertionValidator.Builder#metadataResolver(MetadataResolver)} immediately.</span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;p&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * The URL factory uses the JDK {@link HttpClient} (Java 17) to fetch the metadata blob once at construction</span>
+<span class="source-line-no">065</span><span id="line-65"> * time and wraps the parsed DOM in a {@link DOMMetadataResolver}.  No background refresh is performed; applications</span>
+<span class="source-line-no">066</span><span id="line-66"> * that need periodic refresh should construct their own {@code HTTPMetadataResolver} (from</span>
+<span class="source-line-no">067</span><span id="line-67"> * {@code opensaml-saml-impl}) with an Apache HttpClient + refresh policy.</span>
+<span class="source-line-no">068</span><span id="line-68"> *</span>
+<span class="source-line-no">069</span><span id="line-69"> * @since 10.0.0</span>
+<span class="source-line-no">070</span><span id="line-70"> */</span>
+<span class="source-line-no">071</span><span id="line-71">public final class SamlMetadataResolvers {</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">   private SamlMetadataResolvers() {}</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">   /**</span>
+<span class="source-line-no">076</span><span id="line-76">    * Creates a {@link MetadataResolver} that loads SAML 2.0 metadata from the given file.</span>
+<span class="source-line-no">077</span><span id="line-77">    *</span>
+<span class="source-line-no">078</span><span id="line-78">    * &lt;p&gt;</span>
+<span class="source-line-no">079</span><span id="line-79">    * The file is parsed at construction time and re-parsed on disk modification by the underlying</span>
+<span class="source-line-no">080</span><span id="line-80">    * {@link FilesystemMetadataResolver}.</span>
+<span class="source-line-no">081</span><span id="line-81">    *</span>
+<span class="source-line-no">082</span><span id="line-82">    * @param file The metadata XML file on the local filesystem.  Must exist and be readable.</span>
+<span class="source-line-no">083</span><span id="line-83">    * @return An initialized {@link MetadataResolver}.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @throws IOException If the file cannot be parsed or initialized.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public static MetadataResolver file(File file) throws IOException {</span>
+<span class="source-line-no">087</span><span id="line-87">      if (file == null)</span>
+<span class="source-line-no">088</span><span id="line-88">         throw new IllegalArgumentException("file must not be null");</span>
+<span class="source-line-no">089</span><span id="line-89">      if (!file.isFile()) // HTT: false branch (file present) requires valid SAML metadata XML; covered by integration tests</span>
+<span class="source-line-no">090</span><span id="line-90">         throw new FileNotFoundException("SAML metadata file not found: " + file);</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">      OpenSamlBootstrap.ensureInitialized();</span>
+<span class="source-line-no">093</span><span id="line-93">      try {</span>
+<span class="source-line-no">094</span><span id="line-94">         var parserPool = new BasicParserPool();</span>
+<span class="source-line-no">095</span><span id="line-95">         parserPool.initialize();</span>
 <span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /**</span>
-<span class="source-line-no">098</span><span id="line-98">    * Creates a {@link MetadataResolver} that fetches SAML 2.0 metadata from the given URL once and serves it</span>
-<span class="source-line-no">099</span><span id="line-99">    * from an in-memory DOM.</span>
-<span class="source-line-no">100</span><span id="line-100">    *</span>
-<span class="source-line-no">101</span><span id="line-101">    * &lt;p&gt;</span>
-<span class="source-line-no">102</span><span id="line-102">    * Fetch happens on the calling thread with a 30-second connect/request timeout.  Applications that need</span>
-<span class="source-line-no">103</span><span id="line-103">    * periodic refresh should construct an OpenSAML {@code HTTPMetadataResolver} directly with an Apache</span>
-<span class="source-line-no">104</span><span id="line-104">    * HttpClient.</span>
-<span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * @param url The metadata URL.  Must be an absolute HTTPS or HTTP URL.</span>
-<span class="source-line-no">107</span><span id="line-107">    * @return An initialized {@link MetadataResolver}.</span>
-<span class="source-line-no">108</span><span id="line-108">    * @throws IOException If the URL cannot be fetched or the metadata is malformed.</span>
-<span class="source-line-no">109</span><span id="line-109">    */</span>
-<span class="source-line-no">110</span><span id="line-110">   public static MetadataResolver url(String url) throws IOException {</span>
-<span class="source-line-no">111</span><span id="line-111">      if (url == null)</span>
-<span class="source-line-no">112</span><span id="line-112">         throw new IllegalArgumentException("url must not be null");</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">      OpenSamlBootstrap.ensureInitialized();</span>
-<span class="source-line-no">115</span><span id="line-115">      try {</span>
-<span class="source-line-no">116</span><span id="line-116">         var client = HttpClient.newBuilder()</span>
-<span class="source-line-no">117</span><span id="line-117">            .connectTimeout(Duration.ofSeconds(30))</span>
-<span class="source-line-no">118</span><span id="line-118">            .build();</span>
-<span class="source-line-no">119</span><span id="line-119">         var req = HttpRequest.newBuilder()</span>
-<span class="source-line-no">120</span><span id="line-120">            .uri(URI.create(url))</span>
-<span class="source-line-no">121</span><span id="line-121">            .timeout(Duration.ofSeconds(30))</span>
-<span class="source-line-no">122</span><span id="line-122">            .GET()</span>
-<span class="source-line-no">123</span><span id="line-123">            .build();</span>
-<span class="source-line-no">124</span><span id="line-124">         var resp = client.send(req, HttpResponse.BodyHandlers.ofByteArray());</span>
-<span class="source-line-no">125</span><span id="line-125">         if (resp.statusCode() &lt; 200 || resp.statusCode() &gt;= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests</span>
-<span class="source-line-no">126</span><span id="line-126">            throw new IOException("Failed to fetch SAML metadata from " + url + " (HTTP " + resp.statusCode() + ")");</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">         var dbf = DocumentBuilderFactory.newInstance();</span>
-<span class="source-line-no">129</span><span id="line-129">         dbf.setNamespaceAware(true);</span>
-<span class="source-line-no">130</span><span id="line-130">         dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);</span>
-<span class="source-line-no">131</span><span id="line-131">         dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);</span>
-<span class="source-line-no">132</span><span id="line-132">         dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);</span>
-<span class="source-line-no">133</span><span id="line-133">         dbf.setXIncludeAware(false);</span>
-<span class="source-line-no">134</span><span id="line-134">         dbf.setExpandEntityReferences(false);</span>
-<span class="source-line-no">135</span><span id="line-135">         var doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(resp.body()));</span>
-<span class="source-line-no">136</span><span id="line-136">         Element root = doc.getDocumentElement();</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">         var resolver = new DOMMetadataResolver(root);</span>
-<span class="source-line-no">139</span><span id="line-139">         resolver.setId(url);</span>
-<span class="source-line-no">140</span><span id="line-140">         resolver.setRequireValidMetadata(true);</span>
-<span class="source-line-no">141</span><span id="line-141">         resolver.initialize();</span>
-<span class="source-line-no">142</span><span id="line-142">         return resolver;</span>
-<span class="source-line-no">143</span><span id="line-143">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">144</span><span id="line-144">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">145</span><span id="line-145">         throw new IOException("Interrupted while fetching SAML metadata from " + url, e);</span>
-<span class="source-line-no">146</span><span id="line-146">      } catch (ComponentInitializationException | javax.xml.parsers.ParserConfigurationException</span>
-<span class="source-line-no">147</span><span id="line-147">            | org.xml.sax.SAXException e) {</span>
-<span class="source-line-no">148</span><span id="line-148">         throw new IOException("Failed to initialize DOMMetadataResolver for " + url, e);</span>
-<span class="source-line-no">149</span><span id="line-149">      }</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   /**</span>
-<span class="source-line-no">153</span><span id="line-153">    * Creates a {@link MetadataResolver} that loads SAML 2.0 metadata from the given {@link Path}.</span>
-<span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * &lt;p&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    * Convenience overload of {@link #file(File)}; useful for callers that have a {@link Path} on hand.</span>
-<span class="source-line-no">157</span><span id="line-157">    *</span>
-<span class="source-line-no">158</span><span id="line-158">    * @param path The metadata XML file as a {@link Path}.</span>
-<span class="source-line-no">159</span><span id="line-159">    * @return An initialized {@link MetadataResolver}.</span>
-<span class="source-line-no">160</span><span id="line-160">    * @throws IOException If the file cannot be parsed or initialized.</span>
-<span class="source-line-no">161</span><span id="line-161">    */</span>
-<span class="source-line-no">162</span><span id="line-162">   public static MetadataResolver file(Path path) throws IOException {</span>
-<span class="source-line-no">163</span><span id="line-163">      if (path == null) // HTT: false branch (valid path) delegates to file(File); covered wherever file(File) is tested</span>
-<span class="source-line-no">164</span><span id="line-164">         throw new IllegalArgumentException("path must not be null");</span>
-<span class="source-line-no">165</span><span id="line-165">      return file(path.toFile());</span>
-<span class="source-line-no">166</span><span id="line-166">   }</span>
-<span class="source-line-no">167</span><span id="line-167">}</span>
+<span class="source-line-no">097</span><span id="line-97">         var resolver = new FilesystemMetadataResolver(file);</span>
+<span class="source-line-no">098</span><span id="line-98">         resolver.setId(file.getAbsolutePath());</span>
+<span class="source-line-no">099</span><span id="line-99">         resolver.setParserPool(parserPool);</span>
+<span class="source-line-no">100</span><span id="line-100">         resolver.setRequireValidMetadata(true);</span>
+<span class="source-line-no">101</span><span id="line-101">         resolver.initialize();</span>
+<span class="source-line-no">102</span><span id="line-102">         return resolver;</span>
+<span class="source-line-no">103</span><span id="line-103">      } catch (ComponentInitializationException | ResolverException e) {</span>
+<span class="source-line-no">104</span><span id="line-104">         throw ioex(e, "Failed to initialize FilesystemMetadataResolver for %s", file);</span>
+<span class="source-line-no">105</span><span id="line-105">      }</span>
+<span class="source-line-no">106</span><span id="line-106">   }</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108">   /**</span>
+<span class="source-line-no">109</span><span id="line-109">    * Creates a {@link MetadataResolver} that fetches SAML 2.0 metadata from the given URL once and serves it</span>
+<span class="source-line-no">110</span><span id="line-110">    * from an in-memory DOM.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * &lt;p&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * Fetch happens on the calling thread with a 30-second connect/request timeout.  Applications that need</span>
+<span class="source-line-no">114</span><span id="line-114">    * periodic refresh should construct an OpenSAML {@code HTTPMetadataResolver} directly with an Apache</span>
+<span class="source-line-no">115</span><span id="line-115">    * HttpClient.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * &lt;h5 class='section'&gt;Transport:&lt;/h5&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * &lt;p&gt;</span>
+<span class="source-line-no">119</span><span id="line-119">    * The metadata blob supplies the trust-anchor signing certificate, so the transport must not be</span>
+<span class="source-line-no">120</span><span id="line-120">    * downgradeable by a network intermediary.  The URL must therefore use &lt;js&gt;"https"&lt;/js&gt; or target a</span>
+<span class="source-line-no">121</span><span id="line-121">    * loopback host (&lt;js&gt;"localhost"&lt;/js&gt;/&lt;js&gt;"127.0.0.1"&lt;/js&gt;/&lt;js&gt;"::1"&lt;/js&gt;, for local development); a</span>
+<span class="source-line-no">122</span><span id="line-122">    * plaintext &lt;js&gt;"http"&lt;/js&gt; URL aimed at any other host is rejected.  When the IdP offers signed metadata,</span>
+<span class="source-line-no">123</span><span id="line-123">    * prefer {@link #url(String, X509Certificate)} so the metadata's own XML signature is verified against a</span>
+<span class="source-line-no">124</span><span id="line-124">    * pinned certificate independently of the transport.</span>
+<span class="source-line-no">125</span><span id="line-125">    *</span>
+<span class="source-line-no">126</span><span id="line-126">    * @param url The metadata URL.  Must use HTTPS or target a loopback host.</span>
+<span class="source-line-no">127</span><span id="line-127">    * @return An initialized {@link MetadataResolver}.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @throws IOException If the URL cannot be fetched or the metadata is malformed.</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   public static MetadataResolver url(String url) throws IOException {</span>
+<span class="source-line-no">131</span><span id="line-131">      return url(url, null);</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   /**</span>
+<span class="source-line-no">135</span><span id="line-135">    * Creates a {@link MetadataResolver} that fetches SAML 2.0 metadata from the given URL and verifies the</span>
+<span class="source-line-no">136</span><span id="line-136">    * metadata's XML signature against the supplied pinned certificate before trusting it.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;p&gt;</span>
+<span class="source-line-no">139</span><span id="line-139">    * This is the strongest option: the metadata document's own enveloped signature is validated against</span>
+<span class="source-line-no">140</span><span id="line-140">    * &lt;jv&gt;metadataSigningCert&lt;/jv&gt;, so a substituted or tampered metadata blob is rejected regardless of the</span>
+<span class="source-line-no">141</span><span id="line-141">    * transport used to fetch it.  The same transport rule as {@link #url(String)} still applies.</span>
+<span class="source-line-no">142</span><span id="line-142">    *</span>
+<span class="source-line-no">143</span><span id="line-143">    * @param url The metadata URL.  Must use HTTPS or target a loopback host.</span>
+<span class="source-line-no">144</span><span id="line-144">    * @param metadataSigningCert The certificate whose public key signed the metadata document.  When</span>
+<span class="source-line-no">145</span><span id="line-145">    *    &lt;jk&gt;null&lt;/jk&gt;, no signature validation is performed (equivalent to {@link #url(String)}).</span>
+<span class="source-line-no">146</span><span id="line-146">    * @return An initialized {@link MetadataResolver}.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @throws IOException If the URL cannot be fetched, the metadata is malformed, or its signature does not</span>
+<span class="source-line-no">148</span><span id="line-148">    *    verify against the pinned certificate.</span>
+<span class="source-line-no">149</span><span id="line-149">    */</span>
+<span class="source-line-no">150</span><span id="line-150">   public static MetadataResolver url(String url, X509Certificate metadataSigningCert) throws IOException {</span>
+<span class="source-line-no">151</span><span id="line-151">      if (url == null)</span>
+<span class="source-line-no">152</span><span id="line-152">         throw new IllegalArgumentException("url must not be null");</span>
+<span class="source-line-no">153</span><span id="line-153">      UriUtils.assertSecureOrLoopback(URI.create(url));</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">      OpenSamlBootstrap.ensureInitialized();</span>
+<span class="source-line-no">156</span><span id="line-156">      try {</span>
+<span class="source-line-no">157</span><span id="line-157">         var client = HttpClient.newBuilder()</span>
+<span class="source-line-no">158</span><span id="line-158">            .connectTimeout(Duration.ofSeconds(30))</span>
+<span class="source-line-no">159</span><span id="line-159">            .build();</span>
+<span class="source-line-no">160</span><span id="line-160">         var req = HttpRequest.newBuilder()</span>
+<span class="source-line-no">161</span><span id="line-161">            .uri(URI.create(url))</span>
+<span class="source-line-no">162</span><span id="line-162">            .timeout(Duration.ofSeconds(30))</span>
+<span class="source-line-no">163</span><span id="line-163">            .GET()</span>
+<span class="source-line-no">164</span><span id="line-164">            .build();</span>
+<span class="source-line-no">165</span><span id="line-165">         var resp = client.send(req, HttpResponse.BodyHandlers.ofByteArray());</span>
+<span class="source-line-no">166</span><span id="line-166">         if (resp.statusCode() &lt; 200 || resp.statusCode() &gt;= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests</span>
+<span class="source-line-no">167</span><span id="line-167">            throw ioex("Failed to fetch SAML metadata from %s (HTTP %s)", url, resp.statusCode());</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">         var dbf = DocumentBuilderFactory.newInstance();</span>
+<span class="source-line-no">170</span><span id="line-170">         dbf.setNamespaceAware(true);</span>
+<span class="source-line-no">171</span><span id="line-171">         dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);</span>
+<span class="source-line-no">172</span><span id="line-172">         dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);</span>
+<span class="source-line-no">173</span><span id="line-173">         dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);</span>
+<span class="source-line-no">174</span><span id="line-174">         dbf.setXIncludeAware(false);</span>
+<span class="source-line-no">175</span><span id="line-175">         dbf.setExpandEntityReferences(false);</span>
+<span class="source-line-no">176</span><span id="line-176">         var doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(resp.body()));</span>
+<span class="source-line-no">177</span><span id="line-177">         Element root = doc.getDocumentElement();</span>
+<span class="source-line-no">178</span><span id="line-178"></span>
+<span class="source-line-no">179</span><span id="line-179">         var resolver = new DOMMetadataResolver(root);</span>
+<span class="source-line-no">180</span><span id="line-180">         resolver.setId(url);</span>
+<span class="source-line-no">181</span><span id="line-181">         resolver.setRequireValidMetadata(true);</span>
+<span class="source-line-no">182</span><span id="line-182">         if (metadataSigningCert != null)</span>
+<span class="source-line-no">183</span><span id="line-183">            resolver.setMetadataFilter(signatureValidationFilter(metadataSigningCert));</span>
+<span class="source-line-no">184</span><span id="line-184">         resolver.initialize();</span>
+<span class="source-line-no">185</span><span id="line-185">         return resolver;</span>
+<span class="source-line-no">186</span><span id="line-186">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">187</span><span id="line-187">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">188</span><span id="line-188">         throw ioex(e, "Interrupted while fetching SAML metadata from %s", url);</span>
+<span class="source-line-no">189</span><span id="line-189">      } catch (ComponentInitializationException | javax.xml.parsers.ParserConfigurationException</span>
+<span class="source-line-no">190</span><span id="line-190">            | org.xml.sax.SAXException e) {</span>
+<span class="source-line-no">191</span><span id="line-191">         throw ioex(e, "Failed to initialize DOMMetadataResolver for %s", url);</span>
+<span class="source-line-no">192</span><span id="line-192">      }</span>
+<span class="source-line-no">193</span><span id="line-193">   }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   private static MetadataFilter signatureValidationFilter(X509Certificate cert) throws ComponentInitializationException {</span>
+<span class="source-line-no">196</span><span id="line-196">      var credential = new BasicX509Credential(cert);</span>
+<span class="source-line-no">197</span><span id="line-197">      var trustEngine = new ExplicitKeySignatureTrustEngine(</span>
+<span class="source-line-no">198</span><span id="line-198">         new StaticCredentialResolver(credential),</span>
+<span class="source-line-no">199</span><span id="line-199">         DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver());</span>
+<span class="source-line-no">200</span><span id="line-200">      var filter = new SignatureValidationFilter(trustEngine);</span>
+<span class="source-line-no">201</span><span id="line-201">      filter.setDefaultCriteria(new CriteriaSet(new UsageCriterion(org.opensaml.security.credential.UsageType.SIGNING)));</span>
+<span class="source-line-no">202</span><span id="line-202">      filter.initialize();</span>
+<span class="source-line-no">203</span><span id="line-203">      return filter;</span>
+<span class="source-line-no">204</span><span id="line-204">   }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">   /**</span>
+<span class="source-line-no">207</span><span id="line-207">    * Creates a {@link MetadataResolver} that loads SAML 2.0 metadata from the given {@link Path}.</span>
+<span class="source-line-no">208</span><span id="line-208">    *</span>
+<span class="source-line-no">209</span><span id="line-209">    * &lt;p&gt;</span>
+<span class="source-line-no">210</span><span id="line-210">    * Convenience overload of {@link #file(File)}; useful for callers that have a {@link Path} on hand.</span>
+<span class="source-line-no">211</span><span id="line-211">    *</span>
+<span class="source-line-no">212</span><span id="line-212">    * @param path The metadata XML file as a {@link Path}.</span>
+<span class="source-line-no">213</span><span id="line-213">    * @return An initialized {@link MetadataResolver}.</span>
+<span class="source-line-no">214</span><span id="line-214">    * @throws IOException If the file cannot be parsed or initialized.</span>
+<span class="source-line-no">215</span><span id="line-215">    */</span>
+<span class="source-line-no">216</span><span id="line-216">   public static MetadataResolver file(Path path) throws IOException {</span>
+<span class="source-line-no">217</span><span id="line-217">      if (path == null) // HTT: false branch (valid path) delegates to file(File); covered wherever file(File) is tested</span>
+<span class="source-line-no">218</span><span id="line-218">         throw new IllegalArgumentException("path must not be null");</span>
+<span class="source-line-no">219</span><span id="line-219">      return file(path.toFile());</span>
+<span class="source-line-no">220</span><span id="line-220">   }</span>
+<span class="source-line-no">221</span><span id="line-221">}</span>
 
 
 

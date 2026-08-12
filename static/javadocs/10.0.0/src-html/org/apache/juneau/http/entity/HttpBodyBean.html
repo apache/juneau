@@ -88,34 +88,35 @@
 <span class="source-line-no">075</span><span id="line-75">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">076</span><span id="line-76">    */</span>
 <span class="source-line-no">077</span><span id="line-77">   public static HttpBodyBean of(HttpBody body) {</span>
-<span class="source-line-no">078</span><span id="line-78">      return new HttpBodyBean(body, body.getContentType());</span>
-<span class="source-line-no">079</span><span id="line-79">   }</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   @Override /* HttpBody */</span>
-<span class="source-line-no">082</span><span id="line-82">   public String getContentType() {</span>
-<span class="source-line-no">083</span><span id="line-83">      return contentType;</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   @Override /* HttpBody */</span>
-<span class="source-line-no">087</span><span id="line-87">   public long getContentLength() {</span>
-<span class="source-line-no">088</span><span id="line-88">      return delegate.getContentLength();</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   @Override /* HttpBody */</span>
-<span class="source-line-no">092</span><span id="line-92">   public boolean isRepeatable() {</span>
-<span class="source-line-no">093</span><span id="line-93">      return delegate.isRepeatable();</span>
-<span class="source-line-no">094</span><span id="line-94">   }</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   @Override /* HttpBody */</span>
-<span class="source-line-no">097</span><span id="line-97">   public void writeTo(OutputStream out) throws IOException {</span>
-<span class="source-line-no">098</span><span id="line-98">      delegate.writeTo(out);</span>
-<span class="source-line-no">099</span><span id="line-99">   }</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   @Override /* Object */</span>
-<span class="source-line-no">102</span><span id="line-102">   public String toString() {</span>
-<span class="source-line-no">103</span><span id="line-103">      return delegate.toString();</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105">}</span>
+<span class="source-line-no">078</span><span id="line-78">      assertArgNotNull("body", body);</span>
+<span class="source-line-no">079</span><span id="line-79">      return new HttpBodyBean(body, body.getContentType());</span>
+<span class="source-line-no">080</span><span id="line-80">   }</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">   @Override /* HttpBody */</span>
+<span class="source-line-no">083</span><span id="line-83">   public String getContentType() {</span>
+<span class="source-line-no">084</span><span id="line-84">      return contentType;</span>
+<span class="source-line-no">085</span><span id="line-85">   }</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   @Override /* HttpBody */</span>
+<span class="source-line-no">088</span><span id="line-88">   public long getContentLength() {</span>
+<span class="source-line-no">089</span><span id="line-89">      return delegate.getContentLength();</span>
+<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   @Override /* HttpBody */</span>
+<span class="source-line-no">093</span><span id="line-93">   public boolean isRepeatable() {</span>
+<span class="source-line-no">094</span><span id="line-94">      return delegate.isRepeatable();</span>
+<span class="source-line-no">095</span><span id="line-95">   }</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   @Override /* HttpBody */</span>
+<span class="source-line-no">098</span><span id="line-98">   public void writeTo(OutputStream out) throws IOException {</span>
+<span class="source-line-no">099</span><span id="line-99">      delegate.writeTo(out);</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   @Override /* Object */</span>
+<span class="source-line-no">103</span><span id="line-103">   public String toString() {</span>
+<span class="source-line-no">104</span><span id="line-104">      return delegate.toString();</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106">}</span>
 
 
 

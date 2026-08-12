@@ -56,24 +56,41 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.observation">org.apache.juneau.rest.server.observation</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
 <div class="col-last even-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.observation">org.apache.juneau.rest.server.observation</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Explicit programmatic observation API for <code>juneau-rest-server</code> &mdash; custom (non-request)
  metrics + tracing around an arbitrary block of work.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.tracing">org.apache.juneau.rest.server.tracing</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.tracing">org.apache.juneau.rest.server.tracing</a></div>
+<div class="col-last even-row-color">
 <div class="block">Tracing SPI for <code>juneau-rest-server</code> &mdash; per-request span hook backed by a
  caller-supplied <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bean.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.tracing.otel">org.apache.juneau.rest.server.tracing.otel</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.tracing.otel">org.apache.juneau.rest.server.tracing.otel</a></div>
+<div class="col-last odd-row-color">
 <div class="block">OpenTelemetry bridge for the <code>juneau-rest-server</code>
  <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> SPI.</div>
 </div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.tracing</a> used by <a href="../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/TraceContextExtractor.html#org.apache.juneau.rest.server.mcp.v20260728">TraceContextExtractor</a></div>
+<div class="col-last even-row-color">
+<div class="block">SPI for recognizing a non-HTTP trace-context carrier inside a resolved <code>@RestOp</code> invocation.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.rest.server.observation">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.tracing</a> used by <a href="../observation/package-summary.html">org.apache.juneau.rest.server.observation</a></span></div>
@@ -105,8 +122,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Handle to one in-flight <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>-managed span.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/TracerHook.html#org.apache.juneau.rest.server.tracing">TracerHook</a></div>
+<div class="col-first odd-row-color"><a href="class-use/TraceOperation.html#org.apache.juneau.rest.server.tracing">TraceOperation</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Immutable, low-cardinality description of the operation a <code>TracerHook</code> bridge should name a
+ span after, supplied to <a href="TracerHook.html#startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)"><code>TracerHook.startSpan(org.apache.juneau.rest.server.RestRequest, TraceContextCarrier, TraceOperation)</code></a>
+ alongside the extracted <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/TracerHook.html#org.apache.juneau.rest.server.tracing">TracerHook</a></div>
+<div class="col-last even-row-color">
 <div class="block">SPI for receiving per-request tracing events from <code>juneau-rest-server</code>.</div>
 </div>
 </div>
@@ -122,8 +145,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Handle to one in-flight <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>-managed span.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/TracerHook.html#org.apache.juneau.rest.server.tracing.otel">TracerHook</a></div>
+<div class="col-first odd-row-color"><a href="class-use/TraceOperation.html#org.apache.juneau.rest.server.tracing.otel">TraceOperation</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Immutable, low-cardinality description of the operation a <code>TracerHook</code> bridge should name a
+ span after, supplied to <a href="TracerHook.html#startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)"><code>TracerHook.startSpan(org.apache.juneau.rest.server.RestRequest, TraceContextCarrier, TraceOperation)</code></a>
+ alongside the extracted <a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/TracerHook.html#org.apache.juneau.rest.server.tracing.otel">TracerHook</a></div>
+<div class="col-last even-row-color">
 <div class="block">SPI for receiving per-request tracing events from <code>juneau-rest-server</code>.</div>
 </div>
 </div>

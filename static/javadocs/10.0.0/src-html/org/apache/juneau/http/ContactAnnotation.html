@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -135,7 +135,7 @@
 <span class="source-line-no">122</span><span id="line-122"></span>
 <span class="source-line-no">123</span><span id="line-123">      Instance(ContactAnnotation.Builder b) {</span>
 <span class="source-line-no">124</span><span id="line-124">         super(b);</span>
-<span class="source-line-no">125</span><span id="line-125">         description = copyOf(b.description);</span>
+<span class="source-line-no">125</span><span id="line-125">         description = cp(b.description);</span>
 <span class="source-line-no">126</span><span id="line-126">         email = b.email;</span>
 <span class="source-line-no">127</span><span id="line-127">         name = b.name;</span>
 <span class="source-line-no">128</span><span id="line-128">         url = b.url;</span>
@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145"></span>
 <span class="source-line-no">146</span><span id="line-146">      @Override /* Overridden from annotation */</span>
 <span class="source-line-no">147</span><span id="line-147">      public String[] description() {</span>
-<span class="source-line-no">148</span><span id="line-148">         return description;</span>
+<span class="source-line-no">148</span><span id="line-148">         return cp(description);</span>
 <span class="source-line-no">149</span><span id="line-149">      }</span>
 <span class="source-line-no">150</span><span id="line-150">   }</span>
 <span class="source-line-no">151</span><span id="line-151"></span>

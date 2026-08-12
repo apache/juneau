@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.examples.bean.atom;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.marshall.json5.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.marshall.marshaller.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">/**</span>
 <span class="source-line-no">022</span><span id="line-22"> * Atom feed JSON example.</span>
@@ -50,8 +50,8 @@
 <span class="source-line-no">037</span><span id="line-37"></span>
 <span class="source-line-no">038</span><span id="line-38">      var feed = AtomFeed.getAtomFeed();</span>
 <span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">      // Get JSON serializer with readable output.</span>
-<span class="source-line-no">041</span><span id="line-41">      var s = Json5Serializer.DEFAULT_READABLE;</span>
+<span class="source-line-no">040</span><span id="line-40">      // Get JSON marshaller with readable output.</span>
+<span class="source-line-no">041</span><span id="line-41">      var s = Json5R.DEFAULT;</span>
 <span class="source-line-no">042</span><span id="line-42"></span>
 <span class="source-line-no">043</span><span id="line-43">      // Serialize to ATOM/JSON</span>
 <span class="source-line-no">044</span><span id="line-44">      //Produces</span>
@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line-119">       *  ]</span>
 <span class="source-line-no">120</span><span id="line-120">       *  }</span>
 <span class="source-line-no">121</span><span id="line-121">       */</span>
-<span class="source-line-no">122</span><span id="line-122">      var atomJson = s.serialize(feed);</span>
+<span class="source-line-no">122</span><span id="line-122">      var atomJson = s.write(feed);</span>
 <span class="source-line-no">123</span><span id="line-123">   }</span>
 <span class="source-line-no">124</span><span id="line-124">}</span>
 

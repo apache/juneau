@@ -243,7 +243,7 @@
 <span class="source-line-no">230</span><span id="line-230">      /**</span>
 <span class="source-line-no">231</span><span id="line-231">       * Adds a parent bundle.</span>
 <span class="source-line-no">232</span><span id="line-232">       *</span>
-<span class="source-line-no">233</span><span id="line-233">       * @param value The parent bundle.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">233</span><span id="line-233">       * @param value The parent bundle.  Can be &lt;jk&gt;null&lt;/jk&gt; to clear any previously-set parent bundle.</span>
 <span class="source-line-no">234</span><span id="line-234">       * @return This object.</span>
 <span class="source-line-no">235</span><span id="line-235">       */</span>
 <span class="source-line-no">236</span><span id="line-236">      public Builder parent(Messages value) {</span>
@@ -254,7 +254,7 @@
 <span class="source-line-no">241</span><span id="line-241">      /**</span>
 <span class="source-line-no">242</span><span id="line-242">       * Builds the messages bundle.</span>
 <span class="source-line-no">243</span><span id="line-243">       *</span>
-<span class="source-line-no">244</span><span id="line-244">       * @return A new {@link Messages}, or &lt;jk&gt;null&lt;/jk&gt; if no locations are configured.</span>
+<span class="source-line-no">244</span><span id="line-244">       * @return A new {@link Messages} bundle.</span>
 <span class="source-line-no">245</span><span id="line-245">       */</span>
 <span class="source-line-no">246</span><span id="line-246">      @SuppressWarnings({</span>
 <span class="source-line-no">247</span><span id="line-247">         "unchecked", // Type erasure requires unchecked casts for message bundle access</span>
@@ -314,7 +314,7 @@
 <span class="source-line-no">301</span><span id="line-301">   }</span>
 <span class="source-line-no">302</span><span id="line-302"></span>
 <span class="source-line-no">303</span><span id="line-303">   /**</span>
-<span class="source-line-no">304</span><span id="line-304">    * Constructor.</span>
+<span class="source-line-no">304</span><span id="line-304">    * Creates a new message bundle for the specified class.</span>
 <span class="source-line-no">305</span><span id="line-305">    *</span>
 <span class="source-line-no">306</span><span id="line-306">    * @param forClass</span>
 <span class="source-line-no">307</span><span id="line-307">    *    The class we're creating this object for.</span>
@@ -325,7 +325,7 @@
 <span class="source-line-no">312</span><span id="line-312">   }</span>
 <span class="source-line-no">313</span><span id="line-313"></span>
 <span class="source-line-no">314</span><span id="line-314">   /**</span>
-<span class="source-line-no">315</span><span id="line-315">    * Constructor.</span>
+<span class="source-line-no">315</span><span id="line-315">    * Creates a new message bundle for the specified class using the specified bundle name.</span>
 <span class="source-line-no">316</span><span id="line-316">    *</span>
 <span class="source-line-no">317</span><span id="line-317">    * @param forClass</span>
 <span class="source-line-no">318</span><span id="line-318">    *    The class we're creating this object for.</span>
@@ -434,7 +434,7 @@
 <span class="source-line-no">421</span><span id="line-421">         });</span>
 <span class="source-line-no">422</span><span id="line-422">      }</span>
 <span class="source-line-no">423</span><span id="line-423"></span>
-<span class="source-line-no">424</span><span id="line-424">      this.keyMap = u(copyOf(keyMap2));</span>
+<span class="source-line-no">424</span><span id="line-424">      this.keyMap = u(cp(keyMap2));</span>
 <span class="source-line-no">425</span><span id="line-425">      this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();</span>
 <span class="source-line-no">426</span><span id="line-426">   }</span>
 <span class="source-line-no">427</span><span id="line-427"></span>
@@ -460,7 +460,7 @@
 <span class="source-line-no">447</span><span id="line-447">   /**</span>
 <span class="source-line-no">448</span><span id="line-448">    * Returns this message bundle for the specified locale.</span>
 <span class="source-line-no">449</span><span id="line-449">    *</span>
-<span class="source-line-no">450</span><span id="line-450">    * @param locale The locale to get the messages for.</span>
+<span class="source-line-no">450</span><span id="line-450">    * @param locale The locale to get the messages for.  Can be &lt;jk&gt;null&lt;/jk&gt; (the default locale is used).</span>
 <span class="source-line-no">451</span><span id="line-451">    * @return A new {@link Messages} object.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">452</span><span id="line-452">    */</span>
 <span class="source-line-no">453</span><span id="line-453">   public Messages forLocale(Locale locale) {</span>
@@ -494,7 +494,7 @@
 <span class="source-line-no">481</span><span id="line-481">      var s = getString(key);</span>
 <span class="source-line-no">482</span><span id="line-482">      if (s.startsWith("{!"))</span>
 <span class="source-line-no">483</span><span id="line-483">         return s;</span>
-<span class="source-line-no">484</span><span id="line-484">      return f(s, args);</span>
+<span class="source-line-no">484</span><span id="line-484">      return mf(s, args);</span>
 <span class="source-line-no">485</span><span id="line-485">   }</span>
 <span class="source-line-no">486</span><span id="line-486"></span>
 <span class="source-line-no">487</span><span id="line-487">   @Override /* Overridden from ResourceBundle */</span>

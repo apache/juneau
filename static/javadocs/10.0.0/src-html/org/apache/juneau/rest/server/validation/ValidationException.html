@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.validation;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -66,60 +66,61 @@
 <span class="source-line-no">053</span><span id="line-53"> * @since 10.0.0</span>
 <span class="source-line-no">054</span><span id="line-54"> */</span>
 <span class="source-line-no">055</span><span id="line-55">@SuppressWarnings({</span>
-<span class="source-line-no">056</span><span id="line-56">   "java:S110" // Deep inheritance inherent to the exception hierarchy</span>
-<span class="source-line-no">057</span><span id="line-57">})</span>
-<span class="source-line-no">058</span><span id="line-58">public class ValidationException extends BadRequest {</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   /** The default detail message used when constructed without an explicit message. */</span>
-<span class="source-line-no">063</span><span id="line-63">   public static final String DEFAULT_MESSAGE = "Request validation failed";</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   private final transient List&lt;ValidationViolation&gt; violations;</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * Constructor.</span>
-<span class="source-line-no">069</span><span id="line-69">    *</span>
-<span class="source-line-no">070</span><span id="line-70">    * @param violations The list of constraint violations. Must not be &lt;jk&gt;null&lt;/jk&gt; (use an empty list to signal</span>
-<span class="source-line-no">071</span><span id="line-71">    *    &amp;quot;validation requested but no violations&amp;quot; &amp;mdash; though that case never actually throws in practice).</span>
-<span class="source-line-no">072</span><span id="line-72">    */</span>
-<span class="source-line-no">073</span><span id="line-73">   public ValidationException(List&lt;ValidationViolation&gt; violations) {</span>
-<span class="source-line-no">074</span><span id="line-74">      super(DEFAULT_MESSAGE);</span>
-<span class="source-line-no">075</span><span id="line-75">      this.violations = List.copyOf(violations);</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * Constructor with a custom detail message.</span>
-<span class="source-line-no">080</span><span id="line-80">    *</span>
-<span class="source-line-no">081</span><span id="line-81">    * @param violations The list of constraint violations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">082</span><span id="line-82">    * @param msg The detail message. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">083</span><span id="line-83">    *    Treated as a format pattern when {@code args} is non-empty.</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param args Optional message arguments.</span>
-<span class="source-line-no">085</span><span id="line-85">    */</span>
-<span class="source-line-no">086</span><span id="line-86">   public ValidationException(List&lt;ValidationViolation&gt; violations, String msg, Object...args) {</span>
-<span class="source-line-no">087</span><span id="line-87">      super(msg, args);</span>
-<span class="source-line-no">088</span><span id="line-88">      this.violations = List.copyOf(violations);</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">   /**</span>
-<span class="source-line-no">092</span><span id="line-92">    * Returns the immutable list of constraint violations that produced this exception.</span>
-<span class="source-line-no">093</span><span id="line-93">    *</span>
-<span class="source-line-no">094</span><span id="line-94">    * @return The list of violations, never &lt;jk&gt;null&lt;/jk&gt; and never modifiable.</span>
-<span class="source-line-no">095</span><span id="line-95">    */</span>
-<span class="source-line-no">096</span><span id="line-96">   public List&lt;ValidationViolation&gt; getViolations() {</span>
-<span class="source-line-no">097</span><span id="line-97">      return violations;</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   /**</span>
-<span class="source-line-no">101</span><span id="line-101">    * Returns a defensive, mutable copy of the violation list for callers that need to inspect / filter it</span>
-<span class="source-line-no">102</span><span id="line-102">    * without mutating the exception's own state.</span>
-<span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * @return A new mutable copy. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">105</span><span id="line-105">    */</span>
-<span class="source-line-no">106</span><span id="line-106">   public List&lt;ValidationViolation&gt; copyViolations() {</span>
-<span class="source-line-no">107</span><span id="line-107">      return copyOf(violations);</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109">}</span>
+<span class="source-line-no">056</span><span id="line-56">   "java:S110", // Deep inheritance inherent to the exception hierarchy</span>
+<span class="source-line-no">057</span><span id="line-57">   "java:S2160" // Exceptions are compared by identity, not by their violations payload; no equals() override needed</span>
+<span class="source-line-no">058</span><span id="line-58">})</span>
+<span class="source-line-no">059</span><span id="line-59">public class ValidationException extends BadRequest {</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">   /** The default detail message used when constructed without an explicit message. */</span>
+<span class="source-line-no">064</span><span id="line-64">   public static final String DEFAULT_MESSAGE = "Request validation failed";</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   private final transient List&lt;ValidationViolation&gt; violations;</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">   /**</span>
+<span class="source-line-no">069</span><span id="line-69">    * Constructor.</span>
+<span class="source-line-no">070</span><span id="line-70">    *</span>
+<span class="source-line-no">071</span><span id="line-71">    * @param violations The list of constraint violations. Must not be &lt;jk&gt;null&lt;/jk&gt; (use an empty list to signal</span>
+<span class="source-line-no">072</span><span id="line-72">    *    &amp;quot;validation requested but no violations&amp;quot; &amp;mdash; though that case never actually throws in practice).</span>
+<span class="source-line-no">073</span><span id="line-73">    */</span>
+<span class="source-line-no">074</span><span id="line-74">   public ValidationException(List&lt;ValidationViolation&gt; violations) {</span>
+<span class="source-line-no">075</span><span id="line-75">      super(DEFAULT_MESSAGE);</span>
+<span class="source-line-no">076</span><span id="line-76">      this.violations = List.copyOf(violations);</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Constructor with a custom detail message.</span>
+<span class="source-line-no">081</span><span id="line-81">    *</span>
+<span class="source-line-no">082</span><span id="line-82">    * @param violations The list of constraint violations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param msg The detail message. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">084</span><span id="line-84">    *    Treated as a format pattern when {@code args} is non-empty.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param args Optional message arguments.</span>
+<span class="source-line-no">086</span><span id="line-86">    */</span>
+<span class="source-line-no">087</span><span id="line-87">   public ValidationException(List&lt;ValidationViolation&gt; violations, String msg, Object...args) {</span>
+<span class="source-line-no">088</span><span id="line-88">      super(msg, args);</span>
+<span class="source-line-no">089</span><span id="line-89">      this.violations = List.copyOf(violations);</span>
+<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Returns the immutable list of constraint violations that produced this exception.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * @return The list of violations, never &lt;jk&gt;null&lt;/jk&gt; and never modifiable.</span>
+<span class="source-line-no">096</span><span id="line-96">    */</span>
+<span class="source-line-no">097</span><span id="line-97">   public List&lt;ValidationViolation&gt; getViolations() {</span>
+<span class="source-line-no">098</span><span id="line-98">      return violations;</span>
+<span class="source-line-no">099</span><span id="line-99">   }</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /**</span>
+<span class="source-line-no">102</span><span id="line-102">    * Returns a defensive, mutable copy of the violation list for callers that need to inspect / filter it</span>
+<span class="source-line-no">103</span><span id="line-103">    * without mutating the exception's own state.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * @return A new mutable copy. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    */</span>
+<span class="source-line-no">107</span><span id="line-107">   public List&lt;ValidationViolation&gt; copyViolations() {</span>
+<span class="source-line-no">108</span><span id="line-108">      return cp(violations);</span>
+<span class="source-line-no">109</span><span id="line-109">   }</span>
+<span class="source-line-no">110</span><span id="line-110">}</span>
 
 
 

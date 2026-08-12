@@ -165,7 +165,7 @@ implements <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.s
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>paramInfo</code> - The Java method parameter being resolved.</dd>
+<dd><code>paramInfo</code> - The Java method parameter being resolved. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -184,7 +184,7 @@ implements <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.s
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>paramInfo</code> - The Java method parameter being resolved.</dd>
+<dd><code>paramInfo</code> - The Java method parameter being resolved. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="AttributeArg.html" title="class in org.apache.juneau.rest.server.arg"><code>AttributeArg</code></a>, or <jk>null</jk> if the parameter is not annotated with <a href="../Attr.html" title="annotation interface in org.apache.juneau.rest.server"><code>Attr</code></a>.</dd>
 </dl>

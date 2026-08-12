@@ -293,8 +293,13 @@
 <span class="source-line-no">280</span><span id="line-280">      return baos.toByteArray();</span>
 <span class="source-line-no">281</span><span id="line-281">   }</span>
 <span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   public Map&lt;String,String[]&gt; getHeaders() { return headerMap; }</span>
-<span class="source-line-no">284</span><span id="line-284">}</span>
+<span class="source-line-no">283</span><span id="line-283">   /**</span>
+<span class="source-line-no">284</span><span id="line-284">    * Returns the raw header map backing this response.</span>
+<span class="source-line-no">285</span><span id="line-285">    *</span>
+<span class="source-line-no">286</span><span id="line-286">    * @return The header map, keyed by header name to all values set for that name. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">287</span><span id="line-287">    */</span>
+<span class="source-line-no">288</span><span id="line-288">   public Map&lt;String,String[]&gt; getHeaders() { return headerMap; }</span>
+<span class="source-line-no">289</span><span id="line-289">}</span>
 
 
 

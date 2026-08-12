@@ -188,329 +188,323 @@
 <span class="source-line-no">175</span><span id="line-175">    * Creates a new builder for this session.</span>
 <span class="source-line-no">176</span><span id="line-176">    *</span>
 <span class="source-line-no">177</span><span id="line-177">    * @param ctx The serializer creating this session.</span>
-<span class="source-line-no">178</span><span id="line-178">    * @return A new builder.</span>
-<span class="source-line-no">179</span><span id="line-179">    */</span>
-<span class="source-line-no">180</span><span id="line-180">   public static Builder create(RdfStreamSerializer ctx) {</span>
-<span class="source-line-no">181</span><span id="line-181">      return new Builder(assertArgNotNull(ARG_ctx, ctx));</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   private final Model model;</span>
-<span class="source-line-no">185</span><span id="line-185">   private final Property pRoot;</span>
-<span class="source-line-no">186</span><span id="line-186">   private final Property pValue;</span>
-<span class="source-line-no">187</span><span id="line-187">   private final Lang lang;</span>
-<span class="source-line-no">188</span><span id="line-188">   private final RdfStreamSerializer ctx;</span>
-<span class="source-line-no">189</span><span id="line-189">   private final Namespace[] namespaces;</span>
-<span class="source-line-no">190</span><span id="line-190"></span>
-<span class="source-line-no">191</span><span id="line-191">   protected RdfStreamSerializerSession(Builder builder) {</span>
-<span class="source-line-no">192</span><span id="line-192">      super(builder);</span>
-<span class="source-line-no">193</span><span id="line-193">      ctx = builder.ctx;</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">      model = ModelFactory.createDefaultModel();</span>
-<span class="source-line-no">196</span><span id="line-196">      namespaces = ctx.getNamespaces();</span>
-<span class="source-line-no">197</span><span id="line-197">      addModelPrefix(ctx.getJuneauNs());</span>
-<span class="source-line-no">198</span><span id="line-198">      addModelPrefix(ctx.getJuneauBpNs());</span>
-<span class="source-line-no">199</span><span id="line-199">      if (namespaces != null)</span>
-<span class="source-line-no">200</span><span id="line-200">         for (var ns : namespaces)</span>
-<span class="source-line-no">201</span><span id="line-201">            addModelPrefix(ns);</span>
-<span class="source-line-no">202</span><span id="line-202">      pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);</span>
-<span class="source-line-no">203</span><span id="line-203">      pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);</span>
-<span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">      var langName = ctx.getLanguage();</span>
-<span class="source-line-no">206</span><span id="line-206">      lang = toLang(langName);</span>
-<span class="source-line-no">207</span><span id="line-207">      if (lang == null)</span>
-<span class="source-line-no">208</span><span id="line-208">         throw new IllegalStateException("Unknown RDF language: " + langName);</span>
-<span class="source-line-no">209</span><span id="line-209">   }</span>
-<span class="source-line-no">210</span><span id="line-210"></span>
-<span class="source-line-no">211</span><span id="line-211">   @Override /* OutputStreamSerializerSession */</span>
-<span class="source-line-no">212</span><span id="line-212">   public boolean hasNativeBytes() {</span>
-<span class="source-line-no">213</span><span id="line-213">      // The RDF graph layer has no native byte-array literal type — byte[] is surfaced either as an</span>
-<span class="source-line-no">214</span><span id="line-214">      // xsd:base64Binary typed literal or as a plain string literal</span>
-<span class="source-line-no">215</span><span id="line-215">      // carrying the configured BinaryFormat's text wire form (at any other BinaryFormat, after the</span>
-<span class="source-line-no">216</span><span id="line-216">      // BinarySwap fires).</span>
-<span class="source-line-no">217</span><span id="line-217">      return false;</span>
-<span class="source-line-no">218</span><span id="line-218">   }</span>
-<span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">   private static Lang toLang(String langName) {</span>
-<span class="source-line-no">221</span><span id="line-221">      var l = org.apache.jena.riot.RDFLanguages.nameToLang(langName);</span>
-<span class="source-line-no">222</span><span id="line-222">      if (l != null)</span>
-<span class="source-line-no">223</span><span id="line-223">         return l;</span>
-<span class="source-line-no">224</span><span id="line-224">      if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages</span>
-<span class="source-line-no">225</span><span id="line-225">         return Lang.RDFPROTO;</span>
-<span class="source-line-no">226</span><span id="line-226">      return null;</span>
-<span class="source-line-no">227</span><span id="line-227">   }</span>
-<span class="source-line-no">228</span><span id="line-228"></span>
-<span class="source-line-no">229</span><span id="line-229">   private void addModelPrefix(Namespace ns) {</span>
-<span class="source-line-no">230</span><span id="line-230">      model.setNsPrefix(ns.getName(), ns.getUri());</span>
-<span class="source-line-no">231</span><span id="line-231">   }</span>
-<span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233">   /**</span>
-<span class="source-line-no">234</span><span id="line-234">    * Returns the language-specific metadata on the specified bean property.</span>
-<span class="source-line-no">235</span><span id="line-235">    *</span>
-<span class="source-line-no">236</span><span id="line-236">    * @param bpm The bean property to return the metadata on.</span>
-<span class="source-line-no">237</span><span id="line-237">    * @return The metadata.</span>
-<span class="source-line-no">238</span><span id="line-238">    */</span>
-<span class="source-line-no">239</span><span id="line-239">   protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">240</span><span id="line-240">      return bpm == null ? RdfBeanPropertyMeta.DEFAULT : ctx.getRdfBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">241</span><span id="line-241">   }</span>
-<span class="source-line-no">242</span><span id="line-242"></span>
-<span class="source-line-no">243</span><span id="line-243">   /**</span>
-<span class="source-line-no">244</span><span id="line-244">    * Returns the language-specific metadata on the specified bean property.</span>
-<span class="source-line-no">245</span><span id="line-245">    *</span>
-<span class="source-line-no">246</span><span id="line-246">    * @param bpm The bean property to return the metadata on.</span>
-<span class="source-line-no">247</span><span id="line-247">    * @return The metadata.</span>
-<span class="source-line-no">248</span><span id="line-248">    */</span>
-<span class="source-line-no">249</span><span id="line-249">   protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">250</span><span id="line-250">      return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">251</span><span id="line-251">   }</span>
-<span class="source-line-no">252</span><span id="line-252"></span>
-<span class="source-line-no">253</span><span id="line-253">   private String encodeElementName(Object o) {</span>
-<span class="source-line-no">254</span><span id="line-254">      return XmlUtils.encodeElementName(toString(o));</span>
-<span class="source-line-no">255</span><span id="line-255">   }</span>
-<span class="source-line-no">256</span><span id="line-256"></span>
-<span class="source-line-no">257</span><span id="line-257">   private String encodeTextInvalidChars(Object o) {</span>
-<span class="source-line-no">258</span><span id="line-258">      if (o == null)</span>
-<span class="source-line-no">259</span><span id="line-259">         return null;</span>
-<span class="source-line-no">260</span><span id="line-260">      return XmlUtils.escapeText(toString(o));</span>
-<span class="source-line-no">261</span><span id="line-261">   }</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">   private String getUri(Object uri, Object uri2) {</span>
-<span class="source-line-no">264</span><span id="line-264">      String s = null;</span>
-<span class="source-line-no">265</span><span id="line-265">      if (nn(uri))</span>
-<span class="source-line-no">266</span><span id="line-266">         s = uri.toString();</span>
-<span class="source-line-no">267</span><span id="line-267">      if (ie(s) &amp;&amp; nn(uri2))</span>
-<span class="source-line-no">268</span><span id="line-268">         s = uri2.toString();</span>
-<span class="source-line-no">269</span><span id="line-269">      if (s == null)</span>
-<span class="source-line-no">270</span><span id="line-270">         return null;</span>
-<span class="source-line-no">271</span><span id="line-271">      return getUriResolver().resolve(s);</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273"></span>
-<span class="source-line-no">274</span><span id="line-274">   @SuppressWarnings({</span>
-<span class="source-line-no">275</span><span id="line-275">      "null" // aType/wType intentionally null before assignment in control flow</span>
-<span class="source-line-no">276</span><span id="line-276">   })</span>
-<span class="source-line-no">277</span><span id="line-277">   private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta&lt;?&gt; eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {</span>
-<span class="source-line-no">278</span><span id="line-278">      var m = model;</span>
-<span class="source-line-no">279</span><span id="line-279">      ClassMeta&lt;?&gt; aType = push2(attrName, o, eType);</span>
-<span class="source-line-no">280</span><span id="line-280">      ClassMeta&lt;?&gt; wType = null;</span>
-<span class="source-line-no">281</span><span id="line-281">      ClassMeta&lt;?&gt; sType;</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">      if (eType == null)</span>
-<span class="source-line-no">284</span><span id="line-284">         eType = object();</span>
-<span class="source-line-no">285</span><span id="line-285">      if (aType == null) {</span>
-<span class="source-line-no">286</span><span id="line-286">         o = null;</span>
-<span class="source-line-no">287</span><span id="line-287">         aType = object();</span>
-<span class="source-line-no">288</span><span id="line-288">      }</span>
-<span class="source-line-no">289</span><span id="line-289">      if (isOptional(aType)) {</span>
-<span class="source-line-no">290</span><span id="line-290">         o = getOptionalValue(o);</span>
-<span class="source-line-no">291</span><span id="line-291">         eType = getOptionalType(eType);</span>
-<span class="source-line-no">292</span><span id="line-292">         aType = getClassMetaForObject(o, object());</span>
-<span class="source-line-no">293</span><span id="line-293">      }</span>
-<span class="source-line-no">294</span><span id="line-294">      if (nn(o)) {</span>
-<span class="source-line-no">295</span><span id="line-295">         if (aType.isDelegate()) {</span>
-<span class="source-line-no">296</span><span id="line-296">            wType = aType;</span>
-<span class="source-line-no">297</span><span id="line-297">            aType = (ClassMeta)((Delegate)o).getBeanInfo();</span>
-<span class="source-line-no">298</span><span id="line-298">         }</span>
-<span class="source-line-no">299</span><span id="line-299">         sType = aType;</span>
-<span class="source-line-no">300</span><span id="line-300">         var swap = aType.getSwap(this);</span>
-<span class="source-line-no">301</span><span id="line-301">         if (nn(swap)) {</span>
-<span class="source-line-no">302</span><span id="line-302">            o = swap(swap, o);</span>
-<span class="source-line-no">303</span><span id="line-303">            sType = swap.getSwapClassMeta(this);</span>
-<span class="source-line-no">304</span><span id="line-304">            if (sType.isObject())</span>
-<span class="source-line-no">305</span><span id="line-305">               sType = getClassMetaForObject(o);</span>
-<span class="source-line-no">306</span><span id="line-306">         }</span>
-<span class="source-line-no">307</span><span id="line-307">      } else {</span>
-<span class="source-line-no">308</span><span id="line-308">         sType = eType.getSerializedClassMeta(this);</span>
-<span class="source-line-no">309</span><span id="line-309">      }</span>
-<span class="source-line-no">310</span><span id="line-310"></span>
-<span class="source-line-no">311</span><span id="line-311">      var typeName = getBeanTypeName(this, eType, aType, bpm);</span>
-<span class="source-line-no">312</span><span id="line-312">      RDFNode n = null;</span>
-<span class="source-line-no">313</span><span id="line-313"></span>
-<span class="source-line-no">314</span><span id="line-314">      if (o == null || sType.isChar() &amp;&amp; ((Character)o).charValue() == 0) {</span>
-<span class="source-line-no">315</span><span id="line-315">         if (nn(bpm)) {</span>
-<span class="source-line-no">316</span><span id="line-316">            if (isKeepNullProperties())</span>
-<span class="source-line-no">317</span><span id="line-317">               n = m.createResource(RDF_NIL);</span>
-<span class="source-line-no">318</span><span id="line-318">         } else {</span>
-<span class="source-line-no">319</span><span id="line-319">            n = m.createResource(RDF_NIL);</span>
-<span class="source-line-no">320</span><span id="line-320">         }</span>
-<span class="source-line-no">321</span><span id="line-321">      } else if (sType.isUri() || isURI) {</span>
-<span class="source-line-no">322</span><span id="line-322">         // RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values need Resource emission, not literal text.</span>
-<span class="source-line-no">323</span><span id="line-323">         var uri = getUri(o, null);</span>
-<span class="source-line-no">324</span><span id="line-324">         if (isAbsoluteUri(uri))</span>
-<span class="source-line-no">325</span><span id="line-325">            n = m.createResource(uri);</span>
-<span class="source-line-no">326</span><span id="line-326">         else</span>
-<span class="source-line-no">327</span><span id="line-327">            n = m.createLiteral(encodeTextInvalidChars(uri));</span>
-<span class="source-line-no">328</span><span id="line-328">      } else if (sType.isBean()) {</span>
-<span class="source-line-no">329</span><span id="line-329">         var bm = toBeanMap(o);</span>
-<span class="source-line-no">330</span><span id="line-330">         Object uri = null;</span>
-<span class="source-line-no">331</span><span id="line-331">         var rbm = ctx.getRdfBeanMeta(bm.getMeta());</span>
-<span class="source-line-no">332</span><span id="line-332">         if (rbm.hasBeanUri())</span>
-<span class="source-line-no">333</span><span id="line-333">            uri = rbm.getBeanUriProperty().get(bm, null);</span>
-<span class="source-line-no">334</span><span id="line-334">         var uri2 = getUri(uri, null);</span>
-<span class="source-line-no">335</span><span id="line-335">         n = m.createResource(uri2);</span>
-<span class="source-line-no">336</span><span id="line-336">         serializeBeanMap(bm, (Resource)n, typeName);</span>
-<span class="source-line-no">337</span><span id="line-337">      } else if (sType.isMap() || (nn(wType) &amp;&amp; wType.isMap())) {</span>
-<span class="source-line-no">338</span><span id="line-338">         if (o instanceof BeanMap o2) {</span>
-<span class="source-line-no">339</span><span id="line-339">            Object uri = null;</span>
-<span class="source-line-no">340</span><span id="line-340">            var rbm = ctx.getRdfBeanMeta(o2.getMeta());</span>
-<span class="source-line-no">341</span><span id="line-341">            if (rbm.hasBeanUri())</span>
-<span class="source-line-no">342</span><span id="line-342">               uri = rbm.getBeanUriProperty().get(o2, null);</span>
-<span class="source-line-no">343</span><span id="line-343">            var uri2 = getUri(uri, null);</span>
-<span class="source-line-no">344</span><span id="line-344">            n = m.createResource(uri2);</span>
-<span class="source-line-no">345</span><span id="line-345">            serializeBeanMap(o2, (Resource)n, typeName);</span>
-<span class="source-line-no">346</span><span id="line-346">         } else {</span>
-<span class="source-line-no">347</span><span id="line-347">            n = m.createResource();</span>
-<span class="source-line-no">348</span><span id="line-348">            serializeMap((Map)o, (Resource)n, sType);</span>
-<span class="source-line-no">349</span><span id="line-349">         }</span>
-<span class="source-line-no">350</span><span id="line-350">      } else if (sType.isByteArray()) {</span>
-<span class="source-line-no">351</span><span id="line-351">         // byte[] gate must come before isCollectionOrArray: byte[] satisfies isArray() but RDF emits it as a typed base64 literal, not as a Seq of bytes.</span>
-<span class="source-line-no">352</span><span id="line-352">         var b64 = Base64.getEncoder().encodeToString((byte[]) o);</span>
-<span class="source-line-no">353</span><span id="line-353">         n = m.createTypedLiteral(b64, XSDDatatype.XSDbase64Binary);</span>
-<span class="source-line-no">354</span><span id="line-354">      } else if (sType.isCollectionOrArray() || (nn(wType) &amp;&amp; wType.isCollection())) {</span>
-<span class="source-line-no">355</span><span id="line-355">         var c = sort(sType.isCollection() ? (Collection)o : toList(sType.inner(), o));</span>
-<span class="source-line-no">356</span><span id="line-356">         var f = ctx.getCollectionFormat();</span>
-<span class="source-line-no">357</span><span id="line-357">         var cRdf = ctx.getRdfClassMeta(sType);</span>
-<span class="source-line-no">358</span><span id="line-358">         var bpRdf = getRdfBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">359</span><span id="line-359">         if (cRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)</span>
-<span class="source-line-no">360</span><span id="line-360">            f = cRdf.getCollectionFormat();</span>
-<span class="source-line-no">361</span><span id="line-361">         if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)</span>
-<span class="source-line-no">362</span><span id="line-362">            f = bpRdf.getCollectionFormat();</span>
-<span class="source-line-no">363</span><span id="line-363">         if (f == RdfCollectionFormat.MULTI_VALUED) {</span>
-<span class="source-line-no">364</span><span id="line-364">            serializeToMultiProperties(c, eType, bpm, attrName, parentResource);</span>
-<span class="source-line-no">365</span><span id="line-365">         } else {</span>
-<span class="source-line-no">366</span><span id="line-366">            n = switch (f) {</span>
-<span class="source-line-no">367</span><span id="line-367">               case BAG -&gt; serializeToContainer(c, eType, m.createBag());</span>
-<span class="source-line-no">368</span><span id="line-368">               case LIST -&gt; serializeToList(c, eType);</span>
-<span class="source-line-no">369</span><span id="line-369">               default -&gt; serializeToContainer(c, eType, m.createSeq());</span>
-<span class="source-line-no">370</span><span id="line-370">            };</span>
-<span class="source-line-no">371</span><span id="line-371">         }</span>
-<span class="source-line-no">372</span><span id="line-372">      } else if (sType.isCharSequence() || sType.isChar()) {</span>
-<span class="source-line-no">373</span><span id="line-373">         n = m.createLiteral(encodeTextInvalidChars(o));</span>
-<span class="source-line-no">374</span><span id="line-374">      } else if (sType.isNumber() || sType.isBoolean()) {</span>
-<span class="source-line-no">375</span><span id="line-375">         if (!ctx.isAddLiteralTypes())</span>
-<span class="source-line-no">376</span><span id="line-376">            n = m.createLiteral(o.toString());</span>
-<span class="source-line-no">377</span><span id="line-377">         else</span>
-<span class="source-line-no">378</span><span id="line-378">            n = m.createTypedLiteral(o);</span>
-<span class="source-line-no">379</span><span id="line-379">      } else if (sType.isReader()) {</span>
-<span class="source-line-no">380</span><span id="line-380">         n = m.createLiteral(encodeTextInvalidChars(read((Reader)o, SerializerSession::handleThrown)));</span>
-<span class="source-line-no">381</span><span id="line-381">      } else if (sType.isInputStream()) {</span>
-<span class="source-line-no">382</span><span id="line-382">         n = m.createLiteral(encodeTextInvalidChars(read((InputStream)o, SerializerSession::handleThrown)));</span>
-<span class="source-line-no">383</span><span id="line-383">      } else {</span>
-<span class="source-line-no">384</span><span id="line-384">         n = m.createLiteral(encodeTextInvalidChars(toString(o)));</span>
-<span class="source-line-no">385</span><span id="line-385">      }</span>
+<span class="source-line-no">178</span><span id="line-178">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">179</span><span id="line-179">    * @return A new builder.</span>
+<span class="source-line-no">180</span><span id="line-180">    */</span>
+<span class="source-line-no">181</span><span id="line-181">   public static Builder create(RdfStreamSerializer ctx) {</span>
+<span class="source-line-no">182</span><span id="line-182">      return new Builder(assertArgNotNull(ARG_ctx, ctx));</span>
+<span class="source-line-no">183</span><span id="line-183">   }</span>
+<span class="source-line-no">184</span><span id="line-184"></span>
+<span class="source-line-no">185</span><span id="line-185">   private final Model model;</span>
+<span class="source-line-no">186</span><span id="line-186">   private final Property pRoot;</span>
+<span class="source-line-no">187</span><span id="line-187">   private final Property pValue;</span>
+<span class="source-line-no">188</span><span id="line-188">   private final Lang lang;</span>
+<span class="source-line-no">189</span><span id="line-189">   private final RdfStreamSerializer ctx;</span>
+<span class="source-line-no">190</span><span id="line-190">   private final Namespace[] namespaces;</span>
+<span class="source-line-no">191</span><span id="line-191"></span>
+<span class="source-line-no">192</span><span id="line-192">   protected RdfStreamSerializerSession(Builder builder) {</span>
+<span class="source-line-no">193</span><span id="line-193">      super(builder);</span>
+<span class="source-line-no">194</span><span id="line-194">      ctx = builder.ctx;</span>
+<span class="source-line-no">195</span><span id="line-195"></span>
+<span class="source-line-no">196</span><span id="line-196">      model = ModelFactory.createDefaultModel();</span>
+<span class="source-line-no">197</span><span id="line-197">      namespaces = ctx.getNamespaces();</span>
+<span class="source-line-no">198</span><span id="line-198">      addModelPrefix(ctx.getJuneauNs());</span>
+<span class="source-line-no">199</span><span id="line-199">      addModelPrefix(ctx.getJuneauBpNs());</span>
+<span class="source-line-no">200</span><span id="line-200">      if (namespaces != null) // HTT: RdfStreamSerializer.Builder only exposes language(); the delegated RdfSerializer's namespaces() is never set, so getNamespaces() always returns a non-null (empty) array here.</span>
+<span class="source-line-no">201</span><span id="line-201">         for (var ns : namespaces) // HTT: unreachable — namespaces is always empty for stream serializers; see guard above.</span>
+<span class="source-line-no">202</span><span id="line-202">            addModelPrefix(ns); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">203</span><span id="line-203">      pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);</span>
+<span class="source-line-no">204</span><span id="line-204">      pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">      var langName = ctx.getLanguage();</span>
+<span class="source-line-no">207</span><span id="line-207">      lang = toLang(langName);</span>
+<span class="source-line-no">208</span><span id="line-208">      if (lang == null)</span>
+<span class="source-line-no">209</span><span id="line-209">         throw isex("Unknown RDF language: %s", langName);</span>
+<span class="source-line-no">210</span><span id="line-210">   }</span>
+<span class="source-line-no">211</span><span id="line-211"></span>
+<span class="source-line-no">212</span><span id="line-212">   @Override /* OutputStreamSerializerSession */</span>
+<span class="source-line-no">213</span><span id="line-213">   public boolean hasNativeBytes() {</span>
+<span class="source-line-no">214</span><span id="line-214">      // The RDF graph layer has no native byte-array literal type — byte[] is surfaced either as an</span>
+<span class="source-line-no">215</span><span id="line-215">      // xsd:base64Binary typed literal or as a plain string literal</span>
+<span class="source-line-no">216</span><span id="line-216">      // carrying the configured BinaryFormat's text wire form (at any other BinaryFormat, after the</span>
+<span class="source-line-no">217</span><span id="line-217">      // BinarySwap fires).</span>
+<span class="source-line-no">218</span><span id="line-218">      return false;</span>
+<span class="source-line-no">219</span><span id="line-219">   }</span>
+<span class="source-line-no">220</span><span id="line-220"></span>
+<span class="source-line-no">221</span><span id="line-221">   private static Lang toLang(String langName) {</span>
+<span class="source-line-no">222</span><span id="line-222">      var l = org.apache.jena.riot.RDFLanguages.nameToLang(langName);</span>
+<span class="source-line-no">223</span><span id="line-223">      if (l != null)</span>
+<span class="source-line-no">224</span><span id="line-224">         return l;</span>
+<span class="source-line-no">225</span><span id="line-225">      if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages</span>
+<span class="source-line-no">226</span><span id="line-226">         return Lang.RDFPROTO;</span>
+<span class="source-line-no">227</span><span id="line-227">      return null;</span>
+<span class="source-line-no">228</span><span id="line-228">   }</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   private void addModelPrefix(Namespace ns) {</span>
+<span class="source-line-no">231</span><span id="line-231">      model.setNsPrefix(ns.getName(), ns.getUri());</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   /**</span>
+<span class="source-line-no">235</span><span id="line-235">    * Returns the language-specific metadata on the specified bean property.</span>
+<span class="source-line-no">236</span><span id="line-236">    *</span>
+<span class="source-line-no">237</span><span id="line-237">    * @param bpm The bean property to return the metadata on.</span>
+<span class="source-line-no">238</span><span id="line-238">    * @return The metadata.</span>
+<span class="source-line-no">239</span><span id="line-239">    */</span>
+<span class="source-line-no">240</span><span id="line-240">   protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">241</span><span id="line-241">      return bpm == null ? RdfBeanPropertyMeta.DEFAULT : ctx.getRdfBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">242</span><span id="line-242">   }</span>
+<span class="source-line-no">243</span><span id="line-243"></span>
+<span class="source-line-no">244</span><span id="line-244">   /**</span>
+<span class="source-line-no">245</span><span id="line-245">    * Returns the language-specific metadata on the specified bean property.</span>
+<span class="source-line-no">246</span><span id="line-246">    *</span>
+<span class="source-line-no">247</span><span id="line-247">    * @param bpm The bean property to return the metadata on.</span>
+<span class="source-line-no">248</span><span id="line-248">    * @return The metadata.</span>
+<span class="source-line-no">249</span><span id="line-249">    */</span>
+<span class="source-line-no">250</span><span id="line-250">   protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">251</span><span id="line-251">      return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   private String encodeElementName(Object o) {</span>
+<span class="source-line-no">255</span><span id="line-255">      return XmlUtils.encodeElementName(toString(o));</span>
+<span class="source-line-no">256</span><span id="line-256">   }</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">   String encodeTextInvalidChars(Object o) {</span>
+<span class="source-line-no">259</span><span id="line-259">      if (o == null)</span>
+<span class="source-line-no">260</span><span id="line-260">         return null;</span>
+<span class="source-line-no">261</span><span id="line-261">      return XmlUtils.escapeText(toString(o));</span>
+<span class="source-line-no">262</span><span id="line-262">   }</span>
+<span class="source-line-no">263</span><span id="line-263"></span>
+<span class="source-line-no">264</span><span id="line-264">   private String getUri(Object uri) {</span>
+<span class="source-line-no">265</span><span id="line-265">      if (! nn(uri))</span>
+<span class="source-line-no">266</span><span id="line-266">         return null;</span>
+<span class="source-line-no">267</span><span id="line-267">      return getUriResolver().resolve(uri.toString());</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   @SuppressWarnings({</span>
+<span class="source-line-no">271</span><span id="line-271">      "null" // aType/wType intentionally null before assignment in control flow</span>
+<span class="source-line-no">272</span><span id="line-272">   })</span>
+<span class="source-line-no">273</span><span id="line-273">   private RDFNode writeAnything(Object o, boolean isURI, ClassMeta&lt;?&gt; eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {</span>
+<span class="source-line-no">274</span><span id="line-274">      var m = model;</span>
+<span class="source-line-no">275</span><span id="line-275">      ClassMeta&lt;?&gt; aType = push2(attrName, o, eType);</span>
+<span class="source-line-no">276</span><span id="line-276">      ClassMeta&lt;?&gt; wType = null;</span>
+<span class="source-line-no">277</span><span id="line-277">      ClassMeta&lt;?&gt; sType;</span>
+<span class="source-line-no">278</span><span id="line-278"></span>
+<span class="source-line-no">279</span><span id="line-279">      if (eType == null)</span>
+<span class="source-line-no">280</span><span id="line-280">         eType = object();</span>
+<span class="source-line-no">281</span><span id="line-281">      if (aType == null) {</span>
+<span class="source-line-no">282</span><span id="line-282">         o = null;</span>
+<span class="source-line-no">283</span><span id="line-283">         aType = object();</span>
+<span class="source-line-no">284</span><span id="line-284">      }</span>
+<span class="source-line-no">285</span><span id="line-285">      if (isOptional(aType)) {</span>
+<span class="source-line-no">286</span><span id="line-286">         o = getOptionalValue(o);</span>
+<span class="source-line-no">287</span><span id="line-287">         eType = getOptionalType(eType);</span>
+<span class="source-line-no">288</span><span id="line-288">         aType = getClassMetaForObject(o, object());</span>
+<span class="source-line-no">289</span><span id="line-289">      }</span>
+<span class="source-line-no">290</span><span id="line-290">      if (nn(o)) {</span>
+<span class="source-line-no">291</span><span id="line-291">         if (aType.isDelegate()) {</span>
+<span class="source-line-no">292</span><span id="line-292">            wType = aType;</span>
+<span class="source-line-no">293</span><span id="line-293">            aType = (ClassMeta)((Delegate)o).getBeanInfo();</span>
+<span class="source-line-no">294</span><span id="line-294">         }</span>
+<span class="source-line-no">295</span><span id="line-295">         sType = aType;</span>
+<span class="source-line-no">296</span><span id="line-296">         var swap = aType.getSwap(this);</span>
+<span class="source-line-no">297</span><span id="line-297">         if (nn(swap)) {</span>
+<span class="source-line-no">298</span><span id="line-298">            o = swap(swap, o);</span>
+<span class="source-line-no">299</span><span id="line-299">            sType = swap.getSwapClassMeta(this);</span>
+<span class="source-line-no">300</span><span id="line-300">            if (sType.isObject())</span>
+<span class="source-line-no">301</span><span id="line-301">               sType = getClassMetaForObject(o);</span>
+<span class="source-line-no">302</span><span id="line-302">         }</span>
+<span class="source-line-no">303</span><span id="line-303">      } else {</span>
+<span class="source-line-no">304</span><span id="line-304">         sType = eType.getSerializedClassMeta(this);</span>
+<span class="source-line-no">305</span><span id="line-305">      }</span>
+<span class="source-line-no">306</span><span id="line-306"></span>
+<span class="source-line-no">307</span><span id="line-307">      var typeName = getBeanTypeName(this, eType, aType, bpm);</span>
+<span class="source-line-no">308</span><span id="line-308">      RDFNode n = null;</span>
+<span class="source-line-no">309</span><span id="line-309"></span>
+<span class="source-line-no">310</span><span id="line-310">      if (o == null || sType.isChar() &amp;&amp; ((Character)o).charValue() == 0) {</span>
+<span class="source-line-no">311</span><span id="line-311">         if (nn(bpm)) {</span>
+<span class="source-line-no">312</span><span id="line-312">            if (isKeepNullProperties()) // HTT: bpm!=null only reaches this branch via writeBeanMap's line ~418 call site, which is itself only reached after canIgnoreValue(bpMeta,...) let a null/NUL value through — and canIgnoreValue only lets a null value through when isKeepNullProperties() is already true. So whenever this line executes, isKeepNullProperties() is structurally guaranteed true; the false side (leaving n unset) is dead in this call path.</span>
+<span class="source-line-no">313</span><span id="line-313">               n = m.createResource(RDF_NIL);</span>
+<span class="source-line-no">314</span><span id="line-314">         } else {</span>
+<span class="source-line-no">315</span><span id="line-315">            n = m.createResource(RDF_NIL);</span>
+<span class="source-line-no">316</span><span id="line-316">         }</span>
+<span class="source-line-no">317</span><span id="line-317">      } else if (sType.isUri() || isURI) {</span>
+<span class="source-line-no">318</span><span id="line-318">         // RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values need Resource emission, not literal text.</span>
+<span class="source-line-no">319</span><span id="line-319">         var uri = getUri(o);</span>
+<span class="source-line-no">320</span><span id="line-320">         if (isAbsoluteUri(uri))</span>
+<span class="source-line-no">321</span><span id="line-321">            n = m.createResource(uri);</span>
+<span class="source-line-no">322</span><span id="line-322">         else</span>
+<span class="source-line-no">323</span><span id="line-323">            n = m.createLiteral(encodeTextInvalidChars(uri));</span>
+<span class="source-line-no">324</span><span id="line-324">      } else if (sType.isBean()) {</span>
+<span class="source-line-no">325</span><span id="line-325">         var bm = toBeanMap(o);</span>
+<span class="source-line-no">326</span><span id="line-326">         Object uri = null;</span>
+<span class="source-line-no">327</span><span id="line-327">         var rbm = ctx.getRdfBeanMeta(bm.getMeta());</span>
+<span class="source-line-no">328</span><span id="line-328">         if (rbm.hasBeanUri())</span>
+<span class="source-line-no">329</span><span id="line-329">            uri = rbm.getBeanUriProperty().get(bm, null);</span>
+<span class="source-line-no">330</span><span id="line-330">         var uri2 = getUri(uri);</span>
+<span class="source-line-no">331</span><span id="line-331">         n = m.createResource(uri2);</span>
+<span class="source-line-no">332</span><span id="line-332">         writeBeanMap(bm, (Resource)n, typeName);</span>
+<span class="source-line-no">333</span><span id="line-333">      } else if (sType.isMap() || (nn(wType) &amp;&amp; wType.isMap())) { // HTT: 1 residual branch — the "wType.isMap()" right-hand sub-check is evaluated only when sType.isMap()==false AND nn(wType)==true, but the only concrete Delegate wrapper reaching this far, DelegateMap (internal.DelegateMap#getBeanInfo()), always returns a MAP-category ClassMeta, so sType.isMap() is already true before wType is even consulted; the sub-check's own "true" outcome is therefore never separately exercised (short-circuited away every time). Same root cause as line 350's identical pattern.</span>
+<span class="source-line-no">334</span><span id="line-334">         if (o instanceof BeanMap o2) { // HTT: suspected structurally dead. The only way to reach this else-if with wType!=null is via a Delegate (lines 291-294): for BeanMap specifically (which IS a Delegate, and IS a java.util.Map), aType gets reassigned to the WRAPPED bean's own BEAN-category ClassMeta, so sType ends up isBean()==true and dispatches through the EARLIER sType.isBean() branch (line 324) instead — this else-if is never reached for a real BeanMap. For the OTHER disjunct (sType.isMap() directly true, e.g. an ordinary Map/JsonMap), `o` is never itself a BeanMap. Confirmed empirically: RdfSerializer_Test#o10_stream_serialize_rawBeanMap_direct exercises the Delegate-unwrap path but still lands on isBean(), not here. Flagged, not deleted — see also RdfSerializerSession (non-stream) lines ~277-284, which have the identical pattern.</span>
+<span class="source-line-no">335</span><span id="line-335">            Object uri = null; // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">336</span><span id="line-336">            var rbm = ctx.getRdfBeanMeta(o2.getMeta()); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">337</span><span id="line-337">            if (rbm.hasBeanUri()) // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">338</span><span id="line-338">               uri = rbm.getBeanUriProperty().get(o2, null); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">339</span><span id="line-339">            var uri2 = getUri(uri); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">340</span><span id="line-340">            n = m.createResource(uri2); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">341</span><span id="line-341">            writeBeanMap(o2, (Resource)n, typeName); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">342</span><span id="line-342">         } else { // HTT: the residual "goto" jump instruction that would exit the if-block above is unreachable — see guard above; every actual invocation takes this else branch directly.</span>
+<span class="source-line-no">343</span><span id="line-343">            n = m.createResource();</span>
+<span class="source-line-no">344</span><span id="line-344">            writeMap((Map)o, (Resource)n, sType);</span>
+<span class="source-line-no">345</span><span id="line-345">         }</span>
+<span class="source-line-no">346</span><span id="line-346">      } else if (sType.isByteArray()) {</span>
+<span class="source-line-no">347</span><span id="line-347">         // byte[] gate must come before isCollectionOrArray: byte[] satisfies isArray() but RDF emits it as a typed base64 literal, not as a Seq of bytes.</span>
+<span class="source-line-no">348</span><span id="line-348">         var b64 = Base64.getEncoder().encodeToString((byte[]) o);</span>
+<span class="source-line-no">349</span><span id="line-349">         n = m.createTypedLiteral(b64, XSDDatatype.XSDbase64Binary);</span>
+<span class="source-line-no">350</span><span id="line-350">      } else if (sType.isCollectionOrArray() || (nn(wType) &amp;&amp; wType.isCollection())) { // HTT: the "nn(wType) &amp;&amp; wType.isCollection()" fallback is suspected structurally dead for the same reason as the isMap() fallback above — the only concrete Delegate collection wrapper in the codebase, DelegateList (see internal.DelegateList#getBeanInfo()), always returns a COLLECTION-category ClassMeta from getBeanInfo(), so sType stays isCollectionOrArray()==true and the left disjunct is always what's satisfied; nn(wType)==true is therefore never actually evaluated at this specific check (short-circuited away). Confirmed empirically via k22_stream_delegate_list_thrift / l02_serialize_delegate_list, which exercise the Delegate-unwrap but never reach the wType-only side of this condition. Flagged, not deleted.</span>
+<span class="source-line-no">351</span><span id="line-351">         var c = sort(sType.isCollection() ? (Collection)o : toList(sType.inner(), o));</span>
+<span class="source-line-no">352</span><span id="line-352">         var f = ctx.getCollectionFormat();</span>
+<span class="source-line-no">353</span><span id="line-353">         var cRdf = ctx.getRdfClassMeta(sType);</span>
+<span class="source-line-no">354</span><span id="line-354">         var bpRdf = getRdfBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">355</span><span id="line-355">         if (cRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)</span>
+<span class="source-line-no">356</span><span id="line-356">            f = cRdf.getCollectionFormat();</span>
+<span class="source-line-no">357</span><span id="line-357">         if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)</span>
+<span class="source-line-no">358</span><span id="line-358">            f = bpRdf.getCollectionFormat();</span>
+<span class="source-line-no">359</span><span id="line-359">         if (f == RdfCollectionFormat.MULTI_VALUED) {</span>
+<span class="source-line-no">360</span><span id="line-360">            writeToMultiProperties(c, eType, bpm, attrName, parentResource);</span>
+<span class="source-line-no">361</span><span id="line-361">         } else {</span>
+<span class="source-line-no">362</span><span id="line-362">            n = switch (f) {</span>
+<span class="source-line-no">363</span><span id="line-363">               case BAG -&gt; writeToContainer(c, eType, m.createBag());</span>
+<span class="source-line-no">364</span><span id="line-364">               case LIST -&gt; writeToList(c, eType);</span>
+<span class="source-line-no">365</span><span id="line-365">               default -&gt; writeToContainer(c, eType, m.createSeq());</span>
+<span class="source-line-no">366</span><span id="line-366">            };</span>
+<span class="source-line-no">367</span><span id="line-367">         }</span>
+<span class="source-line-no">368</span><span id="line-368">      } else if (sType.isCharSequence() || sType.isChar()) {</span>
+<span class="source-line-no">369</span><span id="line-369">         n = m.createLiteral(encodeTextInvalidChars(o));</span>
+<span class="source-line-no">370</span><span id="line-370">      } else if (sType.isNumber() || sType.isBoolean()) {</span>
+<span class="source-line-no">371</span><span id="line-371">         if (!ctx.isAddLiteralTypes()) // HTT: RdfStreamSerializer.Builder only exposes language(); addLiteralTypes is always false for stream serializers.</span>
+<span class="source-line-no">372</span><span id="line-372">            n = m.createLiteral(o.toString());</span>
+<span class="source-line-no">373</span><span id="line-373">         else</span>
+<span class="source-line-no">374</span><span id="line-374">            n = m.createTypedLiteral(o); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">375</span><span id="line-375">      } else if (sType.isReader()) {</span>
+<span class="source-line-no">376</span><span id="line-376">         n = m.createLiteral(encodeTextInvalidChars(read((Reader)o, SerializerSession::handleThrown))); // HTT: the catch(IOException)-&gt;accept(e) path IS genuinely exercised (RdfSerializer_Test#o11_stream_serialize_reader_ioException_wrapped; a throwing Reader triggers this and yields a SerializeException wrapping the IOException — proven by a temporary System.err probe inside the lambda body during triage, which printed on every run) — but JaCoCo persistently reports the compiler-synthesized `lambda$writeAnything$0` method (the SerializerSession::handleThrown method-reference target) as 0% covered regardless, a known class of JaCoCo/javac-lambda-desugaring interaction where the synthetic method is invoked only via a functional-interface instance constructed in a different class (IoUtils.read) and its probe is never recorded. Waived as a tooling artifact, not a real gap.</span>
+<span class="source-line-no">377</span><span id="line-377">      } else if (sType.isInputStream()) {</span>
+<span class="source-line-no">378</span><span id="line-378">         n = m.createLiteral(encodeTextInvalidChars(read((InputStream)o, SerializerSession::handleThrown))); // HTT: same tooling artifact as the Reader branch above — RdfSerializer_Test#o12_stream_serialize_inputstream_ioException_wrapped exercises this (confirmed via the same temporary System.err probe technique), but JaCoCo reports the synthesized `lambda$writeAnything$1` method as 0% covered regardless. Waived as a tooling artifact, not a real gap.</span>
+<span class="source-line-no">379</span><span id="line-379">      } else {</span>
+<span class="source-line-no">380</span><span id="line-380">         n = m.createLiteral(encodeTextInvalidChars(toString(o)));</span>
+<span class="source-line-no">381</span><span id="line-381">      }</span>
+<span class="source-line-no">382</span><span id="line-382"></span>
+<span class="source-line-no">383</span><span id="line-383">      pop();</span>
+<span class="source-line-no">384</span><span id="line-384">      return n;</span>
+<span class="source-line-no">385</span><span id="line-385">   }</span>
 <span class="source-line-no">386</span><span id="line-386"></span>
-<span class="source-line-no">387</span><span id="line-387">      pop();</span>
-<span class="source-line-no">388</span><span id="line-388">      return n;</span>
-<span class="source-line-no">389</span><span id="line-389">   }</span>
-<span class="source-line-no">390</span><span id="line-390"></span>
-<span class="source-line-no">391</span><span id="line-391">   private void serializeBeanMap(BeanMap&lt;?&gt; m, Resource r, String typeName) throws SerializeException {</span>
-<span class="source-line-no">392</span><span id="line-392">      var l = new ArrayList&lt;BeanPropertyValue&gt;();</span>
-<span class="source-line-no">393</span><span id="line-393">      if (nn(typeName)) {</span>
-<span class="source-line-no">394</span><span id="line-394">         var pm = m.getMeta().getTypeProperty();</span>
-<span class="source-line-no">395</span><span id="line-395">         l.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));</span>
-<span class="source-line-no">396</span><span id="line-396">      }</span>
-<span class="source-line-no">397</span><span id="line-397">      var checkNull = (Predicate&lt;Object&gt;)(x -&gt; isKeepNullProperties() || nn(x));</span>
-<span class="source-line-no">398</span><span id="line-398">      m.forEachValue(checkNull, (pMeta, key, value, thrown) -&gt; l.add(new BeanPropertyValue(pMeta, key, value, thrown)));</span>
-<span class="source-line-no">399</span><span id="line-399">      Collections.reverse(l);</span>
-<span class="source-line-no">400</span><span id="line-400">      l.forEach(x -&gt; {</span>
-<span class="source-line-no">401</span><span id="line-401">         var bpMeta = x.getMeta();</span>
-<span class="source-line-no">402</span><span id="line-402">         var cMeta = (ClassMeta&lt;?&gt;) bpMeta.getBeanInfo();</span>
-<span class="source-line-no">403</span><span id="line-403">         var bpRdf = getRdfBeanPropertyMeta(bpMeta);</span>
-<span class="source-line-no">404</span><span id="line-404">         var bpXml = getXmlBeanPropertyMeta(bpMeta);</span>
-<span class="source-line-no">405</span><span id="line-405">         if (bpRdf.isBeanUri())</span>
-<span class="source-line-no">406</span><span id="line-406">            return;</span>
-<span class="source-line-no">407</span><span id="line-407">         var key = x.getName();</span>
-<span class="source-line-no">408</span><span id="line-408">         var value = x.getValue();</span>
-<span class="source-line-no">409</span><span id="line-409">         var t = x.getThrown();</span>
-<span class="source-line-no">410</span><span id="line-410">         if (nn(t))</span>
-<span class="source-line-no">411</span><span id="line-411">            onBeanGetterException(bpMeta, t);</span>
-<span class="source-line-no">412</span><span id="line-412">         if (canIgnoreValue(bpMeta, key, value))</span>
-<span class="source-line-no">413</span><span id="line-413">            return;</span>
-<span class="source-line-no">414</span><span id="line-414">         var ns = bpRdf.getNamespace();</span>
-<span class="source-line-no">415</span><span id="line-415">         if (ns == null &amp;&amp; ctx.isUseXmlNamespaces())</span>
-<span class="source-line-no">416</span><span id="line-416">            ns = bpXml.getNamespace();</span>
-<span class="source-line-no">417</span><span id="line-417">         if (ns == null)</span>
-<span class="source-line-no">418</span><span id="line-418">            ns = ctx.getJuneauBpNs();</span>
-<span class="source-line-no">419</span><span id="line-419">         else if (ctx.isAutoDetectNamespaces())</span>
-<span class="source-line-no">420</span><span id="line-420">            addModelPrefix(ns);</span>
-<span class="source-line-no">421</span><span id="line-421">         var p = model.createProperty(ns.getUri(), encodeElementName(key));</span>
-<span class="source-line-no">422</span><span id="line-422">         var n = serializeAnything(value, bpMeta.isUri(), cMeta, key, bpMeta, r);</span>
-<span class="source-line-no">423</span><span id="line-423">         if (nn(n))</span>
-<span class="source-line-no">424</span><span id="line-424">            r.addProperty(p, n);</span>
-<span class="source-line-no">425</span><span id="line-425">      });</span>
-<span class="source-line-no">426</span><span id="line-426">   }</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">   private void serializeMap(Map m, Resource r, ClassMeta&lt;?&gt; type) throws SerializeException {</span>
-<span class="source-line-no">429</span><span id="line-429">      m = sort(m);</span>
-<span class="source-line-no">430</span><span id="line-430">      var keyType = type.getKeyType();</span>
-<span class="source-line-no">431</span><span id="line-431">      var valueType = type.getValueType();</span>
-<span class="source-line-no">432</span><span id="line-432">      var l = CollectionUtils.toList(m.entrySet());</span>
-<span class="source-line-no">433</span><span id="line-433">      Collections.reverse(l);</span>
-<span class="source-line-no">434</span><span id="line-434">      l.forEach(x -&gt; {</span>
-<span class="source-line-no">435</span><span id="line-435">         var entry = (Map.Entry&lt;Object,Object&gt;)x;</span>
-<span class="source-line-no">436</span><span id="line-436">         Object value = entry.getValue();</span>
-<span class="source-line-no">437</span><span id="line-437">         Object key = generalize(entry.getKey(), keyType);</span>
-<span class="source-line-no">438</span><span id="line-438">         var ns = ctx.getJuneauBpNs();</span>
-<span class="source-line-no">439</span><span id="line-439">         var p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));</span>
-<span class="source-line-no">440</span><span id="line-440">         var n = serializeAnything(value, false, valueType, toString(key), null, r);</span>
-<span class="source-line-no">441</span><span id="line-441">         if (nn(n))</span>
-<span class="source-line-no">442</span><span id="line-442">            r.addProperty(p, n);</span>
-<span class="source-line-no">443</span><span id="line-443">      });</span>
-<span class="source-line-no">444</span><span id="line-444">   }</span>
-<span class="source-line-no">445</span><span id="line-445"></span>
-<span class="source-line-no">446</span><span id="line-446">   private Container serializeToContainer(Collection c, ClassMeta&lt;?&gt; type, Container list) throws SerializeException {</span>
-<span class="source-line-no">447</span><span id="line-447">      var elementType = type.getElementType();</span>
-<span class="source-line-no">448</span><span id="line-448">      c.forEach(x -&gt; list.add(serializeAnything(x, false, elementType, null, null, null)));</span>
-<span class="source-line-no">449</span><span id="line-449">      return list;</span>
-<span class="source-line-no">450</span><span id="line-450">   }</span>
-<span class="source-line-no">451</span><span id="line-451"></span>
-<span class="source-line-no">452</span><span id="line-452">   private RDFList serializeToList(Collection c, ClassMeta&lt;?&gt; type) throws SerializeException {</span>
-<span class="source-line-no">453</span><span id="line-453">      var elementType = type.getElementType();</span>
-<span class="source-line-no">454</span><span id="line-454">      List&lt;RDFNode&gt; l = listOfSize(c.size());</span>
-<span class="source-line-no">455</span><span id="line-455">      c.forEach(x -&gt; l.add(serializeAnything(x, false, elementType, null, null, null)));</span>
-<span class="source-line-no">456</span><span id="line-456">      return model.createList(l.iterator());</span>
-<span class="source-line-no">457</span><span id="line-457">   }</span>
-<span class="source-line-no">458</span><span id="line-458"></span>
-<span class="source-line-no">459</span><span id="line-459">   private void serializeToMultiProperties(Collection c, ClassMeta&lt;?&gt; sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {</span>
-<span class="source-line-no">460</span><span id="line-460">      var elementType = sType.getElementType();</span>
-<span class="source-line-no">461</span><span id="line-461">      var bpRdf = getRdfBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">462</span><span id="line-462">      var bpXml = getXmlBeanPropertyMeta(bpm);</span>
-<span class="source-line-no">463</span><span id="line-463">      c.forEach(x -&gt; {</span>
-<span class="source-line-no">464</span><span id="line-464">         var ns = bpRdf.getNamespace();</span>
-<span class="source-line-no">465</span><span id="line-465">         if (ns == null &amp;&amp; ctx.isUseXmlNamespaces())</span>
-<span class="source-line-no">466</span><span id="line-466">            ns = bpXml.getNamespace();</span>
-<span class="source-line-no">467</span><span id="line-467">         if (ns == null)</span>
-<span class="source-line-no">468</span><span id="line-468">            ns = ctx.getJuneauBpNs();</span>
-<span class="source-line-no">469</span><span id="line-469">         else if (ctx.isAutoDetectNamespaces())</span>
-<span class="source-line-no">470</span><span id="line-470">            addModelPrefix(ns);</span>
-<span class="source-line-no">471</span><span id="line-471">         var n2 = serializeAnything(x, false, elementType, null, null, null);</span>
-<span class="source-line-no">472</span><span id="line-472">         var p = model.createProperty(ns.getUri(), encodeElementName(attrName));</span>
-<span class="source-line-no">473</span><span id="line-473">         parentResource.addProperty(p, n2);</span>
-<span class="source-line-no">474</span><span id="line-474">      });</span>
-<span class="source-line-no">475</span><span id="line-475">   }</span>
-<span class="source-line-no">476</span><span id="line-476"></span>
-<span class="source-line-no">477</span><span id="line-477">   @Override</span>
-<span class="source-line-no">478</span><span id="line-478">   protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
-<span class="source-line-no">479</span><span id="line-479">      var cm = getClassMetaForObject(o);</span>
-<span class="source-line-no">480</span><span id="line-480">      // HTT: RdfStreamSerializer.Builder only exposes language(); looseCollections is always false for stream serializers.</span>
-<span class="source-line-no">481</span><span id="line-481">      if (ctx.isLooseCollections() &amp;&amp; nn(cm) &amp;&amp; cm.isCollectionOrArray()) {</span>
-<span class="source-line-no">482</span><span id="line-482">         Collection c = cm.isCollection() ? (Collection)o : toList(cm.inner(), o);</span>
-<span class="source-line-no">483</span><span id="line-483">         forEachEntry(c, x -&gt; serializeAnything(x, false, object(), "root", null, null));</span>
-<span class="source-line-no">484</span><span id="line-484">      } else {</span>
-<span class="source-line-no">485</span><span id="line-485">         var n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);</span>
-<span class="source-line-no">486</span><span id="line-486">         Resource r;</span>
-<span class="source-line-no">487</span><span id="line-487">         if (n.isLiteral()) {</span>
-<span class="source-line-no">488</span><span id="line-488">            r = model.createResource();</span>
-<span class="source-line-no">489</span><span id="line-489">            r.addProperty(pValue, n);</span>
-<span class="source-line-no">490</span><span id="line-490">         } else {</span>
-<span class="source-line-no">491</span><span id="line-491">            r = n.asResource();</span>
-<span class="source-line-no">492</span><span id="line-492">         }</span>
-<span class="source-line-no">493</span><span id="line-493">         // HTT: RdfStreamSerializer.Builder only exposes language(); addRootProp is always false.</span>
-<span class="source-line-no">494</span><span id="line-494">         if (ctx.isAddRootProp())</span>
-<span class="source-line-no">495</span><span id="line-495">            r.addProperty(pRoot, "true");</span>
-<span class="source-line-no">496</span><span id="line-496">      }</span>
-<span class="source-line-no">497</span><span id="line-497">      RDFDataMgr.write(out.getOutputStream(), model, lang);</span>
-<span class="source-line-no">498</span><span id="line-498">   }</span>
-<span class="source-line-no">499</span><span id="line-499"></span>
-<span class="source-line-no">500</span><span id="line-500">}</span>
+<span class="source-line-no">387</span><span id="line-387">   private void writeBeanMap(BeanMap&lt;?&gt; m, Resource r, String typeName) throws SerializeException {</span>
+<span class="source-line-no">388</span><span id="line-388">      var l = new ArrayList&lt;BeanPropertyValue&gt;();</span>
+<span class="source-line-no">389</span><span id="line-389">      if (nn(typeName)) {</span>
+<span class="source-line-no">390</span><span id="line-390">         var pm = m.getMeta().getTypeProperty();</span>
+<span class="source-line-no">391</span><span id="line-391">         l.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));</span>
+<span class="source-line-no">392</span><span id="line-392">      }</span>
+<span class="source-line-no">393</span><span id="line-393">      var checkNull = (Predicate&lt;Object&gt;)(x -&gt; isKeepNullProperties() || nn(x));</span>
+<span class="source-line-no">394</span><span id="line-394">      m.forEachValue(checkNull, (pMeta, key, value, thrown) -&gt; l.add(new BeanPropertyValue(pMeta, key, value, thrown)));</span>
+<span class="source-line-no">395</span><span id="line-395">      Collections.reverse(l);</span>
+<span class="source-line-no">396</span><span id="line-396">      l.forEach(x -&gt; {</span>
+<span class="source-line-no">397</span><span id="line-397">         var bpMeta = x.getMeta();</span>
+<span class="source-line-no">398</span><span id="line-398">         var cMeta = (ClassMeta&lt;?&gt;) bpMeta.getBeanInfo();</span>
+<span class="source-line-no">399</span><span id="line-399">         var bpRdf = getRdfBeanPropertyMeta(bpMeta);</span>
+<span class="source-line-no">400</span><span id="line-400">         var bpXml = getXmlBeanPropertyMeta(bpMeta);</span>
+<span class="source-line-no">401</span><span id="line-401">         if (bpRdf.isBeanUri())</span>
+<span class="source-line-no">402</span><span id="line-402">            return;</span>
+<span class="source-line-no">403</span><span id="line-403">         var key = x.getName();</span>
+<span class="source-line-no">404</span><span id="line-404">         var value = x.getValue();</span>
+<span class="source-line-no">405</span><span id="line-405">         var t = x.getThrown();</span>
+<span class="source-line-no">406</span><span id="line-406">         if (nn(t))</span>
+<span class="source-line-no">407</span><span id="line-407">            onBeanGetterException(bpMeta, t); // HTT: genuinely exercised — RdfSerializer_Test#o13_stream_beanGetterException_surfaces_onBeanGetterException triggers a real getter exception, confirmed reaching this exact call (with a non-null BeanRuntimeException `t`) via a temporary System.err probe during triage — onBeanGetterException then rethrows as SerializeException since isIgnoreInvocationExceptionsOnGetters() is false. Same JaCoCo tooling artifact as lines 376/378: a conditional basic block whose only content is a call that always throws (no local catch, no fall-through instruction) is never marked covered by this JaCoCo version even when demonstrably executed. Waived as a tooling artifact, not a real gap.</span>
+<span class="source-line-no">408</span><span id="line-408">         if (canIgnoreValue(bpMeta, key, value))</span>
+<span class="source-line-no">409</span><span id="line-409">            return;</span>
+<span class="source-line-no">410</span><span id="line-410">         var ns = bpRdf.getNamespace();</span>
+<span class="source-line-no">411</span><span id="line-411">         if (ns == null &amp;&amp; ctx.isUseXmlNamespaces()) // HTT: RdfStreamSerializer.Builder only exposes language(); the delegated RdfSerializer's useXmlNamespaces defaults to true and is never overridden, so this is always true when reached.</span>
+<span class="source-line-no">412</span><span id="line-412">            ns = bpXml.getNamespace();</span>
+<span class="source-line-no">413</span><span id="line-413">         if (ns == null)</span>
+<span class="source-line-no">414</span><span id="line-414">            ns = ctx.getJuneauBpNs();</span>
+<span class="source-line-no">415</span><span id="line-415">         else if (ctx.isAutoDetectNamespaces()) // HTT: RdfStreamSerializer.Builder only exposes language(); the delegated RdfSerializer's autoDetectNamespaces defaults to true and is never overridden, so this is always true when reached.</span>
+<span class="source-line-no">416</span><span id="line-416">            addModelPrefix(ns);</span>
+<span class="source-line-no">417</span><span id="line-417">         var p = model.createProperty(ns.getUri(), encodeElementName(key));</span>
+<span class="source-line-no">418</span><span id="line-418">         var n = writeAnything(value, bpMeta.isUri(), cMeta, key, bpMeta, r);</span>
+<span class="source-line-no">419</span><span id="line-419">         if (nn(n))</span>
+<span class="source-line-no">420</span><span id="line-420">            r.addProperty(p, n);</span>
+<span class="source-line-no">421</span><span id="line-421">      });</span>
+<span class="source-line-no">422</span><span id="line-422">   }</span>
+<span class="source-line-no">423</span><span id="line-423"></span>
+<span class="source-line-no">424</span><span id="line-424">   private void writeMap(Map m, Resource r, ClassMeta&lt;?&gt; type) throws SerializeException {</span>
+<span class="source-line-no">425</span><span id="line-425">      m = sort(m);</span>
+<span class="source-line-no">426</span><span id="line-426">      var keyType = type.getKeyType();</span>
+<span class="source-line-no">427</span><span id="line-427">      var valueType = type.getValueType();</span>
+<span class="source-line-no">428</span><span id="line-428">      var l = CollectionUtils.toList(m.entrySet());</span>
+<span class="source-line-no">429</span><span id="line-429">      Collections.reverse(l);</span>
+<span class="source-line-no">430</span><span id="line-430">      l.forEach(x -&gt; {</span>
+<span class="source-line-no">431</span><span id="line-431">         var entry = (Map.Entry&lt;Object,Object&gt;)x;</span>
+<span class="source-line-no">432</span><span id="line-432">         Object value = entry.getValue();</span>
+<span class="source-line-no">433</span><span id="line-433">         Object key = generalize(entry.getKey(), keyType);</span>
+<span class="source-line-no">434</span><span id="line-434">         var ns = ctx.getJuneauBpNs();</span>
+<span class="source-line-no">435</span><span id="line-435">         var p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));</span>
+<span class="source-line-no">436</span><span id="line-436">         var n = writeAnything(value, false, valueType, toString(key), null, r);</span>
+<span class="source-line-no">437</span><span id="line-437">         if (nn(n)) // HTT: writeMap always passes bpm=null to writeAnything, and writeAnything's null-value branch unconditionally assigns n=RDF_NIL when bpm is null (regardless of keepNullProperties) — so n is never null here; the false side is only reachable when bpm != null (see writeBeanMap's equivalent check at line ~419). Flagged as suspected structurally-dead code in this call path, not fixed.</span>
+<span class="source-line-no">438</span><span id="line-438">            r.addProperty(p, n);</span>
+<span class="source-line-no">439</span><span id="line-439">      });</span>
+<span class="source-line-no">440</span><span id="line-440">   }</span>
+<span class="source-line-no">441</span><span id="line-441"></span>
+<span class="source-line-no">442</span><span id="line-442">   private Container writeToContainer(Collection c, ClassMeta&lt;?&gt; type, Container list) throws SerializeException {</span>
+<span class="source-line-no">443</span><span id="line-443">      var elementType = type.getElementType();</span>
+<span class="source-line-no">444</span><span id="line-444">      c.forEach(x -&gt; list.add(writeAnything(x, false, elementType, null, null, null)));</span>
+<span class="source-line-no">445</span><span id="line-445">      return list;</span>
+<span class="source-line-no">446</span><span id="line-446">   }</span>
+<span class="source-line-no">447</span><span id="line-447"></span>
+<span class="source-line-no">448</span><span id="line-448">   private RDFList writeToList(Collection c, ClassMeta&lt;?&gt; type) throws SerializeException {</span>
+<span class="source-line-no">449</span><span id="line-449">      var elementType = type.getElementType();</span>
+<span class="source-line-no">450</span><span id="line-450">      List&lt;RDFNode&gt; l = listOfSize(c.size());</span>
+<span class="source-line-no">451</span><span id="line-451">      c.forEach(x -&gt; l.add(writeAnything(x, false, elementType, null, null, null)));</span>
+<span class="source-line-no">452</span><span id="line-452">      return model.createList(l.iterator());</span>
+<span class="source-line-no">453</span><span id="line-453">   }</span>
+<span class="source-line-no">454</span><span id="line-454"></span>
+<span class="source-line-no">455</span><span id="line-455">   private void writeToMultiProperties(Collection c, ClassMeta&lt;?&gt; sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {</span>
+<span class="source-line-no">456</span><span id="line-456">      var elementType = sType.getElementType();</span>
+<span class="source-line-no">457</span><span id="line-457">      var bpRdf = getRdfBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">458</span><span id="line-458">      var bpXml = getXmlBeanPropertyMeta(bpm);</span>
+<span class="source-line-no">459</span><span id="line-459">      c.forEach(x -&gt; {</span>
+<span class="source-line-no">460</span><span id="line-460">         var ns = bpRdf.getNamespace();</span>
+<span class="source-line-no">461</span><span id="line-461">         if (ns == null &amp;&amp; ctx.isUseXmlNamespaces()) // HTT: RdfStreamSerializer.Builder only exposes language(); the delegated RdfSerializer's useXmlNamespaces defaults to true and is never overridden, so this is always true when reached.</span>
+<span class="source-line-no">462</span><span id="line-462">            ns = bpXml.getNamespace();</span>
+<span class="source-line-no">463</span><span id="line-463">         if (ns == null)</span>
+<span class="source-line-no">464</span><span id="line-464">            ns = ctx.getJuneauBpNs();</span>
+<span class="source-line-no">465</span><span id="line-465">         else if (ctx.isAutoDetectNamespaces()) // HTT: RdfStreamSerializer.Builder only exposes language(); the delegated RdfSerializer's autoDetectNamespaces defaults to true and is never overridden, so this is always true when reached.</span>
+<span class="source-line-no">466</span><span id="line-466">            addModelPrefix(ns);</span>
+<span class="source-line-no">467</span><span id="line-467">         var n2 = writeAnything(x, false, elementType, null, null, null);</span>
+<span class="source-line-no">468</span><span id="line-468">         var p = model.createProperty(ns.getUri(), encodeElementName(attrName));</span>
+<span class="source-line-no">469</span><span id="line-469">         parentResource.addProperty(p, n2);</span>
+<span class="source-line-no">470</span><span id="line-470">      });</span>
+<span class="source-line-no">471</span><span id="line-471">   }</span>
+<span class="source-line-no">472</span><span id="line-472"></span>
+<span class="source-line-no">473</span><span id="line-473">   @Override</span>
+<span class="source-line-no">474</span><span id="line-474">   protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
+<span class="source-line-no">475</span><span id="line-475">      var cm = getClassMetaForObject(o);</span>
+<span class="source-line-no">476</span><span id="line-476">      if (ctx.isLooseCollections() &amp;&amp; nn(cm) &amp;&amp; cm.isCollectionOrArray()) { // HTT: RdfStreamSerializer.Builder only exposes language(); looseCollections is always false for stream serializers.</span>
+<span class="source-line-no">477</span><span id="line-477">         Collection c = cm.isCollection() ? (Collection)o : toList(cm.inner(), o); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">478</span><span id="line-478">         forEachEntry(c, x -&gt; writeAnything(x, false, object(), "root", null, null)); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">479</span><span id="line-479">      } else { // HTT: unreachable false-jump target of the guard above (looseCollections is always false for stream serializers, so every write() takes this else branch, but jacoco still marks the residual jump).</span>
+<span class="source-line-no">480</span><span id="line-480">         var n = writeAnything(o, false, getExpectedRootType(o), "root", null, null);</span>
+<span class="source-line-no">481</span><span id="line-481">         Resource r;</span>
+<span class="source-line-no">482</span><span id="line-482">         if (n.isLiteral()) {</span>
+<span class="source-line-no">483</span><span id="line-483">            r = model.createResource();</span>
+<span class="source-line-no">484</span><span id="line-484">            r.addProperty(pValue, n);</span>
+<span class="source-line-no">485</span><span id="line-485">         } else {</span>
+<span class="source-line-no">486</span><span id="line-486">            r = n.asResource();</span>
+<span class="source-line-no">487</span><span id="line-487">         }</span>
+<span class="source-line-no">488</span><span id="line-488">         if (ctx.isAddRootProp()) // HTT: RdfStreamSerializer.Builder only exposes language(); addRootProp is always false for stream serializers.</span>
+<span class="source-line-no">489</span><span id="line-489">            r.addProperty(pRoot, "true"); // HTT: unreachable — see guard above.</span>
+<span class="source-line-no">490</span><span id="line-490">      }</span>
+<span class="source-line-no">491</span><span id="line-491">      RDFDataMgr.write(out.getOutputStream(), model, lang);</span>
+<span class="source-line-no">492</span><span id="line-492">   }</span>
+<span class="source-line-no">493</span><span id="line-493"></span>
+<span class="source-line-no">494</span><span id="line-494">}</span>
 
 
 

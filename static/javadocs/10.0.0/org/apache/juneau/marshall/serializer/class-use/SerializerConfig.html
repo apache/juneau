@@ -74,8 +74,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -160,9 +159,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../rest/server/mcp/McpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpRestServlet</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/mcp/AbstractMcpRestServlet.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">AbstractMcpRestServlet</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Drop-in <a href="../../../rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> subclass that exposes a single MCP JSON-RPC endpoint at <code>POST /</code>.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../../../rest/server/mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a> with annotations of type <a href="../SerializerConfig.html" title="annotation interface in org.apache.juneau.marshall.serializer">SerializerConfig</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpEndpointMixin.</span><code><a href="../../../rest/server/mcp/McpEndpointMixin.html#handleMcpRequest(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">handleMcpRequest</a><wbr>(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;req,
+ <a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;restReq)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Default MCP JSON-RPC endpoint handler.</div>
 </div>
 </div>
 </section>

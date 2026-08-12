@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-57">RecordAdapter</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-59">RecordAdapter</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Static factories that produce buffered <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> / <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> instances for
  formats whose token-stream surface is whole-value-only (no native <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> /
@@ -93,12 +93,12 @@ loadScripts(document, 'script');</script>
  Reduces per-format override boilerplate to a one-liner on the session class:
  <p class='bjava'>
    <ja>@Override</ja>
-   <jk>public</jk> RecordReader parseRecords(Object <jv>input</jv>) <jk>throws</jk> IOException {
+   <jk>public</jk> RecordReader readRecords(Object <jv>input</jv>) <jk>throws</jk> IOException {
       <jk>return</jk> RecordAdapter.<jsm>reader</jsm>(<jk>this</jk>, <jv>input</jv>);
    }
 
    <ja>@Override</ja>
-   <jk>public</jk> RecordWriter serializeRecords(Object <jv>output</jv>) <jk>throws</jk> IOException {
+   <jk>public</jk> RecordWriter writeRecords(Object <jv>output</jv>) <jk>throws</jk> IOException {
       <jk>return</jk> RecordAdapter.<jsm>writer</jsm>(<jk>this</jk>, <jv>output</jv>);
    }
  </p>
@@ -139,14 +139,14 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a single-shot <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that delegates <code>read(...)</code> calls to the
- session's <a href="../parser/ParserSession.html#parse(java.lang.Object,java.lang.Class)"><code>parse(...)</code></a> entry point.</div>
+ session's <a href="../parser/ParserSession.html#read(java.lang.Object,java.lang.Class)"><code>read(...)</code></a> entry point.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#writer(org.apache.juneau.marshall.serializer.SerializerSession,java.lang.Object)" class="member-name-link">writer</a><wbr>(<a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a single-shot <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that delegates <code>write(Object)</code> calls to the
- session's <a href="../serializer/SerializerSession.html#serialize(java.lang.Object,java.lang.Object)"><code>serialize(...)</code></a> entry point.</div>
+ session's <a href="../serializer/SerializerSession.html#write(java.lang.Object,java.lang.Object)"><code>write(...)</code></a> entry point.</div>
 </div>
 </div>
 </div>
@@ -168,10 +168,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reader(org.apache.juneau.marshall.parser.ParserSession,java.lang.Object)">
 <h3>reader</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-80">reader</a></span><wbr><span class="parameters">(<a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-82">reader</a></span><wbr><span class="parameters">(<a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span></div>
 <div class="block">Creates a single-shot <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that delegates <code>read(...)</code> calls to the
- session's <a href="../parser/ParserSession.html#parse(java.lang.Object,java.lang.Class)"><code>parse(...)</code></a> entry point.</div>
+ session's <a href="../parser/ParserSession.html#read(java.lang.Object,java.lang.Class)"><code>read(...)</code></a> entry point.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>session</code> - The format's live parser session.  Must not be <jk>null</jk>.</dd>
@@ -184,16 +184,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="arrayReader(org.apache.juneau.marshall.parser.ParserSession,java.lang.Object)">
 <h3>arrayReader</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-136">arrayReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-138">arrayReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Creates an array-element <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> backed by a buffered list parse.
 
  <p>
- Equivalent to calling <code>session.parse(input, List.class, Object.class)</code> once and
+ Equivalent to calling <code>session.read(input, List.class, Object.class)</code> once and
  iterating the result.  This is correct but NOT streaming &mdash; the whole array is
  materialized.  Format-specific implementations may override
- <a href="ArrayRecordReadable.html#parseArrayRecords(java.lang.Object)"><code>ArrayRecordReadable.parseArrayRecords(Object)</code></a> directly for actual streaming.</div>
+ <a href="ArrayRecordReadable.html#readArrayRecords(java.lang.Object)"><code>ArrayRecordReadable.readArrayRecords(Object)</code></a> directly for actual streaming.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>session</code> - The format's live parser session.  Must not be <jk>null</jk>.</dd>
@@ -208,14 +208,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="arrayWriter(org.apache.juneau.marshall.serializer.SerializerSession,java.lang.Object)">
 <h3>arrayWriter</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-185">arrayWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-187">arrayWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
 <div class="block">Creates an array-element <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that buffers each <a href="RecordWriter.html#write(java.lang.Object)"><code>write(...)</code></a> call and emits the whole list on <a href="RecordWriter.html#close()"><code>RecordWriter.close()</code></a>.
 
  <p>
  This is correct but NOT streaming &mdash; the writes are accumulated in memory.
  Format-specific implementations may override
- <a href="ArrayRecordWritable.html#serializeArrayRecords(java.lang.Object)"><code>ArrayRecordWritable.serializeArrayRecords(Object)</code></a> directly for actual streaming.</div>
+ <a href="ArrayRecordWritable.html#writeArrayRecords(java.lang.Object)"><code>ArrayRecordWritable.writeArrayRecords(Object)</code></a> directly for actual streaming.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>session</code> - The format's live serializer session.  Must not be <jk>null</jk>.</dd>
@@ -228,10 +228,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writer(org.apache.juneau.marshall.serializer.SerializerSession,java.lang.Object)">
 <h3>writer</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-225">writer</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordAdapter.html#line-227">writer</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span></div>
 <div class="block">Creates a single-shot <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that delegates <code>write(Object)</code> calls to the
- session's <a href="../serializer/SerializerSession.html#serialize(java.lang.Object,java.lang.Object)"><code>serialize(...)</code></a> entry point.</div>
+ session's <a href="../serializer/SerializerSession.html#write(java.lang.Object,java.lang.Object)"><code>write(...)</code></a> entry point.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>session</code> - The format's live serializer session.  Must not be <jk>null</jk>.</dd>

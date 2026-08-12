@@ -188,14 +188,14 @@
 <span class="source-line-no">175</span><span id="line-175">   public static NameValuePair cast(Object o) {</span>
 <span class="source-line-no">176</span><span id="line-176">      if (o instanceof NameValuePair o2)</span>
 <span class="source-line-no">177</span><span id="line-177">         return o2;</span>
-<span class="source-line-no">178</span><span id="line-178">      if (o instanceof Headerable o3) {</span>
-<span class="source-line-no">179</span><span id="line-179">         Header x = o3.asHeader();</span>
+<span class="source-line-no">178</span><span id="line-178">      if (o instanceof Headerable o2) {</span>
+<span class="source-line-no">179</span><span id="line-179">         Header x = o2.asHeader();</span>
 <span class="source-line-no">180</span><span id="line-180">         return BasicPart.of(x.getName(), x.getValue());</span>
 <span class="source-line-no">181</span><span id="line-181">      }</span>
 <span class="source-line-no">182</span><span id="line-182">      if (o instanceof Map.Entry o4) {</span>
 <span class="source-line-no">183</span><span id="line-183">         return BasicPart.of(s(o4.getKey()), o4.getValue());</span>
 <span class="source-line-no">184</span><span id="line-184">      }</span>
-<span class="source-line-no">185</span><span id="line-185">      throw rex("Object of type {0} could not be converted to a Part.", cn(o));</span>
+<span class="source-line-no">185</span><span id="line-185">      throw rex("Object of type %s could not be converted to a Part.", cn(o));</span>
 <span class="source-line-no">186</span><span id="line-186">   }</span>
 <span class="source-line-no">187</span><span id="line-187"></span>
 <span class="source-line-no">188</span><span id="line-188">   /**</span>

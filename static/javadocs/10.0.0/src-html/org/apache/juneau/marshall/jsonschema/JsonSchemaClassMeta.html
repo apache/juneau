@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41">   /**</span>
 <span class="source-line-no">042</span><span id="line-42">    * Constructor.</span>
 <span class="source-line-no">043</span><span id="line-43">    *</span>
-<span class="source-line-no">044</span><span id="line-44">    * @param cm The class that this annotation is defined on.</span>
+<span class="source-line-no">044</span><span id="line-44">    * @param cm The class that this annotation is defined on.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">045</span><span id="line-45">    * @param mp JSON-schema metadata provider (for finding information about other artifacts).</span>
 <span class="source-line-no">046</span><span id="line-46">    */</span>
 <span class="source-line-no">047</span><span id="line-47">   public JsonSchemaClassMeta(ClassMeta&lt;?&gt; cm, JsonSchemaMetaProvider mp) {</span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59">   /**</span>
 <span class="source-line-no">060</span><span id="line-60">    * Returns the {@link Schema @Schema} annotation defined on the class.</span>
 <span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * @return The value of the annotation, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
+<span class="source-line-no">062</span><span id="line-62">    * @return The value of the annotation as a generic map.  Never &lt;jk&gt;null&lt;/jk&gt; - returns an empty map if not specified.</span>
 <span class="source-line-no">063</span><span id="line-63">    */</span>
 <span class="source-line-no">064</span><span id="line-64">   protected JsonMap getSchema() { return schema; }</span>
 <span class="source-line-no">065</span><span id="line-65">}</span>

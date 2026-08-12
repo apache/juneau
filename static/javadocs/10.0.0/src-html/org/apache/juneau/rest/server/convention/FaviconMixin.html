@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * Sibling of {@link SeoMixin} (robots.txt / sitemap.xml), {@link VersionMixin}</span>
-<span class="source-line-no">028</span><span id="line-28"> * ({@code /version} / {@code /info} / {@code /about}), and {@link WellKnownMixin}</span>
+<span class="source-line-no">028</span><span id="line-28"> * ({@code /version}), and {@link WellKnownMixin}</span>
 <span class="source-line-no">029</span><span id="line-29"> * ({@code /.well-known/*}). All four classes live in the {@code org.apache.juneau.rest.server.convention}</span>
 <span class="source-line-no">030</span><span id="line-30"> * convention-endpoints mixin pack.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
@@ -210,7 +210,7 @@
 <span class="source-line-no">197</span><span id="line-197">    * forwarded once into {@link FaviconProvider.Builder}, and the REST config is inherited once from</span>
 <span class="source-line-no">198</span><span id="line-198">    * {@link AbstractRestBuilder}.</span>
 <span class="source-line-no">199</span><span id="line-199">    */</span>
-<span class="source-line-no">200</span><span id="line-200">   public static class Builder extends RestMixin.Builder&lt;FaviconMixin, Builder&gt; {</span>
+<span class="source-line-no">200</span><span id="line-200">   public static class Builder extends RestMixin.Builder&lt;FaviconMixin,Builder&gt; {</span>
 <span class="source-line-no">201</span><span id="line-201"></span>
 <span class="source-line-no">202</span><span id="line-202">      private final FaviconProvider.Builder worker = FaviconProvider.create();</span>
 <span class="source-line-no">203</span><span id="line-203"></span>

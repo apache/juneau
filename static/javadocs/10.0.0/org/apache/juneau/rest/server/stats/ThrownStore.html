@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -336,7 +336,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Retrieves the stats for the specified thrown exception.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>e</code> - The exception.</dd>
+<dd><code>e</code> - The exception. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A clone of the stats, never <jk>null</jk>.</dd>
 </dl>
@@ -360,7 +360,7 @@ loadScripts(document, 'script');</script>
  them to simple strings.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The throwable to create the stack trace for.</dd>
+<dd><code>t</code> - The throwable to create the stack trace for. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A modifiable list of strings.</dd>
 </dl>
@@ -376,7 +376,7 @@ loadScripts(document, 'script');</script>
  Subclasses can override this method to provide their own implementation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>t</code> - The throwable to calculate the stack trace on.</dd>
+<dd><code>t</code> - The throwable to calculate the stack trace on. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A calculated hash.</dd>
 </dl>
@@ -406,7 +406,7 @@ loadScripts(document, 'script');</script>
  trace elements of lambda expressions.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>e</code> - The stack trace element to convert.</dd>
+<dd><code>e</code> - The stack trace element to convert. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The converted stack trace element.</dd>
 </dl>

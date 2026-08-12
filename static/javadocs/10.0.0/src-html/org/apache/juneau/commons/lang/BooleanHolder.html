@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;, &lt;jv&gt;value&lt;/jv&gt;.get());</span>
 <span class="source-line-no">094</span><span id="line-94">    * &lt;/p&gt;</span>
 <span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param value The initial value.</span>
+<span class="source-line-no">096</span><span id="line-96">    * @param value The initial value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">097</span><span id="line-97">    * @return A new boolean value.</span>
 <span class="source-line-no">098</span><span id="line-98">    */</span>
 <span class="source-line-no">099</span><span id="line-99">   public static BooleanHolder of(Boolean value) {</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">   /**</span>
 <span class="source-line-no">104</span><span id="line-104">    * Constructor.</span>
 <span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * @param value The initial value.</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param value The initial value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">107</span><span id="line-107">    */</span>
 <span class="source-line-no">108</span><span id="line-108">   public BooleanHolder(Boolean value) {</span>
 <span class="source-line-no">109</span><span id="line-109">      super(value);</span>
@@ -139,7 +139,7 @@
 <span class="source-line-no">126</span><span id="line-126">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;empty&lt;/jv&gt;.is(&lt;jk&gt;null&lt;/jk&gt;));</span>
 <span class="source-line-no">127</span><span id="line-127">    * &lt;/p&gt;</span>
 <span class="source-line-no">128</span><span id="line-128">    *</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param value The value to compare to.</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param value The value to compare to.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">130</span><span id="line-130">    * @return &lt;jk&gt;true&lt;/jk&gt; if the current value is equal to the specified value.</span>
 <span class="source-line-no">131</span><span id="line-131">    */</span>
 <span class="source-line-no">132</span><span id="line-132">   @Override</span>
@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">    *    &lt;jsm&gt;assertFalse&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;.isAny(&lt;jk&gt;false&lt;/jk&gt;));</span>
 <span class="source-line-no">148</span><span id="line-148">    * &lt;/p&gt;</span>
 <span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * @param values The values to compare to.</span>
+<span class="source-line-no">150</span><span id="line-150">    * @param values The values to compare to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">151</span><span id="line-151">    * @return &lt;jk&gt;true&lt;/jk&gt; if the current value matches any of the specified values.</span>
 <span class="source-line-no">152</span><span id="line-152">    */</span>
 <span class="source-line-no">153</span><span id="line-153">   public boolean isAny(Boolean...values) {</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">    *</span>
 <span class="source-line-no">188</span><span id="line-188">    * @return &lt;c&gt;true&lt;/c&gt; if the value is set to &lt;c&gt;true&lt;/c&gt;, &lt;c&gt;false&lt;/c&gt; otherwise (including when &lt;c&gt;null&lt;/c&gt;).</span>
 <span class="source-line-no">189</span><span id="line-189">    */</span>
-<span class="source-line-no">190</span><span id="line-190">   public boolean isTrue() { return Boolean.TRUE.equals(get()); }</span>
+<span class="source-line-no">190</span><span id="line-190">   public boolean isTrue() { return ObjectUtils.isTrue(get()); }</span>
 <span class="source-line-no">191</span><span id="line-191">}</span>
 
 

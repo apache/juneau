@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">   /**</span>
 <span class="source-line-no">103</span><span id="line-103">    * Returns any parsing errors.</span>
 <span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * @return Any parsing errors.</span>
+<span class="source-line-no">105</span><span id="line-105">    * @return Any parsing errors, or &lt;jk&gt;null&lt;/jk&gt; if parsing was successful.</span>
 <span class="source-line-no">106</span><span id="line-106">    */</span>
 <span class="source-line-no">107</span><span id="line-107">   public String getError() { return error; }</span>
 <span class="source-line-no">108</span><span id="line-108"></span>
@@ -256,19 +256,19 @@
 <span class="source-line-no">243</span><span id="line-243">      } else if (state == S7) {</span>
 <span class="source-line-no">244</span><span id="line-244">         this.remainder = uri.substring(mark);</span>
 <span class="source-line-no">245</span><span id="line-245">      } else {</span>
-<span class="source-line-no">246</span><span id="line-246">         throw rex("Invalid URI pattern encountered:  {0}", uri);</span>
+<span class="source-line-no">246</span><span id="line-246">         throw rex("Invalid URI pattern encountered:  %s", uri);</span>
 <span class="source-line-no">247</span><span id="line-247">      }</span>
 <span class="source-line-no">248</span><span id="line-248"></span>
 <span class="source-line-no">249</span><span id="line-249">      if (! contextPath.isEmpty()) {</span>
 <span class="source-line-no">250</span><span id="line-250">         var p = UrlPathMatcher.of(contextPath);</span>
 <span class="source-line-no">251</span><span id="line-251">         if (p.match(UrlPath.of(this.contextPath)) == null)</span>
-<span class="source-line-no">252</span><span id="line-252">            throw rex("Context path [{0}] not found in URI:  {1}", contextPath, uri);</span>
+<span class="source-line-no">252</span><span id="line-252">            throw rex("Context path [%s] not found in URI:  %s", contextPath, uri);</span>
 <span class="source-line-no">253</span><span id="line-253">      }</span>
 <span class="source-line-no">254</span><span id="line-254"></span>
 <span class="source-line-no">255</span><span id="line-255">      if (! servletPath.isEmpty()) {</span>
 <span class="source-line-no">256</span><span id="line-256">         var p = UrlPathMatcher.of(servletPath);</span>
 <span class="source-line-no">257</span><span id="line-257">         if (p.match(UrlPath.of(this.servletPath)) == null)</span>
-<span class="source-line-no">258</span><span id="line-258">            throw rex("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);</span>
+<span class="source-line-no">258</span><span id="line-258">            throw rex("Servlet path [%s] not found in URI:  %s", servletPath, uri);</span>
 <span class="source-line-no">259</span><span id="line-259">      }</span>
 <span class="source-line-no">260</span><span id="line-260">   }</span>
 <span class="source-line-no">261</span><span id="line-261">}</span>

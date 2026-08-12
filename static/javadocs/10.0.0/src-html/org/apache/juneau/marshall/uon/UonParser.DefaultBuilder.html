@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">       *       .build();</span>
 <span class="source-line-no">146</span><span id="line-146">       *</span>
 <span class="source-line-no">147</span><span id="line-147">       *  &lt;jc&gt;// Produces: ["foo bar", "baz quz"].&lt;/jc&gt;</span>
-<span class="source-line-no">148</span><span id="line-148">       *    String[] &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;js&gt;"@(foo%20bar,baz%20qux)"&lt;/js&gt;, String[].&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">148</span><span id="line-148">       *    String[] &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;js&gt;"@(foo%20bar,baz%20qux)"&lt;/js&gt;, String[].&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">149</span><span id="line-149">       * &lt;/p&gt;</span>
 <span class="source-line-no">150</span><span id="line-150">       *</span>
 <span class="source-line-no">151</span><span id="line-151">       * @return This object.</span>
@@ -207,7 +207,7 @@
 <span class="source-line-no">194</span><span id="line-194">       *</span>
 <span class="source-line-no">195</span><span id="line-195">       *    &lt;jc&gt;// Should fail because input has multiple POJOs.&lt;/jc&gt;</span>
 <span class="source-line-no">196</span><span id="line-196">       *    String &lt;jv&gt;in&lt;/jv&gt; = &lt;js&gt;"(foo=bar)(baz=qux)"&lt;/js&gt;;</span>
-<span class="source-line-no">197</span><span id="line-197">       *    MyBean &lt;jv&gt;myBean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;in&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">197</span><span id="line-197">       *    MyBean &lt;jv&gt;myBean&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;in&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">198</span><span id="line-198">       * &lt;/p&gt;</span>
 <span class="source-line-no">199</span><span id="line-199">       *</span>
 <span class="source-line-no">200</span><span id="line-200">       * @return This object.</span>
@@ -330,12 +330,12 @@
 <span class="source-line-no">317</span><span id="line-317"></span>
 <span class="source-line-no">318</span><span id="line-318">   /**</span>
 <span class="source-line-no">319</span><span id="line-319">    * Convenience delegator that opens a whole-value {@link RecordReader} over the input using</span>
-<span class="source-line-no">320</span><span id="line-320">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #parse(Object, Class)}).</span>
+<span class="source-line-no">320</span><span id="line-320">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #read(Object, Class)}).</span>
 <span class="source-line-no">321</span><span id="line-321">    *</span>
 <span class="source-line-no">322</span><span id="line-322">    * &lt;p&gt;</span>
-<span class="source-line-no">323</span><span id="line-323">    * The real implementation lives on {@link UonParserSession#parseRecords(Object)}.  Callers</span>
+<span class="source-line-no">323</span><span id="line-323">    * The real implementation lives on {@link UonParserSession#readRecords(Object)}.  Callers</span>
 <span class="source-line-no">324</span><span id="line-324">    * that need request-derived configuration (locale, timezone, schema, swaps) should call</span>
-<span class="source-line-no">325</span><span id="line-325">    * {@link #createSession()} and invoke {@link UonParserSession#parseRecords(Object)} on the</span>
+<span class="source-line-no">325</span><span id="line-325">    * {@link #createSession()} and invoke {@link UonParserSession#readRecords(Object)} on the</span>
 <span class="source-line-no">326</span><span id="line-326">    * built session instead.</span>
 <span class="source-line-no">327</span><span id="line-327">    *</span>
 <span class="source-line-no">328</span><span id="line-328">    * @param input The input.</span>
@@ -343,8 +343,8 @@
 <span class="source-line-no">330</span><span id="line-330">    * @throws IOException If a problem occurred opening the underlying input.</span>
 <span class="source-line-no">331</span><span id="line-331">    */</span>
 <span class="source-line-no">332</span><span id="line-332">   @Override /* RecordReadable */</span>
-<span class="source-line-no">333</span><span id="line-333">   public RecordReader parseRecords(Object input) throws IOException {</span>
-<span class="source-line-no">334</span><span id="line-334">      return getSession().parseRecords(input);</span>
+<span class="source-line-no">333</span><span id="line-333">   public RecordReader readRecords(Object input) throws IOException {</span>
+<span class="source-line-no">334</span><span id="line-334">      return getSession().readRecords(input);</span>
 <span class="source-line-no">335</span><span id="line-335">   }</span>
 <span class="source-line-no">336</span><span id="line-336"></span>
 <span class="source-line-no">337</span><span id="line-337">   @Override /* RecordReadable */</span>
@@ -379,8 +379,8 @@
 <span class="source-line-no">366</span><span id="line-366">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">367</span><span id="line-367">    * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.</span>
 <span class="source-line-no">368</span><span id="line-368">    */</span>
-<span class="source-line-no">369</span><span id="line-369">   public &lt;T&gt; T parse(HttpPartType partType, HttpPartSchema schema, String in, Class&lt;T&gt; toType) throws ParseException, SchemaValidationException {</span>
-<span class="source-line-no">370</span><span id="line-370">      return getPartSession().parse(partType, schema, in, getClassMeta(toType));</span>
+<span class="source-line-no">369</span><span id="line-369">   public &lt;T&gt; T read(HttpPartType partType, HttpPartSchema schema, String in, Class&lt;T&gt; toType) throws ParseException, SchemaValidationException {</span>
+<span class="source-line-no">370</span><span id="line-370">      return getPartSession().read(partType, schema, in, getClassMeta(toType));</span>
 <span class="source-line-no">371</span><span id="line-371">   }</span>
 <span class="source-line-no">372</span><span id="line-372"></span>
 <span class="source-line-no">373</span><span id="line-373">   /**</span>
@@ -398,8 +398,8 @@
 <span class="source-line-no">385</span><span id="line-385">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">386</span><span id="line-386">    * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.</span>
 <span class="source-line-no">387</span><span id="line-387">    */</span>
-<span class="source-line-no">388</span><span id="line-388">   public &lt;T&gt; T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta&lt;T&gt; toType) throws ParseException, SchemaValidationException {</span>
-<span class="source-line-no">389</span><span id="line-389">      return getPartSession().parse(partType, schema, in, toType);</span>
+<span class="source-line-no">388</span><span id="line-388">   public &lt;T&gt; T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta&lt;T&gt; toType) throws ParseException, SchemaValidationException {</span>
+<span class="source-line-no">389</span><span id="line-389">      return getPartSession().read(partType, schema, in, toType);</span>
 <span class="source-line-no">390</span><span id="line-390">   }</span>
 <span class="source-line-no">391</span><span id="line-391"></span>
 <span class="source-line-no">392</span><span id="line-392">   /**</span>
@@ -418,8 +418,8 @@
 <span class="source-line-no">405</span><span id="line-405">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">406</span><span id="line-406">    * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.</span>
 <span class="source-line-no">407</span><span id="line-407">    */</span>
-<span class="source-line-no">408</span><span id="line-408">   public &lt;T&gt; T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {</span>
-<span class="source-line-no">409</span><span id="line-409">      return getPartSession().parse(partType, schema, in, getClassMeta(toType, toTypeArgs));</span>
+<span class="source-line-no">408</span><span id="line-408">   public &lt;T&gt; T read(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {</span>
+<span class="source-line-no">409</span><span id="line-409">      return getPartSession().read(partType, schema, in, getClassMeta(toType, toTypeArgs));</span>
 <span class="source-line-no">410</span><span id="line-410">   }</span>
 <span class="source-line-no">411</span><span id="line-411"></span>
 <span class="source-line-no">412</span><span id="line-412">   /**</span>

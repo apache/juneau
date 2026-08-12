@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotationType</code> - The annotation type of the annotation implementation class.</dd>
+<dd><code>annotationType</code> - The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <div class="block">The targets this annotation applies to.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The targets this annotation applies to.</dd>
+<dd><code>values</code> - The targets this annotation applies to.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

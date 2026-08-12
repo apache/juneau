@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47">       *    "id": "a"</span>
 <span class="source-line-no">048</span><span id="line-48">       * }</span>
 <span class="source-line-no">049</span><span id="line-49">       */</span>
-<span class="source-line-no">050</span><span id="line-50">      var withWhitespace = JsonSerializer.create().ws().build().serialize(aPojo);</span>
+<span class="source-line-no">050</span><span id="line-50">      var withWhitespace = JsonSerializer.create().ws().build().write(aPojo);</span>
 <span class="source-line-no">051</span><span id="line-51">      // the output will be padded with spaces after format characters</span>
 <span class="source-line-no">052</span><span id="line-52">      Logger.getLogger(JsonConfigurationExample.class).info(withWhitespace);</span>
 <span class="source-line-no">053</span><span id="line-53"></span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55">       * Produces</span>
 <span class="source-line-no">056</span><span id="line-56">       * {"name":"&lt;\/pojo&gt;","id":"a"}</span>
 <span class="source-line-no">057</span><span id="line-57">       */</span>
-<span class="source-line-no">058</span><span id="line-58">      var escaped = JsonSerializer.create().escapeSolidus().build().serialize(aPojo);</span>
+<span class="source-line-no">058</span><span id="line-58">      var escaped = JsonSerializer.create().escapeSolidus().build().write(aPojo);</span>
 <span class="source-line-no">059</span><span id="line-59">      // the output will have escaped /</span>
 <span class="source-line-no">060</span><span id="line-60">      Logger.getLogger(JsonConfigurationExample.class).info(escaped);</span>
 <span class="source-line-no">061</span><span id="line-61"></span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71">         .ws()  // Use whitespace</span>
 <span class="source-line-no">072</span><span id="line-72">         .sq()  // Use single quotes</span>
 <span class="source-line-no">073</span><span id="line-73">         .build()</span>
-<span class="source-line-no">074</span><span id="line-74">         .serialize(aPojo);  // Create a Json5Serializer</span>
+<span class="source-line-no">074</span><span id="line-74">         .write(aPojo);  // Create a Json5Serializer</span>
 <span class="source-line-no">075</span><span id="line-75"></span>
 <span class="source-line-no">076</span><span id="line-76">      Logger.getLogger(JsonConfigurationExample.class).info(configurableJson);</span>
 <span class="source-line-no">077</span><span id="line-77"></span>

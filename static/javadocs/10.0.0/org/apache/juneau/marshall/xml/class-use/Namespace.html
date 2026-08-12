@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected <a href="../XmlSerializerSession.ContentResult.html" title="enum class in org.apache.juneau.marshall.xml">XmlSerializerSession.ContentResult</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#serializeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#writeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;keyName,
@@ -267,9 +267,6 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>protected static final <a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">XmlSerializer.</span><code><a href="../XmlSerializer.html#DEFAULT_JUNEAU_NAMESPACE" class="member-name-link">DEFAULT_JUNEAU_NAMESPACE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected static final <a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">XmlSerializer.</span><code><a href="../XmlSerializer.html#DEFAULT_XS_NAMESPACE" class="member-name-link">DEFAULT_XS_NAMESPACE</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.marshall.xml</a> that return <a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span></div>
 <div class="summary-table three-column-summary">
@@ -345,14 +342,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a></code></div>
+<div class="col-first even-row-color"><code><a href="../XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">XmlWriter.</span><code><a href="../XmlWriter.html#attr(org.apache.juneau.marshall.xml.Namespace,java.lang.String,java.lang.Object)" class="member-name-link">attr</a><wbr>(<a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Same as <a href="../XmlWriter.html#attr(java.lang.String,java.lang.String,java.lang.Object)"><code>XmlWriter.attr(String, String, Object)</code></a>, except pass in a <a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml"><code>Namespace</code></a> object for the namespace.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a></code></div>
+<div class="col-first odd-row-color"><code><a href="../XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">XmlWriter.</span><code><a href="../XmlWriter.html#attrUri(org.apache.juneau.marshall.xml.Namespace,java.lang.String,java.lang.Object)" class="member-name-link">attrUri</a><wbr>(<a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
@@ -369,14 +366,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Default namespaces.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a></code></div>
+<div class="col-first even-row-color"><code><a href="../XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">XmlWriter.</span><code><a href="../XmlWriter.html#oAttr(org.apache.juneau.marshall.xml.Namespace,java.lang.String)" class="member-name-link">oAttr</a><wbr>(<a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code></div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="../XmlSerializerSession.ContentResult.html" title="enum class in org.apache.juneau.marshall.xml">XmlSerializerSession.ContentResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">XmlSerializerSession.</span><code><a href="../XmlSerializerSession.html#serializeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">XmlSerializerSession.</span><code><a href="../XmlSerializerSession.html#writeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;keyName,
@@ -397,7 +394,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../XmlWriter.html#%3Cinit%3E(java.io.Writer,boolean,int,boolean,char,org.apache.juneau.marshall.UriResolver,boolean,org.apache.juneau.marshall.xml.Namespace)" class="member-name-link">XmlWriter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="col-second even-row-color"><code><a href="../BasicXmlWriter.html#%3Cinit%3E(java.io.Writer,boolean,int,boolean,char,org.apache.juneau.marshall.UriResolver,boolean,org.apache.juneau.marshall.xml.Namespace)" class="member-name-link">BasicXmlWriter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
  boolean&nbsp;trimStrings,
@@ -406,6 +403,18 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;enableNs,
  <a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;defaultNamespace)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-second odd-row-color"><code><a href="../XmlWriter.html#%3Cinit%3E(java.io.Writer,boolean,int,boolean,char,org.apache.juneau.marshall.UriResolver,boolean,org.apache.juneau.marshall.xml.Namespace)" class="member-name-link">XmlWriter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+ boolean&nbsp;useWhitespace,
+ int&nbsp;maxIndent,
+ boolean&nbsp;trimStrings,
+ char&nbsp;quoteChar,
+ <a href="../../UriResolver.html" title="class in org.apache.juneau.marshall">UriResolver</a>&nbsp;uriResolver,
+ boolean&nbsp;enableNs,
+ <a href="../Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;defaultNamespace)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Constructor.</div>
 </div>
 </div>

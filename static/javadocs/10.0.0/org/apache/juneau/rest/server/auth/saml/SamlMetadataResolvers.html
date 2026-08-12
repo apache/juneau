@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-60">SamlMetadataResolvers</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-71">SamlMetadataResolvers</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Convenience factories for building <code>MetadataResolver</code> instances backed by an OpenSAML implementation.
 
@@ -135,6 +135,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <code>MetadataResolver</code> that fetches SAML 2.0 metadata from the given URL once and serves it
  from an in-memory DOM.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static org.opensaml.saml.metadata.resolver.MetadataResolver</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#url(java.lang.String,java.security.cert.X509Certificate)" class="member-name-link">url</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/cert/X509Certificate.html" title="class or interface in java.security.cert" class="external-link">X509Certificate</a>&nbsp;metadataSigningCert)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a <code>MetadataResolver</code> that fetches SAML 2.0 metadata from the given URL and verifies the
+ metadata's XML signature against the supplied pinned certificate before trusting it.</div>
+</div>
 </div>
 </div>
 </div>
@@ -155,7 +162,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="file(java.io.File)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.opensaml.saml.metadata.resolver.MetadataResolver</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-75">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.opensaml.saml.metadata.resolver.MetadataResolver</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-86">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span>
                                                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Creates a <code>MetadataResolver</code> that loads SAML 2.0 metadata from the given file.
 
@@ -175,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="url(java.lang.String)">
 <h3>url</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.opensaml.saml.metadata.resolver.MetadataResolver</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-110">url</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.opensaml.saml.metadata.resolver.MetadataResolver</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-130">url</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span>
                                                                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Creates a <code>MetadataResolver</code> that fetches SAML 2.0 metadata from the given URL once and serves it
  from an in-memory DOM.
@@ -183,10 +190,19 @@ loadScripts(document, 'script');</script>
  <p>
  Fetch happens on the calling thread with a 30-second connect/request timeout.  Applications that need
  periodic refresh should construct an OpenSAML <code>HTTPMetadataResolver</code> directly with an Apache
- HttpClient.</div>
+ HttpClient.
+
+ <h5 class='section'>Transport:</h5>
+ <p>
+ The metadata blob supplies the trust-anchor signing certificate, so the transport must not be
+ downgradeable by a network intermediary.  The URL must therefore use <js>"https"</js> or target a
+ loopback host (<js>"localhost"</js>/<js>"127.0.0.1"</js>/<js>"::1"</js>, for local development); a
+ plaintext <js>"http"</js> URL aimed at any other host is rejected.  When the IdP offers signed metadata,
+ prefer <a href="#url(java.lang.String,java.security.cert.X509Certificate)"><code>url(String, X509Certificate)</code></a> so the metadata's own XML signature is verified against a
+ pinned certificate independently of the transport.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>url</code> - The metadata URL.  Must be an absolute HTTPS or HTTP URL.</dd>
+<dd><code>url</code> - The metadata URL.  Must use HTTPS or target a loopback host.</dd>
 <dt>Returns:</dt>
 <dd>An initialized <code>MetadataResolver</code>.</dd>
 <dt>Throws:</dt>
@@ -195,9 +211,35 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="url(java.lang.String,java.security.cert.X509Certificate)">
+<h3>url</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.opensaml.saml.metadata.resolver.MetadataResolver</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-150">url</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/cert/X509Certificate.html" title="class or interface in java.security.cert" class="external-link">X509Certificate</a>&nbsp;metadataSigningCert)</span>
+                                                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Creates a <code>MetadataResolver</code> that fetches SAML 2.0 metadata from the given URL and verifies the
+ metadata's XML signature against the supplied pinned certificate before trusting it.
+
+ <p>
+ This is the strongest option: the metadata document's own enveloped signature is validated against
+ <jv>metadataSigningCert</jv>, so a substituted or tampered metadata blob is rejected regardless of the
+ transport used to fetch it.  The same transport rule as <a href="#url(java.lang.String)"><code>url(String)</code></a> still applies.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>url</code> - The metadata URL.  Must use HTTPS or target a loopback host.</dd>
+<dd><code>metadataSigningCert</code> - The certificate whose public key signed the metadata document.  When
+   <jk>null</jk>, no signature validation is performed (equivalent to <a href="#url(java.lang.String)"><code>url(String)</code></a>).</dd>
+<dt>Returns:</dt>
+<dd>An initialized <code>MetadataResolver</code>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the URL cannot be fetched, the metadata is malformed, or its signature does not
+   verify against the pinned certificate.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="file(java.nio.file.Path)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.opensaml.saml.metadata.resolver.MetadataResolver</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-162">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">org.opensaml.saml.metadata.resolver.MetadataResolver</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlMetadataResolvers.html#line-216">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;path)</span>
                                                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Creates a <code>MetadataResolver</code> that loads SAML 2.0 metadata from the given <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a>.
 

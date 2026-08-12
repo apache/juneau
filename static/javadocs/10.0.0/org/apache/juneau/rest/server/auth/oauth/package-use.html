@@ -60,14 +60,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">OAuth 2.0 / OIDC integration for the Juneau REST server.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.auth.oauth.flow">org.apache.juneau.rest.server.auth.oauth.flow</a></div>
-<div class="col-last odd-row-color">
-<div class="block">OAuth 2.0 client-side flow helpers.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.auth.oidc.rp">org.apache.juneau.rest.server.auth.oidc.rp</a></div>
-<div class="col-last even-row-color">
-<div class="block">OpenID Connect Relying Party (RP) login support for Juneau REST servers.</div>
-</div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
@@ -80,6 +72,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/BoundedLruTokenCache.html#org.apache.juneau.rest.server.auth.oauth">BoundedLruTokenCache</a></div>
 <div class="col-last even-row-color">
 <div class="block">Thread-safe bounded LRU implementation of <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/CachingClientCredentialsFlow.html#org.apache.juneau.rest.server.auth.oauth">CachingClientCredentialsFlow</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Server-side caching decorator layering an optional <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a> over the role-neutral
+ <a href="../../../auth/oauth/flow/OAuthClientCredentialsFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthClientCredentialsFlow</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/CachingClientCredentialsFlow.Builder.html#org.apache.juneau.rest.server.auth.oauth">CachingClientCredentialsFlow.Builder</a></div>
+<div class="col-last even-row-color">
+<div class="block">Builder.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/OAuthFilter.html#org.apache.juneau.rest.server.auth.oauth">OAuthFilter</a></div>
 <div class="col-last odd-row-color">
@@ -101,43 +102,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Builder for <a href="OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>OAuthIntrospectionValidator</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/OAuthToken.html#org.apache.juneau.rest.server.auth.oauth">OAuthToken</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Immutable record returned by every OAuth 2.0 flow helper on a successful token acquisition.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/TokenCache.html#org.apache.juneau.rest.server.auth.oauth">TokenCache</a></div>
-<div class="col-last even-row-color">
-<div class="block">SPI for caching the result of an OAuth introspection or token-acquisition call.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.auth.oauth.flow">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.auth.oauth</a> used by <a href="flow/package-summary.html">org.apache.juneau.rest.server.auth.oauth.flow</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/OAuthToken.html#org.apache.juneau.rest.server.auth.oauth.flow">OAuthToken</a></div>
-<div class="col-last even-row-color">
-<div class="block">Immutable record returned by every OAuth 2.0 flow helper on a successful token acquisition.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/TokenCache.html#org.apache.juneau.rest.server.auth.oauth.flow">TokenCache</a></div>
+<div class="col-first odd-row-color"><a href="class-use/TokenCache.html#org.apache.juneau.rest.server.auth.oauth">TokenCache</a></div>
 <div class="col-last odd-row-color">
 <div class="block">SPI for caching the result of an OAuth introspection or token-acquisition call.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.auth.oidc.rp">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.auth.oauth</a> used by <a href="../oidc/rp/package-summary.html">org.apache.juneau.rest.server.auth.oidc.rp</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/OAuthToken.html#org.apache.juneau.rest.server.auth.oidc.rp">OAuthToken</a></div>
-<div class="col-last even-row-color">
-<div class="block">Immutable record returned by every OAuth 2.0 flow helper on a successful token acquisition.</div>
 </div>
 </div>
 </section>

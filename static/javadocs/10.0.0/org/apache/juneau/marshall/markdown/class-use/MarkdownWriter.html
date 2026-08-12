@@ -140,7 +140,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#serializeAnything(org.apache.juneau.marshall.markdown.MarkdownWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#writeAnything(org.apache.juneau.marshall.markdown.MarkdownWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="../../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta)</code></div>
@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Main serialization dispatch method.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;bm,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;aType)</code></div>
@@ -156,14 +156,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Serializes a bean as a 2-column key/value Markdown table.</div>
 </div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../MarkdownDocSerializerSession.html#serializeBeanWithHeadings(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,int)" class="member-name-link">serializeBeanWithHeadings</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../MarkdownDocSerializerSession.html#writeBeanWithHeadings(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,int)" class="member-name-link">writeBeanWithHeadings</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;bm,
  int&nbsp;level)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a bean in document mode, using headings to structure nested objects.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#serializeCollection(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Collection,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeCollection</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#writeCollection(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Collection,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeCollection</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
@@ -171,7 +171,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Serializes a collection as either a multi-column table (uniform beans/maps) or a bulleted list.</div>
 </div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#serializeMap(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeMap</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../MarkdownSerializerSession.html#writeMap(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeMap</a><wbr>(<a href="../MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;m,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
 <div class="col-last even-row-color">

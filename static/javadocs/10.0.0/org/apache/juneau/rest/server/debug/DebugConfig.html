@@ -194,7 +194,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store.</dd>
+<dd><code>beanStore</code> - The bean store.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder.</dd>
+<dd><code>builder</code> - The builder.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -224,7 +224,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store.</dd>
+<dd><code>beanStore</code> - The bean store.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new builder.</dd>
 </dl>
@@ -238,8 +238,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Resolves debug for resource-level requests.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>context</code> - The context.</dd>
-<dd><code>req</code> - The request.</dd>
+<dd><code>context</code> - The context.  Can be <jk>null</jk> (resolution proceeds without a resource-class context).</dd>
+<dd><code>req</code> - The request.  Can be <jk>null</jk> (debug resolves to disabled).</dd>
 <dt>Returns:</dt>
 <dd>A debug result.</dd>
 </dl>
@@ -253,8 +253,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Resolves debug for operation-level requests.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>context</code> - The context.</dd>
-<dd><code>req</code> - The request.</dd>
+<dd><code>context</code> - The context.  Must not be <jk>null</jk>.</dd>
+<dd><code>req</code> - The request.  Can be <jk>null</jk> (debug resolves to disabled).</dd>
 <dt>Returns:</dt>
 <dd>A debug result.</dd>
 </dl>
@@ -276,7 +276,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>target</code> - The target key.</dd>
 <dt>Returns:</dt>
-<dd>The configured rule, or <jk>null</jk>.</dd>
+<dd>The configured rule, or <jk>null</jk> if none is configured for the target (or the target is <jk>null</jk>).</dd>
 </dl>
 </section>
 </li>

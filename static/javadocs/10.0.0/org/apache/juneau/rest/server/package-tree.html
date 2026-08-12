@@ -64,6 +64,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.<a href="AbstractRestBuilder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">AbstractRestBuilder</a>&lt;R,<wbr>SELF&gt; (implements org.apache.juneau.rest.server.<a href="RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;SELF&gt;)</li>
 <li class="circle">org.apache.juneau.commons.<a href="../../commons/AnnotationObject.Builder.html" class="type-name-link" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a>
 <ul>
+<li class="circle">org.apache.juneau.rest.server.<a href="ChildAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">ChildAnnotation.Builder</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="DebugAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">DebugAnnotation.Builder</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="MixinAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">MixinAnnotation.Builder</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="OpSwaggerAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">OpSwaggerAnnotation.Builder</a></li>
@@ -85,6 +86,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.<a href="SwaggerAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">SwaggerAnnotation.Builder</a></li>
 </ul>
 </li>
+<li class="circle">org.apache.juneau.rest.server.<a href="ChildAnnotation.html" class="type-name-link" title="class in org.apache.juneau.rest.server">ChildAnnotation</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="../../marshall/Context.html" class="type-name-link" title="class in org.apache.juneau.marshall">Context</a>
 <ul>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestContext.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext</a></li>
@@ -119,6 +121,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestContext.ContextKind.Child.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Child</a> (implements org.apache.juneau.rest.server.<a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a>)</li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestContext.ContextKind.Mixin.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Mixin</a> (implements org.apache.juneau.rest.server.<a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a>)</li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestContext.ContextKind.Root.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Root</a> (implements org.apache.juneau.rest.server.<a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a>)</li>
+<li class="circle">org.apache.juneau.rest.server.<a href="RestContext.ResolvedChild.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ResolvedChild</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestContext.ResolvedMixin.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ResolvedMixin</a></li>
 </ul>
 </li>
@@ -127,6 +130,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestChildMatch.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestChildMatch</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestChildren.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestChildren</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestChildren.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestChildren.Builder</a></li>
+<li class="circle">org.apache.juneau.rest.server.<a href="RestContextProperties.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContextProperties</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestDeleteAnnotation.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestDeleteAnnotation</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestDestroyAnnotation.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestDestroyAnnotation</a></li>
 <li class="circle">org.apache.juneau.rest.server.<a href="RestEndCallAnnotation.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestEndCallAnnotation</a></li>
@@ -183,6 +187,7 @@ loadScripts(document, 'script');</script>
 <h2 title="Annotation Interface Hierarchy">Annotation Interface Hierarchy</h2>
 <ul>
 <li class="circle">org.apache.juneau.rest.server.<a href="Attr.html" class="type-name-link" title="annotation interface in org.apache.juneau.rest.server">Attr</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
+<li class="circle">org.apache.juneau.rest.server.<a href="Child.html" class="type-name-link" title="annotation interface in org.apache.juneau.rest.server">Child</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.rest.server.<a href="Debug.html" class="type-name-link" title="annotation interface in org.apache.juneau.rest.server">Debug</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.rest.server.<a href="Method.html" class="type-name-link" title="annotation interface in org.apache.juneau.rest.server">Method</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.rest.server.<a href="Mixin.html" class="type-name-link" title="annotation interface in org.apache.juneau.rest.server">Mixin</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>

@@ -152,9 +152,9 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type being consumed.</dd>
 <dt>Parameters:</dt>
-<dd><code>predicate</code> - The predicate.</dd>
-<dd><code>consumer</code> - The consumer.</dd>
-<dd><code>value</code> - The value.</dd>
+<dd><code>predicate</code> - The predicate.  Can be <jk>null</jk> (treated as an always-match).</dd>
+<dd><code>consumer</code> - The consumer.  Must not be <jk>null</jk> when the predicate matches.</dd>
+<dd><code>value</code> - The value.  Can be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -181,8 +181,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type of value.</dd>
 <dt>Parameters:</dt>
-<dd><code>message</code> - A format string using <code>{0}</code> as placeholder for the formatted value.</dd>
-<dd><code>formatter</code> - A function to extract/format the value for display.</dd>
+<dd><code>message</code> - A format string using <code>{0}</code> as placeholder for the formatted value.  Must not be <jk>null</jk>.</dd>
+<dd><code>formatter</code> - A function to extract/format the value for display.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A function that prints and returns the value.</dd>
 </dl>
@@ -198,8 +198,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type being tested.</dd>
 <dt>Parameters:</dt>
-<dd><code>predicate</code> - The predicate.</dd>
-<dd><code>value</code> - The value to test.</dd>
+<dd><code>predicate</code> - The predicate.  Can be <jk>null</jk> (returns <jk>true</jk>).</dd>
+<dd><code>value</code> - The value to test.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.</dd>
 </dl>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The element type.</dd>
 <dt>Parameters:</dt>
-<dd><code>keyExtractor</code> - A function that extracts the key from each element.</dd>
+<dd><code>keyExtractor</code> - A function that extracts the key from each element.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A predicate that returns <jk>true</jk> for the first occurrence of each unique key,
    and <jk>false</jk> for subsequent occurrences with the same key.</dd>

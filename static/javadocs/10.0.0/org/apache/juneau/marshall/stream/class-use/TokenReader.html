@@ -113,13 +113,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CborParser.</span><code><a href="../../cbor/CborParser.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CborParser.</span><code><a href="../../cbor/CborParser.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Convenience delegator that opens a <a href="../../cbor/CborTokenReader.html" title="class in org.apache.juneau.marshall.cbor"><code>CborTokenReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).</div>
+ <b>default session arguments</b> (mirrors <a href="../../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">CborParserSession.</span><code><a href="../../cbor/CborParserSession.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CborParserSession.</span><code><a href="../../cbor/CborParserSession.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Opens a low-level pull-parser cursor over a CBOR document, bound to this live session.</div>
 </div>
@@ -146,13 +146,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonParser.</span><code><a href="../../json/JsonParser.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonParser.</span><code><a href="../../json/JsonParser.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Convenience delegator that opens a <a href="../../json/JsonTokenReader.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).</div>
+ <b>default session arguments</b> (mirrors <a href="../../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonParserSession.</span><code><a href="../../json/JsonParserSession.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Opens a low-level pull-parser cursor over a JSON document, bound to this session's live
  <a href="../../../commons/bean/BeanSession.html" title="interface in org.apache.juneau.commons.bean"><code>BeanSession</code></a>/<a href="../../MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a>.</div>
@@ -180,7 +180,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Json5ParserSession.</span><code><a href="../../json5/Json5ParserSession.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5ParserSession.</span><code><a href="../../json5/Json5ParserSession.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Opens a low-level pull-parser cursor over a JSON5 document, bound to this live session.</div>
 </div>
@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Json5lParserSession.</span><code><a href="../../json5l/Json5lParserSession.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5lParserSession.</span><code><a href="../../json5l/Json5lParserSession.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Opens a low-level pull-parser cursor over a JSON5L document, bound to this live session.</div>
 </div>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonlParserSession.</span><code><a href="../../jsonl/JsonlParserSession.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonlParserSession.</span><code><a href="../../jsonl/JsonlParserSession.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Opens a low-level pull-parser cursor over a JSONL document, bound to this live session.</div>
 </div>
@@ -281,13 +281,18 @@ loadScripts(document, 'script');</script>
 <div class="block">Opens a low-level <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input using the <a href="../../marshaller/Json5l.html#DEFAULT"><code>Json5l.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#toTokens(java.lang.Object)" class="member-name-link">toTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5R.</span><code><a href="../../marshaller/Json5R.html#toTokens(java.lang.Object)" class="member-name-link">toTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Opens a low-level <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
+<div class="block">Opens a low-level <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input using the <a href="../../marshaller/Json5R.html#DEFAULT"><code>Json5R.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#toTokens(java.lang.Object)" class="member-name-link">toTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#toTokens(java.lang.Object)" class="member-name-link">toTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#toTokens(java.lang.Object)" class="member-name-link">toTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Opens a low-level <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input using the <a href="../../marshaller/MsgPack.html#DEFAULT"><code>MsgPack.DEFAULT</code></a> marshaller.</div>
 </div>
 </div>
@@ -313,13 +318,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MsgPackParser.</span><code><a href="../../msgpack/MsgPackParser.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MsgPackParser.</span><code><a href="../../msgpack/MsgPackParser.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Convenience delegator that opens a <a href="../../msgpack/MsgPackTokenReader.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackTokenReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).</div>
+ <b>default session arguments</b> (mirrors <a href="../../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MsgPackParserSession.</span><code><a href="../../msgpack/MsgPackParserSession.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MsgPackParserSession.</span><code><a href="../../msgpack/MsgPackParserSession.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Opens a low-level pull-parser cursor over a MessagePack document, bound to this live session.</div>
 </div>
@@ -335,7 +340,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TokenReadable.</span><code><a href="../TokenReadable.html#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TokenReadable.</span><code><a href="../TokenReadable.html#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Opens a low-level <a href="../TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input.</div>
 </div>

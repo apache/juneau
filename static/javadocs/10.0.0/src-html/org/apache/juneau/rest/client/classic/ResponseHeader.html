@@ -91,7 +91,7 @@
 <span class="source-line-no">078</span><span id="line-78">    * @param name The header name.</span>
 <span class="source-line-no">079</span><span id="line-79">    * @param request The request object.</span>
 <span class="source-line-no">080</span><span id="line-80">    * @param response The response object.</span>
-<span class="source-line-no">081</span><span id="line-81">    * @param header The wrapped header.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">081</span><span id="line-81">    * @param header The wrapped header.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an absent header with no value and no elements).</span>
 <span class="source-line-no">082</span><span id="line-82">    * @throws IllegalArgumentException If name is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">083</span><span id="line-83">    */</span>
 <span class="source-line-no">084</span><span id="line-84">   public ResponseHeader(String name, RestRequest request, RestResponse response, Header header) {</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line-94">    *</span>
 <span class="source-line-no">095</span><span id="line-95">    * @param &lt;T&gt; The type to convert to.</span>
 <span class="source-line-no">096</span><span id="line-96">    * @param type The type to convert to.</span>
-<span class="source-line-no">097</span><span id="line-97">    * @return The converted type, or &lt;jk&gt;null&lt;/jk&gt; if header is not present.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @return The converted type, or an empty {@link Optional} if the header is not present.</span>
 <span class="source-line-no">098</span><span id="line-98">    */</span>
 <span class="source-line-no">099</span><span id="line-99">   public &lt;T&gt; Optional&lt;T&gt; as(Class&lt;T&gt; type) {</span>
 <span class="source-line-no">100</span><span id="line-100">      return as(request.getClassMeta(type));</span>
@@ -118,13 +118,13 @@
 <span class="source-line-no">105</span><span id="line-105">    *</span>
 <span class="source-line-no">106</span><span id="line-106">    * @param &lt;T&gt; The type to convert to.</span>
 <span class="source-line-no">107</span><span id="line-107">    * @param type The type to convert to.</span>
-<span class="source-line-no">108</span><span id="line-108">    * @return The converted type, or &lt;jk&gt;null&lt;/jk&gt; if header is not present.</span>
+<span class="source-line-no">108</span><span id="line-108">    * @return The converted type, or an empty {@link Optional} if the header is not present.</span>
 <span class="source-line-no">109</span><span id="line-109">    */</span>
 <span class="source-line-no">110</span><span id="line-110">   public &lt;T&gt; Optional&lt;T&gt; as(ClassMeta&lt;T&gt; type) {</span>
 <span class="source-line-no">111</span><span id="line-111">      try {</span>
-<span class="source-line-no">112</span><span id="line-112">         return o(parser.parse(HEADER, schema, getValue(), type));</span>
+<span class="source-line-no">112</span><span id="line-112">         return o(parser.read(HEADER, schema, getValue(), type));</span>
 <span class="source-line-no">113</span><span id="line-113">      } catch (ParseException e) {</span>
-<span class="source-line-no">114</span><span id="line-114">         throw rex(e, "Could not parse response header {0}.", getName());</span>
+<span class="source-line-no">114</span><span id="line-114">         throw rex(e, "Could not parse response header %s.", getName());</span>
 <span class="source-line-no">115</span><span id="line-115">      }</span>
 <span class="source-line-no">116</span><span id="line-116">   }</span>
 <span class="source-line-no">117</span><span id="line-117"></span>
@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124">    * @param &lt;T&gt; The type to convert to.</span>
 <span class="source-line-no">125</span><span id="line-125">    * @param type The type to convert to.</span>
 <span class="source-line-no">126</span><span id="line-126">    * @param args The type parameters.</span>
-<span class="source-line-no">127</span><span id="line-127">    * @return The converted type, or &lt;jk&gt;null&lt;/jk&gt; if header is not present.</span>
+<span class="source-line-no">127</span><span id="line-127">    * @return The converted type, or an empty {@link Optional} if the header is not present.</span>
 <span class="source-line-no">128</span><span id="line-128">    */</span>
 <span class="source-line-no">129</span><span id="line-129">   public &lt;T&gt; Optional&lt;T&gt; as(Type type, Type...args) {</span>
 <span class="source-line-no">130</span><span id="line-130">      return as(request.getClassMeta(type, args));</span>
@@ -279,13 +279,13 @@
 <span class="source-line-no">266</span><span id="line-266">            return cc.newInstance(getName(), getValue());</span>
 <span class="source-line-no">267</span><span id="line-267">      } catch (ExecutableException e) {</span>
 <span class="source-line-no">268</span><span id="line-268">         var cause = e.getCause();</span>
-<span class="source-line-no">269</span><span id="line-269">         if (cause instanceof Exception ex)</span>
-<span class="source-line-no">270</span><span id="line-270">            throw toRex(ex);</span>
+<span class="source-line-no">269</span><span id="line-269">         if (cause instanceof Exception cause2)</span>
+<span class="source-line-no">270</span><span id="line-270">            throw toRex(cause2);</span>
 <span class="source-line-no">271</span><span id="line-271">         throw toRex(cause);</span>
 <span class="source-line-no">272</span><span id="line-272">      } catch (Exception e) {</span>
 <span class="source-line-no">273</span><span id="line-273">         throw toRex(e);</span>
 <span class="source-line-no">274</span><span id="line-274">      }</span>
-<span class="source-line-no">275</span><span id="line-275">      throw rex("Could not determine a method to construct type {0}", cn(c));</span>
+<span class="source-line-no">275</span><span id="line-275">      throw rex("Could not determine a method to construct type %s", cn(c));</span>
 <span class="source-line-no">276</span><span id="line-276">   }</span>
 <span class="source-line-no">277</span><span id="line-277"></span>
 <span class="source-line-no">278</span><span id="line-278">   /**</span>
@@ -535,7 +535,7 @@
 <span class="source-line-no">522</span><span id="line-522">    * @throws org.apache.http.ParseException In case of a parsing error.</span>
 <span class="source-line-no">523</span><span id="line-523">    */</span>
 <span class="source-line-no">524</span><span id="line-524">   @Override /* Overridden from Header */</span>
-<span class="source-line-no">525</span><span id="line-525">   public HeaderElement[] getElements() throws org.apache.http.ParseException { return elements; }</span>
+<span class="source-line-no">525</span><span id="line-525">   public HeaderElement[] getElements() throws org.apache.http.ParseException { return cp(elements); }</span>
 <span class="source-line-no">526</span><span id="line-526"></span>
 <span class="source-line-no">527</span><span id="line-527">   /**</span>
 <span class="source-line-no">528</span><span id="line-528">    * Specifies the part parser to use for this header.</span>
@@ -545,11 +545,11 @@
 <span class="source-line-no">532</span><span id="line-532">    *</span>
 <span class="source-line-no">533</span><span id="line-533">    * @param value</span>
 <span class="source-line-no">534</span><span id="line-534">    *    The new part parser to use for this header.</span>
-<span class="source-line-no">535</span><span id="line-535">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, {@link SimplePartParser#DEFAULT} will be used.</span>
+<span class="source-line-no">535</span><span id="line-535">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, {@link SimplePartParser#DEFAULT_SESSION} will be used.</span>
 <span class="source-line-no">536</span><span id="line-536">    * @return This object.</span>
 <span class="source-line-no">537</span><span id="line-537">    */</span>
 <span class="source-line-no">538</span><span id="line-538">   public ResponseHeader parser(HttpPartParserSession value) {</span>
-<span class="source-line-no">539</span><span id="line-539">      this.parser = value == null ? SimplePartParser.DEFAULT_SESSION : value;</span>
+<span class="source-line-no">539</span><span id="line-539">      this.parser = or(value, SimplePartParser.DEFAULT_SESSION);</span>
 <span class="source-line-no">540</span><span id="line-540">      return this;</span>
 <span class="source-line-no">541</span><span id="line-541">   }</span>
 <span class="source-line-no">542</span><span id="line-542"></span>

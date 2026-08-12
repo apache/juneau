@@ -214,8 +214,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds an extension type mapping.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>ext</code> - The file extension.</dd>
-<dd><code>type</code> - The MIME type.</dd>
+<dd><code>ext</code> - The file extension.  Must not be <jk>null</jk> or blank.</dd>
+<dd><code>type</code> - The MIME type.  Must not be <jk>null</jk> or blank.</dd>
 <dt>Returns:</dt>
 <dd>This builder.</dd>
 <dt>Throws:</dt>
@@ -231,8 +231,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds a file type mapping.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The file name or path pattern.</dd>
-<dd><code>type</code> - The MIME type.</dd>
+<dd><code>name</code> - The file name or path pattern.  Must not be <jk>null</jk> or blank.</dd>
+<dd><code>type</code> - The MIME type.  Must not be <jk>null</jk> or blank.</dd>
 <dt>Returns:</dt>
 <dd>This builder.</dd>
 <dt>Throws:</dt>
@@ -272,7 +272,7 @@ loadScripts(document, 'script');</script>
  mime.types file contents as a single string (which will be split on newlines).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mimeTypesLines</code> - The MIME types lines or file contents.</dd>
+<dd><code>mimeTypesLines</code> - The MIME types lines or file contents.  Null and empty entries are ignored.</dd>
 <dt>Returns:</dt>
 <dd>This builder.</dd>
 </dl>

@@ -70,7 +70,7 @@
 <span class="source-line-no">057</span><span id="line-57">   /**</span>
 <span class="source-line-no">058</span><span id="line-58">    * Formats the specified value using this format.</span>
 <span class="source-line-no">059</span><span id="line-59">    *</span>
-<span class="source-line-no">060</span><span id="line-60">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">060</span><span id="line-60">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">061</span><span id="line-61">    * @return The formatted string, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">062</span><span id="line-62">    */</span>
 <span class="source-line-no">063</span><span id="line-63">   public String format(Locale value) {</span>
@@ -85,7 +85,7 @@
 <span class="source-line-no">072</span><span id="line-72">   /**</span>
 <span class="source-line-no">073</span><span id="line-73">    * Parses the specified wire value using this format.</span>
 <span class="source-line-no">074</span><span id="line-74">    *</span>
-<span class="source-line-no">075</span><span id="line-75">    * @param value The wire value. Can be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param value The wire value. Can be &lt;jk&gt;null&lt;/jk&gt; or blank (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">076</span><span id="line-76">    * @return The parsed {@link Locale}, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">077</span><span id="line-77">    */</span>
 <span class="source-line-no">078</span><span id="line-78">   public Locale parse(String value) {</span>

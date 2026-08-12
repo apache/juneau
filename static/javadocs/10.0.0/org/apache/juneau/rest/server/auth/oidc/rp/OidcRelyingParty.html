@@ -269,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.oidc.rp.OidcRelyingParty.Builder)">
 <h3>OidcRelyingParty</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-535">OidcRelyingParty</a></span><wbr><span class="parameters">(<a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-540">OidcRelyingParty</a></span><wbr><span class="parameters">(<a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -299,7 +299,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="startLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>startLogin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-578">startLogin</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-583">startLogin</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Begins the login flow: generates <code>state</code> + <code>nonce</code> + PKCE verifier, stores them
@@ -317,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="completeLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>completeLogin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-603">completeLogin</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-608">completeLogin</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
@@ -338,7 +338,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="logout(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>logout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-668">logout</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-673">logout</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Logs the user out: invalidates the session, clears the session cookie, and (when the IdP
@@ -356,7 +356,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="refresh(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>refresh</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-702">refresh</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-707">refresh</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span></div>
 <div class="block">Refreshes the current session's access token using the rotating-refresh-token grant.
 
@@ -377,7 +377,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="backChannelLogout(java.lang.String)">
 <h3>backChannelLogout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-777">backChannelLogout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logoutToken)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-782">backChannelLogout</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;logoutToken)</span>
                       throws <span class="exceptions"><a href="../../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block">Processes an IdP-pushed OpenID Connect back-channel logout token, invalidating the matching
  server-side session(s).
@@ -408,7 +408,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authFilter()">
 <h3>authFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcSessionAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSessionAuthFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-811">authFilter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcSessionAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSessionAuthFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-816">authFilter</a></span>()</div>
 <div class="block">Returns a request-time <a href="../../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> that resolves this RP's session cookie into a
  <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.</div>
 <dl class="notes">
@@ -420,7 +420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sessionStore()">
 <h3>sessionStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-820">sessionStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-825">sessionStore</a></span>()</div>
 <div class="block">Returns the configured session store.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -431,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cookieName()">
 <h3>cookieName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-829">cookieName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/OidcRelyingParty.html#line-834">cookieName</a></span>()</div>
 <div class="block">Returns the session cookie name.</div>
 <dl class="notes">
 <dt>Returns:</dt>

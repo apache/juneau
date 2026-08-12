@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60">   /**</span>
 <span class="source-line-no">061</span><span id="line-61">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the {@link #cast(Object)} method can be used on the specified object.</span>
 <span class="source-line-no">062</span><span id="line-62">    *</span>
-<span class="source-line-no">063</span><span id="line-63">    * @param o The object to check.</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param o The object to check.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;false&lt;/jk&gt;).</span>
 <span class="source-line-no">064</span><span id="line-64">    * @return &lt;jk&gt;true&lt;/jk&gt; if the {@link #cast(Object)} method can be used on the specified object.</span>
 <span class="source-line-no">065</span><span id="line-65">    */</span>
 <span class="source-line-no">066</span><span id="line-66">   public static boolean canCast(Object o) {</span>
@@ -93,8 +93,8 @@
 <span class="source-line-no">080</span><span id="line-80">   public static NameValuePair cast(Object o) {</span>
 <span class="source-line-no">081</span><span id="line-81">      if (o instanceof NameValuePair o2)</span>
 <span class="source-line-no">082</span><span id="line-82">         return o2;</span>
-<span class="source-line-no">083</span><span id="line-83">      if (o instanceof NameValuePairable o3)</span>
-<span class="source-line-no">084</span><span id="line-84">         return o3.asNameValuePair();</span>
+<span class="source-line-no">083</span><span id="line-83">      if (o instanceof NameValuePairable o2)</span>
+<span class="source-line-no">084</span><span id="line-84">         return o2.asNameValuePair();</span>
 <span class="source-line-no">085</span><span id="line-85">      if (o instanceof Headerable o2) {</span>
 <span class="source-line-no">086</span><span id="line-86">         var x = o2.asHeader();</span>
 <span class="source-line-no">087</span><span id="line-87">         return BasicPart.of(x.getName(), x.getValue());</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">      if (o instanceof Map.Entry e) {</span>
 <span class="source-line-no">090</span><span id="line-90">         return BasicPart.of(s(e.getKey()), e.getValue());</span>
 <span class="source-line-no">091</span><span id="line-91">      }</span>
-<span class="source-line-no">092</span><span id="line-92">      throw rex("Object of type {0} could not be converted to a Part.", cn(o));</span>
+<span class="source-line-no">092</span><span id="line-92">      throw rex("Object of type %s could not be converted to a Part.", cn(o));</span>
 <span class="source-line-no">093</span><span id="line-93">   }</span>
 <span class="source-line-no">094</span><span id="line-94"></span>
 <span class="source-line-no">095</span><span id="line-95">   /**</span>
@@ -119,8 +119,8 @@
 <span class="source-line-no">106</span><span id="line-106">   /**</span>
 <span class="source-line-no">107</span><span id="line-107">    * Creates a {@link NameValuePair} from a name/value pair string (e.g. &lt;js&gt;"Foo: bar"&lt;/js&gt;)</span>
 <span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * @param pair The pair string.</span>
-<span class="source-line-no">110</span><span id="line-110">    * @return A new {@link NameValuePair} object.</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param pair The pair string.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">110</span><span id="line-110">    * @return A new {@link NameValuePair} object, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">111</span><span id="line-111">    */</span>
 <span class="source-line-no">112</span><span id="line-112">   public static BasicPart ofPair(String pair) {</span>
 <span class="source-line-no">113</span><span id="line-113">      if (pair == null)</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">   /**</span>
 <span class="source-line-no">139</span><span id="line-139">    * Copy constructor.</span>
 <span class="source-line-no">140</span><span id="line-140">    *</span>
-<span class="source-line-no">141</span><span id="line-141">    * @param copyFrom The object to copy.</span>
+<span class="source-line-no">141</span><span id="line-141">    * @param copyFrom The object to copy.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">142</span><span id="line-142">    */</span>
 <span class="source-line-no">143</span><span id="line-143">   protected BasicPart(BasicPart copyFrom) {</span>
 <span class="source-line-no">144</span><span id="line-144">      assertArgNotNull(ARG_copyFrom, copyFrom);</span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189"></span>
 <span class="source-line-no">190</span><span id="line-190">   @Override</span>
 <span class="source-line-no">191</span><span id="line-191">   public int hashCode() {</span>
-<span class="source-line-no">192</span><span id="line-192">      return Objects.hash(name, getValue());</span>
+<span class="source-line-no">192</span><span id="line-192">      return h(name, getValue());</span>
 <span class="source-line-no">193</span><span id="line-193">   }</span>
 <span class="source-line-no">194</span><span id="line-194"></span>
 <span class="source-line-no">195</span><span id="line-195">   @Override /* Overridden from Object */</span>

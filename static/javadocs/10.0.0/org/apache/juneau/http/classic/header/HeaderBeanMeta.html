@@ -186,32 +186,35 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The header bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The header bean type.</dd>
+<dd><code>type</code> - The header bean type.  Must not be <jk>null</jk> or a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
-<dd>The metadata, or <jk>null</jk> if a valid constructor could not be found.</dd>
+<dd>The metadata.  Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="construct(java.lang.Object)">
 <h3>construct</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderBeanMeta.html" title="type parameter in HeaderBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-119">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderBeanMeta.html" title="type parameter in HeaderBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-121">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Constructs a header bean with the specified name or value.
 
  <p>
  Can only be used on beans where the header name is known.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The header value.</dd>
+<dd><code>value</code> - The header value.
+   <br>Can be <jk>null</jk>, in which case it is passed as-is (or stringified to <jk>null</jk>) to the bean's constructor.</dd>
 <dt>Returns:</dt>
 <dd>A newly constructed bean.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code> - If bean could not be constructed (e.g. couldn't find a constructor).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="construct(java.lang.String,java.lang.Object)">
 <h3>construct</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderBeanMeta.html" title="type parameter in HeaderBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-135">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HeaderBeanMeta.html" title="type parameter in HeaderBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-138">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Constructs a header bean with the specified name or value.</div>
 <dl class="notes">
@@ -219,7 +222,8 @@ loadScripts(document, 'script');</script>
 <dd><code>name</code> - The header name.
    <br>If <jk>null</jk>, uses the value pulled from the <a href="../../Header.html#name()"><code>@Header(name)</code></a> or
    <a href="../../Header.html#value()"><code>@Header(value)</code></a> annotations.</dd>
-<dd><code>value</code> - The header value.</dd>
+<dd><code>value</code> - The header value.
+   <br>Can be <jk>null</jk>, in which case it is passed as-is (or stringified to <jk>null</jk>) to the bean's constructor.</dd>
 <dt>Returns:</dt>
 <dd>A newly constructed bean.</dd>
 <dt>Throws:</dt>
@@ -230,7 +234,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-161">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-164">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -240,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-166">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-169">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -250,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema()">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-179">getSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderBeanMeta.html#line-182">getSchema</a></span>()</div>
 <div class="block">Returns schema information about this header.
 
  <p>

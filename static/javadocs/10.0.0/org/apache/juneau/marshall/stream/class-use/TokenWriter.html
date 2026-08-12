@@ -157,18 +157,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">CborTokenWriter.</span><code><a href="../../cbor/CborTokenWriter.html#object(java.lang.Object)" class="member-name-link">object</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CborSerializer.</span><code><a href="../../cbor/CborSerializer.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Convenience delegator that opens a <a href="../../cbor/CborTokenWriter.html" title="class in org.apache.juneau.marshall.cbor"><code>CborTokenWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)"><code>OutputStreamSerializer.serialize(Object)</code></a>).</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">CborSerializerSession.</span><code><a href="../../cbor/CborSerializerSession.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Opens a low-level push generator that emits CBOR (RFC 8949) one structural event at a time,
- bound to this live session.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">CborTokenWriter.</span><code><a href="../../cbor/CborTokenWriter.html#startArray()" class="member-name-link">startArray</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
@@ -177,6 +165,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">CborTokenWriter.</span><code><a href="../../cbor/CborTokenWriter.html#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CborSerializer.</span><code><a href="../../cbor/CborSerializer.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience delegator that opens a <a href="../../cbor/CborTokenWriter.html" title="class in org.apache.juneau.marshall.cbor"><code>CborTokenWriter</code></a> over the output using
+ <b>default session arguments</b> (mirrors <a href="../../serializer/OutputStreamSerializer.html#write(java.lang.Object)"><code>OutputStreamSerializer.write(Object)</code></a>).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CborSerializerSession.</span><code><a href="../../cbor/CborSerializerSession.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level push generator that emits CBOR (RFC 8949) one structural event at a time,
+ bound to this live session.</div>
+</div>
 </div>
 </section>
 </li>
@@ -189,12 +189,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JcsSerializer.</span><code><a href="../../jcs/JcsSerializer.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JcsSerializer.</span><code><a href="../../jcs/JcsSerializer.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Convenience delegator (default session args) for the raw-JSON token writer.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Opens a low-level push generator that emits raw JSON (NOT canonical JCS) one structural
  event at a time, with the <a href="../TokenWriter.html#object(java.lang.Object)"><code>object(Object)</code></a> POJO bridge disabled (the
@@ -259,30 +259,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonTokenWriter.</span><code><a href="../../json/JsonTokenWriter.html#object(java.lang.Object)" class="member-name-link">object</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchemaSerializer.</span><code><a href="../../json/JsonSchemaSerializer.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Convenience delegator (default session args) for the raw-JSON token writer.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchemaSerializerSession.</span><code><a href="../../json/JsonSchemaSerializerSession.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Opens a low-level push generator that emits raw JSON (NOT schema) one structural event at a
- time, with the <a href="../TokenWriter.html#object(java.lang.Object)"><code>object(Object)</code></a> POJO bridge disabled (the walker would
- emit the bean's own JSON, not its JSON Schema).</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSerializer.</span><code><a href="../../json/JsonSerializer.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Convenience delegator that opens a <a href="../../json/JsonTokenWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../../serializer/Serializer.html#serialize(java.lang.Object,java.lang.Object)"><code>Serializer.serialize(Object, Object)</code></a>).</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Opens a low-level push generator that emits JSON one structural event at a time, bound to
- this session's live config.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonTokenWriter.</span><code><a href="../../json/JsonTokenWriter.html#startArray()" class="member-name-link">startArray</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
@@ -291,6 +267,30 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonTokenWriter.</span><code><a href="../../json/JsonTokenWriter.html#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchemaSerializer.</span><code><a href="../../json/JsonSchemaSerializer.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience delegator (default session args) for the raw-JSON token writer.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchemaSerializerSession.</span><code><a href="../../json/JsonSchemaSerializerSession.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level push generator that emits raw JSON (NOT schema) one structural event at a
+ time, with the <a href="../TokenWriter.html#object(java.lang.Object)"><code>object(Object)</code></a> POJO bridge disabled (the walker would
+ emit the bean's own JSON, not its JSON Schema).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializer.</span><code><a href="../../json/JsonSerializer.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience delegator that opens a <a href="../../json/JsonTokenWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter</code></a> over the output using
+ <b>default session arguments</b> (mirrors <a href="../../serializer/Serializer.html#write(java.lang.Object,java.lang.Object)"><code>Serializer.write(Object, Object)</code></a>).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level push generator that emits JSON one structural event at a time, bound to
+ this session's live config.</div>
+</div>
 </div>
 </section>
 </li>
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Json5lSerializerSession.</span><code><a href="../../json5l/Json5lSerializerSession.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5lSerializerSession.</span><code><a href="../../json5l/Json5lSerializerSession.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -365,20 +365,20 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonlTokenWriter.</span><code><a href="../../jsonl/JsonlTokenWriter.html#object(java.lang.Object)" class="member-name-link">object</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonlSerializerSession.</span><code><a href="../../jsonl/JsonlSerializerSession.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last even-row-color">
+<div class="col-second even-row-color"><span class="type-name-label">JsonlTokenWriter.</span><code><a href="../../jsonl/JsonlTokenWriter.html#startArray()" class="member-name-link">startArray</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonlTokenWriter.</span><code><a href="../../jsonl/JsonlTokenWriter.html#startObject()" class="member-name-link">startObject</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonlTokenWriter.</span><code><a href="../../jsonl/JsonlTokenWriter.html#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonlSerializerSession.</span><code><a href="../../jsonl/JsonlSerializerSession.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Opens a low-level push generator that emits JSONL one structural event at a time, with a
  trailing newline after every top-level value, bound to this live session.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonlTokenWriter.</span><code><a href="../../jsonl/JsonlTokenWriter.html#startArray()" class="member-name-link">startArray</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonlTokenWriter.</span><code><a href="../../jsonl/JsonlTokenWriter.html#startObject()" class="member-name-link">startObject</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonlTokenWriter.</span><code><a href="../../jsonl/JsonlTokenWriter.html#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -416,18 +416,23 @@ loadScripts(document, 'script');</script>
 <div class="block">Opens a low-level <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> generator over the specified output using the <a href="../../marshaller/Json5l.html#DEFAULT"><code>Json5l.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#ofTokens(java.lang.Object)" class="member-name-link">ofTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json5R.</span><code><a href="../../marshaller/Json5R.html#ofTokens(java.lang.Object)" class="member-name-link">ofTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Opens a low-level <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> generator over the specified output using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
+<div class="block">Opens a low-level <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> generator over the specified output using the <a href="../../marshaller/Json5R.html#DEFAULT"><code>Json5R.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#ofTokens(java.lang.Object)" class="member-name-link">ofTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#ofTokens(java.lang.Object)" class="member-name-link">ofTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> generator over the specified output using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#ofTokens(java.lang.Object)" class="member-name-link">ofTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Opens a low-level <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> generator over the specified output using the <a href="../../marshaller/MsgPack.html#DEFAULT"><code>MsgPack.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Marshaller.</span><code><a href="../../marshaller/Marshaller.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Marshaller.</span><code><a href="../../marshaller/Marshaller.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Opens a low-level push generator that emits structural events one at a time.</div>
 </div>
 </div>
@@ -489,18 +494,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">MsgPackTokenWriter.</span><code><a href="../../msgpack/MsgPackTokenWriter.html#object(java.lang.Object)" class="member-name-link">object</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MsgPackSerializer.</span><code><a href="../../msgpack/MsgPackSerializer.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Convenience delegator that opens a <a href="../../msgpack/MsgPackTokenWriter.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackTokenWriter</code></a> over the output using
- <b>default session arguments</b> (mirrors <a href="../../serializer/OutputStreamSerializer.html#serialize(java.lang.Object)"><code>OutputStreamSerializer.serialize(Object)</code></a>).</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MsgPackSerializerSession.</span><code><a href="../../msgpack/MsgPackSerializerSession.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Opens a low-level push generator that emits MessagePack one structural event at a time,
- bound to this live session.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MsgPackTokenWriter.</span><code><a href="../../msgpack/MsgPackTokenWriter.html#startArray()" class="member-name-link">startArray</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
@@ -509,6 +502,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MsgPackTokenWriter.</span><code><a href="../../msgpack/MsgPackTokenWriter.html#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MsgPackSerializer.</span><code><a href="../../msgpack/MsgPackSerializer.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience delegator that opens a <a href="../../msgpack/MsgPackTokenWriter.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackTokenWriter</code></a> over the output using
+ <b>default session arguments</b> (mirrors <a href="../../serializer/OutputStreamSerializer.html#write(java.lang.Object)"><code>OutputStreamSerializer.write(Object)</code></a>).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MsgPackSerializerSession.</span><code><a href="../../msgpack/MsgPackSerializerSession.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level push generator that emits MessagePack one structural event at a time,
+ bound to this live session.</div>
+</div>
 </div>
 </section>
 </li>
@@ -581,45 +586,45 @@ loadScripts(document, 'script');</script>
 <div class="block">Emits an arbitrary POJO through the format's structural events.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TokenWritable.</span><code><a href="../TokenWritable.html#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#startArray()" class="member-name-link">startArray</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Opens a low-level <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> push generator targeting the specified output.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#startArray()" class="member-name-link">startArray</a>()</code></div>
-<div class="col-last odd-row-color">
 <div class="block">Emits a <a href="../TokenType.html#START_ARRAY"><code>TokenType.START_ARRAY</code></a> event.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#startObject()" class="member-name-link">startObject</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#startObject()" class="member-name-link">startObject</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Emits a <a href="../TokenType.html#START_OBJECT"><code>TokenType.START_OBJECT</code></a> event.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#string(java.lang.String)" class="member-name-link">string</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Emits a <a href="../TokenType.html#VALUE_STRING"><code>TokenType.VALUE_STRING</code></a> event.</div>
 </div>
-<div class="col-first even-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Implements <a href="../RecordWriter.html#write(java.lang.Object)"><code>RecordWriter.write(Object)</code></a> by delegating to <a href="../TokenWriter.html#object(java.lang.Object)"><code>object(Object)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#writeExt(int,byte%5B%5D)" class="member-name-link">writeExt</a><wbr>(int&nbsp;type,
+<div class="col-first even-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#writeExt(int,byte%5B%5D)" class="member-name-link">writeExt</a><wbr>(int&nbsp;type,
  byte[]&nbsp;payload)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Emits a typed-binary value (signed type byte + binary payload).</div>
 </div>
-<div class="col-first even-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#writeSimple(int)" class="member-name-link">writeSimple</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#writeSimple(int)" class="member-name-link">writeSimple</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Emits an opaque simple value.</div>
 </div>
-<div class="col-first odd-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#writeTag(long)" class="member-name-link">writeTag</a><wbr>(long&nbsp;tagNumber)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>default <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TokenWriter.</span><code><a href="../TokenWriter.html#writeTag(long)" class="member-name-link">writeTag</a><wbr>(long&nbsp;tagNumber)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Emits a semantic tag prefixing the next value emit.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TokenWritable.</span><code><a href="../TokenWritable.html#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> push generator targeting the specified output.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.marshall.stream</a> with parameters of type <a href="../TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span></div>

@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
  <ol>
    <li>Negotiating the request's <code>Content-Type</code> to a matched <a href="../../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a>.
    <li>Building a request-configured <a href="../../../marshall/parser/ParserSession.html" title="class in org.apache.juneau.marshall.parser"><code>ParserSession</code></a>
-       and calling <a href="../../../marshall/stream/RecordReadable.html#parseRecords(java.lang.Object)"><code>parseRecords(input)</code></a> on it where
+       and calling <a href="../../../marshall/stream/RecordReadable.html#readRecords(java.lang.Object)"><code>readRecords(input)</code></a> on it where
        <code>input</code> is the request reader (text formats) or input stream (binary formats).
    <li>Verifying the returned cursor's runtime type is assignable to the declared parameter
        type &mdash; this enforces the two-layer resolution for concrete cursor subtypes
@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>paramInfo</code> - The Java method parameter being resolved.</dd>
+<dd><code>paramInfo</code> - The Java method parameter being resolved. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="RecordReaderArg.html" title="class in org.apache.juneau.rest.server.arg"><code>RecordReaderArg</code></a>, or <jk>null</jk> if the parameter type is not
    <a href="../../../marshall/stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> or a subtype (other than <a href="../../../marshall/stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> &mdash; that case is

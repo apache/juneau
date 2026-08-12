@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24"> *</span>
 <span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
 <span class="source-line-no">026</span><span id="line-26"> * Because {@link TokenReader} IS-A {@link RecordReader}, FULL formats get the record surface for</span>
-<span class="source-line-no">027</span><span id="line-27"> * free &amp;mdash; the {@link #parseRecords(Object)} default returns {@link #parseTokens(Object)}.</span>
+<span class="source-line-no">027</span><span id="line-27"> * free &amp;mdash; the {@link #readRecords(Object)} default returns {@link #readTokens(Object)}.</span>
 <span class="source-line-no">028</span><span id="line-28"> * Capability is detected via {@code instanceof}; a format that supports tokens is a</span>
 <span class="source-line-no">029</span><span id="line-29"> * {@code TokenReadable} (and transitively a {@link RecordReadable}).</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
@@ -55,23 +55,23 @@
 <span class="source-line-no">042</span><span id="line-42">    * Opens a low-level {@link TokenReader} cursor over the specified input.</span>
 <span class="source-line-no">043</span><span id="line-43">    *</span>
 <span class="source-line-no">044</span><span id="line-44">    * @param input The input.  Subtypes define the supported types (typically</span>
-<span class="source-line-no">045</span><span id="line-45">    *    {@link Reader} / {@link CharSequence} / {@link InputStream} / {@code byte[]} / {@link File}).</span>
+<span class="source-line-no">045</span><span id="line-45">    *    {@link Reader} / {@link CharSequence} / {@link InputStream} / &lt;code&gt;&lt;jk&gt;byte&lt;/jk&gt;[]&lt;/code&gt;).</span>
 <span class="source-line-no">046</span><span id="line-46">    * @return A new {@link TokenReader} cursor positioned at {@link TokenType#NOT_AVAILABLE}.</span>
 <span class="source-line-no">047</span><span id="line-47">    * @throws IOException If a problem occurred reading the underlying input.</span>
 <span class="source-line-no">048</span><span id="line-48">    */</span>
-<span class="source-line-no">049</span><span id="line-49">   TokenReader parseTokens(Object input) throws IOException;</span>
+<span class="source-line-no">049</span><span id="line-49">   TokenReader readTokens(Object input) throws IOException;</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">   /**</span>
 <span class="source-line-no">052</span><span id="line-52">    * FULL formats get record semantics for free &amp;mdash; a {@link TokenReader} IS-A</span>
 <span class="source-line-no">053</span><span id="line-53">    * {@link RecordReader}.</span>
 <span class="source-line-no">054</span><span id="line-54">    *</span>
 <span class="source-line-no">055</span><span id="line-55">    * @param input The input.</span>
-<span class="source-line-no">056</span><span id="line-56">    * @return A new {@link RecordReader} cursor (the same object as {@link #parseTokens(Object)}).</span>
+<span class="source-line-no">056</span><span id="line-56">    * @return A new {@link RecordReader} cursor (the same object as {@link #readTokens(Object)}).</span>
 <span class="source-line-no">057</span><span id="line-57">    * @throws IOException If a problem occurred reading the underlying input.</span>
 <span class="source-line-no">058</span><span id="line-58">    */</span>
 <span class="source-line-no">059</span><span id="line-59">   @Override</span>
-<span class="source-line-no">060</span><span id="line-60">   default RecordReader parseRecords(Object input) throws IOException {</span>
-<span class="source-line-no">061</span><span id="line-61">      return parseTokens(input);</span>
+<span class="source-line-no">060</span><span id="line-60">   default RecordReader readRecords(Object input) throws IOException {</span>
+<span class="source-line-no">061</span><span id="line-61">      return readTokens(input);</span>
 <span class="source-line-no">062</span><span id="line-62">   }</span>
 <span class="source-line-no">063</span><span id="line-63">}</span>
 

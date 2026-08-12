@@ -272,32 +272,37 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CborParserSession.html" title="class in org.apache.juneau.marshall.cbor">CborParserSession</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSession()" class="member-name-link">getSession</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxLength()" class="member-name-link">getMaxLength</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the maximum allowed wire-declared length for byte/text strings and array/map element counts.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CborParserSession.html" title="class in org.apache.juneau.marshall.cbor">CborParserSession</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSession()" class="member-name-link">getSession</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a session to use for this context.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isNativeMode()" class="member-name-link">isNativeMode</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isNativeMode()" class="member-name-link">isNativeMode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if token-cursor native mode is enabled.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the properties on this bean as a map for debugging.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseArrayRecords(java.lang.Object)" class="member-name-link">parseArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readArrayRecords(java.lang.Object)" class="member-name-link">readArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator for the streaming array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> (uses default
- session args; see <a href="#parseTokens(java.lang.Object)"><code>parseTokens(Object)</code></a>).</div>
+ session args; see <a href="#readTokens(java.lang.Object)"><code>readTokens(Object)</code></a>).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator that opens a <a href="CborTokenReader.html" title="class in org.apache.juneau.marshall.cbor"><code>CborTokenReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the properties on this bean as a map for debugging.</div>
+ <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).</div>
 </div>
 </div>
 </div>
@@ -307,7 +312,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <code><a href="../parser/InputStreamParser.html#getBinaryFormat()">getBinaryFormat</a>, <a href="../parser/InputStreamParser.html#isReaderParser()">isReaderParser</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.Parser">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></h3>
-<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doParse</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parseArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">parseArgs</a>, <a href="../parser/Parser.html#parseIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../parser/Parser.html#parseIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">parseIntoMap</a>, <a href="../parser/Parser.html#parseWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">parseWithOuter</a></code></div>
+<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doRead</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#readArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">readArgs</a>, <a href="../parser/Parser.html#readIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">readIntoCollection</a>, <a href="../parser/Parser.html#readIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">readIntoMap</a>, <a href="../parser/Parser.html#readWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">readWithOuter</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingContextable">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingContextable.html" title="class in org.apache.juneau.marshall">MarshallingContextable</a></h3>
 <code><a href="../MarshallingContextable.html#getDurationFormat()">getDurationFormat</a>, <a href="../MarshallingContextable.html#getMarshallingContext()">getMarshallingContext</a>, <a href="../MarshallingContextable.html#getPeriodFormat()">getPeriodFormat</a></code></div>
@@ -319,13 +324,13 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.ArrayRecordReadable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></h3>
-<code><a href="../stream/ArrayRecordReadable.html#isArrayRecordStreaming()">isArrayRecordStreaming</a>, <a href="../stream/ArrayRecordReadable.html#parseArrayRecords(java.lang.Object,java.lang.String)">parseArrayRecords</a></code></div>
+<code><a href="../stream/ArrayRecordReadable.html#isArrayRecordStreaming()">isArrayRecordStreaming</a>, <a href="../stream/ArrayRecordReadable.html#readArrayRecords(java.lang.Object,java.lang.String)">readArrayRecords</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.RecordReadable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></h3>
 <code><a href="../stream/RecordReadable.html#isRecordStreaming()">isRecordStreaming</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.TokenReadable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/TokenReadable.html" title="interface in org.apache.juneau.marshall.stream">TokenReadable</a></h3>
-<code><a href="../stream/TokenReadable.html#parseRecords(java.lang.Object)">parseRecords</a></code></div>
+<code><a href="../stream/TokenReadable.html#readRecords(java.lang.Object)">readRecords</a></code></div>
 </section>
 </li>
 </ul>
@@ -340,35 +345,35 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-204">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-226">DEFAULT</a></span></div>
 <div class="block">Default parser, all default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_NATIVE">
 <h3>DEFAULT_NATIVE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-206">DEFAULT_NATIVE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-228">DEFAULT_NATIVE</a></span></div>
 <div class="block">Default parser with binary-native opt-in mode enabled (CBOR tags / simple values surface as token-level metadata).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_SPACED_HEX">
 <h3>DEFAULT_SPACED_HEX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-208">DEFAULT_SPACED_HEX</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-230">DEFAULT_SPACED_HEX</a></span></div>
 <div class="block">Default parser, string input encoded as spaced-hex.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_BASE64">
 <h3>DEFAULT_BASE64</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-210">DEFAULT_BASE64</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CborParser.html" title="class in org.apache.juneau.marshall.cbor">CborParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-232">DEFAULT_BASE64</a></span></div>
 <div class="block">Default parser, string input encoded as BASE64.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="nativeMode">
 <h3>nativeMode</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-221">nativeMode</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-243">nativeMode</a></span></div>
 </section>
 </li>
 </ul>
@@ -382,7 +387,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.cbor.CborParser.Builder)">
 <h3>CborParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-231">CborParser</a></span><wbr><span class="parameters">(<a href="CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-255">CborParser</a></span><wbr><span class="parameters">(<a href="CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -401,7 +406,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-217">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-239">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -412,7 +417,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isNativeMode()">
 <h3>isNativeMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-241">isNativeMode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-266">isNativeMode</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if token-cursor native mode is enabled.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -421,9 +426,20 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 </section>
 </li>
 <li>
+<section class="detail" id="getMaxLength()">
+<h3>getMaxLength</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-275">getMaxLength</a></span>()</div>
+<div class="block">Returns the maximum allowed wire-declared length for byte/text strings and array/map element counts.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The maximum length.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-245">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-279">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -440,7 +456,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborParserSession.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-250">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborParserSession.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-284">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -458,7 +474,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getCborBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getCborBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.cbor">CborBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-255">getCborBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.cbor">CborBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-289">getCborBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="CborMetaProvider.html#getCborBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">CborMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -474,7 +490,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getCborClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getCborClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborClassMeta.html" title="class in org.apache.juneau.marshall.cbor">CborClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-262">getCborClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborClassMeta.html" title="class in org.apache.juneau.marshall.cbor">CborClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-296">getCborClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="CborMetaProvider.html#getCborClassMeta(org.apache.juneau.marshall.ClassMeta)">CborMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -490,7 +506,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborParserSession.html" title="class in org.apache.juneau.marshall.cbor">CborParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-267">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CborParserSession.html" title="class in org.apache.juneau.marshall.cbor">CborParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-301">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -505,21 +521,21 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 </section>
 </li>
 <li>
-<section class="detail" id="parseTokens(java.lang.Object)">
-<h3>parseTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-286">parseTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readTokens(java.lang.Object)">
+<h3>readTokens</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-320">readTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="CborTokenReader.html" title="class in org.apache.juneau.marshall.cbor"><code>CborTokenReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).
+ <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).
 
  <p>
- The real implementation lives on <a href="CborParserSession.html#parseTokens(java.lang.Object)"><code>CborParserSession.parseTokens(Object)</code></a>.  Callers
+ The real implementation lives on <a href="CborParserSession.html#readTokens(java.lang.Object)"><code>CborParserSession.readTokens(Object)</code></a>.  Callers
  that need request-derived configuration (locale, timezone, schema, swaps) should call
- <a href="#createSession()"><code>createSession()</code></a> and invoke <a href="CborParserSession.html#parseTokens(java.lang.Object)"><code>CborParserSession.parseTokens(Object)</code></a> on the
+ <a href="#createSession()"><code>createSession()</code></a> and invoke <a href="CborParserSession.html#readTokens(java.lang.Object)"><code>CborParserSession.readTokens(Object)</code></a> on the
  built session instead.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/TokenReadable.html#parseTokens(java.lang.Object)">parseTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenReadable.html" title="interface in org.apache.juneau.marshall.stream">TokenReadable</a></code></dd>
+<dd><code><a href="../stream/TokenReadable.html#readTokens(java.lang.Object)">readTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenReadable.html" title="interface in org.apache.juneau.marshall.stream">TokenReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -530,16 +546,16 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 </section>
 </li>
 <li>
-<section class="detail" id="parseArrayRecords(java.lang.Object)">
-<h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-300">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readArrayRecords(java.lang.Object)">
+<h3>readArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-334">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the streaming array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> (uses default
- session args; see <a href="#parseTokens(java.lang.Object)"><code>parseTokens(Object)</code></a>).  Real impl on
- <a href="CborParserSession.html#parseArrayRecords(java.lang.Object)"><code>CborParserSession.parseArrayRecords(Object)</code></a>.</div>
+ session args; see <a href="#readTokens(java.lang.Object)"><code>readTokens(Object)</code></a>).  Real impl on
+ <a href="CborParserSession.html#readArrayRecords(java.lang.Object)"><code>CborParserSession.readArrayRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordReadable.html#parseArrayRecords(java.lang.Object)">parseArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordReadable.html#readArrayRecords(java.lang.Object)">readArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -552,7 +568,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-305">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/cbor/CborParser.html#line-339">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

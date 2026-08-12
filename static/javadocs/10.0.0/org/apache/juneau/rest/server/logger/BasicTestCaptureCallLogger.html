@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -140,6 +140,15 @@ loadScripts(document, 'script');</script>
 <code><a href="CallLogger.Builder.html" title="class in org.apache.juneau.rest.server.logger">CallLogger.Builder</a>, <a href="CallLogger.Void.html" title="class in org.apache.juneau.rest.server.logger">CallLogger.Void</a></code></div>
 </section>
 </li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="inherited-list">
+<h3 id="fields-inherited-from-class-org.apache.juneau.rest.server.logger.CallLogger">Fields inherited from class&nbsp;org.apache.juneau.rest.server.logger.<a href="CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a></h3>
+<code><a href="CallLogger.html#DEFAULT_REDACTED_HEADERS">DEFAULT_REDACTED_HEADERS</a></code></div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -183,7 +192,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.ThrowableAssertion&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertThrown()" class="member-name-link">assertThrown</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the last logged message level.</div>
+<div class="block">Returns an assertion of the last logged throwable.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLevel()" class="member-name-link">getLevel</a>()</code></div>
@@ -203,7 +212,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getThrown()" class="member-name-link">getThrown</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the last logged message level.</div>
+<div class="block">Returns the last logged throwable.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="CallLogger.Builder.html" title="class in org.apache.juneau.rest.server.logger">CallLogger.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#init(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">init</a><wbr>(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</code></div>
@@ -258,7 +267,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor using specific settings.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store containing injectable beans for this logger.</dd>
+<dd><code>beanStore</code> - The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -296,10 +305,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="assertThrown()">
 <h3>assertThrown</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.ThrowableAssertion&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/logger/BasicTestCaptureCallLogger.html#line-122">assertThrown</a></span>()</div>
-<div class="block">Returns the last logged message level.</div>
+<div class="block">Returns an assertion of the last logged throwable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The last logged message level, or <jk>null</jk> if nothing was logged.</dd>
+<dd>The last logged throwable as an assertion object.  Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -332,7 +341,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the last logged message and then deletes it internally.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The last logged message.</dd>
+<dd>The last logged message, or <jk>null</jk> if nothing was logged.</dd>
 </dl>
 </section>
 </li>
@@ -340,10 +349,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getThrown()">
 <h3>getThrown</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/logger/BasicTestCaptureCallLogger.html#line-162">getThrown</a></span>()</div>
-<div class="block">Returns the last logged message level.</div>
+<div class="block">Returns the last logged throwable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The last logged message level, or <jk>null</jk> if nothing was logged.</dd>
+<dd>The last logged throwable, or <jk>null</jk> if nothing was logged.</dd>
 </dl>
 </section>
 </li>
@@ -370,7 +379,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="CallLogger.html#init(org.apache.juneau.commons.inject.BeanStore)">init</a></code>&nbsp;in class&nbsp;<code><a href="CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store containing injectable beans for this logger.</dd>
+<dd><code>beanStore</code> - The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new builder object.</dd>
 </dl>

@@ -111,16 +111,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#serializeArrayRecords(java.lang.Object)" class="member-name-link">serializeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writeArrayRecords(java.lang.Object)" class="member-name-link">writeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Opens a <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each <a href="RecordWriter.html#write(java.lang.Object)"><code>write(...)</code></a>
  call as one element of a top-level wire array.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#serializeArrayRecords(java.lang.Object,int)" class="member-name-link">serializeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#writeArrayRecords(java.lang.Object,int)" class="member-name-link">writeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
  int&nbsp;expectedCount)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">Variant of <a href="#serializeArrayRecords(java.lang.Object)"><code>serializeArrayRecords(Object)</code></a> for length-prefixed binary formats that
+<div class="block">Variant of <a href="#writeArrayRecords(java.lang.Object)"><code>writeArrayRecords(Object)</code></a> for length-prefixed binary formats that
  require the element count up front (msgpack, bson).</div>
 </div>
 </div>
@@ -138,10 +138,10 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="serializeArrayRecords(java.lang.Object)">
-<h3>serializeArrayRecords</h3>
-<div class="member-signature"><span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordWritable.html#line-47">serializeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeArrayRecords(java.lang.Object)">
+<h3>writeArrayRecords</h3>
+<div class="member-signature"><span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordWritable.html#line-47">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each <a href="RecordWriter.html#write(java.lang.Object)"><code>write(...)</code></a>
  call as one element of a top-level wire array.</div>
 <dl class="notes">
@@ -155,14 +155,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="serializeArrayRecords(java.lang.Object,int)">
-<h3>serializeArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordWritable.html#line-60">serializeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
+<section class="detail" id="writeArrayRecords(java.lang.Object,int)">
+<h3>writeArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/ArrayRecordWritable.html#line-60">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
  int&nbsp;expectedCount)</span>
-                                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Variant of <a href="#serializeArrayRecords(java.lang.Object)"><code>serializeArrayRecords(Object)</code></a> for length-prefixed binary formats that
+                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Variant of <a href="#writeArrayRecords(java.lang.Object)"><code>writeArrayRecords(Object)</code></a> for length-prefixed binary formats that
  require the element count up front (msgpack, bson).  Other formats may ignore the count and
- behave the same as <a href="#serializeArrayRecords(java.lang.Object)"><code>serializeArrayRecords(Object)</code></a>.</div>
+ behave the same as <a href="#writeArrayRecords(java.lang.Object)"><code>writeArrayRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>

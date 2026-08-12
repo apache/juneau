@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Registers multiple cache-flush hooks at once.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>hooks</code> - The hooks, keyed by registration name.</dd>
+<dd><code>hooks</code> - The hooks, keyed by registration name. Can be <code>null</code> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="threadNamePrefixExclude(java.lang.String...)">
 <h3>threadNamePrefixExclude</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AdminMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">AdminMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminMixin.Builder.html#line-322">threadNamePrefixExclude</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AdminMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">AdminMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminMixin.Builder.html#line-323">threadNamePrefixExclude</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Replaces the thread-name-prefix exclude list.
 
  <p>
@@ -218,7 +218,8 @@ loadScripts(document, 'script');</script>
  filtering entirely.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The thread-name prefixes to exclude. Must not be <code>null</code>.</dd>
+<dd><code>values</code> - The thread-name prefixes to exclude. Can be <code>null</code> (equivalent to an empty
+   array &mdash; disables filtering); <code>null</code> or empty elements are skipped.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -227,7 +228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops">AdminMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminMixin.Builder.html#line-332">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops">AdminMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/AdminMixin.Builder.html#line-333">build</a></span>()</div>
 <div class="block">Builds an <a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminMixin</code></a> instance.</div>
 <dl class="notes">
 <dt>Returns:</dt>

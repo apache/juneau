@@ -58,8 +58,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -76,7 +75,12 @@ loadScripts(document, 'script');</script>
 R&gt;&nbsp;<a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpTypedHandlers.</span><code><a href="../McpTypedHandlers.html#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)" class="member-name-link">adaptTool</a><wbr>(<a href="../McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;A,<wbr>R&gt;&nbsp;typed)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Converts a typed tool handler into a raw handler suitable for <a href="../McpServerConfig.html#addTool(org.apache.juneau.rest.server.mcp.McpToolHandler...)"><code>McpServerConfig.addTool(McpToolHandler...)</code></a>.</div>
+<div class="block">Adapts a typed tool handler into a raw <a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpServerConfig.</span><code><a href="../McpServerConfig.html#addTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)" class="member-name-link">addTool</a><wbr>(<a href="../McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;?,<wbr>?&gt;&nbsp;handler)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience: adapt and append a single typed tool handler.</div>
 </div>
 </div>
 </section>

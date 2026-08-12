@@ -75,7 +75,7 @@
 <span class="source-line-no">062</span><span id="line-62">   /**</span>
 <span class="source-line-no">063</span><span id="line-63">    * Renders the manifest's main attributes (build/version/git metadata) as a sorted map.</span>
 <span class="source-line-no">064</span><span id="line-64">    *</span>
-<span class="source-line-no">065</span><span id="line-65">    * @param manifest The resolved manifest, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">065</span><span id="line-65">    * @param manifest The resolved manifest, or &lt;jk&gt;null&lt;/jk&gt; (in which case an empty map is returned).</span>
 <span class="source-line-no">066</span><span id="line-66">    * @return A sorted map of manifest attribute &amp;rarr; value (empty when {@code manifest} is &lt;jk&gt;null&lt;/jk&gt;); never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">067</span><span id="line-67">    */</span>
 <span class="source-line-no">068</span><span id="line-68">   public JsonMap getInfo(ManifestFile manifest) {</span>

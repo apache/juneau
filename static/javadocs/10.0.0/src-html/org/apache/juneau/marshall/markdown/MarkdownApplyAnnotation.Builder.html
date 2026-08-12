@@ -223,12 +223,13 @@
 <span class="source-line-no">210</span><span id="line-210">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</span>
 <span class="source-line-no">211</span><span id="line-211">    *</span>
 <span class="source-line-no">212</span><span id="line-212">    * @param a The annotation to check.</span>
-<span class="source-line-no">213</span><span id="line-213">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</span>
-<span class="source-line-no">214</span><span id="line-214">    */</span>
-<span class="source-line-no">215</span><span id="line-215">   public static boolean empty(MarkdownApply a) {</span>
-<span class="source-line-no">216</span><span id="line-216">      return a == null || DEFAULT.equals(a);</span>
-<span class="source-line-no">217</span><span id="line-217">   }</span>
-<span class="source-line-no">218</span><span id="line-218">}</span>
+<span class="source-line-no">213</span><span id="line-213">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;true&lt;/jk&gt;).</span>
+<span class="source-line-no">214</span><span id="line-214">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</span>
+<span class="source-line-no">215</span><span id="line-215">    */</span>
+<span class="source-line-no">216</span><span id="line-216">   public static boolean empty(MarkdownApply a) {</span>
+<span class="source-line-no">217</span><span id="line-217">      return a == null || DEFAULT.equals(a);</span>
+<span class="source-line-no">218</span><span id="line-218">   }</span>
+<span class="source-line-no">219</span><span id="line-219">}</span>
 
 
 

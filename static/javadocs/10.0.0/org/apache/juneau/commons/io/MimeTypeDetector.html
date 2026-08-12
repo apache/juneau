@@ -281,7 +281,7 @@ loadScripts(document, 'script');</script>
  Results are cached to improve performance for repeated lookups of the same files.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>fileName</code> - The name or path of the file.</dd>
+<dd><code>fileName</code> - The name or path of the file.  Can be <jk>null</jk> or empty, in which case the default type is returned.</dd>
 <dt>Returns:</dt>
 <dd>The MIME type of the file, or the default type if unknown.</dd>
 </dl>

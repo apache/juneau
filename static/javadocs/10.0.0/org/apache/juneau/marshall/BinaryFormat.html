@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
  <p>
  Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native bytes regardless of the configured
  <code>BinaryFormat</code>; this setting only affects text-based serializers and the
- <code>OutputStreamSerializerSession#serializeToString(Object)</code> stream-to-string convenience.</div>
+ <code>OutputStreamSerializerSession#writeToString(Object)</code> stream-to-string convenience.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -296,7 +296,7 @@ not permitted.)</div>
 <div class="block">Formats the specified value using this format.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format.  Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to format.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The formatted string, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
 </dl>
@@ -314,7 +314,7 @@ not permitted.)</div>
  enums in this package.  The configured format is consulted only as a hint for ambiguous input.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value.  Can be <jk>null</jk> or blank.</dd>
+<dd><code>value</code> - The wire value.  Can be <jk>null</jk> or blank (returns an empty array).</dd>
 <dt>Returns:</dt>
 <dd>The parsed bytes, or an empty array if <code>value</code> is <jk>null</jk> or blank.</dd>
 </dl>

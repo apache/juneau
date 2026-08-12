@@ -96,10 +96,10 @@ loadScripts(document, 'script');</script>
  only when the underlying input is exhausted.
 
  <p>
- The most ergonomic way to consume a JSONL file is via <a href="../json/JsonTokenReader.html#read(java.lang.Class)"><code>JsonTokenReader.read(Class)</code></a>, which binds one
+ The most ergonomic way to consume a JSONL stream is via <a href="../json/JsonTokenReader.html#read(java.lang.Class)"><code>JsonTokenReader.read(Class)</code></a>, which binds one
  line to a POJO per call:
  <p class='bjava'>
-   <jk>try</jk> (TokenReader <jv>r</jv> = Jsonl.<jsf>DEFAULT</jsf>.parseTokens(<jv>file</jv>)) {
+   <jk>try</jk> (TokenReader <jv>r</jv> = Jsonl.<jsf>DEFAULT</jsf>.readTokens(<jv>reader</jv>)) {
       <jk>while</jk> (<jv>r</jv>.canRead()) {
          MyRecord <jv>rec</jv> = <jv>r</jv>.read(MyRecord.<jk>class</jk>);
          process(<jv>rec</jv>);
@@ -151,7 +151,7 @@ loadScripts(document, 'script');</script>
  <a href="../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="JsonlParserSession.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParserSession</a>&nbsp;session)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor used by <a href="JsonlParserSession.html#parseTokens(java.lang.Object)"><code>JsonlParserSession.parseTokens(Object)</code></a> to plumb the calling
+<div class="block">Constructor used by <a href="JsonlParserSession.html#readTokens(java.lang.Object)"><code>JsonlParserSession.readTokens(Object)</code></a> to plumb the calling
  session through.</div>
 </div>
 </div>
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
  <a href="../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="JsonlParserSession.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParserSession</a>&nbsp;session)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Constructor used by <a href="JsonlParserSession.html#parseTokens(java.lang.Object)"><code>JsonlParserSession.parseTokens(Object)</code></a> to plumb the calling
+<div class="block">Constructor used by <a href="JsonlParserSession.html#readTokens(java.lang.Object)"><code>JsonlParserSession.readTokens(Object)</code></a> to plumb the calling
  session through.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

@@ -236,8 +236,8 @@ V&gt;&nbsp;<a href="Property.Builder.html" title="class in org.apache.juneau.com
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>producer</code> - The producer function (getter). Can be <jk>null</jk>.</dd>
-<dd><code>consumer</code> - The consumer function (setter). Can be <jk>null</jk>.</dd>
+<dd><code>producer</code> - The producer function (getter). Can be <jk>null</jk>, in which case <a href="#canRead()"><code>canRead()</code></a> returns <jk>false</jk> and <a href="#get(T)"><code>get(Object)</code></a> throws an <a href="ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a>.</dd>
+<dd><code>consumer</code> - The consumer function (setter). Can be <jk>null</jk>, in which case <a href="#canWrite()"><code>canWrite()</code></a> returns <jk>false</jk> and <a href="#set(T,V)"><code>set(Object,Object)</code></a> throws an <a href="ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a>.</dd>
 </dl>
 </section>
 </li>

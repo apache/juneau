@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-324">EchoMixin.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-333">EchoMixin.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder for <a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>EchoMixin</code></a> instances.</div>
 </section>
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-330">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-339">Builder</a></span>()</div>
 <div class="block">Constructor &mdash; package access for <a href="EchoMixin.html#create()"><code>EchoMixin.create()</code></a>.</div>
 </section>
 </li>
@@ -171,7 +171,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bodyLimit(long)">
 <h3>bodyLimit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-344">bodyLimit</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-353">bodyLimit</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <div class="block">Sets the body capture cap.
 
  <p>
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="redactedHeaders(java.lang.String...)">
 <h3>redactedHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-361">redactedHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-371">redactedHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Replaces the redacted-header set with the supplied values.
 
  <p>
@@ -196,7 +196,8 @@ loadScripts(document, 'script');</script>
  (not recommended outside of integration tests).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The header names to redact.</dd>
+<dd><code>values</code> - The header names to redact. Can be <code>null</code> (equivalent to an empty array
+   &mdash; disables redaction); <code>null</code> or blank elements are skipped.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -205,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="redactHeader(java.lang.String)">
 <h3>redactHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-377">redactHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-387">redactHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds an additional header name to the redacted-header set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -219,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-389">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#line-399">build</a></span>()</div>
 <div class="block">Builds a <a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>EchoMixin</code></a> instance.</div>
 <dl class="notes">
 <dt>Returns:</dt>

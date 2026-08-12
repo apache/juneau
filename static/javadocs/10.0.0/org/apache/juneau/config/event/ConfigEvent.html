@@ -365,7 +365,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The modifier characters.
-   <br>Never <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> if the event has no modifiers (e.g. remove/section events, or entries set without modifiers).</dd>
 </dl>
 </section>
 </li>
@@ -376,7 +376,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the section or entry lines.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The section or entry lines.</dd>
+<dd>An unmodifiable list of the section or entry lines, or <jk>null</jk> if none were supplied.</dd>
 </dl>
 </section>
 </li>

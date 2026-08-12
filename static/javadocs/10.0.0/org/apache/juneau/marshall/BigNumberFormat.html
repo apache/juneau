@@ -346,7 +346,7 @@ not permitted.)</div>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dd><code>format</code> - The configured format. Can be <jk>null</jk> (treated as <a href="#NUMBER"><code>NUMBER</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The formatted value (a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> for numeric output, a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> for string output),
@@ -371,7 +371,7 @@ not permitted.)</div>
  magnitude.  Zero-scale values are tested against the integer <code>±(2^53 − 1)</code> bound.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dd><code>format</code> - The configured format. Can be <jk>null</jk> (treated as <a href="#NUMBER"><code>NUMBER</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The formatted value (a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a> for numeric output, a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> for string output),
@@ -394,8 +394,8 @@ not permitted.)</div>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The target type (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a>).</dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank.</dd>
-<dd><code>format</code> - The configured format (informational only — parsing is format-agnostic). Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
+<dd><code>format</code> - The configured format (informational only — parsing is format-agnostic). Can be <jk>null</jk> (ignored; parsing is format-agnostic).</dd>
 <dd><code>targetType</code> - The desired return type — <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>The parsed value, or <jk>null</jk> if <code>value</code> is <jk>null</jk> or blank.</dd>

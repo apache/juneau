@@ -110,76 +110,80 @@
 <span class="source-line-no">097</span><span id="line-97">    * Constructor.</span>
 <span class="source-line-no">098</span><span id="line-98">    *</span>
 <span class="source-line-no">099</span><span id="line-99">    * @param builder The builder for this object.</span>
-<span class="source-line-no">100</span><span id="line-100">    */</span>
-<span class="source-line-no">101</span><span id="line-101">   protected RrpcRestOpSession(Builder builder) {</span>
-<span class="source-line-no">102</span><span id="line-102">      super(builder);</span>
-<span class="source-line-no">103</span><span id="line-103">      ctx = builder.ctx2;</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   @Override /* Overridden from RestOpSession */</span>
-<span class="source-line-no">107</span><span id="line-107">   public RrpcRestOpSession finish() {</span>
-<span class="source-line-no">108</span><span id="line-108">      super.finish();</span>
-<span class="source-line-no">109</span><span id="line-109">      return this;</span>
-<span class="source-line-no">110</span><span id="line-110">   }</span>
-<span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   @Override</span>
-<span class="source-line-no">113</span><span id="line-113">   @SuppressWarnings({</span>
-<span class="source-line-no">114</span><span id="line-114">      "java:S3776" // Cognitive complexity acceptable for RRPC request handling</span>
-<span class="source-line-no">115</span><span id="line-115">   })</span>
-<span class="source-line-no">116</span><span id="line-116">   public void run() throws Exception {</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">      super.run();</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">      RestRequest req = getRequest();</span>
-<span class="source-line-no">121</span><span id="line-121">      RestResponse res = getResponse();</span>
-<span class="source-line-no">122</span><span id="line-122">      RestSession session = getRestSession();</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">      final Object o = res.hasContent() ? res.getContent(Object.class) : null;</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">      if ("GET".equals(session.getMethod())) {</span>
-<span class="source-line-no">127</span><span id="line-127">         res.setContent(ctx.getMeta().getMethodsByPath().keySet());</span>
-<span class="source-line-no">128</span><span id="line-128">         return;</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">      } else if ("POST".equals(session.getMethod())) {</span>
-<span class="source-line-no">131</span><span id="line-131">         var pip = session.getUrlPath().getPath();</span>
-<span class="source-line-no">132</span><span id="line-132">         if (pip.indexOf('/') != -1)</span>
-<span class="source-line-no">133</span><span id="line-133">            pip = pip.substring(pip.lastIndexOf('/') + 1);</span>
-<span class="source-line-no">134</span><span id="line-134">         pip = urlDecode(pip);</span>
-<span class="source-line-no">135</span><span id="line-135">         RrpcInterfaceMethodMeta rmm = ctx.getMeta().getMethodMetaByPath(pip);</span>
-<span class="source-line-no">136</span><span id="line-136">         if (nn(rmm)) {</span>
-<span class="source-line-no">137</span><span id="line-137">            Method m = rmm.getJavaMethod();</span>
-<span class="source-line-no">138</span><span id="line-138">            try {</span>
-<span class="source-line-no">139</span><span id="line-139">               // Parse the args and invoke the method.</span>
-<span class="source-line-no">140</span><span id="line-140">               var parserMatchOpt = req.getContent().getParserMatch();</span>
-<span class="source-line-no">141</span><span id="line-141">               if (!parserMatchOpt.isPresent())</span>
-<span class="source-line-no">142</span><span id="line-142">                  throw new BadRequest("No parser match found for request content");</span>
-<span class="source-line-no">143</span><span id="line-143">               Parser p = parserMatchOpt.get().getParser();</span>
-<span class="source-line-no">144</span><span id="line-144">               Object[] args = null;</span>
-<span class="source-line-no">145</span><span id="line-145">               if (m.getGenericParameterTypes().length == 0)</span>
-<span class="source-line-no">146</span><span id="line-146">                  args = new Object[0];</span>
-<span class="source-line-no">147</span><span id="line-147">               else {</span>
-<span class="source-line-no">148</span><span id="line-148">                  try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {</span>
-<span class="source-line-no">149</span><span id="line-149">                     args = p.parseArgs(in, m.getGenericParameterTypes());</span>
-<span class="source-line-no">150</span><span id="line-150">                  }</span>
-<span class="source-line-no">151</span><span id="line-151">               }</span>
-<span class="source-line-no">152</span><span id="line-152">               res.setContent(m.invoke(o, args));</span>
-<span class="source-line-no">153</span><span id="line-153">               return;</span>
-<span class="source-line-no">154</span><span id="line-154">            } catch (BasicHttpException e) {</span>
-<span class="source-line-no">155</span><span id="line-155">               throw e;</span>
-<span class="source-line-no">156</span><span id="line-156">            } catch (Exception e) {</span>
-<span class="source-line-no">157</span><span id="line-157">               throw new InternalServerError(e);</span>
-<span class="source-line-no">158</span><span id="line-158">            }</span>
-<span class="source-line-no">159</span><span id="line-159">         }</span>
-<span class="source-line-no">160</span><span id="line-160">      }</span>
-<span class="source-line-no">161</span><span id="line-161">      throw new NotFound();</span>
-<span class="source-line-no">162</span><span id="line-162">   }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   @Override /* Overridden from RestOpSession */</span>
-<span class="source-line-no">165</span><span id="line-165">   public RrpcRestOpSession status(HttpStatusLine value) {</span>
-<span class="source-line-no">166</span><span id="line-166">      super.status(value);</span>
-<span class="source-line-no">167</span><span id="line-167">      return this;</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169">}</span>
+<span class="source-line-no">100</span><span id="line-100">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">101</span><span id="line-101">    */</span>
+<span class="source-line-no">102</span><span id="line-102">   protected RrpcRestOpSession(Builder builder) {</span>
+<span class="source-line-no">103</span><span id="line-103">      super(builder);</span>
+<span class="source-line-no">104</span><span id="line-104">      ctx = builder.ctx2;</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   @Override /* Overridden from RestOpSession */</span>
+<span class="source-line-no">108</span><span id="line-108">   public RrpcRestOpSession finish() {</span>
+<span class="source-line-no">109</span><span id="line-109">      super.finish();</span>
+<span class="source-line-no">110</span><span id="line-110">      return this;</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   @Override</span>
+<span class="source-line-no">114</span><span id="line-114">   @SuppressWarnings({</span>
+<span class="source-line-no">115</span><span id="line-115">      "java:S3776" // Cognitive complexity acceptable for RRPC request handling</span>
+<span class="source-line-no">116</span><span id="line-116">   })</span>
+<span class="source-line-no">117</span><span id="line-117">   public void run() throws Exception {</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">      super.run();</span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">      RestRequest req = getRequest();</span>
+<span class="source-line-no">122</span><span id="line-122">      RestResponse res = getResponse();</span>
+<span class="source-line-no">123</span><span id="line-123">      RestSession session = getRestSession();</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">      final Object o = res.hasContent() ? res.getContent(Object.class) : null;</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">      if ("GET".equals(session.getMethod())) {</span>
+<span class="source-line-no">128</span><span id="line-128">         res.setContent(ctx.getMeta().getMethodsByPath().keySet());</span>
+<span class="source-line-no">129</span><span id="line-129">         return;</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">      } else if ("POST".equals(session.getMethod())) {</span>
+<span class="source-line-no">132</span><span id="line-132">         // The method-signature path is whatever remains of the URL below this operation's matched path</span>
+<span class="source-line-no">133</span><span id="line-133">         // pattern (e.g. pattern "/calc/*" matched against "/calc/add/(int,int)" leaves "add/(int,int)"),</span>
+<span class="source-line-no">134</span><span id="line-134">         // NOT merely the last '/'-delimited segment of the full request path. A method-signature path</span>
+<span class="source-line-no">135</span><span id="line-135">         // itself contains a '/' (name/(paramTypes)), so truncating at the last slash strips the method</span>
+<span class="source-line-no">136</span><span id="line-136">         // name and leaves only the parameter-type token, which can never match a registered method path.</span>
+<span class="source-line-no">137</span><span id="line-137">         var match = session.getUrlPathMatch();</span>
+<span class="source-line-no">138</span><span id="line-138">         var pip = urlDecode(emptyIfNull(nn(match) ? match.getRemainder() : null));</span>
+<span class="source-line-no">139</span><span id="line-139">         RrpcInterfaceMethodMeta rmm = ctx.getMeta().getMethodMetaByPath(pip);</span>
+<span class="source-line-no">140</span><span id="line-140">         if (nn(rmm)) {</span>
+<span class="source-line-no">141</span><span id="line-141">            Method m = rmm.getJavaMethod();</span>
+<span class="source-line-no">142</span><span id="line-142">            try {</span>
+<span class="source-line-no">143</span><span id="line-143">               // Parse the args and invoke the method.</span>
+<span class="source-line-no">144</span><span id="line-144">               var parserMatchOpt = req.getContent().getParserMatch();</span>
+<span class="source-line-no">145</span><span id="line-145">               if (!parserMatchOpt.isPresent())</span>
+<span class="source-line-no">146</span><span id="line-146">                  throw new BadRequest("No parser match found for request content");</span>
+<span class="source-line-no">147</span><span id="line-147">               Parser p = parserMatchOpt.get().getParser();</span>
+<span class="source-line-no">148</span><span id="line-148">               Object[] args = null;</span>
+<span class="source-line-no">149</span><span id="line-149">               if (m.getGenericParameterTypes().length == 0)</span>
+<span class="source-line-no">150</span><span id="line-150">                  args = new Object[0];</span>
+<span class="source-line-no">151</span><span id="line-151">               else {</span>
+<span class="source-line-no">152</span><span id="line-152">                  try (Closeable in = p.isReaderParser() ? req.getReader() : req.getInputStream()) {</span>
+<span class="source-line-no">153</span><span id="line-153">                     args = p.readArgs(in, m.getGenericParameterTypes());</span>
+<span class="source-line-no">154</span><span id="line-154">                  }</span>
+<span class="source-line-no">155</span><span id="line-155">               }</span>
+<span class="source-line-no">156</span><span id="line-156">               res.setContent(m.invoke(o, args));</span>
+<span class="source-line-no">157</span><span id="line-157">               return;</span>
+<span class="source-line-no">158</span><span id="line-158">            } catch (BasicHttpException e) {</span>
+<span class="source-line-no">159</span><span id="line-159">               throw e;</span>
+<span class="source-line-no">160</span><span id="line-160">            } catch (Exception e) {</span>
+<span class="source-line-no">161</span><span id="line-161">               throw new InternalServerError(e);</span>
+<span class="source-line-no">162</span><span id="line-162">            }</span>
+<span class="source-line-no">163</span><span id="line-163">         }</span>
+<span class="source-line-no">164</span><span id="line-164">      }</span>
+<span class="source-line-no">165</span><span id="line-165">      throw new NotFound();</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">   @Override /* Overridden from RestOpSession */</span>
+<span class="source-line-no">169</span><span id="line-169">   public RrpcRestOpSession status(HttpStatusLine value) {</span>
+<span class="source-line-no">170</span><span id="line-170">      super.status(value);</span>
+<span class="source-line-no">171</span><span id="line-171">      return this;</span>
+<span class="source-line-no">172</span><span id="line-172">   }</span>
+<span class="source-line-no">173</span><span id="line-173">}</span>
 
 
 

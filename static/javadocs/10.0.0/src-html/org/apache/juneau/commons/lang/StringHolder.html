@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;jv&gt;name&lt;/jv&gt;.get());</span>
 <span class="source-line-no">086</span><span id="line-86">    * &lt;/p&gt;</span>
 <span class="source-line-no">087</span><span id="line-87">    *</span>
-<span class="source-line-no">088</span><span id="line-88">    * @param value The initial value.</span>
+<span class="source-line-no">088</span><span id="line-88">    * @param value The initial value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">089</span><span id="line-89">    * @return A new string value.</span>
 <span class="source-line-no">090</span><span id="line-90">    */</span>
 <span class="source-line-no">091</span><span id="line-91">   public static StringHolder of(String value) {</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">   /**</span>
 <span class="source-line-no">103</span><span id="line-103">    * Constructor.</span>
 <span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * @param value The initial value.</span>
+<span class="source-line-no">105</span><span id="line-105">    * @param value The initial value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">106</span><span id="line-106">    */</span>
 <span class="source-line-no">107</span><span id="line-107">   public StringHolder(String value) {</span>
 <span class="source-line-no">108</span><span id="line-108">      super(value);</span>
@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line-125">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;empty&lt;/jv&gt;.is(&lt;jk&gt;null&lt;/jk&gt;));</span>
 <span class="source-line-no">126</span><span id="line-126">    * &lt;/p&gt;</span>
 <span class="source-line-no">127</span><span id="line-127">    *</span>
-<span class="source-line-no">128</span><span id="line-128">    * @param value The value to compare to.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param value The value to compare to.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">129</span><span id="line-129">    * @return &lt;jk&gt;true&lt;/jk&gt; if the current value is equal to the specified value.</span>
 <span class="source-line-no">130</span><span id="line-130">    */</span>
 <span class="source-line-no">131</span><span id="line-131">   @Override</span>
@@ -162,7 +162,7 @@
 <span class="source-line-no">149</span><span id="line-149">    *    &lt;jsm&gt;assertFalse&lt;/jsm&gt;(&lt;jv&gt;name&lt;/jv&gt;.isAny());</span>
 <span class="source-line-no">150</span><span id="line-150">    * &lt;/p&gt;</span>
 <span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * @param values The values to compare to.</span>
+<span class="source-line-no">152</span><span id="line-152">    * @param values The values to compare to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">153</span><span id="line-153">    * @return &lt;jk&gt;true&lt;/jk&gt; if the current value matches any of the specified values.</span>
 <span class="source-line-no">154</span><span id="line-154">    */</span>
 <span class="source-line-no">155</span><span id="line-155">   public boolean isAny(String...values) {</span>

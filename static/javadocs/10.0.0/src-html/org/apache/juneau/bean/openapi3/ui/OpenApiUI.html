@@ -245,7 +245,7 @@
 <span class="source-line-no">232</span><span id="line-232">      return div().class_("op-block op-block-closed model").children(modelBlockSummary(modelName, model), div(model).class_("op-block-contents"));</span>
 <span class="source-line-no">233</span><span id="line-233">   }</span>
 <span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">   private static HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {</span>
+<span class="source-line-no">235</span><span id="line-235">   private static Div modelBlockSummary(String modelName, SchemaInfo model) {</span>
 <span class="source-line-no">236</span><span id="line-236">      return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(modelName).class_("method-button"),</span>
 <span class="source-line-no">237</span><span id="line-237">         nn(model.getDescription()) ? span(toBRL(model.getDescription())).class_("summary") : null);</span>
 <span class="source-line-no">238</span><span id="line-238">   }</span>
@@ -260,22 +260,22 @@
 <span class="source-line-no">247</span><span id="line-247">   }</span>
 <span class="source-line-no">248</span><span id="line-248"></span>
 <span class="source-line-no">249</span><span id="line-249">   // Creates the "Model" header.</span>
-<span class="source-line-no">250</span><span id="line-250">   private static HtmlElement modelsBlockSummary() {</span>
+<span class="source-line-no">250</span><span id="line-250">   private static Div modelsBlockSummary() {</span>
 <span class="source-line-no">251</span><span id="line-251">      return div().class_("tag-block-summary").onclick("toggleTagBlock(this)").children(span("Models").class_("name"));</span>
 <span class="source-line-no">252</span><span id="line-252">   }</span>
 <span class="source-line-no">253</span><span id="line-253"></span>
 <span class="source-line-no">254</span><span id="line-254">   private static Div opBlock(Session s, String path, String opName, Operation op) {</span>
 <span class="source-line-no">255</span><span id="line-255"></span>
 <span class="source-line-no">256</span><span id="line-256">      boolean deprecated = isTrue(op.getDeprecated());</span>
-<span class="source-line-no">257</span><span id="line-257">      var opClass = deprecated ? "deprecated" : opName.toLowerCase();</span>
+<span class="source-line-no">257</span><span id="line-257">      var opClass = deprecated ? "deprecated" : lcr(opName);</span>
 <span class="source-line-no">258</span><span id="line-258">      if (! deprecated &amp;&amp; ! STANDARD_METHODS.contains(opClass)) // HTT - opBlock only called with standard method names; custom method branch unreachable</span>
 <span class="source-line-no">259</span><span id="line-259">         opClass = "other";</span>
 <span class="source-line-no">260</span><span id="line-260"></span>
 <span class="source-line-no">261</span><span id="line-261">      return div().class_("op-block op-block-closed " + opClass).children(opBlockSummary(path, opName, op), div(tableContainer(s, op)).class_("op-block-contents"));</span>
 <span class="source-line-no">262</span><span id="line-262">   }</span>
 <span class="source-line-no">263</span><span id="line-263"></span>
-<span class="source-line-no">264</span><span id="line-264">   private static HtmlElement opBlockSummary(String path, String opName, Operation op) {</span>
-<span class="source-line-no">265</span><span id="line-265">      return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(opName.toUpperCase()).class_("method-button"), span(path).class_("path"),</span>
+<span class="source-line-no">264</span><span id="line-264">   private static Div opBlockSummary(String path, String opName, Operation op) {</span>
+<span class="source-line-no">265</span><span id="line-265">      return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(span(ucr(opName)).class_("method-button"), span(path).class_("path"),</span>
 <span class="source-line-no">266</span><span id="line-266">         nn(op.getSummary()) ? span(op.getSummary()).class_("summary") : null);</span>
 <span class="source-line-no">267</span><span id="line-267">   }</span>
 <span class="source-line-no">268</span><span id="line-268"></span>
@@ -356,7 +356,7 @@
 <span class="source-line-no">343</span><span id="line-343">   }</span>
 <span class="source-line-no">344</span><span id="line-344"></span>
 <span class="source-line-no">345</span><span id="line-345">   // Creates the "pet  Everything about your Pets  ext-link" header.</span>
-<span class="source-line-no">346</span><span id="line-346">   private static HtmlElement tagBlockSummary(Tag t) {</span>
+<span class="source-line-no">346</span><span id="line-346">   private static Div tagBlockSummary(Tag t) {</span>
 <span class="source-line-no">347</span><span id="line-347">      var ed = t.getExternalDocs();</span>
 <span class="source-line-no">348</span><span id="line-348"></span>
 <span class="source-line-no">349</span><span id="line-349">      String content;</span>

@@ -90,8 +90,8 @@ extends <a href="RecordWritable.html" title="interface in org.apache.juneau.mars
 
  <p>
  Because <a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> IS-A <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a>, FULL formats get the record surface for
- free &mdash; the <a href="#serializeRecords(java.lang.Object)"><code>serializeRecords(Object)</code></a> default returns
- <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>.  Capability is detected via <code>instanceof</code>.
+ free &mdash; the <a href="#writeRecords(java.lang.Object)"><code>writeRecords(Object)</code></a> default returns
+ <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>.  Capability is detected via <code>instanceof</code>.
 
  <h5 class='section'>See Also:</h5><ul>
    <li><a href="TokenReadable.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReadable</code></a> &mdash; the symmetric reader role.
@@ -112,13 +112,13 @@ extends <a href="RecordWritable.html" title="interface in org.apache.juneau.mars
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#serializeRecords(java.lang.Object)" class="member-name-link">serializeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#writeRecords(java.lang.Object)" class="member-name-link">writeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">FULL formats get record semantics for free &mdash; a <a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> IS-A
  <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Opens a low-level <a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> push generator targeting the specified output.</div>
 </div>
@@ -140,15 +140,16 @@ extends <a href="RecordWritable.html" title="interface in org.apache.juneau.mars
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="serializeTokens(java.lang.Object)">
-<h3>serializeTokens</h3>
-<div class="member-signature"><span class="return-type"><a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenWritable.html#line-48">serializeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeTokens(java.lang.Object)">
+<h3>writeTokens</h3>
+<div class="member-signature"><span class="return-type"><a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenWritable.html#line-49">writeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level <a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> push generator targeting the specified output.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>output</code> - The output.  Subtypes define the supported types (typically
-   <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a>).</dd>
+<dd><code>output</code> - The output.  Subtypes define the supported types: byte formats (cbor, msgpack)
+   accept an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a>; char formats (json, json5, jsonl, jsonschema, jcs) accept a
+   <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> (encoded as UTF-8).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a>.</dd>
 <dt>Throws:</dt>
@@ -157,20 +158,20 @@ extends <a href="RecordWritable.html" title="interface in org.apache.juneau.mars
 </section>
 </li>
 <li>
-<section class="detail" id="serializeRecords(java.lang.Object)">
-<h3>serializeRecords</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenWritable.html#line-59">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeRecords(java.lang.Object)">
+<h3>writeRecords</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenWritable.html#line-60">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">FULL formats get record semantics for free &mdash; a <a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> IS-A
  <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="RecordWritable.html#serializeRecords(java.lang.Object)">serializeRecords</a></code>&nbsp;in interface&nbsp;<code><a href="RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
+<dd><code><a href="RecordWritable.html#writeRecords(java.lang.Object)">writeRecords</a></code>&nbsp;in interface&nbsp;<code><a href="RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor (the same object as
-   <a href="#serializeTokens(java.lang.Object)"><code>serializeTokens(Object)</code></a>).</dd>
+   <a href="#writeTokens(java.lang.Object)"><code>writeTokens(Object)</code></a>).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If a problem occurred opening the underlying output.</dd>
 </dl>

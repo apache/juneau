@@ -173,20 +173,20 @@
 <span class="source-line-no">160</span><span id="line-160"></span>
 <span class="source-line-no">161</span><span id="line-161">   /**</span>
 <span class="source-line-no">162</span><span id="line-162">    * Convenience delegator that opens a {@link RecordWriter} over the output using</span>
-<span class="source-line-no">163</span><span id="line-163">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #serialize(Object)}).</span>
+<span class="source-line-no">163</span><span id="line-163">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
 <span class="source-line-no">164</span><span id="line-164">    *</span>
 <span class="source-line-no">165</span><span id="line-165">    * &lt;p&gt;</span>
-<span class="source-line-no">166</span><span id="line-166">    * The real implementation lives on {@link PlainTextSerializerSession#serializeRecords(Object)}.</span>
+<span class="source-line-no">166</span><span id="line-166">    * The real implementation lives on {@link PlainTextSerializerSession#writeRecords(Object)}.</span>
 <span class="source-line-no">167</span><span id="line-167">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
-<span class="source-line-no">168</span><span id="line-168">    * invoke {@link PlainTextSerializerSession#serializeRecords(Object)} on the built session instead.</span>
+<span class="source-line-no">168</span><span id="line-168">    * invoke {@link PlainTextSerializerSession#writeRecords(Object)} on the built session instead.</span>
 <span class="source-line-no">169</span><span id="line-169">    *</span>
 <span class="source-line-no">170</span><span id="line-170">    * @param output The output.</span>
 <span class="source-line-no">171</span><span id="line-171">    * @return A new {@link RecordWriter}.</span>
 <span class="source-line-no">172</span><span id="line-172">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">173</span><span id="line-173">    */</span>
 <span class="source-line-no">174</span><span id="line-174">   @Override /* RecordWritable */</span>
-<span class="source-line-no">175</span><span id="line-175">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">176</span><span id="line-176">      return getSession().serializeRecords(output);</span>
+<span class="source-line-no">175</span><span id="line-175">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">176</span><span id="line-176">      return getSession().writeRecords(output);</span>
 <span class="source-line-no">177</span><span id="line-177">   }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
 <span class="source-line-no">179</span><span id="line-179">   @Override /* RecordWritable */</span>

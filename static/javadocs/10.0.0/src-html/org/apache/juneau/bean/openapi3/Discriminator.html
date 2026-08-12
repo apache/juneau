@@ -116,14 +116,14 @@
 <span class="source-line-no">103</span><span id="line-103">      super(copyFrom);</span>
 <span class="source-line-no">104</span><span id="line-104"></span>
 <span class="source-line-no">105</span><span id="line-105">      this.propertyName = copyFrom.propertyName;</span>
-<span class="source-line-no">106</span><span id="line-106">      this.mapping = copyOf(copyFrom.mapping);</span>
+<span class="source-line-no">106</span><span id="line-106">      this.mapping = cp(copyFrom.mapping);</span>
 <span class="source-line-no">107</span><span id="line-107">   }</span>
 <span class="source-line-no">108</span><span id="line-108"></span>
 <span class="source-line-no">109</span><span id="line-109">   /**</span>
 <span class="source-line-no">110</span><span id="line-110">    * Adds one or more values to the &lt;property&gt;mapping&lt;/property&gt; property.</span>
 <span class="source-line-no">111</span><span id="line-111">    *</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param key The key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">113</span><span id="line-113">    * @param value The value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param key The key.  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @param value The value.  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">114</span><span id="line-114">    * @return This object</span>
 <span class="source-line-no">115</span><span id="line-115">    */</span>
 <span class="source-line-no">116</span><span id="line-116">   public Discriminator addMapping(String key, String value) {</span>
@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">    * Bean property getter:  &lt;property&gt;mapping&lt;/property&gt;.</span>
 <span class="source-line-no">144</span><span id="line-144">    *</span>
 <span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">    * The URL for the target documentation.</span>
+<span class="source-line-no">146</span><span id="line-146">    * An object to hold mappings between payload values and schema names or references.</span>
 <span class="source-line-no">147</span><span id="line-147">    *</span>
 <span class="source-line-no">148</span><span id="line-148">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">149</span><span id="line-149">    */</span>
@@ -166,7 +166,7 @@
 <span class="source-line-no">153</span><span id="line-153">    * Bean property getter:  &lt;property&gt;propertyName&lt;/property&gt;.</span>
 <span class="source-line-no">154</span><span id="line-154">    *</span>
 <span class="source-line-no">155</span><span id="line-155">    * &lt;p&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    * A short description of the target documentation.</span>
+<span class="source-line-no">156</span><span id="line-156">    * The name of the property in the payload that will hold the discriminator value.</span>
 <span class="source-line-no">157</span><span id="line-157">    *</span>
 <span class="source-line-no">158</span><span id="line-158">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">159</span><span id="line-159">    */</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">    * Bean property setter:  &lt;property&gt;mapping&lt;/property&gt;.</span>
 <span class="source-line-no">188</span><span id="line-188">    *</span>
 <span class="source-line-no">189</span><span id="line-189">    * &lt;p&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">    * The URL for the target documentation.</span>
+<span class="source-line-no">190</span><span id="line-190">    * An object to hold mappings between payload values and schema names or references.</span>
 <span class="source-line-no">191</span><span id="line-191">    *</span>
 <span class="source-line-no">192</span><span id="line-192">    * @param value</span>
 <span class="source-line-no">193</span><span id="line-193">    *    The new value for this property.</span>
@@ -220,7 +220,7 @@
 <span class="source-line-no">207</span><span id="line-207">    * Bean property setter:  &lt;property&gt;propertyName&lt;/property&gt;.</span>
 <span class="source-line-no">208</span><span id="line-208">    *</span>
 <span class="source-line-no">209</span><span id="line-209">    * &lt;p&gt;</span>
-<span class="source-line-no">210</span><span id="line-210">    * A short description of the target documentation.</span>
+<span class="source-line-no">210</span><span id="line-210">    * The name of the property in the payload that will hold the discriminator value.</span>
 <span class="source-line-no">211</span><span id="line-211">    *</span>
 <span class="source-line-no">212</span><span id="line-212">    * @param value</span>
 <span class="source-line-no">213</span><span id="line-213">    *    The new value for this property.</span>

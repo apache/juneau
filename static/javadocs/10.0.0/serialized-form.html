@@ -55,11 +55,11 @@ loadScripts(document, 'script');</script>
 <ul class="block-list">
 <li>
 <section class="serialized-package-container">
-<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/bean/mcp/package-summary.html">org.apache.juneau.bean.mcp</a></h2>
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/bean/jsonrpc/package-summary.html">org.apache.juneau.bean.jsonrpc</a></h2>
 <ul class="block-list">
 <li>
-<section class="serialized-class-details" id="org.apache.juneau.bean.mcp.McpException">
-<h3>Exception&nbsp;<a href="org/apache/juneau/bean/mcp/McpException.html" title="class in org.apache.juneau.bean.mcp">org.apache.juneau.bean.mcp.McpException</a></h3>
+<section class="serialized-class-details" id="org.apache.juneau.bean.jsonrpc.McpException">
+<h3>Exception&nbsp;<a href="org/apache/juneau/bean/jsonrpc/McpException.html" title="class in org.apache.juneau.bean.jsonrpc">org.apache.juneau.bean.jsonrpc.McpException</a></h3>
 <div class="type-signature">class McpException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
@@ -95,36 +95,6 @@ loadScripts(document, 'script');</script>
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
 </dl>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li>
-<section class="serialized-package-container">
-<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/commons/collections/package-summary.html">org.apache.juneau.commons.collections</a></h2>
-<ul class="block-list">
-<li>
-<section class="serialized-class-details" id="org.apache.juneau.commons.collections.ControlledArrayList">
-<h3>Class&nbsp;<a href="org/apache/juneau/commons/collections/ControlledArrayList.html" title="class in org.apache.juneau.commons.collections">org.apache.juneau.commons.collections.ControlledArrayList</a></h3>
-<div class="type-signature">class ControlledArrayList extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="org/apache/juneau/commons/collections/ControlledArrayList.html" title="type parameter in ControlledArrayList">E</a>&gt; implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
-<dl class="name-value">
-<dt>serialVersionUID:</dt>
-<dd>-1L</dd>
-</dl>
-<ul class="block-list">
-<li>
-<section class="detail">
-<h4>Serialized Fields</h4>
-<ul class="block-list">
-<li class="block-list">
-<h5>unmodifiable</h5>
-<pre>boolean unmodifiable</pre>
-</li>
-</ul>
-</section>
-</li>
-</ul>
 </section>
 </li>
 </ul>
@@ -232,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="serialized-class-details" id="org.apache.juneau.http.classic.header.HeaderList">
 <h3>Class&nbsp;<a href="org/apache/juneau/http/classic/header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">org.apache.juneau.http.classic.header.HeaderList</a></h3>
-<div class="type-signature">class HeaderList extends <a href="org/apache/juneau/commons/collections/ControlledArrayList.html" title="class in org.apache.juneau.commons.collections">ControlledArrayList</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt; implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<div class="type-signature">class HeaderList extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt; implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -250,6 +220,16 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 </ul>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.header.HeaderList.Unmodifiable">
+<h3>Class&nbsp;<a href="org/apache/juneau/http/classic/header/HeaderList.Unmodifiable.html" title="class in org.apache.juneau.http.classic.header">org.apache.juneau.http.classic.header.HeaderList.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -272,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="serialized-class-details" id="org.apache.juneau.http.classic.part.PartList">
 <h3>Class&nbsp;<a href="org/apache/juneau/http/classic/part/PartList.html" title="class in org.apache.juneau.http.classic.part">org.apache.juneau.http.classic.part.PartList</a></h3>
-<div class="type-signature">class PartList extends <a href="org/apache/juneau/commons/collections/ControlledArrayList.html" title="class in org.apache.juneau.commons.collections">ControlledArrayList</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt; implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<div class="type-signature">class PartList extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a>&gt; implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -293,9 +273,366 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.part.PartList.Unmodifiable">
+<h3>Class&nbsp;<a href="org/apache/juneau/http/classic/part/PartList.Unmodifiable.html" title="class in org.apache.juneau.http.classic.part">org.apache.juneau.http.classic.part.PartList.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/part/PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.classic.part.PartList.Void">
 <h3>Class&nbsp;<a href="org/apache/juneau/http/classic/part/PartList.Void.html" title="class in org.apache.juneau.http.classic.part">org.apache.juneau.http.classic.part.PartList.Void</a></h3>
 <div class="type-signature">class Void extends <a href="org/apache/juneau/http/classic/part/PartList.html" title="class in org.apache.juneau.http.classic.part">PartList</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li>
+<section class="serialized-package-container">
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/http/classic/response/package-summary.html">org.apache.juneau.http.classic.response</a></h2>
+<ul class="block-list">
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.BadRequest.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/BadRequest.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.BadRequest.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/BadRequest.html" title="class in org.apache.juneau.http.classic.response">BadRequest</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.BasicHttpException.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/BasicHttpException.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.BasicHttpException.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.Conflict.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/Conflict.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.Conflict.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/Conflict.html" title="class in org.apache.juneau.http.classic.response">Conflict</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.ExpectationFailed.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/ExpectationFailed.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.ExpectationFailed.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/ExpectationFailed.html" title="class in org.apache.juneau.http.classic.response">ExpectationFailed</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.FailedDependency.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/FailedDependency.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.FailedDependency.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/FailedDependency.html" title="class in org.apache.juneau.http.classic.response">FailedDependency</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.Forbidden.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/Forbidden.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.Forbidden.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/Forbidden.html" title="class in org.apache.juneau.http.classic.response">Forbidden</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.Gone.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/Gone.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.Gone.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/Gone.html" title="class in org.apache.juneau.http.classic.response">Gone</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.HttpVersionNotSupported.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/HttpVersionNotSupported.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.HttpVersionNotSupported.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/HttpVersionNotSupported.html" title="class in org.apache.juneau.http.classic.response">HttpVersionNotSupported</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.InsufficientStorage.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/InsufficientStorage.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.InsufficientStorage.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/InsufficientStorage.html" title="class in org.apache.juneau.http.classic.response">InsufficientStorage</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.InternalServerError.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/InternalServerError.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.InternalServerError.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.LengthRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/LengthRequired.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.LengthRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/LengthRequired.html" title="class in org.apache.juneau.http.classic.response">LengthRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.Locked.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/Locked.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.Locked.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/Locked.html" title="class in org.apache.juneau.http.classic.response">Locked</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.LoopDetected.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/LoopDetected.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.LoopDetected.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/LoopDetected.html" title="class in org.apache.juneau.http.classic.response">LoopDetected</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.MethodNotAllowed.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/MethodNotAllowed.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.MethodNotAllowed.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.MisdirectedRequest.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/MisdirectedRequest.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.MisdirectedRequest.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/MisdirectedRequest.html" title="class in org.apache.juneau.http.classic.response">MisdirectedRequest</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.NetworkAuthenticationRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/NetworkAuthenticationRequired.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.NetworkAuthenticationRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/NetworkAuthenticationRequired.html" title="class in org.apache.juneau.http.classic.response">NetworkAuthenticationRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.NotAcceptable.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/NotAcceptable.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.NotAcceptable.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/NotAcceptable.html" title="class in org.apache.juneau.http.classic.response">NotAcceptable</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.NotExtended.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/NotExtended.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.NotExtended.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/NotExtended.html" title="class in org.apache.juneau.http.classic.response">NotExtended</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.NotFound.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/NotFound.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.NotFound.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.NotImplemented.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/NotImplemented.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.NotImplemented.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.PayloadTooLarge.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/PayloadTooLarge.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.PayloadTooLarge.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/PayloadTooLarge.html" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.PreconditionFailed.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/PreconditionFailed.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.PreconditionFailed.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/PreconditionFailed.html" title="class in org.apache.juneau.http.classic.response">PreconditionFailed</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.PreconditionRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/PreconditionRequired.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.PreconditionRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/PreconditionRequired.html" title="class in org.apache.juneau.http.classic.response">PreconditionRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.RangeNotSatisfiable.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/RangeNotSatisfiable.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.RangeNotSatisfiable.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/RangeNotSatisfiable.html" title="class in org.apache.juneau.http.classic.response">RangeNotSatisfiable</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.RequestHeaderFieldsTooLarge.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/RequestHeaderFieldsTooLarge.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.RequestHeaderFieldsTooLarge.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/RequestHeaderFieldsTooLarge.html" title="class in org.apache.juneau.http.classic.response">RequestHeaderFieldsTooLarge</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.ServiceUnavailable.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/ServiceUnavailable.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.ServiceUnavailable.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/ServiceUnavailable.html" title="class in org.apache.juneau.http.classic.response">ServiceUnavailable</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.TooManyRequests.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/TooManyRequests.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.TooManyRequests.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/TooManyRequests.html" title="class in org.apache.juneau.http.classic.response">TooManyRequests</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.Unauthorized.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/Unauthorized.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.Unauthorized.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/Unauthorized.html" title="class in org.apache.juneau.http.classic.response">Unauthorized</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.UnavailableForLegalReasons.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/UnavailableForLegalReasons.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.UnavailableForLegalReasons.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/UnavailableForLegalReasons.html" title="class in org.apache.juneau.http.classic.response">UnavailableForLegalReasons</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.UnprocessableEntity.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/UnprocessableEntity.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.UnprocessableEntity.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/UnprocessableEntity.html" title="class in org.apache.juneau.http.classic.response">UnprocessableEntity</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.UnsupportedMediaType.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/UnsupportedMediaType.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.UnsupportedMediaType.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/UnsupportedMediaType.html" title="class in org.apache.juneau.http.classic.response">UnsupportedMediaType</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.UpgradeRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/UpgradeRequired.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.UpgradeRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/UpgradeRequired.html" title="class in org.apache.juneau.http.classic.response">UpgradeRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.UriTooLong.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/UriTooLong.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.UriTooLong.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/UriTooLong.html" title="class in org.apache.juneau.http.classic.response">UriTooLong</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.classic.response.VariantAlsoNegotiates.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/classic/response/VariantAlsoNegotiates.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.VariantAlsoNegotiates.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/classic/response/VariantAlsoNegotiates.html" title="class in org.apache.juneau.http.classic.response">VariantAlsoNegotiates</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -330,6 +667,16 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 </ul>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.header.HttpHeaderList.Unmodifiable">
+<h3>Class&nbsp;<a href="org/apache/juneau/http/header/HttpHeaderList.Unmodifiable.html" title="class in org.apache.juneau.http.header">org.apache.juneau.http.header.HttpHeaderList.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/header/HttpHeaderList.html" title="class in org.apache.juneau.http.header">HttpHeaderList</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -373,6 +720,16 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.part.HttpPartList.Unmodifiable">
+<h3>Class&nbsp;<a href="org/apache/juneau/http/part/HttpPartList.Unmodifiable.html" title="class in org.apache.juneau.http.part">org.apache.juneau.http.part.HttpPartList.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/part/HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.part.HttpPartList.Void">
 <h3>Class&nbsp;<a href="org/apache/juneau/http/part/HttpPartList.Void.html" title="class in org.apache.juneau.http.part">org.apache.juneau.http.part.HttpPartList.Void</a></h3>
 <div class="type-signature">class Void extends <a href="org/apache/juneau/http/part/HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
@@ -400,9 +757,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.BadGateway.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/BadGateway.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.BadGateway.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/BadGateway.html" title="class in org.apache.juneau.http.response">BadGateway</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.BadRequest">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/BadRequest.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.BadRequest</a></h3>
 <div class="type-signature">class BadRequest extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.BadRequest.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/BadRequest.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.BadRequest.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/BadRequest.html" title="class in org.apache.juneau.http.response">BadRequest</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -438,10 +815,6 @@ loadScripts(document, 'script');</script>
 <h5>statusLine</h5>
 <pre><a href="org/apache/juneau/http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a> statusLine</pre>
 </li>
-<li class="block-list">
-<h5>unmodifiable</h5>
-<pre>boolean unmodifiable</pre>
-</li>
 </ul>
 </section>
 </li>
@@ -449,9 +822,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.BasicHttpException.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/BasicHttpException.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.BasicHttpException.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.Conflict">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Conflict.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Conflict</a></h3>
 <div class="type-signature">class Conflict extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.Conflict.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Conflict.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Conflict.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/Conflict.html" title="class in org.apache.juneau.http.response">Conflict</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -469,9 +862,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.ExpectationFailed.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/ExpectationFailed.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.ExpectationFailed.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/ExpectationFailed.html" title="class in org.apache.juneau.http.response">ExpectationFailed</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.FailedDependency">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/FailedDependency.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.FailedDependency</a></h3>
 <div class="type-signature">class FailedDependency extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.FailedDependency.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/FailedDependency.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.FailedDependency.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/FailedDependency.html" title="class in org.apache.juneau.http.response">FailedDependency</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -489,9 +902,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.Forbidden.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Forbidden.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Forbidden.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/Forbidden.html" title="class in org.apache.juneau.http.response">Forbidden</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.GatewayTimeout">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/GatewayTimeout.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.GatewayTimeout</a></h3>
 <div class="type-signature">class GatewayTimeout extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.GatewayTimeout.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/GatewayTimeout.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.GatewayTimeout.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/GatewayTimeout.html" title="class in org.apache.juneau.http.response">GatewayTimeout</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -509,9 +942,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.Gone.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Gone.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Gone.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/Gone.html" title="class in org.apache.juneau.http.response">Gone</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.HttpVersionNotSupported">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/HttpVersionNotSupported.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.HttpVersionNotSupported</a></h3>
 <div class="type-signature">class HttpVersionNotSupported extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.HttpVersionNotSupported.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/HttpVersionNotSupported.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.HttpVersionNotSupported.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/HttpVersionNotSupported.html" title="class in org.apache.juneau.http.response">HttpVersionNotSupported</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -529,9 +982,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.InsufficientStorage.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/InsufficientStorage.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.InsufficientStorage.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/InsufficientStorage.html" title="class in org.apache.juneau.http.response">InsufficientStorage</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.InternalServerError">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/InternalServerError.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.InternalServerError</a></h3>
 <div class="type-signature">class InternalServerError extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.InternalServerError.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/InternalServerError.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.InternalServerError.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/InternalServerError.html" title="class in org.apache.juneau.http.response">InternalServerError</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -549,9 +1022,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.LengthRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/LengthRequired.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.LengthRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/LengthRequired.html" title="class in org.apache.juneau.http.response">LengthRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.Locked">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Locked.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Locked</a></h3>
 <div class="type-signature">class Locked extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.Locked.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Locked.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Locked.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/Locked.html" title="class in org.apache.juneau.http.response">Locked</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -569,9 +1062,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.LoopDetected.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/LoopDetected.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.LoopDetected.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/LoopDetected.html" title="class in org.apache.juneau.http.response">LoopDetected</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.MethodNotAllowed">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.MethodNotAllowed</a></h3>
 <div class="type-signature">class MethodNotAllowed extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.MethodNotAllowed.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/MethodNotAllowed.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.MethodNotAllowed.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.response">MethodNotAllowed</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -589,9 +1102,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.MisdirectedRequest.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/MisdirectedRequest.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.MisdirectedRequest.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/MisdirectedRequest.html" title="class in org.apache.juneau.http.response">MisdirectedRequest</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.NetworkAuthenticationRequired">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NetworkAuthenticationRequired.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NetworkAuthenticationRequired</a></h3>
 <div class="type-signature">class NetworkAuthenticationRequired extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.NetworkAuthenticationRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NetworkAuthenticationRequired.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NetworkAuthenticationRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/NetworkAuthenticationRequired.html" title="class in org.apache.juneau.http.response">NetworkAuthenticationRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -609,9 +1142,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.NotAcceptable.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NotAcceptable.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NotAcceptable.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/NotAcceptable.html" title="class in org.apache.juneau.http.response">NotAcceptable</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.NotExtended">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NotExtended.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NotExtended</a></h3>
 <div class="type-signature">class NotExtended extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.NotExtended.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NotExtended.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NotExtended.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/NotExtended.html" title="class in org.apache.juneau.http.response">NotExtended</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -629,9 +1182,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.NotFound.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NotFound.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NotFound.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.NotImplemented">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NotImplemented.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NotImplemented</a></h3>
 <div class="type-signature">class NotImplemented extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.NotImplemented.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/NotImplemented.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.NotImplemented.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/NotImplemented.html" title="class in org.apache.juneau.http.response">NotImplemented</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -649,9 +1222,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.PayloadTooLarge.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/PayloadTooLarge.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.PayloadTooLarge.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/PayloadTooLarge.html" title="class in org.apache.juneau.http.response">PayloadTooLarge</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.PreconditionFailed">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/PreconditionFailed.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.PreconditionFailed</a></h3>
 <div class="type-signature">class PreconditionFailed extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.PreconditionFailed.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/PreconditionFailed.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.PreconditionFailed.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/PreconditionFailed.html" title="class in org.apache.juneau.http.response">PreconditionFailed</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -669,9 +1262,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.PreconditionRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/PreconditionRequired.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.PreconditionRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/PreconditionRequired.html" title="class in org.apache.juneau.http.response">PreconditionRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.RangeNotSatisfiable">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/RangeNotSatisfiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.RangeNotSatisfiable</a></h3>
 <div class="type-signature">class RangeNotSatisfiable extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.RangeNotSatisfiable.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/RangeNotSatisfiable.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.RangeNotSatisfiable.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/RangeNotSatisfiable.html" title="class in org.apache.juneau.http.response">RangeNotSatisfiable</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -689,9 +1302,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.RequestHeaderFieldsTooLarge.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/RequestHeaderFieldsTooLarge.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.RequestHeaderFieldsTooLarge.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/RequestHeaderFieldsTooLarge.html" title="class in org.apache.juneau.http.response">RequestHeaderFieldsTooLarge</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.ServiceUnavailable">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/ServiceUnavailable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.ServiceUnavailable</a></h3>
 <div class="type-signature">class ServiceUnavailable extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.ServiceUnavailable.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/ServiceUnavailable.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.ServiceUnavailable.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/ServiceUnavailable.html" title="class in org.apache.juneau.http.response">ServiceUnavailable</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -709,9 +1342,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.TooManyRequests.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/TooManyRequests.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.TooManyRequests.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/TooManyRequests.html" title="class in org.apache.juneau.http.response">TooManyRequests</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.Unauthorized">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Unauthorized.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Unauthorized</a></h3>
 <div class="type-signature">class Unauthorized extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.Unauthorized.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/Unauthorized.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.Unauthorized.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/Unauthorized.html" title="class in org.apache.juneau.http.response">Unauthorized</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -729,9 +1382,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.UnavailableForLegalReasons.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/UnavailableForLegalReasons.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.UnavailableForLegalReasons.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/UnavailableForLegalReasons.html" title="class in org.apache.juneau.http.response">UnavailableForLegalReasons</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.UnprocessableEntity">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/UnprocessableEntity.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.UnprocessableEntity</a></h3>
 <div class="type-signature">class UnprocessableEntity extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.UnprocessableEntity.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/UnprocessableEntity.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.UnprocessableEntity.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/UnprocessableEntity.html" title="class in org.apache.juneau.http.response">UnprocessableEntity</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -749,9 +1422,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.UnsupportedMediaType.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/UnsupportedMediaType.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.UnsupportedMediaType.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/UnsupportedMediaType.html" title="class in org.apache.juneau.http.response">UnsupportedMediaType</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.UpgradeRequired">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/UpgradeRequired.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.UpgradeRequired</a></h3>
 <div class="type-signature">class UpgradeRequired extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.UpgradeRequired.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/UpgradeRequired.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.UpgradeRequired.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/UpgradeRequired.html" title="class in org.apache.juneau.http.response">UpgradeRequired</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -769,9 +1462,29 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.UriTooLong.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/UriTooLong.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.UriTooLong.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/UriTooLong.html" title="class in org.apache.juneau.http.response">UriTooLong</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="serialized-class-details" id="org.apache.juneau.http.response.VariantAlsoNegotiates">
 <h3>Exception&nbsp;<a href="org/apache/juneau/http/response/VariantAlsoNegotiates.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.VariantAlsoNegotiates</a></h3>
 <div class="type-signature">class VariantAlsoNegotiates extends <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.http.response.VariantAlsoNegotiates.Unmodifiable">
+<h3>Exception&nbsp;<a href="org/apache/juneau/http/response/VariantAlsoNegotiates.Unmodifiable.html" title="class in org.apache.juneau.http.response">org.apache.juneau.http.response.VariantAlsoNegotiates.Unmodifiable</a></h3>
+<div class="type-signature">class Unmodifiable extends <a href="org/apache/juneau/http/response/VariantAlsoNegotiates.html" title="class in org.apache.juneau.http.response">VariantAlsoNegotiates</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -867,11 +1580,11 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <section class="serialized-package-container">
-<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/microservice/resources/package-summary.html">org.apache.juneau.microservice.resources</a></h2>
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/microservice/examples/package-summary.html">org.apache.juneau.microservice.examples</a></h2>
 <ul class="block-list">
 <li>
-<section class="serialized-class-details" id="org.apache.juneau.microservice.resources.LogsResource">
-<h3>Class&nbsp;<a href="org/apache/juneau/microservice/resources/LogsResource.html" title="class in org.apache.juneau.microservice.resources">org.apache.juneau.microservice.resources.LogsResource</a></h3>
+<section class="serialized-class-details" id="org.apache.juneau.microservice.examples.LogsResource">
+<h3>Class&nbsp;<a href="org/apache/juneau/microservice/examples/LogsResource.html" title="class in org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples.LogsResource</a></h3>
 <div class="type-signature">class LogsResource extends <a href="org/apache/juneau/rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
@@ -890,6 +1603,26 @@ loadScripts(document, 'script');</script>
 <section class="serialized-class-details" id="org.apache.juneau.petstore.rest.PetFreemarkerViewResource">
 <h3>Class&nbsp;<a href="org/apache/juneau/petstore/rest/PetFreemarkerViewResource.html" title="class in org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest.PetFreemarkerViewResource</a></h3>
 <div class="type-signature">class PetFreemarkerViewResource extends <a href="org/apache/juneau/rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.petstore.rest.PetHtmlResource">
+<h3>Class&nbsp;<a href="org/apache/juneau/petstore/rest/PetHtmlResource.html" title="class in org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest.PetHtmlResource</a></h3>
+<div class="type-signature">class PetHtmlResource extends <a href="org/apache/juneau/rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.petstore.rest.PetInfoResource">
+<h3>Class&nbsp;<a href="org/apache/juneau/petstore/rest/PetInfoResource.html" title="class in org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest.PetInfoResource</a></h3>
+<div class="type-signature">class PetInfoResource extends <a href="org/apache/juneau/rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -958,6 +1691,53 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <section class="serialized-package-container">
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/auth/oauth/flow/package-summary.html">org.apache.juneau.rest.auth.oauth.flow</a></h2>
+<ul class="block-list">
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.rest.auth.oauth.flow.OAuthFlowException">
+<h3>Exception&nbsp;<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthFlowException.html" title="class in org.apache.juneau.rest.auth.oauth.flow">org.apache.juneau.rest.auth.oauth.flow.OAuthFlowException</a></h3>
+<div class="type-signature">class OAuthFlowException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="block-list">
+<li>
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="block-list">
+<li class="block-list">
+<h5>errorCode</h5>
+<pre><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a> errorCode</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li>
+<section class="serialized-package-container">
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/auth/oauth/oidc/package-summary.html">org.apache.juneau.rest.auth.oauth.oidc</a></h2>
+<ul class="block-list">
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryException">
+<h3>Exception&nbsp;<a href="org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryException.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryException</a></h3>
+<div class="type-signature">class OidcDiscoveryException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li>
+<section class="serialized-package-container">
 <h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/client/package-summary.html">org.apache.juneau.rest.client</a></h2>
 <ul class="block-list">
 <li>
@@ -1015,46 +1795,109 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <section class="serialized-package-container">
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/client/mcp/auth/package-summary.html">org.apache.juneau.rest.client.mcp.auth</a></h2>
+<ul class="block-list">
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.rest.client.mcp.auth.McpAuthException">
+<h3>Exception&nbsp;<a href="org/apache/juneau/rest/client/mcp/auth/McpAuthException.html" title="class in org.apache.juneau.rest.client.mcp.auth">org.apache.juneau.rest.client.mcp.auth.McpAuthException</a></h3>
+<div class="type-signature">class McpAuthException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.rest.client.mcp.auth.McpInsufficientScopeException">
+<h3>Exception&nbsp;<a href="org/apache/juneau/rest/client/mcp/auth/McpInsufficientScopeException.html" title="class in org.apache.juneau.rest.client.mcp.auth">org.apache.juneau.rest.client.mcp.auth.McpInsufficientScopeException</a></h3>
+<div class="type-signature">class McpInsufficientScopeException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="block-list">
+<li>
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="block-list">
+<li class="block-list">
+<h5>challenge</h5>
+<pre><a href="org/apache/juneau/rest/client/mcp/auth/WwwAuthenticateChallenge.html" title="class in org.apache.juneau.rest.client.mcp.auth">WwwAuthenticateChallenge</a> challenge</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.rest.client.mcp.auth.WwwAuthenticateChallenge">
+<h3>Class&nbsp;<a href="org/apache/juneau/rest/client/mcp/auth/WwwAuthenticateChallenge.html" title="class in org.apache.juneau.rest.client.mcp.auth">org.apache.juneau.rest.client.mcp.auth.WwwAuthenticateChallenge</a></h3>
+<div class="type-signature">class WwwAuthenticateChallenge extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="block-list">
+<li>
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="block-list">
+<li class="block-list">
+<h5>parameters</h5>
+<pre><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt; parameters</pre>
+</li>
+<li class="block-list">
+<h5>scheme</h5>
+<pre><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a> scheme</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li>
+<section class="serialized-package-container">
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/client/mcp/v20260728/package-summary.html">org.apache.juneau.rest.client.mcp.v20260728</a></h2>
+<ul class="block-list">
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.rest.client.mcp.v20260728.McpElicitationLimitException">
+<h3>Exception&nbsp;<a href="org/apache/juneau/rest/client/mcp/v20260728/McpElicitationLimitException.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">org.apache.juneau.rest.client.mcp.v20260728.McpElicitationLimitException</a></h3>
+<div class="type-signature">class McpElicitationLimitException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="block-list">
+<li>
+<section class="detail">
+<h4>Serialized Fields</h4>
+<ul class="block-list">
+<li class="block-list">
+<h5>maxRounds</h5>
+<pre>int maxRounds</pre>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li>
+<section class="serialized-package-container">
 <h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/server/auth/package-summary.html">org.apache.juneau.rest.server.auth</a></h2>
 <ul class="block-list">
 <li>
 <section class="serialized-class-details" id="org.apache.juneau.rest.server.auth.AuthenticationException">
 <h3>Exception&nbsp;<a href="org/apache/juneau/rest/server/auth/AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">org.apache.juneau.rest.server.auth.AuthenticationException</a></h3>
 <div class="type-signature">class AuthenticationException extends <a href="org/apache/juneau/http/response/Unauthorized.html" title="class in org.apache.juneau.http.response">Unauthorized</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
-<dl class="name-value">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li>
-<section class="serialized-package-container">
-<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/server/auth/oauth/flow/package-summary.html">org.apache.juneau.rest.server.auth.oauth.flow</a></h2>
-<ul class="block-list">
-<li>
-<section class="serialized-class-details" id="org.apache.juneau.rest.server.auth.oauth.flow.OAuthFlowException">
-<h3>Exception&nbsp;<a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthFlowException.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">org.apache.juneau.rest.server.auth.oauth.flow.OAuthFlowException</a></h3>
-<div class="type-signature">class OAuthFlowException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
-<dl class="name-value">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<li>
-<section class="serialized-package-container">
-<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/server/auth/oauth/oidc/package-summary.html">org.apache.juneau.rest.server.auth.oauth.oidc</a></h2>
-<ul class="block-list">
-<li>
-<section class="serialized-class-details" id="org.apache.juneau.rest.server.auth.oauth.oidc.OidcDiscoveryException">
-<h3>Exception&nbsp;<a href="org/apache/juneau/rest/server/auth/oauth/oidc/OidcDiscoveryException.html" title="class in org.apache.juneau.rest.server.auth.oauth.oidc">org.apache.juneau.rest.server.auth.oauth.oidc.OidcDiscoveryException</a></h3>
-<div class="type-signature">class OidcDiscoveryException extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
 <dl class="name-value">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -1168,6 +2011,23 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 </ul>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<li>
+<section class="serialized-package-container">
+<h2 title="Package">Package&nbsp;<a href="org/apache/juneau/rest/server/mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></h2>
+<ul class="block-list">
+<li>
+<section class="serialized-class-details" id="org.apache.juneau.rest.server.mcp.v20260728.McpInputRequiredSignal">
+<h3>Exception&nbsp;<a href="org/apache/juneau/rest/server/mcp/v20260728/McpInputRequiredSignal.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728.McpInputRequiredSignal</a></h3>
+<div class="type-signature">class McpInputRequiredSignal extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a> implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></div>
+<dl class="name-value">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -1767,6 +1767,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/10.62.RestServerManagementLogging',
 							label: '10.62. Management / Logging Surface (juneau-rest-server-management-logging)',
 						},
+						{
+							type: 'doc',
+							id: 'topics/10.63.RestServerRdf',
+							label: '10.63. RDF Support (juneau-rest-server-rdf)',
+						},
 					],
 					link: {
 						type: 'doc',

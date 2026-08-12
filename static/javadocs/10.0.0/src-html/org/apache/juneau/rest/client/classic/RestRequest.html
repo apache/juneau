@@ -43,88 +43,88 @@
 <span class="source-line-no">030</span><span id="line-30">import java.io.*;</span>
 <span class="source-line-no">031</span><span id="line-31">import java.lang.reflect.*;</span>
 <span class="source-line-no">032</span><span id="line-32">import java.net.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import java.text.*;</span>
-<span class="source-line-no">034</span><span id="line-34">import java.util.*;</span>
-<span class="source-line-no">035</span><span id="line-35">import java.util.concurrent.*;</span>
-<span class="source-line-no">036</span><span id="line-36">import java.util.function.*;</span>
-<span class="source-line-no">037</span><span id="line-37">import java.util.logging.*;</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">import org.apache.http.*;</span>
-<span class="source-line-no">040</span><span id="line-40">import org.apache.http.ParseException;</span>
-<span class="source-line-no">041</span><span id="line-41">import org.apache.http.client.config.*;</span>
-<span class="source-line-no">042</span><span id="line-42">import org.apache.http.client.entity.*;</span>
-<span class="source-line-no">043</span><span id="line-43">import org.apache.http.client.methods.*;</span>
-<span class="source-line-no">044</span><span id="line-44">import org.apache.http.client.utils.*;</span>
-<span class="source-line-no">045</span><span id="line-45">import org.apache.http.concurrent.*;</span>
-<span class="source-line-no">046</span><span id="line-46">import org.apache.http.entity.BasicHttpEntity;</span>
-<span class="source-line-no">047</span><span id="line-47">import org.apache.http.params.*;</span>
-<span class="source-line-no">048</span><span id="line-48">import org.apache.http.protocol.*;</span>
-<span class="source-line-no">049</span><span id="line-49">import org.apache.juneau.commons.bean.*;</span>
-<span class="source-line-no">050</span><span id="line-50">import org.apache.juneau.commons.collections.*;</span>
-<span class="source-line-no">051</span><span id="line-51">import org.apache.juneau.commons.httppart.*;</span>
-<span class="source-line-no">052</span><span id="line-52">import org.apache.juneau.commons.reflect.*;</span>
-<span class="source-line-no">053</span><span id="line-53">import org.apache.juneau.http.classic.*;</span>
-<span class="source-line-no">054</span><span id="line-54">import org.apache.juneau.http.classic.HttpHeaders;</span>
-<span class="source-line-no">055</span><span id="line-55">import org.apache.juneau.http.classic.entity.*;</span>
-<span class="source-line-no">056</span><span id="line-56">import org.apache.juneau.http.classic.header.*;</span>
-<span class="source-line-no">057</span><span id="line-57">import org.apache.juneau.http.classic.header.ContentType;</span>
-<span class="source-line-no">058</span><span id="line-58">import org.apache.juneau.http.classic.part.*;</span>
-<span class="source-line-no">059</span><span id="line-59">import org.apache.juneau.http.classic.resource.*;</span>
-<span class="source-line-no">060</span><span id="line-60">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">061</span><span id="line-61">import org.apache.juneau.marshall.bson.*;</span>
-<span class="source-line-no">062</span><span id="line-62">import org.apache.juneau.marshall.html.*;</span>
-<span class="source-line-no">063</span><span id="line-63">import org.apache.juneau.marshall.httppart.*;</span>
-<span class="source-line-no">064</span><span id="line-64">import org.apache.juneau.marshall.jcs.*;</span>
-<span class="source-line-no">065</span><span id="line-65">import org.apache.juneau.marshall.json.*;</span>
-<span class="source-line-no">066</span><span id="line-66">import org.apache.juneau.marshall.json5.*;</span>
-<span class="source-line-no">067</span><span id="line-67">import org.apache.juneau.marshall.marshaller.*;</span>
-<span class="source-line-no">068</span><span id="line-68">import org.apache.juneau.marshall.marshaller.Uon;</span>
-<span class="source-line-no">069</span><span id="line-69">import org.apache.juneau.marshall.msgpack.*;</span>
-<span class="source-line-no">070</span><span id="line-70">import org.apache.juneau.marshall.oapi.*;</span>
-<span class="source-line-no">071</span><span id="line-71">import org.apache.juneau.marshall.parser.*;</span>
-<span class="source-line-no">072</span><span id="line-72">import org.apache.juneau.marshall.plaintext.*;</span>
-<span class="source-line-no">073</span><span id="line-73">import org.apache.juneau.marshall.serializer.*;</span>
-<span class="source-line-no">074</span><span id="line-74">import org.apache.juneau.marshall.stream.*;</span>
-<span class="source-line-no">075</span><span id="line-75">import org.apache.juneau.marshall.uon.*;</span>
-<span class="source-line-no">076</span><span id="line-76">import org.apache.juneau.marshall.urlencoding.*;</span>
-<span class="source-line-no">077</span><span id="line-77">import org.apache.juneau.marshall.xml.*;</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">/**</span>
-<span class="source-line-no">080</span><span id="line-80"> * Represents a request to a remote REST resource.</span>
-<span class="source-line-no">081</span><span id="line-81"> *</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;p&gt;</span>
-<span class="source-line-no">083</span><span id="line-83"> * Instances of this class are created by the various creator methods on the {@link RestClient} class.</span>
-<span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> *    &lt;jc&gt;// Create a request and automatically close it.&lt;/jc&gt;</span>
-<span class="source-line-no">088</span><span id="line-88"> *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;RestRequest&lt;/jv&gt; &lt;jv&gt;req&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;.get(&lt;js&gt;"/myResource"&lt;/js&gt;)) {</span>
-<span class="source-line-no">089</span><span id="line-89"> *       &lt;jv&gt;req&lt;/jv&gt;</span>
-<span class="source-line-no">090</span><span id="line-90"> *          .queryData(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;)</span>
-<span class="source-line-no">091</span><span id="line-91"> *          .run()</span>
-<span class="source-line-no">092</span><span id="line-92"> *          .assertStatus().asCode().is(200);</span>
-<span class="source-line-no">093</span><span id="line-93"> *    }</span>
-<span class="source-line-no">094</span><span id="line-94"> * &lt;/p&gt;</span>
-<span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;p&gt;</span>
-<span class="source-line-no">097</span><span id="line-97"> * The {@link #close()} method will automatically close any associated {@link RestResponse} if one was created via {@link #run()}.</span>
-<span class="source-line-no">098</span><span id="line-98"> *</span>
-<span class="source-line-no">099</span><span id="line-99"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">100</span><span id="line-100"> *    &lt;li class='warn'&gt;This class is not thread safe.</span>
-<span class="source-line-no">101</span><span id="line-101"> *    &lt;li class='note'&gt;This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.</span>
-<span class="source-line-no">102</span><span id="line-102"> *       The {@link #close()} method allows unchecked exceptions to propagate for debuggability,</span>
-<span class="source-line-no">103</span><span id="line-103"> *       while catching and logging checked exceptions to follow AutoCloseable best practices.</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;/ul&gt;</span>
-<span class="source-line-no">105</span><span id="line-105"> *</span>
-<span class="source-line-no">106</span><span id="line-106"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">107</span><span id="line-107"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient"&gt;juneau-rest-client Basics&lt;/a&gt;</span>
-<span class="source-line-no">108</span><span id="line-108"> * &lt;/ul&gt;</span>
-<span class="source-line-no">109</span><span id="line-109"> */</span>
-<span class="source-line-no">110</span><span id="line-110">@SuppressWarnings({</span>
-<span class="source-line-no">111</span><span id="line-111">   "java:S115",  // Constants use UPPER_snakeCase naming convention</span>
-<span class="source-line-no">112</span><span id="line-112">   "resource",   // Resource management handled externally</span>
-<span class="source-line-no">113</span><span id="line-113">   "java:S3740", // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time</span>
-<span class="source-line-no">114</span><span id="line-114">   "java:S1133"  // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.</span>
+<span class="source-line-no">033</span><span id="line-33">import java.util.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import java.util.concurrent.*;</span>
+<span class="source-line-no">035</span><span id="line-35">import java.util.function.*;</span>
+<span class="source-line-no">036</span><span id="line-36">import java.util.logging.*;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">import org.apache.http.*;</span>
+<span class="source-line-no">039</span><span id="line-39">import org.apache.http.ParseException;</span>
+<span class="source-line-no">040</span><span id="line-40">import org.apache.http.client.config.*;</span>
+<span class="source-line-no">041</span><span id="line-41">import org.apache.http.client.entity.*;</span>
+<span class="source-line-no">042</span><span id="line-42">import org.apache.http.client.methods.*;</span>
+<span class="source-line-no">043</span><span id="line-43">import org.apache.http.client.utils.*;</span>
+<span class="source-line-no">044</span><span id="line-44">import org.apache.http.concurrent.*;</span>
+<span class="source-line-no">045</span><span id="line-45">import org.apache.http.entity.BasicHttpEntity;</span>
+<span class="source-line-no">046</span><span id="line-46">import org.apache.http.params.*;</span>
+<span class="source-line-no">047</span><span id="line-47">import org.apache.http.protocol.*;</span>
+<span class="source-line-no">048</span><span id="line-48">import org.apache.juneau.commons.bean.*;</span>
+<span class="source-line-no">049</span><span id="line-49">import org.apache.juneau.commons.collections.*;</span>
+<span class="source-line-no">050</span><span id="line-50">import org.apache.juneau.commons.httppart.*;</span>
+<span class="source-line-no">051</span><span id="line-51">import org.apache.juneau.commons.reflect.*;</span>
+<span class="source-line-no">052</span><span id="line-52">import org.apache.juneau.http.classic.*;</span>
+<span class="source-line-no">053</span><span id="line-53">import org.apache.juneau.http.classic.HttpHeaders;</span>
+<span class="source-line-no">054</span><span id="line-54">import org.apache.juneau.http.classic.entity.*;</span>
+<span class="source-line-no">055</span><span id="line-55">import org.apache.juneau.http.classic.header.*;</span>
+<span class="source-line-no">056</span><span id="line-56">import org.apache.juneau.http.classic.header.ContentType;</span>
+<span class="source-line-no">057</span><span id="line-57">import org.apache.juneau.http.classic.part.*;</span>
+<span class="source-line-no">058</span><span id="line-58">import org.apache.juneau.http.classic.resource.*;</span>
+<span class="source-line-no">059</span><span id="line-59">import org.apache.juneau.marshall.*;</span>
+<span class="source-line-no">060</span><span id="line-60">import org.apache.juneau.marshall.bson.*;</span>
+<span class="source-line-no">061</span><span id="line-61">import org.apache.juneau.marshall.html.*;</span>
+<span class="source-line-no">062</span><span id="line-62">import org.apache.juneau.marshall.httppart.*;</span>
+<span class="source-line-no">063</span><span id="line-63">import org.apache.juneau.marshall.jcs.*;</span>
+<span class="source-line-no">064</span><span id="line-64">import org.apache.juneau.marshall.json.*;</span>
+<span class="source-line-no">065</span><span id="line-65">import org.apache.juneau.marshall.json5.*;</span>
+<span class="source-line-no">066</span><span id="line-66">import org.apache.juneau.marshall.marshaller.*;</span>
+<span class="source-line-no">067</span><span id="line-67">import org.apache.juneau.marshall.marshaller.Uon;</span>
+<span class="source-line-no">068</span><span id="line-68">import org.apache.juneau.marshall.msgpack.*;</span>
+<span class="source-line-no">069</span><span id="line-69">import org.apache.juneau.marshall.oapi.*;</span>
+<span class="source-line-no">070</span><span id="line-70">import org.apache.juneau.marshall.parser.*;</span>
+<span class="source-line-no">071</span><span id="line-71">import org.apache.juneau.marshall.plaintext.*;</span>
+<span class="source-line-no">072</span><span id="line-72">import org.apache.juneau.marshall.serializer.*;</span>
+<span class="source-line-no">073</span><span id="line-73">import org.apache.juneau.marshall.stream.*;</span>
+<span class="source-line-no">074</span><span id="line-74">import org.apache.juneau.marshall.uon.*;</span>
+<span class="source-line-no">075</span><span id="line-75">import org.apache.juneau.marshall.urlencoding.*;</span>
+<span class="source-line-no">076</span><span id="line-76">import org.apache.juneau.marshall.xml.*;</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">/**</span>
+<span class="source-line-no">079</span><span id="line-79"> * Represents a request to a remote REST resource.</span>
+<span class="source-line-no">080</span><span id="line-80"> *</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;p&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> * Instances of this class are created by the various creator methods on the {@link RestClient} class.</span>
+<span class="source-line-no">083</span><span id="line-83"> *</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *    &lt;jc&gt;// Create a request and automatically close it.&lt;/jc&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;RestRequest&lt;/jv&gt; &lt;jv&gt;req&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;.get(&lt;js&gt;"/myResource"&lt;/js&gt;)) {</span>
+<span class="source-line-no">088</span><span id="line-88"> *       &lt;jv&gt;req&lt;/jv&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *          .queryData(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;)</span>
+<span class="source-line-no">090</span><span id="line-90"> *          .run()</span>
+<span class="source-line-no">091</span><span id="line-91"> *          .assertStatus().asCode().is(200);</span>
+<span class="source-line-no">092</span><span id="line-92"> *    }</span>
+<span class="source-line-no">093</span><span id="line-93"> * &lt;/p&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> *</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;p&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> * The {@link #close()} method will automatically close any associated {@link RestResponse} if one was created via {@link #run()}.</span>
+<span class="source-line-no">097</span><span id="line-97"> *</span>
+<span class="source-line-no">098</span><span id="line-98"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> *    &lt;li class='warn'&gt;This class is not thread safe.</span>
+<span class="source-line-no">100</span><span id="line-100"> *    &lt;li class='note'&gt;This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.</span>
+<span class="source-line-no">101</span><span id="line-101"> *       The {@link #close()} method allows unchecked exceptions to propagate for debuggability,</span>
+<span class="source-line-no">102</span><span id="line-102"> *       while catching and logging checked exceptions to follow AutoCloseable best practices.</span>
+<span class="source-line-no">103</span><span id="line-103"> * &lt;/ul&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> *</span>
+<span class="source-line-no">105</span><span id="line-105"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">106</span><span id="line-106"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient"&gt;juneau-rest-client Basics&lt;/a&gt;</span>
+<span class="source-line-no">107</span><span id="line-107"> * &lt;/ul&gt;</span>
+<span class="source-line-no">108</span><span id="line-108"> */</span>
+<span class="source-line-no">109</span><span id="line-109">@SuppressWarnings({</span>
+<span class="source-line-no">110</span><span id="line-110">   "java:S115",  // Constants use UPPER_snakeCase naming convention</span>
+<span class="source-line-no">111</span><span id="line-111">   "resource",   // Resource management handled externally</span>
+<span class="source-line-no">112</span><span id="line-112">   "java:S3740", // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time</span>
+<span class="source-line-no">113</span><span id="line-113">   "java:S1133", // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.</span>
+<span class="source-line-no">114</span><span id="line-114">   "java:S6539"  // Monster class; RestRequest is intentionally a single per-request fluent builder aggregating headers/query/form/body/serialization config</span>
 <span class="source-line-no">115</span><span id="line-115">})</span>
 <span class="source-line-no">116</span><span id="line-116">public class RestRequest extends MarshallingSession implements HttpUriRequest, Configurable, AutoCloseable {</span>
 <span class="source-line-no">117</span><span id="line-117"></span>
@@ -170,8 +170,8 @@
 <span class="source-line-no">157</span><span id="line-157">         name = x.getName();</span>
 <span class="source-line-no">158</span><span id="line-158">         if (x instanceof SerializedHeader x2) {</span>
 <span class="source-line-no">159</span><span id="line-159">            value = x2.copyWith(getPartSerializerSession(), null).getValue();</span>
-<span class="source-line-no">160</span><span id="line-160">         } else if (x instanceof SerializedPart x3) {</span>
-<span class="source-line-no">161</span><span id="line-161">            value = x3.copyWith(getPartSerializerSession(), null).getValue();</span>
+<span class="source-line-no">160</span><span id="line-160">         } else if (x instanceof SerializedPart x2) {</span>
+<span class="source-line-no">161</span><span id="line-161">            value = x2.copyWith(getPartSerializerSession(), null).getValue();</span>
 <span class="source-line-no">162</span><span id="line-162">         } else {</span>
 <span class="source-line-no">163</span><span id="line-163">            var v = x.getValue();</span>
 <span class="source-line-no">164</span><span id="line-164">            value = (ie(v) &amp;&amp; skipIfEmpty) ? null : v;</span>
@@ -874,7 +874,7 @@
 <span class="source-line-no">861</span><span id="line-861">    *</span>
 <span class="source-line-no">862</span><span id="line-862">    * Header values are ignored.</span>
 <span class="source-line-no">863</span><span id="line-863">    * &lt;br&gt;If there is more than one matching header in the message the last element of {@link #getHeaders(String)} is returned.</span>
-<span class="source-line-no">864</span><span id="line-864">    * &lt;br&gt;If there is no matching header in the message null is returned.</span>
+<span class="source-line-no">864</span><span id="line-864">    * &lt;br&gt;If there is no matching header in the message, &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
 <span class="source-line-no">865</span><span id="line-865">    *</span>
 <span class="source-line-no">866</span><span id="line-866">    * @param name The name of the header to return.</span>
 <span class="source-line-no">867</span><span id="line-867">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -1385,7 +1385,7 @@
 <span class="source-line-no">1372</span><span id="line-1372">    *</span>
 <span class="source-line-no">1373</span><span id="line-1373">    * @param level The log level.</span>
 <span class="source-line-no">1374</span><span id="line-1374">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1375</span><span id="line-1375">    * @param msg The message with {@link MessageFormat}-style arguments.</span>
+<span class="source-line-no">1375</span><span id="line-1375">    * @param msg The message with {@link String#format(String, Object...) String.format}-style (&lt;c&gt;%s&lt;/c&gt;) arguments.</span>
 <span class="source-line-no">1376</span><span id="line-1376">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">1377</span><span id="line-1377">    * @param args The arguments.</span>
 <span class="source-line-no">1378</span><span id="line-1378">    *    &lt;br&gt;Can contain &lt;jk&gt;null&lt;/jk&gt; values.</span>
@@ -1402,8 +1402,8 @@
 <span class="source-line-no">1389</span><span id="line-1389">    * @param level The log level.</span>
 <span class="source-line-no">1390</span><span id="line-1390">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">1391</span><span id="line-1391">    * @param t The throwable cause.</span>
-<span class="source-line-no">1392</span><span id="line-1392">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1393</span><span id="line-1393">    * @param msg The message with {@link MessageFormat}-style arguments.</span>
+<span class="source-line-no">1392</span><span id="line-1392">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (no exception details are logged).</span>
+<span class="source-line-no">1393</span><span id="line-1393">    * @param msg The message with {@link String#format(String, Object...) String.format}-style (&lt;c&gt;%s&lt;/c&gt;) arguments.</span>
 <span class="source-line-no">1394</span><span id="line-1394">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">1395</span><span id="line-1395">    * @param args The arguments.</span>
 <span class="source-line-no">1396</span><span id="line-1396">    *    &lt;br&gt;Can contain &lt;jk&gt;null&lt;/jk&gt; values.</span>
@@ -2082,7 +2082,7 @@
 <span class="source-line-no">2069</span><span id="line-2069">            var value = x.value;</span>
 <span class="source-line-no">2070</span><span id="line-2070">            var pathVar = "{" + name + "}";</span>
 <span class="source-line-no">2071</span><span id="line-2071">            if (path.indexOf(pathVar) == -1 &amp;&amp; ! name.equals("/*"))</span>
-<span class="source-line-no">2072</span><span id="line-2072">               throw new IllegalStateException("Path variable {" + name + "} was not found in path.");</span>
+<span class="source-line-no">2072</span><span id="line-2072">               throw isex("Path variable {%s} was not found in path.", name);</span>
 <span class="source-line-no">2073</span><span id="line-2073">            if (name.equals("/*"))</span>
 <span class="source-line-no">2074</span><span id="line-2074">               path = path.replaceAll("\\/\\*$", URI_PATH_SEPARATOR + value);</span>
 <span class="source-line-no">2075</span><span id="line-2075">            else</span>
@@ -2115,7 +2115,7 @@
 <span class="source-line-no">2102</span><span id="line-2102">         headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(request::addHeader);</span>
 <span class="source-line-no">2103</span><span id="line-2103"></span>
 <span class="source-line-no">2104</span><span id="line-2104">         if (request2 == null &amp;&amp; content != NO_BODY)</span>
-<span class="source-line-no">2105</span><span id="line-2105">            throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());</span>
+<span class="source-line-no">2105</span><span id="line-2105">            throw new RestCallException(null, null, "Method does not support content entity.  Method=%s, URI=%s", getMethod(), getURI());</span>
 <span class="source-line-no">2106</span><span id="line-2106"></span>
 <span class="source-line-no">2107</span><span id="line-2107">         if (nn(request2)) {</span>
 <span class="source-line-no">2108</span><span id="line-2108"></span>
@@ -2145,8 +2145,8 @@
 <span class="source-line-no">2132</span><span id="line-2132">               entity = readerEntity(input3, getRequestContentType(TEXT_PLAIN));</span>
 <span class="source-line-no">2133</span><span id="line-2133">            else if (input2 instanceof InputStream input3)</span>
 <span class="source-line-no">2134</span><span id="line-2134">               entity = streamEntity(input3, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));</span>
-<span class="source-line-no">2135</span><span id="line-2135">            else if (input2 instanceof RecordStreamBody body)</span>
-<span class="source-line-no">2136</span><span id="line-2136">               entity = streamBodyEntity(body, serializer2);</span>
+<span class="source-line-no">2135</span><span id="line-2135">            else if (input2 instanceof RecordStreamBody input3)</span>
+<span class="source-line-no">2136</span><span id="line-2136">               entity = streamBodyEntity(input3, serializer2);</span>
 <span class="source-line-no">2137</span><span id="line-2137">            else if (nn(serializer2))</span>
 <span class="source-line-no">2138</span><span id="line-2138">               entity = serializedEntity(input2, serializer2, contentSchema).setContentType(contentType);</span>
 <span class="source-line-no">2139</span><span id="line-2139">            else {</span>
@@ -2154,7 +2154,7 @@
 <span class="source-line-no">2141</span><span id="line-2141">                  if (contentType == null)</span>
 <span class="source-line-no">2142</span><span id="line-2142">                     throw new RestCallException(null, null,</span>
 <span class="source-line-no">2143</span><span id="line-2143">                        "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");</span>
-<span class="source-line-no">2144</span><span id="line-2144">                  throw new RestCallException(null, null, "No matching serializer for media type ''{0}''", contentType);</span>
+<span class="source-line-no">2144</span><span id="line-2144">                  throw new RestCallException(null, null, "No matching serializer for media type '%s'", contentType);</span>
 <span class="source-line-no">2145</span><span id="line-2145">               }</span>
 <span class="source-line-no">2146</span><span id="line-2146">               entity = stringEntity(input2 == null ? "" : MarshallingContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));</span>
 <span class="source-line-no">2147</span><span id="line-2147">            }</span>
@@ -2207,689 +2207,709 @@
 <span class="source-line-no">2194</span><span id="line-2194">                     }</span>
 <span class="source-line-no">2195</span><span id="line-2195">                  }</span>
 <span class="source-line-no">2196</span><span id="line-2196">                  if (nn(thrownInstance)) {</span>
-<span class="source-line-no">2197</span><span id="line-2197">                     if (thrownInstance instanceof Exception ex)</span>
-<span class="source-line-no">2198</span><span id="line-2198">                        throw ex;</span>
-<span class="source-line-no">2199</span><span id="line-2199">                     throw new RestCallException(response, thrownInstance, "Server threw non-Exception: {0}", className);</span>
+<span class="source-line-no">2197</span><span id="line-2197">                     if (thrownInstance instanceof Exception thrownInstance2)</span>
+<span class="source-line-no">2198</span><span id="line-2198">                        throw thrownInstance2;</span>
+<span class="source-line-no">2199</span><span id="line-2199">                     throw new RestCallException(response, thrownInstance, "Server threw non-Exception: %s", className);</span>
 <span class="source-line-no">2200</span><span id="line-2200">                  }</span>
 <span class="source-line-no">2201</span><span id="line-2201">               }</span>
 <span class="source-line-no">2202</span><span id="line-2202">            }</span>
 <span class="source-line-no">2203</span><span id="line-2203">         }</span>
 <span class="source-line-no">2204</span><span id="line-2204"></span>
 <span class="source-line-no">2205</span><span id="line-2205">         if (errorCodes.test(sc) &amp;&amp; ! ignoreErrors) {</span>
-<span class="source-line-no">2206</span><span id="line-2206">            throw new RestCallException(response, null, "HTTP method ''{0}'' call to ''{1}'' caused response code ''{2}, {3}''.\nResponse: \n{4}", method, getURI(), sc, response.getReasonPhrase(),</span>
-<span class="source-line-no">2207</span><span id="line-2207">               response.getContent().asAbbreviatedString(1000));</span>
-<span class="source-line-no">2208</span><span id="line-2208">         }</span>
-<span class="source-line-no">2209</span><span id="line-2209"></span>
-<span class="source-line-no">2210</span><span id="line-2210">      } catch (RuntimeException | RestCallException e) {</span>
-<span class="source-line-no">2211</span><span id="line-2211">         if (nn(response))</span>
-<span class="source-line-no">2212</span><span id="line-2212">            response.close();</span>
-<span class="source-line-no">2213</span><span id="line-2213">         throw e;</span>
-<span class="source-line-no">2214</span><span id="line-2214">      } catch (Exception e) {</span>
-<span class="source-line-no">2215</span><span id="line-2215">         if (nn(response))</span>
-<span class="source-line-no">2216</span><span id="line-2216">            response.close();</span>
-<span class="source-line-no">2217</span><span id="line-2217">         throw new RestCallException(response, e, "Call failed.");</span>
-<span class="source-line-no">2218</span><span id="line-2218">      }</span>
-<span class="source-line-no">2219</span><span id="line-2219"></span>
-<span class="source-line-no">2220</span><span id="line-2220">      return this.response;</span>
-<span class="source-line-no">2221</span><span id="line-2221">   }</span>
-<span class="source-line-no">2222</span><span id="line-2222"></span>
-<span class="source-line-no">2223</span><span id="line-2223">   /**</span>
-<span class="source-line-no">2224</span><span id="line-2224">    * Same as {@link #run()} but allows you to run the call asynchronously.</span>
-<span class="source-line-no">2225</span><span id="line-2225">    *</span>
-<span class="source-line-no">2226</span><span id="line-2226">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">2227</span><span id="line-2227">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">2228</span><span id="line-2228">    *    Future&amp;lt;RestResponse&amp;gt; &lt;jv&gt;future&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;.get(&lt;jsf&gt;URI&lt;/jsf&gt;).runFuture();</span>
-<span class="source-line-no">2229</span><span id="line-2229">    *</span>
-<span class="source-line-no">2230</span><span id="line-2230">    *    &lt;jc&gt;// Do some other stuff&lt;/jc&gt;</span>
-<span class="source-line-no">2231</span><span id="line-2231">    *</span>
-<span class="source-line-no">2232</span><span id="line-2232">    *    &lt;jk&gt;try&lt;/jk&gt; {</span>
-<span class="source-line-no">2233</span><span id="line-2233">    *       String &lt;jv&gt;body&lt;/jv&gt; = &lt;jv&gt;future&lt;/jv&gt;.get().getContent().asString();</span>
-<span class="source-line-no">2234</span><span id="line-2234">    *       &lt;jc&gt;// Succeeded!&lt;/jc&gt;</span>
-<span class="source-line-no">2235</span><span id="line-2235">    *    } &lt;jk&gt;catch&lt;/jk&gt; (RestCallException &lt;jv&gt;e&lt;/jv&gt;) {</span>
-<span class="source-line-no">2236</span><span id="line-2236">    *       &lt;jc&gt;// Failed!&lt;/jc&gt;</span>
-<span class="source-line-no">2237</span><span id="line-2237">    *    }</span>
-<span class="source-line-no">2238</span><span id="line-2238">    * &lt;/p&gt;</span>
-<span class="source-line-no">2239</span><span id="line-2239">    *</span>
-<span class="source-line-no">2240</span><span id="line-2240">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">2241</span><span id="line-2241">    *    &lt;li class='note'&gt;Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the</span>
-<span class="source-line-no">2242</span><span id="line-2242">    *       executor service used for creating {@link Future Futures}.</span>
-<span class="source-line-no">2243</span><span id="line-2243">    * &lt;/ul&gt;</span>
-<span class="source-line-no">2244</span><span id="line-2244">    *</span>
-<span class="source-line-no">2245</span><span id="line-2245">    * @return The HTTP status code.</span>
-<span class="source-line-no">2246</span><span id="line-2246">    * @throws RestCallException If the executor service was not defined.</span>
-<span class="source-line-no">2247</span><span id="line-2247">    */</span>
-<span class="source-line-no">2248</span><span id="line-2248">   public Future&lt;RestResponse&gt; runFuture() throws RestCallException {</span>
-<span class="source-line-no">2249</span><span id="line-2249">      return client.getExecutorService().submit(this::run);</span>
-<span class="source-line-no">2250</span><span id="line-2250">   }</span>
-<span class="source-line-no">2251</span><span id="line-2251"></span>
-<span class="source-line-no">2252</span><span id="line-2252">   /**</span>
-<span class="source-line-no">2253</span><span id="line-2253">    * Specifies the serializer to use on the request body.</span>
-<span class="source-line-no">2254</span><span id="line-2254">    *</span>
-<span class="source-line-no">2255</span><span id="line-2255">    * &lt;p&gt;</span>
-<span class="source-line-no">2256</span><span id="line-2256">    * Overrides the serializers specified on the {@link RestClient}.</span>
-<span class="source-line-no">2257</span><span id="line-2257">    *</span>
-<span class="source-line-no">2258</span><span id="line-2258">    * &lt;p&gt;</span>
-<span class="source-line-no">2259</span><span id="line-2259">    *    The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
-<span class="source-line-no">2260</span><span id="line-2260">    *    bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2261</span><span id="line-2261">    *</span>
-<span class="source-line-no">2262</span><span id="line-2262">    * &lt;p&gt;</span>
-<span class="source-line-no">2263</span><span id="line-2263">    * If the &lt;c&gt;Content-Type&lt;/c&gt; header is not set on the request, it will be set to the media type of this serializer.</span>
+<span class="source-line-no">2206</span><span id="line-2206">            // Surface the server-reported exception detail from the Thrown header (authoritative and independent of the response body) so callers still see the original failure detail.</span>
+<span class="source-line-no">2207</span><span id="line-2207">            throw new RestCallException(response, null, "HTTP method '%s' call to '%s' caused response code '%s, %s'.\nResponse: \n%s%s", method, getURI(), sc, response.getReasonPhrase(),</span>
+<span class="source-line-no">2208</span><span id="line-2208">               response.getContent().asAbbreviatedString(1000), getThrownDetailSuffix(thrown));</span>
+<span class="source-line-no">2209</span><span id="line-2209">         }</span>
+<span class="source-line-no">2210</span><span id="line-2210"></span>
+<span class="source-line-no">2211</span><span id="line-2211">      } catch (RuntimeException | RestCallException e) {</span>
+<span class="source-line-no">2212</span><span id="line-2212">         if (nn(response))</span>
+<span class="source-line-no">2213</span><span id="line-2213">            response.close();</span>
+<span class="source-line-no">2214</span><span id="line-2214">         throw e;</span>
+<span class="source-line-no">2215</span><span id="line-2215">      } catch (Exception e) {</span>
+<span class="source-line-no">2216</span><span id="line-2216">         if (nn(response))</span>
+<span class="source-line-no">2217</span><span id="line-2217">            response.close();</span>
+<span class="source-line-no">2218</span><span id="line-2218">         throw new RestCallException(response, e, "Call failed.");</span>
+<span class="source-line-no">2219</span><span id="line-2219">      }</span>
+<span class="source-line-no">2220</span><span id="line-2220"></span>
+<span class="source-line-no">2221</span><span id="line-2221">      return this.response;</span>
+<span class="source-line-no">2222</span><span id="line-2222">   }</span>
+<span class="source-line-no">2223</span><span id="line-2223"></span>
+<span class="source-line-no">2224</span><span id="line-2224">   /**</span>
+<span class="source-line-no">2225</span><span id="line-2225">    * Returns a message suffix describing the first entry of the given {@link Thrown} header, if present and</span>
+<span class="source-line-no">2226</span><span id="line-2226">    * non-blank, or an empty string otherwise.</span>
+<span class="source-line-no">2227</span><span id="line-2227">    *</span>
+<span class="source-line-no">2228</span><span id="line-2228">    * @param thrown The parsed {@code Thrown} response header.</span>
+<span class="source-line-no">2229</span><span id="line-2229">    * @return A &lt;js&gt;"\nThrown: &amp;lt;className&amp;gt;: &amp;lt;message&amp;gt;"&lt;/js&gt; suffix, or an empty string.</span>
+<span class="source-line-no">2230</span><span id="line-2230">    */</span>
+<span class="source-line-no">2231</span><span id="line-2231">   private static String getThrownDetailSuffix(Thrown thrown) {</span>
+<span class="source-line-no">2232</span><span id="line-2232">      if (thrown.isPresent()) {</span>
+<span class="source-line-no">2233</span><span id="line-2233">         var partsOpt = thrown.asParts();</span>
+<span class="source-line-no">2234</span><span id="line-2234">         if (partsOpt.isPresent() &amp;&amp; ! partsOpt.get().isEmpty()) {</span>
+<span class="source-line-no">2235</span><span id="line-2235">            var part = partsOpt.get().get(0);</span>
+<span class="source-line-no">2236</span><span id="line-2236">            if (inb(part.getClassName()) &amp;&amp; inb(part.getMessage()))</span>
+<span class="source-line-no">2237</span><span id="line-2237">               return "\nThrown: " + part.getClassName() + ": " + part.getMessage();</span>
+<span class="source-line-no">2238</span><span id="line-2238">         }</span>
+<span class="source-line-no">2239</span><span id="line-2239">      }</span>
+<span class="source-line-no">2240</span><span id="line-2240">      return "";</span>
+<span class="source-line-no">2241</span><span id="line-2241">   }</span>
+<span class="source-line-no">2242</span><span id="line-2242"></span>
+<span class="source-line-no">2243</span><span id="line-2243">   /**</span>
+<span class="source-line-no">2244</span><span id="line-2244">    * Same as {@link #run()} but allows you to run the call asynchronously.</span>
+<span class="source-line-no">2245</span><span id="line-2245">    *</span>
+<span class="source-line-no">2246</span><span id="line-2246">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">2247</span><span id="line-2247">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">2248</span><span id="line-2248">    *    Future&amp;lt;RestResponse&amp;gt; &lt;jv&gt;future&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;.get(&lt;jsf&gt;URI&lt;/jsf&gt;).runFuture();</span>
+<span class="source-line-no">2249</span><span id="line-2249">    *</span>
+<span class="source-line-no">2250</span><span id="line-2250">    *    &lt;jc&gt;// Do some other stuff&lt;/jc&gt;</span>
+<span class="source-line-no">2251</span><span id="line-2251">    *</span>
+<span class="source-line-no">2252</span><span id="line-2252">    *    &lt;jk&gt;try&lt;/jk&gt; {</span>
+<span class="source-line-no">2253</span><span id="line-2253">    *       String &lt;jv&gt;body&lt;/jv&gt; = &lt;jv&gt;future&lt;/jv&gt;.get().getContent().asString();</span>
+<span class="source-line-no">2254</span><span id="line-2254">    *       &lt;jc&gt;// Succeeded!&lt;/jc&gt;</span>
+<span class="source-line-no">2255</span><span id="line-2255">    *    } &lt;jk&gt;catch&lt;/jk&gt; (RestCallException &lt;jv&gt;e&lt;/jv&gt;) {</span>
+<span class="source-line-no">2256</span><span id="line-2256">    *       &lt;jc&gt;// Failed!&lt;/jc&gt;</span>
+<span class="source-line-no">2257</span><span id="line-2257">    *    }</span>
+<span class="source-line-no">2258</span><span id="line-2258">    * &lt;/p&gt;</span>
+<span class="source-line-no">2259</span><span id="line-2259">    *</span>
+<span class="source-line-no">2260</span><span id="line-2260">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">2261</span><span id="line-2261">    *    &lt;li class='note'&gt;Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the</span>
+<span class="source-line-no">2262</span><span id="line-2262">    *       executor service used for creating {@link Future Futures}.</span>
+<span class="source-line-no">2263</span><span id="line-2263">    * &lt;/ul&gt;</span>
 <span class="source-line-no">2264</span><span id="line-2264">    *</span>
-<span class="source-line-no">2265</span><span id="line-2265">    * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.</span>
-<span class="source-line-no">2266</span><span id="line-2266">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will use default serializer matching Content-Type).</span>
-<span class="source-line-no">2267</span><span id="line-2267">    * @return This object.</span>
-<span class="source-line-no">2268</span><span id="line-2268">    */</span>
-<span class="source-line-no">2269</span><span id="line-2269">   public RestRequest serializer(Class&lt;? extends Serializer&gt; serializer) {</span>
-<span class="source-line-no">2270</span><span id="line-2270">      this.serializer = serializer == null ? null : client.getInstance(serializer);</span>
-<span class="source-line-no">2271</span><span id="line-2271">      return this;</span>
-<span class="source-line-no">2272</span><span id="line-2272">   }</span>
-<span class="source-line-no">2273</span><span id="line-2273"></span>
-<span class="source-line-no">2274</span><span id="line-2274">   /**</span>
-<span class="source-line-no">2275</span><span id="line-2275">    * Specifies the serializer to use on the request body.</span>
-<span class="source-line-no">2276</span><span id="line-2276">    *</span>
-<span class="source-line-no">2277</span><span id="line-2277">    * &lt;p&gt;</span>
-<span class="source-line-no">2278</span><span id="line-2278">    * Overrides the serializers specified on the {@link RestClient}.</span>
-<span class="source-line-no">2279</span><span id="line-2279">    *</span>
-<span class="source-line-no">2280</span><span id="line-2280">    * &lt;p&gt;</span>
-<span class="source-line-no">2281</span><span id="line-2281">    *    The serializer is not modified by an of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
-<span class="source-line-no">2282</span><span id="line-2282">    *    bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2283</span><span id="line-2283">    *</span>
-<span class="source-line-no">2284</span><span id="line-2284">    * &lt;p&gt;</span>
-<span class="source-line-no">2285</span><span id="line-2285">    * If the &lt;c&gt;Content-Type&lt;/c&gt; header is not set on the request, it will be set to the media type of this serializer.</span>
-<span class="source-line-no">2286</span><span id="line-2286">    *</span>
-<span class="source-line-no">2287</span><span id="line-2287">    * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.</span>
-<span class="source-line-no">2288</span><span id="line-2288">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will use default serializer matching Content-Type).</span>
-<span class="source-line-no">2289</span><span id="line-2289">    * @return This object.</span>
-<span class="source-line-no">2290</span><span id="line-2290">    */</span>
-<span class="source-line-no">2291</span><span id="line-2291">   public RestRequest serializer(Serializer serializer) {</span>
-<span class="source-line-no">2292</span><span id="line-2292">      this.serializer = serializer;</span>
-<span class="source-line-no">2293</span><span id="line-2293">      return this;</span>
-<span class="source-line-no">2294</span><span id="line-2294">   }</span>
-<span class="source-line-no">2295</span><span id="line-2295"></span>
-<span class="source-line-no">2296</span><span id="line-2296">   /**</span>
-<span class="source-line-no">2297</span><span id="line-2297">    * Overwrites the first header with the same name.</span>
-<span class="source-line-no">2298</span><span id="line-2298">    *</span>
-<span class="source-line-no">2299</span><span id="line-2299">    * The new header will be appended to the end of the list, if no header with the given name can be found.</span>
-<span class="source-line-no">2300</span><span id="line-2300">    *</span>
-<span class="source-line-no">2301</span><span id="line-2301">    * @param header The header to set.</span>
-<span class="source-line-no">2302</span><span id="line-2302">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (ignored).</span>
-<span class="source-line-no">2303</span><span id="line-2303">    */</span>
-<span class="source-line-no">2304</span><span id="line-2304">   @Override /* Overridden from HttpMessage */</span>
-<span class="source-line-no">2305</span><span id="line-2305">   public void setHeader(Header header) {</span>
-<span class="source-line-no">2306</span><span id="line-2306">      headerData.set(header);</span>
-<span class="source-line-no">2307</span><span id="line-2307">   }</span>
-<span class="source-line-no">2308</span><span id="line-2308"></span>
-<span class="source-line-no">2309</span><span id="line-2309">   /**</span>
-<span class="source-line-no">2310</span><span id="line-2310">    * Overwrites the first header with the same name.</span>
-<span class="source-line-no">2311</span><span id="line-2311">    *</span>
-<span class="source-line-no">2312</span><span id="line-2312">    * The new header will be appended to the end of the list, if no header with the given name can be found.</span>
-<span class="source-line-no">2313</span><span id="line-2313">    *</span>
-<span class="source-line-no">2314</span><span id="line-2314">    * @param name The name of the header.</span>
-<span class="source-line-no">2315</span><span id="line-2315">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt; or empty (header will not be created).</span>
-<span class="source-line-no">2316</span><span id="line-2316">    * @param value The value of the header.</span>
-<span class="source-line-no">2317</span><span id="line-2317">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2318</span><span id="line-2318">    */</span>
-<span class="source-line-no">2319</span><span id="line-2319">   @Override /* Overridden from HttpMessage */</span>
-<span class="source-line-no">2320</span><span id="line-2320">   public void setHeader(String name, String value) {</span>
-<span class="source-line-no">2321</span><span id="line-2321">      headerData.set(stringHeader(name, value));</span>
-<span class="source-line-no">2322</span><span id="line-2322">   }</span>
-<span class="source-line-no">2323</span><span id="line-2323"></span>
-<span class="source-line-no">2324</span><span id="line-2324">   /**</span>
-<span class="source-line-no">2325</span><span id="line-2325">    * Overwrites all the headers in the message.</span>
-<span class="source-line-no">2326</span><span id="line-2326">    *</span>
-<span class="source-line-no">2327</span><span id="line-2327">    * @param headers The array of headers to set.</span>
-<span class="source-line-no">2328</span><span id="line-2328">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (all headers will be cleared).</span>
-<span class="source-line-no">2329</span><span id="line-2329">    *    &lt;br&gt;Can contain &lt;jk&gt;null&lt;/jk&gt; values (ignored).</span>
-<span class="source-line-no">2330</span><span id="line-2330">    */</span>
-<span class="source-line-no">2331</span><span id="line-2331">   @Override /* Overridden from HttpMessage */</span>
-<span class="source-line-no">2332</span><span id="line-2332">   public void setHeaders(Header[] headers) {</span>
-<span class="source-line-no">2333</span><span id="line-2333">      headerData.set(headers);</span>
-<span class="source-line-no">2334</span><span id="line-2334">   }</span>
-<span class="source-line-no">2335</span><span id="line-2335"></span>
-<span class="source-line-no">2336</span><span id="line-2336">   /**</span>
-<span class="source-line-no">2337</span><span id="line-2337">    * Provides parameters to be used for the processing of this message.</span>
-<span class="source-line-no">2338</span><span id="line-2338">    *</span>
-<span class="source-line-no">2339</span><span id="line-2339">    * @param params The parameters.</span>
-<span class="source-line-no">2340</span><span id="line-2340">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (default parameters will be used).</span>
-<span class="source-line-no">2341</span><span id="line-2341">    * @deprecated Use constructor parameters of configuration API provided by HttpClient.</span>
-<span class="source-line-no">2342</span><span id="line-2342">    */</span>
-<span class="source-line-no">2343</span><span id="line-2343">   @Override /* Overridden from HttpMessage */</span>
-<span class="source-line-no">2344</span><span id="line-2344">   @Deprecated(since = "10.0", forRemoval = true)</span>
-<span class="source-line-no">2345</span><span id="line-2345">   public void setParams(HttpParams params) {</span>
-<span class="source-line-no">2346</span><span id="line-2346">      request.setParams(params);</span>
-<span class="source-line-no">2347</span><span id="line-2347">   }</span>
-<span class="source-line-no">2348</span><span id="line-2348"></span>
-<span class="source-line-no">2349</span><span id="line-2349">   /**</span>
-<span class="source-line-no">2350</span><span id="line-2350">    * Causes logging to be suppressed for the duration of this request.</span>
-<span class="source-line-no">2351</span><span id="line-2351">    *</span>
-<span class="source-line-no">2352</span><span id="line-2352">    * &lt;p&gt;</span>
-<span class="source-line-no">2353</span><span id="line-2353">    * Overrides the {@link #debug()} setting on this request or client.</span>
-<span class="source-line-no">2354</span><span id="line-2354">    *</span>
-<span class="source-line-no">2355</span><span id="line-2355">    * @return This object.</span>
-<span class="source-line-no">2356</span><span id="line-2356">    */</span>
-<span class="source-line-no">2357</span><span id="line-2357">   public RestRequest suppressLogging() {</span>
-<span class="source-line-no">2358</span><span id="line-2358">      this.suppressLogging = true;</span>
-<span class="source-line-no">2359</span><span id="line-2359">      return this;</span>
-<span class="source-line-no">2360</span><span id="line-2360">   }</span>
-<span class="source-line-no">2361</span><span id="line-2361"></span>
-<span class="source-line-no">2362</span><span id="line-2362">   /**</span>
-<span class="source-line-no">2363</span><span id="line-2363">    * Specifies the target host for the request.</span>
-<span class="source-line-no">2364</span><span id="line-2364">    *</span>
-<span class="source-line-no">2365</span><span id="line-2365">    * @param target The target host for the request.</span>
-<span class="source-line-no">2366</span><span id="line-2366">    *    Implementations may accept &lt;jk&gt;null&lt;/jk&gt; if they can still determine a route, for example to a default</span>
-<span class="source-line-no">2367</span><span id="line-2367">    *    target or by inspecting the request.</span>
-<span class="source-line-no">2368</span><span id="line-2368">    * @return This object.</span>
-<span class="source-line-no">2369</span><span id="line-2369">    */</span>
-<span class="source-line-no">2370</span><span id="line-2370">   public RestRequest target(HttpHost target) {</span>
-<span class="source-line-no">2371</span><span id="line-2371">      this.target = target;</span>
-<span class="source-line-no">2372</span><span id="line-2372">      return this;</span>
-<span class="source-line-no">2373</span><span id="line-2373">   }</span>
-<span class="source-line-no">2374</span><span id="line-2374"></span>
-<span class="source-line-no">2375</span><span id="line-2375">   /**</span>
-<span class="source-line-no">2376</span><span id="line-2376">    * Convenience method for specifying UON as the marshalling transmission media type for this request only.</span>
-<span class="source-line-no">2377</span><span id="line-2377">    *</span>
-<span class="source-line-no">2378</span><span id="line-2378">    * &lt;p&gt;</span>
-<span class="source-line-no">2379</span><span id="line-2379">    * UON is Url-Encoding Object notation that is equivalent to JSON but suitable for transmission as URL-encoded</span>
-<span class="source-line-no">2380</span><span id="line-2380">    * query and form post values.</span>
-<span class="source-line-no">2381</span><span id="line-2381">    *</span>
-<span class="source-line-no">2382</span><span id="line-2382">    * &lt;p&gt;</span>
-<span class="source-line-no">2383</span><span id="line-2383">    *    {@link UonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.</span>
-<span class="source-line-no">2384</span><span id="line-2384">    *    &lt;ul&gt;</span>
-<span class="source-line-no">2385</span><span id="line-2385">    *       &lt;li&gt;The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
-<span class="source-line-no">2386</span><span id="line-2386">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2387</span><span id="line-2387">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">2388</span><span id="line-2388">    * &lt;p&gt;</span>
-<span class="source-line-no">2389</span><span id="line-2389">    *    {@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.</span>
-<span class="source-line-no">2390</span><span id="line-2390">    *    &lt;ul&gt;</span>
-<span class="source-line-no">2391</span><span id="line-2391">    *       &lt;li&gt;The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or</span>
-<span class="source-line-no">2392</span><span id="line-2392">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2393</span><span id="line-2393">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">2394</span><span id="line-2394">    * &lt;p&gt;</span>
-<span class="source-line-no">2395</span><span id="line-2395">    *    &lt;c&gt;Accept&lt;/c&gt; request header will be set to &lt;js&gt;"text/uon"&lt;/js&gt; unless overridden</span>
-<span class="source-line-no">2396</span><span id="line-2396">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.</span>
-<span class="source-line-no">2397</span><span id="line-2397">    * &lt;p&gt;</span>
-<span class="source-line-no">2398</span><span id="line-2398">    *    &lt;c&gt;Content-Type&lt;/c&gt; request header will be set to &lt;js&gt;"text/uon"&lt;/js&gt; unless overridden</span>
-<span class="source-line-no">2399</span><span id="line-2399">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.</span>
-<span class="source-line-no">2400</span><span id="line-2400">    * &lt;p&gt;</span>
-<span class="source-line-no">2401</span><span id="line-2401">    *    Identical to calling &lt;c&gt;serializer(UonSerializer.&lt;jk&gt;class&lt;/jk&gt;).parser(UonParser.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</span>
-<span class="source-line-no">2402</span><span id="line-2402">    *</span>
-<span class="source-line-no">2403</span><span id="line-2403">    * @return This object.</span>
-<span class="source-line-no">2404</span><span id="line-2404">    */</span>
-<span class="source-line-no">2405</span><span id="line-2405">   public RestRequest uon() {</span>
-<span class="source-line-no">2406</span><span id="line-2406">      return serializer(UonSerializer.class).parser(UonParser.class);</span>
-<span class="source-line-no">2407</span><span id="line-2407">   }</span>
-<span class="source-line-no">2408</span><span id="line-2408"></span>
-<span class="source-line-no">2409</span><span id="line-2409">   /**</span>
-<span class="source-line-no">2410</span><span id="line-2410">    * Sets the URI for this request.</span>
-<span class="source-line-no">2411</span><span id="line-2411">    *</span>
-<span class="source-line-no">2412</span><span id="line-2412">    * &lt;p&gt;</span>
-<span class="source-line-no">2413</span><span id="line-2413">    * Can be any of the following types:</span>
-<span class="source-line-no">2414</span><span id="line-2414">    * &lt;ul&gt;</span>
-<span class="source-line-no">2415</span><span id="line-2415">    *    &lt;li&gt;{@link URI}</span>
-<span class="source-line-no">2416</span><span id="line-2416">    *    &lt;li&gt;{@link URL}</span>
-<span class="source-line-no">2417</span><span id="line-2417">    *    &lt;li&gt;{@link URIBuilder}</span>
-<span class="source-line-no">2418</span><span id="line-2418">    *    &lt;li&gt;Anything else converted to a string using {@link Object#toString()}.</span>
-<span class="source-line-no">2419</span><span id="line-2419">    * &lt;/ul&gt;</span>
-<span class="source-line-no">2420</span><span id="line-2420">    *</span>
-<span class="source-line-no">2421</span><span id="line-2421">    * &lt;p&gt;</span>
-<span class="source-line-no">2422</span><span id="line-2422">    * Relative URI strings will be interpreted as relative to the root URI defined on the client.</span>
-<span class="source-line-no">2423</span><span id="line-2423">    *</span>
-<span class="source-line-no">2424</span><span id="line-2424">    * @param uri</span>
-<span class="source-line-no">2425</span><span id="line-2425">    *    The URI of the remote REST resource.</span>
-<span class="source-line-no">2426</span><span id="line-2426">    *    &lt;br&gt;This overrides the URI passed in from the client.</span>
-<span class="source-line-no">2427</span><span id="line-2427">    *    &lt;br&gt;Can be any of the following types:</span>
-<span class="source-line-no">2428</span><span id="line-2428">    *    &lt;ul&gt;</span>
-<span class="source-line-no">2429</span><span id="line-2429">    *       &lt;li&gt;{@link URIBuilder}</span>
-<span class="source-line-no">2430</span><span id="line-2430">    *       &lt;li&gt;{@link URI}</span>
-<span class="source-line-no">2431</span><span id="line-2431">    *       &lt;li&gt;{@link URL}</span>
-<span class="source-line-no">2432</span><span id="line-2432">    *       &lt;li&gt;{@link String}</span>
-<span class="source-line-no">2433</span><span id="line-2433">    *       &lt;li&gt;{@link Object} - Converted to &lt;c&gt;String&lt;/c&gt; using &lt;c&gt;toString()&lt;/c&gt;</span>
-<span class="source-line-no">2434</span><span id="line-2434">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">2435</span><span id="line-2435">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2436</span><span id="line-2436">    * @return This object.</span>
-<span class="source-line-no">2437</span><span id="line-2437">    * @throws RestCallException Invalid URI syntax detected.</span>
-<span class="source-line-no">2438</span><span id="line-2438">    */</span>
-<span class="source-line-no">2439</span><span id="line-2439">   public RestRequest uri(Object uri) throws RestCallException {</span>
-<span class="source-line-no">2440</span><span id="line-2440">      var x = client.toUri(uri, null);</span>
-<span class="source-line-no">2441</span><span id="line-2441">      if (nn(x.getScheme()))</span>
-<span class="source-line-no">2442</span><span id="line-2442">         uriBuilder.setScheme(x.getScheme());</span>
-<span class="source-line-no">2443</span><span id="line-2443">      if (nn(x.getHost()))</span>
-<span class="source-line-no">2444</span><span id="line-2444">         uriBuilder.setHost(x.getHost());</span>
-<span class="source-line-no">2445</span><span id="line-2445">      if (x.getPort() != -1)</span>
-<span class="source-line-no">2446</span><span id="line-2446">         uriBuilder.setPort(x.getPort());</span>
-<span class="source-line-no">2447</span><span id="line-2447">      if (nn(x.getUserInfo()))</span>
-<span class="source-line-no">2448</span><span id="line-2448">         uriBuilder.setUserInfo(x.getUserInfo());</span>
-<span class="source-line-no">2449</span><span id="line-2449">      if (nn(x.getFragment()))</span>
-<span class="source-line-no">2450</span><span id="line-2450">         uriBuilder.setFragment(x.getFragment());</span>
-<span class="source-line-no">2451</span><span id="line-2451">      if (nn(x.getQuery()))</span>
-<span class="source-line-no">2452</span><span id="line-2452">         uriBuilder.setCustomQuery(x.getQuery());</span>
-<span class="source-line-no">2453</span><span id="line-2453">      uriBuilder.setPath(x.getPath());</span>
-<span class="source-line-no">2454</span><span id="line-2454">      return this;</span>
-<span class="source-line-no">2455</span><span id="line-2455">   }</span>
-<span class="source-line-no">2456</span><span id="line-2456"></span>
-<span class="source-line-no">2457</span><span id="line-2457">   /**</span>
-<span class="source-line-no">2458</span><span id="line-2458">    * Sets the URI fragment.</span>
-<span class="source-line-no">2459</span><span id="line-2459">    *</span>
-<span class="source-line-no">2460</span><span id="line-2460">    * @param fragment The URI fragment.  The value is expected to be unescaped and may contain non ASCII characters.</span>
-<span class="source-line-no">2461</span><span id="line-2461">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (fragment will be cleared).</span>
-<span class="source-line-no">2462</span><span id="line-2462">    * @return This object.</span>
-<span class="source-line-no">2463</span><span id="line-2463">    */</span>
-<span class="source-line-no">2464</span><span id="line-2464">   public RestRequest uriFragment(String fragment) {</span>
-<span class="source-line-no">2465</span><span id="line-2465">      uriBuilder.setFragment(fragment);</span>
-<span class="source-line-no">2466</span><span id="line-2466">      return this;</span>
-<span class="source-line-no">2467</span><span id="line-2467">   }</span>
-<span class="source-line-no">2468</span><span id="line-2468"></span>
-<span class="source-line-no">2469</span><span id="line-2469">   /**</span>
-<span class="source-line-no">2470</span><span id="line-2470">    * Sets the URI host.</span>
-<span class="source-line-no">2471</span><span id="line-2471">    *</span>
-<span class="source-line-no">2472</span><span id="line-2472">    * @param host The new URI host.</span>
-<span class="source-line-no">2473</span><span id="line-2473">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (host will be cleared).</span>
-<span class="source-line-no">2474</span><span id="line-2474">    * @return This object.</span>
-<span class="source-line-no">2475</span><span id="line-2475">    */</span>
-<span class="source-line-no">2476</span><span id="line-2476">   public RestRequest uriHost(String host) {</span>
-<span class="source-line-no">2477</span><span id="line-2477">      uriBuilder.setHost(host);</span>
-<span class="source-line-no">2478</span><span id="line-2478">      return this;</span>
-<span class="source-line-no">2479</span><span id="line-2479">   }</span>
-<span class="source-line-no">2480</span><span id="line-2480"></span>
-<span class="source-line-no">2481</span><span id="line-2481">   /**</span>
-<span class="source-line-no">2482</span><span id="line-2482">    * Sets the URI port.</span>
-<span class="source-line-no">2483</span><span id="line-2483">    *</span>
-<span class="source-line-no">2484</span><span id="line-2484">    * @param port The new URI port.</span>
-<span class="source-line-no">2485</span><span id="line-2485">    * @return This object.</span>
-<span class="source-line-no">2486</span><span id="line-2486">    */</span>
-<span class="source-line-no">2487</span><span id="line-2487">   public RestRequest uriPort(int port) {</span>
-<span class="source-line-no">2488</span><span id="line-2488">      uriBuilder.setPort(port);</span>
-<span class="source-line-no">2489</span><span id="line-2489">      return this;</span>
-<span class="source-line-no">2490</span><span id="line-2490">   }</span>
-<span class="source-line-no">2491</span><span id="line-2491"></span>
-<span class="source-line-no">2492</span><span id="line-2492">   /**</span>
-<span class="source-line-no">2493</span><span id="line-2493">    * Sets the URI scheme.</span>
-<span class="source-line-no">2494</span><span id="line-2494">    *</span>
-<span class="source-line-no">2495</span><span id="line-2495">    * @param scheme The new URI scheme.</span>
-<span class="source-line-no">2496</span><span id="line-2496">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (scheme will be cleared).</span>
-<span class="source-line-no">2497</span><span id="line-2497">    * @return This object.</span>
-<span class="source-line-no">2498</span><span id="line-2498">    */</span>
-<span class="source-line-no">2499</span><span id="line-2499">   public RestRequest uriScheme(String scheme) {</span>
-<span class="source-line-no">2500</span><span id="line-2500">      uriBuilder.setScheme(scheme);</span>
-<span class="source-line-no">2501</span><span id="line-2501">      return this;</span>
-<span class="source-line-no">2502</span><span id="line-2502">   }</span>
-<span class="source-line-no">2503</span><span id="line-2503"></span>
-<span class="source-line-no">2504</span><span id="line-2504">   /**</span>
-<span class="source-line-no">2505</span><span id="line-2505">    * Sets the URI user info.</span>
-<span class="source-line-no">2506</span><span id="line-2506">    *</span>
-<span class="source-line-no">2507</span><span id="line-2507">    * @param userInfo The new URI user info.</span>
-<span class="source-line-no">2508</span><span id="line-2508">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (user info will be cleared).</span>
-<span class="source-line-no">2509</span><span id="line-2509">    * @return This object.</span>
-<span class="source-line-no">2510</span><span id="line-2510">    */</span>
-<span class="source-line-no">2511</span><span id="line-2511">   public RestRequest uriUserInfo(String userInfo) {</span>
-<span class="source-line-no">2512</span><span id="line-2512">      uriBuilder.setUserInfo(userInfo);</span>
-<span class="source-line-no">2513</span><span id="line-2513">      return this;</span>
-<span class="source-line-no">2514</span><span id="line-2514">   }</span>
-<span class="source-line-no">2515</span><span id="line-2515"></span>
-<span class="source-line-no">2516</span><span id="line-2516">   /**</span>
-<span class="source-line-no">2517</span><span id="line-2517">    * Sets the URI user info.</span>
-<span class="source-line-no">2518</span><span id="line-2518">    *</span>
-<span class="source-line-no">2519</span><span id="line-2519">    * @param username The new URI username.</span>
-<span class="source-line-no">2520</span><span id="line-2520">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2521</span><span id="line-2521">    * @param password The new URI password.</span>
-<span class="source-line-no">2522</span><span id="line-2522">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2523</span><span id="line-2523">    * @return This object.</span>
-<span class="source-line-no">2524</span><span id="line-2524">    */</span>
-<span class="source-line-no">2525</span><span id="line-2525">   public RestRequest uriUserInfo(String username, String password) {</span>
-<span class="source-line-no">2526</span><span id="line-2526">      uriBuilder.setUserInfo(username, password);</span>
-<span class="source-line-no">2527</span><span id="line-2527">      return this;</span>
-<span class="source-line-no">2528</span><span id="line-2528">   }</span>
-<span class="source-line-no">2529</span><span id="line-2529"></span>
-<span class="source-line-no">2530</span><span id="line-2530">   /**</span>
-<span class="source-line-no">2531</span><span id="line-2531">    * Convenience method for specifying URL-Encoding as the marshalling transmission media type for this request only.</span>
-<span class="source-line-no">2532</span><span id="line-2532">    *</span>
-<span class="source-line-no">2533</span><span id="line-2533">    * &lt;p&gt;</span>
-<span class="source-line-no">2534</span><span id="line-2534">    *    {@link UrlEncodingSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.</span>
-<span class="source-line-no">2535</span><span id="line-2535">    *    &lt;ul&gt;</span>
-<span class="source-line-no">2536</span><span id="line-2536">    *       &lt;li&gt;The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
-<span class="source-line-no">2537</span><span id="line-2537">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2538</span><span id="line-2538">    *       &lt;li&gt;This serializer is NOT used when using the {@link RestRequest#formData(String, Object)} (and related) methods for constructing</span>
-<span class="source-line-no">2539</span><span id="line-2539">    *          the request body.  Instead, the part serializer specified via {@link RestClient.Builder#partSerializer(Class)} is used.</span>
-<span class="source-line-no">2540</span><span id="line-2540">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">2541</span><span id="line-2541">    * &lt;p&gt;</span>
-<span class="source-line-no">2542</span><span id="line-2542">    *    {@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.</span>
-<span class="source-line-no">2543</span><span id="line-2543">    *    &lt;ul&gt;</span>
-<span class="source-line-no">2544</span><span id="line-2544">    *       &lt;li&gt;The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or</span>
-<span class="source-line-no">2545</span><span id="line-2545">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2546</span><span id="line-2546">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">2547</span><span id="line-2547">    * &lt;p&gt;</span>
-<span class="source-line-no">2548</span><span id="line-2548">    *    &lt;c&gt;Accept&lt;/c&gt; request header will be set to &lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt; unless overridden</span>
-<span class="source-line-no">2549</span><span id="line-2549">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.</span>
-<span class="source-line-no">2550</span><span id="line-2550">    * &lt;p&gt;</span>
-<span class="source-line-no">2551</span><span id="line-2551">    *    &lt;c&gt;Content-Type&lt;/c&gt; request header will be set to &lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt; unless overridden</span>
-<span class="source-line-no">2552</span><span id="line-2552">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.</span>
+<span class="source-line-no">2265</span><span id="line-2265">    * @return The HTTP status code.</span>
+<span class="source-line-no">2266</span><span id="line-2266">    * @throws RestCallException If the executor service was not defined.</span>
+<span class="source-line-no">2267</span><span id="line-2267">    */</span>
+<span class="source-line-no">2268</span><span id="line-2268">   public Future&lt;RestResponse&gt; runFuture() throws RestCallException {</span>
+<span class="source-line-no">2269</span><span id="line-2269">      return client.getExecutorService().submit(this::run);</span>
+<span class="source-line-no">2270</span><span id="line-2270">   }</span>
+<span class="source-line-no">2271</span><span id="line-2271"></span>
+<span class="source-line-no">2272</span><span id="line-2272">   /**</span>
+<span class="source-line-no">2273</span><span id="line-2273">    * Specifies the serializer to use on the request body.</span>
+<span class="source-line-no">2274</span><span id="line-2274">    *</span>
+<span class="source-line-no">2275</span><span id="line-2275">    * &lt;p&gt;</span>
+<span class="source-line-no">2276</span><span id="line-2276">    * Overrides the serializers specified on the {@link RestClient}.</span>
+<span class="source-line-no">2277</span><span id="line-2277">    *</span>
+<span class="source-line-no">2278</span><span id="line-2278">    * &lt;p&gt;</span>
+<span class="source-line-no">2279</span><span id="line-2279">    *    The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
+<span class="source-line-no">2280</span><span id="line-2280">    *    bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2281</span><span id="line-2281">    *</span>
+<span class="source-line-no">2282</span><span id="line-2282">    * &lt;p&gt;</span>
+<span class="source-line-no">2283</span><span id="line-2283">    * If the &lt;c&gt;Content-Type&lt;/c&gt; header is not set on the request, it will be set to the media type of this serializer.</span>
+<span class="source-line-no">2284</span><span id="line-2284">    *</span>
+<span class="source-line-no">2285</span><span id="line-2285">    * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.</span>
+<span class="source-line-no">2286</span><span id="line-2286">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will use default serializer matching Content-Type).</span>
+<span class="source-line-no">2287</span><span id="line-2287">    * @return This object.</span>
+<span class="source-line-no">2288</span><span id="line-2288">    */</span>
+<span class="source-line-no">2289</span><span id="line-2289">   public RestRequest serializer(Class&lt;? extends Serializer&gt; serializer) {</span>
+<span class="source-line-no">2290</span><span id="line-2290">      this.serializer = serializer == null ? null : client.getInstance(serializer);</span>
+<span class="source-line-no">2291</span><span id="line-2291">      return this;</span>
+<span class="source-line-no">2292</span><span id="line-2292">   }</span>
+<span class="source-line-no">2293</span><span id="line-2293"></span>
+<span class="source-line-no">2294</span><span id="line-2294">   /**</span>
+<span class="source-line-no">2295</span><span id="line-2295">    * Specifies the serializer to use on the request body.</span>
+<span class="source-line-no">2296</span><span id="line-2296">    *</span>
+<span class="source-line-no">2297</span><span id="line-2297">    * &lt;p&gt;</span>
+<span class="source-line-no">2298</span><span id="line-2298">    * Overrides the serializers specified on the {@link RestClient}.</span>
+<span class="source-line-no">2299</span><span id="line-2299">    *</span>
+<span class="source-line-no">2300</span><span id="line-2300">    * &lt;p&gt;</span>
+<span class="source-line-no">2301</span><span id="line-2301">    *    The serializer is not modified by an of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
+<span class="source-line-no">2302</span><span id="line-2302">    *    bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2303</span><span id="line-2303">    *</span>
+<span class="source-line-no">2304</span><span id="line-2304">    * &lt;p&gt;</span>
+<span class="source-line-no">2305</span><span id="line-2305">    * If the &lt;c&gt;Content-Type&lt;/c&gt; header is not set on the request, it will be set to the media type of this serializer.</span>
+<span class="source-line-no">2306</span><span id="line-2306">    *</span>
+<span class="source-line-no">2307</span><span id="line-2307">    * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.</span>
+<span class="source-line-no">2308</span><span id="line-2308">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (will use default serializer matching Content-Type).</span>
+<span class="source-line-no">2309</span><span id="line-2309">    * @return This object.</span>
+<span class="source-line-no">2310</span><span id="line-2310">    */</span>
+<span class="source-line-no">2311</span><span id="line-2311">   public RestRequest serializer(Serializer serializer) {</span>
+<span class="source-line-no">2312</span><span id="line-2312">      this.serializer = serializer;</span>
+<span class="source-line-no">2313</span><span id="line-2313">      return this;</span>
+<span class="source-line-no">2314</span><span id="line-2314">   }</span>
+<span class="source-line-no">2315</span><span id="line-2315"></span>
+<span class="source-line-no">2316</span><span id="line-2316">   /**</span>
+<span class="source-line-no">2317</span><span id="line-2317">    * Overwrites the first header with the same name.</span>
+<span class="source-line-no">2318</span><span id="line-2318">    *</span>
+<span class="source-line-no">2319</span><span id="line-2319">    * The new header will be appended to the end of the list, if no header with the given name can be found.</span>
+<span class="source-line-no">2320</span><span id="line-2320">    *</span>
+<span class="source-line-no">2321</span><span id="line-2321">    * @param header The header to set.</span>
+<span class="source-line-no">2322</span><span id="line-2322">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (ignored).</span>
+<span class="source-line-no">2323</span><span id="line-2323">    */</span>
+<span class="source-line-no">2324</span><span id="line-2324">   @Override /* Overridden from HttpMessage */</span>
+<span class="source-line-no">2325</span><span id="line-2325">   public void setHeader(Header header) {</span>
+<span class="source-line-no">2326</span><span id="line-2326">      headerData.set(header);</span>
+<span class="source-line-no">2327</span><span id="line-2327">   }</span>
+<span class="source-line-no">2328</span><span id="line-2328"></span>
+<span class="source-line-no">2329</span><span id="line-2329">   /**</span>
+<span class="source-line-no">2330</span><span id="line-2330">    * Overwrites the first header with the same name.</span>
+<span class="source-line-no">2331</span><span id="line-2331">    *</span>
+<span class="source-line-no">2332</span><span id="line-2332">    * The new header will be appended to the end of the list, if no header with the given name can be found.</span>
+<span class="source-line-no">2333</span><span id="line-2333">    *</span>
+<span class="source-line-no">2334</span><span id="line-2334">    * @param name The name of the header.</span>
+<span class="source-line-no">2335</span><span id="line-2335">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt; or empty (header will not be created).</span>
+<span class="source-line-no">2336</span><span id="line-2336">    * @param value The value of the header.</span>
+<span class="source-line-no">2337</span><span id="line-2337">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2338</span><span id="line-2338">    */</span>
+<span class="source-line-no">2339</span><span id="line-2339">   @Override /* Overridden from HttpMessage */</span>
+<span class="source-line-no">2340</span><span id="line-2340">   public void setHeader(String name, String value) {</span>
+<span class="source-line-no">2341</span><span id="line-2341">      headerData.set(stringHeader(name, value));</span>
+<span class="source-line-no">2342</span><span id="line-2342">   }</span>
+<span class="source-line-no">2343</span><span id="line-2343"></span>
+<span class="source-line-no">2344</span><span id="line-2344">   /**</span>
+<span class="source-line-no">2345</span><span id="line-2345">    * Overwrites all the headers in the message.</span>
+<span class="source-line-no">2346</span><span id="line-2346">    *</span>
+<span class="source-line-no">2347</span><span id="line-2347">    * @param headers The array of headers to set.</span>
+<span class="source-line-no">2348</span><span id="line-2348">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (all headers will be cleared).</span>
+<span class="source-line-no">2349</span><span id="line-2349">    *    &lt;br&gt;Can contain &lt;jk&gt;null&lt;/jk&gt; values (ignored).</span>
+<span class="source-line-no">2350</span><span id="line-2350">    */</span>
+<span class="source-line-no">2351</span><span id="line-2351">   @Override /* Overridden from HttpMessage */</span>
+<span class="source-line-no">2352</span><span id="line-2352">   public void setHeaders(Header[] headers) {</span>
+<span class="source-line-no">2353</span><span id="line-2353">      headerData.set(headers);</span>
+<span class="source-line-no">2354</span><span id="line-2354">   }</span>
+<span class="source-line-no">2355</span><span id="line-2355"></span>
+<span class="source-line-no">2356</span><span id="line-2356">   /**</span>
+<span class="source-line-no">2357</span><span id="line-2357">    * Provides parameters to be used for the processing of this message.</span>
+<span class="source-line-no">2358</span><span id="line-2358">    *</span>
+<span class="source-line-no">2359</span><span id="line-2359">    * @param params The parameters.</span>
+<span class="source-line-no">2360</span><span id="line-2360">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (default parameters will be used).</span>
+<span class="source-line-no">2361</span><span id="line-2361">    * @deprecated Use constructor parameters of configuration API provided by HttpClient.</span>
+<span class="source-line-no">2362</span><span id="line-2362">    */</span>
+<span class="source-line-no">2363</span><span id="line-2363">   @Override /* Overridden from HttpMessage */</span>
+<span class="source-line-no">2364</span><span id="line-2364">   @Deprecated(since = "10.0", forRemoval = true)</span>
+<span class="source-line-no">2365</span><span id="line-2365">   public void setParams(HttpParams params) {</span>
+<span class="source-line-no">2366</span><span id="line-2366">      request.setParams(params);</span>
+<span class="source-line-no">2367</span><span id="line-2367">   }</span>
+<span class="source-line-no">2368</span><span id="line-2368"></span>
+<span class="source-line-no">2369</span><span id="line-2369">   /**</span>
+<span class="source-line-no">2370</span><span id="line-2370">    * Causes logging to be suppressed for the duration of this request.</span>
+<span class="source-line-no">2371</span><span id="line-2371">    *</span>
+<span class="source-line-no">2372</span><span id="line-2372">    * &lt;p&gt;</span>
+<span class="source-line-no">2373</span><span id="line-2373">    * Overrides the {@link #debug()} setting on this request or client.</span>
+<span class="source-line-no">2374</span><span id="line-2374">    *</span>
+<span class="source-line-no">2375</span><span id="line-2375">    * @return This object.</span>
+<span class="source-line-no">2376</span><span id="line-2376">    */</span>
+<span class="source-line-no">2377</span><span id="line-2377">   public RestRequest suppressLogging() {</span>
+<span class="source-line-no">2378</span><span id="line-2378">      this.suppressLogging = true;</span>
+<span class="source-line-no">2379</span><span id="line-2379">      return this;</span>
+<span class="source-line-no">2380</span><span id="line-2380">   }</span>
+<span class="source-line-no">2381</span><span id="line-2381"></span>
+<span class="source-line-no">2382</span><span id="line-2382">   /**</span>
+<span class="source-line-no">2383</span><span id="line-2383">    * Specifies the target host for the request.</span>
+<span class="source-line-no">2384</span><span id="line-2384">    *</span>
+<span class="source-line-no">2385</span><span id="line-2385">    * @param target The target host for the request.</span>
+<span class="source-line-no">2386</span><span id="line-2386">    *    Implementations may accept &lt;jk&gt;null&lt;/jk&gt; if they can still determine a route, for example to a default</span>
+<span class="source-line-no">2387</span><span id="line-2387">    *    target or by inspecting the request.</span>
+<span class="source-line-no">2388</span><span id="line-2388">    * @return This object.</span>
+<span class="source-line-no">2389</span><span id="line-2389">    */</span>
+<span class="source-line-no">2390</span><span id="line-2390">   public RestRequest target(HttpHost target) {</span>
+<span class="source-line-no">2391</span><span id="line-2391">      this.target = target;</span>
+<span class="source-line-no">2392</span><span id="line-2392">      return this;</span>
+<span class="source-line-no">2393</span><span id="line-2393">   }</span>
+<span class="source-line-no">2394</span><span id="line-2394"></span>
+<span class="source-line-no">2395</span><span id="line-2395">   /**</span>
+<span class="source-line-no">2396</span><span id="line-2396">    * Convenience method for specifying UON as the marshalling transmission media type for this request only.</span>
+<span class="source-line-no">2397</span><span id="line-2397">    *</span>
+<span class="source-line-no">2398</span><span id="line-2398">    * &lt;p&gt;</span>
+<span class="source-line-no">2399</span><span id="line-2399">    * UON is Url-Encoding Object notation that is equivalent to JSON but suitable for transmission as URL-encoded</span>
+<span class="source-line-no">2400</span><span id="line-2400">    * query and form post values.</span>
+<span class="source-line-no">2401</span><span id="line-2401">    *</span>
+<span class="source-line-no">2402</span><span id="line-2402">    * &lt;p&gt;</span>
+<span class="source-line-no">2403</span><span id="line-2403">    *    {@link UonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.</span>
+<span class="source-line-no">2404</span><span id="line-2404">    *    &lt;ul&gt;</span>
+<span class="source-line-no">2405</span><span id="line-2405">    *       &lt;li&gt;The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
+<span class="source-line-no">2406</span><span id="line-2406">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2407</span><span id="line-2407">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">2408</span><span id="line-2408">    * &lt;p&gt;</span>
+<span class="source-line-no">2409</span><span id="line-2409">    *    {@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.</span>
+<span class="source-line-no">2410</span><span id="line-2410">    *    &lt;ul&gt;</span>
+<span class="source-line-no">2411</span><span id="line-2411">    *       &lt;li&gt;The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or</span>
+<span class="source-line-no">2412</span><span id="line-2412">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2413</span><span id="line-2413">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">2414</span><span id="line-2414">    * &lt;p&gt;</span>
+<span class="source-line-no">2415</span><span id="line-2415">    *    &lt;c&gt;Accept&lt;/c&gt; request header will be set to &lt;js&gt;"text/uon"&lt;/js&gt; unless overridden</span>
+<span class="source-line-no">2416</span><span id="line-2416">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.</span>
+<span class="source-line-no">2417</span><span id="line-2417">    * &lt;p&gt;</span>
+<span class="source-line-no">2418</span><span id="line-2418">    *    &lt;c&gt;Content-Type&lt;/c&gt; request header will be set to &lt;js&gt;"text/uon"&lt;/js&gt; unless overridden</span>
+<span class="source-line-no">2419</span><span id="line-2419">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.</span>
+<span class="source-line-no">2420</span><span id="line-2420">    * &lt;p&gt;</span>
+<span class="source-line-no">2421</span><span id="line-2421">    *    Identical to calling &lt;c&gt;serializer(UonSerializer.&lt;jk&gt;class&lt;/jk&gt;).parser(UonParser.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</span>
+<span class="source-line-no">2422</span><span id="line-2422">    *</span>
+<span class="source-line-no">2423</span><span id="line-2423">    * @return This object.</span>
+<span class="source-line-no">2424</span><span id="line-2424">    */</span>
+<span class="source-line-no">2425</span><span id="line-2425">   public RestRequest uon() {</span>
+<span class="source-line-no">2426</span><span id="line-2426">      return serializer(UonSerializer.class).parser(UonParser.class);</span>
+<span class="source-line-no">2427</span><span id="line-2427">   }</span>
+<span class="source-line-no">2428</span><span id="line-2428"></span>
+<span class="source-line-no">2429</span><span id="line-2429">   /**</span>
+<span class="source-line-no">2430</span><span id="line-2430">    * Sets the URI for this request.</span>
+<span class="source-line-no">2431</span><span id="line-2431">    *</span>
+<span class="source-line-no">2432</span><span id="line-2432">    * &lt;p&gt;</span>
+<span class="source-line-no">2433</span><span id="line-2433">    * Can be any of the following types:</span>
+<span class="source-line-no">2434</span><span id="line-2434">    * &lt;ul&gt;</span>
+<span class="source-line-no">2435</span><span id="line-2435">    *    &lt;li&gt;{@link URI}</span>
+<span class="source-line-no">2436</span><span id="line-2436">    *    &lt;li&gt;{@link URL}</span>
+<span class="source-line-no">2437</span><span id="line-2437">    *    &lt;li&gt;{@link URIBuilder}</span>
+<span class="source-line-no">2438</span><span id="line-2438">    *    &lt;li&gt;Anything else converted to a string using {@link Object#toString()}.</span>
+<span class="source-line-no">2439</span><span id="line-2439">    * &lt;/ul&gt;</span>
+<span class="source-line-no">2440</span><span id="line-2440">    *</span>
+<span class="source-line-no">2441</span><span id="line-2441">    * &lt;p&gt;</span>
+<span class="source-line-no">2442</span><span id="line-2442">    * Relative URI strings will be interpreted as relative to the root URI defined on the client.</span>
+<span class="source-line-no">2443</span><span id="line-2443">    *</span>
+<span class="source-line-no">2444</span><span id="line-2444">    * @param uri</span>
+<span class="source-line-no">2445</span><span id="line-2445">    *    The URI of the remote REST resource.</span>
+<span class="source-line-no">2446</span><span id="line-2446">    *    &lt;br&gt;This overrides the URI passed in from the client.</span>
+<span class="source-line-no">2447</span><span id="line-2447">    *    &lt;br&gt;Can be any of the following types:</span>
+<span class="source-line-no">2448</span><span id="line-2448">    *    &lt;ul&gt;</span>
+<span class="source-line-no">2449</span><span id="line-2449">    *       &lt;li&gt;{@link URIBuilder}</span>
+<span class="source-line-no">2450</span><span id="line-2450">    *       &lt;li&gt;{@link URI}</span>
+<span class="source-line-no">2451</span><span id="line-2451">    *       &lt;li&gt;{@link URL}</span>
+<span class="source-line-no">2452</span><span id="line-2452">    *       &lt;li&gt;{@link String}</span>
+<span class="source-line-no">2453</span><span id="line-2453">    *       &lt;li&gt;{@link Object} - Converted to &lt;c&gt;String&lt;/c&gt; using &lt;c&gt;toString()&lt;/c&gt;</span>
+<span class="source-line-no">2454</span><span id="line-2454">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">2455</span><span id="line-2455">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2456</span><span id="line-2456">    * @return This object.</span>
+<span class="source-line-no">2457</span><span id="line-2457">    * @throws RestCallException Invalid URI syntax detected.</span>
+<span class="source-line-no">2458</span><span id="line-2458">    */</span>
+<span class="source-line-no">2459</span><span id="line-2459">   public RestRequest uri(Object uri) throws RestCallException {</span>
+<span class="source-line-no">2460</span><span id="line-2460">      var x = client.toUri(uri, null);</span>
+<span class="source-line-no">2461</span><span id="line-2461">      if (nn(x.getScheme()))</span>
+<span class="source-line-no">2462</span><span id="line-2462">         uriBuilder.setScheme(x.getScheme());</span>
+<span class="source-line-no">2463</span><span id="line-2463">      if (nn(x.getHost()))</span>
+<span class="source-line-no">2464</span><span id="line-2464">         uriBuilder.setHost(x.getHost());</span>
+<span class="source-line-no">2465</span><span id="line-2465">      if (x.getPort() != -1)</span>
+<span class="source-line-no">2466</span><span id="line-2466">         uriBuilder.setPort(x.getPort());</span>
+<span class="source-line-no">2467</span><span id="line-2467">      if (nn(x.getUserInfo()))</span>
+<span class="source-line-no">2468</span><span id="line-2468">         uriBuilder.setUserInfo(x.getUserInfo());</span>
+<span class="source-line-no">2469</span><span id="line-2469">      if (nn(x.getFragment()))</span>
+<span class="source-line-no">2470</span><span id="line-2470">         uriBuilder.setFragment(x.getFragment());</span>
+<span class="source-line-no">2471</span><span id="line-2471">      if (nn(x.getQuery()))</span>
+<span class="source-line-no">2472</span><span id="line-2472">         uriBuilder.setCustomQuery(x.getQuery());</span>
+<span class="source-line-no">2473</span><span id="line-2473">      uriBuilder.setPath(x.getPath());</span>
+<span class="source-line-no">2474</span><span id="line-2474">      return this;</span>
+<span class="source-line-no">2475</span><span id="line-2475">   }</span>
+<span class="source-line-no">2476</span><span id="line-2476"></span>
+<span class="source-line-no">2477</span><span id="line-2477">   /**</span>
+<span class="source-line-no">2478</span><span id="line-2478">    * Sets the URI fragment.</span>
+<span class="source-line-no">2479</span><span id="line-2479">    *</span>
+<span class="source-line-no">2480</span><span id="line-2480">    * @param fragment The URI fragment.  The value is expected to be unescaped and may contain non ASCII characters.</span>
+<span class="source-line-no">2481</span><span id="line-2481">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (fragment will be cleared).</span>
+<span class="source-line-no">2482</span><span id="line-2482">    * @return This object.</span>
+<span class="source-line-no">2483</span><span id="line-2483">    */</span>
+<span class="source-line-no">2484</span><span id="line-2484">   public RestRequest uriFragment(String fragment) {</span>
+<span class="source-line-no">2485</span><span id="line-2485">      uriBuilder.setFragment(fragment);</span>
+<span class="source-line-no">2486</span><span id="line-2486">      return this;</span>
+<span class="source-line-no">2487</span><span id="line-2487">   }</span>
+<span class="source-line-no">2488</span><span id="line-2488"></span>
+<span class="source-line-no">2489</span><span id="line-2489">   /**</span>
+<span class="source-line-no">2490</span><span id="line-2490">    * Sets the URI host.</span>
+<span class="source-line-no">2491</span><span id="line-2491">    *</span>
+<span class="source-line-no">2492</span><span id="line-2492">    * @param host The new URI host.</span>
+<span class="source-line-no">2493</span><span id="line-2493">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (host will be cleared).</span>
+<span class="source-line-no">2494</span><span id="line-2494">    * @return This object.</span>
+<span class="source-line-no">2495</span><span id="line-2495">    */</span>
+<span class="source-line-no">2496</span><span id="line-2496">   public RestRequest uriHost(String host) {</span>
+<span class="source-line-no">2497</span><span id="line-2497">      uriBuilder.setHost(host);</span>
+<span class="source-line-no">2498</span><span id="line-2498">      return this;</span>
+<span class="source-line-no">2499</span><span id="line-2499">   }</span>
+<span class="source-line-no">2500</span><span id="line-2500"></span>
+<span class="source-line-no">2501</span><span id="line-2501">   /**</span>
+<span class="source-line-no">2502</span><span id="line-2502">    * Sets the URI port.</span>
+<span class="source-line-no">2503</span><span id="line-2503">    *</span>
+<span class="source-line-no">2504</span><span id="line-2504">    * @param port The new URI port.</span>
+<span class="source-line-no">2505</span><span id="line-2505">    * @return This object.</span>
+<span class="source-line-no">2506</span><span id="line-2506">    */</span>
+<span class="source-line-no">2507</span><span id="line-2507">   public RestRequest uriPort(int port) {</span>
+<span class="source-line-no">2508</span><span id="line-2508">      uriBuilder.setPort(port);</span>
+<span class="source-line-no">2509</span><span id="line-2509">      return this;</span>
+<span class="source-line-no">2510</span><span id="line-2510">   }</span>
+<span class="source-line-no">2511</span><span id="line-2511"></span>
+<span class="source-line-no">2512</span><span id="line-2512">   /**</span>
+<span class="source-line-no">2513</span><span id="line-2513">    * Sets the URI scheme.</span>
+<span class="source-line-no">2514</span><span id="line-2514">    *</span>
+<span class="source-line-no">2515</span><span id="line-2515">    * @param scheme The new URI scheme.</span>
+<span class="source-line-no">2516</span><span id="line-2516">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (scheme will be cleared).</span>
+<span class="source-line-no">2517</span><span id="line-2517">    * @return This object.</span>
+<span class="source-line-no">2518</span><span id="line-2518">    */</span>
+<span class="source-line-no">2519</span><span id="line-2519">   public RestRequest uriScheme(String scheme) {</span>
+<span class="source-line-no">2520</span><span id="line-2520">      uriBuilder.setScheme(scheme);</span>
+<span class="source-line-no">2521</span><span id="line-2521">      return this;</span>
+<span class="source-line-no">2522</span><span id="line-2522">   }</span>
+<span class="source-line-no">2523</span><span id="line-2523"></span>
+<span class="source-line-no">2524</span><span id="line-2524">   /**</span>
+<span class="source-line-no">2525</span><span id="line-2525">    * Sets the URI user info.</span>
+<span class="source-line-no">2526</span><span id="line-2526">    *</span>
+<span class="source-line-no">2527</span><span id="line-2527">    * @param userInfo The new URI user info.</span>
+<span class="source-line-no">2528</span><span id="line-2528">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (user info will be cleared).</span>
+<span class="source-line-no">2529</span><span id="line-2529">    * @return This object.</span>
+<span class="source-line-no">2530</span><span id="line-2530">    */</span>
+<span class="source-line-no">2531</span><span id="line-2531">   public RestRequest uriUserInfo(String userInfo) {</span>
+<span class="source-line-no">2532</span><span id="line-2532">      uriBuilder.setUserInfo(userInfo);</span>
+<span class="source-line-no">2533</span><span id="line-2533">      return this;</span>
+<span class="source-line-no">2534</span><span id="line-2534">   }</span>
+<span class="source-line-no">2535</span><span id="line-2535"></span>
+<span class="source-line-no">2536</span><span id="line-2536">   /**</span>
+<span class="source-line-no">2537</span><span id="line-2537">    * Sets the URI user info.</span>
+<span class="source-line-no">2538</span><span id="line-2538">    *</span>
+<span class="source-line-no">2539</span><span id="line-2539">    * @param username The new URI username.</span>
+<span class="source-line-no">2540</span><span id="line-2540">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2541</span><span id="line-2541">    * @param password The new URI password.</span>
+<span class="source-line-no">2542</span><span id="line-2542">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2543</span><span id="line-2543">    * @return This object.</span>
+<span class="source-line-no">2544</span><span id="line-2544">    */</span>
+<span class="source-line-no">2545</span><span id="line-2545">   public RestRequest uriUserInfo(String username, String password) {</span>
+<span class="source-line-no">2546</span><span id="line-2546">      uriBuilder.setUserInfo(username, password);</span>
+<span class="source-line-no">2547</span><span id="line-2547">      return this;</span>
+<span class="source-line-no">2548</span><span id="line-2548">   }</span>
+<span class="source-line-no">2549</span><span id="line-2549"></span>
+<span class="source-line-no">2550</span><span id="line-2550">   /**</span>
+<span class="source-line-no">2551</span><span id="line-2551">    * Convenience method for specifying URL-Encoding as the marshalling transmission media type for this request only.</span>
+<span class="source-line-no">2552</span><span id="line-2552">    *</span>
 <span class="source-line-no">2553</span><span id="line-2553">    * &lt;p&gt;</span>
-<span class="source-line-no">2554</span><span id="line-2554">    *    Identical to calling &lt;c&gt;serializer(UrlEncodingSerializer.&lt;jk&gt;class&lt;/jk&gt;).parser(UrlEncodingParser.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</span>
-<span class="source-line-no">2555</span><span id="line-2555">    *</span>
-<span class="source-line-no">2556</span><span id="line-2556">    * @return This object.</span>
-<span class="source-line-no">2557</span><span id="line-2557">    */</span>
-<span class="source-line-no">2558</span><span id="line-2558">   public RestRequest urlEnc() {</span>
-<span class="source-line-no">2559</span><span id="line-2559">      return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);</span>
-<span class="source-line-no">2560</span><span id="line-2560">   }</span>
-<span class="source-line-no">2561</span><span id="line-2561"></span>
-<span class="source-line-no">2562</span><span id="line-2562">   /**</span>
-<span class="source-line-no">2563</span><span id="line-2563">    * Convenience method for specifying XML as the marshalling transmission media type for this request only.</span>
-<span class="source-line-no">2564</span><span id="line-2564">    *</span>
-<span class="source-line-no">2565</span><span id="line-2565">    * &lt;p&gt;</span>
-<span class="source-line-no">2566</span><span id="line-2566">    * {@link XmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.</span>
-<span class="source-line-no">2567</span><span id="line-2567">    *    &lt;ul&gt;</span>
-<span class="source-line-no">2568</span><span id="line-2568">    *       &lt;li&gt;The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
-<span class="source-line-no">2569</span><span id="line-2569">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2570</span><span id="line-2570">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">2571</span><span id="line-2571">    * &lt;p&gt;</span>
-<span class="source-line-no">2572</span><span id="line-2572">    *    {@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.</span>
-<span class="source-line-no">2573</span><span id="line-2573">    *    &lt;ul&gt;</span>
-<span class="source-line-no">2574</span><span id="line-2574">    *       &lt;li&gt;The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or</span>
-<span class="source-line-no">2575</span><span id="line-2575">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
-<span class="source-line-no">2576</span><span id="line-2576">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">2577</span><span id="line-2577">    * &lt;p&gt;</span>
-<span class="source-line-no">2578</span><span id="line-2578">    *    &lt;c&gt;Accept&lt;/c&gt; request header will be set to &lt;js&gt;"text/xml"&lt;/js&gt; unless overridden</span>
-<span class="source-line-no">2579</span><span id="line-2579">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.</span>
-<span class="source-line-no">2580</span><span id="line-2580">    * &lt;p&gt;</span>
-<span class="source-line-no">2581</span><span id="line-2581">    *    &lt;c&gt;Content-Type&lt;/c&gt; request header will be set to &lt;js&gt;"text/xml"&lt;/js&gt; unless overridden</span>
-<span class="source-line-no">2582</span><span id="line-2582">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.</span>
-<span class="source-line-no">2583</span><span id="line-2583">    * &lt;p&gt;</span>
-<span class="source-line-no">2584</span><span id="line-2584">    *    Identical to calling &lt;c&gt;serializer(XmlSerializer.&lt;jk&gt;class&lt;/jk&gt;).parser(XmlParser.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</span>
-<span class="source-line-no">2585</span><span id="line-2585">    *</span>
-<span class="source-line-no">2586</span><span id="line-2586">    * @return This object.</span>
-<span class="source-line-no">2587</span><span id="line-2587">    */</span>
-<span class="source-line-no">2588</span><span id="line-2588">   public RestRequest xml() {</span>
-<span class="source-line-no">2589</span><span id="line-2589">      return serializer(XmlSerializer.class).parser(XmlParser.class);</span>
-<span class="source-line-no">2590</span><span id="line-2590">   }</span>
-<span class="source-line-no">2591</span><span id="line-2591"></span>
-<span class="source-line-no">2592</span><span id="line-2592">   private Header createHeader(String name, Object value) {</span>
-<span class="source-line-no">2593</span><span id="line-2593">      return createHeader(name, value, null, null, null);</span>
-<span class="source-line-no">2594</span><span id="line-2594">   }</span>
-<span class="source-line-no">2595</span><span id="line-2595"></span>
-<span class="source-line-no">2596</span><span id="line-2596">   private NameValuePair createPart(HttpPartType type, String name, Object value) {</span>
-<span class="source-line-no">2597</span><span id="line-2597">      return createPart(name, value, type, null, null, null);</span>
-<span class="source-line-no">2598</span><span id="line-2598">   }</span>
-<span class="source-line-no">2599</span><span id="line-2599"></span>
-<span class="source-line-no">2600</span><span id="line-2600">   private HttpPartSerializerSession getPartSerializerSession(HttpPartSerializer serializer) {</span>
-<span class="source-line-no">2601</span><span id="line-2601">      if (serializer == null)</span>
-<span class="source-line-no">2602</span><span id="line-2602">         serializer = client.getPartSerializer();</span>
-<span class="source-line-no">2603</span><span id="line-2603">      return partSerializerSessions.computeIfAbsent(serializer, HttpPartSerializer::getPartSession);</span>
-<span class="source-line-no">2604</span><span id="line-2604">   }</span>
-<span class="source-line-no">2605</span><span id="line-2605"></span>
-<span class="source-line-no">2606</span><span id="line-2606">   private ContentType getRequestContentType(ContentType def) {</span>
-<span class="source-line-no">2607</span><span id="line-2607">      var h = request.getFirstHeader("Content-Type");</span>
-<span class="source-line-no">2608</span><span id="line-2608">      if (nn(h)) {</span>
-<span class="source-line-no">2609</span><span id="line-2609">         var s = h.getValue();</span>
-<span class="source-line-no">2610</span><span id="line-2610">         if (ine(s))</span>
-<span class="source-line-no">2611</span><span id="line-2611">            return ContentType.of(s);</span>
-<span class="source-line-no">2612</span><span id="line-2612">      }</span>
-<span class="source-line-no">2613</span><span id="line-2613">      return def;</span>
+<span class="source-line-no">2554</span><span id="line-2554">    *    {@link UrlEncodingSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.</span>
+<span class="source-line-no">2555</span><span id="line-2555">    *    &lt;ul&gt;</span>
+<span class="source-line-no">2556</span><span id="line-2556">    *       &lt;li&gt;The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
+<span class="source-line-no">2557</span><span id="line-2557">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2558</span><span id="line-2558">    *       &lt;li&gt;This serializer is NOT used when using the {@link RestRequest#formData(String, Object)} (and related) methods for constructing</span>
+<span class="source-line-no">2559</span><span id="line-2559">    *          the request body.  Instead, the part serializer specified via {@link RestClient.Builder#partSerializer(Class)} is used.</span>
+<span class="source-line-no">2560</span><span id="line-2560">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">2561</span><span id="line-2561">    * &lt;p&gt;</span>
+<span class="source-line-no">2562</span><span id="line-2562">    *    {@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.</span>
+<span class="source-line-no">2563</span><span id="line-2563">    *    &lt;ul&gt;</span>
+<span class="source-line-no">2564</span><span id="line-2564">    *       &lt;li&gt;The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or</span>
+<span class="source-line-no">2565</span><span id="line-2565">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2566</span><span id="line-2566">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">2567</span><span id="line-2567">    * &lt;p&gt;</span>
+<span class="source-line-no">2568</span><span id="line-2568">    *    &lt;c&gt;Accept&lt;/c&gt; request header will be set to &lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt; unless overridden</span>
+<span class="source-line-no">2569</span><span id="line-2569">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.</span>
+<span class="source-line-no">2570</span><span id="line-2570">    * &lt;p&gt;</span>
+<span class="source-line-no">2571</span><span id="line-2571">    *    &lt;c&gt;Content-Type&lt;/c&gt; request header will be set to &lt;js&gt;"application/x-www-form-urlencoded"&lt;/js&gt; unless overridden</span>
+<span class="source-line-no">2572</span><span id="line-2572">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.</span>
+<span class="source-line-no">2573</span><span id="line-2573">    * &lt;p&gt;</span>
+<span class="source-line-no">2574</span><span id="line-2574">    *    Identical to calling &lt;c&gt;serializer(UrlEncodingSerializer.&lt;jk&gt;class&lt;/jk&gt;).parser(UrlEncodingParser.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</span>
+<span class="source-line-no">2575</span><span id="line-2575">    *</span>
+<span class="source-line-no">2576</span><span id="line-2576">    * @return This object.</span>
+<span class="source-line-no">2577</span><span id="line-2577">    */</span>
+<span class="source-line-no">2578</span><span id="line-2578">   public RestRequest urlEnc() {</span>
+<span class="source-line-no">2579</span><span id="line-2579">      return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);</span>
+<span class="source-line-no">2580</span><span id="line-2580">   }</span>
+<span class="source-line-no">2581</span><span id="line-2581"></span>
+<span class="source-line-no">2582</span><span id="line-2582">   /**</span>
+<span class="source-line-no">2583</span><span id="line-2583">    * Convenience method for specifying XML as the marshalling transmission media type for this request only.</span>
+<span class="source-line-no">2584</span><span id="line-2584">    *</span>
+<span class="source-line-no">2585</span><span id="line-2585">    * &lt;p&gt;</span>
+<span class="source-line-no">2586</span><span id="line-2586">    * {@link XmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.</span>
+<span class="source-line-no">2587</span><span id="line-2587">    *    &lt;ul&gt;</span>
+<span class="source-line-no">2588</span><span id="line-2588">    *       &lt;li&gt;The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or</span>
+<span class="source-line-no">2589</span><span id="line-2589">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2590</span><span id="line-2590">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">2591</span><span id="line-2591">    * &lt;p&gt;</span>
+<span class="source-line-no">2592</span><span id="line-2592">    *    {@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.</span>
+<span class="source-line-no">2593</span><span id="line-2593">    *    &lt;ul&gt;</span>
+<span class="source-line-no">2594</span><span id="line-2594">    *       &lt;li&gt;The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or</span>
+<span class="source-line-no">2595</span><span id="line-2595">    *          bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.</span>
+<span class="source-line-no">2596</span><span id="line-2596">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">2597</span><span id="line-2597">    * &lt;p&gt;</span>
+<span class="source-line-no">2598</span><span id="line-2598">    *    &lt;c&gt;Accept&lt;/c&gt; request header will be set to &lt;js&gt;"text/xml"&lt;/js&gt; unless overridden</span>
+<span class="source-line-no">2599</span><span id="line-2599">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.</span>
+<span class="source-line-no">2600</span><span id="line-2600">    * &lt;p&gt;</span>
+<span class="source-line-no">2601</span><span id="line-2601">    *    &lt;c&gt;Content-Type&lt;/c&gt; request header will be set to &lt;js&gt;"text/xml"&lt;/js&gt; unless overridden</span>
+<span class="source-line-no">2602</span><span id="line-2602">    *       by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.</span>
+<span class="source-line-no">2603</span><span id="line-2603">    * &lt;p&gt;</span>
+<span class="source-line-no">2604</span><span id="line-2604">    *    Identical to calling &lt;c&gt;serializer(XmlSerializer.&lt;jk&gt;class&lt;/jk&gt;).parser(XmlParser.&lt;jk&gt;class&lt;/jk&gt;)&lt;/c&gt;.</span>
+<span class="source-line-no">2605</span><span id="line-2605">    *</span>
+<span class="source-line-no">2606</span><span id="line-2606">    * @return This object.</span>
+<span class="source-line-no">2607</span><span id="line-2607">    */</span>
+<span class="source-line-no">2608</span><span id="line-2608">   public RestRequest xml() {</span>
+<span class="source-line-no">2609</span><span id="line-2609">      return serializer(XmlSerializer.class).parser(XmlParser.class);</span>
+<span class="source-line-no">2610</span><span id="line-2610">   }</span>
+<span class="source-line-no">2611</span><span id="line-2611"></span>
+<span class="source-line-no">2612</span><span id="line-2612">   private Header createHeader(String name, Object value) {</span>
+<span class="source-line-no">2613</span><span id="line-2613">      return createHeader(name, value, null, null, null);</span>
 <span class="source-line-no">2614</span><span id="line-2614">   }</span>
 <span class="source-line-no">2615</span><span id="line-2615"></span>
-<span class="source-line-no">2616</span><span id="line-2616">   /**</span>
-<span class="source-line-no">2617</span><span id="line-2617">    * Creates a new header.</span>
-<span class="source-line-no">2618</span><span id="line-2618">    *</span>
-<span class="source-line-no">2619</span><span id="line-2619">    * @param name The header name.</span>
-<span class="source-line-no">2620</span><span id="line-2620">    * @param value The header value.</span>
-<span class="source-line-no">2621</span><span id="line-2621">    * @param serializer The part serializer to use, or &lt;jk&gt;null&lt;/jk&gt; to use the part serializer defined on the client.</span>
-<span class="source-line-no">2622</span><span id="line-2622">    * @param schema Optional HTTP part schema to provide to the part serializer.</span>
-<span class="source-line-no">2623</span><span id="line-2623">    * @param skipIfEmpty If &lt;jk&gt;true&lt;/jk&gt;, empty string values will be ignored on the request.</span>
-<span class="source-line-no">2624</span><span id="line-2624">    * @return A new header.</span>
-<span class="source-line-no">2625</span><span id="line-2625">    */</span>
-<span class="source-line-no">2626</span><span id="line-2626">   protected Header createHeader(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {</span>
-<span class="source-line-no">2627</span><span id="line-2627">      if (ie(name))</span>
-<span class="source-line-no">2628</span><span id="line-2628">         return null;</span>
-<span class="source-line-no">2629</span><span id="line-2629">      if (skipIfEmpty == null)</span>
-<span class="source-line-no">2630</span><span id="line-2630">         skipIfEmpty = client.isSkipEmptyHeaderData();</span>
-<span class="source-line-no">2631</span><span id="line-2631">      if (serializer == null)</span>
-<span class="source-line-no">2632</span><span id="line-2632">         serializer = client.getPartSerializer();</span>
-<span class="source-line-no">2633</span><span id="line-2633">      return new SerializedHeader(name, value, getPartSerializerSession(serializer), schema, skipIfEmpty);</span>
+<span class="source-line-no">2616</span><span id="line-2616">   private NameValuePair createPart(HttpPartType type, String name, Object value) {</span>
+<span class="source-line-no">2617</span><span id="line-2617">      return createPart(name, value, type, null, null, null);</span>
+<span class="source-line-no">2618</span><span id="line-2618">   }</span>
+<span class="source-line-no">2619</span><span id="line-2619"></span>
+<span class="source-line-no">2620</span><span id="line-2620">   private HttpPartSerializerSession getPartSerializerSession(HttpPartSerializer serializer) {</span>
+<span class="source-line-no">2621</span><span id="line-2621">      if (serializer == null)</span>
+<span class="source-line-no">2622</span><span id="line-2622">         serializer = client.getPartSerializer();</span>
+<span class="source-line-no">2623</span><span id="line-2623">      return partSerializerSessions.computeIfAbsent(serializer, HttpPartSerializer::getPartSession);</span>
+<span class="source-line-no">2624</span><span id="line-2624">   }</span>
+<span class="source-line-no">2625</span><span id="line-2625"></span>
+<span class="source-line-no">2626</span><span id="line-2626">   private ContentType getRequestContentType(ContentType def) {</span>
+<span class="source-line-no">2627</span><span id="line-2627">      var h = request.getFirstHeader("Content-Type");</span>
+<span class="source-line-no">2628</span><span id="line-2628">      if (nn(h)) {</span>
+<span class="source-line-no">2629</span><span id="line-2629">         var s = h.getValue();</span>
+<span class="source-line-no">2630</span><span id="line-2630">         if (ine(s))</span>
+<span class="source-line-no">2631</span><span id="line-2631">            return ContentType.of(s);</span>
+<span class="source-line-no">2632</span><span id="line-2632">      }</span>
+<span class="source-line-no">2633</span><span id="line-2633">      return def;</span>
 <span class="source-line-no">2634</span><span id="line-2634">   }</span>
 <span class="source-line-no">2635</span><span id="line-2635"></span>
 <span class="source-line-no">2636</span><span id="line-2636">   /**</span>
-<span class="source-line-no">2637</span><span id="line-2637">    * Constructs the {@link HttpRequestBase} object that ends up being passed to the client execute method.</span>
+<span class="source-line-no">2637</span><span id="line-2637">    * Creates a new header.</span>
 <span class="source-line-no">2638</span><span id="line-2638">    *</span>
-<span class="source-line-no">2639</span><span id="line-2639">    * &lt;p&gt;</span>
-<span class="source-line-no">2640</span><span id="line-2640">    * Subclasses can override this method to create their own request base objects.</span>
-<span class="source-line-no">2641</span><span id="line-2641">    *</span>
-<span class="source-line-no">2642</span><span id="line-2642">    * @param method The HTTP method.</span>
-<span class="source-line-no">2643</span><span id="line-2643">    * @param uri The HTTP URI.</span>
-<span class="source-line-no">2644</span><span id="line-2644">    * @param hasBody Whether the HTTP request has a body.</span>
-<span class="source-line-no">2645</span><span id="line-2645">    * @return A new {@link HttpRequestBase} object.</span>
-<span class="source-line-no">2646</span><span id="line-2646">    */</span>
-<span class="source-line-no">2647</span><span id="line-2647">   protected HttpRequestBase createInnerRequest(String method, URI uri, boolean hasBody) {</span>
-<span class="source-line-no">2648</span><span id="line-2648">      var req = hasBody ? new BasicHttpEntityRequestBase(this, method) : new BasicHttpRequestBase(this, method);</span>
-<span class="source-line-no">2649</span><span id="line-2649">      req.setURI(uri);</span>
-<span class="source-line-no">2650</span><span id="line-2650">      return req;</span>
-<span class="source-line-no">2651</span><span id="line-2651">   }</span>
-<span class="source-line-no">2652</span><span id="line-2652"></span>
-<span class="source-line-no">2653</span><span id="line-2653">   /**</span>
-<span class="source-line-no">2654</span><span id="line-2654">    * Creates a new query/form-data/path part.</span>
-<span class="source-line-no">2655</span><span id="line-2655">    *</span>
-<span class="source-line-no">2656</span><span id="line-2656">    * @param name The part name.</span>
-<span class="source-line-no">2657</span><span id="line-2657">    * @param value The part value.</span>
-<span class="source-line-no">2658</span><span id="line-2658">    * @param type The HTTP part type.</span>
-<span class="source-line-no">2659</span><span id="line-2659">    * @param serializer The part serializer to use, or &lt;jk&gt;null&lt;/jk&gt; to use the part serializer defined on the client.</span>
-<span class="source-line-no">2660</span><span id="line-2660">    * @param schema Optional HTTP part schema to provide to the part serializer.</span>
-<span class="source-line-no">2661</span><span id="line-2661">    * @param skipIfEmpty If &lt;jk&gt;true&lt;/jk&gt;, empty string values will be ignored on the request.</span>
-<span class="source-line-no">2662</span><span id="line-2662">    * @return A new part.</span>
-<span class="source-line-no">2663</span><span id="line-2663">    */</span>
-<span class="source-line-no">2664</span><span id="line-2664">   protected NameValuePair createPart(String name, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {</span>
-<span class="source-line-no">2665</span><span id="line-2665">      if (ie(name))</span>
-<span class="source-line-no">2666</span><span id="line-2666">         return null;</span>
-<span class="source-line-no">2667</span><span id="line-2667">      if (skipIfEmpty == null) {</span>
-<span class="source-line-no">2668</span><span id="line-2668">         if (type == QUERY)</span>
-<span class="source-line-no">2669</span><span id="line-2669">            skipIfEmpty = client.isSkipEmptyQueryData();</span>
-<span class="source-line-no">2670</span><span id="line-2670">         else if (type == FORMDATA)</span>
-<span class="source-line-no">2671</span><span id="line-2671">            skipIfEmpty = client.isSkipEmptyFormData();</span>
-<span class="source-line-no">2672</span><span id="line-2672">         else</span>
-<span class="source-line-no">2673</span><span id="line-2673">            skipIfEmpty = false;</span>
-<span class="source-line-no">2674</span><span id="line-2674">      }</span>
-<span class="source-line-no">2675</span><span id="line-2675">      if (serializer == null)</span>
-<span class="source-line-no">2676</span><span id="line-2676">         serializer = client.getPartSerializer();</span>
-<span class="source-line-no">2677</span><span id="line-2677">      return new SerializedPart(name, value, type, getPartSerializerSession(serializer), schema, skipIfEmpty);</span>
-<span class="source-line-no">2678</span><span id="line-2678">   }</span>
-<span class="source-line-no">2679</span><span id="line-2679"></span>
-<span class="source-line-no">2680</span><span id="line-2680">   @Override /* Overridden from MarshallingSession */</span>
-<span class="source-line-no">2681</span><span id="line-2681">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">2682</span><span id="line-2682">      return super.properties()</span>
-<span class="source-line-no">2683</span><span id="line-2683">         .a(ARG_client, client.properties())</span>
-<span class="source-line-no">2684</span><span id="line-2684">         .a(PROP_ignoreErrors, ignoreErrors)</span>
-<span class="source-line-no">2685</span><span id="line-2685">         .a(PROP_interceptors, interceptors)</span>
-<span class="source-line-no">2686</span><span id="line-2686">         .a(PROP_requestBodySchema, contentSchema)</span>
-<span class="source-line-no">2687</span><span id="line-2687">         .a(PROP_response, response)</span>
-<span class="source-line-no">2688</span><span id="line-2688">         .a(PROP_serializer, serializer);</span>
-<span class="source-line-no">2689</span><span id="line-2689">   }</span>
-<span class="source-line-no">2690</span><span id="line-2690"></span>
-<span class="source-line-no">2691</span><span id="line-2691">   RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
-<span class="source-line-no">2692</span><span id="line-2692">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
-<span class="source-line-no">2693</span><span id="line-2693"></span>
-<span class="source-line-no">2694</span><span id="line-2694">      if (! isMulti) {</span>
-<span class="source-line-no">2695</span><span id="line-2695">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
-<span class="source-line-no">2696</span><span id="line-2696">            return formData(createPart(name, value, FORMDATA, serializer, schema, skipIfEmpty));</span>
-<span class="source-line-no">2697</span><span id="line-2697">         return this;</span>
-<span class="source-line-no">2698</span><span id="line-2698">      }</span>
+<span class="source-line-no">2639</span><span id="line-2639">    * @param name The header name.</span>
+<span class="source-line-no">2640</span><span id="line-2640">    * @param value The header value.</span>
+<span class="source-line-no">2641</span><span id="line-2641">    * @param serializer The part serializer to use, or &lt;jk&gt;null&lt;/jk&gt; to use the part serializer defined on the client.</span>
+<span class="source-line-no">2642</span><span id="line-2642">    * @param schema Optional HTTP part schema to provide to the part serializer.</span>
+<span class="source-line-no">2643</span><span id="line-2643">    * @param skipIfEmpty If &lt;jk&gt;true&lt;/jk&gt;, empty string values will be ignored on the request.</span>
+<span class="source-line-no">2644</span><span id="line-2644">    * @return A new header.</span>
+<span class="source-line-no">2645</span><span id="line-2645">    */</span>
+<span class="source-line-no">2646</span><span id="line-2646">   protected Header createHeader(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {</span>
+<span class="source-line-no">2647</span><span id="line-2647">      if (ie(name))</span>
+<span class="source-line-no">2648</span><span id="line-2648">         return null;</span>
+<span class="source-line-no">2649</span><span id="line-2649">      if (skipIfEmpty == null)</span>
+<span class="source-line-no">2650</span><span id="line-2650">         skipIfEmpty = client.isSkipEmptyHeaderData();</span>
+<span class="source-line-no">2651</span><span id="line-2651">      if (serializer == null)</span>
+<span class="source-line-no">2652</span><span id="line-2652">         serializer = client.getPartSerializer();</span>
+<span class="source-line-no">2653</span><span id="line-2653">      return new SerializedHeader(name, value, getPartSerializerSession(serializer), schema, skipIfEmpty);</span>
+<span class="source-line-no">2654</span><span id="line-2654">   }</span>
+<span class="source-line-no">2655</span><span id="line-2655"></span>
+<span class="source-line-no">2656</span><span id="line-2656">   /**</span>
+<span class="source-line-no">2657</span><span id="line-2657">    * Constructs the {@link HttpRequestBase} object that ends up being passed to the client execute method.</span>
+<span class="source-line-no">2658</span><span id="line-2658">    *</span>
+<span class="source-line-no">2659</span><span id="line-2659">    * &lt;p&gt;</span>
+<span class="source-line-no">2660</span><span id="line-2660">    * Subclasses can override this method to create their own request base objects.</span>
+<span class="source-line-no">2661</span><span id="line-2661">    *</span>
+<span class="source-line-no">2662</span><span id="line-2662">    * @param method The HTTP method.</span>
+<span class="source-line-no">2663</span><span id="line-2663">    * @param uri The HTTP URI.</span>
+<span class="source-line-no">2664</span><span id="line-2664">    * @param hasBody Whether the HTTP request has a body.</span>
+<span class="source-line-no">2665</span><span id="line-2665">    * @return A new {@link HttpRequestBase} object.</span>
+<span class="source-line-no">2666</span><span id="line-2666">    */</span>
+<span class="source-line-no">2667</span><span id="line-2667">   protected HttpRequestBase createInnerRequest(String method, URI uri, boolean hasBody) {</span>
+<span class="source-line-no">2668</span><span id="line-2668">      var req = hasBody ? new BasicHttpEntityRequestBase(this, method) : new BasicHttpRequestBase(this, method);</span>
+<span class="source-line-no">2669</span><span id="line-2669">      req.setURI(uri);</span>
+<span class="source-line-no">2670</span><span id="line-2670">      return req;</span>
+<span class="source-line-no">2671</span><span id="line-2671">   }</span>
+<span class="source-line-no">2672</span><span id="line-2672"></span>
+<span class="source-line-no">2673</span><span id="line-2673">   /**</span>
+<span class="source-line-no">2674</span><span id="line-2674">    * Creates a new query/form-data/path part.</span>
+<span class="source-line-no">2675</span><span id="line-2675">    *</span>
+<span class="source-line-no">2676</span><span id="line-2676">    * @param name The part name.</span>
+<span class="source-line-no">2677</span><span id="line-2677">    * @param value The part value.</span>
+<span class="source-line-no">2678</span><span id="line-2678">    * @param type The HTTP part type.</span>
+<span class="source-line-no">2679</span><span id="line-2679">    * @param serializer The part serializer to use, or &lt;jk&gt;null&lt;/jk&gt; to use the part serializer defined on the client.</span>
+<span class="source-line-no">2680</span><span id="line-2680">    * @param schema Optional HTTP part schema to provide to the part serializer.</span>
+<span class="source-line-no">2681</span><span id="line-2681">    * @param skipIfEmpty If &lt;jk&gt;true&lt;/jk&gt;, empty string values will be ignored on the request.</span>
+<span class="source-line-no">2682</span><span id="line-2682">    * @return A new part.</span>
+<span class="source-line-no">2683</span><span id="line-2683">    */</span>
+<span class="source-line-no">2684</span><span id="line-2684">   protected NameValuePair createPart(String name, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {</span>
+<span class="source-line-no">2685</span><span id="line-2685">      if (ie(name))</span>
+<span class="source-line-no">2686</span><span id="line-2686">         return null;</span>
+<span class="source-line-no">2687</span><span id="line-2687">      if (skipIfEmpty == null) {</span>
+<span class="source-line-no">2688</span><span id="line-2688">         if (type == QUERY)</span>
+<span class="source-line-no">2689</span><span id="line-2689">            skipIfEmpty = client.isSkipEmptyQueryData();</span>
+<span class="source-line-no">2690</span><span id="line-2690">         else if (type == FORMDATA)</span>
+<span class="source-line-no">2691</span><span id="line-2691">            skipIfEmpty = client.isSkipEmptyFormData();</span>
+<span class="source-line-no">2692</span><span id="line-2692">         else</span>
+<span class="source-line-no">2693</span><span id="line-2693">            skipIfEmpty = false;</span>
+<span class="source-line-no">2694</span><span id="line-2694">      }</span>
+<span class="source-line-no">2695</span><span id="line-2695">      if (serializer == null)</span>
+<span class="source-line-no">2696</span><span id="line-2696">         serializer = client.getPartSerializer();</span>
+<span class="source-line-no">2697</span><span id="line-2697">      return new SerializedPart(name, value, type, getPartSerializerSession(serializer), schema, skipIfEmpty);</span>
+<span class="source-line-no">2698</span><span id="line-2698">   }</span>
 <span class="source-line-no">2699</span><span id="line-2699"></span>
-<span class="source-line-no">2700</span><span id="line-2700">      List&lt;NameValuePair&gt; l = list();</span>
-<span class="source-line-no">2701</span><span id="line-2701"></span>
-<span class="source-line-no">2702</span><span id="line-2702">      if (HttpParts.canCast(value)) {</span>
-<span class="source-line-no">2703</span><span id="line-2703">         l.add(HttpParts.cast(value));</span>
-<span class="source-line-no">2704</span><span id="line-2704">      } else if (value instanceof PartList value2) {</span>
-<span class="source-line-no">2705</span><span id="line-2705">         value2.forEach(l::add);</span>
-<span class="source-line-no">2706</span><span id="line-2706">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
-<span class="source-line-no">2707</span><span id="line-2707">         value3.forEach(x -&gt; l.add(HttpParts.cast(x)));</span>
-<span class="source-line-no">2708</span><span id="line-2708">      } else if (isArray(value)) {</span>
-<span class="source-line-no">2709</span><span id="line-2709">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
-<span class="source-line-no">2710</span><span id="line-2710">            l.add(HttpParts.cast(Array.get(value, i)));</span>
-<span class="source-line-no">2711</span><span id="line-2711">      } else if (value instanceof Map value2) {</span>
-<span class="source-line-no">2712</span><span id="line-2712">         toMap(value2).forEach((k, v) -&gt; l.add(createPart(s(k), v, FORMDATA, serializer, schema, skipIfEmpty)));</span>
-<span class="source-line-no">2713</span><span id="line-2713">      } else if (isBean(value)) {</span>
-<span class="source-line-no">2714</span><span id="line-2714">         toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, FORMDATA, serializer, schema, skipIfEmpty)));</span>
-<span class="source-line-no">2715</span><span id="line-2715">      } else if (nn(value)) {</span>
-<span class="source-line-no">2716</span><span id="line-2716">         formDataCustom(value);</span>
+<span class="source-line-no">2700</span><span id="line-2700">   @Override /* Overridden from MarshallingSession */</span>
+<span class="source-line-no">2701</span><span id="line-2701">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">2702</span><span id="line-2702">      return super.properties()</span>
+<span class="source-line-no">2703</span><span id="line-2703">         .a(ARG_client, client.properties())</span>
+<span class="source-line-no">2704</span><span id="line-2704">         .a(PROP_ignoreErrors, ignoreErrors)</span>
+<span class="source-line-no">2705</span><span id="line-2705">         .a(PROP_interceptors, interceptors)</span>
+<span class="source-line-no">2706</span><span id="line-2706">         .a(PROP_requestBodySchema, contentSchema)</span>
+<span class="source-line-no">2707</span><span id="line-2707">         .a(PROP_response, response)</span>
+<span class="source-line-no">2708</span><span id="line-2708">         .a(PROP_serializer, serializer);</span>
+<span class="source-line-no">2709</span><span id="line-2709">   }</span>
+<span class="source-line-no">2710</span><span id="line-2710"></span>
+<span class="source-line-no">2711</span><span id="line-2711">   RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
+<span class="source-line-no">2712</span><span id="line-2712">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
+<span class="source-line-no">2713</span><span id="line-2713"></span>
+<span class="source-line-no">2714</span><span id="line-2714">      if (! isMulti) {</span>
+<span class="source-line-no">2715</span><span id="line-2715">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
+<span class="source-line-no">2716</span><span id="line-2716">            return formData(createPart(name, value, FORMDATA, serializer, schema, skipIfEmpty));</span>
 <span class="source-line-no">2717</span><span id="line-2717">         return this;</span>
 <span class="source-line-no">2718</span><span id="line-2718">      }</span>
 <span class="source-line-no">2719</span><span id="line-2719"></span>
-<span class="source-line-no">2720</span><span id="line-2720">      if (skipIfEmpty)</span>
-<span class="source-line-no">2721</span><span id="line-2721">         l.removeIf(x -&gt; ie(x.getValue()));</span>
-<span class="source-line-no">2722</span><span id="line-2722"></span>
-<span class="source-line-no">2723</span><span id="line-2723">      formData.append(l);</span>
-<span class="source-line-no">2724</span><span id="line-2724"></span>
-<span class="source-line-no">2725</span><span id="line-2725">      return this;</span>
-<span class="source-line-no">2726</span><span id="line-2726">   }</span>
-<span class="source-line-no">2727</span><span id="line-2727"></span>
-<span class="source-line-no">2728</span><span id="line-2728">   HttpPartSerializerSession getPartSerializerSession() {</span>
-<span class="source-line-no">2729</span><span id="line-2729">      if (partSerializerSession == null)</span>
-<span class="source-line-no">2730</span><span id="line-2730">         partSerializerSession = getPartSerializerSession(null);</span>
-<span class="source-line-no">2731</span><span id="line-2731">      return partSerializerSession;</span>
-<span class="source-line-no">2732</span><span id="line-2732">   }</span>
-<span class="source-line-no">2733</span><span id="line-2733"></span>
-<span class="source-line-no">2734</span><span id="line-2734">   RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
-<span class="source-line-no">2735</span><span id="line-2735">      var isMulti = ie(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);</span>
-<span class="source-line-no">2736</span><span id="line-2736"></span>
-<span class="source-line-no">2737</span><span id="line-2737">      if (! isMulti) {</span>
-<span class="source-line-no">2738</span><span id="line-2738">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
-<span class="source-line-no">2739</span><span id="line-2739">            return header(createHeader(name, value, serializer, schema, skipIfEmpty));</span>
-<span class="source-line-no">2740</span><span id="line-2740">         return this;</span>
-<span class="source-line-no">2741</span><span id="line-2741">      }</span>
+<span class="source-line-no">2720</span><span id="line-2720">      List&lt;NameValuePair&gt; l = list();</span>
+<span class="source-line-no">2721</span><span id="line-2721"></span>
+<span class="source-line-no">2722</span><span id="line-2722">      if (HttpParts.canCast(value)) {</span>
+<span class="source-line-no">2723</span><span id="line-2723">         l.add(HttpParts.cast(value));</span>
+<span class="source-line-no">2724</span><span id="line-2724">      } else if (value instanceof PartList value2) {</span>
+<span class="source-line-no">2725</span><span id="line-2725">         value2.forEach(l::add);</span>
+<span class="source-line-no">2726</span><span id="line-2726">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
+<span class="source-line-no">2727</span><span id="line-2727">         value3.forEach(x -&gt; l.add(HttpParts.cast(x)));</span>
+<span class="source-line-no">2728</span><span id="line-2728">      } else if (isArray(value)) {</span>
+<span class="source-line-no">2729</span><span id="line-2729">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
+<span class="source-line-no">2730</span><span id="line-2730">            l.add(HttpParts.cast(Array.get(value, i)));</span>
+<span class="source-line-no">2731</span><span id="line-2731">      } else if (value instanceof Map value2) {</span>
+<span class="source-line-no">2732</span><span id="line-2732">         toMap(value2).forEach((k, v) -&gt; l.add(createPart(s(k), v, FORMDATA, serializer, schema, skipIfEmpty)));</span>
+<span class="source-line-no">2733</span><span id="line-2733">      } else if (isBean(value)) {</span>
+<span class="source-line-no">2734</span><span id="line-2734">         toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, FORMDATA, serializer, schema, skipIfEmpty)));</span>
+<span class="source-line-no">2735</span><span id="line-2735">      } else if (nn(value)) {</span>
+<span class="source-line-no">2736</span><span id="line-2736">         formDataCustom(value);</span>
+<span class="source-line-no">2737</span><span id="line-2737">         return this;</span>
+<span class="source-line-no">2738</span><span id="line-2738">      }</span>
+<span class="source-line-no">2739</span><span id="line-2739"></span>
+<span class="source-line-no">2740</span><span id="line-2740">      if (skipIfEmpty)</span>
+<span class="source-line-no">2741</span><span id="line-2741">         l.removeIf(x -&gt; ie(x.getValue()));</span>
 <span class="source-line-no">2742</span><span id="line-2742"></span>
-<span class="source-line-no">2743</span><span id="line-2743">      List&lt;Header&gt; l = list();</span>
+<span class="source-line-no">2743</span><span id="line-2743">      formData.append(l);</span>
 <span class="source-line-no">2744</span><span id="line-2744"></span>
-<span class="source-line-no">2745</span><span id="line-2745">      if (HttpHeaders.canCast(value)) {</span>
-<span class="source-line-no">2746</span><span id="line-2746">         l.add(HttpHeaders.cast(value));</span>
-<span class="source-line-no">2747</span><span id="line-2747">      } else if (value instanceof HeaderList value2) {</span>
-<span class="source-line-no">2748</span><span id="line-2748">         value2.forEach(l::add);</span>
-<span class="source-line-no">2749</span><span id="line-2749">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
-<span class="source-line-no">2750</span><span id="line-2750">         value3.forEach(x -&gt; l.add(HttpHeaders.cast(x)));</span>
-<span class="source-line-no">2751</span><span id="line-2751">      } else if (isArray(value)) {</span>
-<span class="source-line-no">2752</span><span id="line-2752">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
-<span class="source-line-no">2753</span><span id="line-2753">            l.add(HttpHeaders.cast(Array.get(value, i)));</span>
-<span class="source-line-no">2754</span><span id="line-2754">      } else if (value instanceof Map value2) {</span>
-<span class="source-line-no">2755</span><span id="line-2755">         toMap(value2).forEach((k, v) -&gt; l.add(createHeader(s(k), v, serializer, schema, skipIfEmpty)));</span>
-<span class="source-line-no">2756</span><span id="line-2756">      } else if (isBean(value)) {</span>
-<span class="source-line-no">2757</span><span id="line-2757">         toBeanMap(value).forEach((k, v) -&gt; l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));</span>
-<span class="source-line-no">2758</span><span id="line-2758">      } else if (nn(value)) {</span>
-<span class="source-line-no">2759</span><span id="line-2759">         throw rex("Invalid value type for header arg ''{0}'': {1}", name, cn(value));</span>
-<span class="source-line-no">2760</span><span id="line-2760">      }</span>
-<span class="source-line-no">2761</span><span id="line-2761"></span>
-<span class="source-line-no">2762</span><span id="line-2762">      if (skipIfEmpty)</span>
-<span class="source-line-no">2763</span><span id="line-2763">         l.removeIf(x -&gt; ie(x.getValue()));</span>
+<span class="source-line-no">2745</span><span id="line-2745">      return this;</span>
+<span class="source-line-no">2746</span><span id="line-2746">   }</span>
+<span class="source-line-no">2747</span><span id="line-2747"></span>
+<span class="source-line-no">2748</span><span id="line-2748">   HttpPartSerializerSession getPartSerializerSession() {</span>
+<span class="source-line-no">2749</span><span id="line-2749">      if (partSerializerSession == null)</span>
+<span class="source-line-no">2750</span><span id="line-2750">         partSerializerSession = getPartSerializerSession(null);</span>
+<span class="source-line-no">2751</span><span id="line-2751">      return partSerializerSession;</span>
+<span class="source-line-no">2752</span><span id="line-2752">   }</span>
+<span class="source-line-no">2753</span><span id="line-2753"></span>
+<span class="source-line-no">2754</span><span id="line-2754">   RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
+<span class="source-line-no">2755</span><span id="line-2755">      var isMulti = ie(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);</span>
+<span class="source-line-no">2756</span><span id="line-2756"></span>
+<span class="source-line-no">2757</span><span id="line-2757">      if (! isMulti) {</span>
+<span class="source-line-no">2758</span><span id="line-2758">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
+<span class="source-line-no">2759</span><span id="line-2759">            return header(createHeader(name, value, serializer, schema, skipIfEmpty));</span>
+<span class="source-line-no">2760</span><span id="line-2760">         return this;</span>
+<span class="source-line-no">2761</span><span id="line-2761">      }</span>
+<span class="source-line-no">2762</span><span id="line-2762"></span>
+<span class="source-line-no">2763</span><span id="line-2763">      List&lt;Header&gt; l = list();</span>
 <span class="source-line-no">2764</span><span id="line-2764"></span>
-<span class="source-line-no">2765</span><span id="line-2765">      headerData.append(l);</span>
-<span class="source-line-no">2766</span><span id="line-2766"></span>
-<span class="source-line-no">2767</span><span id="line-2767">      return this;</span>
-<span class="source-line-no">2768</span><span id="line-2768">   }</span>
-<span class="source-line-no">2769</span><span id="line-2769"></span>
-<span class="source-line-no">2770</span><span id="line-2770">   boolean isLoggingSuppressed() { return suppressLogging; }</span>
-<span class="source-line-no">2771</span><span id="line-2771"></span>
-<span class="source-line-no">2772</span><span id="line-2772">   RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {</span>
-<span class="source-line-no">2773</span><span id="line-2773">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
-<span class="source-line-no">2774</span><span id="line-2774"></span>
-<span class="source-line-no">2775</span><span id="line-2775">      if (! isMulti)</span>
-<span class="source-line-no">2776</span><span id="line-2776">         return pathData(createPart(name, value, PATH, serializer, schema, false));</span>
-<span class="source-line-no">2777</span><span id="line-2777"></span>
-<span class="source-line-no">2778</span><span id="line-2778">      List&lt;NameValuePair&gt; l = list();</span>
-<span class="source-line-no">2779</span><span id="line-2779"></span>
-<span class="source-line-no">2780</span><span id="line-2780">      if (HttpParts.canCast(value)) {</span>
-<span class="source-line-no">2781</span><span id="line-2781">         l.add(HttpParts.cast(value));</span>
-<span class="source-line-no">2782</span><span id="line-2782">      } else if (value instanceof PartList value2) {</span>
-<span class="source-line-no">2783</span><span id="line-2783">         value2.forEach(l::add);</span>
-<span class="source-line-no">2784</span><span id="line-2784">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
-<span class="source-line-no">2785</span><span id="line-2785">         value3.forEach(x -&gt; l.add(HttpParts.cast(x)));</span>
-<span class="source-line-no">2786</span><span id="line-2786">      } else if (isArray(value)) {</span>
-<span class="source-line-no">2787</span><span id="line-2787">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
-<span class="source-line-no">2788</span><span id="line-2788">            l.add(HttpParts.cast(Array.get(value, i)));</span>
-<span class="source-line-no">2789</span><span id="line-2789">      } else if (value instanceof Map value2) {</span>
-<span class="source-line-no">2790</span><span id="line-2790">         toMap(value2).forEach((k, v) -&gt; l.add(createPart(s(k), v, PATH, serializer, schema, false)));</span>
-<span class="source-line-no">2791</span><span id="line-2791">      } else if (isBean(value)) {</span>
-<span class="source-line-no">2792</span><span id="line-2792">         toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, PATH, serializer, schema, false)));</span>
-<span class="source-line-no">2793</span><span id="line-2793">      } else if (nn(value)) {</span>
-<span class="source-line-no">2794</span><span id="line-2794">         throw rex("Invalid value type for path arg ''{0}'': {1}", name, cn(value));</span>
-<span class="source-line-no">2795</span><span id="line-2795">      }</span>
-<span class="source-line-no">2796</span><span id="line-2796"></span>
-<span class="source-line-no">2797</span><span id="line-2797">      pathData.append(l);</span>
-<span class="source-line-no">2798</span><span id="line-2798"></span>
-<span class="source-line-no">2799</span><span id="line-2799">      return this;</span>
-<span class="source-line-no">2800</span><span id="line-2800">   }</span>
-<span class="source-line-no">2801</span><span id="line-2801"></span>
-<span class="source-line-no">2802</span><span id="line-2802">   RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
-<span class="source-line-no">2803</span><span id="line-2803">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
-<span class="source-line-no">2804</span><span id="line-2804"></span>
-<span class="source-line-no">2805</span><span id="line-2805">      if (! isMulti) {</span>
-<span class="source-line-no">2806</span><span id="line-2806">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
-<span class="source-line-no">2807</span><span id="line-2807">            return queryData(createPart(name, value, QUERY, serializer, schema, skipIfEmpty));</span>
-<span class="source-line-no">2808</span><span id="line-2808">         return this;</span>
-<span class="source-line-no">2809</span><span id="line-2809">      }</span>
-<span class="source-line-no">2810</span><span id="line-2810"></span>
-<span class="source-line-no">2811</span><span id="line-2811">      List&lt;NameValuePair&gt; l = list();</span>
-<span class="source-line-no">2812</span><span id="line-2812"></span>
-<span class="source-line-no">2813</span><span id="line-2813">      if (HttpParts.canCast(value)) {</span>
-<span class="source-line-no">2814</span><span id="line-2814">         l.add(HttpParts.cast(value));</span>
-<span class="source-line-no">2815</span><span id="line-2815">      } else if (value instanceof PartList value2) {</span>
-<span class="source-line-no">2816</span><span id="line-2816">         value2.forEach(l::add);</span>
-<span class="source-line-no">2817</span><span id="line-2817">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
-<span class="source-line-no">2818</span><span id="line-2818">         value3.forEach(x -&gt; l.add(HttpParts.cast(x)));</span>
-<span class="source-line-no">2819</span><span id="line-2819">      } else if (isArray(value)) {</span>
-<span class="source-line-no">2820</span><span id="line-2820">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
-<span class="source-line-no">2821</span><span id="line-2821">            l.add(HttpParts.cast(Array.get(value, i)));</span>
-<span class="source-line-no">2822</span><span id="line-2822">      } else if (value instanceof Map value2) {</span>
-<span class="source-line-no">2823</span><span id="line-2823">         toMap(value2).forEach((k, v) -&gt; l.add(createPart(s(k), v, QUERY, serializer, schema, skipIfEmpty)));</span>
-<span class="source-line-no">2824</span><span id="line-2824">      } else if (isBean(value)) {</span>
-<span class="source-line-no">2825</span><span id="line-2825">         toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, QUERY, serializer, schema, skipIfEmpty)));</span>
-<span class="source-line-no">2826</span><span id="line-2826">      } else if (nn(value)) {</span>
-<span class="source-line-no">2827</span><span id="line-2827">         queryCustom(value);</span>
+<span class="source-line-no">2765</span><span id="line-2765">      if (HttpHeaders.canCast(value)) {</span>
+<span class="source-line-no">2766</span><span id="line-2766">         l.add(HttpHeaders.cast(value));</span>
+<span class="source-line-no">2767</span><span id="line-2767">      } else if (value instanceof HeaderList value2) {</span>
+<span class="source-line-no">2768</span><span id="line-2768">         value2.forEach(l::add);</span>
+<span class="source-line-no">2769</span><span id="line-2769">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
+<span class="source-line-no">2770</span><span id="line-2770">         value3.forEach(x -&gt; l.add(HttpHeaders.cast(x)));</span>
+<span class="source-line-no">2771</span><span id="line-2771">      } else if (isArray(value)) {</span>
+<span class="source-line-no">2772</span><span id="line-2772">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
+<span class="source-line-no">2773</span><span id="line-2773">            l.add(HttpHeaders.cast(Array.get(value, i)));</span>
+<span class="source-line-no">2774</span><span id="line-2774">      } else if (value instanceof Map value2) {</span>
+<span class="source-line-no">2775</span><span id="line-2775">         toMap(value2).forEach((k, v) -&gt; l.add(createHeader(s(k), v, serializer, schema, skipIfEmpty)));</span>
+<span class="source-line-no">2776</span><span id="line-2776">      } else if (isBean(value)) {</span>
+<span class="source-line-no">2777</span><span id="line-2777">         toBeanMap(value).forEach((k, v) -&gt; l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));</span>
+<span class="source-line-no">2778</span><span id="line-2778">      } else if (nn(value)) {</span>
+<span class="source-line-no">2779</span><span id="line-2779">         throw rex("Invalid value type for header arg '%s': %s", name, cn(value));</span>
+<span class="source-line-no">2780</span><span id="line-2780">      }</span>
+<span class="source-line-no">2781</span><span id="line-2781"></span>
+<span class="source-line-no">2782</span><span id="line-2782">      if (skipIfEmpty)</span>
+<span class="source-line-no">2783</span><span id="line-2783">         l.removeIf(x -&gt; ie(x.getValue()));</span>
+<span class="source-line-no">2784</span><span id="line-2784"></span>
+<span class="source-line-no">2785</span><span id="line-2785">      headerData.append(l);</span>
+<span class="source-line-no">2786</span><span id="line-2786"></span>
+<span class="source-line-no">2787</span><span id="line-2787">      return this;</span>
+<span class="source-line-no">2788</span><span id="line-2788">   }</span>
+<span class="source-line-no">2789</span><span id="line-2789"></span>
+<span class="source-line-no">2790</span><span id="line-2790">   boolean isLoggingSuppressed() { return suppressLogging; }</span>
+<span class="source-line-no">2791</span><span id="line-2791"></span>
+<span class="source-line-no">2792</span><span id="line-2792">   RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {</span>
+<span class="source-line-no">2793</span><span id="line-2793">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
+<span class="source-line-no">2794</span><span id="line-2794"></span>
+<span class="source-line-no">2795</span><span id="line-2795">      if (! isMulti)</span>
+<span class="source-line-no">2796</span><span id="line-2796">         return pathData(createPart(name, value, PATH, serializer, schema, false));</span>
+<span class="source-line-no">2797</span><span id="line-2797"></span>
+<span class="source-line-no">2798</span><span id="line-2798">      List&lt;NameValuePair&gt; l = list();</span>
+<span class="source-line-no">2799</span><span id="line-2799"></span>
+<span class="source-line-no">2800</span><span id="line-2800">      if (HttpParts.canCast(value)) {</span>
+<span class="source-line-no">2801</span><span id="line-2801">         l.add(HttpParts.cast(value));</span>
+<span class="source-line-no">2802</span><span id="line-2802">      } else if (value instanceof PartList value2) {</span>
+<span class="source-line-no">2803</span><span id="line-2803">         value2.forEach(l::add);</span>
+<span class="source-line-no">2804</span><span id="line-2804">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
+<span class="source-line-no">2805</span><span id="line-2805">         value3.forEach(x -&gt; l.add(HttpParts.cast(x)));</span>
+<span class="source-line-no">2806</span><span id="line-2806">      } else if (isArray(value)) {</span>
+<span class="source-line-no">2807</span><span id="line-2807">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
+<span class="source-line-no">2808</span><span id="line-2808">            l.add(HttpParts.cast(Array.get(value, i)));</span>
+<span class="source-line-no">2809</span><span id="line-2809">      } else if (value instanceof Map value2) {</span>
+<span class="source-line-no">2810</span><span id="line-2810">         toMap(value2).forEach((k, v) -&gt; l.add(createPart(s(k), v, PATH, serializer, schema, false)));</span>
+<span class="source-line-no">2811</span><span id="line-2811">      } else if (isBean(value)) {</span>
+<span class="source-line-no">2812</span><span id="line-2812">         toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, PATH, serializer, schema, false)));</span>
+<span class="source-line-no">2813</span><span id="line-2813">      } else if (nn(value)) {</span>
+<span class="source-line-no">2814</span><span id="line-2814">         throw rex("Invalid value type for path arg '%s': %s", name, cn(value));</span>
+<span class="source-line-no">2815</span><span id="line-2815">      }</span>
+<span class="source-line-no">2816</span><span id="line-2816"></span>
+<span class="source-line-no">2817</span><span id="line-2817">      pathData.append(l);</span>
+<span class="source-line-no">2818</span><span id="line-2818"></span>
+<span class="source-line-no">2819</span><span id="line-2819">      return this;</span>
+<span class="source-line-no">2820</span><span id="line-2820">   }</span>
+<span class="source-line-no">2821</span><span id="line-2821"></span>
+<span class="source-line-no">2822</span><span id="line-2822">   RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
+<span class="source-line-no">2823</span><span id="line-2823">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
+<span class="source-line-no">2824</span><span id="line-2824"></span>
+<span class="source-line-no">2825</span><span id="line-2825">      if (! isMulti) {</span>
+<span class="source-line-no">2826</span><span id="line-2826">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
+<span class="source-line-no">2827</span><span id="line-2827">            return queryData(createPart(name, value, QUERY, serializer, schema, skipIfEmpty));</span>
 <span class="source-line-no">2828</span><span id="line-2828">         return this;</span>
 <span class="source-line-no">2829</span><span id="line-2829">      }</span>
 <span class="source-line-no">2830</span><span id="line-2830"></span>
-<span class="source-line-no">2831</span><span id="line-2831">      if (skipIfEmpty)</span>
-<span class="source-line-no">2832</span><span id="line-2832">         l.removeIf(x -&gt; ie(x.getValue()));</span>
-<span class="source-line-no">2833</span><span id="line-2833"></span>
-<span class="source-line-no">2834</span><span id="line-2834">      queryData.append(l);</span>
-<span class="source-line-no">2835</span><span id="line-2835"></span>
-<span class="source-line-no">2836</span><span id="line-2836">      return this;</span>
-<span class="source-line-no">2837</span><span id="line-2837">   }</span>
-<span class="source-line-no">2838</span><span id="line-2838"></span>
-<span class="source-line-no">2839</span><span id="line-2839">   /**</span>
-<span class="source-line-no">2840</span><span id="line-2840">    * Resolves a {@link RecordStreamBody} body by invoking the caller's consumer against a</span>
-<span class="source-line-no">2841</span><span id="line-2841">    * cursor opened over a temporary buffer, then sending the buffered bytes as the request</span>
-<span class="source-line-no">2842</span><span id="line-2842">    * body.</span>
-<span class="source-line-no">2843</span><span id="line-2843">    */</span>
-<span class="source-line-no">2844</span><span id="line-2844">   @SuppressWarnings({"unchecked", "rawtypes"})</span>
-<span class="source-line-no">2845</span><span id="line-2845">   private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {</span>
-<span class="source-line-no">2846</span><span id="line-2846">      if (serializer == null)</span>
-<span class="source-line-no">2847</span><span id="line-2847">         throw iaex("No serializer registered for cursor-streamed request body.");</span>
-<span class="source-line-no">2848</span><span id="line-2848">      try {</span>
-<span class="source-line-no">2849</span><span id="line-2849">         var consumer = body.getConsumer();</span>
-<span class="source-line-no">2850</span><span id="line-2850">         var writerKind = body.getWriterKind();</span>
-<span class="source-line-no">2851</span><span id="line-2851"></span>
-<span class="source-line-no">2852</span><span id="line-2852">         if (writerKind == TokenWriter.class &amp;&amp; !(serializer instanceof TokenWritable))</span>
-<span class="source-line-no">2853</span><span id="line-2853">            throw iaex("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());</span>
-<span class="source-line-no">2854</span><span id="line-2854">         if (writerKind == RecordWriter.class &amp;&amp; !(serializer instanceof RecordWritable))</span>
-<span class="source-line-no">2855</span><span id="line-2855">            throw iaex("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());</span>
-<span class="source-line-no">2856</span><span id="line-2856"></span>
-<span class="source-line-no">2857</span><span id="line-2857">         var buf = new ByteArrayOutputStream();</span>
-<span class="source-line-no">2858</span><span id="line-2858">         Object output = serializer.isWriterSerializer()</span>
-<span class="source-line-no">2859</span><span id="line-2859">            ? new OutputStreamWriter(buf, java.nio.charset.StandardCharsets.UTF_8)</span>
-<span class="source-line-no">2860</span><span id="line-2860">            : buf;</span>
-<span class="source-line-no">2861</span><span id="line-2861"></span>
-<span class="source-line-no">2862</span><span id="line-2862">         try (var w = (writerKind == TokenWriter.class)</span>
-<span class="source-line-no">2863</span><span id="line-2863">               ? ((TokenWritable) serializer).serializeTokens(output)</span>
-<span class="source-line-no">2864</span><span id="line-2864">               : ((RecordWritable) serializer).serializeRecords(output)) {</span>
-<span class="source-line-no">2865</span><span id="line-2865">            ((Consumer) consumer).accept(w);</span>
-<span class="source-line-no">2866</span><span id="line-2866">            w.flush();</span>
-<span class="source-line-no">2867</span><span id="line-2867">         }</span>
-<span class="source-line-no">2868</span><span id="line-2868">         if (output instanceof Writer ow)</span>
-<span class="source-line-no">2869</span><span id="line-2869">            ow.flush();</span>
-<span class="source-line-no">2870</span><span id="line-2870"></span>
-<span class="source-line-no">2871</span><span id="line-2871">         // Use the serializer's primary produces() media type if no explicit Content-Type set.</span>
-<span class="source-line-no">2872</span><span id="line-2872">         var ct = serializer.getPrimaryMediaType();</span>
-<span class="source-line-no">2873</span><span id="line-2873">         var contentType2 = ct != null ? ContentType.of(ct.toString()) : ContentType.APPLICATION_OCTET_STREAM;</span>
-<span class="source-line-no">2874</span><span id="line-2874">         return byteArrayEntity(buf.toByteArray(), getRequestContentType(contentType2));</span>
-<span class="source-line-no">2875</span><span id="line-2875">      } catch (IOException e) {</span>
-<span class="source-line-no">2876</span><span id="line-2876">         throw rex(e, "I/O error streaming request body.");</span>
-<span class="source-line-no">2877</span><span id="line-2877">      }</span>
-<span class="source-line-no">2878</span><span id="line-2878">   }</span>
-<span class="source-line-no">2879</span><span id="line-2879">}</span>
+<span class="source-line-no">2831</span><span id="line-2831">      List&lt;NameValuePair&gt; l = list();</span>
+<span class="source-line-no">2832</span><span id="line-2832"></span>
+<span class="source-line-no">2833</span><span id="line-2833">      if (HttpParts.canCast(value)) {</span>
+<span class="source-line-no">2834</span><span id="line-2834">         l.add(HttpParts.cast(value));</span>
+<span class="source-line-no">2835</span><span id="line-2835">      } else if (value instanceof PartList value2) {</span>
+<span class="source-line-no">2836</span><span id="line-2836">         value2.forEach(l::add);</span>
+<span class="source-line-no">2837</span><span id="line-2837">      } else if (value instanceof Collection&lt;?&gt; value3) {</span>
+<span class="source-line-no">2838</span><span id="line-2838">         value3.forEach(x -&gt; l.add(HttpParts.cast(x)));</span>
+<span class="source-line-no">2839</span><span id="line-2839">      } else if (isArray(value)) {</span>
+<span class="source-line-no">2840</span><span id="line-2840">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
+<span class="source-line-no">2841</span><span id="line-2841">            l.add(HttpParts.cast(Array.get(value, i)));</span>
+<span class="source-line-no">2842</span><span id="line-2842">      } else if (value instanceof Map value2) {</span>
+<span class="source-line-no">2843</span><span id="line-2843">         toMap(value2).forEach((k, v) -&gt; l.add(createPart(s(k), v, QUERY, serializer, schema, skipIfEmpty)));</span>
+<span class="source-line-no">2844</span><span id="line-2844">      } else if (isBean(value)) {</span>
+<span class="source-line-no">2845</span><span id="line-2845">         toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, QUERY, serializer, schema, skipIfEmpty)));</span>
+<span class="source-line-no">2846</span><span id="line-2846">      } else if (nn(value)) {</span>
+<span class="source-line-no">2847</span><span id="line-2847">         queryCustom(value);</span>
+<span class="source-line-no">2848</span><span id="line-2848">         return this;</span>
+<span class="source-line-no">2849</span><span id="line-2849">      }</span>
+<span class="source-line-no">2850</span><span id="line-2850"></span>
+<span class="source-line-no">2851</span><span id="line-2851">      if (skipIfEmpty)</span>
+<span class="source-line-no">2852</span><span id="line-2852">         l.removeIf(x -&gt; ie(x.getValue()));</span>
+<span class="source-line-no">2853</span><span id="line-2853"></span>
+<span class="source-line-no">2854</span><span id="line-2854">      queryData.append(l);</span>
+<span class="source-line-no">2855</span><span id="line-2855"></span>
+<span class="source-line-no">2856</span><span id="line-2856">      return this;</span>
+<span class="source-line-no">2857</span><span id="line-2857">   }</span>
+<span class="source-line-no">2858</span><span id="line-2858"></span>
+<span class="source-line-no">2859</span><span id="line-2859">   /**</span>
+<span class="source-line-no">2860</span><span id="line-2860">    * Resolves a {@link RecordStreamBody} body by invoking the caller's consumer against a</span>
+<span class="source-line-no">2861</span><span id="line-2861">    * cursor opened over a temporary buffer, then sending the buffered bytes as the request</span>
+<span class="source-line-no">2862</span><span id="line-2862">    * body.</span>
+<span class="source-line-no">2863</span><span id="line-2863">    */</span>
+<span class="source-line-no">2864</span><span id="line-2864">   @SuppressWarnings({"unchecked", "rawtypes"})</span>
+<span class="source-line-no">2865</span><span id="line-2865">   private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {</span>
+<span class="source-line-no">2866</span><span id="line-2866">      if (serializer == null)</span>
+<span class="source-line-no">2867</span><span id="line-2867">         throw iaex("No serializer registered for cursor-streamed request body.");</span>
+<span class="source-line-no">2868</span><span id="line-2868">      try {</span>
+<span class="source-line-no">2869</span><span id="line-2869">         var consumer = body.getConsumer();</span>
+<span class="source-line-no">2870</span><span id="line-2870">         var writerKind = body.getWriterKind();</span>
+<span class="source-line-no">2871</span><span id="line-2871"></span>
+<span class="source-line-no">2872</span><span id="line-2872">         if (writerKind == TokenWriter.class &amp;&amp; !(serializer instanceof TokenWritable))</span>
+<span class="source-line-no">2873</span><span id="line-2873">            throw iaex("Serializer '%s' does not support the token-writer surface.", serializer.getClass().getName());</span>
+<span class="source-line-no">2874</span><span id="line-2874">         if (writerKind == RecordWriter.class &amp;&amp; !(serializer instanceof RecordWritable))</span>
+<span class="source-line-no">2875</span><span id="line-2875">            throw iaex("Serializer '%s' does not support the record-writer surface.", serializer.getClass().getName());</span>
+<span class="source-line-no">2876</span><span id="line-2876"></span>
+<span class="source-line-no">2877</span><span id="line-2877">         var buf = new ByteArrayOutputStream();</span>
+<span class="source-line-no">2878</span><span id="line-2878">         Object output = serializer.isWriterSerializer()</span>
+<span class="source-line-no">2879</span><span id="line-2879">            ? new OutputStreamWriter(buf, java.nio.charset.StandardCharsets.UTF_8)</span>
+<span class="source-line-no">2880</span><span id="line-2880">            : buf;</span>
+<span class="source-line-no">2881</span><span id="line-2881"></span>
+<span class="source-line-no">2882</span><span id="line-2882">         try (var w = (writerKind == TokenWriter.class)</span>
+<span class="source-line-no">2883</span><span id="line-2883">               ? ((TokenWritable) serializer).writeTokens(output)</span>
+<span class="source-line-no">2884</span><span id="line-2884">               : ((RecordWritable) serializer).writeRecords(output)) {</span>
+<span class="source-line-no">2885</span><span id="line-2885">            ((Consumer) consumer).accept(w);</span>
+<span class="source-line-no">2886</span><span id="line-2886">            w.flush();</span>
+<span class="source-line-no">2887</span><span id="line-2887">         }</span>
+<span class="source-line-no">2888</span><span id="line-2888">         if (output instanceof Writer output2)</span>
+<span class="source-line-no">2889</span><span id="line-2889">            output2.flush();</span>
+<span class="source-line-no">2890</span><span id="line-2890"></span>
+<span class="source-line-no">2891</span><span id="line-2891">         // Use the serializer's primary produces() media type if no explicit Content-Type set.</span>
+<span class="source-line-no">2892</span><span id="line-2892">         var ct = serializer.getPrimaryMediaType();</span>
+<span class="source-line-no">2893</span><span id="line-2893">         var contentType2 = ct != null ? ContentType.of(ct.toString()) : ContentType.APPLICATION_OCTET_STREAM;</span>
+<span class="source-line-no">2894</span><span id="line-2894">         return byteArrayEntity(buf.toByteArray(), getRequestContentType(contentType2));</span>
+<span class="source-line-no">2895</span><span id="line-2895">      } catch (IOException e) {</span>
+<span class="source-line-no">2896</span><span id="line-2896">         throw rex(e, "I/O error streaming request body.");</span>
+<span class="source-line-no">2897</span><span id="line-2897">      }</span>
+<span class="source-line-no">2898</span><span id="line-2898">   }</span>
+<span class="source-line-no">2899</span><span id="line-2899">}</span>
 
 
 

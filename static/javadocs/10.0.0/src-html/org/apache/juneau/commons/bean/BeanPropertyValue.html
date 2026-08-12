@@ -62,8 +62,8 @@
 <span class="source-line-no">049</span><span id="line-49">    *</span>
 <span class="source-line-no">050</span><span id="line-50">    * @param pMeta The bean property metadata.</span>
 <span class="source-line-no">051</span><span id="line-51">    * @param name The bean property name.</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param value The bean property value.</span>
-<span class="source-line-no">053</span><span id="line-53">    * @param thrown The exception thrown by calling the property getter.</span>
+<span class="source-line-no">052</span><span id="line-52">    * @param value The bean property value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">053</span><span id="line-53">    * @param thrown The exception thrown by calling the property getter.  Can be &lt;jk&gt;null&lt;/jk&gt; if no exception was thrown.</span>
 <span class="source-line-no">054</span><span id="line-54">    */</span>
 <span class="source-line-no">055</span><span id="line-55">   public BeanPropertyValue(BeanPropertyMeta pMeta, String name, Object value, Throwable thrown) {</span>
 <span class="source-line-no">056</span><span id="line-56">      this.pMeta = pMeta;</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"></span>
 <span class="source-line-no">067</span><span id="line-67">   @Override /* Overridden from Object */</span>
 <span class="source-line-no">068</span><span id="line-68">   public boolean equals(Object o) {</span>
-<span class="source-line-no">069</span><span id="line-69">      return o instanceof BeanPropertyValue other &amp;&amp; compareTo(other) == 0;</span>
+<span class="source-line-no">069</span><span id="line-69">      return o instanceof BeanPropertyValue o2 &amp;&amp; compareTo(o2) == 0;</span>
 <span class="source-line-no">070</span><span id="line-70">   }</span>
 <span class="source-line-no">071</span><span id="line-71"></span>
 <span class="source-line-no">072</span><span id="line-72">   @Override /* Overridden from Object */</span>

@@ -204,12 +204,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">YAML Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.marshall">org.apache.juneau.petstore.marshall</a></div>
 <div class="col-last even-row-color">
+<div class="block">Petstore-local marshalling support.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Response Converters</div>
 </div>
 </div>
@@ -333,7 +337,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ImageSerializer.</span><code><a href="../../../examples/serializer/ImageSerializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">ImageSerializer.</span><code><a href="../../../examples/serializer/ImageSerializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">
@@ -351,7 +355,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BsonSerializerSession.</span><code><a href="../../bson/BsonSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">BsonSerializerSession.</span><code><a href="../../bson/BsonSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -366,7 +370,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CborSerializerSession.</span><code><a href="../../cbor/CborSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">CborSerializerSession.</span><code><a href="../../cbor/CborSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -383,14 +387,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../../collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonList.</span><code><a href="../../collections/JsonList.html#writeTo(java.io.Writer)" class="member-name-link">writeTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Convenience method for serializing this JsonList to the specified Writer using the JsonSerializer.DEFAULT
- serializer.</div>
+<div class="block">Convenience method for serializing this JsonList to the specified Writer using the <a href="../../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a>
+ marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonMap.</span><code><a href="../../collections/JsonMap.html#writeTo(java.io.Writer)" class="member-name-link">writeTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Convenience method for serializing this map to the specified <c>Writer</c> using the
- <a href="../../json/JsonSerializer.html#DEFAULT"><code>JsonSerializer.DEFAULT</code></a> serializer.</div>
+ <a href="../../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a> marshaller.</div>
 </div>
 </div>
 </section>
@@ -404,7 +408,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CsvSerializerSession.</span><code><a href="../../csv/CsvSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">CsvSerializerSession.</span><code><a href="../../csv/CsvSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -419,11 +423,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HjsonSerializerSession.</span><code><a href="../../hjson/HjsonSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">HjsonSerializerSession.</span><code><a href="../../hjson/HjsonSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected <a href="../../hjson/HjsonWriter.html" title="class in org.apache.juneau.marshall.hjson">HjsonWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HjsonSerializerSession.</span><code><a href="../../hjson/HjsonSerializerSession.html#serializeAnything(org.apache.juneau.marshall.hjson.HjsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../hjson/HjsonWriter.html" title="class in org.apache.juneau.marshall.hjson">HjsonWriter</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">HjsonSerializerSession.</span><code><a href="../../hjson/HjsonSerializerSession.html#writeAnything(org.apache.juneau.marshall.hjson.HjsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../../hjson/HjsonWriter.html" title="class in org.apache.juneau.marshall.hjson">HjsonWriter</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
@@ -441,11 +445,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HoconSerializerSession.</span><code><a href="../../hocon/HoconSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">HoconSerializerSession.</span><code><a href="../../hocon/HoconSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected <a href="../../hocon/HoconWriter.html" title="class in org.apache.juneau.marshall.hocon">HoconWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HoconSerializerSession.</span><code><a href="../../hocon/HoconSerializerSession.html#serializeAnything(org.apache.juneau.marshall.hocon.HoconWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../hocon/HoconWriter.html" title="class in org.apache.juneau.marshall.hocon">HoconWriter</a>&nbsp;hw,
+<div class="col-second odd-row-color"><span class="type-name-label">HoconSerializerSession.</span><code><a href="../../hocon/HoconSerializerSession.html#writeAnything(org.apache.juneau.marshall.hocon.HoconWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../../hocon/HoconWriter.html" title="class in org.apache.juneau.marshall.hocon">HoconWriter</a>&nbsp;hw,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
@@ -463,27 +467,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlDocSerializerSession.</span><code><a href="../../html/HtmlDocSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">HtmlDocSerializerSession.</span><code><a href="../../html/HtmlDocSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HtmlSchemaDocSerializerSession.</span><code><a href="../../html/HtmlSchemaDocSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">HtmlSchemaDocSerializerSession.</span><code><a href="../../html/HtmlSchemaDocSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlSchemaSerializerSession.</span><code><a href="../../html/HtmlSchemaSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">HtmlSchemaSerializerSession.</span><code><a href="../../html/HtmlSchemaSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlStrippedDocSerializerSession.</span><code><a href="../../html/HtmlStrippedDocSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">HtmlStrippedDocSerializerSession.</span><code><a href="../../html/HtmlStrippedDocSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected <a href="../../xml/XmlSerializerSession.ContentResult.html" title="enum class in org.apache.juneau.marshall.xml">XmlSerializerSession.ContentResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#serializeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#writeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;keyName,
@@ -496,7 +500,7 @@ loadScripts(document, 'script');</script>
  <a href="../../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected <a href="../../xml/XmlSerializerSession.ContentResult.html" title="enum class in org.apache.juneau.marshall.xml">XmlSerializerSession.ContentResult</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#serializeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,int,boolean,boolean)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">HtmlSerializerSession.</span><code><a href="../../html/HtmlSerializerSession.html#writeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,int,boolean,boolean)" class="member-name-link">writeAnything</a><wbr>(<a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
@@ -519,7 +523,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BaseHttpPartSerializer.</span><code><a href="../../httppart/BaseHttpPartSerializer.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color"><span class="type-name-label">BaseHttpPartSerializer.</span><code><a href="../../httppart/BaseHttpPartSerializer.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
@@ -527,7 +531,7 @@ loadScripts(document, 'script');</script>
  form-data parameter, or URI path variable.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HttpPartSerializerSession.</span><code><a href="../../httppart/HttpPartSerializerSession.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
+<div class="col-second odd-row-color"><span class="type-name-label">HttpPartSerializerSession.</span><code><a href="../../httppart/HttpPartSerializerSession.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
  <a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
@@ -546,7 +550,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">IniSerializerSession.</span><code><a href="../../ini/IniSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">IniSerializerSession.</span><code><a href="../../ini/IniSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -560,13 +564,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#serializeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JcsSerializerSession.</span><code><a href="../../jcs/JcsSerializerSession.html#writeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;m,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
@@ -582,11 +586,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RdfSerializerSession.</span><code><a href="../../jena/RdfSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">RdfSerializerSession.</span><code><a href="../../jena/RdfSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RdfStreamSerializerSession.</span><code><a href="../../jena/RdfStreamSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">RdfStreamSerializerSession.</span><code><a href="../../jena/RdfStreamSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
@@ -672,15 +676,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchemaSerializerSession.</span><code><a href="../../json/JsonSchemaSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchemaSerializerSession.</span><code><a href="../../json/JsonSchemaSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#serializeAnything(org.apache.juneau.marshall.json.JsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code>protected <a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#writeAnything(org.apache.juneau.marshall.json.JsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
@@ -688,13 +692,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Workhorse method.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#serializeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSerializerSession.</span><code><a href="../../json/JsonSerializerSession.html#writeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeMap</a><wbr>(<a href="../../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;m,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -712,14 +716,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../../json5/Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Json5List.</span><code><a href="../../json5/Json5List.html#writeTo(java.io.Writer)" class="member-name-link">writeTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Convenience method for serializing this list to the specified Writer using the <a href="../../json5/Json5Serializer.html#DEFAULT"><code>Json5Serializer.DEFAULT</code></a>
- serializer.</div>
+<div class="block">Convenience method for serializing this list to the specified Writer using the <a href="../../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a>
+ marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../../json5/Json5Map.html" title="class in org.apache.juneau.marshall.json5">Json5Map</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Json5Map.</span><code><a href="../../json5/Json5Map.html#writeTo(java.io.Writer)" class="member-name-link">writeTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Convenience method for serializing this map to the specified <c>Writer</c> using the
- <a href="../../json5/Json5Serializer.html#DEFAULT"><code>Json5Serializer.DEFAULT</code></a> serializer.</div>
+ <a href="../../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a> marshaller.</div>
 </div>
 </div>
 </section>
@@ -733,7 +737,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonlSerializerSession.</span><code><a href="../../jsonl/JsonlSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">JsonlSerializerSession.</span><code><a href="../../jsonl/JsonlSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -774,11 +778,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../../markdown/MarkdownDocSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../../markdown/MarkdownDocSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
@@ -787,7 +791,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Determines if a collection can be rendered as a multi-column table.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#serializeAnything(org.apache.juneau.marshall.markdown.MarkdownWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#writeAnything(org.apache.juneau.marshall.markdown.MarkdownWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="../../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta)</code></div>
@@ -795,7 +799,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Main serialization dispatch method.</div>
 </div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#serializeBeanMap(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#writeBeanMap(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeBeanMap</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;bm,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;aType)</code></div>
@@ -803,14 +807,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Serializes a bean as a 2-column key/value Markdown table.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../../markdown/MarkdownDocSerializerSession.html#serializeBeanWithHeadings(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,int)" class="member-name-link">serializeBeanWithHeadings</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownDocSerializerSession.</span><code><a href="../../markdown/MarkdownDocSerializerSession.html#writeBeanWithHeadings(org.apache.juneau.marshall.markdown.MarkdownWriter,org.apache.juneau.commons.bean.BeanMap,int)" class="member-name-link">writeBeanWithHeadings</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="../../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;bm,
  int&nbsp;level)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a bean in document mode, using headings to structure nested objects.</div>
 </div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#serializeCollection(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Collection,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeCollection</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#writeCollection(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Collection,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeCollection</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
@@ -818,12 +822,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Serializes a collection as either a multi-column table (uniform beans/maps) or a bulleted list.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#serializeInlineValue(java.lang.Object)" class="member-name-link">serializeInlineValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#writeInlineValue(java.lang.Object)" class="member-name-link">writeInlineValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a value for placement in a Markdown table cell.</div>
 </div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#serializeMap(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeMap</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownSerializerSession.</span><code><a href="../../markdown/MarkdownSerializerSession.html#writeMap(org.apache.juneau.marshall.markdown.MarkdownWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeMap</a><wbr>(<a href="../../markdown/MarkdownWriter.html" title="class in org.apache.juneau.marshall.markdown">MarkdownWriter</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;m,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
 <div class="col-last even-row-color">
@@ -999,136 +1003,325 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <code><jk>byte</jk>[]</code> using the <a href="../../marshaller/Bson.html#DEFAULT"><code>Bson.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static byte[]</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Cbor.</span><code><a href="../../marshaller/Cbor.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Bson.</span><code><a href="../../marshaller/Bson.html#of(java.lang.Object,java.io.OutputStream)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> using the <a href="../../marshaller/Bson.html#DEFAULT"><code>Bson.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static byte[]</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Cbor.</span><code><a href="../../marshaller/Cbor.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <code><jk>byte</jk>[]</code> using the <a href="../../marshaller/Cbor.html#DEFAULT"><code>Cbor.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Cbor.</span><code><a href="../../marshaller/Cbor.html#of(java.lang.Object,java.io.OutputStream)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> using the <a href="../../marshaller/Cbor.html#DEFAULT"><code>Cbor.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Csv.</span><code><a href="../../marshaller/Csv.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Csv.html#DEFAULT"><code>Csv.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Hjson.</span><code><a href="../../marshaller/Hjson.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Csv.</span><code><a href="../../marshaller/Csv.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Csv.html#DEFAULT"><code>Csv.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Hjson.</span><code><a href="../../marshaller/Hjson.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Hjson.html#DEFAULT"><code>Hjson.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Hjson.</span><code><a href="../../marshaller/Hjson.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Hjson.html#DEFAULT"><code>Hjson.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HjsonC.</span><code><a href="../../marshaller/HjsonC.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/HjsonC.html#DEFAULT"><code>HjsonC.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HjsonC.</span><code><a href="../../marshaller/HjsonC.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/HjsonC.html#DEFAULT"><code>HjsonC.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Hocon.</span><code><a href="../../marshaller/Hocon.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Hocon.html#DEFAULT"><code>Hocon.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Html.</span><code><a href="../../marshaller/Html.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Hocon.</span><code><a href="../../marshaller/Hocon.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Hocon.html#DEFAULT"><code>Hocon.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Html.</span><code><a href="../../marshaller/Html.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Html.html#DEFAULT"><code>Html.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Html.</span><code><a href="../../marshaller/Html.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Html.html#DEFAULT"><code>Html.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Ini.</span><code><a href="../../marshaller/Ini.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Ini.html#DEFAULT"><code>Ini.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Jcs.</span><code><a href="../../marshaller/Jcs.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Ini.</span><code><a href="../../marshaller/Ini.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Ini.html#DEFAULT"><code>Ini.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">IniR.</span><code><a href="../../marshaller/IniR.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/IniR.html#DEFAULT"><code>IniR.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">IniR.</span><code><a href="../../marshaller/IniR.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/IniR.html#DEFAULT"><code>IniR.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Jcs.</span><code><a href="../../marshaller/Jcs.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Jcs.html#DEFAULT"><code>Jcs.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Jcs.</span><code><a href="../../marshaller/Jcs.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Jcs.html#DEFAULT"><code>Jcs.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Json.</span><code><a href="../../marshaller/Json.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Json5.</span><code><a href="../../marshaller/Json5.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json.</span><code><a href="../../marshaller/Json.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5.</span><code><a href="../../marshaller/Json5.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json5.</span><code><a href="../../marshaller/Json5.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Json5l.</span><code><a href="../../marshaller/Json5l.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Json5l.html#DEFAULT"><code>Json5l.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json5l.</span><code><a href="../../marshaller/Json5l.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Json5l.html#DEFAULT"><code>Json5l.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5R.</span><code><a href="../../marshaller/Json5R.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Json5R.html#DEFAULT"><code>Json5R.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json5R.</span><code><a href="../../marshaller/Json5R.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Json5R.html#DEFAULT"><code>Json5R.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">Markdown.</span><code><a href="../../marshaller/Markdown.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Markdown.html#DEFAULT"><code>Markdown.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarkdownDoc.</span><code><a href="../../marshaller/MarkdownDoc.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Markdown.</span><code><a href="../../marshaller/Markdown.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Markdown.html#DEFAULT"><code>Markdown.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarkdownDoc.</span><code><a href="../../marshaller/MarkdownDoc.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/MarkdownDoc.html#DEFAULT"><code>MarkdownDoc.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownDoc.</span><code><a href="../../marshaller/MarkdownDoc.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/MarkdownDoc.html#DEFAULT"><code>MarkdownDoc.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static byte[]</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <code><jk>byte</jk>[]</code> using the <a href="../../marshaller/MsgPack.html#DEFAULT"><code>MsgPack.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OpenApi.</span><code><a href="../../marshaller/OpenApi.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#of(java.lang.Object,java.io.OutputStream)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> using the <a href="../../marshaller/MsgPack.html#DEFAULT"><code>MsgPack.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OpenApi.</span><code><a href="../../marshaller/OpenApi.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/OpenApi.html#DEFAULT"><code>OpenApi.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApi.</span><code><a href="../../marshaller/OpenApi.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/OpenApi.html#DEFAULT"><code>OpenApi.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">OpenApi.</span><code><a href="../../marshaller/OpenApi.html#of(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Serializes a Java object to an OpenApi output.</div>
+<div class="block">Serializes a Java object to an OpenApi output using the specified part schema.</div>
 </div>
 <div class="col-first odd-row-color"><code>static byte[]</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Parquet.</span><code><a href="../../marshaller/Parquet.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <code><jk>byte</jk>[]</code> using the <a href="../../marshaller/Parquet.html#DEFAULT"><code>Parquet.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PlainText.</span><code><a href="../../marshaller/PlainText.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Parquet.</span><code><a href="../../marshaller/Parquet.html#of(java.lang.Object,java.io.OutputStream)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> using the <a href="../../marshaller/Parquet.html#DEFAULT"><code>Parquet.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PlainText.</span><code><a href="../../marshaller/PlainText.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/PlainText.html#DEFAULT"><code>PlainText.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PlainText.</span><code><a href="../../marshaller/PlainText.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/PlainText.html#DEFAULT"><code>PlainText.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code>static byte[]</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Protobuf.</span><code><a href="../../marshaller/Protobuf.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <code><jk>byte</jk>[]</code> using the <a href="../../marshaller/Protobuf.html#DEFAULT"><code>Protobuf.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Prototext.</span><code><a href="../../marshaller/Prototext.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Protobuf.</span><code><a href="../../marshaller/Protobuf.html#of(java.lang.Object,java.io.OutputStream)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a> using the <a href="../../marshaller/Protobuf.html#DEFAULT"><code>Protobuf.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Prototext.</span><code><a href="../../marshaller/Prototext.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Prototext.html#DEFAULT"><code>Prototext.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Prototext.</span><code><a href="../../marshaller/Prototext.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Prototext.html#DEFAULT"><code>Prototext.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Sse.</span><code><a href="../../marshaller/Sse.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Sse.html#DEFAULT"><code>Sse.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Toml.</span><code><a href="../../marshaller/Toml.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Sse.</span><code><a href="../../marshaller/Sse.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Sse.html#DEFAULT"><code>Sse.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Toml.</span><code><a href="../../marshaller/Toml.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Toml.html#DEFAULT"><code>Toml.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Toml.</span><code><a href="../../marshaller/Toml.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Toml.html#DEFAULT"><code>Toml.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Uon.</span><code><a href="../../marshaller/Uon.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Uon.html#DEFAULT"><code>Uon.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UrlEncoding.</span><code><a href="../../marshaller/UrlEncoding.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Uon.</span><code><a href="../../marshaller/Uon.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Uon.html#DEFAULT"><code>Uon.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UrlEncoding.</span><code><a href="../../marshaller/UrlEncoding.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/UrlEncoding.html#DEFAULT"><code>UrlEncoding.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UrlEncoding.</span><code><a href="../../marshaller/UrlEncoding.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/UrlEncoding.html#DEFAULT"><code>UrlEncoding.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Xml.</span><code><a href="../../marshaller/Xml.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Xml.html#DEFAULT"><code>Xml.DEFAULT</code></a> marshaller.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Yaml.</span><code><a href="../../marshaller/Yaml.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Xml.</span><code><a href="../../marshaller/Xml.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Xml.html#DEFAULT"><code>Xml.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Yaml.</span><code><a href="../../marshaller/Yaml.html#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to a <c>String</c> using the <a href="../../marshaller/Yaml.html#DEFAULT"><code>Yaml.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Yaml.</span><code><a href="../../marshaller/Yaml.html#of(java.lang.Object,java.io.Writer)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> using the <a href="../../marshaller/Yaml.html#DEFAULT"><code>Yaml.DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">MarshallUtils.</span><code><a href="../../marshaller/MarshallUtils.html#openApi(java.lang.Object)" class="member-name-link">openApi</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
@@ -1257,7 +1450,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MsgPackSerializerSession.</span><code><a href="../../msgpack/MsgPackSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">MsgPackSerializerSession.</span><code><a href="../../msgpack/MsgPackSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -1272,11 +1465,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OpenApiSerializerSession.</span><code><a href="../../oapi/OpenApiSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">OpenApiSerializerSession.</span><code><a href="../../oapi/OpenApiSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OpenApiSerializerSession.</span><code><a href="../../oapi/OpenApiSerializerSession.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApiSerializerSession.</span><code><a href="../../oapi/OpenApiSerializerSession.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
@@ -1292,7 +1485,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ParquetSerializerSession.</span><code><a href="../../parquet/ParquetSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">ParquetSerializerSession.</span><code><a href="../../parquet/ParquetSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -1307,7 +1500,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PlainTextSerializerSession.</span><code><a href="../../plaintext/PlainTextSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">PlainTextSerializerSession.</span><code><a href="../../plaintext/PlainTextSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -1329,7 +1522,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">SerializeException.</span><code><a href="../SerializeException.html#getRootCause()" class="member-name-link">getRootCause</a>()</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Returns the highest-level <c>ParseException</c> in the stack trace.</div>
+<div class="block">Returns the highest-level <c>SerializeException</c> in the stack trace.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">SerializeException.</span><code><a href="../SerializeException.html#initCause(java.lang.Throwable)" class="member-name-link">initCause</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
@@ -1361,14 +1554,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified value should not be serialized.</div>
 </div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
  <a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serializes a POJO to the specified pipe.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+<div class="col-second odd-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serializes a POJO to the specified pipe.</div>
@@ -1397,66 +1590,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Same as <a href="../../MarshallingTraverseSession.html#push(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)"><code>MarshallingTraverseSession.push(String, Object, ClassMeta)</code></a> but wraps <a href="../../MarshallingRecursionException.html" title="class in org.apache.juneau.marshall"><code>MarshallingRecursionException</code></a> inside <a href="../SerializeException.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializeException</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><code>final byte[]</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OutputStreamSerializer.</span><code><a href="../OutputStreamSerializer.html#serialize(java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Convenience method for serializing an object to a <code><jk>byte</jk></code>.</div>
-</div>
-<div class="col-first odd-row-color"><code>final byte[]</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OutputStreamSerializerSession.</span><code><a href="../OutputStreamSerializerSession.html#serialize(java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Convenience method for serializing an object to a <code><jk>byte</jk></code>.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#serialize(java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
- depending on the serializer type.</div>
-</div>
-<div class="col-first odd-row-color"><code>final void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#serialize(java.lang.Object,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Serializes a POJO to the specified output stream or writer.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#serialize(java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
- depending on the serializer type.</div>
-</div>
-<div class="col-first odd-row-color"><code>final void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#serialize(java.lang.Object,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;out)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Serialize the specified object using the specified session.</div>
-</div>
-<div class="col-first even-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">WriterSerializer.</span><code><a href="../WriterSerializer.html#serialize(java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Convenience method for serializing an object to a <c>String</c>.</div>
-</div>
-<div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">WriterSerializerSession.</span><code><a href="../WriterSerializerSession.html#serialize(java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Convenience method for serializing an object to a <c>String</c>.</div>
-</div>
-<div class="col-first even-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OutputStreamSerializerSession.</span><code><a href="../OutputStreamSerializerSession.html#serializeToString(java.lang.Object)" class="member-name-link">serializeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#serializeToString(java.lang.Object)" class="member-name-link">serializeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Convenience method for serializing an object to a String.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#serializeToString(java.lang.Object)" class="member-name-link">serializeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Shortcut method for serializing an object to a String.</div>
-</div>
-<div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">WriterSerializerSession.</span><code><a href="../WriterSerializerSession.html#serializeToString(java.lang.Object)" class="member-name-link">serializeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#swap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object)" class="member-name-link">swap</a><wbr>(<a href="../../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&nbsp;swap,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
@@ -1469,6 +1602,66 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Recursively unwraps nested <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> chains to their underlying value.</div>
 </div>
+<div class="col-first even-row-color"><code>final byte[]</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OutputStreamSerializer.</span><code><a href="../OutputStreamSerializer.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Convenience method for serializing an object to a <code><jk>byte</jk></code>.</div>
+</div>
+<div class="col-first odd-row-color"><code>final byte[]</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OutputStreamSerializerSession.</span><code><a href="../OutputStreamSerializerSession.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience method for serializing an object to a <code><jk>byte</jk></code>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
+ depending on the serializer type.</div>
+</div>
+<div class="col-first odd-row-color"><code>final void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#write(java.lang.Object,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serializes a POJO to the specified output stream or writer.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
+ depending on the serializer type.</div>
+</div>
+<div class="col-first odd-row-color"><code>final void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#write(java.lang.Object,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;out)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serialize the specified object using the specified session.</div>
+</div>
+<div class="col-first even-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">WriterSerializer.</span><code><a href="../WriterSerializer.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Convenience method for serializing an object to a <c>String</c>.</div>
+</div>
+<div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">WriterSerializerSession.</span><code><a href="../WriterSerializerSession.html#write(java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience method for serializing an object to a <c>String</c>.</div>
+</div>
+<div class="col-first even-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OutputStreamSerializerSession.</span><code><a href="../OutputStreamSerializerSession.html#writeToString(java.lang.Object)" class="member-name-link">writeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Serializer.</span><code><a href="../Serializer.html#writeToString(java.lang.Object)" class="member-name-link">writeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Convenience method for serializing an object to a String.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SerializerSession.</span><code><a href="../SerializerSession.html#writeToString(java.lang.Object)" class="member-name-link">writeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Shortcut method for serializing an object to a String.</div>
+</div>
+<div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">WriterSerializerSession.</span><code><a href="../WriterSerializerSession.html#writeToString(java.lang.Object)" class="member-name-link">writeToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -1481,7 +1674,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SoapXmlSerializerSession.</span><code><a href="../../soap/SoapXmlSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">SoapXmlSerializerSession.</span><code><a href="../../soap/SoapXmlSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -1496,7 +1689,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SseSerializerSession.</span><code><a href="../../sse/SseSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><span class="type-name-label">SseSerializerSession.</span><code><a href="../../sse/SseSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -1542,7 +1735,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TomlSerializerSession.</span><code><a href="../../toml/TomlSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">TomlSerializerSession.</span><code><a href="../../toml/TomlSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -1557,11 +1750,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UonSerializer.</span><code><a href="../../uon/UonSerializer.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color"><span class="type-name-label">UonSerializer.</span><code><a href="../../uon/UonSerializer.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
@@ -1569,12 +1762,12 @@ loadScripts(document, 'script');</script>
  form-data parameter, or URI path variable.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
+<div class="col-second even-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
  <a href="../../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="../SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#serializeAnything(org.apache.juneau.marshall.uon.UonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../uon/UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color"><code>protected <a href="../../uon/UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#writeAnything(org.apache.juneau.marshall.uon.UonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../../uon/UonWriter.html" title="class in org.apache.juneau.marshall.uon">UonWriter</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
@@ -1594,7 +1787,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UrlEncodingSerializerSession.</span><code><a href="../../urlencoding/UrlEncodingSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">UrlEncodingSerializerSession.</span><code><a href="../../urlencoding/UrlEncodingSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -1609,11 +1802,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">XmlDocSerializerSession.</span><code><a href="../../xml/XmlDocSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">XmlDocSerializerSession.</span><code><a href="../../xml/XmlDocSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">XmlSerializerSession.</span><code><a href="../../xml/XmlSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">XmlSerializerSession.</span><code><a href="../../xml/XmlSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected final void</code></div>
@@ -1622,7 +1815,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Recursively searches for the XML namespaces on the specified POJO and adds them to the serializer context object.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected <a href="../../xml/XmlSerializerSession.ContentResult.html" title="enum class in org.apache.juneau.marshall.xml">XmlSerializerSession.ContentResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">XmlSerializerSession.</span><code><a href="../../xml/XmlSerializerSession.html#serializeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">XmlSerializerSession.</span><code><a href="../../xml/XmlSerializerSession.html#writeAnything(org.apache.juneau.marshall.xml.XmlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.String,org.apache.juneau.marshall.xml.Namespace,boolean,org.apache.juneau.marshall.xml.XmlFormat,boolean,boolean,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="../../xml/XmlWriter.html" title="class in org.apache.juneau.marshall.xml">XmlWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;keyName,
@@ -1648,11 +1841,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../../yaml/YamlSerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second even-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../../yaml/YamlSerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected <a href="../../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../../yaml/YamlSerializerSession.html#serializeAnything(org.apache.juneau.marshall.yaml.YamlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,boolean)" class="member-name-link">serializeAnything</a><wbr>(<a href="../../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a>&nbsp;out,
+<div class="col-second odd-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../../yaml/YamlSerializerSession.html#writeAnything(org.apache.juneau.marshall.yaml.YamlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,boolean)" class="member-name-link">writeAnything</a><wbr>(<a href="../../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
@@ -1660,6 +1853,24 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;asField)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Workhorse method.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.marshall">
+<h2>Uses of <a href="../SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a> in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a> that throw <a href="../SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetPhotoSerializer.</span><code><a href="../../../petstore/marshall/PetPhotoSerializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a>&nbsp;session,
+ <a href="../SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;pipe,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serializes a POJO to the specified pipe.</div>
 </div>
 </div>
 </section>

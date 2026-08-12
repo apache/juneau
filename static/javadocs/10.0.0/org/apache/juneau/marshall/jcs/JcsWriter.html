@@ -75,8 +75,8 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">java.io.Writer</a>
-<div class="inheritance"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">org.apache.juneau.marshall.serializer.SerializerWriter</a>
-<div class="inheritance"><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">org.apache.juneau.marshall.json.JsonWriter</a>
+<div class="inheritance"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">org.apache.juneau.marshall.serializer.SerializerWriter</a>&lt;SELF&gt;
+<div class="inheritance"><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">org.apache.juneau.marshall.json.JsonWriter</a>&lt;<a href="JcsWriter.html" title="class in org.apache.juneau.marshall.jcs">JcsWriter</a>&gt;
 <div class="inheritance">org.apache.juneau.marshall.jcs.JcsWriter</div>
 </div>
 </div>
@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsWriter.html#line-37">JcsWriter</a></span>
-<span class="extends-implements">extends <a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></span></div>
+<span class="extends-implements">extends <a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;<a href="JcsWriter.html" title="class in org.apache.juneau.marshall.jcs">JcsWriter</a>&gt;</span></div>
 <div class="block">JSON writer for JCS (RFC 8785) canonical output.
 
  <p>
@@ -152,7 +152,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JcsWriter.html" title="class in org.apache.juneau.marshall.jcs">JcsWriter</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(java.lang.Object)" class="member-name-link">append</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
+<div class="block">Writes the string representation of the specified object to the writer.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="JcsWriter.html" title="class in org.apache.juneau.marshall.jcs">JcsWriter</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stringValue(java.lang.String)" class="member-name-link">stringValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
@@ -164,10 +164,10 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.json.JsonWriter">Methods inherited from class&nbsp;org.apache.juneau.marshall.json.<a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></h3>
-<code><a href="../json/JsonWriter.html#append(char)">append</a>, <a href="../json/JsonWriter.html#append(char%5B%5D)">append</a>, <a href="../json/JsonWriter.html#append(int,char)">append</a>, <a href="../json/JsonWriter.html#append(int,java.lang.String)">append</a>, <a href="../json/JsonWriter.html#append(java.lang.String)">append</a>, <a href="../json/JsonWriter.html#appendIf(boolean,char)">appendIf</a>, <a href="../json/JsonWriter.html#appendIf(boolean,java.lang.String)">appendIf</a>, <a href="../json/JsonWriter.html#appendln(int,java.lang.String)">appendln</a>, <a href="../json/JsonWriter.html#appendln(java.lang.String)">appendln</a>, <a href="../json/JsonWriter.html#appendUri(java.lang.Object)">appendUri</a>, <a href="../json/JsonWriter.html#attr(java.lang.String)">attr</a>, <a href="../json/JsonWriter.html#cr(int)">cr</a>, <a href="../json/JsonWriter.html#cre(int)">cre</a>, <a href="../json/JsonWriter.html#create(java.io.Writer,boolean,int,boolean,char,boolean,boolean,org.apache.juneau.marshall.UriResolver)">create</a>, <a href="../json/JsonWriter.html#i(int)">i</a>, <a href="../json/JsonWriter.html#ie(int)">ie</a>, <a href="../json/JsonWriter.html#nl(int)">nl</a>, <a href="../json/JsonWriter.html#nlIf(boolean,int)">nlIf</a>, <a href="../json/JsonWriter.html#q()">q</a>, <a href="../json/JsonWriter.html#s()">s</a>, <a href="../json/JsonWriter.html#s(int)">s</a>, <a href="../json/JsonWriter.html#sIf(boolean)">sIf</a>, <a href="../json/JsonWriter.html#smi(int)">smi</a>, <a href="../json/JsonWriter.html#uriValue(java.lang.Object)">uriValue</a>, <a href="../json/JsonWriter.html#w(char)">w</a>, <a href="../json/JsonWriter.html#w(java.lang.String)">w</a></code></div>
+<code><a href="../json/JsonWriter.html#attr(java.lang.String)">attr</a>, <a href="../json/JsonWriter.html#create(java.io.Writer,boolean,int,boolean,char,boolean,boolean,org.apache.juneau.marshall.UriResolver)">create</a>, <a href="../json/JsonWriter.html#s(int)">s</a>, <a href="../json/JsonWriter.html#smi(int)">smi</a>, <a href="../json/JsonWriter.html#uriValue(java.lang.Object)">uriValue</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.SerializerWriter">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></h3>
-<code><a href="../serializer/SerializerWriter.html#close()">close</a>, <a href="../serializer/SerializerWriter.html#flush()">flush</a>, <a href="../serializer/SerializerWriter.html#write(char%5B%5D,int,int)">write</a></code></div>
+<code><a href="../serializer/SerializerWriter.html#append(char)">append</a>, <a href="../serializer/SerializerWriter.html#append(char%5B%5D)">append</a>, <a href="../serializer/SerializerWriter.html#append(int,char)">append</a>, <a href="../serializer/SerializerWriter.html#append(int,java.lang.String)">append</a>, <a href="../serializer/SerializerWriter.html#append(java.lang.String)">append</a>, <a href="../serializer/SerializerWriter.html#appendIf(boolean,char)">appendIf</a>, <a href="../serializer/SerializerWriter.html#appendIf(boolean,java.lang.String)">appendIf</a>, <a href="../serializer/SerializerWriter.html#appendln(int,java.lang.String)">appendln</a>, <a href="../serializer/SerializerWriter.html#appendln(java.lang.String)">appendln</a>, <a href="../serializer/SerializerWriter.html#appendUri(java.lang.Object)">appendUri</a>, <a href="../serializer/SerializerWriter.html#close()">close</a>, <a href="../serializer/SerializerWriter.html#cr(int)">cr</a>, <a href="../serializer/SerializerWriter.html#cre(int)">cre</a>, <a href="../serializer/SerializerWriter.html#flush()">flush</a>, <a href="../serializer/SerializerWriter.html#i(int)">i</a>, <a href="../serializer/SerializerWriter.html#ie(int)">ie</a>, <a href="../serializer/SerializerWriter.html#nl(int)">nl</a>, <a href="../serializer/SerializerWriter.html#nlIf(boolean,int)">nlIf</a>, <a href="../serializer/SerializerWriter.html#q()">q</a>, <a href="../serializer/SerializerWriter.html#s()">s</a>, <a href="../serializer/SerializerWriter.html#self()">self</a>, <a href="../serializer/SerializerWriter.html#sIf(boolean)">sIf</a>, <a href="../serializer/SerializerWriter.html#w(char)">w</a>, <a href="../serializer/SerializerWriter.html#w(java.lang.String)">w</a>, <a href="../serializer/SerializerWriter.html#write(char%5B%5D,int,int)">write</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.io.Writer">Methods inherited from class&nbsp;java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#append(java.lang.CharSequence)" title="class or interface in java.io" class="external-link">append</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#append(java.lang.CharSequence,int,int)" title="class or interface in java.io" class="external-link">append</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#nullWriter()" title="class or interface in java.io" class="external-link">nullWriter</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(char%5B%5D)" title="class or interface in java.io" class="external-link">write</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(int)" title="class or interface in java.io" class="external-link">write</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(java.lang.String)" title="class or interface in java.io" class="external-link">write</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html#write(java.lang.String,int,int)" title="class or interface in java.io" class="external-link">write</a></code></div>
@@ -223,12 +223,13 @@ loadScripts(document, 'script');</script>
 <h3>append</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JcsWriter.html" title="class in org.apache.juneau.marshall.jcs">JcsWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsWriter.html#line-61">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerWriter.html#append(java.lang.Object)">SerializerWriter</a></code></span></div>
-<div class="block">Writes the specified text to the writer if it isn't <jk>null</jk>.</div>
+<div class="block">Writes the string representation of the specified object to the writer.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../json/JsonWriter.html#append(java.lang.Object)">append</a></code>&nbsp;in class&nbsp;<code><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></code></dd>
+<dd><code><a href="../serializer/SerializerWriter.html#append(java.lang.Object)">append</a></code>&nbsp;in class&nbsp;<code><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;<a href="JcsWriter.html" title="class in org.apache.juneau.marshall.jcs">JcsWriter</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The text to write.</dd>
+<dd><code>value</code> - The object to write.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -242,9 +243,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Serializes the specified object as a JSON string value.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../json/JsonWriter.html#stringValue(java.lang.String)">stringValue</a></code>&nbsp;in class&nbsp;<code><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></code></dd>
+<dd><code><a href="../json/JsonWriter.html#stringValue(java.lang.String)">stringValue</a></code>&nbsp;in class&nbsp;<code><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;<a href="JcsWriter.html" title="class in org.apache.juneau.marshall.jcs">JcsWriter</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>s</code> - The object being serialized.</dd>
+<dd><code>s</code> - The object being serialized.
+   <br>Can be <jk>null</jk> (nothing is written).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

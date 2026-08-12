@@ -60,23 +60,25 @@
 <span class="source-line-no">047</span><span id="line-47">    * Copy constructor.</span>
 <span class="source-line-no">048</span><span id="line-48">    *</span>
 <span class="source-line-no">049</span><span id="line-49">    * @param copyFrom The object to copy.</span>
-<span class="source-line-no">050</span><span id="line-50">    */</span>
-<span class="source-line-no">051</span><span id="line-51">   public SeeOtherRoot(SeeOtherRoot copyFrom) {</span>
-<span class="source-line-no">052</span><span id="line-52">      super(copyFrom);</span>
-<span class="source-line-no">053</span><span id="line-53">   }</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   /**</span>
-<span class="source-line-no">056</span><span id="line-56">    * Constructor with no redirect.</span>
-<span class="source-line-no">057</span><span id="line-57">    * &lt;p&gt;</span>
-<span class="source-line-no">058</span><span id="line-58">    * Used for end-to-end interfaces.</span>
-<span class="source-line-no">059</span><span id="line-59">    *</span>
-<span class="source-line-no">060</span><span id="line-60">    * @param content Message to send as the response.</span>
-<span class="source-line-no">061</span><span id="line-61">    */</span>
-<span class="source-line-no">062</span><span id="line-62">   public SeeOtherRoot(String content) {</span>
-<span class="source-line-no">063</span><span id="line-63">      super(content);</span>
-<span class="source-line-no">064</span><span id="line-64">      setLocation("servlet:/");</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66">}</span>
+<span class="source-line-no">050</span><span id="line-50">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">051</span><span id="line-51">    */</span>
+<span class="source-line-no">052</span><span id="line-52">   public SeeOtherRoot(SeeOtherRoot copyFrom) {</span>
+<span class="source-line-no">053</span><span id="line-53">      super(copyFrom);</span>
+<span class="source-line-no">054</span><span id="line-54">   }</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">   /**</span>
+<span class="source-line-no">057</span><span id="line-57">    * Constructor with no redirect.</span>
+<span class="source-line-no">058</span><span id="line-58">    * &lt;p&gt;</span>
+<span class="source-line-no">059</span><span id="line-59">    * Used for end-to-end interfaces.</span>
+<span class="source-line-no">060</span><span id="line-60">    *</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param content Message to send as the response.</span>
+<span class="source-line-no">062</span><span id="line-62">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; for no response body.</span>
+<span class="source-line-no">063</span><span id="line-63">    */</span>
+<span class="source-line-no">064</span><span id="line-64">   public SeeOtherRoot(String content) {</span>
+<span class="source-line-no">065</span><span id="line-65">      super(content);</span>
+<span class="source-line-no">066</span><span id="line-66">      setLocation("servlet:/");</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68">}</span>
 
 
 

@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
  <ol>
    <li>Negotiating the response's <code>Accept</code> to a matched <a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a>.
    <li>Building a request-configured <a href="../../../marshall/serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerSession</code></a>
-       and calling <a href="../../../marshall/stream/RecordWritable.html#serializeRecords(java.lang.Object)"><code>serializeRecords(output)</code></a> on it.
+       and calling <a href="../../../marshall/stream/RecordWritable.html#writeRecords(java.lang.Object)"><code>writeRecords(output)</code></a> on it.
    <li>Verifying the returned cursor is assignable to the declared parameter type.
  </ol>
 
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>paramInfo</code> - The Java method parameter being resolved.</dd>
+<dd><code>paramInfo</code> - The Java method parameter being resolved. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="RecordWriterArg.html" title="class in org.apache.juneau.rest.server.arg"><code>RecordWriterArg</code></a>, or <jk>null</jk> if the parameter type is not
    <a href="../../../marshall/stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> or a subtype (other than <a href="../../../marshall/stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> &mdash; that case is

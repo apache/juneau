@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">    *</span>
 <span class="source-line-no">085</span><span id="line-85">    * @param value</span>
 <span class="source-line-no">086</span><span id="line-86">    *    The header value.</span>
-<span class="source-line-no">087</span><span id="line-87">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">087</span><span id="line-87">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">088</span><span id="line-88">    */</span>
 <span class="source-line-no">089</span><span id="line-89">   public NoTrace(Boolean value) {</span>
 <span class="source-line-no">090</span><span id="line-90">      super(NAME, value);</span>
@@ -109,7 +109,7 @@
 <span class="source-line-no">096</span><span id="line-96">    * @param value</span>
 <span class="source-line-no">097</span><span id="line-97">    *    The header value.</span>
 <span class="source-line-no">098</span><span id="line-98">    *    &lt;br&gt;Must be parsable by {@link Boolean#parseBoolean(String)}.</span>
-<span class="source-line-no">099</span><span id="line-99">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">099</span><span id="line-99">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">100</span><span id="line-100">    */</span>
 <span class="source-line-no">101</span><span id="line-101">   public NoTrace(String value) {</span>
 <span class="source-line-no">102</span><span id="line-102">      super(NAME, value);</span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line-110">    *</span>
 <span class="source-line-no">111</span><span id="line-111">    * @param value</span>
 <span class="source-line-no">112</span><span id="line-112">    *    The supplier of the header value.</span>
-<span class="source-line-no">113</span><span id="line-113">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">113</span><span id="line-113">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">114</span><span id="line-114">    */</span>
 <span class="source-line-no">115</span><span id="line-115">   public NoTrace(Supplier&lt;Boolean&gt; value) {</span>
 <span class="source-line-no">116</span><span id="line-116">      super(NAME, value);</span>

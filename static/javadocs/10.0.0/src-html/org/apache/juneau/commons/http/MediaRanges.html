@@ -99,7 +99,7 @@
 <span class="source-line-no">086</span><span id="line-86">   /**</span>
 <span class="source-line-no">087</span><span id="line-87">    * Returns a parsed &lt;c&gt;Accept&lt;/c&gt; header value.</span>
 <span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param value The raw &lt;c&gt;Accept&lt;/c&gt; header value.</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param value The raw &lt;c&gt;Accept&lt;/c&gt; header value.  Can be &lt;jk&gt;null&lt;/jk&gt; or empty (returns {@link #EMPTY}).</span>
 <span class="source-line-no">090</span><span id="line-90">    * @return A parsed &lt;c&gt;Accept&lt;/c&gt; header value.</span>
 <span class="source-line-no">091</span><span id="line-91">    */</span>
 <span class="source-line-no">092</span><span id="line-92">   public static MediaRanges of(String value) {</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line-94">   }</span>
 <span class="source-line-no">095</span><span id="line-95"></span>
 <span class="source-line-no">096</span><span id="line-96">   private static HeaderElement[] parse(String value) {</span>
-<span class="source-line-no">097</span><span id="line-97">      return HeaderValueParser.parseElements(emptyIfNull(trim(value)));</span>
+<span class="source-line-no">097</span><span id="line-97">      return HeaderValueParser.readElements(emptyIfNull(trim(value)));</span>
 <span class="source-line-no">098</span><span id="line-98">   }</span>
 <span class="source-line-no">099</span><span id="line-99"></span>
 <span class="source-line-no">100</span><span id="line-100">   private final MediaRange[] ranges;</span>
@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line-119">   /**</span>
 <span class="source-line-no">120</span><span id="line-120">    * Constructor.</span>
 <span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @param value The &lt;c&gt;Accept&lt;/c&gt; header value.</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param value The &lt;c&gt;Accept&lt;/c&gt; header value.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty string).</span>
 <span class="source-line-no">123</span><span id="line-123">    */</span>
 <span class="source-line-no">124</span><span id="line-124">   public MediaRanges(String value) {</span>
 <span class="source-line-no">125</span><span id="line-125">      this(parse(value));</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">    * &lt;p&gt;</span>
 <span class="source-line-no">185</span><span id="line-185">    * See &lt;a class="doclink" href="https://www.w3.org/TR/activitypub/#retrieving-objects"&gt;ActivityPub / Retrieving Objects&lt;/a&gt;</span>
 <span class="source-line-no">186</span><span id="line-186">    *</span>
-<span class="source-line-no">187</span><span id="line-187">    * @param mediaTypes The media types to match against.</span>
+<span class="source-line-no">187</span><span id="line-187">    * @param mediaTypes The media types to match against.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;c&gt;-1&lt;/c&gt;).</span>
 <span class="source-line-no">188</span><span id="line-188">    * @return The index into the array of the best match, or &lt;c&gt;-1&lt;/c&gt; if no suitable matches could be found.</span>
 <span class="source-line-no">189</span><span id="line-189">    */</span>
 <span class="source-line-no">190</span><span id="line-190">   public int match(List&lt;? extends MediaType&gt; mediaTypes) {</span>
@@ -242,7 +242,7 @@
 <span class="source-line-no">229</span><span id="line-229"></span>
 <span class="source-line-no">230</span><span id="line-230">   @Override</span>
 <span class="source-line-no">231</span><span id="line-231">   public boolean equals(Object o) {</span>
-<span class="source-line-no">232</span><span id="line-232">      return o instanceof MediaRanges other &amp;&amp; eq(this, other, (x, y) -&gt; eq(x.string, y.string));</span>
+<span class="source-line-no">232</span><span id="line-232">      return o instanceof MediaRanges o2 &amp;&amp; eq(this, o2, (x, y) -&gt; eq(x.string, y.string));</span>
 <span class="source-line-no">233</span><span id="line-233">   }</span>
 <span class="source-line-no">234</span><span id="line-234"></span>
 <span class="source-line-no">235</span><span id="line-235">   @Override</span>

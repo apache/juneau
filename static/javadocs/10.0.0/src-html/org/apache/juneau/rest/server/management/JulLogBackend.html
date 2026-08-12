@@ -30,64 +30,72 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.management;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.util.logging.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * {@link LogBackend} implementation for {@link java.util.logging java.util.logging} (JUL).</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> * This is the default backend driven by {@link LoggersManager} when no {@link LoggersSettings} declares another</span>
-<span class="source-line-no">027</span><span id="line-27"> * one, and it carries the original v1 {@code /loggers} behavior so the JUL path is unchanged: reads report each</span>
-<span class="source-line-no">028</span><span id="line-28"> * logger's own ({@link Logger#getLevel() configured}) level (empty string when inherited), the root logger is</span>
-<span class="source-line-no">029</span><span id="line-29"> * keyed {@code "ROOT"}, and sets are process-lifetime-only via {@link Logger#setLevel(Level)}.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * @since 10.0.0</span>
-<span class="source-line-no">032</span><span id="line-32"> */</span>
-<span class="source-line-no">033</span><span id="line-33">// Singleton is appropriate for a JUL logging backend — single shared instance per JVM.</span>
-<span class="source-line-no">034</span><span id="line-34">@SuppressWarnings("java:S6548")</span>
-<span class="source-line-no">035</span><span id="line-35">public class JulLogBackend implements LogBackend {</span>
-<span class="source-line-no">036</span><span id="line-36"></span>
-<span class="source-line-no">037</span><span id="line-37">   /** Process-wide shared instance (stateless). */</span>
-<span class="source-line-no">038</span><span id="line-38">   public static final JulLogBackend INSTANCE = new JulLogBackend();</span>
-<span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">   private JulLogBackend() {}</span>
-<span class="source-line-no">041</span><span id="line-41"></span>
-<span class="source-line-no">042</span><span id="line-42">   @Override /* LogBackend */</span>
-<span class="source-line-no">043</span><span id="line-43">   public Map&lt;String,String&gt; getLevels() {</span>
-<span class="source-line-no">044</span><span id="line-44">      var out = new TreeMap&lt;String,String&gt;();</span>
-<span class="source-line-no">045</span><span id="line-45">      var lm = LogManager.getLogManager();</span>
-<span class="source-line-no">046</span><span id="line-46">      var names = Collections.list(lm.getLoggerNames());</span>
-<span class="source-line-no">047</span><span id="line-47">      for (var name : names) {</span>
-<span class="source-line-no">048</span><span id="line-48">         var logger = lm.getLogger(name);</span>
-<span class="source-line-no">049</span><span id="line-49">         if (logger == null)</span>
-<span class="source-line-no">050</span><span id="line-50">            continue;</span>
-<span class="source-line-no">051</span><span id="line-51">         var level = logger.getLevel();</span>
-<span class="source-line-no">052</span><span id="line-52">         var key = name.isEmpty() ? "ROOT" : name;</span>
-<span class="source-line-no">053</span><span id="line-53">         out.put(key, level == null ? "" : level.getName());</span>
-<span class="source-line-no">054</span><span id="line-54">      }</span>
-<span class="source-line-no">055</span><span id="line-55">      return out;</span>
-<span class="source-line-no">056</span><span id="line-56">   }</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   @Override /* LogBackend */</span>
-<span class="source-line-no">059</span><span id="line-59">   public String getLevel(String name) {</span>
-<span class="source-line-no">060</span><span id="line-60">      var logger = LogManager.getLogManager().getLogger(resolveName(name));</span>
-<span class="source-line-no">061</span><span id="line-61">      if (logger == null)</span>
-<span class="source-line-no">062</span><span id="line-62">         return null;</span>
-<span class="source-line-no">063</span><span id="line-63">      var level = logger.getLevel();</span>
-<span class="source-line-no">064</span><span id="line-64">      return level == null ? "" : level.getName();</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   @Override /* LogBackend */</span>
-<span class="source-line-no">068</span><span id="line-68">   public void setLevel(String name, String level) {</span>
-<span class="source-line-no">069</span><span id="line-69">      var logger = Logger.getLogger(resolveName(name));</span>
-<span class="source-line-no">070</span><span id="line-70">      logger.setLevel(level == null || level.isBlank() ? null : Level.parse(level.trim()));</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   private static String resolveName(String name) {</span>
-<span class="source-line-no">074</span><span id="line-74">      // The root logger is the empty-string-named logger; expose it under the friendlier "ROOT" alias.</span>
-<span class="source-line-no">075</span><span id="line-75">      return (name == null || name.equals("ROOT")) ? "" : name;</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77">}</span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.concurrent.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.logging.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">/**</span>
+<span class="source-line-no">024</span><span id="line-24"> * {@link LogBackend} implementation for {@link java.util.logging java.util.logging} (JUL).</span>
+<span class="source-line-no">025</span><span id="line-25"> *</span>
+<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * This is the default backend driven by {@link LoggersManager} when no {@link LoggersSettings} declares another</span>
+<span class="source-line-no">028</span><span id="line-28"> * one, and it carries the original v1 {@code /loggers} behavior so the JUL path is unchanged: reads report each</span>
+<span class="source-line-no">029</span><span id="line-29"> * logger's own ({@link Logger#getLevel() configured}) level (empty string when inherited), the root logger is</span>
+<span class="source-line-no">030</span><span id="line-30"> * keyed {@code "ROOT"}, and sets are process-lifetime-only via {@link Logger#setLevel(Level)}.</span>
+<span class="source-line-no">031</span><span id="line-31"> *</span>
+<span class="source-line-no">032</span><span id="line-32"> * @since 10.0.0</span>
+<span class="source-line-no">033</span><span id="line-33"> */</span>
+<span class="source-line-no">034</span><span id="line-34">// Singleton is appropriate for a JUL logging backend — single shared instance per JVM.</span>
+<span class="source-line-no">035</span><span id="line-35">@SuppressWarnings("java:S6548")</span>
+<span class="source-line-no">036</span><span id="line-36">public class JulLogBackend implements LogBackend {</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">   /** Process-wide shared instance. */</span>
+<span class="source-line-no">039</span><span id="line-39">   public static final JulLogBackend INSTANCE = new JulLogBackend();</span>
+<span class="source-line-no">040</span><span id="line-40"></span>
+<span class="source-line-no">041</span><span id="line-41">   // Strong references to loggers whose levels we've explicitly set.  The JUL LogManager holds only weak</span>
+<span class="source-line-no">042</span><span id="line-42">   // references to loggers, so a logger with no other strong referent can be garbage-collected between a</span>
+<span class="source-line-no">043</span><span id="line-43">   // set and a subsequent read — silently dropping the runtime-configured level (the endpoint's set is</span>
+<span class="source-line-no">044</span><span id="line-44">   // documented as process-lifetime-only) and causing reads to 404.  Pinning here keeps set levels effective.</span>
+<span class="source-line-no">045</span><span id="line-45">   private final Set&lt;Logger&gt; pinned = ConcurrentHashMap.newKeySet();</span>
+<span class="source-line-no">046</span><span id="line-46"></span>
+<span class="source-line-no">047</span><span id="line-47">   private JulLogBackend() {}</span>
+<span class="source-line-no">048</span><span id="line-48"></span>
+<span class="source-line-no">049</span><span id="line-49">   @Override /* LogBackend */</span>
+<span class="source-line-no">050</span><span id="line-50">   public Map&lt;String,String&gt; getLevels() {</span>
+<span class="source-line-no">051</span><span id="line-51">      var out = new TreeMap&lt;String,String&gt;();</span>
+<span class="source-line-no">052</span><span id="line-52">      var lm = LogManager.getLogManager();</span>
+<span class="source-line-no">053</span><span id="line-53">      var names = Collections.list(lm.getLoggerNames());</span>
+<span class="source-line-no">054</span><span id="line-54">      for (var name : names) {</span>
+<span class="source-line-no">055</span><span id="line-55">         var logger = lm.getLogger(name);</span>
+<span class="source-line-no">056</span><span id="line-56">         if (logger == null)</span>
+<span class="source-line-no">057</span><span id="line-57">            continue;</span>
+<span class="source-line-no">058</span><span id="line-58">         var level = logger.getLevel();</span>
+<span class="source-line-no">059</span><span id="line-59">         var key = name.isEmpty() ? "ROOT" : name;</span>
+<span class="source-line-no">060</span><span id="line-60">         out.put(key, level == null ? "" : level.getName());</span>
+<span class="source-line-no">061</span><span id="line-61">      }</span>
+<span class="source-line-no">062</span><span id="line-62">      return out;</span>
+<span class="source-line-no">063</span><span id="line-63">   }</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   @Override /* LogBackend */</span>
+<span class="source-line-no">066</span><span id="line-66">   public String getLevel(String name) {</span>
+<span class="source-line-no">067</span><span id="line-67">      var logger = LogManager.getLogManager().getLogger(resolveName(name));</span>
+<span class="source-line-no">068</span><span id="line-68">      if (logger == null)</span>
+<span class="source-line-no">069</span><span id="line-69">         return null;</span>
+<span class="source-line-no">070</span><span id="line-70">      var level = logger.getLevel();</span>
+<span class="source-line-no">071</span><span id="line-71">      return level == null ? "" : level.getName();</span>
+<span class="source-line-no">072</span><span id="line-72">   }</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   @Override /* LogBackend */</span>
+<span class="source-line-no">075</span><span id="line-75">   public void setLevel(String name, String level) {</span>
+<span class="source-line-no">076</span><span id="line-76">      var logger = Logger.getLogger(resolveName(name));</span>
+<span class="source-line-no">077</span><span id="line-77">      logger.setLevel(level == null || level.isBlank() ? null : Level.parse(level.trim()));</span>
+<span class="source-line-no">078</span><span id="line-78">      pinned.add(logger);</span>
+<span class="source-line-no">079</span><span id="line-79">   }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   private static String resolveName(String name) {</span>
+<span class="source-line-no">082</span><span id="line-82">      // The root logger is the empty-string-named logger; expose it under the friendlier "ROOT" alias.</span>
+<span class="source-line-no">083</span><span id="line-83">      return (name == null || name.equals("ROOT")) ? "" : name;</span>
+<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">085</span><span id="line-85">}</span>
 
 
 

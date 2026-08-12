@@ -474,7 +474,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>e</code> - The parsed media type string.</dd>
-<dd><code>parameters</code> - Optional parameters.</dd>
+<dd><code>parameters</code> - Optional parameters.  If <jk>null</jk>, they're pulled from the media type string.</dd>
 </dl>
 </section>
 </li>
@@ -485,7 +485,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mt</code> - The media type string.</dd>
+<dd><code>mt</code> - The media type string.  Can be <jk>null</jk> (treated as an empty string).</dd>
 </dl>
 </section>
 </li>
@@ -497,7 +497,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mt</code> - The media type string.</dd>
+<dd><code>mt</code> - The media type string.  Can be <jk>null</jk> (treated as an empty string).</dd>
 <dd><code>parameters</code> - The media type parameters.  If <jk>null</jk>, they're pulled from the media type string.</dd>
 </dl>
 </section>
@@ -693,12 +693,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="hasSubType(java.lang.String)">
 <h3>hasSubType</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-320">hasSubType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;st)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-321">hasSubType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;st)</span></div>
 <div class="block">Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>st</code> - The subtype string.
-   Case is ignored.</dd>
+   Case is ignored.
+   Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the subtype contains the specified subtype string.</dd>
 </dl>
@@ -707,7 +708,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isMetaSubtype()">
 <h3>isMetaSubtype</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-333">isMetaSubtype</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-334">isMetaSubtype</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this media type subtype contains the <js>'*'</js> meta character.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -718,7 +719,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="match(java.util.List)">
 <h3>match</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-350">match</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;&nbsp;mediaTypes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-351">match</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&gt;&nbsp;mediaTypes)</span></div>
 <div class="block">Given a list of media types, returns the best match for this <c>Content-Type</c> header.
 
  <p>
@@ -731,7 +732,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  present in the header.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mediaTypes</code> - The media types to match against.</dd>
+<dd><code>mediaTypes</code> - The media types to match against.  Must not be <jk>null</jk> or a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.</dd>
 </dl>
@@ -740,7 +741,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="match(org.apache.juneau.commons.http.MediaType,boolean)">
 <h3>match</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-406">match</a></span><wbr><span class="parameters">(<a href="MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-407">match</a></span><wbr><span class="parameters">(<a href="MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>&nbsp;o,
  boolean&nbsp;allowExtraSubTypes)</span></div>
 <div class="block">Returns a match metric against the specified media type where a larger number represents a better match.
 
@@ -749,8 +750,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <br>The comparison media type must not.
 
  <ul>
-   <li>Exact matches (e.g. <js>"text/json"</js>/</js>"text/json"</js>) should match
-      better than meta-character matches (e.g. <js>"text/*"</js>/</js>"text/json"</js>)
+   <li>Exact matches (e.g. <js>"text/json"</js>/<js>"text/json"</js>) should match
+      better than meta-character matches (e.g. <js>"text/*"</js>/<js>"text/json"</js>)
    <li>The comparison media type can have additional subtype tokens (e.g. <js>"text/json+foo"</js>)
       that will not prevent a match if the <c>allowExtraSubTypes</c> flag is set.
       The reverse is not true, e.g. the comparison media type must contain all subtype tokens found in the
@@ -779,7 +780,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The media type to compare with.</dd>
+<dd><code>o</code> - The media type to compare with.  Can be <jk>null</jk> (returns <c>-1</c>).</dd>
 <dd><code>allowExtraSubTypes</code> - If <jk>true</jk>,</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the media types match.</dd>
@@ -789,7 +790,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-458">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/http/MediaType.html#line-459">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

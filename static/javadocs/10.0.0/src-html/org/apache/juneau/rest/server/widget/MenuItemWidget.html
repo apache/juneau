@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60">    *</span>
 <span class="source-line-no">061</span><span id="line-61">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">062</span><span id="line-62">    *    &lt;ja&gt;@Override&lt;/ja&gt;</span>
-<span class="source-line-no">063</span><span id="line-63">    *    &lt;jk&gt;public&lt;/jk&gt; String getBeforeShowScript(RestRequest &lt;jv&gt;req&lt;/jv&gt;) {</span>
+<span class="source-line-no">063</span><span id="line-63">    *    &lt;jk&gt;public&lt;/jk&gt; String getBeforeShowScript(RestRequest &lt;jv&gt;req&lt;/jv&gt;, RestResponse &lt;jv&gt;res&lt;/jv&gt;) {</span>
 <span class="source-line-no">064</span><span id="line-64">    *       &lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;""&lt;/js&gt;</span>
 <span class="source-line-no">065</span><span id="line-65">    *          + &lt;js&gt;"\n   var xhr = new XMLHttpRequest();"&lt;/js&gt;</span>
 <span class="source-line-no">066</span><span id="line-66">    *          + &lt;js&gt;"\n   xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&amp;amp;v=id,name', true);"&lt;/js&gt;</span>
@@ -101,8 +101,8 @@
 <span class="source-line-no">088</span><span id="line-88">    *</span>
 <span class="source-line-no">089</span><span id="line-89">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">090</span><span id="line-90">    *    &lt;ja&gt;@Override&lt;/ja&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    *    &lt;jk&gt;public&lt;/jk&gt; String getBeforeShowScript(RestRequest &lt;jv&gt;req&lt;/jv&gt;) &lt;jk&gt;throws&lt;/jk&gt; Exception {</span>
-<span class="source-line-no">092</span><span id="line-92">    *       &lt;jk&gt;return&lt;/jk&gt; loadScript(&lt;js&gt;"AddOrderMenuItem_beforeShow.js"&lt;/js&gt;);</span>
+<span class="source-line-no">091</span><span id="line-91">    *    &lt;jk&gt;public&lt;/jk&gt; String getBeforeShowScript(RestRequest &lt;jv&gt;req&lt;/jv&gt;, RestResponse &lt;jv&gt;res&lt;/jv&gt;) &lt;jk&gt;throws&lt;/jk&gt; Exception {</span>
+<span class="source-line-no">092</span><span id="line-92">    *       &lt;jk&gt;return&lt;/jk&gt; loadScript(&lt;jv&gt;req&lt;/jv&gt;, &lt;js&gt;"AddOrderMenuItem_beforeShow.js"&lt;/js&gt;);</span>
 <span class="source-line-no">093</span><span id="line-93">    *    }</span>
 <span class="source-line-no">094</span><span id="line-94">    * &lt;/p&gt;</span>
 <span class="source-line-no">095</span><span id="line-95">    *</span>
@@ -190,8 +190,8 @@
 <span class="source-line-no">177</span><span id="line-177">            .build();</span>
 <span class="source-line-no">178</span><span id="line-178">         // @formatter:on</span>
 <span class="source-line-no">179</span><span id="line-179">         session.indent = 2;</span>
-<span class="source-line-no">180</span><span id="line-180">         try {</span>
-<span class="source-line-no">181</span><span id="line-181">            session.serialize(o, sb);</span>
+<span class="source-line-no">180</span><span id="line-180">         try (Writer w = new StringBuilderWriter(sb)) {</span>
+<span class="source-line-no">181</span><span id="line-181">            session.write(o, w);</span>
 <span class="source-line-no">182</span><span id="line-182">         } catch (Exception e) {</span>
 <span class="source-line-no">183</span><span id="line-183">            throw toRex(e);</span>
 <span class="source-line-no">184</span><span id="line-184">         }</span>

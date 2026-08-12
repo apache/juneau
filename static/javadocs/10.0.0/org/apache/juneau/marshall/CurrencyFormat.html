@@ -353,7 +353,7 @@ not permitted.)</div>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html#ROOT" title="class or interface in java.util" class="external-link"><code>Locale.ROOT</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dd><code>format</code> - The configured format. Can be <jk>null</jk> (treated as <a href="#ISO_CODE"><code>ISO_CODE</code></a>).</dd>
 <dd><code>locale</code> - The locale used by <a href="#SYMBOL"><code>SYMBOL</code></a> / <a href="#DISPLAY_NAME"><code>DISPLAY_NAME</code></a>. Can be <jk>null</jk>
    (treated as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html#ROOT" title="class or interface in java.util" class="external-link"><code>Locale.ROOT</code></a>).</dd>
@@ -377,7 +377,7 @@ not permitted.)</div>
  match a symbol, prefers the locale's default currency.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank.</dd>
+<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
 <dd><code>format</code> - The configured format hint. Can be <jk>null</jk> (treated as <a href="#ISO_CODE"><code>ISO_CODE</code></a>).</dd>
 <dd><code>locale</code> - The locale used to disambiguate <a href="#SYMBOL"><code>SYMBOL</code></a> / <a href="#DISPLAY_NAME"><code>DISPLAY_NAME</code></a> matches.
    Can be <jk>null</jk> (treated as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html#ROOT" title="class or interface in java.util" class="external-link"><code>Locale.ROOT</code></a>).</dd>

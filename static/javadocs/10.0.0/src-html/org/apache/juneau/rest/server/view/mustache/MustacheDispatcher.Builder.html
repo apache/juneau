@@ -256,7 +256,7 @@
 <span class="source-line-no">243</span><span id="line-243">      } catch (IOException | BasicHttpException ex) {</span>
 <span class="source-line-no">244</span><span id="line-244">         throw ex;</span>
 <span class="source-line-no">245</span><span id="line-245">      } catch (Exception ex) {</span>
-<span class="source-line-no">246</span><span id="line-246">         throw new InternalServerError(ex, "Mustache render failed for ''{0}''", safeTemplate);</span>
+<span class="source-line-no">246</span><span id="line-246">         throw new InternalServerError(ex, "Mustache render failed for '%s'", safeTemplate);</span>
 <span class="source-line-no">247</span><span id="line-247">      }</span>
 <span class="source-line-no">248</span><span id="line-248">   }</span>
 <span class="source-line-no">249</span><span id="line-249"></span>
@@ -284,7 +284,7 @@
 <span class="source-line-no">271</span><span id="line-271">         bp = "/" + bp;</span>
 <span class="source-line-no">272</span><span id="line-272">      if (resolved.startsWith(bp))</span>
 <span class="source-line-no">273</span><span id="line-273">         return resolved.substring(bp.length());</span>
-<span class="source-line-no">274</span><span id="line-274">      throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
+<span class="source-line-no">274</span><span id="line-274">      throw iaex("Resolved path '%s' does not start with base '%s'", resolved, bp);</span>
 <span class="source-line-no">275</span><span id="line-275">   }</span>
 <span class="source-line-no">276</span><span id="line-276"></span>
 <span class="source-line-no">277</span><span id="line-277">   /**</span>

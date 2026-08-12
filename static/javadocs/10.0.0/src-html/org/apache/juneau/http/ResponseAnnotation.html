@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -151,21 +151,21 @@
 <span class="source-line-no">138</span><span id="line-138"></span>
 <span class="source-line-no">139</span><span id="line-139">      Instance(ResponseAnnotation.Builder b) {</span>
 <span class="source-line-no">140</span><span id="line-140">         super(b);</span>
-<span class="source-line-no">141</span><span id="line-141">         description = copyOf(b.description);</span>
-<span class="source-line-no">142</span><span id="line-142">         examples = copyOf(b.examples);</span>
-<span class="source-line-no">143</span><span id="line-143">         headers = copyOf(b.headers);</span>
+<span class="source-line-no">141</span><span id="line-141">         description = cp(b.description);</span>
+<span class="source-line-no">142</span><span id="line-142">         examples = cp(b.examples);</span>
+<span class="source-line-no">143</span><span id="line-143">         headers = cp(b.headers);</span>
 <span class="source-line-no">144</span><span id="line-144">         schema = b.schema;</span>
 <span class="source-line-no">145</span><span id="line-145">         summary = b.summary;</span>
 <span class="source-line-no">146</span><span id="line-146">      }</span>
 <span class="source-line-no">147</span><span id="line-147"></span>
 <span class="source-line-no">148</span><span id="line-148">      @Override /* Overridden from Response */</span>
 <span class="source-line-no">149</span><span id="line-149">      public String[] examples() {</span>
-<span class="source-line-no">150</span><span id="line-150">         return examples;</span>
+<span class="source-line-no">150</span><span id="line-150">         return cp(examples);</span>
 <span class="source-line-no">151</span><span id="line-151">      }</span>
 <span class="source-line-no">152</span><span id="line-152"></span>
 <span class="source-line-no">153</span><span id="line-153">      @Override /* Overridden from Response */</span>
 <span class="source-line-no">154</span><span id="line-154">      public Header[] headers() {</span>
-<span class="source-line-no">155</span><span id="line-155">         return headers;</span>
+<span class="source-line-no">155</span><span id="line-155">         return cp(headers);</span>
 <span class="source-line-no">156</span><span id="line-156">      }</span>
 <span class="source-line-no">157</span><span id="line-157"></span>
 <span class="source-line-no">158</span><span id="line-158">      @Override /* Overridden from Response */</span>
@@ -180,7 +180,7 @@
 <span class="source-line-no">167</span><span id="line-167"></span>
 <span class="source-line-no">168</span><span id="line-168">      @Override /* Overridden from annotation */</span>
 <span class="source-line-no">169</span><span id="line-169">      public String[] description() {</span>
-<span class="source-line-no">170</span><span id="line-170">         return description;</span>
+<span class="source-line-no">170</span><span id="line-170">         return cp(description);</span>
 <span class="source-line-no">171</span><span id="line-171">      }</span>
 <span class="source-line-no">172</span><span id="line-172">   }</span>
 <span class="source-line-no">173</span><span id="line-173"></span>

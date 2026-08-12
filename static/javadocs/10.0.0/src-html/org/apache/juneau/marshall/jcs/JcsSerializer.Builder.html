@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56"> *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; MyBean().name(&lt;js&gt;"Alice"&lt;/js&gt;).age(30);</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;jc&gt;// Serialize to canonical JSON.&lt;/jc&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *    String &lt;jv&gt;json&lt;/jv&gt; = JcsSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;bean&lt;/jv&gt;);</span>
+<span class="source-line-no">059</span><span id="line-59"> *    String &lt;jv&gt;json&lt;/jv&gt; = JcsSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;bean&lt;/jv&gt;);</span>
 <span class="source-line-no">060</span><span id="line-60"> *</span>
 <span class="source-line-no">061</span><span id="line-61"> *    &lt;jc&gt;// Or use the Jcs marshaller convenience method.&lt;/jc&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *    String &lt;jv&gt;json&lt;/jv&gt; = Jcs.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;bean&lt;/jv&gt;);</span>
@@ -201,37 +201,37 @@
 <span class="source-line-no">188</span><span id="line-188"></span>
 <span class="source-line-no">189</span><span id="line-189">   /**</span>
 <span class="source-line-no">190</span><span id="line-190">    * Convenience delegator (default session args) for the raw-JSON token writer.  Real impl on</span>
-<span class="source-line-no">191</span><span id="line-191">    * {@link JcsSerializerSession#serializeTokens(Object)}.</span>
+<span class="source-line-no">191</span><span id="line-191">    * {@link JcsSerializerSession#writeTokens(Object)}.</span>
 <span class="source-line-no">192</span><span id="line-192">    *</span>
 <span class="source-line-no">193</span><span id="line-193">    * &lt;p&gt;</span>
 <span class="source-line-no">194</span><span id="line-194">    * &lt;b&gt;Note:&lt;/b&gt; the cursor's structural methods ({@link TokenWriter#startObject() startObject},</span>
 <span class="source-line-no">195</span><span id="line-195">    * {@link TokenWriter#fieldName(String) fieldName}, {@link TokenWriter#string(String) string}, ...)</span>
 <span class="source-line-no">196</span><span id="line-196">    * produce ordinary JSON; they do &lt;em&gt;not&lt;/em&gt; apply the JCS canonicalization rules (sorted</span>
-<span class="source-line-no">197</span><span id="line-197">    * keys, normalized number formatting, etc.) that {@link #serialize(Object)} produces.  The</span>
+<span class="source-line-no">197</span><span id="line-197">    * keys, normalized number formatting, etc.) that {@link #write(Object)} produces.  The</span>
 <span class="source-line-no">198</span><span id="line-198">    * {@link TokenWriter#object(Object) object(Object)} bridge is &lt;b&gt;disabled&lt;/b&gt; on this writer.</span>
-<span class="source-line-no">199</span><span id="line-199">    * Use {@link #serialize(Object)} for canonical output.</span>
+<span class="source-line-no">199</span><span id="line-199">    * Use {@link #write(Object)} for canonical output.</span>
 <span class="source-line-no">200</span><span id="line-200">    *</span>
 <span class="source-line-no">201</span><span id="line-201">    * @param output The output.</span>
 <span class="source-line-no">202</span><span id="line-202">    * @return A new {@link JsonTokenWriter} with {@code object(...)} disabled.</span>
 <span class="source-line-no">203</span><span id="line-203">    * @throws IOException If the output type is not supported or could not be opened.</span>
 <span class="source-line-no">204</span><span id="line-204">    */</span>
 <span class="source-line-no">205</span><span id="line-205">   @Override /* TokenWritable */</span>
-<span class="source-line-no">206</span><span id="line-206">   public TokenWriter serializeTokens(Object output) throws IOException {</span>
-<span class="source-line-no">207</span><span id="line-207">      return getSession().serializeTokens(output);</span>
+<span class="source-line-no">206</span><span id="line-206">   public TokenWriter writeTokens(Object output) throws IOException {</span>
+<span class="source-line-no">207</span><span id="line-207">      return getSession().writeTokens(output);</span>
 <span class="source-line-no">208</span><span id="line-208">   }</span>
 <span class="source-line-no">209</span><span id="line-209"></span>
 <span class="source-line-no">210</span><span id="line-210">   /**</span>
 <span class="source-line-no">211</span><span id="line-211">    * Convenience delegator (default session args) for a record writer that emits canonical JCS</span>
 <span class="source-line-no">212</span><span id="line-212">    * for the value passed to {@link RecordWriter#write(Object) write(...)}.  Real impl on</span>
-<span class="source-line-no">213</span><span id="line-213">    * {@link JcsSerializerSession#serializeRecords(Object)}.</span>
+<span class="source-line-no">213</span><span id="line-213">    * {@link JcsSerializerSession#writeRecords(Object)}.</span>
 <span class="source-line-no">214</span><span id="line-214">    *</span>
 <span class="source-line-no">215</span><span id="line-215">    * @param output The output.</span>
 <span class="source-line-no">216</span><span id="line-216">    * @return A new {@link RecordWriter}.</span>
 <span class="source-line-no">217</span><span id="line-217">    * @throws IOException If the output type is not supported or could not be opened.</span>
 <span class="source-line-no">218</span><span id="line-218">    */</span>
 <span class="source-line-no">219</span><span id="line-219">   @Override /* RecordWritable */</span>
-<span class="source-line-no">220</span><span id="line-220">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">221</span><span id="line-221">      return getSession().serializeRecords(output);</span>
+<span class="source-line-no">220</span><span id="line-220">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">221</span><span id="line-221">      return getSession().writeRecords(output);</span>
 <span class="source-line-no">222</span><span id="line-222">   }</span>
 <span class="source-line-no">223</span><span id="line-223"></span>
 <span class="source-line-no">224</span><span id="line-224">   @Override /* RecordWritable */</span>

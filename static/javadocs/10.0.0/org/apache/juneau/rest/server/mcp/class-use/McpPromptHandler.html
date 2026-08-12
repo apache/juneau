@@ -58,8 +58,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20250618">org.apache.juneau.rest.server.mcp.v20250618</a></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>2025-06-18</code> binding for <code>juneau-rest-server-mcp</code>.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -72,10 +75,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static &lt;A&gt;&nbsp;<a href="../McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">McpTypedHandlers.</span><code><a href="../McpTypedHandlers.html#adaptPrompt(org.apache.juneau.rest.server.mcp.McpTypedPromptHandler)" class="member-name-link">adaptPrompt</a><wbr>(<a href="../McpTypedPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedPromptHandler</a>&lt;A&gt;&nbsp;typed)</code></div>
+<div class="col-first even-row-color"><code>static <a href="../McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpPromptHandler.</span><code><a href="../McpPromptHandler.html#of(org.apache.juneau.rest.server.mcp.McpPromptSpec,java.util.function.BiFunction)" class="member-name-link">of</a><wbr>(<a href="../McpPromptSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpPromptSpec</a>&nbsp;descriptor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;,<wbr><a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr><a href="../McpPromptOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpPromptOutcome</a>&gt;&nbsp;get)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Converts a typed prompt handler into a raw handler suitable for <a href="../McpServerConfig.html#addPrompt(org.apache.juneau.rest.server.mcp.McpPromptHandler...)"><code>McpServerConfig.addPrompt(McpPromptHandler...)</code></a>.</div>
+<div class="block">Builds a handler from a fixed descriptor and a <code>get</code> lambda.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server.mcp</a> that return types with arguments of type <a href="../McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></span></div>
@@ -109,6 +113,22 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">McpServerConfig.</span><code><a href="../McpServerConfig.html#setPrompts(java.util.List)" class="member-name-link">setPrompts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a>&gt;&nbsp;prompts)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the prompt handler list.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20250618">
+<h2>Uses of <a href="../McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a> in <a href="../v20250618/package-summary.html">org.apache.juneau.rest.server.mcp.v20250618</a></h2>
+<div class="caption"><span>Methods in <a href="../v20250618/package-summary.html">org.apache.juneau.rest.server.mcp.v20250618</a> that return <a href="../McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static &lt;A&gt;&nbsp;<a href="../McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTypedHandlers.</span><code><a href="../v20250618/McpTypedHandlers.html#adaptPrompt(org.apache.juneau.rest.server.mcp.v20250618.McpTypedPromptHandler)" class="member-name-link">adaptPrompt</a><wbr>(<a href="../v20250618/McpTypedPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp.v20250618">McpTypedPromptHandler</a>&lt;A&gt;&nbsp;typed)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Converts a typed prompt handler into a raw handler suitable for <a href="../McpServerConfig.html#addPrompt(org.apache.juneau.rest.server.mcp.McpPromptHandler...)"><code>McpServerConfig.addPrompt(McpPromptHandler...)</code></a>.</div>
 </div>
 </div>
 </section>

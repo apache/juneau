@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line-88">   /**</span>
 <span class="source-line-no">089</span><span id="line-89">    * Returns a package info wrapper around the package of the specified class.</span>
 <span class="source-line-no">090</span><span id="line-90">    *</span>
-<span class="source-line-no">091</span><span id="line-91">    * @param childClass The class whose package to retrieve.</span>
+<span class="source-line-no">091</span><span id="line-91">    * @param childClass The class whose package to retrieve.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">092</span><span id="line-92">    * @return A package info wrapper.</span>
 <span class="source-line-no">093</span><span id="line-93">    */</span>
 <span class="source-line-no">094</span><span id="line-94">   public static PackageInfo of(Class&lt;?&gt; childClass) {</span>
@@ -111,7 +111,7 @@
 <span class="source-line-no">098</span><span id="line-98">   /**</span>
 <span class="source-line-no">099</span><span id="line-99">    * Returns a package info wrapper around the package of the specified class info.</span>
 <span class="source-line-no">100</span><span id="line-100">    *</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param childClass The class info whose package to retrieve.</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param childClass The class info whose package to retrieve.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">102</span><span id="line-102">    * @return A package info wrapper.</span>
 <span class="source-line-no">103</span><span id="line-103">    */</span>
 <span class="source-line-no">104</span><span id="line-104">   public static PackageInfo of(ClassInfo childClass) {</span>
@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108">   /**</span>
 <span class="source-line-no">109</span><span id="line-109">    * Returns a package info wrapper around the specified package object.</span>
 <span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * @param inner The package object.</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param inner The package object.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">112</span><span id="line-112">    * @return A package info wrapper.</span>
 <span class="source-line-no">113</span><span id="line-113">    */</span>
 <span class="source-line-no">114</span><span id="line-114">   public static PackageInfo of(Package inner) {</span>
@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line-125">   /**</span>
 <span class="source-line-no">126</span><span id="line-126">    * Constructor.</span>
 <span class="source-line-no">127</span><span id="line-127">    *</span>
-<span class="source-line-no">128</span><span id="line-128">    * @param inner The package object.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param inner The package object.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">129</span><span id="line-129">    */</span>
 <span class="source-line-no">130</span><span id="line-130">   protected PackageInfo(Package inner) {</span>
 <span class="source-line-no">131</span><span id="line-131">      assertArgNotNull(ARG_inner, inner);</span>

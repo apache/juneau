@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-49">LoggersResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-54">LoggersResource</a></span>
 <span class="extends-implements">extends <a href="../servlet/BasicRestResource.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestResource</a></span></div>
 <div class="block">Child-resource flavor of the <code>/loggers</code> runtime log-level management endpoint.
 
@@ -96,6 +96,11 @@ loadScripts(document, 'script');</script>
  the <a href="LoggersMixin.html" title="class in org.apache.juneau.rest.server.management"><code>mixin</code></a> flavor uses, so the two forms cannot drift.  Extends
  <a href="../servlet/BasicRestResource.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestResource</code></a> so the returned beans serialize via the <code>BasicUniversalConfig</code> set
  (mirrors <code>HealthResource</code>).
+
+ <p>
+ As with the mixin flavor, the <code>GET</code> endpoints carry no built-in guard of their own &mdash; mount this
+ resource only under a subtree that's already covered by whatever authentication/authorization the app applies
+ to its management endpoints generally. See <a href="LoggersMixin.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersMixin</code></a> for details.
 
  <h5 class='section'>Backend:</h5><ul>
    <li>Drives <a href="JulLogBackend.html" title="class in org.apache.juneau.rest.server.management"><code>java.util.logging</code></a> by default; declare a Logback / Log4j2 backend
@@ -195,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>LoggersResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-50">LoggersResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-55">LoggersResource</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -209,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLoggers(org.apache.juneau.rest.server.RestRequest)">
 <h3>getLoggers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-59">getLoggers</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-64">getLoggers</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">[GET /] - All loggers and their configured levels.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -220,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLogger(org.apache.juneau.rest.server.RestRequest,java.lang.String)">
 <h3>getLogger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-76">getLogger</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-81">getLogger</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">[GET /{name}] - One logger's configured level.</div>
@@ -238,7 +243,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLogger(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.lang.String)">
 <h3>setLogger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-101">setLogger</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-106">setLogger</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
@@ -263,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLoggerPost(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.lang.String)">
 <h3>setLoggerPost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-123">setLoggerPost</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/LoggersResource.html#line-128">setLoggerPost</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("name")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>

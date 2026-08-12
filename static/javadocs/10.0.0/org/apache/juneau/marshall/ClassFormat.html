@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-91">ClassFormat</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-94">ClassFormat</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>&gt;</span></div>
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> values.
 
@@ -222,14 +222,19 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Parses the specified wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setClassNameGuard(java.util.function.Predicate)" class="member-name-link">setClassNameGuard</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Installs a global guard that vets class names before the parser path resolves them to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </div>
@@ -256,14 +261,14 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NOT_SET">
 <h3>NOT_SET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-94">NOT_SET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-97">NOT_SET</a></span></div>
 <div class="block">Sentinel meaning "no value configured" — falls through to the next-higher precedence level.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="FQCN">
 <h3>FQCN</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-110">FQCN</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-113">FQCN</a></span></div>
 <div class="block">Canonical fully-qualified name with dotted nested-type separators (the default).
 
  <p>
@@ -281,7 +286,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="BINARY_NAME">
 <h3>BINARY_NAME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-127">BINARY_NAME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-130">BINARY_NAME</a></span></div>
 <div class="block">JVM binary name per <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getName()" title="class or interface in java.lang" class="external-link"><code>Class.getName()</code></a>.
 
  <h5 class='figure'>Example:</h5>
@@ -300,7 +305,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="SIMPLE_NAME">
 <h3>SIMPLE_NAME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-144">SIMPLE_NAME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-147">SIMPLE_NAME</a></span></div>
 <div class="block">Unqualified simple name per <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getSimpleName()" title="class or interface in java.lang" class="external-link"><code>Class.getSimpleName()</code></a>.
 
  <h5 class='figure'>Example:</h5>
@@ -327,7 +332,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-91">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-94">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -339,7 +344,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-91">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-94">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -356,9 +361,27 @@ not permitted.)</div>
 </section>
 </li>
 <li>
+<section class="detail" id="setClassNameGuard(java.util.function.Predicate)">
+<h3>setClassNameGuard</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-164">setClassNameGuard</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="block">Installs a global guard that vets class names before the parser path resolves them to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.
+
+ <p>
+ The guard is consulted for every candidate name (including the nested-type <c>$</c>-rewritten forms)
+ before it is passed to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#forName(java.lang.String,boolean,java.lang.ClassLoader)" title="class or interface in java.lang" class="external-link"><code>Class.forName(String, boolean, ClassLoader)</code></a>.  Names the guard rejects are
+ treated as unresolvable.  This lets a deployment restrict which types may be materialized from parsed
+ input to an explicit allow-list.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The guard predicate returning <jk>true</jk> for permitted class names, or <jk>null</jk> to
+   allow all names (the default).</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="format(java.lang.Class,org.apache.juneau.marshall.ClassFormat)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-156">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-190">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value,
  <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> using this format.
 
@@ -366,7 +389,7 @@ not permitted.)</div>
  <a href="#NOT_SET"><code>NOT_SET</code></a> / <code>null</code> format are treated as <a href="#FQCN"><code>FQCN</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dd><code>format</code> - The configured format. Can be <jk>null</jk> (treated as <a href="#FQCN"><code>FQCN</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The formatted wire representation, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
@@ -376,7 +399,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="parse(java.lang.String,org.apache.juneau.marshall.ClassFormat,java.lang.ClassLoader)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-212">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-246">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html" title="class or interface in java.lang" class="external-link">ClassLoader</a>&nbsp;classLoader)</span></div>
 <div class="block">Parses the specified wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.
@@ -412,7 +435,7 @@ not permitted.)</div>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank.</dd>
+<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
 <dd><code>format</code> - The configured format hint. Can be <jk>null</jk> (treated as <a href="#FQCN"><code>FQCN</code></a>).</dd>
 <dd><code>classLoader</code> - The class loader. Can be <jk>null</jk> (uses
    <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html#getContextClassLoader()" title="class or interface in java.lang" class="external-link"><code>context class loader</code></a>).</dd>
@@ -427,7 +450,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isNumeric()">
 <h3>isNumeric</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-324">isNumeric</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-364">isNumeric</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this format emits a numeric wire value.
 
  <p>

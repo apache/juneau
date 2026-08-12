@@ -119,12 +119,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block"><code>HttpTransport</code> implementation for the next-generation REST client backed by the Jetty 12 HTTP client.</div>
 </div>
-<div class="col-first even-row-color"><a href="okhttp/package-summary.html">org.apache.juneau.rest.client.okhttp</a></div>
+<div class="col-first even-row-color"><a href="mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a></div>
 <div class="col-last even-row-color">
+<div class="block">Revision-neutral Model Context Protocol (MCP) client core - Streamable-HTTP transport orchestration, the
+ auth-token seam, and the pluggable response cache that per-revision <code>McpClient</code> facades build on.</div>
+</div>
+<div class="col-first odd-row-color"><a href="okhttp/package-summary.html">org.apache.juneau.rest.client.okhttp</a></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>HttpTransport</code> implementation for the next-generation REST client backed by OkHttp.</div>
 </div>
-<div class="col-first odd-row-color"><a href="remote/package-summary.html">org.apache.juneau.rest.client.remote</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="remote/package-summary.html">org.apache.juneau.rest.client.remote</a></div>
+<div class="col-last even-row-color">
 <div class="block">Remote-proxy support for the next-generation REST client.</div>
 </div>
 </div>
@@ -184,6 +189,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A streaming HTTP request body that emits its content through a token/record-streaming cursor.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RedirectSecurity.html" title="class in org.apache.juneau.rest.client">RedirectSecurity</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Pure decision logic for whether caller-set credential headers (such as <code>Authorization</code>
+ or <code>Cookie</code>) should be forwarded or stripped when a REST call is transparently replayed
+ against a redirect target (an HTTP <code>3xx</code> response's <code>Location</code>).</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="RedirectSecurity.CredentialDecision.html" title="enum class in org.apache.juneau.rest.client">RedirectSecurity.CredentialDecision</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">The outcome of a credential-forwarding decision for a single redirect hop.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="ResponseBody.html" title="class in org.apache.juneau.rest.client">ResponseBody</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

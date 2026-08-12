@@ -91,10 +91,10 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="servlet/RestMixin.Builder.html" title="class in org.apache.juneau.rest.server.servlet">RestMixin.Builder</a></code>, <code><a href="servlet/RestResource.Builder.html" title="class in org.apache.juneau.rest.server.servlet">RestResource.Builder</a></code>, <code><a href="servlet/RestServlet.Builder.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet.Builder</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-57">AbstractRestBuilder</a>&lt;R,<wbr>SELF extends AbstractRestBuilder&lt;R,<wbr>SELF&gt;&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-58">AbstractRestBuilder</a>&lt;R,<wbr>SELF extends AbstractRestBuilder&lt;R,<wbr>SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;SELF&gt;</span></div>
-<div class="block">Shared abstract base for the <a href="RestBuilder.html" title="interface in org.apache.juneau.rest.server"><code>RestBuilder</code></a>flavor builders (<code>RestServlet.Builder</code>,
+<div class="block">Shared abstract base for the <a href="RestBuilder.html" title="interface in org.apache.juneau.rest.server"><code>RestBuilder</code></a> flavor builders (<code>RestServlet.Builder</code>,
  <code>RestResource.Builder</code>, <code>RestMixin.Builder</code>).
 
  <p>
@@ -487,7 +487,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class)">
 <h3>AbstractRestBuilder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-74">AbstractRestBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">R</a>&gt;&nbsp;resourceType)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-75">AbstractRestBuilder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">R</a>&gt;&nbsp;resourceType)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -506,7 +506,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="self()">
 <h3>self</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-83">self</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-84">self</a></span>()</div>
 <div class="block">Returns this builder cast to the self type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -517,7 +517,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">R</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-92">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">R</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-93">build</a></span>()</div>
 <div class="block">Builds the configured resource instance.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -528,7 +528,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="createResource()">
 <h3>createResource</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">R</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-103">createResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">R</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-104">createResource</a></span>()</div>
 <div class="block">Reflectively instantiates the resource type, preferring a <code>(RestBuilder&lt;?&gt;)</code> constructor (constructor
  injection) and falling back to the no-arg constructor.
 
@@ -543,7 +543,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="getResourceType()">
 <h3>getResourceType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-122">getResourceType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-123">getResourceType</a></span>()</div>
 <div class="block">Returns the resource type produced by this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -554,7 +554,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="toRestAnnotation()">
 <h3>toRestAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Rest.html" title="annotation interface in org.apache.juneau.rest.server">Rest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-132">toRestAnnotation</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Rest.html" title="annotation interface in org.apache.juneau.rest.server">Rest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-133">toRestAnnotation</a></span>()</div>
 <div class="block">Returns the synthetic <code>@Rest</code> annotation carrying all builder-set members, for use as the
  highest-priority contributor of the <code>@Rest</code> resolution chain.</div>
 <dl class="notes">
@@ -566,18 +566,18 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="getMdcAsyncPropagation()">
 <h3>getMdcAsyncPropagation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-141">getMdcAsyncPropagation</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-142">getMdcAsyncPropagation</a></span>()</div>
 <div class="block">Returns the programmatic MDC async-propagation override, or <jk>null</jk> if not set.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The override, or <jk>null</jk>.</dd>
+<dd>The override, or <jk>null</jk> if not set.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getExtras()">
 <h3>getExtras</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-150">getExtras</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-151">getExtras</a></span>()</div>
 <div class="block">Returns the forward-compat extras set via <a href="#set(java.lang.String,java.lang.Object)"><code>set(String, Object)</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -588,7 +588,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="path(java.lang.String)">
 <h3>path</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-158">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-159">path</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#path(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#path()"><code>path</code></a> for this resource.</div>
 <dl class="notes">
@@ -604,7 +604,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="paths(java.lang.String...)">
 <h3>paths</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-161">paths</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-162">paths</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#paths(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#paths()"><code>top-level mount paths</code></a> for this resource.</div>
 <dl class="notes">
@@ -620,7 +620,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="children(java.lang.Class...)">
 <h3>children</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-164">children</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-165">children</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#children(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#children()"><code>child resources</code></a> for this resource.</div>
 <dl class="notes">
@@ -636,7 +636,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="mixins(java.lang.Class...)">
 <h3>mixins</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-167">mixins</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-168">mixins</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#mixins(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#mixins()"><code>mixins</code></a> for this resource.</div>
 <dl class="notes">
@@ -652,7 +652,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="mixinDefs(org.apache.juneau.rest.server.Mixin...)">
 <h3>mixinDefs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-170">mixinDefs</a></span><wbr><span class="parameters">(<a href="Mixin.html" title="annotation interface in org.apache.juneau.rest.server">Mixin</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-171">mixinDefs</a></span><wbr><span class="parameters">(<a href="Mixin.html" title="annotation interface in org.apache.juneau.rest.server">Mixin</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#mixinDefs(org.apache.juneau.rest.server.Mixin...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#mixinDefs()"><code>mixinDefs</code></a> (rich, host-overriding mixin definitions) for this resource.</div>
 <dl class="notes">
@@ -668,7 +668,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="uriAuthority(java.lang.String)">
 <h3>uriAuthority</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-173">uriAuthority</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-174">uriAuthority</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#uriAuthority(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#uriAuthority()"><code>uriAuthority</code></a> for this resource.</div>
 <dl class="notes">
@@ -684,7 +684,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="uriContext(java.lang.String)">
 <h3>uriContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-176">uriContext</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-177">uriContext</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#uriContext(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#uriContext()"><code>uriContext</code></a> for this resource.</div>
 <dl class="notes">
@@ -700,7 +700,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="uriRelativity(java.lang.String)">
 <h3>uriRelativity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-179">uriRelativity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-180">uriRelativity</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#uriRelativity(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#uriRelativity()"><code>uriRelativity</code></a> for this resource.</div>
 <dl class="notes">
@@ -716,7 +716,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="uriResolution(java.lang.String)">
 <h3>uriResolution</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-182">uriResolution</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-183">uriResolution</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#uriResolution(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#uriResolution()"><code>uriResolution</code></a> for this resource.</div>
 <dl class="notes">
@@ -732,7 +732,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="serializers(java.lang.Class...)">
 <h3>serializers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-189">serializers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-190">serializers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#serializers(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#serializers()"><code>serializers</code></a> for this resource.</div>
 <dl class="notes">
@@ -748,7 +748,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="parsers(java.lang.Class...)">
 <h3>parsers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-192">parsers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-193">parsers</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#parsers(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#parsers()"><code>parsers</code></a> for this resource.</div>
 <dl class="notes">
@@ -764,7 +764,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="encoders(java.lang.Class...)">
 <h3>encoders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-195">encoders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/encoders/Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a>&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-196">encoders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/encoders/Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a>&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#encoders(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#encoders()"><code>encoders</code></a> for this resource.</div>
 <dl class="notes">
@@ -780,7 +780,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="partSerializer(java.lang.Class)">
 <h3>partSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-198">partSerializer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-199">partSerializer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#partSerializer(java.lang.Class)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#partSerializer()"><code>partSerializer</code></a> for this resource.</div>
 <dl class="notes">
@@ -796,7 +796,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="partParser(java.lang.Class)">
 <h3>partParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-201">partParser</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-202">partParser</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#partParser(java.lang.Class)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#partParser()"><code>partParser</code></a> for this resource.</div>
 <dl class="notes">
@@ -812,7 +812,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="consumes(java.lang.String...)">
 <h3>consumes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-204">consumes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-205">consumes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#consumes(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#consumes()"><code>consumes</code></a> media types for this resource.</div>
 <dl class="notes">
@@ -828,7 +828,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="produces(java.lang.String...)">
 <h3>produces</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-207">produces</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-208">produces</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#produces(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#produces()"><code>produces</code></a> media types for this resource.</div>
 <dl class="notes">
@@ -844,7 +844,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="responseProcessors(java.lang.Class...)">
 <h3>responseProcessors</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-210">responseProcessors</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a>&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-211">responseProcessors</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a>&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#responseProcessors(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#responseProcessors()"><code>responseProcessors</code></a> for this resource.</div>
 <dl class="notes">
@@ -860,7 +860,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="allowedSerializerOptions(java.lang.String...)">
 <h3>allowedSerializerOptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-213">allowedSerializerOptions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-214">allowedSerializerOptions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#allowedSerializerOptions(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#allowedSerializerOptions()"><code>allowedSerializerOptions</code></a> for this resource.</div>
 <dl class="notes">
@@ -876,7 +876,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="allowedParserOptions(java.lang.String...)">
 <h3>allowedParserOptions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-216">allowedParserOptions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-217">allowedParserOptions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#allowedParserOptions(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#allowedParserOptions()"><code>allowedParserOptions</code></a> for this resource.</div>
 <dl class="notes">
@@ -892,7 +892,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="allowedHeaderParams(java.lang.String)">
 <h3>allowedHeaderParams</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-223">allowedHeaderParams</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-224">allowedHeaderParams</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#allowedHeaderParams(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#allowedHeaderParams()"><code>allowedHeaderParams</code></a> for this resource.</div>
 <dl class="notes">
@@ -908,7 +908,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="allowedMethodHeaders(java.lang.String)">
 <h3>allowedMethodHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-226">allowedMethodHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-227">allowedMethodHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#allowedMethodHeaders(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#allowedMethodHeaders()"><code>allowedMethodHeaders</code></a> for this resource.</div>
 <dl class="notes">
@@ -924,7 +924,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="allowedMethodParams(java.lang.String)">
 <h3>allowedMethodParams</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-229">allowedMethodParams</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-230">allowedMethodParams</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#allowedMethodParams(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#allowedMethodParams()"><code>allowedMethodParams</code></a> for this resource.</div>
 <dl class="notes">
@@ -940,7 +940,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="clientVersionHeader(java.lang.String)">
 <h3>clientVersionHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-232">clientVersionHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-233">clientVersionHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#clientVersionHeader(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#clientVersionHeader()"><code>clientVersionHeader</code></a> for this resource.</div>
 <dl class="notes">
@@ -956,7 +956,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="defaultAccept(java.lang.String)">
 <h3>defaultAccept</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-235">defaultAccept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-236">defaultAccept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#defaultAccept(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#defaultAccept()"><code>defaultAccept</code></a> for this resource.</div>
 <dl class="notes">
@@ -972,7 +972,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="defaultContentType(java.lang.String)">
 <h3>defaultContentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-238">defaultContentType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-239">defaultContentType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#defaultContentType(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#defaultContentType()"><code>defaultContentType</code></a> for this resource.</div>
 <dl class="notes">
@@ -988,7 +988,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="defaultCharset(java.lang.String)">
 <h3>defaultCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-241">defaultCharset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-242">defaultCharset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#defaultCharset(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#defaultCharset()"><code>defaultCharset</code></a> for this resource.</div>
 <dl class="notes">
@@ -1004,7 +1004,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="defaultRequestAttributes(java.lang.String...)">
 <h3>defaultRequestAttributes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-244">defaultRequestAttributes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-245">defaultRequestAttributes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#defaultRequestAttributes(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#defaultRequestAttributes()"><code>defaultRequestAttributes</code></a> for this resource.</div>
 <dl class="notes">
@@ -1020,7 +1020,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="defaultRequestHeaders(java.lang.String...)">
 <h3>defaultRequestHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-247">defaultRequestHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-248">defaultRequestHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#defaultRequestHeaders(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#defaultRequestHeaders()"><code>defaultRequestHeaders</code></a> for this resource.</div>
 <dl class="notes">
@@ -1036,7 +1036,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="defaultResponseHeaders(java.lang.String...)">
 <h3>defaultResponseHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-250">defaultResponseHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-251">defaultResponseHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#defaultResponseHeaders(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#defaultResponseHeaders()"><code>defaultResponseHeaders</code></a> for this resource.</div>
 <dl class="notes">
@@ -1052,7 +1052,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="disableContentParam(java.lang.String)">
 <h3>disableContentParam</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-253">disableContentParam</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-254">disableContentParam</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#disableContentParam(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#disableContentParam()"><code>disableContentParam</code></a> flag for this resource.</div>
 <dl class="notes">
@@ -1068,7 +1068,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="maxInput(java.lang.String)">
 <h3>maxInput</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-256">maxInput</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-257">maxInput</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#maxInput(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#maxInput()"><code>maxInput</code></a> for this resource.</div>
 <dl class="notes">
@@ -1084,7 +1084,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="restOpArgs(java.lang.Class...)">
 <h3>restOpArgs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-259">restOpArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-260">restOpArgs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#restOpArgs(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#restOpArgs()"><code>restOpArgs</code></a> for this resource.</div>
 <dl class="notes">
@@ -1100,7 +1100,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="guards(java.lang.Class...)">
 <h3>guards</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-266">guards</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-267">guards</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#guards(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#guards()"><code>guards</code></a> for this resource.</div>
 <dl class="notes">
@@ -1116,7 +1116,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="roleGuard(java.lang.String)">
 <h3>roleGuard</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-269">roleGuard</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-270">roleGuard</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#roleGuard(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#roleGuard()"><code>roleGuard</code></a> for this resource.</div>
 <dl class="notes">
@@ -1132,7 +1132,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="rolesDeclared(java.lang.String)">
 <h3>rolesDeclared</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-272">rolesDeclared</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-273">rolesDeclared</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#rolesDeclared(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#rolesDeclared()"><code>rolesDeclared</code></a> for this resource.</div>
 <dl class="notes">
@@ -1148,7 +1148,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="converters(java.lang.Class...)">
 <h3>converters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-275">converters</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-276">converters</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#converters(java.lang.Class...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#converters()"><code>converters</code></a> for this resource.</div>
 <dl class="notes">
@@ -1164,7 +1164,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="eagerInit(java.lang.String)">
 <h3>eagerInit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-282">eagerInit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-283">eagerInit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#eagerInit(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#eagerInit()"><code>eagerInit</code></a> flag for this resource.</div>
 <dl class="notes">
@@ -1180,7 +1180,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="lazyChildren(java.lang.String)">
 <h3>lazyChildren</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-285">lazyChildren</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-286">lazyChildren</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#lazyChildren(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#lazyChildren()"><code>lazyChildren</code></a> flag for this resource.</div>
 <dl class="notes">
@@ -1196,7 +1196,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="virtualThreads(java.lang.String)">
 <h3>virtualThreads</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-288">virtualThreads</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-289">virtualThreads</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#virtualThreads(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#virtualThreads()"><code>virtualThreads</code></a> flag for this resource.</div>
 <dl class="notes">
@@ -1212,7 +1212,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="asyncTimeoutMillis(java.lang.String)">
 <h3>asyncTimeoutMillis</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-291">asyncTimeoutMillis</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-292">asyncTimeoutMillis</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#asyncTimeoutMillis(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#asyncTimeoutMillis()"><code>asyncTimeoutMillis</code></a> for this resource.</div>
 <dl class="notes">
@@ -1228,7 +1228,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="asyncCompletionExecutor(java.lang.String)">
 <h3>asyncCompletionExecutor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-294">asyncCompletionExecutor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-295">asyncCompletionExecutor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#asyncCompletionExecutor(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#asyncCompletionExecutor()"><code>asyncCompletionExecutor</code></a> bean name for this resource.</div>
 <dl class="notes">
@@ -1244,7 +1244,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="callLogger(java.lang.Class)">
 <h3>callLogger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-301">callLogger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-302">callLogger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#callLogger(java.lang.Class)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#callLogger()"><code>callLogger</code></a> for this resource.</div>
 <dl class="notes">
@@ -1260,7 +1260,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="debug(java.lang.String)">
 <h3>debug</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-304">debug</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-305">debug</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#debug(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#debug()"><code>debug</code></a> mode for this resource.</div>
 <dl class="notes">
@@ -1276,7 +1276,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="observability(java.lang.String)">
 <h3>observability</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-307">observability</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-308">observability</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#observability(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#observability()"><code>observability</code></a> flag for this resource.</div>
 <dl class="notes">
@@ -1292,7 +1292,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="renderResponseStackTraces(java.lang.String)">
 <h3>renderResponseStackTraces</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-310">renderResponseStackTraces</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-311">renderResponseStackTraces</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#renderResponseStackTraces(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#renderResponseStackTraces()"><code>renderResponseStackTraces</code></a> flag for this resource.</div>
 <dl class="notes">
@@ -1308,7 +1308,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="problemDetails(java.lang.String)">
 <h3>problemDetails</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-313">problemDetails</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-314">problemDetails</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#problemDetails(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#problemDetails()"><code>problemDetails</code></a> flag for this resource.</div>
 <dl class="notes">
@@ -1324,7 +1324,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="title(java.lang.String...)">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-320">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-321">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#title(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#title()"><code>title</code></a> for this resource.</div>
 <dl class="notes">
@@ -1340,7 +1340,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="description(java.lang.String...)">
 <h3>description</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-323">description</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-324">description</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#description(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#description()"><code>description</code></a> for this resource.</div>
 <dl class="notes">
@@ -1356,7 +1356,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="siteName(java.lang.String)">
 <h3>siteName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-326">siteName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-327">siteName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#siteName(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#siteName()"><code>siteName</code></a> for this resource.</div>
 <dl class="notes">
@@ -1372,7 +1372,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="swaggerProvider(java.lang.Class)">
 <h3>swaggerProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-329">swaggerProvider</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="swagger/SwaggerProvider.html" title="interface in org.apache.juneau.rest.server.swagger">SwaggerProvider</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-330">swaggerProvider</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="swagger/SwaggerProvider.html" title="interface in org.apache.juneau.rest.server.swagger">SwaggerProvider</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#swaggerProvider(java.lang.Class)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#swaggerProvider()"><code>swaggerProvider</code></a> for this resource.</div>
 <dl class="notes">
@@ -1388,7 +1388,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="openApiProvider(java.lang.Class)">
 <h3>openApiProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-332">openApiProvider</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="openapi/OpenApiProvider.html" title="interface in org.apache.juneau.rest.server.openapi">OpenApiProvider</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-333">openApiProvider</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="openapi/OpenApiProvider.html" title="interface in org.apache.juneau.rest.server.openapi">OpenApiProvider</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#openApiProvider(java.lang.Class)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#openApiProvider()"><code>openApiProvider</code></a> for this resource.</div>
 <dl class="notes">
@@ -1404,7 +1404,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="messages(java.lang.String)">
 <h3>messages</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-335">messages</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-336">messages</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#messages(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#messages()"><code>messages</code></a> bundle location for this resource.</div>
 <dl class="notes">
@@ -1420,7 +1420,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="config(java.lang.String)">
 <h3>config</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-338">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-339">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#config(java.lang.String)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#config()"><code>config</code></a> location for this resource.</div>
 <dl class="notes">
@@ -1436,7 +1436,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="staticFiles(java.lang.Class)">
 <h3>staticFiles</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-341">staticFiles</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="staticfile/StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile">StaticFiles</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-342">staticFiles</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="staticfile/StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile">StaticFiles</a>&gt;&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#staticFiles(java.lang.Class)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#staticFiles()"><code>staticFiles</code></a> for this resource.</div>
 <dl class="notes">
@@ -1452,7 +1452,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="noInherit(java.lang.String...)">
 <h3>noInherit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-344">noInherit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-345">noInherit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#noInherit(java.lang.String...)">RestBuilder</a></code></span></div>
 <div class="block">Specifies the <a href="Rest.html#noInherit()"><code>noInherit</code></a> property names for this resource.</div>
 <dl class="notes">
@@ -1468,7 +1468,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="mdcAsyncPropagation(boolean)">
 <h3>mdcAsyncPropagation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-351">mdcAsyncPropagation</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-352">mdcAsyncPropagation</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#mdcAsyncPropagation(boolean)">RestBuilder</a></code></span></div>
 <div class="block">Specifies whether MDC async propagation is enabled for this resource.
 
@@ -1488,7 +1488,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-354">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/AbstractRestBuilder.html#line-355">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestBuilder.html#set(java.lang.String,java.lang.Object)">RestBuilder</a></code></span></div>
 <div class="block">Generic forward-compatible override setter, keyed by the <code>@Rest</code> property name (e.g.
@@ -1501,7 +1501,7 @@ implements <a href="RestBuilder.html" title="interface in org.apache.juneau.rest
 <dt>Specified by:</dt>
 <dd><code><a href="RestBuilder.html#set(java.lang.String,java.lang.Object)">set</a></code>&nbsp;in interface&nbsp;<code><a href="RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;<a href="AbstractRestBuilder.html" title="type parameter in AbstractRestBuilder">R</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>key</code> - The <code>@Rest</code> property name.</dd>
+<dd><code>key</code> - The <code>@Rest</code> property name. Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The override value.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>

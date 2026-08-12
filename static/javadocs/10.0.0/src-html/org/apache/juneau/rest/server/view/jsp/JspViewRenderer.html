@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line-106">      var res = opSession.getResponse();</span>
 <span class="source-line-no">107</span><span id="line-107"></span>
 <span class="source-line-no">108</span><span id="line-108">      var content = res.getContent(Object.class);</span>
-<span class="source-line-no">109</span><span id="line-109">      if (! (content instanceof JspView view))</span>
+<span class="source-line-no">109</span><span id="line-109">      if (! (content instanceof JspView content2))</span>
 <span class="source-line-no">110</span><span id="line-110">         return NEXT;</span>
 <span class="source-line-no">111</span><span id="line-111"></span>
 <span class="source-line-no">112</span><span id="line-112">      // Resolve the base path. Prefer the registered JspMixin bean (which the mixin</span>
@@ -130,10 +130,10 @@
 <span class="source-line-no">117</span><span id="line-117">         .orElse("/");</span>
 <span class="source-line-no">118</span><span id="line-118"></span>
 <span class="source-line-no">119</span><span id="line-119">      // Copy attributes onto the request so the JSP / JSTL EL can resolve them.</span>
-<span class="source-line-no">120</span><span id="line-120">      view.getAttributes().forEach(req::setAttribute);</span>
+<span class="source-line-no">120</span><span id="line-120">      content2.getAttributes().forEach(req::setAttribute);</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
 <span class="source-line-no">122</span><span id="line-122">      // Apply caller-supplied response headers (e.g. Content-Type, Cache-Control).</span>
-<span class="source-line-no">123</span><span id="line-123">      view.getResponseHeaders().forEach(res::setHeader);</span>
+<span class="source-line-no">123</span><span id="line-123">      content2.getResponseHeaders().forEach(res::setHeader);</span>
 <span class="source-line-no">124</span><span id="line-124"></span>
 <span class="source-line-no">125</span><span id="line-125">      // Resolve the dispatch path: basePath + templateName, normalized for a single separator.</span>
 <span class="source-line-no">126</span><span id="line-126">      // A path that escapes basePath (e.g. template names assembled from user input that</span>
@@ -143,10 +143,10 @@
 <span class="source-line-no">130</span><span id="line-130">      // which catches IAE and surfaces it as Forbidden.)</span>
 <span class="source-line-no">131</span><span id="line-131">      String target;</span>
 <span class="source-line-no">132</span><span id="line-132">      try {</span>
-<span class="source-line-no">133</span><span id="line-133">         target = joinPath(basePath, view.getTemplateName());</span>
+<span class="source-line-no">133</span><span id="line-133">         target = joinPath(basePath, content2.getTemplateName());</span>
 <span class="source-line-no">134</span><span id="line-134">      } catch (IllegalArgumentException ex) {</span>
-<span class="source-line-no">135</span><span id="line-135">         throw new InternalServerError(ex, "JSP template name escapes configured base path: ''{0}''",</span>
-<span class="source-line-no">136</span><span id="line-136">            view.getTemplateName());</span>
+<span class="source-line-no">135</span><span id="line-135">         throw new InternalServerError(ex, "JSP template name escapes configured base path: '%s'",</span>
+<span class="source-line-no">136</span><span id="line-136">            content2.getTemplateName());</span>
 <span class="source-line-no">137</span><span id="line-137">      }</span>
 <span class="source-line-no">138</span><span id="line-138"></span>
 <span class="source-line-no">139</span><span id="line-139">      // Find the JSP engine via the servlet context. Both forward() failure modes (missing</span>
@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">         var ctx = req.getServletContext();</span>
 <span class="source-line-no">144</span><span id="line-144">         var rd = ctx.getRequestDispatcher(target);</span>
 <span class="source-line-no">145</span><span id="line-145">         if (rd == null)</span>
-<span class="source-line-no">146</span><span id="line-146">            throw new InternalServerError("Could not resolve RequestDispatcher for ''{0}''. {1}",</span>
+<span class="source-line-no">146</span><span id="line-146">            throw new InternalServerError("Could not resolve RequestDispatcher for '%s'. %s",</span>
 <span class="source-line-no">147</span><span id="line-147">               target, NO_ENGINE_DIAGNOSTIC);</span>
 <span class="source-line-no">148</span><span id="line-148">         rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());</span>
 <span class="source-line-no">149</span><span id="line-149">         return FINISHED;</span>
@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">      } catch (IOException ex) {</span>
 <span class="source-line-no">153</span><span id="line-153">         throw ex;</span>
 <span class="source-line-no">154</span><span id="line-154">      } catch (Exception ex) {</span>
-<span class="source-line-no">155</span><span id="line-155">         throw new InternalServerError(ex, "JSP render failed for ''{0}''", target);</span>
+<span class="source-line-no">155</span><span id="line-155">         throw new InternalServerError(ex, "JSP render failed for '%s'", target);</span>
 <span class="source-line-no">156</span><span id="line-156">      }</span>
 <span class="source-line-no">157</span><span id="line-157">   }</span>
 <span class="source-line-no">158</span><span id="line-158"></span>

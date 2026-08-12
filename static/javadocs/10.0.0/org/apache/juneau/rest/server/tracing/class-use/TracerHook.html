@@ -105,6 +105,18 @@ loadScripts(document, 'script');</script>
 <div class="block">Default <a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> implementation that opens no spans and records nothing.</div>
 </div>
 </div>
+<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server.tracing</a> with parameters of type <a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing">TracerHook</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TraceContexts.</span><code><a href="../TraceContexts.html#inject(org.apache.juneau.rest.server.tracing.TracerHook,org.apache.juneau.http.tracing.TraceContextCarrier)" class="member-name-link">inject</a><wbr>(<a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing">TracerHook</a>&nbsp;tracer,
+ <a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Injects the caller's current trace context (as understood by <c>tracer</c>) into <c>carrier</c>.</div>
+</div>
+</div>
 </section>
 </li>
 <li>

@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The bean type.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd>The bean, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if no bean of the specified type and name exists.</dd>
 </dl>
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The bean type.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if this store contains a bean of the specified type and name.</dd>
 </dl>
@@ -335,7 +335,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The bean type to instantiate.</dd>
+<dd><code>type</code> - The bean type to instantiate.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The instantiated bean.</dd>
 </dl>
@@ -373,7 +373,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The bean type.</dd>
-<dd><code>name</code> - The bean name.  Can be <jk>null</jk>.</dd>
+<dd><code>name</code> - The bean name.  Can be <jk>null</jk> for unnamed beans.</dd>
 <dt>Returns:</dt>
 <dd>The supplier, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if no supplier of the specified type and name exists.</dd>
 </dl>
@@ -432,7 +432,7 @@ loadScripts(document, 'script');</script>
 <dd><code>beanType</code> - The type of bean to create.  Must not be <jk>null</jk>.</dd>
 <dd><code>onClassOrObject</code> - The object instance or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> whose public methods are searched.
    Must not be <jk>null</jk>.</dd>
-<dd><code>filter</code> - Optional predicate restricting which methods are eligible.  Can be <jk>null</jk>.</dd>
+<dd><code>filter</code> - Optional predicate restricting which methods are eligible.  Can be <jk>null</jk> (any method qualifies).</dd>
 <dd><code>extraBeans</code> - Optional bean instances visible to parameter resolution for this call only.
    These are <em>not</em> registered in the store.</dd>
 <dt>Returns:</dt>
@@ -508,8 +508,8 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>executable</code> - The constructor or method to inspect.</dd>
-<dd><code>outer</code> - The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.</dd>
+<dd><code>executable</code> - The constructor or method to inspect.  Must not be <jk>null</jk>.</dd>
+<dd><code>outer</code> - The outer object to use for inner-class param resolution.  Can be <jk>null</jk> (the outer-instance skip rule is then never applied).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if every required parameter can be resolved from this store.</dd>
 </dl>
@@ -528,8 +528,8 @@ loadScripts(document, 'script');</script>
  for the full skip rules.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>executable</code> - The constructor or method to resolve parameters for.</dd>
-<dd><code>outer</code> - The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.</dd>
+<dd><code>executable</code> - The constructor or method to resolve parameters for.  Must not be <jk>null</jk>.</dd>
+<dd><code>outer</code> - The outer object to use for inner-class param resolution.  Can be <jk>null</jk> (the outer-instance skip rule is then never applied).</dd>
 <dt>Returns:</dt>
 <dd>An array of resolved parameter values, one per parameter of <c>executable</c>.</dd>
 </dl>
@@ -547,8 +547,8 @@ loadScripts(document, 'script');</script>
  Skipped parameters (outer-instance match, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>) never appear in the result.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>executable</code> - The constructor or method to inspect.</dd>
-<dd><code>outer</code> - The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.</dd>
+<dd><code>executable</code> - The constructor or method to inspect.  Must not be <jk>null</jk>.</dd>
+<dd><code>outer</code> - The outer object to use for inner-class param resolution.  Can be <jk>null</jk> (the outer-instance skip rule is then never applied).</dd>
 <dt>Returns:</dt>
 <dd>A comma-delimited list of missing parameter type names, or <jk>null</jk> when none are missing.</dd>
 </dl>

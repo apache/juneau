@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -97,6 +97,15 @@ loadScripts(document, 'script');</script>
 <div class="inherited-list">
 <h2 id="nested-classes-inherited-from-class-org.apache.juneau.rest.server.logger.CallLogger">Nested classes/interfaces inherited from class&nbsp;org.apache.juneau.rest.server.logger.<a href="CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a></h2>
 <code><a href="CallLogger.Builder.html" title="class in org.apache.juneau.rest.server.logger">CallLogger.Builder</a>, <a href="CallLogger.Void.html" title="class in org.apache.juneau.rest.server.logger">CallLogger.Void</a></code></div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="inherited-list">
+<h3 id="fields-inherited-from-class-org.apache.juneau.rest.server.logger.CallLogger">Fields inherited from class&nbsp;org.apache.juneau.rest.server.logger.<a href="CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a></h3>
+<code><a href="CallLogger.html#DEFAULT_REDACTED_HEADERS">DEFAULT_REDACTED_HEADERS</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -157,7 +166,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store containing injectable beans for this logger.</dd>
+<dd><code>beanStore</code> - The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -181,7 +190,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="CallLogger.html#init(org.apache.juneau.commons.inject.BeanStore)">init</a></code>&nbsp;in class&nbsp;<code><a href="CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store containing injectable beans for this logger.</dd>
+<dd><code>beanStore</code> - The bean store containing injectable beans for this logger. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new builder object.</dd>
 </dl>

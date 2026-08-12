@@ -484,7 +484,7 @@
 <span class="source-line-no">471</span><span id="line-471">    * @param impl</span>
 <span class="source-line-no">472</span><span id="line-472">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">473</span><span id="line-473">    *    &lt;br&gt;If a class, it must have a no-arg constructor.</span>
-<span class="source-line-no">474</span><span id="line-474">    * @return A new builder.</span>
+<span class="source-line-no">474</span><span id="line-474">    * @return A new client.</span>
 <span class="source-line-no">475</span><span id="line-475">    */</span>
 <span class="source-line-no">476</span><span id="line-476">   public static MockRestClient build(Object impl) {</span>
 <span class="source-line-no">477</span><span id="line-477">      return create(impl).build();</span>
@@ -502,7 +502,7 @@
 <span class="source-line-no">489</span><span id="line-489">    * @param impl</span>
 <span class="source-line-no">490</span><span id="line-490">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">491</span><span id="line-491">    *    &lt;br&gt;If a class, it must have a no-arg constructor.</span>
-<span class="source-line-no">492</span><span id="line-492">    * @return A new builder.</span>
+<span class="source-line-no">492</span><span id="line-492">    * @return A new client.</span>
 <span class="source-line-no">493</span><span id="line-493">    */</span>
 <span class="source-line-no">494</span><span id="line-494">   public static MockRestClient buildJson(Object impl) {</span>
 <span class="source-line-no">495</span><span id="line-495">      return create(impl).json().build();</span>
@@ -520,7 +520,7 @@
 <span class="source-line-no">507</span><span id="line-507">    * @param impl</span>
 <span class="source-line-no">508</span><span id="line-508">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">509</span><span id="line-509">    *    &lt;br&gt;If a class, it must have a no-arg constructor.</span>
-<span class="source-line-no">510</span><span id="line-510">    * @return A new builder.</span>
+<span class="source-line-no">510</span><span id="line-510">    * @return A new client.</span>
 <span class="source-line-no">511</span><span id="line-511">    */</span>
 <span class="source-line-no">512</span><span id="line-512">   public static MockRestClient buildJson5(Object impl) {</span>
 <span class="source-line-no">513</span><span id="line-513">      return create(impl).json5().build();</span>
@@ -541,7 +541,7 @@
 <span class="source-line-no">528</span><span id="line-528">    * @param impl</span>
 <span class="source-line-no">529</span><span id="line-529">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">530</span><span id="line-530">    *    &lt;br&gt;If a class, it must have a no-arg constructor.</span>
-<span class="source-line-no">531</span><span id="line-531">    * @return A new builder.</span>
+<span class="source-line-no">531</span><span id="line-531">    * @return A new client.</span>
 <span class="source-line-no">532</span><span id="line-532">    */</span>
 <span class="source-line-no">533</span><span id="line-533">   public static MockRestClient buildJson5Lax(Object impl) {</span>
 <span class="source-line-no">534</span><span id="line-534">      return create(impl).json5().ignoreErrors().noTrace().build();</span>
@@ -562,7 +562,7 @@
 <span class="source-line-no">549</span><span id="line-549">    * @param impl</span>
 <span class="source-line-no">550</span><span id="line-550">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">551</span><span id="line-551">    *    &lt;br&gt;If a class, it must have a no-arg constructor.</span>
-<span class="source-line-no">552</span><span id="line-552">    * @return A new builder.</span>
+<span class="source-line-no">552</span><span id="line-552">    * @return A new client.</span>
 <span class="source-line-no">553</span><span id="line-553">    */</span>
 <span class="source-line-no">554</span><span id="line-554">   public static MockRestClient buildJsonLax(Object impl) {</span>
 <span class="source-line-no">555</span><span id="line-555">      return create(impl).json().ignoreErrors().noTrace().build();</span>
@@ -583,7 +583,7 @@
 <span class="source-line-no">570</span><span id="line-570">    * @param impl</span>
 <span class="source-line-no">571</span><span id="line-571">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">572</span><span id="line-572">    *    &lt;br&gt;If a class, it must have a no-arg constructor.</span>
-<span class="source-line-no">573</span><span id="line-573">    * @return A new builder.</span>
+<span class="source-line-no">573</span><span id="line-573">    * @return A new client.</span>
 <span class="source-line-no">574</span><span id="line-574">    */</span>
 <span class="source-line-no">575</span><span id="line-575">   public static MockRestClient buildLax(Object impl) {</span>
 <span class="source-line-no">576</span><span id="line-576">      return create(impl).ignoreErrors().noTrace().build();</span>
@@ -976,8 +976,8 @@
 <span class="source-line-no">963</span><span id="line-963">   private HttpRequest findRestRequest(HttpRequest req) {</span>
 <span class="source-line-no">964</span><span id="line-964">      if (req instanceof RestRequestCreated req2)</span>
 <span class="source-line-no">965</span><span id="line-965">         return req2.getRestRequest();</span>
-<span class="source-line-no">966</span><span id="line-966">      if (req instanceof HttpRequestWrapper req3)</span>
-<span class="source-line-no">967</span><span id="line-967">         return findRestRequest(req3.getOriginal());</span>
+<span class="source-line-no">966</span><span id="line-966">      if (req instanceof HttpRequestWrapper req2)</span>
+<span class="source-line-no">967</span><span id="line-967">         return findRestRequest(req2.getOriginal());</span>
 <span class="source-line-no">968</span><span id="line-968">      return req;</span>
 <span class="source-line-no">969</span><span id="line-969">   }</span>
 <span class="source-line-no">970</span><span id="line-970"></span>

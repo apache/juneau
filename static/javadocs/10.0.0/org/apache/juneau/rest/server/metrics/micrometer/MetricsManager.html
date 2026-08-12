@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-46">MetricsManager</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-48">MetricsManager</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Shared worker for the <code>/metrics</code> management endpoint:  resolves a consumer-provided Micrometer
  <code>MeterRegistry</code> from the host bean store and renders a scrape payload.
@@ -160,7 +160,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MetricsManager</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-46">MetricsManager</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-48">MetricsManager</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveRegistry(org.apache.juneau.rest.server.RestContext)">
 <h3>resolveRegistry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">io.micrometer.core.instrument.MeterRegistry</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-54">resolveRegistry</a></span><wbr><span class="parameters">(<a href="../../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">io.micrometer.core.instrument.MeterRegistry</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-56">resolveRegistry</a></span><wbr><span class="parameters">(<a href="../../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context)</span></div>
 <div class="block">Resolves the consumer-provided <code>MeterRegistry</code> from the host context's bean store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="scrape(io.micrometer.core.instrument.MeterRegistry)">
 <h3>scrape</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-74">scrape</a></span><wbr><span class="parameters">(io.micrometer.core.instrument.MeterRegistry&nbsp;registry)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/metrics/micrometer/MetricsManager.html#line-76">scrape</a></span><wbr><span class="parameters">(io.micrometer.core.instrument.MeterRegistry&nbsp;registry)</span></div>
 <div class="block">Renders a Prometheus text scrape from the registry, if it is a <code>PrometheusMeterRegistry</code>.
 
  <p>

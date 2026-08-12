@@ -84,20 +84,31 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-54">LogRecord</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-62">LogRecord</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></span></div>
 <div class="block">LogRecord that supports lazy message formatting.
 
  <p>
  This class extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>java.util.logging.LogRecord</code></a> and overrides <a href="#getMessage()"><code>getMessage()</code></a> to use
- <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a> for lazy formatting.
- The message is only formatted when <a href="#getMessage()"><code>getMessage()</code></a> is actually called.
+ <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a> (printf-style <js>"%s"</js>/<js>"%d"</js>) for
+ lazy formatting. The message is only formatted when <a href="#getMessage()"><code>getMessage()</code></a> is actually called.
 
  <h5 class='section'>Usage:</h5>
  <p>
  This class is used internally by <a href="Logger.html" title="class in org.apache.juneau.commons.logging"><code>Logger</code></a> when logging formatted messages.
  The formatted message is only computed when the LogRecord's message is actually
  accessed (e.g., by a Handler or Formatter).
+ </p>
+
+ <h5 class='section'>Formatting contract:</h5>
+ <p>
+ Juneau <a href="Logger.html" title="class in org.apache.juneau.commons.logging"><code>Logger</code></a> patterns are <b>printf-style</b> (rendered here via <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a>).
+ Because this override returns the already-substituted message, downstream <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link"><code>Handlers</code></a> and
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Formatter.html" title="class or interface in java.util.logging" class="external-link"><code>Formatters</code></a> that call <a href="#getMessage()"><code>getMessage()</code></a> see fully-rendered text and never re-apply
+ formatting — so the printf-vs-MessageFormat choice is purely internal. The JDK's <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>
+ parameter contract of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a> only resurfaces if a record is serialized and consumed as a
+ plain <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a> by a non-Juneau handler; such a consumer would apply MessageFormat to the raw
+ <c>{0}</c> pattern, so printf patterns are not intended for that scenario.
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
@@ -156,22 +167,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the log message, formatting it lazily if needed.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSourceClassName()" class="member-name-link">getSourceClassName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the source class name, calculating it lazily from the stack trace if not already set.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSourceMethodName()" class="member-name-link">getSourceMethodName</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the source method name, calculating it lazily from the stack trace if not already set.</div>
-</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.util.logging.LogRecord">Methods inherited from class&nbsp;java.util.logging.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getInstant()" title="class or interface in java.util.logging" class="external-link">getInstant</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getLevel()" title="class or interface in java.util.logging" class="external-link">getLevel</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getLoggerName()" title="class or interface in java.util.logging" class="external-link">getLoggerName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getLongThreadID()" title="class or interface in java.util.logging" class="external-link">getLongThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getMillis()" title="class or interface in java.util.logging" class="external-link">getMillis</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getParameters()" title="class or interface in java.util.logging" class="external-link">getParameters</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getResourceBundle()" title="class or interface in java.util.logging" class="external-link">getResourceBundle</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getResourceBundleName()" title="class or interface in java.util.logging" class="external-link">getResourceBundleName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getSequenceNumber()" title="class or interface in java.util.logging" class="external-link">getSequenceNumber</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getThreadID()" title="class or interface in java.util.logging" class="external-link">getThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getThrown()" title="class or interface in java.util.logging" class="external-link">getThrown</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setInstant(java.time.Instant)" title="class or interface in java.util.logging" class="external-link">setInstant</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setLevel(java.util.logging.Level)" title="class or interface in java.util.logging" class="external-link">setLevel</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setLoggerName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setLoggerName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setLongThreadID(long)" title="class or interface in java.util.logging" class="external-link">setLongThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setMessage(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setMessage</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setMillis(long)" title="class or interface in java.util.logging" class="external-link">setMillis</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setParameters(java.lang.Object%5B%5D)" title="class or interface in java.util.logging" class="external-link">setParameters</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setResourceBundle(java.util.ResourceBundle)" title="class or interface in java.util.logging" class="external-link">setResourceBundle</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setResourceBundleName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setResourceBundleName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setSequenceNumber(long)" title="class or interface in java.util.logging" class="external-link">setSequenceNumber</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setSourceClassName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setSourceClassName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setSourceMethodName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setSourceMethodName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setThreadID(int)" title="class or interface in java.util.logging" class="external-link">setThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setThrown(java.lang.Throwable)" title="class or interface in java.util.logging" class="external-link">setThrown</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getInstant()" title="class or interface in java.util.logging" class="external-link">getInstant</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getLevel()" title="class or interface in java.util.logging" class="external-link">getLevel</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getLoggerName()" title="class or interface in java.util.logging" class="external-link">getLoggerName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getLongThreadID()" title="class or interface in java.util.logging" class="external-link">getLongThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getMillis()" title="class or interface in java.util.logging" class="external-link">getMillis</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getParameters()" title="class or interface in java.util.logging" class="external-link">getParameters</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getResourceBundle()" title="class or interface in java.util.logging" class="external-link">getResourceBundle</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getResourceBundleName()" title="class or interface in java.util.logging" class="external-link">getResourceBundleName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getSequenceNumber()" title="class or interface in java.util.logging" class="external-link">getSequenceNumber</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getSourceClassName()" title="class or interface in java.util.logging" class="external-link">getSourceClassName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getSourceMethodName()" title="class or interface in java.util.logging" class="external-link">getSourceMethodName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getThreadID()" title="class or interface in java.util.logging" class="external-link">getThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getThrown()" title="class or interface in java.util.logging" class="external-link">getThrown</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setInstant(java.time.Instant)" title="class or interface in java.util.logging" class="external-link">setInstant</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setLevel(java.util.logging.Level)" title="class or interface in java.util.logging" class="external-link">setLevel</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setLoggerName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setLoggerName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setLongThreadID(long)" title="class or interface in java.util.logging" class="external-link">setLongThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setMessage(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setMessage</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setMillis(long)" title="class or interface in java.util.logging" class="external-link">setMillis</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setParameters(java.lang.Object%5B%5D)" title="class or interface in java.util.logging" class="external-link">setParameters</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setResourceBundle(java.util.ResourceBundle)" title="class or interface in java.util.logging" class="external-link">setResourceBundle</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setResourceBundleName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setResourceBundleName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setSequenceNumber(long)" title="class or interface in java.util.logging" class="external-link">setSequenceNumber</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setSourceClassName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setSourceClassName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setSourceMethodName(java.lang.String)" title="class or interface in java.util.logging" class="external-link">setSourceMethodName</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setThreadID(int)" title="class or interface in java.util.logging" class="external-link">setThreadID</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setThrown(java.lang.Throwable)" title="class or interface in java.util.logging" class="external-link">setThrown</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -189,7 +190,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.logging.Level,java.lang.String,java.lang.Object[],java.lang.Throwable)">
 <h3>LogRecord</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-90">LogRecord</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-93">LogRecord</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]&nbsp;parameters,
@@ -197,8 +198,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>loggerName</code> - The logger name.</dd>
-<dd><code>level</code> - The log level.</dd>
+<dd><code>loggerName</code> - The logger name.  Can be <jk>null</jk>.</dd>
+<dd><code>level</code> - The log level.  Must not be <jk>null</jk>.</dd>
 <dd><code>msg</code> - The message pattern (will be used as-is if args is null or empty).</dd>
 <dd><code>parameters</code> - The format arguments, or <jk>null</jk> if none.</dd>
 <dd><code>throwable</code> - The throwable, or <jk>null</jk> if none.</dd>
@@ -216,7 +217,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMessage()">
 <h3>getMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-106">getMessage</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-109">getMessage</a></span>()</div>
 <div class="block">Returns the log message, formatting it lazily if needed.
 
  <p>
@@ -231,35 +232,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getSourceClassName()">
-<h3>getSourceClassName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-118">getSourceClassName</a></span>()</div>
-<div class="block">Returns the source class name, calculating it lazily from the stack trace if not already set.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getSourceClassName()" title="class or interface in java.util.logging" class="external-link">getSourceClassName</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></code></dd>
-<dt>Returns:</dt>
-<dd>The source class name, or <jk>null</jk> if not available.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getSourceMethodName()">
-<h3>getSourceMethodName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-130">getSourceMethodName</a></span>()</div>
-<div class="block">Returns the source method name, calculating it lazily from the stack trace if not already set.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getSourceMethodName()" title="class or interface in java.util.logging" class="external-link">getSourceMethodName</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></code></dd>
-<dt>Returns:</dt>
-<dd>The source method name, or <jk>null</jk> if not available.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="formatted(java.lang.String)">
 <h3>formatted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-250">formatted</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-205">formatted</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</span></div>
 <div class="block">Formats this log record as a string using the specified format pattern.
 
  <p>
@@ -274,7 +249,6 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" title="class or interface in java.util" class="external-link"><code>Formatter</code></a> with the following arguments:
  <ol>
    <li><c>date</c> - The date/time as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link"><code>Date</code></a> object
-   <li><c>source</c> - The source class name and method name (e.g., "com.example.MyClass myMethod")
    <li><c>logger</c> - The logger name
    <li><c>level</c> - The log level
    <li><c>message</c> - The formatted log message
@@ -285,9 +259,6 @@ loadScripts(document, 'script');</script>
  <ul>
    <li><js>"{date}"</js> - The date/time formatted using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/SimpleFormatter.html" title="class or interface in java.util.logging" class="external-link"><code>SimpleFormatter</code></a>'s default date format
    <li><js>"{timestamp}"</js> - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)
-   <li><js>"{class}"</js> - The source class name
-   <li><js>"{method}"</js> - The source method name
-   <li><js>"{source}"</js> - The source class name and method name (e.g., "com.example.MyClass myMethod")
    <li><js>"{logger}"</js> - The logger name
    <li><js>"{level}"</js> - The log level name
    <li><js>"{msg}"</js> - The log message (formatted if parameters are present)
@@ -304,11 +275,10 @@ loadScripts(document, 'script');</script>
  </p>
  <ul>
    <li><js>"%1$s"</js> or <js>"%1$tc"</js> - The date/time (argument 1)
-   <li><js>"%2$s"</js> - The source (argument 2)
-   <li><js>"%3$s"</js> - The logger name (argument 3)
-   <li><js>"%4$s"</js> - The log level (argument 4)
-   <li><js>"%5$s"</js> - The log message (argument 5)
-   <li><js>"%6$s"</js> - The throwable and its backtrace (argument 6)
+   <li><js>"%2$s"</js> - The logger name (argument 2)
+   <li><js>"%3$s"</js> - The log level (argument 3)
+   <li><js>"%4$s"</js> - The log message (argument 4)
+   <li><js>"%5$s"</js> - The throwable and its backtrace (argument 5)
  </ul>
 
  <p>
@@ -340,7 +310,7 @@ loadScripts(document, 'script');</script>
    <jc>// Result: "[2025-01-22T07:42:45.123-0500 INFO] User John logged in"</jc>
 
    <jc>// Using Formatter-style specifiers</jc>
-   String <jv>formatted2</jv> = <jv>record</jv>.formatted(<js>"%4$s: %5$s [%1$tc]%n"</js>);
+   String <jv>formatted2</jv> = <jv>record</jv>.formatted(<js>"%3$s: %4$s [%1$tc]%n"</js>);
    <jc>// Result: "INFO: User John logged in [Tue Jan 22 07:42:45 PST 2025]"</jc>
 
    <jc>// Mixed named placeholders and Formatter specifiers</jc>

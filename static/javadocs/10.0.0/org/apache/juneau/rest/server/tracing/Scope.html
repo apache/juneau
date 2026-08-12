@@ -110,7 +110,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -121,14 +121,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Closes the span.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setError(java.lang.Throwable)" class="member-name-link">setError</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;error)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Records the exception (if any) the <code>@RestOp</code> handler threw on the span.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#recordRpcError(int,java.lang.String)" class="member-name-link">recordRpcError</a><wbr>(int&nbsp;code,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Records a JSON-RPC-level error outcome on this span.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setStatusCode(int)" class="member-name-link">setStatusCode</a><wbr>(int&nbsp;statusCode)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setError(java.lang.Throwable)" class="member-name-link">setError</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;error)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Records the exception (if any) the <code>@RestOp</code> handler threw on the span.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setStatusCode(int)" class="member-name-link">setStatusCode</a><wbr>(int&nbsp;statusCode)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Records the HTTP response status code on the span.</div>
 </div>
 </div>
@@ -196,6 +202,33 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html#close()" title="class or interface in java.lang" class="external-link">close</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="recordRpcError(int,java.lang.String)">
+<h3>recordRpcError</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/tracing/Scope.html#line-99">recordRpcError</a></span><wbr><span class="parameters">(int&nbsp;code,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span></div>
+<div class="block">Records a JSON-RPC-level error outcome on this span.
+
+ <p>
+ A dated MCP adapter dispatches every request over HTTP <code>200</code>, so an application-level
+ JSON-RPC error (for example an unknown tool name) never reaches <a href="#setStatusCode(int)"><code>setStatusCode(int)</code></a>
+ with anything but <code>200</code> and never throws into <a href="#setError(java.lang.Throwable)"><code>setError(Throwable)</code></a>. This method
+ gives such a caller a neutral way to observe that outcome on the span &mdash; called from the
+ request-scoped tracing observation before a JSON-RPC error response is returned, distinct from
+ both the HTTP status path and the thrown-exception path.
+
+ <p>
+ Added as a source-compatible default so every existing <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a> implementation keeps
+ compiling unchanged. The default implementation is a no-op; a bridge that wants to classify
+ JSON-RPC errors on the span (for example the OpenTelemetry bridge in
+ <code>juneau-rest-server-tracing-otel</code>) overrides it.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>code</code> - The JSON-RPC error code (e.g. <code>-32601</code>).</dd>
+<dd><code>message</code> - The JSON-RPC error message. May be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

@@ -163,22 +163,24 @@ implements <a href="OpenApiProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.inject.BeanStore)">
 <h3>BasicOpenApiProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProvider.html#line-55">BasicOpenApiProvider</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProvider.html#line-56">BasicOpenApiProvider</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store containing injectable beans for this provider.</dd>
+<dd><code>beanStore</code> - The bean store containing injectable beans for this provider.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.openapi.OpenApiProvider.Builder)">
 <h3>BasicOpenApiProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProvider.html#line-73">BasicOpenApiProvider</a></span><wbr><span class="parameters">(<a href="OpenApiProvider.Builder.html" title="class in org.apache.juneau.rest.server.openapi">OpenApiProvider.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProvider.html#line-75">BasicOpenApiProvider</a></span><wbr><span class="parameters">(<a href="OpenApiProvider.Builder.html" title="class in org.apache.juneau.rest.server.openapi">OpenApiProvider.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder containing the settings for this OpenAPI provider.</dd>
+<dd><code>builder</code> - The builder containing the settings for this OpenAPI provider.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -193,7 +195,7 @@ implements <a href="OpenApiProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getOpenApi(org.apache.juneau.rest.server.RestContext,java.util.Locale)">
 <h3>getOpenApi</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProvider.html#line-92">getOpenApi</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bean/openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/openapi/BasicOpenApiProvider.html#line-94">getOpenApi</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Returns the OpenAPI 3.1 document associated with the specified context of a <a href="../Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>Rest</code></a>-annotated class.

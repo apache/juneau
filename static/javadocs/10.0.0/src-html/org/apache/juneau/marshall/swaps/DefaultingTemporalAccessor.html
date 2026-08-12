@@ -57,8 +57,8 @@
 <span class="source-line-no">044</span><span id="line-44">   /**</span>
 <span class="source-line-no">045</span><span id="line-45">    * Constructor.</span>
 <span class="source-line-no">046</span><span id="line-46">    *</span>
-<span class="source-line-no">047</span><span id="line-47">    * @param inner The temporal accessor being wrapped.</span>
-<span class="source-line-no">048</span><span id="line-48">    * @param zoneId The default zone ID if it's not specified in the accessor.</span>
+<span class="source-line-no">047</span><span id="line-47">    * @param inner The temporal accessor being wrapped. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">048</span><span id="line-48">    * @param zoneId The default zone ID if it's not specified in the accessor. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">049</span><span id="line-49">    */</span>
 <span class="source-line-no">050</span><span id="line-50">   public DefaultingTemporalAccessor(TemporalAccessor inner, ZoneId zoneId) {</span>
 <span class="source-line-no">051</span><span id="line-51">      this.inner = inner;</span>

@@ -164,7 +164,7 @@
 <span class="source-line-no">151</span><span id="line-151">      this.clazz = assertArgNotNull(ARG_clazz, clazz);</span>
 <span class="source-line-no">152</span><span id="line-152">      this.clazzPath = "/".equals(clazzPath) ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));</span>
 <span class="source-line-no">153</span><span id="line-153">      this.path = null;</span>
-<span class="source-line-no">154</span><span id="line-154">      this.hashCode = h(clazz, clazzPath);</span>
+<span class="source-line-no">154</span><span id="line-154">      this.hashCode = h(clazz, this.clazzPath);</span>
 <span class="source-line-no">155</span><span id="line-155">   }</span>
 <span class="source-line-no">156</span><span id="line-156"></span>
 <span class="source-line-no">157</span><span id="line-157">   /**</span>
@@ -236,7 +236,7 @@
 <span class="source-line-no">223</span><span id="line-223">    *    LocalFile &lt;jv&gt;file2&lt;/jv&gt; = &lt;jv&gt;dir&lt;/jv&gt;.resolve(&lt;js&gt;"pages/about.html"&lt;/js&gt;);</span>
 <span class="source-line-no">224</span><span id="line-224">    * &lt;/p&gt;</span>
 <span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    * &lt;h5 class='section'&gt;Security (CWE-22 / path-traversal):&lt;/h5&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">    * &lt;h5 class='section'&gt;Security (path-traversal):&lt;/h5&gt;</span>
 <span class="source-line-no">227</span><span id="line-227">    * &lt;p&gt;</span>
 <span class="source-line-no">228</span><span id="line-228">    * For filesystem-root {@code LocalDir} instances, path resolution is delegated to</span>
 <span class="source-line-no">229</span><span id="line-229">    * {@link FileUtils#resolveSafely(java.io.File, String)} which enforces a strict boundary check:</span>

@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133">    *       .build();</span>
 <span class="source-line-no">134</span><span id="line-134">    * &lt;/p&gt;</span>
 <span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * @param path The file path to write to.</span>
+<span class="source-line-no">136</span><span id="line-136">    * @param path The file path to write to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">137</span><span id="line-137">    * @return A new builder instance initialized with the specified path.</span>
 <span class="source-line-no">138</span><span id="line-138">    */</span>
 <span class="source-line-no">139</span><span id="line-139">   public static FileWriterBuilder create(String path) {</span>
@@ -255,7 +255,7 @@
 <span class="source-line-no">242</span><span id="line-242">    *       .build();</span>
 <span class="source-line-no">243</span><span id="line-243">    * &lt;/p&gt;</span>
 <span class="source-line-no">244</span><span id="line-244">    *</span>
-<span class="source-line-no">245</span><span id="line-245">    * @param cs The character encoding to use. The default is {@link Charset#defaultCharset()}.</span>
+<span class="source-line-no">245</span><span id="line-245">    * @param cs The character encoding to use.  Can be &lt;jk&gt;null&lt;/jk&gt; to use the default charset ({@link Charset#defaultCharset()}).</span>
 <span class="source-line-no">246</span><span id="line-246">    * @return This object for method chaining.</span>
 <span class="source-line-no">247</span><span id="line-247">    */</span>
 <span class="source-line-no">248</span><span id="line-248">   public FileWriterBuilder charset(Charset cs) {</span>
@@ -317,7 +317,7 @@
 <span class="source-line-no">304</span><span id="line-304">    *       .build();</span>
 <span class="source-line-no">305</span><span id="line-305">    * &lt;/p&gt;</span>
 <span class="source-line-no">306</span><span id="line-306">    *</span>
-<span class="source-line-no">307</span><span id="line-307">    * @param path The file path to write to.</span>
+<span class="source-line-no">307</span><span id="line-307">    * @param path The file path to write to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">308</span><span id="line-308">    * @return This object for method chaining.</span>
 <span class="source-line-no">309</span><span id="line-309">    */</span>
 <span class="source-line-no">310</span><span id="line-310">   public FileWriterBuilder file(String path) {</span>

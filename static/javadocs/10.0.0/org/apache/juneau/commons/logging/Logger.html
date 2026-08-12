@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-74">Logger</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-81">Logger</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></span></div>
 <div class="block">Extended logger that provides convenience methods for logging formatted messages.
 
@@ -99,27 +99,34 @@ loadScripts(document, 'script');</script>
    <li>All standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link"><code>Logger</code></a> functionality via delegation
    <li>Convenience methods for formatted logging at all log levels
    <li>Lazy evaluation of formatted messages using <a href="../utils/Shorts.html#fs(java.lang.String,java.lang.Object...)"><code>Shorts.fs(String, Object...)</code></a>
-   <li>Support for both MessageFormat-style and printf-style formatting
+   <li>Printf-style formatting (rendered via <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a>)
  </ul>
 
  <h5 class='section'>Format Support:</h5>
  <p>
- The formatting methods support both MessageFormat-style and printf-style formatting:
+ The formatting methods use printf-style (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" title="class or interface in java.util" class="external-link"><code>Formatter</code></a>) placeholders. MessageFormat-style
+ (<js>"{0}"</js>) patterns are <b>not</b> expanded here — use <a href="../utils/Shorts.html#mf(java.lang.String,java.lang.Object...)"><code>Shorts.mf(String, Object...)</code></a> /
+ <a href="../utils/StringUtils.html#mformat(java.lang.String,java.lang.Object...)"><code>StringUtils.mformat(String, Object...)</code></a> for those:
  </p>
  <ul>
-   <li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, etc.
-   <li><b>MessageFormat-style:</b> <js>"{0}"</js>, <js>"{1,number}"</js>, etc.
-   <li><b>Un-numbered MessageFormat:</b> <js>"{}"</js> - Sequential placeholders
+   <li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%1$s"</js>, etc.
  </ul>
+
+ <p>
+ Juneau <a href="Logger.html" title="class in org.apache.juneau.commons.logging"><code>Logger</code></a> patterns are printf-style. Because <a href="LogRecord.html#getMessage()"><code>LogRecord.getMessage()</code></a> returns the
+ already-substituted message, the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a> parameter contract of the underlying
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a> only surfaces if a record is serialized and consumed as a plain
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a> by a non-Juneau handler.
+ </p>
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
    Logger <jv>logger</jv> = Logger.getLogger(MyClass.<jk>class</jk>.getName());
 
-   <jc>// Formatted logging at different levels</jc>
-   <jv>logger</jv>.severe(<js>"Error processing user {0}: {1}"</js>, userId, error);
+   <jc>// Formatted logging at different levels (printf-style placeholders)</jc>
+   <jv>logger</jv>.severe(<js>"Error processing user %s: %s"</js>, userId, error);
    <jv>logger</jv>.warning(<js>"Failed to connect to %s after %d attempts"</js>, hostname, attempts);
-   <jv>logger</jv>.info(<js>"Processing {} items"</js>, count);
+   <jv>logger</jv>.info(<js>"Processing %s items"</js>, count);
    <jv>logger</jv>.fine(<js>"Debug value: %s"</js>, debugValue);
  </p>
 
@@ -373,11 +380,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.logging.Logger)">
 <h3>Logger</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-110">Logger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a>&nbsp;delegate)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-117">Logger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a>&nbsp;delegate)</span></div>
 <div class="block">Protected constructor - wraps an existing logger instance.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>delegate</code> - The underlying logger to delegate to.</dd>
+<dd><code>delegate</code> - The underlying logger to delegate to.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -392,7 +399,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLogger(java.lang.String)">
 <h3>getLogger</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Logger.html" title="class in org.apache.juneau.commons.logging">Logger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-127">getLogger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Logger.html" title="class in org.apache.juneau.commons.logging">Logger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-134">getLogger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Creates a logger for the specified name.
 
  <p>
@@ -402,7 +409,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#getLogger(java.lang.String)" title="class or interface in java.util.logging" class="external-link"><code>Logger.getLogger(String)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The logger name.</dd>
+<dd><code>name</code> - The logger name.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A logger instance (cached and reused for the same name).</dd>
 </dl>
@@ -411,11 +418,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLogger(java.lang.Class)">
 <h3>getLogger</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Logger.html" title="class in org.apache.juneau.commons.logging">Logger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-137">getLogger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Logger.html" title="class in org.apache.juneau.commons.logging">Logger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-144">getLogger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</span></div>
 <div class="block">Creates a logger for the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>clazz</code> - The class.</dd>
+<dd><code>clazz</code> - The class.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A logger instance.</dd>
 </dl>
@@ -424,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="captureEvents()">
 <h3>captureEvents</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogRecordCapture.html" title="class in org.apache.juneau.commons.logging">LogRecordCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-150">captureEvents</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogRecordCapture.html" title="class in org.apache.juneau.commons.logging">LogRecordCapture</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-157">captureEvents</a></span>()</div>
 <div class="block">Creates a log record capture for testing.
 
  <p>
@@ -439,7 +446,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="severe(java.lang.String)">
 <h3>severe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-208">severe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-215">severe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#severe(java.lang.String)" title="class or interface in java.util.logging" class="external-link">severe</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -449,7 +456,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="warning(java.lang.String)">
 <h3>warning</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-213">warning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-220">warning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#warning(java.lang.String)" title="class or interface in java.util.logging" class="external-link">warning</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -459,7 +466,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="info(java.lang.String)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-218">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-225">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#info(java.lang.String)" title="class or interface in java.util.logging" class="external-link">info</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -469,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="config(java.lang.String)">
 <h3>config</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-223">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-230">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#config(java.lang.String)" title="class or interface in java.util.logging" class="external-link">config</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -479,7 +486,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fine(java.lang.String)">
 <h3>fine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-228">fine</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-235">fine</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#fine(java.lang.String)" title="class or interface in java.util.logging" class="external-link">fine</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -489,7 +496,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finer(java.lang.String)">
 <h3>finer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-233">finer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-240">finer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#finer(java.lang.String)" title="class or interface in java.util.logging" class="external-link">finer</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -499,7 +506,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finest(java.lang.String)">
 <h3>finest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-238">finest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-245">finest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#finest(java.lang.String)" title="class or interface in java.util.logging" class="external-link">finest</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -509,7 +516,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.String)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-243">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-250">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -520,7 +527,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.String,java.lang.Object)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-248">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-255">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;param1)</span></div>
 <dl class="notes">
@@ -532,7 +539,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.String,java.lang.Object[])">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-253">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-260">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]&nbsp;params)</span></div>
 <dl class="notes">
@@ -544,7 +551,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="log(java.util.logging.Level,java.lang.String,java.lang.Throwable)">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-258">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-265">log</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown)</span></div>
 <dl class="notes">
@@ -556,7 +563,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isLoggable(java.util.logging.Level)">
 <h3>isLoggable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-263">isLoggable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-270">isLoggable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#isLoggable(java.util.logging.Level)" title="class or interface in java.util.logging" class="external-link">isLoggable</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -566,7 +573,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLevel()">
 <h3>getLevel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-268">getLevel</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-275">getLevel</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#getLevel()" title="class or interface in java.util.logging" class="external-link">getLevel</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -576,7 +583,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLevel(java.util.logging.Level)">
 <h3>setLevel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-273">setLevel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;newLevel)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-280">setLevel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;newLevel)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#setLevel(java.util.logging.Level)" title="class or interface in java.util.logging" class="external-link">setLevel</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -586,7 +593,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-278">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-285">getName</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#getName()" title="class or interface in java.util.logging" class="external-link">getName</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -596,7 +603,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addHandler(java.util.logging.Handler)">
 <h3>addHandler</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-283">addHandler</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link">Handler</a>&nbsp;handler)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-290">addHandler</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link">Handler</a>&nbsp;handler)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#addHandler(java.util.logging.Handler)" title="class or interface in java.util.logging" class="external-link">addHandler</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -606,7 +613,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="removeHandler(java.util.logging.Handler)">
 <h3>removeHandler</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-288">removeHandler</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link">Handler</a>&nbsp;handler)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-295">removeHandler</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link">Handler</a>&nbsp;handler)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#removeHandler(java.util.logging.Handler)" title="class or interface in java.util.logging" class="external-link">removeHandler</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -616,7 +623,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHandlers()">
 <h3>getHandlers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link">Handler</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-293">getHandlers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Handler.html" title="class or interface in java.util.logging" class="external-link">Handler</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-300">getHandlers</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html#getHandlers()" title="class or interface in java.util.logging" class="external-link">getHandlers</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a></code></dd>
@@ -626,7 +633,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="severe(java.lang.String,java.lang.Object...)">
 <h3>severe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-306">severe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-313">severe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a SEVERE level message with formatted string.</div>
 <dl class="notes">
@@ -639,7 +646,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="severe(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>severe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-317">severe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-324">severe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a SEVERE level message with formatted string and throwable.</div>
@@ -654,7 +661,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="warning(java.lang.String,java.lang.Object...)">
 <h3>warning</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-327">warning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-334">warning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a WARNING level message with formatted string.</div>
 <dl class="notes">
@@ -667,7 +674,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="warning(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>warning</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-338">warning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-345">warning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a WARNING level message with formatted string and throwable.</div>
@@ -682,7 +689,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="info(java.lang.String,java.lang.Object...)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-348">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-355">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs an INFO level message with formatted string.</div>
 <dl class="notes">
@@ -695,7 +702,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="info(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-359">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-366">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs an INFO level message with formatted string and throwable.</div>
@@ -710,7 +717,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="config(java.lang.String,java.lang.Object...)">
 <h3>config</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-369">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-376">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a CONFIG level message with formatted string.</div>
 <dl class="notes">
@@ -723,7 +730,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="config(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>config</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-380">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-387">config</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a CONFIG level message with formatted string and throwable.</div>
@@ -738,7 +745,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fine(java.lang.String,java.lang.Object...)">
 <h3>fine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-390">fine</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-397">fine</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a FINE level message with formatted string.</div>
 <dl class="notes">
@@ -751,7 +758,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fine(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>fine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-401">fine</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-408">fine</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a FINE level message with formatted string and throwable.</div>
@@ -766,7 +773,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finer(java.lang.String,java.lang.Object...)">
 <h3>finer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-411">finer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-418">finer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a FINER level message with formatted string.</div>
 <dl class="notes">
@@ -779,7 +786,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finer(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>finer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-422">finer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-429">finer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a FINER level message with formatted string and throwable.</div>
@@ -794,7 +801,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finest(java.lang.String,java.lang.Object...)">
 <h3>finest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-432">finest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-439">finest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a FINEST level message with formatted string.</div>
 <dl class="notes">
@@ -807,7 +814,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finest(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>finest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-443">finest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-450">finest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a FINEST level message with formatted string and throwable.</div>
@@ -822,13 +829,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="logf(java.util.logging.Level,java.lang.String,java.lang.Object...)">
 <h3>logf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-454">logf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-461">logf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a message at the specified level with formatted string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>level</code> - The log level.</dd>
+<dd><code>level</code> - The log level.  Must not be <jk>null</jk>.</dd>
 <dd><code>pattern</code> - The format pattern.</dd>
 <dd><code>args</code> - The format arguments.</dd>
 </dl>
@@ -837,14 +844,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="logf(java.util.logging.Level,java.lang.String,java.lang.Throwable,java.lang.Object...)">
 <h3>logf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-466">logf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/Logger.html#line-473">logf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pattern,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a message at the specified level with formatted string and throwable.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>level</code> - The log level.</dd>
+<dd><code>level</code> - The log level.  Must not be <jk>null</jk>.</dd>
 <dd><code>pattern</code> - The format pattern.</dd>
 <dd><code>thrown</code> - The throwable.</dd>
 <dd><code>args</code> - The format arguments.</dd>

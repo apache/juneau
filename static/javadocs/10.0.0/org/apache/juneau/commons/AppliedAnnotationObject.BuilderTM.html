@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotationType</code> - The annotation type of the annotation implementation class.</dd>
+<dd><code>annotationType</code> - The annotation type of the annotation implementation class.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Appends the methods that this annotation applies to.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The values to append.</dd>
+<dd><code>value</code> - The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Appends the methods that this annotation applies to.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The values to append.</dd>
+<dd><code>value</code> - The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="AppliedAnnotationObject.Builder.html#on(java.lang.String...)">on</a></code>&nbsp;in class&nbsp;<code><a href="AppliedAnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AppliedAnnotationObject.Builder</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The targets this annotation applies to.</dd>
+<dd><code>value</code> - The targets this annotation applies to.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -247,7 +247,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="AppliedAnnotationObject.BuilderT.html#onClass(java.lang.Class...)">onClass</a></code>&nbsp;in class&nbsp;<code><a href="AppliedAnnotationObject.BuilderT.html" title="class in org.apache.juneau.commons">AppliedAnnotationObject.BuilderT</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The values to append.</dd>
+<dd><code>value</code> - The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="JwtTokenValidator.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-140">JwtTokenValidator.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-142">JwtTokenValidator.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder class for <a href="JwtTokenValidator.html" title="class in org.apache.juneau.rest.server.auth.jwt"><code>JwtTokenValidator</code></a>.</div>
 </section>
@@ -192,7 +192,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-175">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-177">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -207,14 +207,19 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jwksUrl(java.net.URI)">
 <h3>jwksUrl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-186">jwksUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-193">jwksUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the JWKS endpoint URL the validator fetches keys from.
 
  <p>
- Mutually exclusive with <a href="#jwkSource(com.nimbusds.jose.jwk.source.JWKSource)"><code>jwkSource(JWKSource)</code></a> — set one or the other.</div>
+ Mutually exclusive with <a href="#jwkSource(com.nimbusds.jose.jwk.source.JWKSource)"><code>jwkSource(JWKSource)</code></a> — set one or the other.
+
+ <p>
+ The URL must use <js>"https"</js> or target a loopback host; the signing-key material fetched from
+ this endpoint is the trust anchor for every token, so a plaintext transport to a non-loopback host
+ is rejected.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The JWKS URL. Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The JWKS URL. Must not be <jk>null</jk> and must use HTTPS or target a loopback host.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -223,7 +228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jwkSource(com.nimbusds.jose.jwk.source.JWKSource)">
 <h3>jwkSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-202">jwkSource</a></span><wbr><span class="parameters">(com.nimbusds.jose.jwk.source.JWKSource&lt;com.nimbusds.jose.proc.SecurityContext&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-209">jwkSource</a></span><wbr><span class="parameters">(com.nimbusds.jose.jwk.source.JWKSource&lt;com.nimbusds.jose.proc.SecurityContext&gt;&nbsp;value)</span></div>
 <div class="block">Sets a custom <code>JWKSource</code> the validator fetches keys from.
 
  <p>
@@ -241,7 +246,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="issuer(java.lang.String)">
 <h3>issuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-213">issuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-220">issuer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the required <code>iss</code> (issuer) claim value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -254,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="audience(java.lang.String)">
 <h3>audience</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-224">audience</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-231">audience</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the required <code>aud</code> (audience) claim value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -267,7 +272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="algorithms(com.nimbusds.jose.JWSAlgorithm...)">
 <h3>algorithms</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-241">algorithms</a></span><wbr><span class="parameters">(com.nimbusds.jose.JWSAlgorithm...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-248">algorithms</a></span><wbr><span class="parameters">(com.nimbusds.jose.JWSAlgorithm...&nbsp;values)</span></div>
 <div class="block">Sets the signing-algorithm allowlist.
 
  <p>
@@ -286,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clockSkew(java.time.Duration)">
 <h3>clockSkew</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-262">clockSkew</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-269">clockSkew</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the clock-skew tolerance for <code>exp</code> / <code>nbf</code> validation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -299,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jwksCacheTtl(java.time.Duration)">
 <h3>jwksCacheTtl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-278">jwksCacheTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-285">jwksCacheTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the JWKS cache TTL.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -312,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jwksEagerRefreshOnKidMiss(boolean)">
 <h3>jwksEagerRefreshOnKidMiss</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-304">jwksEagerRefreshOnKidMiss</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-311">jwksEagerRefreshOnKidMiss</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Enables or disables the eager JWKS refresh that fires on a fresh-cache <code>kid</code> miss.
 
  <p>
@@ -337,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jwksEagerRefreshCooldown(java.time.Duration)">
 <h3>jwksEagerRefreshCooldown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-324">jwksEagerRefreshCooldown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-331">jwksEagerRefreshCooldown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the minimum spacing between consecutive eager JWKS refreshes.
 
  <p>
@@ -358,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clock(java.time.Clock)">
 <h3>clock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-342">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-348">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
 <div class="block">Overrides the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link"><code>Clock</code></a> used for <code>exp</code> / <code>nbf</code> comparisons and JWKS cache
  TTL. Useful in tests.</div>
 <dl class="notes">
@@ -372,7 +377,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-352">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.Builder.html#line-358">build</a></span>()</div>
 <div class="block">Builds the validator.</div>
 <dl class="notes">
 <dt>Returns:</dt>

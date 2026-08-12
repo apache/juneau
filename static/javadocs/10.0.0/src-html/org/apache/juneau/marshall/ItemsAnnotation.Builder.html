@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -550,14 +550,14 @@
 <span class="source-line-no">537</span><span id="line-537"></span>
 <span class="source-line-no">538</span><span id="line-538">      Object(ItemsAnnotation.Builder b) {</span>
 <span class="source-line-no">539</span><span id="line-539">         super(b);</span>
-<span class="source-line-no">540</span><span id="line-540">         description = copyOf(b.description);</span>
+<span class="source-line-no">540</span><span id="line-540">         description = cp(b.description);</span>
 <span class="source-line-no">541</span><span id="line-541">         $ref = b.$ref;</span>
-<span class="source-line-no">542</span><span id="line-542">         default_ = copyOf(b.default_);</span>
-<span class="source-line-no">543</span><span id="line-543">         enum_ = copyOf(b.enum_);</span>
+<span class="source-line-no">542</span><span id="line-542">         default_ = cp(b.default_);</span>
+<span class="source-line-no">543</span><span id="line-543">         enum_ = cp(b.enum_);</span>
 <span class="source-line-no">544</span><span id="line-544">         cf = b.cf;</span>
 <span class="source-line-no">545</span><span id="line-545">         collectionFormat = b.collectionFormat;</span>
-<span class="source-line-no">546</span><span id="line-546">         df = copyOf(b.df);</span>
-<span class="source-line-no">547</span><span id="line-547">         e = copyOf(b.e);</span>
+<span class="source-line-no">546</span><span id="line-546">         df = cp(b.df);</span>
+<span class="source-line-no">547</span><span id="line-547">         e = cp(b.e);</span>
 <span class="source-line-no">548</span><span id="line-548">         emax = b.emax;</span>
 <span class="source-line-no">549</span><span id="line-549">         emin = b.emin;</span>
 <span class="source-line-no">550</span><span id="line-550">         exclusiveMaximum = b.exclusiveMaximum;</span>
@@ -778,7 +778,7 @@
 <span class="source-line-no">765</span><span id="line-765">   /**</span>
 <span class="source-line-no">766</span><span id="line-766">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</span>
 <span class="source-line-no">767</span><span id="line-767">    *</span>
-<span class="source-line-no">768</span><span id="line-768">    * @param a The annotation to check.</span>
+<span class="source-line-no">768</span><span id="line-768">    * @param a The annotation to check. Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;true&lt;/jk&gt;).</span>
 <span class="source-line-no">769</span><span id="line-769">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</span>
 <span class="source-line-no">770</span><span id="line-770">    */</span>
 <span class="source-line-no">771</span><span id="line-771">   public static boolean empty(Items a) {</span>

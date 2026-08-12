@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Object,org.apache.juneau.marshall.httppart.HttpPartSerializerSession,org.apache.juneau.marshall.httppart.HttpPartSchema,boolean)">
 <h3>SerializedHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-141">SerializedHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-144">SerializedHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;serializer,
  <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
@@ -239,8 +239,9 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The HTTP header name name.</dd>
-<dd><code>value</code> - The POJO to serialize to the parameter value.</dd>
-<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.</dd>
+<dd><code>value</code> - The POJO to serialize to the parameter value.  Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartSerializerSession</code></a> and <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart"><code>HttpPartSchema</code></a>.</dd>
+<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.
+   <br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.</dd>
 <dd><code>schema</code> - The schema object that defines the format of the output.
    <br>If <jk>null</jk>, defaults to the schema defined on the serializer.
    <br>If that's also <jk>null</jk>, defaults to <a href="../../../marshall/httppart/HttpPartSchema.html#DEFAULT"><code>HttpPartSchema.DEFAULT</code></a>.
@@ -255,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.function.Supplier,org.apache.juneau.marshall.httppart.HttpPartSerializerSession,org.apache.juneau.marshall.httppart.HttpPartSchema,boolean)">
 <h3>SerializedHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-172">SerializedHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-176">SerializedHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value,
  <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;serializer,
  <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
@@ -267,8 +268,9 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The HTTP header name name.</dd>
-<dd><code>value</code> - The supplier of the POJO to serialize to the parameter value.</dd>
-<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.</dd>
+<dd><code>value</code> - The supplier of the POJO to serialize to the parameter value.  Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartSerializerSession</code></a> and <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart"><code>HttpPartSchema</code></a>.</dd>
+<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.
+   <br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.</dd>
 <dd><code>schema</code> - The schema object that defines the format of the output.
    <br>If <jk>null</jk>, defaults to the schema defined on the serializer.
    <br>If that's also <jk>null</jk>, defaults to <a href="../../../marshall/httppart/HttpPartSchema.html#DEFAULT"><code>HttpPartSchema.DEFAULT</code></a>.
@@ -283,11 +285,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.header.SerializedHeader)">
 <h3>SerializedHeader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-186">SerializedHeader</a></span><wbr><span class="parameters">(<a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-190">SerializedHeader</a></span><wbr><span class="parameters">(<a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The object to copy.</dd>
+<dd><code>copyFrom</code> - The object to copy.  Must not be <jk>null</jk> or a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown.</dd>
 </dl>
 </section>
 </li>
@@ -309,9 +311,9 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The POJO to serialize as the header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartSerializerSession</code></a> and <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart"><code>HttpPartSchema</code></a>.</dd>
 <dt>Returns:</dt>
-<dd>A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.</dd>
+<dd>A new header bean.  Never <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -320,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.Object,org.apache.juneau.marshall.httppart.HttpPartSerializerSession,org.apache.juneau.marshall.httppart.HttpPartSchema,boolean)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-73">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-74">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;serializer,
  <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
@@ -330,7 +332,8 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The HTTP header name name.</dd>
 <dd><code>value</code> - The POJO to serialize as the header value.</dd>
-<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.</dd>
+<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.
+   <br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.</dd>
 <dd><code>schema</code> - The schema object that defines the format of the output.
    <br>If <jk>null</jk>, defaults to the schema defined on the serializer.
    <br>If that's also <jk>null</jk>, defaults to <a href="../../../marshall/httppart/HttpPartSchema.html#DEFAULT"><code>HttpPartSchema.DEFAULT</code></a>.
@@ -338,7 +341,7 @@ loadScripts(document, 'script');</script>
    <br>Can also be a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a>.</dd>
 <dd><code>skipIfEmpty</code> - If value is a blank string, the value should return as <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.</dd>
+<dd>A new header bean.  Never <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -347,7 +350,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.util.function.Supplier)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-90">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-91">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Static creator with delayed value.
 
@@ -357,9 +360,9 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.</dd>
 <dd><code>value</code> - The supplier of the POJO to serialize as the header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent — see <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart"><code>HttpPartSerializerSession</code></a> and <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart"><code>HttpPartSchema</code></a>.</dd>
 <dt>Returns:</dt>
-<dd>A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.</dd>
+<dd>A new header bean.  Never <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -368,7 +371,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.util.function.Supplier,org.apache.juneau.marshall.httppart.HttpPartSerializerSession,org.apache.juneau.marshall.httppart.HttpPartSchema,boolean)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-115">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-117">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value,
  <a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;serializer,
  <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
@@ -381,7 +384,8 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>name</code> - The HTTP header name name.</dd>
 <dd><code>value</code> - The supplier of the POJO to serialize as the header value.</dd>
-<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.</dd>
+<dd><code>serializer</code> - The serializer to use for serializing the value to a string value.
+   <br>Can be <jk>null</jk>, in which case the value is converted directly to a string instead of being serialized.</dd>
 <dd><code>schema</code> - The schema object that defines the format of the output.
    <br>If <jk>null</jk>, defaults to the schema defined on the serializer.
    <br>If that's also <jk>null</jk>, defaults to <a href="../../../marshall/httppart/HttpPartSchema.html#DEFAULT"><code>HttpPartSchema.DEFAULT</code></a>.
@@ -389,7 +393,7 @@ loadScripts(document, 'script');</script>
    <br>Can also be a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a>.</dd>
 <dd><code>skipIfEmpty</code> - If value is a blank string, the value should return as <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.</dd>
+<dd>A new header bean.  Never <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If name is <jk>null</jk> or empty.</dd>
 </dl>
@@ -398,7 +402,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-200">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-204">copy</a></span>()</div>
 <div class="block">Creates a copy of this object.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -411,13 +415,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copyWith(org.apache.juneau.marshall.httppart.HttpPartSerializerSession,org.apache.juneau.marshall.httppart.HttpPartSchema)">
 <h3>copyWith</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-213">copyWith</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;serializer,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-217">copyWith</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;serializer,
  <a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema)</span></div>
 <div class="block">Copies this bean and sets the serializer and schema on it.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>serializer</code> - The new serializer for the bean.  Can be <jk>null</jk>.</dd>
-<dd><code>schema</code> - The new schema for the bean.  Can be <jk>null</jk>.</dd>
+<dd><code>serializer</code> - The new serializer for the bean.  Can be <jk>null</jk> to leave the serializer unchanged.</dd>
+<dd><code>schema</code> - The new schema for the bean.  Can be <jk>null</jk> to leave the schema unchanged.</dd>
 <dt>Returns:</dt>
 <dd>Either a new bean with the serializer set, or this bean if
    both values are <jk>null</jk> or the serializer and schema were already set.</dd>
@@ -427,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getValue()">
 <h3>getValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-225">getValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-229">getValue</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html#getValue--" title="class or interface in org.apache.http" class="external-link">getValue</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link">NameValuePair</a></code></dd>
@@ -439,11 +443,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schema(org.apache.juneau.marshall.httppart.HttpPartSchema)">
 <h3>schema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-251">schema</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-255">schema</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
 <div class="block">Sets the schema object that defines the format of the output.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -452,11 +456,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializer(org.apache.juneau.marshall.httppart.HttpPartSerializer)">
 <h3>serializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-262">serializer</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-266">serializer</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&nbsp;value)</span></div>
 <div class="block">Sets the serializer to use for serializing the value to a string value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -465,11 +469,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializer(org.apache.juneau.marshall.httppart.HttpPartSerializerSession)">
 <h3>serializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-274">serializer</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-278">serializer</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a>&nbsp;value)</span></div>
 <div class="block">Sets the serializer to use for serializing the value to a string value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -478,7 +482,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="skipIfEmpty()">
 <h3>skipIfEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-284">skipIfEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-288">skipIfEmpty</a></span>()</div>
 <div class="block">Don't serialize this header if the value is <jk>null</jk> or an empty string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -489,7 +493,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="skipIfEmpty(boolean)">
 <h3>skipIfEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-294">skipIfEmpty</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SerializedHeader.html" title="class in org.apache.juneau.http.classic.header">SerializedHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/SerializedHeader.html#line-298">skipIfEmpty</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Don't serialize this header if the value is <jk>null</jk> or an empty string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

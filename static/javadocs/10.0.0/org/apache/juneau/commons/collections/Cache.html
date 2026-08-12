@@ -436,7 +436,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="
 <div class="block">Returns <jk>true</jk> if the cache contains a mapping for the specified key.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key to check.</dd>
+<dd><code>key</code> - The key to check. Can be <jk>null</jk> (null keys are supported like any other key).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the cache contains the key.</dd>
 </dl>
@@ -449,7 +449,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="
 <div class="block">Returns <jk>true</jk> if the cache contains one or more entries with the specified value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to check.</dd>
+<dd><code>value</code> - The value to check. Can be <jk>null</jk>, in which case this method returns <jk>false</jk> (the cache never stores <jk>null</jk> values).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the cache contains the value.</dd>
 </dl>
@@ -477,7 +477,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The cache key. Can be <jk>null</jk>.</dd>
+<dd><code>key</code> - The cache key. Can be <jk>null</jk> (null keys are supported like any other key).</dd>
 <dt>Returns:</dt>
 <dd>The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.</dd>
 <dt>Throws:</dt>
@@ -525,8 +525,8 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The cache key. Can be <jk>null</jk>.</dd>
-<dd><code>supplier</code> - The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.</dd>
+<dd><code>key</code> - The cache key. Can be <jk>null</jk> (null keys are supported like any other key).</dd>
+<dd><code>supplier</code> - The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk> or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.</dd>
 </dl>
@@ -583,7 +583,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="
 <div class="block">Associates the specified value with the specified key in this cache.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The cache key. Can be <jk>null</jk>.</dd>
+<dd><code>key</code> - The cache key. Can be <jk>null</jk> (null keys are supported like any other key).</dd>
 <dd><code>value</code> - The value to associate with the key.</dd>
 <dt>Returns:</dt>
 <dd>The previous value associated with the key, or <jk>null</jk> if there was no mapping.</dd>
@@ -597,7 +597,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache.Builder.html" title="
 <div class="block">Removes the entry for the specified key from the cache.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key to remove. Can be <jk>null</jk>.</dd>
+<dd><code>key</code> - The key to remove. Can be <jk>null</jk> (null keys are supported like any other key).</dd>
 <dt>Returns:</dt>
 <dd>The previous value associated with the key, or <jk>null</jk> if there was no mapping.</dd>
 </dl>

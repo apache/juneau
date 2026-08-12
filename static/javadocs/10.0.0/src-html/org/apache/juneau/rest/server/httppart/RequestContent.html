@@ -214,410 +214,439 @@
 <span class="source-line-no">201</span><span id="line-201">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
 <span class="source-line-no">202</span><span id="line-202">    * &lt;/ul&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    * @param type The class type to instantiate.</span>
-<span class="source-line-no">205</span><span id="line-205">    * @param &lt;T&gt; The class type to instantiate.</span>
-<span class="source-line-no">206</span><span id="line-206">    * @return The input parsed to a POJO.</span>
-<span class="source-line-no">207</span><span id="line-207">    * @throws BadRequest Thrown if input could not be parsed or fails schema validation.</span>
-<span class="source-line-no">208</span><span id="line-208">    * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.</span>
-<span class="source-line-no">209</span><span id="line-209">    * @throws InternalServerError Thrown if an {@link IOException} occurs.</span>
-<span class="source-line-no">210</span><span id="line-210">    */</span>
-<span class="source-line-no">211</span><span id="line-211">   public &lt;T&gt; T as(Class&lt;T&gt; type) throws BadRequest, UnsupportedMediaType, InternalServerError {</span>
-<span class="source-line-no">212</span><span id="line-212">      return getInner(getClassMeta(type));</span>
-<span class="source-line-no">213</span><span id="line-213">   }</span>
-<span class="source-line-no">214</span><span id="line-214"></span>
-<span class="source-line-no">215</span><span id="line-215">   /**</span>
-<span class="source-line-no">216</span><span id="line-216">    * Reads the input from the HTTP request parsed into a POJO.</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;p&gt;</span>
-<span class="source-line-no">219</span><span id="line-219">    * This is similar to {@link #as(Class)} but allows for complex collections of POJOs to be created.</span>
-<span class="source-line-no">220</span><span id="line-220">    *</span>
-<span class="source-line-no">221</span><span id="line-221">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">222</span><span id="line-222">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">223</span><span id="line-223">    *    &lt;jc&gt;// Parse into a linked-list of strings.&lt;/jc&gt;</span>
-<span class="source-line-no">224</span><span id="line-224">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;content1&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    *    &lt;jc&gt;// Parse into a linked-list of linked-lists of strings.&lt;/jc&gt;</span>
-<span class="source-line-no">227</span><span id="line-227">    *    List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; &lt;jv&gt;content2&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(LinkedList.&lt;jk&gt;class&lt;/jk&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">228</span><span id="line-228">    *</span>
-<span class="source-line-no">229</span><span id="line-229">    *    &lt;jc&gt;// Parse into a map of string keys/values.&lt;/jc&gt;</span>
-<span class="source-line-no">230</span><span id="line-230">    *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;content3&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">231</span><span id="line-231">    *</span>
-<span class="source-line-no">232</span><span id="line-232">    *    &lt;jc&gt;// Parse into a map containing string keys and values of lists containing beans.&lt;/jc&gt;</span>
-<span class="source-line-no">233</span><span id="line-233">    *    Map&amp;lt;String,List&amp;lt;MyBean&amp;gt;&amp;gt; &lt;jv&gt;content4&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, List.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">234</span><span id="line-234">    * &lt;/p&gt;</span>
-<span class="source-line-no">235</span><span id="line-235">    *</span>
-<span class="source-line-no">236</span><span id="line-236">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">237</span><span id="line-237">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">238</span><span id="line-238">    *       &lt;c&gt;Collections&lt;/c&gt; must be followed by zero or one parameter representing the value type.</span>
+<span class="source-line-no">204</span><span id="line-204">    * @param type</span>
+<span class="source-line-no">205</span><span id="line-205">    *    The class type to instantiate.</span>
+<span class="source-line-no">206</span><span id="line-206">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; or &lt;code&gt;Object.&lt;jk&gt;class&lt;/jk&gt;&lt;/code&gt; to auto-detect the type based on the input.</span>
+<span class="source-line-no">207</span><span id="line-207">    * @param &lt;T&gt; The class type to instantiate.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @return The input parsed to a POJO.</span>
+<span class="source-line-no">209</span><span id="line-209">    * @throws BadRequest Thrown if input could not be parsed or fails schema validation.</span>
+<span class="source-line-no">210</span><span id="line-210">    * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.</span>
+<span class="source-line-no">211</span><span id="line-211">    * @throws InternalServerError Thrown if an {@link IOException} occurs.</span>
+<span class="source-line-no">212</span><span id="line-212">    */</span>
+<span class="source-line-no">213</span><span id="line-213">   public &lt;T&gt; T as(Class&lt;T&gt; type) throws BadRequest, UnsupportedMediaType, InternalServerError {</span>
+<span class="source-line-no">214</span><span id="line-214">      return getInner(getClassMeta(type));</span>
+<span class="source-line-no">215</span><span id="line-215">   }</span>
+<span class="source-line-no">216</span><span id="line-216"></span>
+<span class="source-line-no">217</span><span id="line-217">   /**</span>
+<span class="source-line-no">218</span><span id="line-218">    * Reads the input from the HTTP request parsed into a POJO.</span>
+<span class="source-line-no">219</span><span id="line-219">    *</span>
+<span class="source-line-no">220</span><span id="line-220">    * &lt;p&gt;</span>
+<span class="source-line-no">221</span><span id="line-221">    * This is similar to {@link #as(Class)} but allows for complex collections of POJOs to be created.</span>
+<span class="source-line-no">222</span><span id="line-222">    *</span>
+<span class="source-line-no">223</span><span id="line-223">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">225</span><span id="line-225">    *    &lt;jc&gt;// Parse into a linked-list of strings.&lt;/jc&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">    *    List&amp;lt;String&amp;gt; &lt;jv&gt;content1&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">227</span><span id="line-227">    *</span>
+<span class="source-line-no">228</span><span id="line-228">    *    &lt;jc&gt;// Parse into a linked-list of linked-lists of strings.&lt;/jc&gt;</span>
+<span class="source-line-no">229</span><span id="line-229">    *    List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; &lt;jv&gt;content2&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(LinkedList.&lt;jk&gt;class&lt;/jk&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">230</span><span id="line-230">    *</span>
+<span class="source-line-no">231</span><span id="line-231">    *    &lt;jc&gt;// Parse into a map of string keys/values.&lt;/jc&gt;</span>
+<span class="source-line-no">232</span><span id="line-232">    *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;content3&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">233</span><span id="line-233">    *</span>
+<span class="source-line-no">234</span><span id="line-234">    *    &lt;jc&gt;// Parse into a map containing string keys and values of lists containing beans.&lt;/jc&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    *    Map&amp;lt;String,List&amp;lt;MyBean&amp;gt;&amp;gt; &lt;jv&gt;content4&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(TreeMap.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;, List.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">236</span><span id="line-236">    * &lt;/p&gt;</span>
+<span class="source-line-no">237</span><span id="line-237">    *</span>
+<span class="source-line-no">238</span><span id="line-238">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">239</span><span id="line-239">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">240</span><span id="line-240">    *       &lt;c&gt;Maps&lt;/c&gt; must be followed by zero or two parameters representing the key and value types.</span>
+<span class="source-line-no">240</span><span id="line-240">    *       &lt;c&gt;Collections&lt;/c&gt; must be followed by zero or one parameter representing the value type.</span>
 <span class="source-line-no">241</span><span id="line-241">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">242</span><span id="line-242">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
-<span class="source-line-no">243</span><span id="line-243">    * &lt;/ul&gt;</span>
-<span class="source-line-no">244</span><span id="line-244">    *</span>
-<span class="source-line-no">245</span><span id="line-245">    * @param type</span>
-<span class="source-line-no">246</span><span id="line-246">    *    The type of object to create.</span>
-<span class="source-line-no">247</span><span id="line-247">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
-<span class="source-line-no">248</span><span id="line-248">    * @param args</span>
-<span class="source-line-no">249</span><span id="line-249">    *    The type arguments of the class if it's a collection or map.</span>
-<span class="source-line-no">250</span><span id="line-250">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
-<span class="source-line-no">251</span><span id="line-251">    *    &lt;br&gt;Ignored if the main type is not a map or collection.</span>
-<span class="source-line-no">252</span><span id="line-252">    * @param &lt;T&gt; The class type to instantiate.</span>
-<span class="source-line-no">253</span><span id="line-253">    * @return The input parsed to a POJO.</span>
-<span class="source-line-no">254</span><span id="line-254">    * @throws BadRequest Thrown if input could not be parsed or fails schema validation.</span>
-<span class="source-line-no">255</span><span id="line-255">    * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.</span>
-<span class="source-line-no">256</span><span id="line-256">    * @throws InternalServerError Thrown if an {@link IOException} occurs.</span>
-<span class="source-line-no">257</span><span id="line-257">    */</span>
-<span class="source-line-no">258</span><span id="line-258">   public &lt;T&gt; T as(Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {</span>
-<span class="source-line-no">259</span><span id="line-259">      return getInner(this.&lt;T&gt;getClassMeta(type, args));</span>
-<span class="source-line-no">260</span><span id="line-260">   }</span>
-<span class="source-line-no">261</span><span id="line-261"></span>
-<span class="source-line-no">262</span><span id="line-262">   /**</span>
-<span class="source-line-no">263</span><span id="line-263">    * Returns the HTTP content content as a plain string.</span>
-<span class="source-line-no">264</span><span id="line-264">    *</span>
-<span class="source-line-no">265</span><span id="line-265">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">266</span><span id="line-266">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
-<span class="source-line-no">268</span><span id="line-268">    * &lt;/ul&gt;</span>
-<span class="source-line-no">269</span><span id="line-269">    *</span>
-<span class="source-line-no">270</span><span id="line-270">    * @return The incoming input from the connection as a plain string.</span>
-<span class="source-line-no">271</span><span id="line-271">    * @throws IOException If a problem occurred trying to read from the reader.</span>
-<span class="source-line-no">272</span><span id="line-272">    */</span>
-<span class="source-line-no">273</span><span id="line-273">   public byte[] asBytes() throws IOException {</span>
-<span class="source-line-no">274</span><span id="line-274">      cache();</span>
-<span class="source-line-no">275</span><span id="line-275">      return content;</span>
-<span class="source-line-no">276</span><span id="line-276">   }</span>
-<span class="source-line-no">277</span><span id="line-277"></span>
-<span class="source-line-no">278</span><span id="line-278">   /**</span>
-<span class="source-line-no">279</span><span id="line-279">    * Returns the HTTP content content as a simple hexadecimal character string.</span>
-<span class="source-line-no">280</span><span id="line-280">    *</span>
-<span class="source-line-no">281</span><span id="line-281">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">282</span><span id="line-282">    * &lt;p class='bcode'&gt;</span>
-<span class="source-line-no">283</span><span id="line-283">    *    0123456789ABCDEF</span>
-<span class="source-line-no">284</span><span id="line-284">    * &lt;/p&gt;</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @return The incoming input from the connection as a plain string.</span>
-<span class="source-line-no">287</span><span id="line-287">    * @throws IOException If a problem occurred trying to read from the reader.</span>
-<span class="source-line-no">288</span><span id="line-288">    */</span>
-<span class="source-line-no">289</span><span id="line-289">   public String asHex() throws IOException {</span>
-<span class="source-line-no">290</span><span id="line-290">      cache();</span>
-<span class="source-line-no">291</span><span id="line-291">      return toHex(content);</span>
-<span class="source-line-no">292</span><span id="line-292">   }</span>
-<span class="source-line-no">293</span><span id="line-293"></span>
-<span class="source-line-no">294</span><span id="line-294">   /**</span>
-<span class="source-line-no">295</span><span id="line-295">    * Returns the HTTP content content as a simple space-delimited hexadecimal character string.</span>
-<span class="source-line-no">296</span><span id="line-296">    *</span>
-<span class="source-line-no">297</span><span id="line-297">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">298</span><span id="line-298">    * &lt;p class='bcode'&gt;</span>
-<span class="source-line-no">299</span><span id="line-299">    *    01 23 45 67 89 AB CD EF</span>
-<span class="source-line-no">300</span><span id="line-300">    * &lt;/p&gt;</span>
-<span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * @return The incoming input from the connection as a plain string.</span>
-<span class="source-line-no">303</span><span id="line-303">    * @throws IOException If a problem occurred trying to read from the reader.</span>
-<span class="source-line-no">304</span><span id="line-304">    */</span>
-<span class="source-line-no">305</span><span id="line-305">   public String asSpacedHex() throws IOException {</span>
-<span class="source-line-no">306</span><span id="line-306">      cache();</span>
-<span class="source-line-no">307</span><span id="line-307">      return toSpacedHex(content);</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   /**</span>
-<span class="source-line-no">311</span><span id="line-311">    * Returns the HTTP content content as a plain string.</span>
-<span class="source-line-no">312</span><span id="line-312">    *</span>
-<span class="source-line-no">313</span><span id="line-313">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">314</span><span id="line-314">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">315</span><span id="line-315">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
-<span class="source-line-no">316</span><span id="line-316">    * &lt;/ul&gt;</span>
-<span class="source-line-no">317</span><span id="line-317">    *</span>
-<span class="source-line-no">318</span><span id="line-318">    * @return The incoming input from the connection as a plain string.</span>
-<span class="source-line-no">319</span><span id="line-319">    * @throws IOException If a problem occurred trying to read from the reader.</span>
-<span class="source-line-no">320</span><span id="line-320">    */</span>
-<span class="source-line-no">321</span><span id="line-321">   public String asString() throws IOException {</span>
-<span class="source-line-no">322</span><span id="line-322">      cache();</span>
-<span class="source-line-no">323</span><span id="line-323">      return new String(content, UTF8);</span>
-<span class="source-line-no">324</span><span id="line-324">   }</span>
-<span class="source-line-no">325</span><span id="line-325"></span>
-<span class="source-line-no">326</span><span id="line-326">   /**</span>
-<span class="source-line-no">327</span><span id="line-327">    * Caches the content in memory for reuse.</span>
-<span class="source-line-no">328</span><span id="line-328">    *</span>
-<span class="source-line-no">329</span><span id="line-329">    * @return This object.</span>
-<span class="source-line-no">330</span><span id="line-330">    * @throws IOException If error occurs while reading stream.</span>
-<span class="source-line-no">331</span><span id="line-331">    */</span>
-<span class="source-line-no">332</span><span id="line-332">   public RequestContent cache() throws IOException {</span>
-<span class="source-line-no">333</span><span id="line-333">      if (content == null)</span>
-<span class="source-line-no">334</span><span id="line-334">         content = readBytes(getInputStream());</span>
-<span class="source-line-no">335</span><span id="line-335">      return this;</span>
-<span class="source-line-no">336</span><span id="line-336">   }</span>
-<span class="source-line-no">337</span><span id="line-337"></span>
-<span class="source-line-no">338</span><span id="line-338">   /**</span>
-<span class="source-line-no">339</span><span id="line-339">    * Sets the contents of this content.</span>
-<span class="source-line-no">340</span><span id="line-340">    *</span>
-<span class="source-line-no">341</span><span id="line-341">    * @param value The new value for this setting.</span>
-<span class="source-line-no">342</span><span id="line-342">    * @return This object.</span>
-<span class="source-line-no">343</span><span id="line-343">    */</span>
-<span class="source-line-no">344</span><span id="line-344">   public RequestContent content(byte[] value) {</span>
-<span class="source-line-no">345</span><span id="line-345">      content = value;</span>
-<span class="source-line-no">346</span><span id="line-346">      return this;</span>
-<span class="source-line-no">347</span><span id="line-347">   }</span>
-<span class="source-line-no">348</span><span id="line-348"></span>
-<span class="source-line-no">349</span><span id="line-349">   /**</span>
-<span class="source-line-no">350</span><span id="line-350">    * Sets the encoders to use for decoding this content.</span>
-<span class="source-line-no">351</span><span id="line-351">    *</span>
-<span class="source-line-no">352</span><span id="line-352">    * @param value The new value for this setting.</span>
-<span class="source-line-no">353</span><span id="line-353">    * @return This object.</span>
-<span class="source-line-no">354</span><span id="line-354">    */</span>
-<span class="source-line-no">355</span><span id="line-355">   public RequestContent encoders(EncoderSet value) {</span>
-<span class="source-line-no">356</span><span id="line-356">      encoders = value;</span>
-<span class="source-line-no">357</span><span id="line-357">      return this;</span>
-<span class="source-line-no">358</span><span id="line-358">   }</span>
-<span class="source-line-no">359</span><span id="line-359"></span>
-<span class="source-line-no">360</span><span id="line-360">   /**</span>
-<span class="source-line-no">361</span><span id="line-361">    * Returns the content length of the content.</span>
-<span class="source-line-no">362</span><span id="line-362">    *</span>
-<span class="source-line-no">363</span><span id="line-363">    * @return The content length of the content in bytes.</span>
-<span class="source-line-no">364</span><span id="line-364">    */</span>
-<span class="source-line-no">365</span><span id="line-365">   public int getContentLength() { return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength; }</span>
-<span class="source-line-no">366</span><span id="line-366"></span>
-<span class="source-line-no">367</span><span id="line-367">   /**</span>
-<span class="source-line-no">368</span><span id="line-368">    * Returns the HTTP content content as an {@link InputStream}.</span>
-<span class="source-line-no">369</span><span id="line-369">    *</span>
-<span class="source-line-no">370</span><span id="line-370">    * @return The negotiated input stream.</span>
-<span class="source-line-no">371</span><span id="line-371">    * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.</span>
-<span class="source-line-no">372</span><span id="line-372">    */</span>
-<span class="source-line-no">373</span><span id="line-373">   public ServletInputStream getInputStream() throws IOException {</span>
-<span class="source-line-no">374</span><span id="line-374"></span>
-<span class="source-line-no">375</span><span id="line-375">      if (nn(content))</span>
-<span class="source-line-no">376</span><span id="line-376">         return new BoundedServletInputStream(content);</span>
-<span class="source-line-no">377</span><span id="line-377"></span>
-<span class="source-line-no">378</span><span id="line-378">      var enc = getEncoder();</span>
+<span class="source-line-no">242</span><span id="line-242">    *       &lt;c&gt;Maps&lt;/c&gt; must be followed by zero or two parameters representing the key and value types.</span>
+<span class="source-line-no">243</span><span id="line-243">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">244</span><span id="line-244">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
+<span class="source-line-no">245</span><span id="line-245">    * &lt;/ul&gt;</span>
+<span class="source-line-no">246</span><span id="line-246">    *</span>
+<span class="source-line-no">247</span><span id="line-247">    * @param type</span>
+<span class="source-line-no">248</span><span id="line-248">    *    The type of object to create.</span>
+<span class="source-line-no">249</span><span id="line-249">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
+<span class="source-line-no">250</span><span id="line-250">    * @param args</span>
+<span class="source-line-no">251</span><span id="line-251">    *    The type arguments of the class if it's a collection or map.</span>
+<span class="source-line-no">252</span><span id="line-252">    *    &lt;br&gt;Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}</span>
+<span class="source-line-no">253</span><span id="line-253">    *    &lt;br&gt;Ignored if the main type is not a map or collection.</span>
+<span class="source-line-no">254</span><span id="line-254">    * @param &lt;T&gt; The class type to instantiate.</span>
+<span class="source-line-no">255</span><span id="line-255">    * @return The input parsed to a POJO.</span>
+<span class="source-line-no">256</span><span id="line-256">    * @throws BadRequest Thrown if input could not be parsed or fails schema validation.</span>
+<span class="source-line-no">257</span><span id="line-257">    * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.</span>
+<span class="source-line-no">258</span><span id="line-258">    * @throws InternalServerError Thrown if an {@link IOException} occurs.</span>
+<span class="source-line-no">259</span><span id="line-259">    */</span>
+<span class="source-line-no">260</span><span id="line-260">   public &lt;T&gt; T as(Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {</span>
+<span class="source-line-no">261</span><span id="line-261">      return getInner(this.&lt;T&gt;getClassMeta(type, args));</span>
+<span class="source-line-no">262</span><span id="line-262">   }</span>
+<span class="source-line-no">263</span><span id="line-263"></span>
+<span class="source-line-no">264</span><span id="line-264">   /**</span>
+<span class="source-line-no">265</span><span id="line-265">    * Returns the HTTP content as a byte array.</span>
+<span class="source-line-no">266</span><span id="line-266">    *</span>
+<span class="source-line-no">267</span><span id="line-267">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">268</span><span id="line-268">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">269</span><span id="line-269">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
+<span class="source-line-no">270</span><span id="line-270">    * &lt;/ul&gt;</span>
+<span class="source-line-no">271</span><span id="line-271">    *</span>
+<span class="source-line-no">272</span><span id="line-272">    * @return The incoming input from the connection as a byte array.</span>
+<span class="source-line-no">273</span><span id="line-273">    * @throws IOException If a problem occurred trying to read from the reader.</span>
+<span class="source-line-no">274</span><span id="line-274">    */</span>
+<span class="source-line-no">275</span><span id="line-275">   public byte[] asBytes() throws IOException {</span>
+<span class="source-line-no">276</span><span id="line-276">      cache();</span>
+<span class="source-line-no">277</span><span id="line-277">      return content;</span>
+<span class="source-line-no">278</span><span id="line-278">   }</span>
+<span class="source-line-no">279</span><span id="line-279"></span>
+<span class="source-line-no">280</span><span id="line-280">   /**</span>
+<span class="source-line-no">281</span><span id="line-281">    * Returns the HTTP content content as a simple hexadecimal character string.</span>
+<span class="source-line-no">282</span><span id="line-282">    *</span>
+<span class="source-line-no">283</span><span id="line-283">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">284</span><span id="line-284">    * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">285</span><span id="line-285">    *    0123456789ABCDEF</span>
+<span class="source-line-no">286</span><span id="line-286">    * &lt;/p&gt;</span>
+<span class="source-line-no">287</span><span id="line-287">    *</span>
+<span class="source-line-no">288</span><span id="line-288">    * @return The incoming input from the connection as a plain string.</span>
+<span class="source-line-no">289</span><span id="line-289">    * @throws IOException If a problem occurred trying to read from the reader.</span>
+<span class="source-line-no">290</span><span id="line-290">    */</span>
+<span class="source-line-no">291</span><span id="line-291">   public String asHex() throws IOException {</span>
+<span class="source-line-no">292</span><span id="line-292">      cache();</span>
+<span class="source-line-no">293</span><span id="line-293">      return toHex(content);</span>
+<span class="source-line-no">294</span><span id="line-294">   }</span>
+<span class="source-line-no">295</span><span id="line-295"></span>
+<span class="source-line-no">296</span><span id="line-296">   /**</span>
+<span class="source-line-no">297</span><span id="line-297">    * Returns the HTTP content content as a simple space-delimited hexadecimal character string.</span>
+<span class="source-line-no">298</span><span id="line-298">    *</span>
+<span class="source-line-no">299</span><span id="line-299">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">300</span><span id="line-300">    * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    *    01 23 45 67 89 AB CD EF</span>
+<span class="source-line-no">302</span><span id="line-302">    * &lt;/p&gt;</span>
+<span class="source-line-no">303</span><span id="line-303">    *</span>
+<span class="source-line-no">304</span><span id="line-304">    * @return The incoming input from the connection as a plain string.</span>
+<span class="source-line-no">305</span><span id="line-305">    * @throws IOException If a problem occurred trying to read from the reader.</span>
+<span class="source-line-no">306</span><span id="line-306">    */</span>
+<span class="source-line-no">307</span><span id="line-307">   public String asSpacedHex() throws IOException {</span>
+<span class="source-line-no">308</span><span id="line-308">      cache();</span>
+<span class="source-line-no">309</span><span id="line-309">      return toSpacedHex(content);</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   /**</span>
+<span class="source-line-no">313</span><span id="line-313">    * Returns the HTTP content content as a plain string.</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">316</span><span id="line-316">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">317</span><span id="line-317">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
+<span class="source-line-no">318</span><span id="line-318">    * &lt;/ul&gt;</span>
+<span class="source-line-no">319</span><span id="line-319">    *</span>
+<span class="source-line-no">320</span><span id="line-320">    * @return The incoming input from the connection as a plain string.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @throws IOException If a problem occurred trying to read from the reader.</span>
+<span class="source-line-no">322</span><span id="line-322">    */</span>
+<span class="source-line-no">323</span><span id="line-323">   public String asString() throws IOException {</span>
+<span class="source-line-no">324</span><span id="line-324">      cache();</span>
+<span class="source-line-no">325</span><span id="line-325">      return new String(content, UTF8);</span>
+<span class="source-line-no">326</span><span id="line-326">   }</span>
+<span class="source-line-no">327</span><span id="line-327"></span>
+<span class="source-line-no">328</span><span id="line-328">   /**</span>
+<span class="source-line-no">329</span><span id="line-329">    * Caches the content in memory for reuse.</span>
+<span class="source-line-no">330</span><span id="line-330">    *</span>
+<span class="source-line-no">331</span><span id="line-331">    * @return This object.</span>
+<span class="source-line-no">332</span><span id="line-332">    * @throws IOException If error occurs while reading stream.</span>
+<span class="source-line-no">333</span><span id="line-333">    */</span>
+<span class="source-line-no">334</span><span id="line-334">   public RequestContent cache() throws IOException {</span>
+<span class="source-line-no">335</span><span id="line-335">      if (content == null)</span>
+<span class="source-line-no">336</span><span id="line-336">         content = readBytes(getInputStream());</span>
+<span class="source-line-no">337</span><span id="line-337">      return this;</span>
+<span class="source-line-no">338</span><span id="line-338">   }</span>
+<span class="source-line-no">339</span><span id="line-339"></span>
+<span class="source-line-no">340</span><span id="line-340">   /**</span>
+<span class="source-line-no">341</span><span id="line-341">    * Sets the contents of this content.</span>
+<span class="source-line-no">342</span><span id="line-342">    *</span>
+<span class="source-line-no">343</span><span id="line-343">    * @param value The new value for this setting.</span>
+<span class="source-line-no">344</span><span id="line-344">    * @return This object.</span>
+<span class="source-line-no">345</span><span id="line-345">    */</span>
+<span class="source-line-no">346</span><span id="line-346">   public RequestContent content(byte[] value) {</span>
+<span class="source-line-no">347</span><span id="line-347">      content = value;</span>
+<span class="source-line-no">348</span><span id="line-348">      return this;</span>
+<span class="source-line-no">349</span><span id="line-349">   }</span>
+<span class="source-line-no">350</span><span id="line-350"></span>
+<span class="source-line-no">351</span><span id="line-351">   /**</span>
+<span class="source-line-no">352</span><span id="line-352">    * Sets the encoders to use for decoding this content.</span>
+<span class="source-line-no">353</span><span id="line-353">    *</span>
+<span class="source-line-no">354</span><span id="line-354">    * @param value The new value for this setting.</span>
+<span class="source-line-no">355</span><span id="line-355">    * @return This object.</span>
+<span class="source-line-no">356</span><span id="line-356">    */</span>
+<span class="source-line-no">357</span><span id="line-357">   public RequestContent encoders(EncoderSet value) {</span>
+<span class="source-line-no">358</span><span id="line-358">      encoders = value;</span>
+<span class="source-line-no">359</span><span id="line-359">      return this;</span>
+<span class="source-line-no">360</span><span id="line-360">   }</span>
+<span class="source-line-no">361</span><span id="line-361"></span>
+<span class="source-line-no">362</span><span id="line-362">   /**</span>
+<span class="source-line-no">363</span><span id="line-363">    * Returns the content length of the content.</span>
+<span class="source-line-no">364</span><span id="line-364">    *</span>
+<span class="source-line-no">365</span><span id="line-365">    * @return The content length of the content in bytes.</span>
+<span class="source-line-no">366</span><span id="line-366">    */</span>
+<span class="source-line-no">367</span><span id="line-367">   public int getContentLength() { return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength; }</span>
+<span class="source-line-no">368</span><span id="line-368"></span>
+<span class="source-line-no">369</span><span id="line-369">   /**</span>
+<span class="source-line-no">370</span><span id="line-370">    * Returns the HTTP content content as an {@link InputStream}.</span>
+<span class="source-line-no">371</span><span id="line-371">    *</span>
+<span class="source-line-no">372</span><span id="line-372">    * @return The negotiated input stream.</span>
+<span class="source-line-no">373</span><span id="line-373">    * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.</span>
+<span class="source-line-no">374</span><span id="line-374">    */</span>
+<span class="source-line-no">375</span><span id="line-375">   public ServletInputStream getInputStream() throws IOException {</span>
+<span class="source-line-no">376</span><span id="line-376"></span>
+<span class="source-line-no">377</span><span id="line-377">      if (nn(content))</span>
+<span class="source-line-no">378</span><span id="line-378">         return new BoundedServletInputStream(content);</span>
 <span class="source-line-no">379</span><span id="line-379"></span>
-<span class="source-line-no">380</span><span id="line-380">      var is = req.getHttpServletRequest().getInputStream();</span>
+<span class="source-line-no">380</span><span id="line-380">      var enc = getEncoder();</span>
 <span class="source-line-no">381</span><span id="line-381"></span>
-<span class="source-line-no">382</span><span id="line-382">      if (enc == null)</span>
-<span class="source-line-no">383</span><span id="line-383">         return new BoundedServletInputStream(is, maxInput);</span>
-<span class="source-line-no">384</span><span id="line-384"></span>
-<span class="source-line-no">385</span><span id="line-385">      return new BoundedServletInputStream(enc.getInputStream(is), maxInput);</span>
-<span class="source-line-no">386</span><span id="line-386">   }</span>
-<span class="source-line-no">387</span><span id="line-387"></span>
-<span class="source-line-no">388</span><span id="line-388">   /**</span>
-<span class="source-line-no">389</span><span id="line-389">    * Returns the parser and media type matching the request &lt;c&gt;Content-Type&lt;/c&gt; header.</span>
-<span class="source-line-no">390</span><span id="line-390">    *</span>
-<span class="source-line-no">391</span><span id="line-391">    * @return</span>
-<span class="source-line-no">392</span><span id="line-392">    *    The parser matching the request &lt;c&gt;Content-Type&lt;/c&gt; header, or {@link Optional#empty()} if no matching parser was</span>
-<span class="source-line-no">393</span><span id="line-393">    *    found.</span>
-<span class="source-line-no">394</span><span id="line-394">    *    Includes the matching media type.</span>
-<span class="source-line-no">395</span><span id="line-395">    */</span>
-<span class="source-line-no">396</span><span id="line-396">   public Optional&lt;ParserMatch&gt; getParserMatch() {</span>
-<span class="source-line-no">397</span><span id="line-397">      if (nn(mediaType) &amp;&amp; nn(parser))</span>
-<span class="source-line-no">398</span><span id="line-398">         return o(new ParserMatch(mediaType, parser));</span>
-<span class="source-line-no">399</span><span id="line-399">      var mt = getMediaType();</span>
-<span class="source-line-no">400</span><span id="line-400">      return o(mt).flatMap(parsers::getParserMatch);</span>
-<span class="source-line-no">401</span><span id="line-401">   }</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">   /**</span>
-<span class="source-line-no">404</span><span id="line-404">    * Returns the HTTP content content as a {@link Reader}.</span>
-<span class="source-line-no">405</span><span id="line-405">    *</span>
-<span class="source-line-no">406</span><span id="line-406">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">407</span><span id="line-407">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">408</span><span id="line-408">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
+<span class="source-line-no">382</span><span id="line-382">      var is = req.getHttpServletRequest().getInputStream();</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">      if (enc == null)</span>
+<span class="source-line-no">385</span><span id="line-385">         return new BoundedServletInputStream(is, maxInput);</span>
+<span class="source-line-no">386</span><span id="line-386"></span>
+<span class="source-line-no">387</span><span id="line-387">      return new BoundedServletInputStream(enc.getInputStream(is), maxInput);</span>
+<span class="source-line-no">388</span><span id="line-388">   }</span>
+<span class="source-line-no">389</span><span id="line-389"></span>
+<span class="source-line-no">390</span><span id="line-390">   /**</span>
+<span class="source-line-no">391</span><span id="line-391">    * Returns the parser and media type matching the request &lt;c&gt;Content-Type&lt;/c&gt; header.</span>
+<span class="source-line-no">392</span><span id="line-392">    *</span>
+<span class="source-line-no">393</span><span id="line-393">    * @return</span>
+<span class="source-line-no">394</span><span id="line-394">    *    The parser matching the request &lt;c&gt;Content-Type&lt;/c&gt; header, or {@link Optional#empty()} if no matching parser was</span>
+<span class="source-line-no">395</span><span id="line-395">    *    found.</span>
+<span class="source-line-no">396</span><span id="line-396">    *    Includes the matching media type.</span>
+<span class="source-line-no">397</span><span id="line-397">    */</span>
+<span class="source-line-no">398</span><span id="line-398">   public Optional&lt;ParserMatch&gt; getParserMatch() {</span>
+<span class="source-line-no">399</span><span id="line-399">      if (nn(mediaType) &amp;&amp; nn(parser))</span>
+<span class="source-line-no">400</span><span id="line-400">         return o(new ParserMatch(mediaType, parser));</span>
+<span class="source-line-no">401</span><span id="line-401">      var mt = getMediaType();</span>
+<span class="source-line-no">402</span><span id="line-402">      return o(mt).flatMap(parsers::getParserMatch);</span>
+<span class="source-line-no">403</span><span id="line-403">   }</span>
+<span class="source-line-no">404</span><span id="line-404"></span>
+<span class="source-line-no">405</span><span id="line-405">   /**</span>
+<span class="source-line-no">406</span><span id="line-406">    * Returns the HTTP content content as a {@link Reader}.</span>
+<span class="source-line-no">407</span><span id="line-407">    *</span>
+<span class="source-line-no">408</span><span id="line-408">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">409</span><span id="line-409">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">410</span><span id="line-410">    *       Automatically handles GZipped input streams.</span>
-<span class="source-line-no">411</span><span id="line-411">    * &lt;/ul&gt;</span>
-<span class="source-line-no">412</span><span id="line-412">    *</span>
-<span class="source-line-no">413</span><span id="line-413">    * @return The content contents as a reader.</span>
-<span class="source-line-no">414</span><span id="line-414">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">415</span><span id="line-415">    */</span>
-<span class="source-line-no">416</span><span id="line-416">   public BufferedReader getReader() throws IOException {</span>
-<span class="source-line-no">417</span><span id="line-417">      var r = getUnbufferedReader();</span>
-<span class="source-line-no">418</span><span id="line-418">      if (r instanceof BufferedReader r2)</span>
-<span class="source-line-no">419</span><span id="line-419">         return r2;</span>
-<span class="source-line-no">420</span><span id="line-420">      int len = req.getHttpServletRequest().getContentLength();</span>
-<span class="source-line-no">421</span><span id="line-421">      int buffSize = len &lt;= 0 ? 8192 : Math.max(len, 8192);</span>
-<span class="source-line-no">422</span><span id="line-422">      return new BufferedReader(r, buffSize);</span>
-<span class="source-line-no">423</span><span id="line-423">   }</span>
-<span class="source-line-no">424</span><span id="line-424"></span>
-<span class="source-line-no">425</span><span id="line-425">   /**</span>
-<span class="source-line-no">426</span><span id="line-426">    * Sets the max input value for this content.</span>
-<span class="source-line-no">427</span><span id="line-427">    *</span>
-<span class="source-line-no">428</span><span id="line-428">    * @param value The new value for this setting.</span>
-<span class="source-line-no">429</span><span id="line-429">    * @return This object.</span>
-<span class="source-line-no">430</span><span id="line-430">    */</span>
-<span class="source-line-no">431</span><span id="line-431">   public RequestContent maxInput(long value) {</span>
-<span class="source-line-no">432</span><span id="line-432">      maxInput = value;</span>
-<span class="source-line-no">433</span><span id="line-433">      return this;</span>
-<span class="source-line-no">434</span><span id="line-434">   }</span>
-<span class="source-line-no">435</span><span id="line-435"></span>
-<span class="source-line-no">436</span><span id="line-436">   /**</span>
-<span class="source-line-no">437</span><span id="line-437">    * Sets the media type of this content.</span>
-<span class="source-line-no">438</span><span id="line-438">    *</span>
-<span class="source-line-no">439</span><span id="line-439">    * @param value The new value for this setting.</span>
-<span class="source-line-no">440</span><span id="line-440">    * @return This object.</span>
-<span class="source-line-no">441</span><span id="line-441">    */</span>
-<span class="source-line-no">442</span><span id="line-442">   public RequestContent mediaType(MediaType value) {</span>
-<span class="source-line-no">443</span><span id="line-443">      mediaType = value;</span>
-<span class="source-line-no">444</span><span id="line-444">      return this;</span>
-<span class="source-line-no">445</span><span id="line-445">   }</span>
-<span class="source-line-no">446</span><span id="line-446"></span>
-<span class="source-line-no">447</span><span id="line-447">   /**</span>
-<span class="source-line-no">448</span><span id="line-448">    * Sets the parser to use for this content.</span>
-<span class="source-line-no">449</span><span id="line-449">    *</span>
-<span class="source-line-no">450</span><span id="line-450">    * @param value The new value for this setting.</span>
-<span class="source-line-no">451</span><span id="line-451">    * @return This object.</span>
-<span class="source-line-no">452</span><span id="line-452">    */</span>
-<span class="source-line-no">453</span><span id="line-453">   public RequestContent parser(Parser value) {</span>
-<span class="source-line-no">454</span><span id="line-454">      parser = value;</span>
-<span class="source-line-no">455</span><span id="line-455">      return this;</span>
-<span class="source-line-no">456</span><span id="line-456">   }</span>
-<span class="source-line-no">457</span><span id="line-457"></span>
-<span class="source-line-no">458</span><span id="line-458">   /**</span>
-<span class="source-line-no">459</span><span id="line-459">    * Sets the parsers to use for parsing this content.</span>
-<span class="source-line-no">460</span><span id="line-460">    *</span>
-<span class="source-line-no">461</span><span id="line-461">    * @param value The new value for this setting.</span>
-<span class="source-line-no">462</span><span id="line-462">    * @return This object.</span>
-<span class="source-line-no">463</span><span id="line-463">    */</span>
-<span class="source-line-no">464</span><span id="line-464">   public RequestContent parsers(ParserSet value) {</span>
-<span class="source-line-no">465</span><span id="line-465">      parsers = value;</span>
-<span class="source-line-no">466</span><span id="line-466">      return this;</span>
-<span class="source-line-no">467</span><span id="line-467">   }</span>
-<span class="source-line-no">468</span><span id="line-468"></span>
-<span class="source-line-no">469</span><span id="line-469">   /**</span>
-<span class="source-line-no">470</span><span id="line-470">    * Sets the schema for this content.</span>
-<span class="source-line-no">471</span><span id="line-471">    *</span>
-<span class="source-line-no">472</span><span id="line-472">    * @param schema The new schema for this content.</span>
-<span class="source-line-no">473</span><span id="line-473">    * @return This object.</span>
-<span class="source-line-no">474</span><span id="line-474">    */</span>
-<span class="source-line-no">475</span><span id="line-475">   public RequestContent setSchema(HttpPartSchema schema) {</span>
-<span class="source-line-no">476</span><span id="line-476">      this.schema = schema;</span>
-<span class="source-line-no">477</span><span id="line-477">      return this;</span>
-<span class="source-line-no">478</span><span id="line-478">   }</span>
-<span class="source-line-no">479</span><span id="line-479"></span>
-<span class="source-line-no">480</span><span id="line-480">   private &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Class&lt;T&gt; type) {</span>
-<span class="source-line-no">481</span><span id="line-481">      return req.getMarshallingSession().getClassMeta(type);</span>
-<span class="source-line-no">482</span><span id="line-482">   }</span>
-<span class="source-line-no">483</span><span id="line-483"></span>
-<span class="source-line-no">484</span><span id="line-484">   private &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Type type, Type...args) {</span>
-<span class="source-line-no">485</span><span id="line-485">      return req.getMarshallingSession().getClassMeta(type, args);</span>
-<span class="source-line-no">486</span><span id="line-486">   }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   private Encoder getEncoder() throws UnsupportedMediaType {</span>
-<span class="source-line-no">489</span><span id="line-489">      if (encoder == null) {</span>
-<span class="source-line-no">490</span><span id="line-490">         var ce = req.getHeaderParam("content-encoding").orElse(null);</span>
-<span class="source-line-no">491</span><span id="line-491">         if (ine(ce)) {</span>
-<span class="source-line-no">492</span><span id="line-492">            ce = ce.trim();</span>
-<span class="source-line-no">493</span><span id="line-493">            encoder = encoders.getEncoder(ce);</span>
-<span class="source-line-no">494</span><span id="line-494">            if (encoder == null)</span>
-<span class="source-line-no">495</span><span id="line-495">               throw new UnsupportedMediaType("Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",</span>
-<span class="source-line-no">496</span><span id="line-496">                  req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings()));</span>
-<span class="source-line-no">497</span><span id="line-497">         }</span>
-<span class="source-line-no">498</span><span id="line-498"></span>
-<span class="source-line-no">499</span><span id="line-499">         if (nn(encoder))</span>
-<span class="source-line-no">500</span><span id="line-500">            contentLength = -1;</span>
-<span class="source-line-no">501</span><span id="line-501">      }</span>
-<span class="source-line-no">502</span><span id="line-502">      // Note that if this is the identity encoder, we want to return null</span>
-<span class="source-line-no">503</span><span id="line-503">      // so that we don't needlessly wrap the input stream.</span>
-<span class="source-line-no">504</span><span id="line-504">      if (encoder == IdentityEncoder.INSTANCE)</span>
-<span class="source-line-no">505</span><span id="line-505">         return null;</span>
-<span class="source-line-no">506</span><span id="line-506">      return encoder;</span>
+<span class="source-line-no">410</span><span id="line-410">    *       If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</span>
+<span class="source-line-no">411</span><span id="line-411">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">412</span><span id="line-412">    *       Automatically handles GZipped input streams.</span>
+<span class="source-line-no">413</span><span id="line-413">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">414</span><span id="line-414">    *       The initial buffer is sized off the request's declared {@code Content-Length}, but never past the</span>
+<span class="source-line-no">415</span><span id="line-415">    *       effective {@code @Rest(maxInput)} ceiling &amp;mdash; a client can send whatever length it likes in that</span>
+<span class="source-line-no">416</span><span id="line-416">    *       header, regardless of how much (or little) content actually follows.</span>
+<span class="source-line-no">417</span><span id="line-417">    * &lt;/ul&gt;</span>
+<span class="source-line-no">418</span><span id="line-418">    *</span>
+<span class="source-line-no">419</span><span id="line-419">    * @return The content contents as a reader.</span>
+<span class="source-line-no">420</span><span id="line-420">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">421</span><span id="line-421">    */</span>
+<span class="source-line-no">422</span><span id="line-422">   public BufferedReader getReader() throws IOException {</span>
+<span class="source-line-no">423</span><span id="line-423">      var r = getUnbufferedReader();</span>
+<span class="source-line-no">424</span><span id="line-424">      if (r instanceof BufferedReader r2)</span>
+<span class="source-line-no">425</span><span id="line-425">         return r2;</span>
+<span class="source-line-no">426</span><span id="line-426">      int len = req.getHttpServletRequest().getContentLength();</span>
+<span class="source-line-no">427</span><span id="line-427">      return new BufferedReader(r, computeReaderBufferSize(len, maxInput));</span>
+<span class="source-line-no">428</span><span id="line-428">   }</span>
+<span class="source-line-no">429</span><span id="line-429"></span>
+<span class="source-line-no">430</span><span id="line-430">   /**</span>
+<span class="source-line-no">431</span><span id="line-431">    * Computes the initial char-buffer size for {@link #getReader()}.</span>
+<span class="source-line-no">432</span><span id="line-432">    *</span>
+<span class="source-line-no">433</span><span id="line-433">    * &lt;p&gt;</span>
+<span class="source-line-no">434</span><span id="line-434">    * Package-private (rather than folded directly into {@link #getReader()}) so the sizing decision can be</span>
+<span class="source-line-no">435</span><span id="line-435">    * exercised directly in unit tests independent of a live servlet request.</span>
+<span class="source-line-no">436</span><span id="line-436">    *</span>
+<span class="source-line-no">437</span><span id="line-437">    * @param declaredContentLength The request's declared {@code Content-Length}, as returned by</span>
+<span class="source-line-no">438</span><span id="line-438">    *    {@code HttpServletRequest.getContentLength()}. May be {@code &lt;= 0} if absent/unparsable.</span>
+<span class="source-line-no">439</span><span id="line-439">    * @param maxInput The effective {@code @Rest(maxInput)} ceiling in bytes. Values {@code &lt;= 0} are</span>
+<span class="source-line-no">440</span><span id="line-440">    *    treated as "no additional ceiling beyond {@code Integer.MAX_VALUE}".</span>
+<span class="source-line-no">441</span><span id="line-441">    * @return The buffer size to use, at least the historical {@code 8192}-byte default and never past</span>
+<span class="source-line-no">442</span><span id="line-442">    *    {@code min(maxInput, Integer.MAX_VALUE)}.</span>
+<span class="source-line-no">443</span><span id="line-443">    */</span>
+<span class="source-line-no">444</span><span id="line-444">   static int computeReaderBufferSize(int declaredContentLength, long maxInput) {</span>
+<span class="source-line-no">445</span><span id="line-445">      long ceiling = maxInput &gt; 0 ? maxInput : Integer.MAX_VALUE;</span>
+<span class="source-line-no">446</span><span id="line-446">      long buffSize = declaredContentLength &lt;= 0 ? 8192 : Math.min(Math.max(declaredContentLength, 8192), ceiling);</span>
+<span class="source-line-no">447</span><span id="line-447">      return (int)Math.min(buffSize, Integer.MAX_VALUE);</span>
+<span class="source-line-no">448</span><span id="line-448">   }</span>
+<span class="source-line-no">449</span><span id="line-449"></span>
+<span class="source-line-no">450</span><span id="line-450">   /**</span>
+<span class="source-line-no">451</span><span id="line-451">    * Sets the max input value for this content.</span>
+<span class="source-line-no">452</span><span id="line-452">    *</span>
+<span class="source-line-no">453</span><span id="line-453">    * @param value The new value for this setting.</span>
+<span class="source-line-no">454</span><span id="line-454">    * @return This object.</span>
+<span class="source-line-no">455</span><span id="line-455">    */</span>
+<span class="source-line-no">456</span><span id="line-456">   public RequestContent maxInput(long value) {</span>
+<span class="source-line-no">457</span><span id="line-457">      maxInput = value;</span>
+<span class="source-line-no">458</span><span id="line-458">      return this;</span>
+<span class="source-line-no">459</span><span id="line-459">   }</span>
+<span class="source-line-no">460</span><span id="line-460"></span>
+<span class="source-line-no">461</span><span id="line-461">   /**</span>
+<span class="source-line-no">462</span><span id="line-462">    * Sets the media type of this content.</span>
+<span class="source-line-no">463</span><span id="line-463">    *</span>
+<span class="source-line-no">464</span><span id="line-464">    * @param value The new value for this setting.</span>
+<span class="source-line-no">465</span><span id="line-465">    * @return This object.</span>
+<span class="source-line-no">466</span><span id="line-466">    */</span>
+<span class="source-line-no">467</span><span id="line-467">   public RequestContent mediaType(MediaType value) {</span>
+<span class="source-line-no">468</span><span id="line-468">      mediaType = value;</span>
+<span class="source-line-no">469</span><span id="line-469">      return this;</span>
+<span class="source-line-no">470</span><span id="line-470">   }</span>
+<span class="source-line-no">471</span><span id="line-471"></span>
+<span class="source-line-no">472</span><span id="line-472">   /**</span>
+<span class="source-line-no">473</span><span id="line-473">    * Sets the parser to use for this content.</span>
+<span class="source-line-no">474</span><span id="line-474">    *</span>
+<span class="source-line-no">475</span><span id="line-475">    * @param value The new value for this setting.</span>
+<span class="source-line-no">476</span><span id="line-476">    * @return This object.</span>
+<span class="source-line-no">477</span><span id="line-477">    */</span>
+<span class="source-line-no">478</span><span id="line-478">   public RequestContent parser(Parser value) {</span>
+<span class="source-line-no">479</span><span id="line-479">      parser = value;</span>
+<span class="source-line-no">480</span><span id="line-480">      return this;</span>
+<span class="source-line-no">481</span><span id="line-481">   }</span>
+<span class="source-line-no">482</span><span id="line-482"></span>
+<span class="source-line-no">483</span><span id="line-483">   /**</span>
+<span class="source-line-no">484</span><span id="line-484">    * Sets the parsers to use for parsing this content.</span>
+<span class="source-line-no">485</span><span id="line-485">    *</span>
+<span class="source-line-no">486</span><span id="line-486">    * @param value The new value for this setting.</span>
+<span class="source-line-no">487</span><span id="line-487">    * @return This object.</span>
+<span class="source-line-no">488</span><span id="line-488">    */</span>
+<span class="source-line-no">489</span><span id="line-489">   public RequestContent parsers(ParserSet value) {</span>
+<span class="source-line-no">490</span><span id="line-490">      parsers = value;</span>
+<span class="source-line-no">491</span><span id="line-491">      return this;</span>
+<span class="source-line-no">492</span><span id="line-492">   }</span>
+<span class="source-line-no">493</span><span id="line-493"></span>
+<span class="source-line-no">494</span><span id="line-494">   /**</span>
+<span class="source-line-no">495</span><span id="line-495">    * Sets the schema for this content.</span>
+<span class="source-line-no">496</span><span id="line-496">    *</span>
+<span class="source-line-no">497</span><span id="line-497">    * @param schema The new schema for this content.</span>
+<span class="source-line-no">498</span><span id="line-498">    * @return This object.</span>
+<span class="source-line-no">499</span><span id="line-499">    */</span>
+<span class="source-line-no">500</span><span id="line-500">   public RequestContent setSchema(HttpPartSchema schema) {</span>
+<span class="source-line-no">501</span><span id="line-501">      this.schema = schema;</span>
+<span class="source-line-no">502</span><span id="line-502">      return this;</span>
+<span class="source-line-no">503</span><span id="line-503">   }</span>
+<span class="source-line-no">504</span><span id="line-504"></span>
+<span class="source-line-no">505</span><span id="line-505">   private &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Class&lt;T&gt; type) {</span>
+<span class="source-line-no">506</span><span id="line-506">      return req.getMarshallingSession().getClassMeta(type);</span>
 <span class="source-line-no">507</span><span id="line-507">   }</span>
 <span class="source-line-no">508</span><span id="line-508"></span>
-<span class="source-line-no">509</span><span id="line-509">   private &lt;T&gt; T getInner(ClassMeta&lt;T&gt; cm) throws BadRequest, UnsupportedMediaType, InternalServerError {</span>
-<span class="source-line-no">510</span><span id="line-510">      try {</span>
-<span class="source-line-no">511</span><span id="line-511">         return parse(cm);</span>
-<span class="source-line-no">512</span><span id="line-512">      } catch (UnsupportedMediaType e) {</span>
-<span class="source-line-no">513</span><span id="line-513">         throw e;</span>
-<span class="source-line-no">514</span><span id="line-514">      } catch (SchemaValidationException e) {</span>
-<span class="source-line-no">515</span><span id="line-515">         throw new BadRequest("Validation failed on request content. " + localizedMessage(e));</span>
-<span class="source-line-no">516</span><span id="line-516">      } catch (ParseException e) {</span>
-<span class="source-line-no">517</span><span id="line-517">         throw new BadRequest(e, "Could not convert request content content to class type ''{0}''.", cm);</span>
-<span class="source-line-no">518</span><span id="line-518">      } catch (IOException e) {</span>
-<span class="source-line-no">519</span><span id="line-519">         throw new InternalServerError(e, "I/O exception occurred while parsing request content.");</span>
-<span class="source-line-no">520</span><span id="line-520">      } catch (Exception e) {</span>
-<span class="source-line-no">521</span><span id="line-521">         throw new InternalServerError(e, "Exception occurred while parsing request content.");</span>
-<span class="source-line-no">522</span><span id="line-522">      }</span>
-<span class="source-line-no">523</span><span id="line-523">   }</span>
-<span class="source-line-no">524</span><span id="line-524"></span>
-<span class="source-line-no">525</span><span id="line-525">   private MediaType getMediaType() {</span>
-<span class="source-line-no">526</span><span id="line-526">      if (nn(mediaType))</span>
-<span class="source-line-no">527</span><span id="line-527">         return mediaType;</span>
-<span class="source-line-no">528</span><span id="line-528">      var ct = req.getHeader(ContentType.class);</span>
-<span class="source-line-no">529</span><span id="line-529">      if (! ct.isPresent() &amp;&amp; nn(content))</span>
-<span class="source-line-no">530</span><span id="line-530">         return MediaType.UON;</span>
-<span class="source-line-no">531</span><span id="line-531">      return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;</span>
+<span class="source-line-no">509</span><span id="line-509">   private &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Type type, Type...args) {</span>
+<span class="source-line-no">510</span><span id="line-510">      return req.getMarshallingSession().getClassMeta(type, args);</span>
+<span class="source-line-no">511</span><span id="line-511">   }</span>
+<span class="source-line-no">512</span><span id="line-512"></span>
+<span class="source-line-no">513</span><span id="line-513">   private Encoder getEncoder() throws UnsupportedMediaType {</span>
+<span class="source-line-no">514</span><span id="line-514">      if (encoder == null) {</span>
+<span class="source-line-no">515</span><span id="line-515">         var ce = req.getHeaderParam("content-encoding").orElse(null);</span>
+<span class="source-line-no">516</span><span id="line-516">         if (ine(ce)) {</span>
+<span class="source-line-no">517</span><span id="line-517">            ce = ce.trim();</span>
+<span class="source-line-no">518</span><span id="line-518">            encoder = encoders.getEncoder(ce);</span>
+<span class="source-line-no">519</span><span id="line-519">            if (encoder == null)</span>
+<span class="source-line-no">520</span><span id="line-520">               throw new UnsupportedMediaType("Unsupported encoding in request header 'Content-Encoding': '%s'\n\tSupported codings: %s",</span>
+<span class="source-line-no">521</span><span id="line-521">                  req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings()));</span>
+<span class="source-line-no">522</span><span id="line-522">         }</span>
+<span class="source-line-no">523</span><span id="line-523"></span>
+<span class="source-line-no">524</span><span id="line-524">         if (nn(encoder))</span>
+<span class="source-line-no">525</span><span id="line-525">            contentLength = -1;</span>
+<span class="source-line-no">526</span><span id="line-526">      }</span>
+<span class="source-line-no">527</span><span id="line-527">      // Note that if this is the identity encoder, we want to return null</span>
+<span class="source-line-no">528</span><span id="line-528">      // so that we don't needlessly wrap the input stream.</span>
+<span class="source-line-no">529</span><span id="line-529">      if (encoder == IdentityEncoder.INSTANCE)</span>
+<span class="source-line-no">530</span><span id="line-530">         return null;</span>
+<span class="source-line-no">531</span><span id="line-531">      return encoder;</span>
 <span class="source-line-no">532</span><span id="line-532">   }</span>
 <span class="source-line-no">533</span><span id="line-533"></span>
-<span class="source-line-no">534</span><span id="line-534">   /* Workhorse method */</span>
-<span class="source-line-no">535</span><span id="line-535">   @SuppressWarnings({</span>
-<span class="source-line-no">536</span><span id="line-536">      "java:S3776" // Cognitive complexity acceptable for content parsing/schema validation</span>
-<span class="source-line-no">537</span><span id="line-537">   })</span>
-<span class="source-line-no">538</span><span id="line-538">   private &lt;T&gt; T parse(ClassMeta&lt;T&gt; cm) throws SchemaValidationException, ParseException, UnsupportedMediaType, IOException {</span>
-<span class="source-line-no">539</span><span id="line-539"></span>
-<span class="source-line-no">540</span><span id="line-540">      if (cm.isReader())</span>
-<span class="source-line-no">541</span><span id="line-541">         return (T)getReader();</span>
-<span class="source-line-no">542</span><span id="line-542"></span>
-<span class="source-line-no">543</span><span id="line-543">      if (cm.isInputStream())</span>
-<span class="source-line-no">544</span><span id="line-544">         return (T)getInputStream();</span>
-<span class="source-line-no">545</span><span id="line-545"></span>
-<span class="source-line-no">546</span><span id="line-546">      var timeZone = req.getTimeZone();</span>
-<span class="source-line-no">547</span><span id="line-547">      var locale = req.getLocale();</span>
-<span class="source-line-no">548</span><span id="line-548">      var pm = getParserMatch().orElse(null);</span>
+<span class="source-line-no">534</span><span id="line-534">   private &lt;T&gt; T getInner(ClassMeta&lt;T&gt; cm) throws BadRequest, UnsupportedMediaType, InternalServerError {</span>
+<span class="source-line-no">535</span><span id="line-535">      try {</span>
+<span class="source-line-no">536</span><span id="line-536">         return parse(cm);</span>
+<span class="source-line-no">537</span><span id="line-537">      } catch (UnsupportedMediaType e) {</span>
+<span class="source-line-no">538</span><span id="line-538">         throw e;</span>
+<span class="source-line-no">539</span><span id="line-539">      } catch (SchemaValidationException e) {</span>
+<span class="source-line-no">540</span><span id="line-540">         throw new BadRequest("Validation failed on request content. " + localizedMessage(e));</span>
+<span class="source-line-no">541</span><span id="line-541">      } catch (ParseException e) {</span>
+<span class="source-line-no">542</span><span id="line-542">         throw new BadRequest(e, "Could not convert request content content to class type '%s'.", cm);</span>
+<span class="source-line-no">543</span><span id="line-543">      } catch (IOException e) {</span>
+<span class="source-line-no">544</span><span id="line-544">         throw new InternalServerError(e, "I/O exception occurred while parsing request content.");</span>
+<span class="source-line-no">545</span><span id="line-545">      } catch (Exception e) {</span>
+<span class="source-line-no">546</span><span id="line-546">         throw new InternalServerError(e, "Exception occurred while parsing request content.");</span>
+<span class="source-line-no">547</span><span id="line-547">      }</span>
+<span class="source-line-no">548</span><span id="line-548">   }</span>
 <span class="source-line-no">549</span><span id="line-549"></span>
-<span class="source-line-no">550</span><span id="line-550">      if (schema == null)</span>
-<span class="source-line-no">551</span><span id="line-551">         schema = HttpPartSchema.DEFAULT;</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">      if (nn(pm)) {</span>
-<span class="source-line-no">554</span><span id="line-554">         var p = pm.getParser();</span>
-<span class="source-line-no">555</span><span id="line-555">         var mediaType2 = pm.getMediaType();</span>
-<span class="source-line-no">556</span><span id="line-556">         // @formatter:off</span>
-<span class="source-line-no">557</span><span id="line-557">         var session = p</span>
-<span class="source-line-no">558</span><span id="line-558">            .createSession()</span>
-<span class="source-line-no">559</span><span id="line-559">            .properties(req.getParserSessionPropertyMap())</span>
-<span class="source-line-no">560</span><span id="line-560">            .javaMethod(req.getOpContext().getJavaMethod())</span>
-<span class="source-line-no">561</span><span id="line-561">            .locale(locale)</span>
-<span class="source-line-no">562</span><span id="line-562">            .timeZone(timeZone.orElse(null))</span>
-<span class="source-line-no">563</span><span id="line-563">            .mediaType(mediaType2)</span>
-<span class="source-line-no">564</span><span id="line-564">            .apply(ReaderParser.Builder.class, x -&gt; x.streamCharset(req.getCharset()))</span>
-<span class="source-line-no">565</span><span id="line-565">            .schema(schema)</span>
-<span class="source-line-no">566</span><span id="line-566">            .debug(req.isDebug() ? true : null)</span>
-<span class="source-line-no">567</span><span id="line-567">            .build();</span>
-<span class="source-line-no">568</span><span id="line-568">         // @formatter:on</span>
-<span class="source-line-no">569</span><span id="line-569"></span>
-<span class="source-line-no">570</span><span id="line-570">         try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {</span>
-<span class="source-line-no">571</span><span id="line-571">            var o = session.parse(in, cm);</span>
-<span class="source-line-no">572</span><span id="line-572">            if (nn(schema))</span>
-<span class="source-line-no">573</span><span id="line-573">               schema.validateOutput(o);</span>
-<span class="source-line-no">574</span><span id="line-574">            return o;</span>
-<span class="source-line-no">575</span><span id="line-575">         }</span>
-<span class="source-line-no">576</span><span id="line-576">      }</span>
+<span class="source-line-no">550</span><span id="line-550">   private MediaType getMediaType() {</span>
+<span class="source-line-no">551</span><span id="line-551">      if (nn(mediaType))</span>
+<span class="source-line-no">552</span><span id="line-552">         return mediaType;</span>
+<span class="source-line-no">553</span><span id="line-553">      var ct = req.getHeader(ContentType.class);</span>
+<span class="source-line-no">554</span><span id="line-554">      if (! ct.isPresent() &amp;&amp; nn(content))</span>
+<span class="source-line-no">555</span><span id="line-555">         return MediaType.UON;</span>
+<span class="source-line-no">556</span><span id="line-556">      return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;</span>
+<span class="source-line-no">557</span><span id="line-557">   }</span>
+<span class="source-line-no">558</span><span id="line-558"></span>
+<span class="source-line-no">559</span><span id="line-559">   /* Workhorse method */</span>
+<span class="source-line-no">560</span><span id="line-560">   @SuppressWarnings({</span>
+<span class="source-line-no">561</span><span id="line-561">      "java:S3776" // Cognitive complexity acceptable for content parsing/schema validation</span>
+<span class="source-line-no">562</span><span id="line-562">   })</span>
+<span class="source-line-no">563</span><span id="line-563">   private &lt;T&gt; T parse(ClassMeta&lt;T&gt; cm) throws SchemaValidationException, ParseException, UnsupportedMediaType, IOException {</span>
+<span class="source-line-no">564</span><span id="line-564"></span>
+<span class="source-line-no">565</span><span id="line-565">      if (cm.isReader())</span>
+<span class="source-line-no">566</span><span id="line-566">         return (T)getReader();</span>
+<span class="source-line-no">567</span><span id="line-567"></span>
+<span class="source-line-no">568</span><span id="line-568">      if (cm.isInputStream())</span>
+<span class="source-line-no">569</span><span id="line-569">         return (T)getInputStream();</span>
+<span class="source-line-no">570</span><span id="line-570"></span>
+<span class="source-line-no">571</span><span id="line-571">      var timeZone = req.getTimeZone();</span>
+<span class="source-line-no">572</span><span id="line-572">      var locale = req.getLocale();</span>
+<span class="source-line-no">573</span><span id="line-573">      var pm = getParserMatch().orElse(null);</span>
+<span class="source-line-no">574</span><span id="line-574"></span>
+<span class="source-line-no">575</span><span id="line-575">      if (schema == null)</span>
+<span class="source-line-no">576</span><span id="line-576">         schema = HttpPartSchema.DEFAULT;</span>
 <span class="source-line-no">577</span><span id="line-577"></span>
-<span class="source-line-no">578</span><span id="line-578">      if (cm.hasReaderMutater())</span>
-<span class="source-line-no">579</span><span id="line-579">         return BasicConverter.INSTANCE.to(getReader(), cm.inner());</span>
-<span class="source-line-no">580</span><span id="line-580"></span>
-<span class="source-line-no">581</span><span id="line-581">      if (cm.hasInputStreamMutater())</span>
-<span class="source-line-no">582</span><span id="line-582">         return BasicConverter.INSTANCE.to(getInputStream(), cm.inner());</span>
-<span class="source-line-no">583</span><span id="line-583"></span>
-<span class="source-line-no">584</span><span id="line-584">      var mt = getMediaType();</span>
-<span class="source-line-no">585</span><span id="line-585"></span>
-<span class="source-line-no">586</span><span id="line-586">      if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) &amp;&amp; cm.hasStringMutater())</span>
-<span class="source-line-no">587</span><span id="line-587">         return BasicConverter.INSTANCE.to(asString(), cm.inner());</span>
-<span class="source-line-no">588</span><span id="line-588"></span>
-<span class="source-line-no">589</span><span id="line-589">      var ct = req.getHeader(ContentType.class);</span>
-<span class="source-line-no">590</span><span id="line-590">      throw new UnsupportedMediaType("Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",</span>
-<span class="source-line-no">591</span><span id="line-591">         ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));</span>
-<span class="source-line-no">592</span><span id="line-592">   }</span>
-<span class="source-line-no">593</span><span id="line-593"></span>
-<span class="source-line-no">594</span><span id="line-594">   /**</span>
-<span class="source-line-no">595</span><span id="line-595">    * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</span>
-<span class="source-line-no">596</span><span id="line-596">    *</span>
-<span class="source-line-no">597</span><span id="line-597">    * @return An unbuffered reader.</span>
-<span class="source-line-no">598</span><span id="line-598">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">599</span><span id="line-599">    */</span>
-<span class="source-line-no">600</span><span id="line-600">   protected Reader getUnbufferedReader() throws IOException {</span>
-<span class="source-line-no">601</span><span id="line-601">      if (nn(content))</span>
-<span class="source-line-no">602</span><span id="line-602">         return new CharSequenceReader(new String(content, UTF8));</span>
-<span class="source-line-no">603</span><span id="line-603">      return new InputStreamReader(getInputStream(), req.getCharset());</span>
-<span class="source-line-no">604</span><span id="line-604">   }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">   boolean isLoaded() { return nn(content); }</span>
-<span class="source-line-no">607</span><span id="line-607">}</span>
+<span class="source-line-no">578</span><span id="line-578">      if (nn(pm)) {</span>
+<span class="source-line-no">579</span><span id="line-579">         var p = pm.getParser();</span>
+<span class="source-line-no">580</span><span id="line-580">         var mediaType2 = pm.getMediaType();</span>
+<span class="source-line-no">581</span><span id="line-581">         // @formatter:off</span>
+<span class="source-line-no">582</span><span id="line-582">         var session = p</span>
+<span class="source-line-no">583</span><span id="line-583">            .createSession()</span>
+<span class="source-line-no">584</span><span id="line-584">            .properties(req.getParserSessionPropertyMap())</span>
+<span class="source-line-no">585</span><span id="line-585">            .javaMethod(req.getOpContext().getJavaMethod())</span>
+<span class="source-line-no">586</span><span id="line-586">            .locale(locale)</span>
+<span class="source-line-no">587</span><span id="line-587">            .timeZone(timeZone.orElse(null))</span>
+<span class="source-line-no">588</span><span id="line-588">            .mediaType(mediaType2)</span>
+<span class="source-line-no">589</span><span id="line-589">            // Note: `p.createSession()` returns a *session* builder (a ParserSession.Builder subtype, e.g.</span>
+<span class="source-line-no">590</span><span id="line-590">            // ReaderParserSession.Builder), never a Parser.Builder subtype, so `ReaderParser.Builder.class`</span>
+<span class="source-line-no">591</span><span id="line-591">            // below can never match. Likely meant `ReaderParserSession.Builder.class` -- flagged as an</span>
+<span class="source-line-no">592</span><span id="line-592">            // incidental finding, not fixed here (out of scope for a coverage-only change).</span>
+<span class="source-line-no">593</span><span id="line-593">            .apply(ReaderParser.Builder.class, x -&gt; x.streamCharset(req.getCharset()))  // HTT: unreachable -- apply()'s type filter never matches (see note above), so the lambda body is provably dead code</span>
+<span class="source-line-no">594</span><span id="line-594">            .schema(schema)</span>
+<span class="source-line-no">595</span><span id="line-595">            .debug(req.isDebug() ? true : null)</span>
+<span class="source-line-no">596</span><span id="line-596">            .build();</span>
+<span class="source-line-no">597</span><span id="line-597">         // @formatter:on</span>
+<span class="source-line-no">598</span><span id="line-598"></span>
+<span class="source-line-no">599</span><span id="line-599">         try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {  // HTT: the compiler-generated null-check on `in` in this try-with-resources' implicit finally is unreachable -- both getUnbufferedReader() and getInputStream() are annotated/documented to never return null, and the ternary itself has both arms covered by RequestContent_Test (h/k groups).</span>
+<span class="source-line-no">600</span><span id="line-600">            var o = session.read(in, cm);</span>
+<span class="source-line-no">601</span><span id="line-601">            if (nn(schema))  // HTT: unreachable-false-arm -- schema is unconditionally defaulted to HttpPartSchema.DEFAULT a few lines above and never reset to null before this point.</span>
+<span class="source-line-no">602</span><span id="line-602">               schema.validateOutput(o);</span>
+<span class="source-line-no">603</span><span id="line-603">            return o;</span>
+<span class="source-line-no">604</span><span id="line-604">         }</span>
+<span class="source-line-no">605</span><span id="line-605">      }</span>
+<span class="source-line-no">606</span><span id="line-606"></span>
+<span class="source-line-no">607</span><span id="line-607">      if (cm.hasReaderMutater())</span>
+<span class="source-line-no">608</span><span id="line-608">         return BasicConverter.INSTANCE.to(getReader(), cm.inner());</span>
+<span class="source-line-no">609</span><span id="line-609"></span>
+<span class="source-line-no">610</span><span id="line-610">      if (cm.hasInputStreamMutater())</span>
+<span class="source-line-no">611</span><span id="line-611">         return BasicConverter.INSTANCE.to(getInputStream(), cm.inner());</span>
+<span class="source-line-no">612</span><span id="line-612"></span>
+<span class="source-line-no">613</span><span id="line-613">      var mt = getMediaType();</span>
+<span class="source-line-no">614</span><span id="line-614"></span>
+<span class="source-line-no">615</span><span id="line-615">      if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) &amp;&amp; cm.hasStringMutater())</span>
+<span class="source-line-no">616</span><span id="line-616">         return BasicConverter.INSTANCE.to(asString(), cm.inner());</span>
+<span class="source-line-no">617</span><span id="line-617"></span>
+<span class="source-line-no">618</span><span id="line-618">      var ct = req.getHeader(ContentType.class);</span>
+<span class="source-line-no">619</span><span id="line-619">      throw new UnsupportedMediaType("Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s",</span>
+<span class="source-line-no">620</span><span id="line-620">         ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));</span>
+<span class="source-line-no">621</span><span id="line-621">   }</span>
+<span class="source-line-no">622</span><span id="line-622"></span>
+<span class="source-line-no">623</span><span id="line-623">   /**</span>
+<span class="source-line-no">624</span><span id="line-624">    * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</span>
+<span class="source-line-no">625</span><span id="line-625">    *</span>
+<span class="source-line-no">626</span><span id="line-626">    * @return An unbuffered reader.</span>
+<span class="source-line-no">627</span><span id="line-627">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">628</span><span id="line-628">    */</span>
+<span class="source-line-no">629</span><span id="line-629">   protected Reader getUnbufferedReader() throws IOException {</span>
+<span class="source-line-no">630</span><span id="line-630">      if (nn(content))</span>
+<span class="source-line-no">631</span><span id="line-631">         return new CharSequenceReader(new String(content, UTF8));</span>
+<span class="source-line-no">632</span><span id="line-632">      return new InputStreamReader(getInputStream(), req.getCharset());</span>
+<span class="source-line-no">633</span><span id="line-633">   }</span>
+<span class="source-line-no">634</span><span id="line-634"></span>
+<span class="source-line-no">635</span><span id="line-635">   boolean isLoaded() { return nn(content); }</span>
+<span class="source-line-no">636</span><span id="line-636">}</span>
 
 
 

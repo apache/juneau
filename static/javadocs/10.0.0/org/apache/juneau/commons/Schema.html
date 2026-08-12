@@ -290,12 +290,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>boolean</code></div>
 <div class="col-second even-row-color"><code><a href="#emax()" class="member-name-link">emax</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Synonym for <a href="#exclusiveMaximum()"><code>exclusiveMaximum()</code></a>.</div>
+<div class="block">Short-form boolean flag mirroring the legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+ <mk>exclusiveMaximum</mk> semantics (superseded by <a href="#exclusiveMaximumValue()"><code>exclusiveMaximumValue()</code></a> for Draft 2020-12).</div>
 </div>
 <div class="col-first odd-row-color"><code>boolean</code></div>
 <div class="col-second odd-row-color"><code><a href="#emin()" class="member-name-link">emin</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Synonym for <a href="#exclusiveMinimum()"><code>exclusiveMinimum()</code></a>.</div>
+<div class="block">Short-form boolean flag mirroring the legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+ <mk>exclusiveMinimum</mk> semantics (superseded by <a href="#exclusiveMinimumValue()"><code>exclusiveMinimumValue()</code></a> for Draft 2020-12).</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
 <div class="col-second even-row-color"><code><a href="#enum_()" class="member-name-link">enum_</a></code></div>
@@ -307,24 +309,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block"><mk>examples</mk> field of the JSON Schema.</div>
 </div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><code><a href="#exclusiveMaximum()" class="member-name-link">exclusiveMaximum</a></code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#exclusiveMaximumValue()" class="member-name-link">exclusiveMaximumValue</a></code></div>
 <div class="col-last even-row-color">
-<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecation-comment">Use <a href="#exclusiveMaximumValue()"><code>exclusiveMaximumValue()</code></a> for JSON Schema Draft 2020-12 compliance.</div>
-</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#exclusiveMaximumValue()" class="member-name-link">exclusiveMaximumValue</a></code></div>
-<div class="col-last odd-row-color">
 <div class="block"><mk>exclusiveMaximum</mk> field of the JSON Schema (Draft 2020-12 numeric value).</div>
-</div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><code><a href="#exclusiveMinimum()" class="member-name-link">exclusiveMinimum</a></code></div>
-<div class="col-last even-row-color">
-<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecation-comment">Use <a href="#exclusiveMinimumValue()"><code>exclusiveMinimumValue()</code></a> for JSON Schema Draft 2020-12 compliance.</div>
-</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#exclusiveMinimumValue()" class="member-name-link">exclusiveMinimumValue</a></code></div>
@@ -1370,8 +1358,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="emax()">
 <h3>emax</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-735">emax</a></span></div>
-<div class="block">Synonym for <a href="#exclusiveMaximum()"><code>exclusiveMaximum()</code></a>.</div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-736">emax</a></span></div>
+<div class="block">Short-form boolean flag mirroring the legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+ <mk>exclusiveMaximum</mk> semantics (superseded by <a href="#exclusiveMaximumValue()"><code>exclusiveMaximumValue()</code></a> for Draft 2020-12).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The annotation value.</dd>
@@ -1385,8 +1374,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="emin()">
 <h3>emin</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-742">emin</a></span></div>
-<div class="block">Synonym for <a href="#exclusiveMinimum()"><code>exclusiveMinimum()</code></a>.</div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-744">emin</a></span></div>
+<div class="block">Short-form boolean flag mirroring the legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+ <mk>exclusiveMinimum</mk> semantics (superseded by <a href="#exclusiveMinimumValue()"><code>exclusiveMinimumValue()</code></a> for Draft 2020-12).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The annotation value.</dd>
@@ -1400,7 +1390,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="examples()">
 <h3>examples</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-777">examples</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-779">examples</a></span></div>
 <div class="block"><mk>examples</mk> field of the JSON Schema.
 
  <p>
@@ -1441,58 +1431,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="exclusiveMaximum()">
-<h3>exclusiveMaximum</h3>
-<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="9.2.0",
-            <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
-</span><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-814">exclusiveMaximum</a></span></div>
-<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecation-comment">Use <a href="#exclusiveMaximumValue()"><code>exclusiveMaximumValue()</code></a> for JSON Schema Draft 2020-12 compliance.</div>
-</div>
-<div class="block"><mk>exclusiveMaximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
-
- <p>
- Defines whether the maximum is matched exclusively.
-
- <p>
- If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
- <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
- <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
-
- <p>
- Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
- <br>If <jk>true</jk>, must be accompanied with <c>maximum</c>.
-
- <h5 class='section'>Notes:</h5><ul>
-   <li class='note'>
-      <b>Deprecated in JSON Schema Draft 2020-12:</b> This boolean format is from Swagger 2.0/OpenAPI 3.0 and JSON Schema Draft 04.
-      Consider using <a href="#exclusiveMaximumValue()"><code>exclusiveMaximumValue()</code></a> for Draft 2020-12 compliance, which uses a numeric value instead.
-      For backward compatibility, if <a href="#exclusiveMaximumValue()"><code>exclusiveMaximumValue()</code></a> is set, it takes precedence over this property.
- </ul>
-
- <h5 class='section'>Used for:</h5>
- <ul class='spaced-list'>
-   <li>
-      Server-side schema-based parsing validation.
-   <li>
-      Server-side generated Swagger documentation.
-   <li>
-      Client-side schema-based serializing validation.
- </ul></div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The annotation value.</dd>
-</dl>
-<dl class="notes">
-<dt>Default:</dt>
-<dd>false</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="exclusiveMaximumValue()">
 <h3>exclusiveMaximumValue</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-858">exclusiveMaximumValue</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-818">exclusiveMaximumValue</a></span></div>
 <div class="block"><mk>exclusiveMaximum</mk> field of the JSON Schema (Draft 2020-12 numeric value).
 
  <p>
@@ -1500,9 +1441,8 @@ loadScripts(document, 'script');</script>
  The instance is valid if it is strictly less than (not equal to) the value specified by this keyword.
 
  <p>
- This is a JSON Schema Draft 2020-12 property that replaces the boolean <a href="#exclusiveMaximum()"><code>exclusiveMaximum()</code></a>.
- For backward compatibility, both properties are supported.
- If this property is specified, it takes precedence over the boolean version.
+ This is a JSON Schema Draft 2020-12 property. The legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+ boolean form was removed in 10.0.0; use this numeric form instead.
 
  <h5 class='section'>Examples:</h5>
  <p class='bjava'>
@@ -1538,58 +1478,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="exclusiveMinimum()">
-<h3>exclusiveMinimum</h3>
-<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="9.2.0",
-            <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true)
-</span><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-895">exclusiveMinimum</a></span></div>
-<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecation-comment">Use <a href="#exclusiveMinimumValue()"><code>exclusiveMinimumValue()</code></a> for JSON Schema Draft 2020-12 compliance.</div>
-</div>
-<div class="block"><mk>exclusiveMinimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
-
- <p>
- Defines whether the minimum is matched exclusively.
-
- <p>
- If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
- <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
- <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
-
- <p>
- Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
- <br>If <jk>true</jk>, must be accompanied with <c>minimum</c>.
-
- <h5 class='section'>Notes:</h5><ul>
-   <li class='note'>
-      <b>Deprecated in JSON Schema Draft 2020-12:</b> This boolean format is from Swagger 2.0/OpenAPI 3.0 and JSON Schema Draft 04.
-      Consider using <a href="#exclusiveMinimumValue()"><code>exclusiveMinimumValue()</code></a> for Draft 2020-12 compliance, which uses a numeric value instead.
-      For backward compatibility, if <a href="#exclusiveMinimumValue()"><code>exclusiveMinimumValue()</code></a> is set, it takes precedence over this property.
- </ul>
-
- <h5 class='section'>Used for:</h5>
- <ul class='spaced-list'>
-   <li>
-      Server-side schema-based parsing validation.
-   <li>
-      Server-side generated Swagger documentation.
-   <li>
-      Client-side schema-based serializing validation.
- </ul></div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The annotation value.</dd>
-</dl>
-<dl class="notes">
-<dt>Default:</dt>
-<dd>false</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="exclusiveMinimumValue()">
 <h3>exclusiveMinimumValue</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-939">exclusiveMinimumValue</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-857">exclusiveMinimumValue</a></span></div>
 <div class="block"><mk>exclusiveMinimum</mk> field of the JSON Schema (Draft 2020-12 numeric value).
 
  <p>
@@ -1597,9 +1488,8 @@ loadScripts(document, 'script');</script>
  The instance is valid if it is strictly greater than (not equal to) the value specified by this keyword.
 
  <p>
- This is a JSON Schema Draft 2020-12 property that replaces the boolean <a href="#exclusiveMinimum()"><code>exclusiveMinimum()</code></a>.
- For backward compatibility, both properties are supported.
- If this property is specified, it takes precedence over the boolean version.
+ This is a JSON Schema Draft 2020-12 property. The legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
+ boolean form was removed in 10.0.0; use this numeric form instead.
 
  <h5 class='section'>Examples:</h5>
  <p class='bjava'>
@@ -1637,7 +1527,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="externalDocs()">
 <h3>externalDocs</h3>
-<div class="member-signature"><span class="return-type"><a href="ExternalDocs.html" title="annotation interface in org.apache.juneau.commons">ExternalDocs</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-952">externalDocs</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="ExternalDocs.html" title="annotation interface in org.apache.juneau.commons">ExternalDocs</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-870">externalDocs</a></span></div>
 <div class="block"><mk>externalDocs</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -1658,7 +1548,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="f()">
 <h3>f</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-959">f</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-877">f</a></span></div>
 <div class="block">Synonym for <a href="#format()"><code>format()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1673,7 +1563,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="format()">
 <h3>format</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1036">format</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-954">format</a></span></div>
 <div class="block"><mk>format</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -1758,7 +1648,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignore()">
 <h3>ignore</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1043">ignore</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-961">ignore</a></span></div>
 <div class="block">Specifies that schema information for this part should not be shown in the generated Swagger documentation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1773,7 +1663,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="items()">
 <h3>items</h3>
-<div class="member-signature"><span class="return-type"><a href="Items.html" title="annotation interface in org.apache.juneau.commons">Items</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1067">items</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="Items.html" title="annotation interface in org.apache.juneau.commons">Items</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-985">items</a></span></div>
 <div class="block"><mk>items</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -1805,7 +1695,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="max()">
 <h3>max</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1074">max</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-992">max</a></span></div>
 <div class="block">Synonym for <a href="#maximum()"><code>maximum()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1820,7 +1710,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxi()">
 <h3>maxi</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1081">maxi</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-999">maxi</a></span></div>
 <div class="block">Synonym for <a href="#maxItems()"><code>maxItems()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1835,7 +1725,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maximum()">
 <h3>maximum</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1110">maximum</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1028">maximum</a></span></div>
 <div class="block"><mk>maximum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -1872,7 +1762,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxItems()">
 <h3>maxItems</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1138">maxItems</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1056">maxItems</a></span></div>
 <div class="block"><mk>maxItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -1908,7 +1798,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxl()">
 <h3>maxl</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1145">maxl</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1063">maxl</a></span></div>
 <div class="block">Synonym for <a href="#maxLength()"><code>maxLength()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1923,7 +1813,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxLength()">
 <h3>maxLength</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1175">maxLength</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1093">maxLength</a></span></div>
 <div class="block"><mk>maxLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -1961,7 +1851,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxp()">
 <h3>maxp</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1182">maxp</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1100">maxp</a></span></div>
 <div class="block">Synonym for <a href="#maxProperties()"><code>maxProperties()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1976,7 +1866,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxProperties()">
 <h3>maxProperties</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1195">maxProperties</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1113">maxProperties</a></span></div>
 <div class="block"><mk>maxProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -1997,7 +1887,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="min()">
 <h3>min</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1202">min</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1120">min</a></span></div>
 <div class="block">Synonym for <a href="#minimum()"><code>minimum()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2012,7 +1902,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mini()">
 <h3>mini</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1209">mini</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1127">mini</a></span></div>
 <div class="block">Synonym for <a href="#minItems()"><code>minItems()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2027,7 +1917,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="minimum()">
 <h3>minimum</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1238">minimum</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1156">minimum</a></span></div>
 <div class="block"><mk>minimum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2064,7 +1954,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="minItems()">
 <h3>minItems</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1266">minItems</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1184">minItems</a></span></div>
 <div class="block"><mk>minItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2100,7 +1990,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="minl()">
 <h3>minl</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1273">minl</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1191">minl</a></span></div>
 <div class="block">Synonym for <a href="#minLength()"><code>minLength()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2115,7 +2005,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="minLength()">
 <h3>minLength</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1303">minLength</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1221">minLength</a></span></div>
 <div class="block"><mk>minLength</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2153,7 +2043,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="minp()">
 <h3>minp</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1310">minp</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1228">minp</a></span></div>
 <div class="block">Synonym for <a href="#minProperties()"><code>minProperties()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2168,7 +2058,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="minProperties()">
 <h3>minProperties</h3>
-<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1323">minProperties</a></span></div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1241">minProperties</a></span></div>
 <div class="block"><mk>minProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -2189,7 +2079,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="mo()">
 <h3>mo</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1330">mo</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1248">mo</a></span></div>
 <div class="block">Synonym for <a href="#multipleOf()"><code>multipleOf()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2204,7 +2094,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="multipleOf()">
 <h3>multipleOf</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1359">multipleOf</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1277">multipleOf</a></span></div>
 <div class="block"><mk>multipleOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2241,7 +2131,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="p()">
 <h3>p</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1366">p</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1284">p</a></span></div>
 <div class="block">Synonym for <a href="#pattern()"><code>pattern()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2256,7 +2146,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pattern()">
 <h3>pattern</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1400">pattern</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1318">pattern</a></span></div>
 <div class="block"><mk>pattern</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2298,7 +2188,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="prefixItems()">
 <h3>prefixItems</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1424">prefixItems</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1342">prefixItems</a></span></div>
 <div class="block"><mk>prefixItems</mk> field of the JSON Schema.
 
  <p>
@@ -2330,7 +2220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="r()">
 <h3>r</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1431">r</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1349">r</a></span></div>
 <div class="block">Synonym for <a href="#required()"><code>required()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2345,7 +2235,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readOnly()">
 <h3>readOnly</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1444">readOnly</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1362">readOnly</a></span></div>
 <div class="block"><mk>readOnly</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -2366,7 +2256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="required()">
 <h3>required</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1486">required</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1404">required</a></span></div>
 <div class="block"><mk>required</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2416,7 +2306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ro()">
 <h3>ro</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1493">ro</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1411">ro</a></span></div>
 <div class="block">Synonym for <a href="#readOnly()"><code>readOnly()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2431,7 +2321,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sie()">
 <h3>sie</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1500">sie</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1418">sie</a></span></div>
 <div class="block">Synonym for <a href="#skipIfEmpty()"><code>skipIfEmpty()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2446,7 +2336,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="skipIfEmpty()">
 <h3>skipIfEmpty</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1516">skipIfEmpty</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1434">skipIfEmpty</a></span></div>
 <div class="block">Skips this value during serialization if it's an empty string or empty collection/array.
 
  <p>
@@ -2470,7 +2360,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="su()">
 <h3>su</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1523">su</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1441">su</a></span></div>
 <div class="block">Synonym for <a href="#summary()"><code>summary()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2485,7 +2375,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="summary()">
 <h3>summary</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1568">summary</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1486">summary</a></span></div>
 <div class="block"><mk>summary</mk> field of the JSON Schema.
 
  <p>
@@ -2539,7 +2429,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="t()">
 <h3>t</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1575">t</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1493">t</a></span></div>
 <div class="block">Synonym for <a href="#type()"><code>type()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2554,7 +2444,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="title()">
 <h3>title</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1587">title</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1505">title</a></span></div>
 <div class="block"><mk>title</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -2574,7 +2464,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type()">
 <h3>type</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1662">type</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1580">type</a></span></div>
 <div class="block"><mk>type</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2657,7 +2547,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ui()">
 <h3>ui</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1669">ui</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1587">ui</a></span></div>
 <div class="block">Synonym for <a href="#uniqueItems()"><code>uniqueItems()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -2672,7 +2562,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unevaluatedItems()">
 <h3>unevaluatedItems</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1693">unevaluatedItems</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1611">unevaluatedItems</a></span></div>
 <div class="block"><mk>unevaluatedItems</mk> field of the JSON Schema.
 
  <p>
@@ -2704,7 +2594,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unevaluatedProperties()">
 <h3>unevaluatedProperties</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1717">unevaluatedProperties</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1635">unevaluatedProperties</a></span></div>
 <div class="block"><mk>unevaluatedProperties</mk> field of the JSON Schema.
 
  <p>
@@ -2736,7 +2626,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uniqueItems()">
 <h3>uniqueItems</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1749">uniqueItems</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1667">uniqueItems</a></span></div>
 <div class="block"><mk>uniqueItems</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <p>
@@ -2776,7 +2666,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="xml()">
 <h3>xml</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1762">xml</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/commons/Schema.html#line-1680">xml</a></span></div>
 <div class="block"><mk>xml</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 
  <h5 class='section'>Notes:</h5><ul>

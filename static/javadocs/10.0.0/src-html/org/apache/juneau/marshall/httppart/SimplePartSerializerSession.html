@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> */</span>
 <span class="source-line-no">034</span><span id="line-34">public class SimplePartSerializerSession extends BaseHttpPartSerializerSession {</span>
 <span class="source-line-no">035</span><span id="line-35">   @Override /* Overridden from PartSerializer */</span>
-<span class="source-line-no">036</span><span id="line-36">   public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {</span>
+<span class="source-line-no">036</span><span id="line-36">   public String write(HttpPartType type, HttpPartSchema schema, Object value) {</span>
 <span class="source-line-no">037</span><span id="line-37">      return BasicConverter.INSTANCE.to(value, String.class);</span>
 <span class="source-line-no">038</span><span id="line-38">   }</span>
 <span class="source-line-no">039</span><span id="line-39">}</span>

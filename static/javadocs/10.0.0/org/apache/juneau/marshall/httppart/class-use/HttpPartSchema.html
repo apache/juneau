@@ -480,26 +480,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Object type</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HttpPartSchema.</span><code><a href="../HttpPartSchema.html#T_OBJECT_CSV" class="member-name-link">T_OBJECT_CSV</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">Comma-delimited object type</div>
-</div>
-<div class="col-first even-row-color"><code>static final <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpPartSchema.</span><code><a href="../HttpPartSchema.html#T_OBJECT_PIPES" class="member-name-link">T_OBJECT_PIPES</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Pipe-delimited object type</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HttpPartSchema.</span><code><a href="../HttpPartSchema.html#T_OBJECT_SSV" class="member-name-link">T_OBJECT_SSV</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">Space-delimited object type</div>
-</div>
-<div class="col-first even-row-color"><code>static final <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpPartSchema.</span><code><a href="../HttpPartSchema.html#T_OBJECT_TSV" class="member-name-link">T_OBJECT_TSV</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Tab-delimited object type</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">HttpPartSchema.</span><code><a href="../HttpPartSchema.html#T_OBJECT_UON" class="member-name-link">T_OBJECT_UON</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">UON-formated object type</div>
@@ -557,7 +537,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">HttpPartSchema.</span><code><a href="../HttpPartSchema.html#getItems()" class="member-name-link">getItems</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Returns the <c>maximum</c> field of this schema.</div>
+<div class="block">Returns the <c>items</c> field of this schema.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">HttpPartSchema.</span><code><a href="../HttpPartSchema.html#getProperty(java.lang.String)" class="member-name-link">getProperty</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
@@ -596,25 +576,39 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Shortcut for <c>property(key, value)</c>.</div>
 </div>
-<div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BaseHttpPartParser.</span><code><a href="../BaseHttpPartParser.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-first odd-row-color"><code><a href="../HttpPartSchema.Builder.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpPartSchema.Builder.</span><code><a href="../HttpPartSchema.Builder.html#property(java.lang.String,org.apache.juneau.marshall.httppart.HttpPartSchema)" class="member-name-link">property</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block"><mk>properties</mk> field.</div>
+</div>
+<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BaseHttpPartParser.</span><code><a href="../BaseHttpPartParser.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;toType)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
-<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BaseHttpPartParser.</span><code><a href="../BaseHttpPartParser.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BaseHttpPartParser.</span><code><a href="../BaseHttpPartParser.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;toType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;toTypeArgs)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Converts the specified input to the specified class type.</div>
+</div>
+<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BaseHttpPartParser.</span><code><a href="../BaseHttpPartParser.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+ <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
+ <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
 <div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BaseHttpPartParser.</span><code><a href="../BaseHttpPartParser.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color"><span class="type-name-label">HttpPartParserSession.</span><code><a href="../HttpPartParserSession.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</code></div>
@@ -622,27 +616,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpPartParserSession.</span><code><a href="../HttpPartParserSession.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color"><span class="type-name-label">SimplePartParserSession.</span><code><a href="../SimplePartParserSession.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Converts the specified input to the specified class type.</div>
-</div>
-<div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SimplePartParserSession.</span><code><a href="../SimplePartParserSession.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
- <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
- <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../HttpPartSchema.Builder.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpPartSchema.Builder.</span><code><a href="../HttpPartSchema.Builder.html#property(java.lang.String,org.apache.juneau.marshall.httppart.HttpPartSchema)" class="member-name-link">property</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block"><mk>properties</mk> field.</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BaseHttpPartSerializer.</span><code><a href="../BaseHttpPartSerializer.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color"><span class="type-name-label">BaseHttpPartSerializer.</span><code><a href="../BaseHttpPartSerializer.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
@@ -650,7 +630,7 @@ loadScripts(document, 'script');</script>
  form-data parameter, or URI path variable.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpPartSerializerSession.</span><code><a href="../HttpPartSerializerSession.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
+<div class="col-second even-row-color"><span class="type-name-label">HttpPartSerializerSession.</span><code><a href="../HttpPartSerializerSession.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
@@ -658,7 +638,7 @@ loadScripts(document, 'script');</script>
  form-data parameter, or URI path variable.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SimplePartSerializerSession.</span><code><a href="../SimplePartSerializerSession.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
+<div class="col-second odd-row-color"><span class="type-name-label">SimplePartSerializerSession.</span><code><a href="../SimplePartSerializerSession.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
@@ -709,14 +689,14 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">OpenApi.</span><code><a href="../../marshaller/OpenApi.html#of(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Serializes a Java object to an OpenApi output.</div>
+<div class="block">Serializes a Java object to an OpenApi output using the specified part schema.</div>
 </div>
 <div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;T</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">OpenApi.</span><code><a href="../../marshaller/OpenApi.html#to(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">to</a><wbr>(<a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Parses an OpenApi input object to the specified Java type.</div>
+<div class="block">Parses an OpenApi input object to the specified Java type using the specified part schema.</div>
 </div>
 </div>
 </section>
@@ -730,13 +710,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OpenApiParserSession.</span><code><a href="../../oapi/OpenApiParserSession.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color"><span class="type-name-label">OpenApiParserSession.</span><code><a href="../../oapi/OpenApiParserSession.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OpenApiSerializerSession.</span><code><a href="../../oapi/OpenApiSerializerSession.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApiSerializerSession.</span><code><a href="../../oapi/OpenApiSerializerSession.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
@@ -816,7 +796,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonParser.</span><code><a href="../../uon/UonParser.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color"><span class="type-name-label">UonParser.</span><code><a href="../../uon/UonParser.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;toType)</code></div>
@@ -824,7 +804,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
 <div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UonParser.</span><code><a href="../../uon/UonParser.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color"><span class="type-name-label">UonParser.</span><code><a href="../../uon/UonParser.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;toType,
@@ -833,7 +813,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonParser.</span><code><a href="../../uon/UonParser.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color"><span class="type-name-label">UonParser.</span><code><a href="../../uon/UonParser.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</code></div>
@@ -841,13 +821,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Converts the specified input to the specified class type.</div>
 </div>
 <div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#parse(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">parse</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second odd-row-color"><span class="type-name-label">UonParserSession.</span><code><a href="../../uon/UonParserSession.html#read(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;in,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;toType)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UonSerializer.</span><code><a href="../../uon/UonSerializer.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="col-second even-row-color"><span class="type-name-label">UonSerializer.</span><code><a href="../../uon/UonSerializer.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
@@ -855,7 +835,7 @@ loadScripts(document, 'script');</script>
  form-data parameter, or URI path variable.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">serialize</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
+<div class="col-second odd-row-color"><span class="type-name-label">UonSerializerSession.</span><code><a href="../../uon/UonSerializerSession.html#write(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">write</a><wbr>(<a href="../../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;type,
  <a href="../HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>

@@ -72,12 +72,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Microservice API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.tomcat">org.apache.juneau.microservice.tomcat</a></div>
 <div class="col-last even-row-color">
+<div class="block">Embedded Tomcat integration for Juneau microservices.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-last even-row-color">
 <div class="block">Spring Boot Integration</div>
 </div>
 </div>
@@ -253,6 +257,26 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;configurations)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Power-user form: boots a Jetty microservice with a caller-supplied bean store and configuration
+ class list.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.microservice.tomcat">
+<h2>Uses of <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a> in <a href="../../../microservice/tomcat/package-summary.html">org.apache.juneau.microservice.tomcat</a></h2>
+<div class="caption"><span>Methods in <a href="../../../microservice/tomcat/package-summary.html">org.apache.juneau.microservice.tomcat</a> with parameters of type <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../../microservice/Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TomcatMicroservice.</span><code><a href="../../../microservice/tomcat/TomcatMicroservice.html#run(java.lang.String%5B%5D,org.apache.juneau.commons.inject.WritableBeanStore,boolean,java.lang.Class...)" class="member-name-link">run</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args,
+ <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore,
+ boolean&nbsp;startConsole,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;configurations)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Power-user form: boots a Tomcat microservice with a caller-supplied bean store and configuration
  class list.</div>
 </div>
 </div>

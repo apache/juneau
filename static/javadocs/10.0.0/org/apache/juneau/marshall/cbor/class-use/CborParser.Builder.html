@@ -83,14 +83,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new builder for this object.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">CborParser.Builder.</span><code><a href="../CborParser.Builder.html#nativeMode()" class="member-name-link">nativeMode</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CborParser.Builder.</span><code><a href="../CborParser.Builder.html#maxLength(int)" class="member-name-link">maxLength</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Surfaces CBOR semantic tags and simple values as token-level metadata on
- <a href="../../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursors returned by <a href="../CborParserSession.html#parseTokens(java.lang.Object)"><code>CborParserSession.parseTokens(Object)</code></a>.</div>
+<div class="block">The maximum allowed wire-declared length for CBOR byte/text strings and array/map element counts.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CborParser.Builder.</span><code><a href="../CborParser.Builder.html#nativeMode(boolean)" class="member-name-link">nativeMode</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CborParser.Builder.</span><code><a href="../CborParser.Builder.html#nativeMode()" class="member-name-link">nativeMode</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">Surfaces CBOR semantic tags and simple values as token-level metadata on
+ <a href="../../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursors returned by <a href="../CborParserSession.html#readTokens(java.lang.Object)"><code>CborParserSession.readTokens(Object)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../CborParser.Builder.html" title="class in org.apache.juneau.marshall.cbor">CborParser.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CborParser.Builder.</span><code><a href="../CborParser.Builder.html#nativeMode(boolean)" class="member-name-link">nativeMode</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Same as <a href="../CborParser.Builder.html#nativeMode()"><code>nativeMode()</code></a> but allows you to explicitly specify the value.</div>
 </div>
 </div>

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/common/utils/HttpUtils.html#line-25">HttpUtils</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/common/utils/HttpUtils.html#line-27">HttpUtils</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">HTTP utilities.</div>
 </section>
@@ -128,32 +128,32 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="detectHttpMethod(java.lang.reflect.Method,boolean,java.lang.String)">
 <h3>detectHttpMethod</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/common/utils/HttpUtils.html#line-43">detectHttpMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/common/utils/HttpUtils.html#line-45">detectHttpMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
  boolean&nbsp;detectMethod,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;def)</span></div>
 <div class="block">Given a method name, infers the REST method name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>m</code> - The Java method.</dd>
+<dd><code>m</code> - The Java method. Must not be <jk>null</jk>.</dd>
 <dd><code>detectMethod</code> - Whether we should auto-detect the HTTP method name from the Java method name.</dd>
-<dd><code>def</code> - The default HTTP method if not detected.</dd>
+<dd><code>def</code> - The default HTTP method if not detected. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The REST method name, or the default value if not found.</dd>
+<dd>The REST method name, or <c>def</c> (which can be <jk>null</jk>) if not detected.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="detectHttpPath(java.lang.reflect.Method,java.lang.String)">
 <h3>detectHttpPath</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/common/utils/HttpUtils.html#line-69">detectHttpPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/common/utils/HttpUtils.html#line-71">detectHttpPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method)</span></div>
 <div class="block">Given a Java method, infers the REST path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>m</code> - The Java method.</dd>
-<dd><code>method</code> - The HTTP method name if it's known.</dd>
+<dd><code>m</code> - The Java method. Must not be <jk>null</jk>.</dd>
+<dd><code>method</code> - The HTTP method name if it's known. Can be <jk>null</jk>, in which case the path is inferred from Java method naming conventions.</dd>
 <dt>Returns:</dt>
-<dd>The REST path or <jk>null</jk> if not detected.</dd>
+<dd>The REST path. Never <jk>null</jk> (falls back to <c>'/' + methodName</c> when no convention matches).</dd>
 </dl>
 </section>
 </li>

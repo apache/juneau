@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *    &lt;jc&gt;// Use one of the default serializers to serialize a POJO&lt;/jc&gt;</span>
-<span class="source-line-no">096</span><span id="line-96"> *    String &lt;jv&gt;json&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
+<span class="source-line-no">096</span><span id="line-96"> *    String &lt;jv&gt;json&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
 <span class="source-line-no">097</span><span id="line-97"> *</span>
 <span class="source-line-no">098</span><span id="line-98"> *    &lt;jc&gt;// Create a custom serializer for lax syntax using single quote characters&lt;/jc&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> *    JsonSerializer &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().simple().sq().build();</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102"> *    &lt;jv&gt;serializer&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.copy().sq().build();</span>
 <span class="source-line-no">103</span><span id="line-103"> *</span>
 <span class="source-line-no">104</span><span id="line-104"> *    &lt;jc&gt;// Serialize a POJO to JSON&lt;/jc&gt;</span>
-<span class="source-line-no">105</span><span id="line-105"> *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
+<span class="source-line-no">105</span><span id="line-105"> *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
 <span class="source-line-no">106</span><span id="line-106"> * &lt;/p&gt;</span>
 <span class="source-line-no">107</span><span id="line-107"> *</span>
 <span class="source-line-no">108</span><span id="line-108"> * &lt;h5 class='figure'&gt;Example output (Map of name/age):&lt;/h5&gt;</span>
@@ -140,7 +140,7 @@
 <span class="source-line-no">127</span><span id="line-127">@SuppressWarnings({</span>
 <span class="source-line-no">128</span><span id="line-128">   "java:S110", // Inheritance depth acceptable for this class hierarchy</span>
 <span class="source-line-no">129</span><span id="line-129">   "java:S115", // Constants use UPPER_snakeCase naming convention</span>
-<span class="source-line-no">130</span><span id="line-130">   "resource"   // serializeTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">130</span><span id="line-130">   "resource"   // writeTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.</span>
 <span class="source-line-no">131</span><span id="line-131">})</span>
 <span class="source-line-no">132</span><span id="line-132">public class JsonSerializer extends WriterSerializer implements JsonMetaProvider, TokenWritable, ArrayRecordWritable {</span>
 <span class="source-line-no">133</span><span id="line-133"></span>
@@ -261,7 +261,7 @@
 <span class="source-line-no">248</span><span id="line-248">       *       .build();</span>
 <span class="source-line-no">249</span><span id="line-249">       *</span>
 <span class="source-line-no">250</span><span id="line-250">       *    &lt;jc&gt;// Produces: "{foo:'&amp;lt;\/bar&amp;gt;'"&lt;/jc&gt;</span>
-<span class="source-line-no">251</span><span id="line-251">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"&amp;lt;/bar&amp;gt;"&lt;/js&gt;);</span>
+<span class="source-line-no">251</span><span id="line-251">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(JsonMap.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"&amp;lt;/bar&amp;gt;"&lt;/js&gt;);</span>
 <span class="source-line-no">252</span><span id="line-252">       * &lt;/p&gt;</span>
 <span class="source-line-no">253</span><span id="line-253">       *</span>
 <span class="source-line-no">254</span><span id="line-254">       * @return This object.</span>
@@ -416,12 +416,12 @@
 <span class="source-line-no">403</span><span id="line-403"></span>
 <span class="source-line-no">404</span><span id="line-404">   /**</span>
 <span class="source-line-no">405</span><span id="line-405">    * Convenience delegator that opens a {@link JsonTokenWriter} over the output using</span>
-<span class="source-line-no">406</span><span id="line-406">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #serialize(Object, Object)}).</span>
+<span class="source-line-no">406</span><span id="line-406">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object, Object)}).</span>
 <span class="source-line-no">407</span><span id="line-407">    *</span>
 <span class="source-line-no">408</span><span id="line-408">    * &lt;p&gt;</span>
-<span class="source-line-no">409</span><span id="line-409">    * The real implementation lives on {@link JsonSerializerSession#serializeTokens(Object)}.</span>
+<span class="source-line-no">409</span><span id="line-409">    * The real implementation lives on {@link JsonSerializerSession#writeTokens(Object)}.</span>
 <span class="source-line-no">410</span><span id="line-410">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
-<span class="source-line-no">411</span><span id="line-411">    * invoke {@link JsonSerializerSession#serializeTokens(Object)} on the built session instead.</span>
+<span class="source-line-no">411</span><span id="line-411">    * invoke {@link JsonSerializerSession#writeTokens(Object)} on the built session instead.</span>
 <span class="source-line-no">412</span><span id="line-412">    *</span>
 <span class="source-line-no">413</span><span id="line-413">    * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or</span>
 <span class="source-line-no">414</span><span id="line-414">    *    {@link StringBuilder}.</span>
@@ -429,8 +429,8 @@
 <span class="source-line-no">416</span><span id="line-416">    * @throws IOException If the output type is not supported or could not be opened.</span>
 <span class="source-line-no">417</span><span id="line-417">    */</span>
 <span class="source-line-no">418</span><span id="line-418">   @Override /* TokenWritable */</span>
-<span class="source-line-no">419</span><span id="line-419">   public TokenWriter serializeTokens(Object output) throws IOException {</span>
-<span class="source-line-no">420</span><span id="line-420">      return getSession().serializeTokens(output);</span>
+<span class="source-line-no">419</span><span id="line-419">   public TokenWriter writeTokens(Object output) throws IOException {</span>
+<span class="source-line-no">420</span><span id="line-420">      return getSession().writeTokens(output);</span>
 <span class="source-line-no">421</span><span id="line-421">   }</span>
 <span class="source-line-no">422</span><span id="line-422"></span>
 <span class="source-line-no">423</span><span id="line-423">   /**</span>
@@ -462,16 +462,16 @@
 <span class="source-line-no">449</span><span id="line-449"></span>
 <span class="source-line-no">450</span><span id="line-450">   /**</span>
 <span class="source-line-no">451</span><span id="line-451">    * Convenience delegator for the streaming array-element {@link RecordWriter} (uses default</span>
-<span class="source-line-no">452</span><span id="line-452">    * session args; see {@link #serializeTokens(Object)}).  Real impl on</span>
-<span class="source-line-no">453</span><span id="line-453">    * {@link JsonSerializerSession#serializeArrayRecords(Object)}.</span>
+<span class="source-line-no">452</span><span id="line-452">    * session args; see {@link #writeTokens(Object)}).  Real impl on</span>
+<span class="source-line-no">453</span><span id="line-453">    * {@link JsonSerializerSession#writeArrayRecords(Object)}.</span>
 <span class="source-line-no">454</span><span id="line-454">    *</span>
 <span class="source-line-no">455</span><span id="line-455">    * @param output The output.</span>
 <span class="source-line-no">456</span><span id="line-456">    * @return A new element-streamed {@link RecordWriter}.</span>
 <span class="source-line-no">457</span><span id="line-457">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">458</span><span id="line-458">    */</span>
 <span class="source-line-no">459</span><span id="line-459">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">460</span><span id="line-460">   public RecordWriter serializeArrayRecords(Object output) throws IOException {</span>
-<span class="source-line-no">461</span><span id="line-461">      return getSession().serializeArrayRecords(output);</span>
+<span class="source-line-no">460</span><span id="line-460">   public RecordWriter writeArrayRecords(Object output) throws IOException {</span>
+<span class="source-line-no">461</span><span id="line-461">      return getSession().writeArrayRecords(output);</span>
 <span class="source-line-no">462</span><span id="line-462">   }</span>
 <span class="source-line-no">463</span><span id="line-463">}</span>
 

@@ -59,8 +59,8 @@
 <span class="source-line-no">046</span><span id="line-46"></span>
 <span class="source-line-no">047</span><span id="line-47">   @Override /* Overridden from ReactiveStreamsAdapter */</span>
 <span class="source-line-no">048</span><span id="line-48">   public Adaptation adapt(Object value) {</span>
-<span class="source-line-no">049</span><span id="line-49">      if (value instanceof Mono&lt;?&gt; m)</span>
-<span class="source-line-no">050</span><span id="line-50">         return Adaptation.single(m.toFuture());</span>
+<span class="source-line-no">049</span><span id="line-49">      if (value instanceof Mono&lt;?&gt; value2)</span>
+<span class="source-line-no">050</span><span id="line-50">         return Adaptation.single(value2.toFuture());</span>
 <span class="source-line-no">051</span><span id="line-51">      var f = (Flux&lt;?&gt;) value;</span>
 <span class="source-line-no">052</span><span id="line-52">      return Adaptation.stream(FlowAdapters.toFlowPublisher(f));</span>
 <span class="source-line-no">053</span><span id="line-53">   }</span>

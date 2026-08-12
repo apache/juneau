@@ -178,7 +178,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMinTime()" class="member-name-link">getMinTime</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the max execution time.</div>
+<div class="block">Returns the minimum execution time.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRunning()" class="member-name-link">getRunning</a>()</code></div>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -267,7 +267,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Call when an error occurs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>e</code> - The exception thrown.  Can be <jk>null</jk>.</dd>
+<dd><code>e</code> - The exception thrown.  Must not be <jk>null</jk> (a <jk>null</jk> argument throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> via <a href="ThrownStore.html#add(java.lang.Throwable)"><code>ThrownStore.add(Throwable)</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -331,7 +331,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the max execution time.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The average execution time in milliseconds.</dd>
+<dd>The max execution time in milliseconds.</dd>
 </dl>
 </section>
 </li>
@@ -350,10 +350,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getMinTime()">
 <h3>getMinTime</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/MethodExecStats.html#line-264">getMinTime</a></span>()</div>
-<div class="block">Returns the max execution time.</div>
+<div class="block">Returns the minimum execution time.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The average execution time in milliseconds.</dd>
+<dd>The minimum execution time in milliseconds.</dd>
 </dl>
 </section>
 </li>

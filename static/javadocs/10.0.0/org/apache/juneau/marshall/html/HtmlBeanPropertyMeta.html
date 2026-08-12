@@ -237,14 +237,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.bean.BeanPropertyMeta,org.apache.juneau.commons.reflect.AnnotationProvider,org.apache.juneau.marshall.html.HtmlMetaProvider)">
 <h3>HtmlBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-88">HtmlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-90">HtmlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm,
  <a href="../../commons/reflect/AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect">AnnotationProvider</a>&nbsp;ap,
  <a href="HtmlMetaProvider.html" title="interface in org.apache.juneau.marshall.html">HtmlMetaProvider</a>&nbsp;mp)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>bpm</code> - The metadata of the bean property of this additional metadata.</dd>
-<dd><code>ap</code> - The annotation provider.</dd>
+<dd><code>bpm</code> - The metadata of the bean property of this additional metadata.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>ap</code> - The annotation provider.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>mp</code> - HTML metadata provider (for finding information about other artifacts).</dd>
 </dl>
 </section>
@@ -260,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAnchorText()">
 <h3>getAnchorText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-127">getAnchorText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-129">getAnchorText</a></span>()</div>
 <div class="block">Specifies the anchor text for this property.
 
  <p>
@@ -274,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLink()">
 <h3>getLink</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-137">getLink</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-139">getLink</a></span>()</div>
 <div class="block">Adds a hyperlink to this value in HTML.
 
  <p>
@@ -288,21 +290,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRender()">
 <h3>getRender</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlRender.html" title="class in org.apache.juneau.marshall.html">HtmlRender</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-147">getRender</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HtmlRender.html" title="class in org.apache.juneau.marshall.html">HtmlRender</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-149">getRender</a></span>()</div>
 <div class="block">Returns the render class for rendering the style and contents of this property value in HTML.
 
  <p>
  This value is specified via the <a href="Html.html#render()"><code>@Html(render)</code></a> annotation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The render class, never <jk>null</jk>.</dd>
+<dd>The render class, or <jk>null</jk> if not specified.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getStyle()">
 <h3>getStyle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-157">getStyle</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-159">getStyle</a></span>()</div>
 <div class="block">Returns the CSS style string for this property.
 
  <p>
@@ -316,7 +318,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNoTableHeaders()">
 <h3>isNoTableHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-166">isNoTableHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-168">isNoTableHeaders</a></span>()</div>
 <div class="block">Returns whether this bean property should not include table headers when serialized as an HTML table.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -328,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFormat()">
 <h3>getFormat</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="HtmlFormat.html" title="enum class in org.apache.juneau.marshall.html">HtmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-173">getFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="HtmlFormat.html" title="enum class in org.apache.juneau.marshall.html">HtmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-175">getFormat</a></span>()</div>
 <div class="block">Returns the format of this bean property</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -339,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isHtml()">
 <h3>isHtml</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-180">isHtml</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-182">isHtml</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#HTML"><code>HtmlFormat.HTML</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -350,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isHtmlCdc()">
 <h3>isHtmlCdc</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-187">isHtmlCdc</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-189">isHtmlCdc</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#HTML_CDC"><code>HtmlFormat.HTML_CDC</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -361,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isHtmlSdc()">
 <h3>isHtmlSdc</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-194">isHtmlSdc</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-196">isHtmlSdc</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#HTML_SDC"><code>HtmlFormat.HTML_SDC</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -372,7 +374,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNoTables()">
 <h3>isNoTables</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-203">isNoTables</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-205">isNoTables</a></span>()</div>
 <div class="block">Returns whether this bean property should not be serialized as an HTML table.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -384,7 +386,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isPlainText()">
 <h3>isPlainText</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-210">isPlainText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-212">isPlainText</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#PLAIN_TEXT"><code>HtmlFormat.PLAIN_TEXT</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -395,7 +397,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isXml()">
 <h3>isXml</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-217">isXml</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/html/HtmlBeanPropertyMeta.html#line-219">isXml</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if <a href="#getFormat()"><code>getFormat()</code></a> returns <a href="HtmlFormat.html#XML"><code>HtmlFormat.XML</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
  Throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> if the file could not be created.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>f</code> - The file to create.</dd>
+<dd><code>f</code> - The file to create.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html#deleteOnExit()" title="class or interface in java.io" class="external-link"><code>File.deleteOnExit()</code></a> is called on the resulting file before being returned by this method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The file name</dd>
+<dd><code>name</code> - The file name.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> name throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>A newly-created temporary file.</dd>
 <dt>Throws:</dt>
@@ -246,8 +246,8 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html#deleteOnExit()" title="class or interface in java.io" class="external-link"><code>File.deleteOnExit()</code></a> is called on the resulting file before being returned by this method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The file name</dd>
-<dd><code>contents</code> - The file contents.</dd>
+<dd><code>name</code> - The file name.  Must not be <jk>null</jk> (unguarded — a <jk>null</jk> name throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
+<dd><code>contents</code> - The file contents.  Can be <jk>null</jk> (creates an empty file).</dd>
 <dt>Returns:</dt>
 <dd>A newly-created temporary file.</dd>
 <dt>Throws:</dt>
@@ -262,7 +262,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Recursively deletes a file or directory.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>f</code> - The file or directory to delete.</dd>
+<dd><code>f</code> - The file or directory to delete.  Can be <jk>null</jk> (returns <jk>true</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if file or directory was successfully deleted.</dd>
 </dl>
@@ -276,8 +276,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified file exists in the specified directory.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>dir</code> - The directory.</dd>
-<dd><code>fileName</code> - The file name.</dd>
+<dd><code>dir</code> - The directory.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
+<dd><code>fileName</code> - The file name.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified file exists in the specified directory.</dd>
 </dl>
@@ -316,9 +316,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Given an arbitrary path, returns the file name portion of that path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The path to check.</dd>
+<dd><code>path</code> - The path to check.  Can be <jk>null</jk> or empty (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The file name.</dd>
+<dd>The file name, or <jk>null</jk> if the path was <jk>null</jk>, empty, or contained only slashes.</dd>
 </dl>
 </section>
 </li>
@@ -330,8 +330,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified file name contains the specified extension.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The file name.</dd>
-<dd><code>ext</code> - The extension.</dd>
+<dd><code>name</code> - The file name.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
+<dd><code>ext</code> - The extension.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified file name contains the specified extension.</dd>
 </dl>
@@ -466,7 +466,7 @@ loadScripts(document, 'script');</script>
  Method ensures that the timestamp changes even if it's been modified within the past millisecond.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>f</code> - The file to modify the modified timestamp on.</dd>
+<dd><code>f</code> - The file to modify the modified timestamp on.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

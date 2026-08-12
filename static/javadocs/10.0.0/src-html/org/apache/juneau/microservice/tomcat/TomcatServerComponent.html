@@ -228,400 +228,409 @@
 <span class="source-line-no">215</span><span id="line-215">         var availablePort = findOpenPort(ports);</span>
 <span class="source-line-no">216</span><span id="line-216"></span>
 <span class="source-line-no">217</span><span id="line-217">         if (availablePortEnv.isEmpty())</span>
-<span class="source-line-no">218</span><span id="line-218">            System.setProperty("availablePort", String.valueOf(availablePort));</span>
-<span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">         // Prefer a @Bean-supplied Tomcat, else build one programmatically via the factory.</span>
-<span class="source-line-no">221</span><span id="line-221">         var injectedTomcat = store.getBean(Tomcat.class).orElse(null);</span>
-<span class="source-line-no">222</span><span id="line-222">         if (nn(injectedTomcat)) {</span>
-<span class="source-line-no">223</span><span id="line-223">            tomcat.set(injectedTomcat);</span>
-<span class="source-line-no">224</span><span id="line-224">         } else {</span>
-<span class="source-line-no">225</span><span id="line-225">            var factory = store.getBean(TomcatServerFactory.class).orElseGet(BasicTomcatServerFactory::new);</span>
-<span class="source-line-no">226</span><span id="line-226">            tomcat.set(createServer(factory, resolveBaseDir(settings)));</span>
-<span class="source-line-no">227</span><span id="line-227">         }</span>
-<span class="source-line-no">228</span><span id="line-228">         tomcat.get().setPort(availablePort);</span>
-<span class="source-line-no">229</span><span id="line-229">         tomcat.get().getConnector();</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">         // Publish back to the store for downstream beans / lookups.</span>
-<span class="source-line-no">232</span><span id="line-232">         store.addBean(Tomcat.class, tomcat.get());</span>
-<span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">         // Graceful-shutdown wiring (zero-downtime k8s rollouts), kept identical to the Jetty contract:</span>
-<span class="source-line-no">235</span><span id="line-235">         //  - Resolve the bounded drain timeout (TomcatSettings &gt; Tomcat/stopTimeout config &gt; 30s default) so</span>
-<span class="source-line-no">236</span><span id="line-236">         //    onStop() can wait for in-flight requests to complete before the server stops.</span>
-<span class="source-line-no">237</span><span id="line-237">         //  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.</span>
-<span class="source-line-no">238</span><span id="line-238">         //  - Mark readiness ready so a freshly-(re)started service serves traffic.</span>
-<span class="source-line-no">239</span><span id="line-239">         stopTimeout.set(coalesce(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));</span>
-<span class="source-line-no">240</span><span id="line-240">         shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));</span>
-<span class="source-line-no">241</span><span id="line-241">         ReadinessState.resolve(store).markReady();</span>
-<span class="source-line-no">242</span><span id="line-242"></span>
-<span class="source-line-no">243</span><span id="line-243">         // Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.</span>
-<span class="source-line-no">244</span><span id="line-244">         var mountedPaths = new LinkedHashMap&lt;String,String&gt;();</span>
-<span class="source-line-no">245</span><span id="line-245"></span>
-<span class="source-line-no">246</span><span id="line-246">         for (var s : cf.get("Tomcat/servlets").asStringArray().orElse(new String[0]))</span>
-<span class="source-line-no">247</span><span id="line-247">            mountConfiguredServlet(s, mountedPaths);</span>
-<span class="source-line-no">248</span><span id="line-248"></span>
-<span class="source-line-no">249</span><span id="line-249">         cf.get("Tomcat/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -&gt; mountMappedServlet(k, v, mountedPaths));</span>
+<span class="source-line-no">218</span><span id="line-218">            // Intentional real-JVM-property publish: the bound port is exposed as a process-global system</span>
+<span class="source-line-no">219</span><span id="line-219">            // property so external config/templates (e.g. the bundled jetty.xml's $S{availablePort}) can read</span>
+<span class="source-line-no">220</span><span id="line-220">            // it.  The $S{...} SVL var resolves via raw System.getProperty (bypassing the Settings override</span>
+<span class="source-line-no">221</span><span id="line-221">            // chain), so a Settings-based write would be invisible to those consumers.  The @Value-injected</span>
+<span class="source-line-no">222</span><span id="line-222">            // availablePortEnv read side is already Settings-abstracted; only this publish must stay raw.</span>
+<span class="source-line-no">223</span><span id="line-223">            System.setProperty("availablePort", String.valueOf(availablePort));</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">         // Prefer a @Bean-supplied Tomcat, else build one programmatically via the factory.</span>
+<span class="source-line-no">226</span><span id="line-226">         var injectedTomcat = store.getBean(Tomcat.class).orElse(null);</span>
+<span class="source-line-no">227</span><span id="line-227">         if (nn(injectedTomcat)) {</span>
+<span class="source-line-no">228</span><span id="line-228">            tomcat.set(injectedTomcat);</span>
+<span class="source-line-no">229</span><span id="line-229">         } else {</span>
+<span class="source-line-no">230</span><span id="line-230">            var factory = store.getBean(TomcatServerFactory.class).orElseGet(BasicTomcatServerFactory::new);</span>
+<span class="source-line-no">231</span><span id="line-231">            tomcat.set(createServer(factory, resolveBaseDir(settings)));</span>
+<span class="source-line-no">232</span><span id="line-232">         }</span>
+<span class="source-line-no">233</span><span id="line-233">         tomcat.get().setPort(availablePort);</span>
+<span class="source-line-no">234</span><span id="line-234">         tomcat.get().getConnector();</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">         // Publish back to the store for downstream beans / lookups.</span>
+<span class="source-line-no">237</span><span id="line-237">         store.addBean(Tomcat.class, tomcat.get());</span>
+<span class="source-line-no">238</span><span id="line-238"></span>
+<span class="source-line-no">239</span><span id="line-239">         // Graceful-shutdown wiring (zero-downtime k8s rollouts), kept identical to the Jetty contract:</span>
+<span class="source-line-no">240</span><span id="line-240">         //  - Resolve the bounded drain timeout (TomcatSettings &gt; Tomcat/stopTimeout config &gt; 30s default) so</span>
+<span class="source-line-no">241</span><span id="line-241">         //    onStop() can wait for in-flight requests to complete before the server stops.</span>
+<span class="source-line-no">242</span><span id="line-242">         //  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.</span>
+<span class="source-line-no">243</span><span id="line-243">         //  - Mark readiness ready so a freshly-(re)started service serves traffic.</span>
+<span class="source-line-no">244</span><span id="line-244">         stopTimeout.set(coalesce(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));</span>
+<span class="source-line-no">245</span><span id="line-245">         shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));</span>
+<span class="source-line-no">246</span><span id="line-246">         ReadinessState.resolve(store).markReady();</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">         // Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.</span>
+<span class="source-line-no">249</span><span id="line-249">         var mountedPaths = new LinkedHashMap&lt;String,String&gt;();</span>
 <span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">         cf.get("Tomcat/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);</span>
-<span class="source-line-no">252</span><span id="line-252"></span>
-<span class="source-line-no">253</span><span id="line-253">         // Auto-mount @Bean AuthFilterChain at /* before any servlet registration so the filter</span>
-<span class="source-line-no">254</span><span id="line-254">         // runs before routing for all requests.</span>
-<span class="source-line-no">255</span><span id="line-255">         store.getBean(AuthFilterChain.class).ifPresent(chain -&gt; addFilter(chain, "/*"));</span>
-<span class="source-line-no">256</span><span id="line-256"></span>
-<span class="source-line-no">257</span><span id="line-257">         // Auto-discover @Rest servlets contributed via @Configuration/@Bean methods.</span>
-<span class="source-line-no">258</span><span id="line-258">         // Path source precedence: @Rest(path=...) on the resource class, else "/".</span>
-<span class="source-line-no">259</span><span id="line-259">         for (var e : store.getBeansOfType(Servlet.class).entrySet()) {</span>
-<span class="source-line-no">260</span><span id="line-260">            var servlet = e.getValue();</span>
-<span class="source-line-no">261</span><span id="line-261">            var cls = servlet.getClass();</span>
-<span class="source-line-no">262</span><span id="line-262">            if (cls.getAnnotation(Rest.class) == null)</span>
-<span class="source-line-no">263</span><span id="line-263">               continue;</span>
-<span class="source-line-no">264</span><span id="line-264">            var pathSpecs = restPathsFor(servlet, store);</span>
-<span class="source-line-no">265</span><span id="line-265">            var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");</span>
-<span class="source-line-no">266</span><span id="line-266">            for (var pathSpec : pathSpecs)</span>
-<span class="source-line-no">267</span><span id="line-267">               checkPathCollision(pathSpec, source, mountedPaths);</span>
-<span class="source-line-no">268</span><span id="line-268">            addServlet(servlet, pathSpecs);</span>
-<span class="source-line-no">269</span><span id="line-269">         }</span>
-<span class="source-line-no">270</span><span id="line-270"></span>
-<span class="source-line-no">271</span><span id="line-271">         if (serverPortEnv.isEmpty())</span>
-<span class="source-line-no">272</span><span id="line-272">            System.setProperty("juneau.serverPort", String.valueOf(availablePort));</span>
-<span class="source-line-no">273</span><span id="line-273"></span>
-<span class="source-line-no">274</span><span id="line-274">         tomcat.get().start();</span>
-<span class="source-line-no">275</span><span id="line-275">         ms.out(messages, "ServerStarted", getPort());</span>
-<span class="source-line-no">276</span><span id="line-276">      } catch (Exception e) {</span>
-<span class="source-line-no">277</span><span id="line-277">         throw toRex(e);</span>
-<span class="source-line-no">278</span><span id="line-278">      }</span>
-<span class="source-line-no">279</span><span id="line-279">   }</span>
-<span class="source-line-no">280</span><span id="line-280"></span>
-<span class="source-line-no">281</span><span id="line-281">   @Override /* Overridden from MicroserviceListener */</span>
-<span class="source-line-no">282</span><span id="line-282">   public void onStop(Microservice ms) {</span>
-<span class="source-line-no">283</span><span id="line-283">      final Logger logger = ms.getLogger();</span>
-<span class="source-line-no">284</span><span id="line-284">      // Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /</span>
-<span class="source-line-no">285</span><span id="line-285">      // Kubernetes stops routing new traffic while in-flight requests drain.  /livez stays healthy so the pod is</span>
-<span class="source-line-no">286</span><span id="line-286">      // not killed mid-drain.  The settle delay (default 0) gives the LB a window to observe the 503.</span>
-<span class="source-line-no">287</span><span id="line-287">      ReadinessState.resolve(ms.getBeanStore()).markOutOfService();</span>
-<span class="source-line-no">288</span><span id="line-288">      ms.out(messages, "DrainingRequests");</span>
-<span class="source-line-no">289</span><span id="line-289">      sleepQuietly(shutdownSettleDelay.get());</span>
-<span class="source-line-no">290</span><span id="line-290">      var t = new Thread("TomcatServerComponentStop") {</span>
-<span class="source-line-no">291</span><span id="line-291">         @Override /* Overridden from Thread */</span>
-<span class="source-line-no">292</span><span id="line-292">         public void run() {</span>
-<span class="source-line-no">293</span><span id="line-293">            try {</span>
-<span class="source-line-no">294</span><span id="line-294">               var t2 = tomcat.get();</span>
-<span class="source-line-no">295</span><span id="line-295">               if (t2 == null)</span>
-<span class="source-line-no">296</span><span id="line-296">                  return;</span>
-<span class="source-line-no">297</span><span id="line-297">               drainConnector(t2, stopTimeout.get(), logger);</span>
-<span class="source-line-no">298</span><span id="line-298">               ms.out(messages, "StoppingServer");</span>
-<span class="source-line-no">299</span><span id="line-299">               t2.stop();</span>
-<span class="source-line-no">300</span><span id="line-300">               t2.destroy();</span>
-<span class="source-line-no">301</span><span id="line-301">               ms.out(messages, "ServerStopped");</span>
-<span class="source-line-no">302</span><span id="line-302">            } catch (Exception e) {</span>
-<span class="source-line-no">303</span><span id="line-303">               logger.log(Level.WARNING, localizedMessage(e), e);</span>
-<span class="source-line-no">304</span><span id="line-304">            } finally {</span>
-<span class="source-line-no">305</span><span id="line-305">               cleanupBaseDir();</span>
-<span class="source-line-no">306</span><span id="line-306">            }</span>
-<span class="source-line-no">307</span><span id="line-307">         }</span>
-<span class="source-line-no">308</span><span id="line-308">      };</span>
-<span class="source-line-no">309</span><span id="line-309">      t.start();</span>
-<span class="source-line-no">310</span><span id="line-310">      try {</span>
-<span class="source-line-no">311</span><span id="line-311">         t.join();</span>
-<span class="source-line-no">312</span><span id="line-312">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">313</span><span id="line-313">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">314</span><span id="line-314">      }</span>
-<span class="source-line-no">315</span><span id="line-315">   }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">   /**</span>
-<span class="source-line-no">318</span><span id="line-318">    * Pauses the connector (stops accepting new connections) and waits up to {@code timeout} for in-flight requests</span>
-<span class="source-line-no">319</span><span id="line-319">    * to drain before the caller stops the server.  Best-effort: never throws out of the shutdown sequence.</span>
-<span class="source-line-no">320</span><span id="line-320">    */</span>
-<span class="source-line-no">321</span><span id="line-321">   private static void drainConnector(Tomcat t2, Duration timeout, Logger logger) {</span>
-<span class="source-line-no">322</span><span id="line-322">      try {</span>
-<span class="source-line-no">323</span><span id="line-323">         var connector = t2.getConnector();</span>
-<span class="source-line-no">324</span><span id="line-324">         if (connector == null)</span>
-<span class="source-line-no">325</span><span id="line-325">            return;</span>
-<span class="source-line-no">326</span><span id="line-326">         connector.pause();</span>
-<span class="source-line-no">327</span><span id="line-327">         var executor = connector.getProtocolHandler() == null ? null : connector.getProtocolHandler().getExecutor();</span>
-<span class="source-line-no">328</span><span id="line-328">         if (executor instanceof ThreadPoolExecutor tpe) {</span>
-<span class="source-line-no">329</span><span id="line-329">            var deadline = System.nanoTime() + Math.max(0L, timeout.toNanos());</span>
-<span class="source-line-no">330</span><span id="line-330">            while (tpe.getActiveCount() &gt; 0 &amp;&amp; System.nanoTime() &lt; deadline) {</span>
-<span class="source-line-no">331</span><span id="line-331">               if (sleepInterruptibly(50L))</span>
-<span class="source-line-no">332</span><span id="line-332">                  return;</span>
-<span class="source-line-no">333</span><span id="line-333">            }</span>
-<span class="source-line-no">334</span><span id="line-334">         }</span>
-<span class="source-line-no">335</span><span id="line-335">      } catch (Exception e) {</span>
-<span class="source-line-no">336</span><span id="line-336">         logger.log(Level.WARNING, localizedMessage(e), e);</span>
-<span class="source-line-no">337</span><span id="line-337">      }</span>
-<span class="source-line-no">338</span><span id="line-338">   }</span>
-<span class="source-line-no">339</span><span id="line-339"></span>
-<span class="source-line-no">340</span><span id="line-340">   private static void sleepQuietly(Duration d) {</span>
-<span class="source-line-no">341</span><span id="line-341">      if (d == null || d.isZero() || d.isNegative())</span>
-<span class="source-line-no">342</span><span id="line-342">         return;</span>
-<span class="source-line-no">343</span><span id="line-343">      try {</span>
-<span class="source-line-no">344</span><span id="line-344">         Thread.sleep(d.toMillis());</span>
-<span class="source-line-no">345</span><span id="line-345">      } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
-<span class="source-line-no">346</span><span id="line-346">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">347</span><span id="line-347">      }</span>
-<span class="source-line-no">348</span><span id="line-348">   }</span>
-<span class="source-line-no">349</span><span id="line-349"></span>
-<span class="source-line-no">350</span><span id="line-350">   private static boolean sleepInterruptibly(long millis) {</span>
-<span class="source-line-no">351</span><span id="line-351">      try {</span>
-<span class="source-line-no">352</span><span id="line-352">         Thread.sleep(millis);</span>
-<span class="source-line-no">353</span><span id="line-353">         return false;</span>
+<span class="source-line-no">251</span><span id="line-251">         for (var s : cf.get("Tomcat/servlets").asStringArray().orElse(new String[0]))</span>
+<span class="source-line-no">252</span><span id="line-252">            mountConfiguredServlet(s, mountedPaths);</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">         cf.get("Tomcat/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -&gt; mountMappedServlet(k, v, mountedPaths));</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">         cf.get("Tomcat/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">         // Auto-mount @Bean AuthFilterChain at /* before any servlet registration so the filter</span>
+<span class="source-line-no">259</span><span id="line-259">         // runs before routing for all requests.</span>
+<span class="source-line-no">260</span><span id="line-260">         store.getBean(AuthFilterChain.class).ifPresent(chain -&gt; addFilter(chain, "/*"));</span>
+<span class="source-line-no">261</span><span id="line-261"></span>
+<span class="source-line-no">262</span><span id="line-262">         // Auto-discover @Rest servlets contributed via @Configuration/@Bean methods.</span>
+<span class="source-line-no">263</span><span id="line-263">         // Path source precedence: @Rest(path=...) on the resource class, else "/".</span>
+<span class="source-line-no">264</span><span id="line-264">         for (var e : store.getBeansOfType(Servlet.class).entrySet()) {</span>
+<span class="source-line-no">265</span><span id="line-265">            var servlet = e.getValue();</span>
+<span class="source-line-no">266</span><span id="line-266">            var cls = servlet.getClass();</span>
+<span class="source-line-no">267</span><span id="line-267">            if (cls.getAnnotation(Rest.class) == null)</span>
+<span class="source-line-no">268</span><span id="line-268">               continue;</span>
+<span class="source-line-no">269</span><span id="line-269">            var pathSpecs = restPathsFor(servlet, store);</span>
+<span class="source-line-no">270</span><span id="line-270">            var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");</span>
+<span class="source-line-no">271</span><span id="line-271">            for (var pathSpec : pathSpecs)</span>
+<span class="source-line-no">272</span><span id="line-272">               checkPathCollision(pathSpec, source, mountedPaths);</span>
+<span class="source-line-no">273</span><span id="line-273">            addServlet(servlet, pathSpecs);</span>
+<span class="source-line-no">274</span><span id="line-274">         }</span>
+<span class="source-line-no">275</span><span id="line-275"></span>
+<span class="source-line-no">276</span><span id="line-276">         if (serverPortEnv.isEmpty())</span>
+<span class="source-line-no">277</span><span id="line-277">            // Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external</span>
+<span class="source-line-no">278</span><span id="line-278">            // publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A</span>
+<span class="source-line-no">279</span><span id="line-279">            // Settings-based write would not be visible to those raw readers, so this is kept.  The</span>
+<span class="source-line-no">280</span><span id="line-280">            // @Value-injected serverPortEnv read side is already Settings-abstracted.</span>
+<span class="source-line-no">281</span><span id="line-281">            System.setProperty("juneau.serverPort", String.valueOf(availablePort));</span>
+<span class="source-line-no">282</span><span id="line-282"></span>
+<span class="source-line-no">283</span><span id="line-283">         tomcat.get().start();</span>
+<span class="source-line-no">284</span><span id="line-284">         ms.out(messages, "ServerStarted", getPort());</span>
+<span class="source-line-no">285</span><span id="line-285">      } catch (Exception e) {</span>
+<span class="source-line-no">286</span><span id="line-286">         throw toRex(e);</span>
+<span class="source-line-no">287</span><span id="line-287">      }</span>
+<span class="source-line-no">288</span><span id="line-288">   }</span>
+<span class="source-line-no">289</span><span id="line-289"></span>
+<span class="source-line-no">290</span><span id="line-290">   @Override /* Overridden from MicroserviceListener */</span>
+<span class="source-line-no">291</span><span id="line-291">   public void onStop(Microservice ms) {</span>
+<span class="source-line-no">292</span><span id="line-292">      final Logger logger = ms.getLogger();</span>
+<span class="source-line-no">293</span><span id="line-293">      // Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /</span>
+<span class="source-line-no">294</span><span id="line-294">      // Kubernetes stops routing new traffic while in-flight requests drain.  /livez stays healthy so the pod is</span>
+<span class="source-line-no">295</span><span id="line-295">      // not killed mid-drain.  The settle delay (default 0) gives the LB a window to observe the 503.</span>
+<span class="source-line-no">296</span><span id="line-296">      ReadinessState.resolve(ms.getBeanStore()).markOutOfService();</span>
+<span class="source-line-no">297</span><span id="line-297">      ms.out(messages, "DrainingRequests");</span>
+<span class="source-line-no">298</span><span id="line-298">      sleepQuietly(shutdownSettleDelay.get());</span>
+<span class="source-line-no">299</span><span id="line-299">      var t = new Thread("TomcatServerComponentStop") {</span>
+<span class="source-line-no">300</span><span id="line-300">         @Override /* Overridden from Thread */</span>
+<span class="source-line-no">301</span><span id="line-301">         public void run() {</span>
+<span class="source-line-no">302</span><span id="line-302">            try {</span>
+<span class="source-line-no">303</span><span id="line-303">               var t2 = tomcat.get();</span>
+<span class="source-line-no">304</span><span id="line-304">               if (t2 == null)</span>
+<span class="source-line-no">305</span><span id="line-305">                  return;</span>
+<span class="source-line-no">306</span><span id="line-306">               drainConnector(t2, stopTimeout.get(), logger);</span>
+<span class="source-line-no">307</span><span id="line-307">               ms.out(messages, "StoppingServer");</span>
+<span class="source-line-no">308</span><span id="line-308">               t2.stop();</span>
+<span class="source-line-no">309</span><span id="line-309">               t2.destroy();</span>
+<span class="source-line-no">310</span><span id="line-310">               ms.out(messages, "ServerStopped");</span>
+<span class="source-line-no">311</span><span id="line-311">            } catch (Exception e) {</span>
+<span class="source-line-no">312</span><span id="line-312">               logger.log(Level.WARNING, localizedMessage(e), e);</span>
+<span class="source-line-no">313</span><span id="line-313">            } finally {</span>
+<span class="source-line-no">314</span><span id="line-314">               cleanupBaseDir();</span>
+<span class="source-line-no">315</span><span id="line-315">            }</span>
+<span class="source-line-no">316</span><span id="line-316">         }</span>
+<span class="source-line-no">317</span><span id="line-317">      };</span>
+<span class="source-line-no">318</span><span id="line-318">      t.start();</span>
+<span class="source-line-no">319</span><span id="line-319">      try {</span>
+<span class="source-line-no">320</span><span id="line-320">         t.join();</span>
+<span class="source-line-no">321</span><span id="line-321">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">322</span><span id="line-322">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">323</span><span id="line-323">      }</span>
+<span class="source-line-no">324</span><span id="line-324">   }</span>
+<span class="source-line-no">325</span><span id="line-325"></span>
+<span class="source-line-no">326</span><span id="line-326">   /**</span>
+<span class="source-line-no">327</span><span id="line-327">    * Pauses the connector (stops accepting new connections) and waits up to {@code timeout} for in-flight requests</span>
+<span class="source-line-no">328</span><span id="line-328">    * to drain before the caller stops the server.  Best-effort: never throws out of the shutdown sequence.</span>
+<span class="source-line-no">329</span><span id="line-329">    */</span>
+<span class="source-line-no">330</span><span id="line-330">   private static void drainConnector(Tomcat t2, Duration timeout, Logger logger) {</span>
+<span class="source-line-no">331</span><span id="line-331">      try {</span>
+<span class="source-line-no">332</span><span id="line-332">         var connector = t2.getConnector();</span>
+<span class="source-line-no">333</span><span id="line-333">         if (connector == null)</span>
+<span class="source-line-no">334</span><span id="line-334">            return;</span>
+<span class="source-line-no">335</span><span id="line-335">         connector.pause();</span>
+<span class="source-line-no">336</span><span id="line-336">         var executor = connector.getProtocolHandler() == null ? null : connector.getProtocolHandler().getExecutor();</span>
+<span class="source-line-no">337</span><span id="line-337">         if (executor instanceof ThreadPoolExecutor executor2) {</span>
+<span class="source-line-no">338</span><span id="line-338">            var deadline = System.nanoTime() + Math.max(0L, timeout.toNanos());</span>
+<span class="source-line-no">339</span><span id="line-339">            while (executor2.getActiveCount() &gt; 0 &amp;&amp; System.nanoTime() &lt; deadline) {</span>
+<span class="source-line-no">340</span><span id="line-340">               if (sleepInterruptibly(50L))</span>
+<span class="source-line-no">341</span><span id="line-341">                  return;</span>
+<span class="source-line-no">342</span><span id="line-342">            }</span>
+<span class="source-line-no">343</span><span id="line-343">         }</span>
+<span class="source-line-no">344</span><span id="line-344">      } catch (Exception e) {</span>
+<span class="source-line-no">345</span><span id="line-345">         logger.log(Level.WARNING, localizedMessage(e), e);</span>
+<span class="source-line-no">346</span><span id="line-346">      }</span>
+<span class="source-line-no">347</span><span id="line-347">   }</span>
+<span class="source-line-no">348</span><span id="line-348"></span>
+<span class="source-line-no">349</span><span id="line-349">   private static void sleepQuietly(Duration d) {</span>
+<span class="source-line-no">350</span><span id="line-350">      if (d == null || d.isZero() || d.isNegative())</span>
+<span class="source-line-no">351</span><span id="line-351">         return;</span>
+<span class="source-line-no">352</span><span id="line-352">      try {</span>
+<span class="source-line-no">353</span><span id="line-353">         Thread.sleep(d.toMillis());</span>
 <span class="source-line-no">354</span><span id="line-354">      } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
 <span class="source-line-no">355</span><span id="line-355">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">356</span><span id="line-356">         return true;</span>
-<span class="source-line-no">357</span><span id="line-357">      }</span>
-<span class="source-line-no">358</span><span id="line-358">   }</span>
-<span class="source-line-no">359</span><span id="line-359"></span>
-<span class="source-line-no">360</span><span id="line-360">   @Override /* Overridden from MicroserviceListener */</span>
-<span class="source-line-no">361</span><span id="line-361">   public void onConfigChange(Microservice ms, ConfigEvents events) {</span>
-<span class="source-line-no">362</span><span id="line-362">      // No-op: Intentional empty implementation - this component is purely lifecycle-driven.</span>
-<span class="source-line-no">363</span><span id="line-363">   }</span>
-<span class="source-line-no">364</span><span id="line-364"></span>
-<span class="source-line-no">365</span><span id="line-365">   /**</span>
-<span class="source-line-no">366</span><span id="line-366">    * Adds an arbitrary servlet to this Tomcat server.</span>
-<span class="source-line-no">367</span><span id="line-367">    *</span>
-<span class="source-line-no">368</span><span id="line-368">    * @param servlet The servlet instance.</span>
-<span class="source-line-no">369</span><span id="line-369">    * @param pathSpec The context path of the servlet.</span>
-<span class="source-line-no">370</span><span id="line-370">    * @return This object.</span>
-<span class="source-line-no">371</span><span id="line-371">    */</span>
-<span class="source-line-no">372</span><span id="line-372">   @SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
-<span class="source-line-no">373</span><span id="line-373">   public TomcatServerComponent addServlet(Servlet servlet, String pathSpec) {</span>
-<span class="source-line-no">374</span><span id="line-374">      return addServlet(servlet, new String[]{normalizePathSpec(pathSpec)});</span>
-<span class="source-line-no">375</span><span id="line-375">   }</span>
-<span class="source-line-no">376</span><span id="line-376"></span>
-<span class="source-line-no">377</span><span id="line-377">   /**</span>
-<span class="source-line-no">378</span><span id="line-378">    * Adds an arbitrary servlet to this Tomcat server at one or more context paths.</span>
-<span class="source-line-no">379</span><span id="line-379">    *</span>
-<span class="source-line-no">380</span><span id="line-380">    * @param servlet The servlet instance.</span>
-<span class="source-line-no">381</span><span id="line-381">    * @param pathSpecs The context paths of the servlet.</span>
-<span class="source-line-no">382</span><span id="line-382">    * @return This object.</span>
-<span class="source-line-no">383</span><span id="line-383">    */</span>
-<span class="source-line-no">384</span><span id="line-384">   public TomcatServerComponent addServlet(Servlet servlet, String...pathSpecs) {</span>
-<span class="source-line-no">385</span><span id="line-385">      var context = getContext();</span>
-<span class="source-line-no">386</span><span id="line-386">      var servletName = cn(servlet) + "#" + UUID.randomUUID();</span>
-<span class="source-line-no">387</span><span id="line-387">      Tomcat.addServlet(context, servletName, servlet);</span>
-<span class="source-line-no">388</span><span id="line-388">      for (var pathSpec : pathSpecs)</span>
-<span class="source-line-no">389</span><span id="line-389">         context.addServletMappingDecoded(pathSpec, servletName);</span>
-<span class="source-line-no">390</span><span id="line-390">      return this;</span>
-<span class="source-line-no">391</span><span id="line-391">   }</span>
-<span class="source-line-no">392</span><span id="line-392"></span>
-<span class="source-line-no">393</span><span id="line-393">   /**</span>
-<span class="source-line-no">394</span><span id="line-394">    * Adds a servlet filter to this Tomcat server at the specified URL pattern.</span>
-<span class="source-line-no">395</span><span id="line-395">    *</span>
-<span class="source-line-no">396</span><span id="line-396">    * @param filter The filter instance.</span>
-<span class="source-line-no">397</span><span id="line-397">    * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).</span>
-<span class="source-line-no">398</span><span id="line-398">    * @return This object.</span>
-<span class="source-line-no">399</span><span id="line-399">    */</span>
-<span class="source-line-no">400</span><span id="line-400">   @SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
-<span class="source-line-no">401</span><span id="line-401">   public TomcatServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {</span>
-<span class="source-line-no">402</span><span id="line-402">      return addFilter(filter, new String[]{urlPattern});</span>
-<span class="source-line-no">403</span><span id="line-403">   }</span>
-<span class="source-line-no">404</span><span id="line-404"></span>
-<span class="source-line-no">405</span><span id="line-405">   /**</span>
-<span class="source-line-no">406</span><span id="line-406">    * Adds a servlet filter to this Tomcat server at one or more URL patterns.</span>
-<span class="source-line-no">407</span><span id="line-407">    *</span>
-<span class="source-line-no">408</span><span id="line-408">    * @param filter The filter instance.</span>
-<span class="source-line-no">409</span><span id="line-409">    * @param urlPatterns The URL patterns the filter applies to.</span>
-<span class="source-line-no">410</span><span id="line-410">    * @return This object.</span>
-<span class="source-line-no">411</span><span id="line-411">    */</span>
-<span class="source-line-no">412</span><span id="line-412">   public TomcatServerComponent addFilter(jakarta.servlet.Filter filter, String...urlPatterns) {</span>
-<span class="source-line-no">413</span><span id="line-413">      var context = getContext();</span>
-<span class="source-line-no">414</span><span id="line-414">      var filterName = cn(filter) + "#" + UUID.randomUUID();</span>
-<span class="source-line-no">415</span><span id="line-415">      var fd = new FilterDef();</span>
-<span class="source-line-no">416</span><span id="line-416">      fd.setFilter(filter);</span>
-<span class="source-line-no">417</span><span id="line-417">      fd.setFilterName(filterName);</span>
-<span class="source-line-no">418</span><span id="line-418">      context.addFilterDef(fd);</span>
-<span class="source-line-no">419</span><span id="line-419">      for (var pattern : urlPatterns) {</span>
-<span class="source-line-no">420</span><span id="line-420">         var fm = new FilterMap();</span>
-<span class="source-line-no">421</span><span id="line-421">         fm.setFilterName(filterName);</span>
-<span class="source-line-no">422</span><span id="line-422">         fm.addURLPattern(pattern);</span>
-<span class="source-line-no">423</span><span id="line-423">         fm.setDispatcher(DispatcherType.REQUEST.name());</span>
-<span class="source-line-no">424</span><span id="line-424">         context.addFilterMap(fm);</span>
-<span class="source-line-no">425</span><span id="line-425">      }</span>
-<span class="source-line-no">426</span><span id="line-426">      return this;</span>
-<span class="source-line-no">427</span><span id="line-427">   }</span>
-<span class="source-line-no">428</span><span id="line-428"></span>
-<span class="source-line-no">429</span><span id="line-429">   /**</span>
-<span class="source-line-no">430</span><span id="line-430">    * Adds an attribute to the root servlet context of the Tomcat server.</span>
-<span class="source-line-no">431</span><span id="line-431">    *</span>
-<span class="source-line-no">432</span><span id="line-432">    * @param name The attribute name.</span>
-<span class="source-line-no">433</span><span id="line-433">    * @param value The attribute value.</span>
-<span class="source-line-no">434</span><span id="line-434">    * @return This object.</span>
-<span class="source-line-no">435</span><span id="line-435">    */</span>
-<span class="source-line-no">436</span><span id="line-436">   public TomcatServerComponent addServletAttribute(String name, Object value) {</span>
-<span class="source-line-no">437</span><span id="line-437">      getContext().getServletContext().setAttribute(name, value);</span>
-<span class="source-line-no">438</span><span id="line-438">      return this;</span>
-<span class="source-line-no">439</span><span id="line-439">   }</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">   /**</span>
-<span class="source-line-no">442</span><span id="line-442">    * Returns the context path that this server is using.</span>
-<span class="source-line-no">443</span><span id="line-443">    *</span>
-<span class="source-line-no">444</span><span id="line-444">    * @return The context path.</span>
-<span class="source-line-no">445</span><span id="line-445">    */</span>
-<span class="source-line-no">446</span><span id="line-446">   public String getContextPath() {</span>
-<span class="source-line-no">447</span><span id="line-447">      return getContext().getPath();</span>
+<span class="source-line-no">356</span><span id="line-356">      }</span>
+<span class="source-line-no">357</span><span id="line-357">   }</span>
+<span class="source-line-no">358</span><span id="line-358"></span>
+<span class="source-line-no">359</span><span id="line-359">   private static boolean sleepInterruptibly(long millis) {</span>
+<span class="source-line-no">360</span><span id="line-360">      try {</span>
+<span class="source-line-no">361</span><span id="line-361">         Thread.sleep(millis);</span>
+<span class="source-line-no">362</span><span id="line-362">         return false;</span>
+<span class="source-line-no">363</span><span id="line-363">      } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
+<span class="source-line-no">364</span><span id="line-364">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">365</span><span id="line-365">         return true;</span>
+<span class="source-line-no">366</span><span id="line-366">      }</span>
+<span class="source-line-no">367</span><span id="line-367">   }</span>
+<span class="source-line-no">368</span><span id="line-368"></span>
+<span class="source-line-no">369</span><span id="line-369">   @Override /* Overridden from MicroserviceListener */</span>
+<span class="source-line-no">370</span><span id="line-370">   public void onConfigChange(Microservice ms, ConfigEvents events) {</span>
+<span class="source-line-no">371</span><span id="line-371">      // No-op: Intentional empty implementation - this component is purely lifecycle-driven.</span>
+<span class="source-line-no">372</span><span id="line-372">   }</span>
+<span class="source-line-no">373</span><span id="line-373"></span>
+<span class="source-line-no">374</span><span id="line-374">   /**</span>
+<span class="source-line-no">375</span><span id="line-375">    * Adds an arbitrary servlet to this Tomcat server.</span>
+<span class="source-line-no">376</span><span id="line-376">    *</span>
+<span class="source-line-no">377</span><span id="line-377">    * @param servlet The servlet instance.</span>
+<span class="source-line-no">378</span><span id="line-378">    * @param pathSpec The context path of the servlet.</span>
+<span class="source-line-no">379</span><span id="line-379">    * @return This object.</span>
+<span class="source-line-no">380</span><span id="line-380">    */</span>
+<span class="source-line-no">381</span><span id="line-381">   @SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
+<span class="source-line-no">382</span><span id="line-382">   public TomcatServerComponent addServlet(Servlet servlet, String pathSpec) {</span>
+<span class="source-line-no">383</span><span id="line-383">      return addServlet(servlet, new String[]{normalizePathSpec(pathSpec)});</span>
+<span class="source-line-no">384</span><span id="line-384">   }</span>
+<span class="source-line-no">385</span><span id="line-385"></span>
+<span class="source-line-no">386</span><span id="line-386">   /**</span>
+<span class="source-line-no">387</span><span id="line-387">    * Adds an arbitrary servlet to this Tomcat server at one or more context paths.</span>
+<span class="source-line-no">388</span><span id="line-388">    *</span>
+<span class="source-line-no">389</span><span id="line-389">    * @param servlet The servlet instance.</span>
+<span class="source-line-no">390</span><span id="line-390">    * @param pathSpecs The context paths of the servlet.</span>
+<span class="source-line-no">391</span><span id="line-391">    * @return This object.</span>
+<span class="source-line-no">392</span><span id="line-392">    */</span>
+<span class="source-line-no">393</span><span id="line-393">   public TomcatServerComponent addServlet(Servlet servlet, String...pathSpecs) {</span>
+<span class="source-line-no">394</span><span id="line-394">      var context = getContext();</span>
+<span class="source-line-no">395</span><span id="line-395">      var servletName = cn(servlet) + "#" + UUID.randomUUID();</span>
+<span class="source-line-no">396</span><span id="line-396">      Tomcat.addServlet(context, servletName, servlet);</span>
+<span class="source-line-no">397</span><span id="line-397">      for (var pathSpec : pathSpecs)</span>
+<span class="source-line-no">398</span><span id="line-398">         context.addServletMappingDecoded(pathSpec, servletName);</span>
+<span class="source-line-no">399</span><span id="line-399">      return this;</span>
+<span class="source-line-no">400</span><span id="line-400">   }</span>
+<span class="source-line-no">401</span><span id="line-401"></span>
+<span class="source-line-no">402</span><span id="line-402">   /**</span>
+<span class="source-line-no">403</span><span id="line-403">    * Adds a servlet filter to this Tomcat server at the specified URL pattern.</span>
+<span class="source-line-no">404</span><span id="line-404">    *</span>
+<span class="source-line-no">405</span><span id="line-405">    * @param filter The filter instance.</span>
+<span class="source-line-no">406</span><span id="line-406">    * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).</span>
+<span class="source-line-no">407</span><span id="line-407">    * @return This object.</span>
+<span class="source-line-no">408</span><span id="line-408">    */</span>
+<span class="source-line-no">409</span><span id="line-409">   @SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.</span>
+<span class="source-line-no">410</span><span id="line-410">   public TomcatServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {</span>
+<span class="source-line-no">411</span><span id="line-411">      return addFilter(filter, new String[]{urlPattern});</span>
+<span class="source-line-no">412</span><span id="line-412">   }</span>
+<span class="source-line-no">413</span><span id="line-413"></span>
+<span class="source-line-no">414</span><span id="line-414">   /**</span>
+<span class="source-line-no">415</span><span id="line-415">    * Adds a servlet filter to this Tomcat server at one or more URL patterns.</span>
+<span class="source-line-no">416</span><span id="line-416">    *</span>
+<span class="source-line-no">417</span><span id="line-417">    * @param filter The filter instance.</span>
+<span class="source-line-no">418</span><span id="line-418">    * @param urlPatterns The URL patterns the filter applies to.</span>
+<span class="source-line-no">419</span><span id="line-419">    * @return This object.</span>
+<span class="source-line-no">420</span><span id="line-420">    */</span>
+<span class="source-line-no">421</span><span id="line-421">   public TomcatServerComponent addFilter(jakarta.servlet.Filter filter, String...urlPatterns) {</span>
+<span class="source-line-no">422</span><span id="line-422">      var context = getContext();</span>
+<span class="source-line-no">423</span><span id="line-423">      var filterName = cn(filter) + "#" + UUID.randomUUID();</span>
+<span class="source-line-no">424</span><span id="line-424">      var fd = new FilterDef();</span>
+<span class="source-line-no">425</span><span id="line-425">      fd.setFilter(filter);</span>
+<span class="source-line-no">426</span><span id="line-426">      fd.setFilterName(filterName);</span>
+<span class="source-line-no">427</span><span id="line-427">      context.addFilterDef(fd);</span>
+<span class="source-line-no">428</span><span id="line-428">      for (var pattern : urlPatterns) {</span>
+<span class="source-line-no">429</span><span id="line-429">         var fm = new FilterMap();</span>
+<span class="source-line-no">430</span><span id="line-430">         fm.setFilterName(filterName);</span>
+<span class="source-line-no">431</span><span id="line-431">         fm.addURLPattern(pattern);</span>
+<span class="source-line-no">432</span><span id="line-432">         fm.setDispatcher(DispatcherType.REQUEST.name());</span>
+<span class="source-line-no">433</span><span id="line-433">         context.addFilterMap(fm);</span>
+<span class="source-line-no">434</span><span id="line-434">      }</span>
+<span class="source-line-no">435</span><span id="line-435">      return this;</span>
+<span class="source-line-no">436</span><span id="line-436">   }</span>
+<span class="source-line-no">437</span><span id="line-437"></span>
+<span class="source-line-no">438</span><span id="line-438">   /**</span>
+<span class="source-line-no">439</span><span id="line-439">    * Adds an attribute to the root servlet context of the Tomcat server.</span>
+<span class="source-line-no">440</span><span id="line-440">    *</span>
+<span class="source-line-no">441</span><span id="line-441">    * @param name The attribute name.</span>
+<span class="source-line-no">442</span><span id="line-442">    * @param value The attribute value.</span>
+<span class="source-line-no">443</span><span id="line-443">    * @return This object.</span>
+<span class="source-line-no">444</span><span id="line-444">    */</span>
+<span class="source-line-no">445</span><span id="line-445">   public TomcatServerComponent addServletAttribute(String name, Object value) {</span>
+<span class="source-line-no">446</span><span id="line-446">      getContext().getServletContext().setAttribute(name, value);</span>
+<span class="source-line-no">447</span><span id="line-447">      return this;</span>
 <span class="source-line-no">448</span><span id="line-448">   }</span>
 <span class="source-line-no">449</span><span id="line-449"></span>
 <span class="source-line-no">450</span><span id="line-450">   /**</span>
-<span class="source-line-no">451</span><span id="line-451">    * Returns the root {@link Context} of the Tomcat server, creating it if necessary.</span>
+<span class="source-line-no">451</span><span id="line-451">    * Returns the context path that this server is using.</span>
 <span class="source-line-no">452</span><span id="line-452">    *</span>
-<span class="source-line-no">453</span><span id="line-453">    * @return The root context.</span>
+<span class="source-line-no">453</span><span id="line-453">    * @return The context path.</span>
 <span class="source-line-no">454</span><span id="line-454">    */</span>
-<span class="source-line-no">455</span><span id="line-455">   public Context getContext() {</span>
-<span class="source-line-no">456</span><span id="line-456">      var context = (Context)getServer().getHost().findChild(ROOT_CONTEXT_PATH);</span>
-<span class="source-line-no">457</span><span id="line-457">      if (context != null)</span>
-<span class="source-line-no">458</span><span id="line-458">         return context;</span>
-<span class="source-line-no">459</span><span id="line-459">      return getServer().addContext(ROOT_CONTEXT_PATH, ROOT_DOC_BASE);</span>
-<span class="source-line-no">460</span><span id="line-460">   }</span>
-<span class="source-line-no">461</span><span id="line-461"></span>
-<span class="source-line-no">462</span><span id="line-462">   /**</span>
-<span class="source-line-no">463</span><span id="line-463">    * Returns the hostname of this microservice.</span>
-<span class="source-line-no">464</span><span id="line-464">    *</span>
-<span class="source-line-no">465</span><span id="line-465">    * @return The hostname.</span>
-<span class="source-line-no">466</span><span id="line-466">    */</span>
-<span class="source-line-no">467</span><span id="line-467">   public String getHostName() {</span>
-<span class="source-line-no">468</span><span id="line-468">      String hostname = "localhost";</span>
-<span class="source-line-no">469</span><span id="line-469">      try {</span>
-<span class="source-line-no">470</span><span id="line-470">         hostname = InetAddress.getLocalHost().getHostName();</span>
-<span class="source-line-no">471</span><span id="line-471">      } catch (UnknownHostException e) {</span>
-<span class="source-line-no">472</span><span id="line-472">         // Cannot determine hostname, use default "localhost"</span>
-<span class="source-line-no">473</span><span id="line-473">      }</span>
-<span class="source-line-no">474</span><span id="line-474">      return hostname;</span>
-<span class="source-line-no">475</span><span id="line-475">   }</span>
-<span class="source-line-no">476</span><span id="line-476"></span>
-<span class="source-line-no">477</span><span id="line-477">   /**</span>
-<span class="source-line-no">478</span><span id="line-478">    * Returns the port that this server is listening on.</span>
-<span class="source-line-no">479</span><span id="line-479">    *</span>
-<span class="source-line-no">480</span><span id="line-480">    * @return The port.</span>
-<span class="source-line-no">481</span><span id="line-481">    */</span>
-<span class="source-line-no">482</span><span id="line-482">   public int getPort() {</span>
-<span class="source-line-no">483</span><span id="line-483">      return getServer().getConnector().getLocalPort();</span>
+<span class="source-line-no">455</span><span id="line-455">   public String getContextPath() {</span>
+<span class="source-line-no">456</span><span id="line-456">      return getContext().getPath();</span>
+<span class="source-line-no">457</span><span id="line-457">   }</span>
+<span class="source-line-no">458</span><span id="line-458"></span>
+<span class="source-line-no">459</span><span id="line-459">   /**</span>
+<span class="source-line-no">460</span><span id="line-460">    * Returns the root {@link Context} of the Tomcat server, creating it if necessary.</span>
+<span class="source-line-no">461</span><span id="line-461">    *</span>
+<span class="source-line-no">462</span><span id="line-462">    * @return The root context.</span>
+<span class="source-line-no">463</span><span id="line-463">    */</span>
+<span class="source-line-no">464</span><span id="line-464">   public Context getContext() {</span>
+<span class="source-line-no">465</span><span id="line-465">      var context = (Context)getServer().getHost().findChild(ROOT_CONTEXT_PATH);</span>
+<span class="source-line-no">466</span><span id="line-466">      if (context != null)</span>
+<span class="source-line-no">467</span><span id="line-467">         return context;</span>
+<span class="source-line-no">468</span><span id="line-468">      return getServer().addContext(ROOT_CONTEXT_PATH, ROOT_DOC_BASE);</span>
+<span class="source-line-no">469</span><span id="line-469">   }</span>
+<span class="source-line-no">470</span><span id="line-470"></span>
+<span class="source-line-no">471</span><span id="line-471">   /**</span>
+<span class="source-line-no">472</span><span id="line-472">    * Returns the hostname of this microservice.</span>
+<span class="source-line-no">473</span><span id="line-473">    *</span>
+<span class="source-line-no">474</span><span id="line-474">    * @return The hostname.</span>
+<span class="source-line-no">475</span><span id="line-475">    */</span>
+<span class="source-line-no">476</span><span id="line-476">   public String getHostName() {</span>
+<span class="source-line-no">477</span><span id="line-477">      String hostname = "localhost";</span>
+<span class="source-line-no">478</span><span id="line-478">      try {</span>
+<span class="source-line-no">479</span><span id="line-479">         hostname = InetAddress.getLocalHost().getHostName();</span>
+<span class="source-line-no">480</span><span id="line-480">      } catch (UnknownHostException e) {</span>
+<span class="source-line-no">481</span><span id="line-481">         // Cannot determine hostname, use default "localhost"</span>
+<span class="source-line-no">482</span><span id="line-482">      }</span>
+<span class="source-line-no">483</span><span id="line-483">      return hostname;</span>
 <span class="source-line-no">484</span><span id="line-484">   }</span>
 <span class="source-line-no">485</span><span id="line-485"></span>
 <span class="source-line-no">486</span><span id="line-486">   /**</span>
-<span class="source-line-no">487</span><span id="line-487">    * Returns whether this server is using &lt;js&gt;"http"&lt;/js&gt; or &lt;js&gt;"https"&lt;/js&gt;.</span>
+<span class="source-line-no">487</span><span id="line-487">    * Returns the port that this server is listening on.</span>
 <span class="source-line-no">488</span><span id="line-488">    *</span>
-<span class="source-line-no">489</span><span id="line-489">    * @return The protocol.</span>
+<span class="source-line-no">489</span><span id="line-489">    * @return The port.</span>
 <span class="source-line-no">490</span><span id="line-490">    */</span>
-<span class="source-line-no">491</span><span id="line-491">   public String getProtocol() {</span>
-<span class="source-line-no">492</span><span id="line-492">      return getServer().getConnector().getSecure() ? "https" : "http";</span>
+<span class="source-line-no">491</span><span id="line-491">   public int getPort() {</span>
+<span class="source-line-no">492</span><span id="line-492">      return getServer().getConnector().getLocalPort();</span>
 <span class="source-line-no">493</span><span id="line-493">   }</span>
 <span class="source-line-no">494</span><span id="line-494"></span>
 <span class="source-line-no">495</span><span id="line-495">   /**</span>
-<span class="source-line-no">496</span><span id="line-496">    * Returns the underlying Tomcat server.</span>
+<span class="source-line-no">496</span><span id="line-496">    * Returns whether this server is using &lt;js&gt;"http"&lt;/js&gt; or &lt;js&gt;"https"&lt;/js&gt;.</span>
 <span class="source-line-no">497</span><span id="line-497">    *</span>
-<span class="source-line-no">498</span><span id="line-498">    * @return The underlying Tomcat server.</span>
-<span class="source-line-no">499</span><span id="line-499">    * @throws IllegalStateException If the server has not been created yet.</span>
-<span class="source-line-no">500</span><span id="line-500">    */</span>
-<span class="source-line-no">501</span><span id="line-501">   public Tomcat getServer() {</span>
-<span class="source-line-no">502</span><span id="line-502">      return Objects.requireNonNull(tomcat.get(), "Tomcat not found.  Microservice has not been started yet.");</span>
-<span class="source-line-no">503</span><span id="line-503">   }</span>
-<span class="source-line-no">504</span><span id="line-504"></span>
-<span class="source-line-no">505</span><span id="line-505">   /**</span>
-<span class="source-line-no">506</span><span id="line-506">    * Returns the URI where this server is listening.</span>
-<span class="source-line-no">507</span><span id="line-507">    *</span>
-<span class="source-line-no">508</span><span id="line-508">    * @return The URI.</span>
+<span class="source-line-no">498</span><span id="line-498">    * @return The protocol.</span>
+<span class="source-line-no">499</span><span id="line-499">    */</span>
+<span class="source-line-no">500</span><span id="line-500">   public String getProtocol() {</span>
+<span class="source-line-no">501</span><span id="line-501">      return getServer().getConnector().getSecure() ? "https" : "http";</span>
+<span class="source-line-no">502</span><span id="line-502">   }</span>
+<span class="source-line-no">503</span><span id="line-503"></span>
+<span class="source-line-no">504</span><span id="line-504">   /**</span>
+<span class="source-line-no">505</span><span id="line-505">    * Returns the underlying Tomcat server.</span>
+<span class="source-line-no">506</span><span id="line-506">    *</span>
+<span class="source-line-no">507</span><span id="line-507">    * @return The underlying Tomcat server.</span>
+<span class="source-line-no">508</span><span id="line-508">    * @throws NullPointerException If the server has not been created yet.</span>
 <span class="source-line-no">509</span><span id="line-509">    */</span>
-<span class="source-line-no">510</span><span id="line-510">   public URI getURI() {</span>
-<span class="source-line-no">511</span><span id="line-511">      var cp = getContextPath();</span>
-<span class="source-line-no">512</span><span id="line-512">      try {</span>
-<span class="source-line-no">513</span><span id="line-513">         return new URI(getProtocol(), null, getHostName(), getPort(), ie(cp) ? null : cp, null, null);</span>
-<span class="source-line-no">514</span><span id="line-514">      } catch (URISyntaxException e) {</span>
-<span class="source-line-no">515</span><span id="line-515">         throw toRex(e);</span>
-<span class="source-line-no">516</span><span id="line-516">      }</span>
-<span class="source-line-no">517</span><span id="line-517">   }</span>
-<span class="source-line-no">518</span><span id="line-518"></span>
-<span class="source-line-no">519</span><span id="line-519">   private static Tomcat createServer(TomcatServerFactory factory, File dir) {</span>
-<span class="source-line-no">520</span><span id="line-520">      try {</span>
-<span class="source-line-no">521</span><span id="line-521">         return factory.create(dir);</span>
-<span class="source-line-no">522</span><span id="line-522">      } catch (Exception e) {</span>
-<span class="source-line-no">523</span><span id="line-523">         throw toRex(e);</span>
-<span class="source-line-no">524</span><span id="line-524">      }</span>
-<span class="source-line-no">525</span><span id="line-525">   }</span>
-<span class="source-line-no">526</span><span id="line-526"></span>
-<span class="source-line-no">527</span><span id="line-527">   private File resolveBaseDir(TomcatSettings settings) {</span>
-<span class="source-line-no">528</span><span id="line-528">      var configured = settings.getBaseDir();</span>
-<span class="source-line-no">529</span><span id="line-529">      if (ine(configured)) {</span>
-<span class="source-line-no">530</span><span id="line-530">         ownsBaseDir.set(false);</span>
-<span class="source-line-no">531</span><span id="line-531">         var f = new File(configured);</span>
-<span class="source-line-no">532</span><span id="line-532">         baseDir.set(f);</span>
-<span class="source-line-no">533</span><span id="line-533">         return f;</span>
-<span class="source-line-no">534</span><span id="line-534">      }</span>
-<span class="source-line-no">535</span><span id="line-535">      try {</span>
-<span class="source-line-no">536</span><span id="line-536">         var f = createTempBaseDir().toFile();</span>
-<span class="source-line-no">537</span><span id="line-537">         ownsBaseDir.set(true);</span>
-<span class="source-line-no">538</span><span id="line-538">         baseDir.set(f);</span>
-<span class="source-line-no">539</span><span id="line-539">         return f;</span>
-<span class="source-line-no">540</span><span id="line-540">      } catch (IOException e) {</span>
-<span class="source-line-no">541</span><span id="line-541">         throw toRex(e);</span>
-<span class="source-line-no">542</span><span id="line-542">      }</span>
-<span class="source-line-no">543</span><span id="line-543">   }</span>
-<span class="source-line-no">544</span><span id="line-544"></span>
-<span class="source-line-no">545</span><span id="line-545">   @SuppressWarnings({</span>
-<span class="source-line-no">546</span><span id="line-546">      "java:S5443" // Temp dir created via Files.createTempDirectory with owner-only (rwx------) POSIX perms; non-POSIX fallback relies on OS-default owner-restricted temp dirs.</span>
-<span class="source-line-no">547</span><span id="line-547">   })</span>
-<span class="source-line-no">548</span><span id="line-548">   private static Path createTempBaseDir() throws IOException {</span>
-<span class="source-line-no">549</span><span id="line-549">      try {</span>
-<span class="source-line-no">550</span><span id="line-550">         // Explicitly restrict to owner-only access (rwx------) on POSIX file systems.</span>
-<span class="source-line-no">551</span><span id="line-551">         Set&lt;PosixFilePermission&gt; ownerOnly = EnumSet.of(</span>
-<span class="source-line-no">552</span><span id="line-552">            PosixFilePermission.OWNER_READ,</span>
-<span class="source-line-no">553</span><span id="line-553">            PosixFilePermission.OWNER_WRITE,</span>
-<span class="source-line-no">554</span><span id="line-554">            PosixFilePermission.OWNER_EXECUTE);</span>
-<span class="source-line-no">555</span><span id="line-555">         return Files.createTempDirectory("juneau-tomcat",</span>
-<span class="source-line-no">556</span><span id="line-556">            PosixFilePermissions.asFileAttribute(ownerOnly));</span>
-<span class="source-line-no">557</span><span id="line-557">      } catch (UnsupportedOperationException e) {</span>
-<span class="source-line-no">558</span><span id="line-558">         // Non-POSIX filesystem (e.g. Windows) — fall back to default temp-dir creation.</span>
-<span class="source-line-no">559</span><span id="line-559">         return Files.createTempDirectory("juneau-tomcat");</span>
-<span class="source-line-no">560</span><span id="line-560">      }</span>
-<span class="source-line-no">561</span><span id="line-561">   }</span>
-<span class="source-line-no">562</span><span id="line-562"></span>
-<span class="source-line-no">563</span><span id="line-563">   private void cleanupBaseDir() {</span>
-<span class="source-line-no">564</span><span id="line-564">      if (ownsBaseDir.get()) {</span>
-<span class="source-line-no">565</span><span id="line-565">         var f = baseDir.getAndSet(null);</span>
-<span class="source-line-no">566</span><span id="line-566">         if (nn(f))</span>
-<span class="source-line-no">567</span><span id="line-567">            deleteFile(f);</span>
-<span class="source-line-no">568</span><span id="line-568">      }</span>
-<span class="source-line-no">569</span><span id="line-569">   }</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">   private void mountConfiguredServlet(String className, Map&lt;String,String&gt; mountedPaths) {</span>
-<span class="source-line-no">572</span><span id="line-572">      try {</span>
-<span class="source-line-no">573</span><span id="line-573">         var c = info(Class.forName(className));</span>
-<span class="source-line-no">574</span><span id="line-574">         if (c.isAssignableTo(RestServlet.class)) {</span>
-<span class="source-line-no">575</span><span id="line-575">            var rs = (RestServlet)c.newInstance();</span>
-<span class="source-line-no">576</span><span id="line-576">            mountWithCollisionCheck(rs, rs.getPath(), "Tomcat/servlets[" + className + "]", mountedPaths);</span>
-<span class="source-line-no">577</span><span id="line-577">         } else {</span>
-<span class="source-line-no">578</span><span id="line-578">            throw rex("Invalid servlet specified in Tomcat/servlets.  Must be a subclass of RestServlet: {0}", className);</span>
-<span class="source-line-no">579</span><span id="line-579">         }</span>
-<span class="source-line-no">580</span><span id="line-580">      } catch (ClassNotFoundException e) {</span>
-<span class="source-line-no">581</span><span id="line-581">         throw toRex(e);</span>
-<span class="source-line-no">582</span><span id="line-582">      }</span>
-<span class="source-line-no">583</span><span id="line-583">   }</span>
-<span class="source-line-no">584</span><span id="line-584"></span>
-<span class="source-line-no">585</span><span id="line-585">   private void mountMappedServlet(String pathKey, Object className, Map&lt;String,String&gt; mountedPaths) {</span>
-<span class="source-line-no">586</span><span id="line-586">      try {</span>
-<span class="source-line-no">587</span><span id="line-587">         var c = info(Class.forName(className.toString()));</span>
-<span class="source-line-no">588</span><span id="line-588">         if (c.isAssignableTo(Servlet.class)) {</span>
-<span class="source-line-no">589</span><span id="line-589">            var rs = (Servlet)c.newInstance();</span>
-<span class="source-line-no">590</span><span id="line-590">            mountWithCollisionCheck(rs, pathKey, "Tomcat/servletMap[" + pathKey + "]", mountedPaths);</span>
-<span class="source-line-no">591</span><span id="line-591">         } else {</span>
-<span class="source-line-no">592</span><span id="line-592">            throw rex("Invalid servlet specified in Tomcat/servletMap.  Must be a subclass of Servlet: {0}", cn(className));</span>
-<span class="source-line-no">593</span><span id="line-593">         }</span>
-<span class="source-line-no">594</span><span id="line-594">      } catch (ClassNotFoundException e) {</span>
-<span class="source-line-no">595</span><span id="line-595">         throw toRex(e);</span>
-<span class="source-line-no">596</span><span id="line-596">      }</span>
-<span class="source-line-no">597</span><span id="line-597">   }</span>
-<span class="source-line-no">598</span><span id="line-598"></span>
-<span class="source-line-no">599</span><span id="line-599">   private void mountWithCollisionCheck(Servlet servlet, String rawPath, String source, Map&lt;String,String&gt; mountedPaths) {</span>
-<span class="source-line-no">600</span><span id="line-600">      var pathSpec = normalizePathSpec(rawPath);</span>
-<span class="source-line-no">601</span><span id="line-601">      checkPathCollision(pathSpec, source, mountedPaths);</span>
-<span class="source-line-no">602</span><span id="line-602">      addServlet(servlet, pathSpec);</span>
-<span class="source-line-no">603</span><span id="line-603">   }</span>
-<span class="source-line-no">604</span><span id="line-604"></span>
-<span class="source-line-no">605</span><span id="line-605">   private void checkPathCollision(String pathSpec, String source, Map&lt;String,String&gt; mountedPaths) {</span>
-<span class="source-line-no">606</span><span id="line-606">      var prior = mountedPaths.get(pathSpec);</span>
-<span class="source-line-no">607</span><span id="line-607">      if (nn(prior))</span>
-<span class="source-line-no">608</span><span id="line-608">         throw rex("Servlet mount path collision: ''{0}'' is already mounted by {1}; refused by {2}.", pathSpec, prior, source);</span>
-<span class="source-line-no">609</span><span id="line-609">      mountedPaths.put(pathSpec, source);</span>
-<span class="source-line-no">610</span><span id="line-610">   }</span>
-<span class="source-line-no">611</span><span id="line-611">}</span>
+<span class="source-line-no">510</span><span id="line-510">   public Tomcat getServer() {</span>
+<span class="source-line-no">511</span><span id="line-511">      return Objects.requireNonNull(tomcat.get(), "Tomcat not found.  Microservice has not been started yet.");</span>
+<span class="source-line-no">512</span><span id="line-512">   }</span>
+<span class="source-line-no">513</span><span id="line-513"></span>
+<span class="source-line-no">514</span><span id="line-514">   /**</span>
+<span class="source-line-no">515</span><span id="line-515">    * Returns the URI where this server is listening.</span>
+<span class="source-line-no">516</span><span id="line-516">    *</span>
+<span class="source-line-no">517</span><span id="line-517">    * @return The URI.</span>
+<span class="source-line-no">518</span><span id="line-518">    */</span>
+<span class="source-line-no">519</span><span id="line-519">   public URI getURI() {</span>
+<span class="source-line-no">520</span><span id="line-520">      var cp = getContextPath();</span>
+<span class="source-line-no">521</span><span id="line-521">      try {</span>
+<span class="source-line-no">522</span><span id="line-522">         return new URI(getProtocol(), null, getHostName(), getPort(), ie(cp) ? null : cp, null, null);</span>
+<span class="source-line-no">523</span><span id="line-523">      } catch (URISyntaxException e) {</span>
+<span class="source-line-no">524</span><span id="line-524">         throw toRex(e);</span>
+<span class="source-line-no">525</span><span id="line-525">      }</span>
+<span class="source-line-no">526</span><span id="line-526">   }</span>
+<span class="source-line-no">527</span><span id="line-527"></span>
+<span class="source-line-no">528</span><span id="line-528">   private static Tomcat createServer(TomcatServerFactory factory, File dir) {</span>
+<span class="source-line-no">529</span><span id="line-529">      try {</span>
+<span class="source-line-no">530</span><span id="line-530">         return factory.create(dir);</span>
+<span class="source-line-no">531</span><span id="line-531">      } catch (Exception e) {</span>
+<span class="source-line-no">532</span><span id="line-532">         throw toRex(e);</span>
+<span class="source-line-no">533</span><span id="line-533">      }</span>
+<span class="source-line-no">534</span><span id="line-534">   }</span>
+<span class="source-line-no">535</span><span id="line-535"></span>
+<span class="source-line-no">536</span><span id="line-536">   private File resolveBaseDir(TomcatSettings settings) {</span>
+<span class="source-line-no">537</span><span id="line-537">      var configured = settings.getBaseDir();</span>
+<span class="source-line-no">538</span><span id="line-538">      if (ine(configured)) {</span>
+<span class="source-line-no">539</span><span id="line-539">         ownsBaseDir.set(false);</span>
+<span class="source-line-no">540</span><span id="line-540">         var f = new File(configured);</span>
+<span class="source-line-no">541</span><span id="line-541">         baseDir.set(f);</span>
+<span class="source-line-no">542</span><span id="line-542">         return f;</span>
+<span class="source-line-no">543</span><span id="line-543">      }</span>
+<span class="source-line-no">544</span><span id="line-544">      try {</span>
+<span class="source-line-no">545</span><span id="line-545">         var f = createTempBaseDir().toFile();</span>
+<span class="source-line-no">546</span><span id="line-546">         ownsBaseDir.set(true);</span>
+<span class="source-line-no">547</span><span id="line-547">         baseDir.set(f);</span>
+<span class="source-line-no">548</span><span id="line-548">         return f;</span>
+<span class="source-line-no">549</span><span id="line-549">      } catch (IOException e) {</span>
+<span class="source-line-no">550</span><span id="line-550">         throw toRex(e);</span>
+<span class="source-line-no">551</span><span id="line-551">      }</span>
+<span class="source-line-no">552</span><span id="line-552">   }</span>
+<span class="source-line-no">553</span><span id="line-553"></span>
+<span class="source-line-no">554</span><span id="line-554">   @SuppressWarnings({</span>
+<span class="source-line-no">555</span><span id="line-555">      "java:S5443" // Temp dir created via Files.createTempDirectory with owner-only (rwx------) POSIX perms; non-POSIX fallback relies on OS-default owner-restricted temp dirs.</span>
+<span class="source-line-no">556</span><span id="line-556">   })</span>
+<span class="source-line-no">557</span><span id="line-557">   private static Path createTempBaseDir() throws IOException {</span>
+<span class="source-line-no">558</span><span id="line-558">      try {</span>
+<span class="source-line-no">559</span><span id="line-559">         // Explicitly restrict to owner-only access (rwx------) on POSIX file systems.</span>
+<span class="source-line-no">560</span><span id="line-560">         Set&lt;PosixFilePermission&gt; ownerOnly = EnumSet.of(</span>
+<span class="source-line-no">561</span><span id="line-561">            PosixFilePermission.OWNER_READ,</span>
+<span class="source-line-no">562</span><span id="line-562">            PosixFilePermission.OWNER_WRITE,</span>
+<span class="source-line-no">563</span><span id="line-563">            PosixFilePermission.OWNER_EXECUTE);</span>
+<span class="source-line-no">564</span><span id="line-564">         return Files.createTempDirectory("juneau-tomcat",</span>
+<span class="source-line-no">565</span><span id="line-565">            PosixFilePermissions.asFileAttribute(ownerOnly));</span>
+<span class="source-line-no">566</span><span id="line-566">      } catch (UnsupportedOperationException e) {</span>
+<span class="source-line-no">567</span><span id="line-567">         // Non-POSIX filesystem (e.g. Windows) — fall back to default temp-dir creation.</span>
+<span class="source-line-no">568</span><span id="line-568">         return Files.createTempDirectory("juneau-tomcat");</span>
+<span class="source-line-no">569</span><span id="line-569">      }</span>
+<span class="source-line-no">570</span><span id="line-570">   }</span>
+<span class="source-line-no">571</span><span id="line-571"></span>
+<span class="source-line-no">572</span><span id="line-572">   private void cleanupBaseDir() {</span>
+<span class="source-line-no">573</span><span id="line-573">      if (ownsBaseDir.get()) {</span>
+<span class="source-line-no">574</span><span id="line-574">         var f = baseDir.getAndSet(null);</span>
+<span class="source-line-no">575</span><span id="line-575">         if (nn(f))</span>
+<span class="source-line-no">576</span><span id="line-576">            deleteFile(f);</span>
+<span class="source-line-no">577</span><span id="line-577">      }</span>
+<span class="source-line-no">578</span><span id="line-578">   }</span>
+<span class="source-line-no">579</span><span id="line-579"></span>
+<span class="source-line-no">580</span><span id="line-580">   private void mountConfiguredServlet(String className, Map&lt;String,String&gt; mountedPaths) {</span>
+<span class="source-line-no">581</span><span id="line-581">      try {</span>
+<span class="source-line-no">582</span><span id="line-582">         var c = info(Class.forName(className));</span>
+<span class="source-line-no">583</span><span id="line-583">         if (c.isAssignableTo(RestServlet.class)) {</span>
+<span class="source-line-no">584</span><span id="line-584">            var rs = (RestServlet)c.newInstance();</span>
+<span class="source-line-no">585</span><span id="line-585">            mountWithCollisionCheck(rs, rs.getPath(), "Tomcat/servlets[" + className + "]", mountedPaths);</span>
+<span class="source-line-no">586</span><span id="line-586">         } else {</span>
+<span class="source-line-no">587</span><span id="line-587">            throw rex("Invalid servlet specified in Tomcat/servlets.  Must be a subclass of RestServlet: %s", className);</span>
+<span class="source-line-no">588</span><span id="line-588">         }</span>
+<span class="source-line-no">589</span><span id="line-589">      } catch (ClassNotFoundException e) {</span>
+<span class="source-line-no">590</span><span id="line-590">         throw toRex(e);</span>
+<span class="source-line-no">591</span><span id="line-591">      }</span>
+<span class="source-line-no">592</span><span id="line-592">   }</span>
+<span class="source-line-no">593</span><span id="line-593"></span>
+<span class="source-line-no">594</span><span id="line-594">   private void mountMappedServlet(String pathKey, Object className, Map&lt;String,String&gt; mountedPaths) {</span>
+<span class="source-line-no">595</span><span id="line-595">      try {</span>
+<span class="source-line-no">596</span><span id="line-596">         var c = info(Class.forName(className.toString()));</span>
+<span class="source-line-no">597</span><span id="line-597">         if (c.isAssignableTo(Servlet.class)) {</span>
+<span class="source-line-no">598</span><span id="line-598">            var rs = (Servlet)c.newInstance();</span>
+<span class="source-line-no">599</span><span id="line-599">            mountWithCollisionCheck(rs, pathKey, "Tomcat/servletMap[" + pathKey + "]", mountedPaths);</span>
+<span class="source-line-no">600</span><span id="line-600">         } else {</span>
+<span class="source-line-no">601</span><span id="line-601">            throw rex("Invalid servlet specified in Tomcat/servletMap.  Must be a subclass of Servlet: %s", cn(className));</span>
+<span class="source-line-no">602</span><span id="line-602">         }</span>
+<span class="source-line-no">603</span><span id="line-603">      } catch (ClassNotFoundException e) {</span>
+<span class="source-line-no">604</span><span id="line-604">         throw toRex(e);</span>
+<span class="source-line-no">605</span><span id="line-605">      }</span>
+<span class="source-line-no">606</span><span id="line-606">   }</span>
+<span class="source-line-no">607</span><span id="line-607"></span>
+<span class="source-line-no">608</span><span id="line-608">   private void mountWithCollisionCheck(Servlet servlet, String rawPath, String source, Map&lt;String,String&gt; mountedPaths) {</span>
+<span class="source-line-no">609</span><span id="line-609">      var pathSpec = normalizePathSpec(rawPath);</span>
+<span class="source-line-no">610</span><span id="line-610">      checkPathCollision(pathSpec, source, mountedPaths);</span>
+<span class="source-line-no">611</span><span id="line-611">      addServlet(servlet, pathSpec);</span>
+<span class="source-line-no">612</span><span id="line-612">   }</span>
+<span class="source-line-no">613</span><span id="line-613"></span>
+<span class="source-line-no">614</span><span id="line-614">   private void checkPathCollision(String pathSpec, String source, Map&lt;String,String&gt; mountedPaths) {</span>
+<span class="source-line-no">615</span><span id="line-615">      var prior = mountedPaths.get(pathSpec);</span>
+<span class="source-line-no">616</span><span id="line-616">      if (nn(prior))</span>
+<span class="source-line-no">617</span><span id="line-617">         throw rex("Servlet mount path collision: '%s' is already mounted by %s; refused by %s.", pathSpec, prior, source);</span>
+<span class="source-line-no">618</span><span id="line-618">      mountedPaths.put(pathSpec, source);</span>
+<span class="source-line-no">619</span><span id="line-619">   }</span>
+<span class="source-line-no">620</span><span id="line-620">}</span>
 
 
 

@@ -198,20 +198,20 @@
 <span class="source-line-no">185</span><span id="line-185">   }</span>
 <span class="source-line-no">186</span><span id="line-186"></span>
 <span class="source-line-no">187</span><span id="line-187">   private Set&lt;String&gt; extractRoles(Principal principal) {</span>
-<span class="source-line-no">188</span><span id="line-188">      if (!(principal instanceof ClaimsPrincipal cp))</span>
+<span class="source-line-no">188</span><span id="line-188">      if (!(principal instanceof ClaimsPrincipal principal2))</span>
 <span class="source-line-no">189</span><span id="line-189">         return Collections.emptySet();</span>
-<span class="source-line-no">190</span><span id="line-190">      var v = cp.getClaims().get(rolesClaim);</span>
+<span class="source-line-no">190</span><span id="line-190">      var v = principal2.getClaims().get(rolesClaim);</span>
 <span class="source-line-no">191</span><span id="line-191">      if (v == null)</span>
 <span class="source-line-no">192</span><span id="line-192">         return Collections.emptySet();</span>
 <span class="source-line-no">193</span><span id="line-193">      var out = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">194</span><span id="line-194">      if (v instanceof String s) {</span>
-<span class="source-line-no">195</span><span id="line-195">         for (var piece : s.split("\\s+"))</span>
+<span class="source-line-no">194</span><span id="line-194">      if (v instanceof String v2) {</span>
+<span class="source-line-no">195</span><span id="line-195">         for (var piece : v2.split("\\s+"))</span>
 <span class="source-line-no">196</span><span id="line-196">            if (!piece.isBlank())</span>
 <span class="source-line-no">197</span><span id="line-197">               out.add(piece);</span>
-<span class="source-line-no">198</span><span id="line-198">      } else if (v instanceof Collection&lt;?&gt; list) {</span>
-<span class="source-line-no">199</span><span id="line-199">         for (var item : list)</span>
-<span class="source-line-no">200</span><span id="line-200">            if (item instanceof String s)</span>
-<span class="source-line-no">201</span><span id="line-201">               out.add(s);</span>
+<span class="source-line-no">198</span><span id="line-198">      } else if (v instanceof Collection&lt;?&gt; v2) {</span>
+<span class="source-line-no">199</span><span id="line-199">         for (var item : v2)</span>
+<span class="source-line-no">200</span><span id="line-200">            if (item instanceof String item2)</span>
+<span class="source-line-no">201</span><span id="line-201">               out.add(item2);</span>
 <span class="source-line-no">202</span><span id="line-202">      }</span>
 <span class="source-line-no">203</span><span id="line-203">      return out;</span>
 <span class="source-line-no">204</span><span id="line-204">   }</span>

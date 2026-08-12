@@ -80,13 +80,13 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-108">SeoMixin</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-110">SeoMixin</a></span>
 <span class="extends-implements">extends <a href="../servlet/RestMixin.html" title="class in org.apache.juneau.rest.server.servlet">RestMixin</a></span></div>
 <div class="block">Mixin that serves SEO-conventional endpoints <code>/robots.txt</code> and <code>/sitemap.xml</code>.
 
  <p>
  Sibling of <a href="FaviconMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>FaviconMixin</code></a> (<code>/favicon.ico</code>),
- <a href="VersionMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>VersionMixin</code></a> (<code>/version</code> / <code>/info</code> / <code>/about</code>), and
+ <a href="VersionMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>VersionMixin</code></a> (<code>/version</code>), and
  <a href="WellKnownMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>WellKnownMixin</code></a> (<code>/.well-known/*</code>). All four classes live in the
  <code>org.apache.juneau.rest.server.convention</code> convention-endpoints mixin pack.
 
@@ -278,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_ROBOTS">
 <h3>DEFAULT_ROBOTS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-112">DEFAULT_ROBOTS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-114">DEFAULT_ROBOTS</a></span></div>
 <div class="block">Default robots policy: deny everything.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -301,14 +301,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>SeoMixin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-127">SeoMixin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-129">SeoMixin</a></span>()</div>
 <div class="block">No-arg constructor used when a host registers the mixin without builder configuration.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.convention.SeoMixin.Builder)">
 <h3>SeoMixin</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-141">SeoMixin</a></span><wbr><span class="parameters">(<a href="SeoMixin.Builder.html" title="class in org.apache.juneau.rest.server.convention">SeoMixin.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-143">SeoMixin</a></span><wbr><span class="parameters">(<a href="SeoMixin.Builder.html" title="class in org.apache.juneau.rest.server.convention">SeoMixin.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Builder constructor.
 
  <p>
@@ -317,7 +317,7 @@ loadScripts(document, 'script');</script>
  mixin's own <a href="../Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a> annotation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder.</dd>
+<dd><code>builder</code> - The builder. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -332,7 +332,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SeoMixin.Builder.html" title="class in org.apache.juneau.rest.server.convention">SeoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-119">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SeoMixin.Builder.html" title="class in org.apache.juneau.rest.server.convention">SeoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-121">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -343,7 +343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRobotsTxt(org.apache.juneau.rest.server.RestResponse)">
 <h3>getRobotsTxt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-153">getRobotsTxt</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-155">getRobotsTxt</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">[GET /robots.txt] &mdash; emit the configured robots policy as <code>text/plain</code>.</div>
 <dl class="notes">
@@ -357,7 +357,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSitemap(org.apache.juneau.rest.server.RestResponse)">
 <h3>getSitemap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-171">getSitemap</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/convention/SeoMixin.html#line-173">getSitemap</a></span><wbr><span class="parameters">(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">[GET /sitemap.xml] &mdash; emit the configured sitemap as <code>application/xml</code>.</div>
 <dl class="notes">

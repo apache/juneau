@@ -193,29 +193,29 @@
 <span class="source-line-no">180</span><span id="line-180"></span>
 <span class="source-line-no">181</span><span id="line-181">   /**</span>
 <span class="source-line-no">182</span><span id="line-182">    * Convenience delegator for the whole-value {@link RecordReader} using &lt;b&gt;default session</span>
-<span class="source-line-no">183</span><span id="line-183">    * arguments&lt;/b&gt;.  The real implementation lives on {@link YamlParserSession#parseRecords(Object)}.</span>
+<span class="source-line-no">183</span><span id="line-183">    * arguments&lt;/b&gt;.  The real implementation lives on {@link YamlParserSession#readRecords(Object)}.</span>
 <span class="source-line-no">184</span><span id="line-184">    *</span>
 <span class="source-line-no">185</span><span id="line-185">    * @param input The input.</span>
 <span class="source-line-no">186</span><span id="line-186">    * @return A new {@link RecordReader} cursor.</span>
 <span class="source-line-no">187</span><span id="line-187">    * @throws IOException If a problem occurred opening the underlying input.</span>
 <span class="source-line-no">188</span><span id="line-188">    */</span>
 <span class="source-line-no">189</span><span id="line-189">   @Override /* RecordReadable */</span>
-<span class="source-line-no">190</span><span id="line-190">   public RecordReader parseRecords(Object input) throws IOException {</span>
-<span class="source-line-no">191</span><span id="line-191">      return getSession().parseRecords(input);</span>
+<span class="source-line-no">190</span><span id="line-190">   public RecordReader readRecords(Object input) throws IOException {</span>
+<span class="source-line-no">191</span><span id="line-191">      return getSession().readRecords(input);</span>
 <span class="source-line-no">192</span><span id="line-192">   }</span>
 <span class="source-line-no">193</span><span id="line-193"></span>
 <span class="source-line-no">194</span><span id="line-194">   /**</span>
 <span class="source-line-no">195</span><span id="line-195">    * Convenience delegator for the buffered array-element {@link RecordReader} using &lt;b&gt;default</span>
 <span class="source-line-no">196</span><span id="line-196">    * session arguments&lt;/b&gt;.  The real implementation lives on</span>
-<span class="source-line-no">197</span><span id="line-197">    * {@link YamlParserSession#parseArrayRecords(Object)}.</span>
+<span class="source-line-no">197</span><span id="line-197">    * {@link YamlParserSession#readArrayRecords(Object)}.</span>
 <span class="source-line-no">198</span><span id="line-198">    *</span>
 <span class="source-line-no">199</span><span id="line-199">    * @param input The input.</span>
 <span class="source-line-no">200</span><span id="line-200">    * @return A buffered {@link RecordReader}.</span>
 <span class="source-line-no">201</span><span id="line-201">    * @throws IOException If a problem occurred reading the input.</span>
 <span class="source-line-no">202</span><span id="line-202">    */</span>
 <span class="source-line-no">203</span><span id="line-203">   @Override /* ArrayRecordReadable */</span>
-<span class="source-line-no">204</span><span id="line-204">   public RecordReader parseArrayRecords(Object input) throws IOException {</span>
-<span class="source-line-no">205</span><span id="line-205">      return getSession().parseArrayRecords(input);</span>
+<span class="source-line-no">204</span><span id="line-204">   public RecordReader readArrayRecords(Object input) throws IOException {</span>
+<span class="source-line-no">205</span><span id="line-205">      return getSession().readArrayRecords(input);</span>
 <span class="source-line-no">206</span><span id="line-206">   }</span>
 <span class="source-line-no">207</span><span id="line-207"></span>
 <span class="source-line-no">208</span><span id="line-208">   /**</span>

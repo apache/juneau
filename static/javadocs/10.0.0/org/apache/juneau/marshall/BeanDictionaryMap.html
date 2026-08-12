@@ -258,7 +258,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>typeName</code> - The dictionary name of the class.</dd>
 <dd><code>collectionClass</code> - The collection implementation class.</dd>
-<dd><code>entryClass</code> - The entry class.</dd>
+<dd><code>entryClass</code> - The entry class. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -276,8 +276,8 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>typeName</code> - The dictionary name of the class.</dd>
 <dd><code>mapClass</code> - The map implementation class.</dd>
-<dd><code>keyClass</code> - The key class.</dd>
-<dd><code>valueClass</code> - The value class.</dd>
+<dd><code>keyClass</code> - The key class. Must not be <jk>null</jk>.</dd>
+<dd><code>valueClass</code> - The value class. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

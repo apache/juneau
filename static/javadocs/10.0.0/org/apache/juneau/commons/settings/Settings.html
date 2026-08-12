@@ -590,8 +590,8 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type to convert the value to.</dd>
 <dt>Parameters:</dt>
-<dd><code>name</code> - The property name.</dd>
-<dd><code>def</code> - The default value to return if not found.</dd>
+<dd><code>name</code> - The property name. Must not be <jk>null</jk>.</dd>
+<dd><code>def</code> - The default value to return if not found. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The found value (converted to type T), or the default value if not found.</dd>
 <dt>See Also:</dt>
@@ -626,7 +626,7 @@ loadScripts(document, 'script');</script>
  property to return empty. Use <a href="#unsetGlobal(java.lang.String)"><code>unsetGlobal(String)</code></a> to completely remove the override.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The property name.</dd>
+<dd><code>name</code> - The property name. Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The override value, or <c>null</c> to set an empty override.</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
@@ -651,7 +651,7 @@ loadScripts(document, 'script');</script>
  (or per-thread override if one exists).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The property name.</dd>
+<dd><code>name</code> - The property name. Must not be <jk>null</jk>.</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">
@@ -679,7 +679,7 @@ loadScripts(document, 'script');</script>
  to return empty for this thread. Use <a href="#unsetLocal(java.lang.String)"><code>unsetLocal(String)</code></a> to completely remove the override.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The property name.</dd>
+<dd><code>name</code> - The property name. Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The override value, or <c>null</c> to set an empty override.</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
@@ -704,7 +704,7 @@ loadScripts(document, 'script');</script>
  or the system property value for the current thread.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The property name.</dd>
+<dd><code>name</code> - The property name. Must not be <jk>null</jk>.</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">

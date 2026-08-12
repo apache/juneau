@@ -179,11 +179,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="collapseTextNodes(java.util.List)">
 <h3>collapseTextNodes</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-78">collapseTextNodes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-79">collapseTextNodes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
 <div class="block">Given a list of Strings and other Objects, combines Strings that are next to each other in the list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The list of text nodes to collapse.</dd>
+<dd><code>value</code> - The list of text nodes to collapse.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The same list.</dd>
 </dl>
@@ -192,29 +193,33 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="decode(java.lang.String,java.lang.StringBuilder)">
 <h3>decode</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-107">decode</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-110">decode</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link">StringBuilder</a>&nbsp;sb)</span></div>
 <div class="block">Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The string being decoded.</dd>
-<dd><code>sb</code> - The string builder to use as a scratch pad.</dd>
+<dd><code>value</code> - The string being decoded.
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
+<dd><code>sb</code> - The string builder to use as a scratch pad.
+   <br>Can be <jk>null</jk> (a new one is created).</dd>
 <dt>Returns:</dt>
-<dd>The decoded string.</dd>
+<dd>The decoded string, or <jk>null</jk> if the input was <jk>null</jk> or represented a <jk>null</jk> value.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="encodeAttrName(java.io.Writer,java.lang.Object)">
 <h3>encodeAttrName</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-147">encodeAttrName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-152">encodeAttrName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Serializes and encodes the specified object as valid XML attribute name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>w</code> - The writer to send the output to.</dd>
-<dd><code>value</code> - The object being serialized.</dd>
+<dd><code>w</code> - The writer to send the output to.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The object being serialized.
+   <br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -225,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="encodeAttrValue(java.io.Writer,java.lang.Object,boolean)">
 <h3>encodeAttrValue</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-197">encodeAttrValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-204">encodeAttrValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;trim)</span></div>
 <div class="block">Encodes the specified attribute value and sends the results to the specified writer.
@@ -237,8 +242,10 @@ loadScripts(document, 'script');</script>
  <br>Encodes invalid XML text characters to <c>_x####_</c> sequences.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>w</code> - The writer to send the output to.</dd>
-<dd><code>value</code> - The object being encoded.</dd>
+<dd><code>w</code> - The writer to send the output to.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The object being encoded.
+   <br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).</dd>
 <dd><code>trim</code> - Trim the text before serializing it.
    If <jk>true</jk>, leading and trailing whitespace characters will be encoded.</dd>
 <dt>Returns:</dt>
@@ -249,11 +256,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="encodeElementName(java.lang.Object)">
 <h3>encodeElementName</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-241">encodeElementName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-249">encodeElementName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Encodes any invalid XML element name characters to <c>_x####_</c> sequences.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The object being encoded.</dd>
+<dd><code>value</code> - The object being encoded.
+   <br>Can be <jk>null</jk> (returns the <c>_x0000_</c> null marker).</dd>
 <dt>Returns:</dt>
 <dd>The encoded element name string.</dd>
 </dl>
@@ -262,13 +270,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="encodeElementName(java.io.Writer,java.lang.Object)">
 <h3>encodeElementName</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-267">encodeElementName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-277">encodeElementName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Encodes any invalid XML element name characters to <c>_x####_</c> sequences.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>w</code> - The writer to send the output to.</dd>
-<dd><code>value</code> - The object being encoded.</dd>
+<dd><code>w</code> - The writer to send the output to.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The object being encoded.
+   <br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).</dd>
 <dt>Returns:</dt>
 <dd>The same writer passed in.</dd>
 </dl>
@@ -277,7 +287,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="encodeText(java.io.Writer,java.lang.Object,boolean,boolean)">
 <h3>encodeText</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-299">encodeText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-311">encodeText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;trim,
  boolean&nbsp;preserveWhitespace)</span></div>
@@ -290,8 +300,10 @@ loadScripts(document, 'script');</script>
  <br>Encodes invalid XML text characters to <c>_x####_</c> sequences.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>w</code> - The writer to send the output to.</dd>
-<dd><code>value</code> - The object being encoded.</dd>
+<dd><code>w</code> - The writer to send the output to.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>value</code> - The object being encoded.
+   <br>Can be <jk>null</jk> (written as the <c>_x0000_</c> null marker).</dd>
 <dd><code>trim</code> - Trim the text before serializing it.</dd>
 <dd><code>preserveWhitespace</code> - Specifies whether we're in preserve-whitespace mode.
    (e.g. <a href="XmlFormat.html#MIXED_PWS"><code>XmlFormat.MIXED_PWS</code></a> or <a href="XmlFormat.html#TEXT_PWS"><code>XmlFormat.TEXT_PWS</code></a>.
@@ -304,11 +316,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="escapeText(java.lang.Object)">
 <h3>escapeText</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-344">escapeText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-357">escapeText</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Escapes invalid XML text characters to <c>_x####_</c> sequences.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The object being encoded.</dd>
+<dd><code>value</code> - The object being encoded.
+   <br>Can be <jk>null</jk> (returns the <c>_x0000_</c> null marker).</dd>
 <dt>Returns:</dt>
 <dd>The encoded string.</dd>
 </dl>
@@ -317,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findNamespace(java.util.List,java.util.List)">
 <h3>findNamespace</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-381">findNamespace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Xml.html" title="annotation interface in org.apache.juneau.marshall.xml">Xml</a>&gt;&nbsp;xmls,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-396">findNamespace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Xml.html" title="annotation interface in org.apache.juneau.marshall.xml">Xml</a>&gt;&nbsp;xmls,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="XmlSchema.html" title="annotation interface in org.apache.juneau.marshall.xml">XmlSchema</a>&gt;&nbsp;schemas)</span></div>
 <div class="block">Find the namespace given a list of <ja>@Xml</ja> and <ja>@XmlSchema</ja> annotations.
 
@@ -325,8 +338,10 @@ loadScripts(document, 'script');</script>
  The annotations should be a parent-to-child ordering of annotations found on a class or method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>xmls</code> - The list of <ja>@Xml</ja> annotations.</dd>
-<dd><code>schemas</code> - The list of <ja>@XmlSchema</ja> annotations.</dd>
+<dd><code>xmls</code> - The list of <ja>@Xml</ja> annotations.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>schemas</code> - The list of <ja>@XmlSchema</ja> annotations.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The namespace, or <jk>null</jk> if it couldn't be found.</dd>
 </dl>
@@ -335,11 +350,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toReadableEvent(javax.xml.stream.XMLStreamReader)">
 <h3>toReadableEvent</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-406">toReadableEvent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a>&nbsp;r)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlUtils.html#line-422">toReadableEvent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a>&nbsp;r)</span></div>
 <div class="block">Utility method that converts the current event on the XML stream to something human-readable for debug purposes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>r</code> - The XML stream reader whose current event is to be converted to a readable string.</dd>
+<dd><code>r</code> - The XML stream reader whose current event is to be converted to a readable string.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The event in human-readable form.</dd>
 </dl>

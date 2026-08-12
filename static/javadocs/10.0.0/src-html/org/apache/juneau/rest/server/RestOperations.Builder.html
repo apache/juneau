@@ -74,8 +74,8 @@
 <span class="source-line-no">061</span><span id="line-61">      /**</span>
 <span class="source-line-no">062</span><span id="line-62">       * Adds a method context to this builder.</span>
 <span class="source-line-no">063</span><span id="line-63">       *</span>
-<span class="source-line-no">064</span><span id="line-64">       * @param value The REST method context to add.</span>
-<span class="source-line-no">065</span><span id="line-65">       * @return Adds a method context to this builder.</span>
+<span class="source-line-no">064</span><span id="line-64">       * @param value The REST method context to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">065</span><span id="line-65">       * @return This object.</span>
 <span class="source-line-no">066</span><span id="line-66">       */</span>
 <span class="source-line-no">067</span><span id="line-67">      public Builder add(RestOpContext value) {</span>
 <span class="source-line-no">068</span><span id="line-68">         return add(value.getHttpMethod(), value);</span>
@@ -84,12 +84,12 @@
 <span class="source-line-no">071</span><span id="line-71">      /**</span>
 <span class="source-line-no">072</span><span id="line-72">       * Adds a method context to this builder.</span>
 <span class="source-line-no">073</span><span id="line-73">       *</span>
-<span class="source-line-no">074</span><span id="line-74">       * @param httpMethodName The HTTP method name.</span>
-<span class="source-line-no">075</span><span id="line-75">       * @param value The REST method context to add.</span>
-<span class="source-line-no">076</span><span id="line-76">       * @return Adds a method context to this builder.</span>
+<span class="source-line-no">074</span><span id="line-74">       * @param httpMethodName The HTTP method name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">075</span><span id="line-75">       * @param value The REST method context to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">076</span><span id="line-76">       * @return This object.</span>
 <span class="source-line-no">077</span><span id="line-77">       */</span>
 <span class="source-line-no">078</span><span id="line-78">      public Builder add(String httpMethodName, RestOpContext value) {</span>
-<span class="source-line-no">079</span><span id="line-79">         httpMethodName = httpMethodName.toUpperCase();</span>
+<span class="source-line-no">079</span><span id="line-79">         httpMethodName = ucr(httpMethodName);</span>
 <span class="source-line-no">080</span><span id="line-80">         map.computeIfAbsent(httpMethodName, k -&gt; new TreeSet&lt;&gt;()).add(value);</span>
 <span class="source-line-no">081</span><span id="line-81">         set.add(value);</span>
 <span class="source-line-no">082</span><span id="line-82">         return this;</span>
@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108">      /**</span>
 <span class="source-line-no">109</span><span id="line-109">       * Constructor.</span>
 <span class="source-line-no">110</span><span id="line-110">       *</span>
-<span class="source-line-no">111</span><span id="line-111">       * @param builder The builder.</span>
+<span class="source-line-no">111</span><span id="line-111">       * @param builder The builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">112</span><span id="line-112">       * @throws Exception If initialization fails.</span>
 <span class="source-line-no">113</span><span id="line-113">       */</span>
 <span class="source-line-no">114</span><span id="line-114">      public Void(Builder builder) throws Exception {</span>
@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">   /**</span>
 <span class="source-line-no">133</span><span id="line-133">    * Constructor.</span>
 <span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param builder The builder containing the settings for this object.</span>
+<span class="source-line-no">135</span><span id="line-135">    * @param builder The builder containing the settings for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">136</span><span id="line-136">    */</span>
 <span class="source-line-no">137</span><span id="line-137">   public RestOperations(Builder builder) {</span>
 <span class="source-line-no">138</span><span id="line-138">      Map&lt;String,List&lt;RestOpContext&gt;&gt; m = map();</span>
@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">   /**</span>
 <span class="source-line-no">146</span><span id="line-146">    * Finds the method that should handle the specified call.</span>
 <span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * @param session The HTTP call.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @param session The HTTP call. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">149</span><span id="line-149">    * @return The method that should handle the specified call.</span>
 <span class="source-line-no">150</span><span id="line-150">    * @throws MethodNotAllowed If no methods implement the requested HTTP method.</span>
 <span class="source-line-no">151</span><span id="line-151">    * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.</span>
@@ -202,9 +202,9 @@
 <span class="source-line-no">189</span><span id="line-189">      }</span>
 <span class="source-line-no">190</span><span id="line-190"></span>
 <span class="source-line-no">191</span><span id="line-191">      if (rc == 1)</span>
-<span class="source-line-no">192</span><span id="line-192">         throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, session.getPathInfo());</span>
+<span class="source-line-no">192</span><span id="line-192">         throw new PreconditionFailed("Method '%s' not found on resource on path '%s' with matching matcher.", m, session.getPathInfo());</span>
 <span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">      throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", session.getPathInfo(), cn(session.getResource()));</span>
+<span class="source-line-no">194</span><span id="line-194">      throw new NotFound("Java method matching path '%s' not found on resource '%s'.", session.getPathInfo(), cn(session.getResource()));</span>
 <span class="source-line-no">195</span><span id="line-195">   }</span>
 <span class="source-line-no">196</span><span id="line-196"></span>
 <span class="source-line-no">197</span><span id="line-197">   /**</span>

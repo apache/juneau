@@ -80,8 +80,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/FunctionalInterface.html" title="class or interface in java.lang" class="external-link">@FunctionalInterface</a>
-</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-34">McpCursor</a></span></div>
-<div class="block">Pagination strategy for MCP <code>list</code> dispatchers (tools / prompts / resources).
+</span><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-35">McpCursor</a></span></div>
+<div class="block">Pagination strategy for MCP <code>list</code> dispatchers (tools / prompts / resources / resource templates).
 
  <p>
  Built-in strategies:
@@ -120,22 +120,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fixedSize(int)" class="member-name-link">fixedSize</a><wbr>(int&nbsp;pageSize)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#cursorOf(java.lang.Object)" class="member-name-link">cursorOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;params)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Extracts the opaque pagination cursor from a JSON-RPC <code>params</code> value.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fixedSize(int)" class="member-name-link">fixedSize</a><wbr>(int&nbsp;pageSize)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Returns a fixed-page-size cursor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;<a href="McpPage.html" title="class in org.apache.juneau.rest.server.mcp">McpPage</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#page(java.util.List,java.lang.String,org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">page</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&nbsp;all,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;<a href="McpPage.html" title="class in org.apache.juneau.rest.server.mcp">McpPage</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#page(java.util.List,java.lang.String,org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">page</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&nbsp;all,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cursor,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;ctx)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Slices a descriptor list into a page returned from <code>tools/list</code>, <code>prompts/list</code>, or
- <code>resources/list</code>.</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Slices a descriptor list into a page returned from <code>tools/list</code>, <code>prompts/list</code>,
+ <code>resources/list</code>, or <code>resources/templates/list</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#parseOffset(java.lang.String)" class="member-name-link">parseOffset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cursor)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#parseOffset(java.lang.String)" class="member-name-link">parseOffset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cursor)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Parses a cursor as a non-negative integer offset; returns <code>0</code> for <code>null</code> or non-numeric inputs.</div>
 </div>
 </div>
@@ -155,7 +160,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SINGLE_PAGE">
 <h3>SINGLE_PAGE</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-52">SINGLE_PAGE</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-53">SINGLE_PAGE</a></span></div>
 <div class="block">Returns everything in a single page; emits no <code>nextCursor</code>.</div>
 </section>
 </li>
@@ -170,11 +175,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="page(java.util.List,java.lang.String,org.apache.juneau.commons.inject.BeanStore)">
 <h3>page</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="McpPage.html" title="class in org.apache.juneau.rest.server.mcp">McpPage</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-47">page</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&nbsp;all,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="McpPage.html" title="class in org.apache.juneau.rest.server.mcp">McpPage</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-48">page</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&nbsp;all,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cursor,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;ctx)</span></div>
-<div class="block">Slices a descriptor list into a page returned from <code>tools/list</code>, <code>prompts/list</code>, or
- <code>resources/list</code>.</div>
+<div class="block">Slices a descriptor list into a page returned from <code>tools/list</code>, <code>prompts/list</code>,
+ <code>resources/list</code>, or <code>resources/templates/list</code>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - Element type.</dd>
@@ -190,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fixedSize(int)">
 <h3>fixedSize</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-68">fixedSize</a></span><wbr><span class="parameters">(int&nbsp;pageSize)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="McpCursor.html" title="interface in org.apache.juneau.rest.server.mcp">McpCursor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-69">fixedSize</a></span><wbr><span class="parameters">(int&nbsp;pageSize)</span></div>
 <div class="block">Returns a fixed-page-size cursor.
 
  <p>
@@ -206,13 +211,29 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parseOffset(java.lang.String)">
 <h3>parseOffset</h3>
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-92">parseOffset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cursor)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-93">parseOffset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cursor)</span></div>
 <div class="block">Parses a cursor as a non-negative integer offset; returns <code>0</code> for <code>null</code> or non-numeric inputs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>cursor</code> - Cursor value (may be <code>null</code>).</dd>
 <dt>Returns:</dt>
 <dd>Parsed offset.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="cursorOf(java.lang.Object)">
+<h3>cursorOf</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpCursor.html#line-112">cursorOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;params)</span></div>
+<div class="block">Extracts the opaque pagination cursor from a JSON-RPC <code>params</code> value.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>params</code> - The raw params value from the request. Can be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>The <code>cursor</code> parameter, or <jk>null</jk> if absent.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../../../bean/jsonrpc/McpException.html" title="class in org.apache.juneau.bean.jsonrpc">McpException</a></code> - If <code>params</code> is present but is not a
+   JSON object.</dd>
 </dl>
 </section>
 </li>

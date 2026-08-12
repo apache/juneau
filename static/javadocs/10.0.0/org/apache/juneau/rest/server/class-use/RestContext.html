@@ -88,34 +88,38 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Actuator-style management-surface endpoints (server-module flavors).</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.metrics.micrometer">org.apache.juneau.rest.server.metrics.micrometer</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
 <div class="col-last even-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.metrics.micrometer">org.apache.juneau.rest.server.metrics.micrometer</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Micrometer bridge for the <code>juneau-rest-server</code>
  <a href="../metrics/MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics"><code>MetricsRecorder</code></a> SPI.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.openapi">org.apache.juneau.rest.server.openapi</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.openapi">org.apache.juneau.rest.server.openapi</a></div>
+<div class="col-last even-row-color">
 <div class="block">Server-side OpenAPI 3.1 emission — the <a href="../openapi/OpenApiProvider.html" title="interface in org.apache.juneau.rest.server.openapi"><code>OpenApiProvider</code></a> SPI
  and the <a href="../openapi/BasicOpenApiProvider.html" title="class in org.apache.juneau.rest.server.openapi"><code>BasicOpenApiProvider</code></a> default implementation that
  walks an <a href="../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> and produces an
  <a href="../../../bean/openapi3/OpenApi.html" title="class in org.apache.juneau.bean.openapi3"><code>OpenApi</code></a> document.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.ops">org.apache.juneau.rest.server.ops</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.ops">org.apache.juneau.rest.server.ops</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Ops / introspection mixin pack — composable <code>@Rest(mixins=...)</code> resources that ship the
  operational surface (request echo, JVM admin, route index) every long-running Juneau service
  eventually grows.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Remote Procedure Call API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.servlet">org.apache.juneau.rest.server.servlet</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.servlet">org.apache.juneau.rest.server.servlet</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Servlets</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.swagger">org.apache.juneau.rest.server.swagger</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.swagger">org.apache.juneau.rest.server.swagger</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Swagger Support</div>
 </div>
 </div>
@@ -506,6 +510,32 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Sets (or clears) the level of a single logger at runtime (process-lifetime-only), for the backend resolved
  from the supplied context.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<h2>Uses of <a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a> in <a href="../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></h2>
+<div class="caption"><span>Methods in <a href="../mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a> with parameters of type <a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpResourceServerSupport.</span><code><a href="../mcp/v20260728/McpResourceServerSupport.html#gateMcpEndpoint(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,org.apache.juneau.rest.server.RestContext,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)" class="member-name-link">gateMcpEndpoint</a><wbr>(<a href="../mcp/v20260728/McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+ <a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx,
+ jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Router-identity bearer gate for the <a href="../mcp/v20260728/McpEndpoint.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>McpEndpoint</code></a> mixin's MCP JSON-RPC endpoint (READY-312f F2, B1/H3).</div>
+</div>
+<div class="col-first odd-row-color"><code>default void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpEndpoint.</span><code><a href="../mcp/v20260728/McpEndpoint.html#mcpResourceServerAuth(org.apache.juneau.rest.server.RestContext,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)" class="member-name-link">mcpResourceServerAuth</a><wbr>(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx,
+ jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">OAuth 2.1 resource-server bearer gate for the mixin's MCP <code>POST /mcp</code> endpoint (READY-312f F2).</div>
 </div>
 </div>
 </section>

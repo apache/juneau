@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48">         .filter(Objects::nonNull)</span>
 <span class="source-line-no">049</span><span id="line-49">         .findFirst()</span>
 <span class="source-line-no">050</span><span id="line-50">         .ifPresent(a -&gt; {</span>
-<span class="source-line-no">051</span><span id="line-51">            throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cns(a), cns(onMethod.getDeclaringClass()), onMethod);</span>
+<span class="source-line-no">051</span><span id="line-51">            throw new InvalidAnnotationException("@%s annotation cannot be used in a @%s bean.  Method='%s'", cns(a), cns(onMethod.getDeclaringClass()), onMethod);</span>
 <span class="source-line-no">052</span><span id="line-52">         });</span>
 <span class="source-line-no">053</span><span id="line-53">      // @formatter:on</span>
 <span class="source-line-no">054</span><span id="line-54">   }</span>

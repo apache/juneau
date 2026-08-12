@@ -86,8 +86,8 @@
 <span class="source-line-no">073</span><span id="line-73">    * Finds the part bean meta for the specified type.</span>
 <span class="source-line-no">074</span><span id="line-74">    *</span>
 <span class="source-line-no">075</span><span id="line-75">    * @param &lt;T&gt; The part bean type.</span>
-<span class="source-line-no">076</span><span id="line-76">    * @param type The part bean type.</span>
-<span class="source-line-no">077</span><span id="line-77">    * @return The metadata, or &lt;jk&gt;null&lt;/jk&gt; if a valid constructor could not be found.</span>
+<span class="source-line-no">076</span><span id="line-76">    * @param type The part bean type.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">077</span><span id="line-77">    * @return The metadata for the specified type.  Never &lt;jk&gt;null&lt;/jk&gt; (a bean with no usable constructor causes {@link #construct(String,Object)} to throw instead).</span>
 <span class="source-line-no">078</span><span id="line-78">    */</span>
 <span class="source-line-no">079</span><span id="line-79">   @SuppressWarnings({</span>
 <span class="source-line-no">080</span><span id="line-80">      "unchecked" // Type erasure requires cast for PartBeanMeta creation</span>
@@ -134,61 +134,64 @@
 <span class="source-line-no">121</span><span id="line-121">    *</span>
 <span class="source-line-no">122</span><span id="line-122">    * @param value</span>
 <span class="source-line-no">123</span><span id="line-123">    *    The part value.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @return A newly constructed bean.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   public T construct(Object value) {</span>
-<span class="source-line-no">127</span><span id="line-127">      return construct(null, value);</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * Constructs a part bean with the specified name or value.</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param name</span>
-<span class="source-line-no">134</span><span id="line-134">    *    The part name.</span>
-<span class="source-line-no">135</span><span id="line-135">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, uses the value pulled from the {@link Header#name() @Header(name)} or</span>
-<span class="source-line-no">136</span><span id="line-136">    *    {@link Header#value() @Header(value)} annotations.</span>
-<span class="source-line-no">137</span><span id="line-137">    * @param value</span>
-<span class="source-line-no">138</span><span id="line-138">    *    The part value.</span>
-<span class="source-line-no">139</span><span id="line-139">    * @return A newly constructed bean.</span>
-<span class="source-line-no">140</span><span id="line-140">    * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).</span>
-<span class="source-line-no">141</span><span id="line-141">    */</span>
-<span class="source-line-no">142</span><span id="line-142">   public T construct(String name, Object value) {</span>
-<span class="source-line-no">143</span><span id="line-143"></span>
-<span class="source-line-no">144</span><span id="line-144">      if (constructor == null)</span>
-<span class="source-line-no">145</span><span id="line-145">         throw uoex("Constructor for type {0} could not be found.", cn(type));</span>
+<span class="source-line-no">124</span><span id="line-124">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent, depending on the target bean type's constructor shape — see {@link #construct(String, Object)}.</span>
+<span class="source-line-no">125</span><span id="line-125">    * @return A newly constructed bean.</span>
+<span class="source-line-no">126</span><span id="line-126">    * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).</span>
+<span class="source-line-no">127</span><span id="line-127">    */</span>
+<span class="source-line-no">128</span><span id="line-128">   public T construct(Object value) {</span>
+<span class="source-line-no">129</span><span id="line-129">      return construct(null, value);</span>
+<span class="source-line-no">130</span><span id="line-130">   }</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">   /**</span>
+<span class="source-line-no">133</span><span id="line-133">    * Constructs a part bean with the specified name or value.</span>
+<span class="source-line-no">134</span><span id="line-134">    *</span>
+<span class="source-line-no">135</span><span id="line-135">    * @param name</span>
+<span class="source-line-no">136</span><span id="line-136">    *    The part name.</span>
+<span class="source-line-no">137</span><span id="line-137">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, uses the value pulled from the {@link Header#name() @Header(name)} or</span>
+<span class="source-line-no">138</span><span id="line-138">    *    {@link Header#value() @Header(value)} annotations.</span>
+<span class="source-line-no">139</span><span id="line-139">    * @param value</span>
+<span class="source-line-no">140</span><span id="line-140">    *    The part value.</span>
+<span class="source-line-no">141</span><span id="line-141">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.  The effect is implementation-dependent, depending on the target bean type's constructor shape (e.g. coerced to &lt;c&gt;String&lt;/c&gt; for a single-&lt;c&gt;String&lt;/c&gt;-arg constructor, passed through unchanged otherwise).</span>
+<span class="source-line-no">142</span><span id="line-142">    * @return A newly constructed bean.</span>
+<span class="source-line-no">143</span><span id="line-143">    * @throws UnsupportedOperationException If bean could not be constructed (e.g. couldn't find a constructor).</span>
+<span class="source-line-no">144</span><span id="line-144">    */</span>
+<span class="source-line-no">145</span><span id="line-145">   public T construct(String name, Object value) {</span>
 <span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">      if (name == null)</span>
-<span class="source-line-no">148</span><span id="line-148">         name = schema.getName();</span>
+<span class="source-line-no">147</span><span id="line-147">      if (constructor == null)</span>
+<span class="source-line-no">148</span><span id="line-148">         throw uoex("Constructor for type %s could not be found.", cn(type));</span>
 <span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">      var pt = constructor.getParameterTypes();</span>
-<span class="source-line-no">151</span><span id="line-151">      var args = new Object[pt.length];</span>
-<span class="source-line-no">152</span><span id="line-152">      if (pt.length == 1) {</span>
-<span class="source-line-no">153</span><span id="line-153">         args[0] = pt[0] == String.class ? s(value) : value;</span>
-<span class="source-line-no">154</span><span id="line-154">      } else {</span>
-<span class="source-line-no">155</span><span id="line-155">         if (name == null)</span>
-<span class="source-line-no">156</span><span id="line-156">            throw uoex("Constructor for type {0} requires a name as the first argument.", cn(type));</span>
-<span class="source-line-no">157</span><span id="line-157">         args[0] = name;</span>
-<span class="source-line-no">158</span><span id="line-158">         args[1] = pt[1] == String.class ? s(value) : value;</span>
-<span class="source-line-no">159</span><span id="line-159">      }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">      try {</span>
-<span class="source-line-no">162</span><span id="line-162">         return constructor.newInstance(args);</span>
-<span class="source-line-no">163</span><span id="line-163">      } catch (Exception e) {</span>
-<span class="source-line-no">164</span><span id="line-164">         throw toRex(e);</span>
-<span class="source-line-no">165</span><span id="line-165">      }</span>
-<span class="source-line-no">166</span><span id="line-166">   }</span>
-<span class="source-line-no">167</span><span id="line-167"></span>
-<span class="source-line-no">168</span><span id="line-168">   /**</span>
-<span class="source-line-no">169</span><span id="line-169">    * Returns schema information about this part.</span>
-<span class="source-line-no">170</span><span id="line-170">    *</span>
-<span class="source-line-no">171</span><span id="line-171">    * &lt;p&gt;</span>
-<span class="source-line-no">172</span><span id="line-172">    * This is information pulled from {@link Query @Query}, {@link FormData @FormData}, or {@link Path @Path} annotations</span>
-<span class="source-line-no">173</span><span id="line-173">    * on the class.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * @return The schema information.</span>
-<span class="source-line-no">176</span><span id="line-176">    */</span>
-<span class="source-line-no">177</span><span id="line-177">   public HttpPartSchema getSchema() { return schema; }</span>
-<span class="source-line-no">178</span><span id="line-178">}</span>
+<span class="source-line-no">150</span><span id="line-150">      if (name == null)</span>
+<span class="source-line-no">151</span><span id="line-151">         name = schema.getName();</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">      var pt = constructor.getParameterTypes();</span>
+<span class="source-line-no">154</span><span id="line-154">      var args = new Object[pt.length];</span>
+<span class="source-line-no">155</span><span id="line-155">      if (pt.length == 1) {</span>
+<span class="source-line-no">156</span><span id="line-156">         args[0] = pt[0] == String.class ? s(value) : value;</span>
+<span class="source-line-no">157</span><span id="line-157">      } else {</span>
+<span class="source-line-no">158</span><span id="line-158">         if (name == null)</span>
+<span class="source-line-no">159</span><span id="line-159">            throw uoex("Constructor for type %s requires a name as the first argument.", cn(type));</span>
+<span class="source-line-no">160</span><span id="line-160">         args[0] = name;</span>
+<span class="source-line-no">161</span><span id="line-161">         args[1] = pt[1] == String.class ? s(value) : value;</span>
+<span class="source-line-no">162</span><span id="line-162">      }</span>
+<span class="source-line-no">163</span><span id="line-163"></span>
+<span class="source-line-no">164</span><span id="line-164">      try {</span>
+<span class="source-line-no">165</span><span id="line-165">         return constructor.newInstance(args);</span>
+<span class="source-line-no">166</span><span id="line-166">      } catch (Exception e) {</span>
+<span class="source-line-no">167</span><span id="line-167">         throw toRex(e);</span>
+<span class="source-line-no">168</span><span id="line-168">      }</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   /**</span>
+<span class="source-line-no">172</span><span id="line-172">    * Returns schema information about this part.</span>
+<span class="source-line-no">173</span><span id="line-173">    *</span>
+<span class="source-line-no">174</span><span id="line-174">    * &lt;p&gt;</span>
+<span class="source-line-no">175</span><span id="line-175">    * This is information pulled from {@link Query @Query}, {@link FormData @FormData}, or {@link Path @Path} annotations</span>
+<span class="source-line-no">176</span><span id="line-176">    * on the class.</span>
+<span class="source-line-no">177</span><span id="line-177">    *</span>
+<span class="source-line-no">178</span><span id="line-178">    * @return The schema information.</span>
+<span class="source-line-no">179</span><span id="line-179">    */</span>
+<span class="source-line-no">180</span><span id="line-180">   public HttpPartSchema getSchema() { return schema; }</span>
+<span class="source-line-no">181</span><span id="line-181">}</span>
 
 
 

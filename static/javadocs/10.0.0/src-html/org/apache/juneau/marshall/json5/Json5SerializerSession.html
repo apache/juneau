@@ -99,9 +99,9 @@
 <span class="source-line-no">086</span><span id="line-86">   protected boolean isSimpleAttrs() { return true; }</span>
 <span class="source-line-no">087</span><span id="line-87"></span>
 <span class="source-line-no">088</span><span id="line-88">   @Override</span>
-<span class="source-line-no">089</span><span id="line-89">   protected JsonWriter getJsonWriter(SerializerPipe out) {</span>
+<span class="source-line-no">089</span><span id="line-89">   protected JsonWriter&lt;?&gt; getJsonWriter(SerializerPipe out) {</span>
 <span class="source-line-no">090</span><span id="line-90">      var output = out.getRawOutput();</span>
-<span class="source-line-no">091</span><span id="line-91">      if (output instanceof JsonWriter output2)</span>
+<span class="source-line-no">091</span><span id="line-91">      if (output instanceof JsonWriter&lt;?&gt; output2)</span>
 <span class="source-line-no">092</span><span id="line-92">         return output2;</span>
 <span class="source-line-no">093</span><span id="line-93">      var w = JsonWriter.create(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), true, isTrimStrings(), getUriResolver());</span>
 <span class="source-line-no">094</span><span id="line-94">      out.setWriter(w);</span>

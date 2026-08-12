@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85">   public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling, int maxRecursionDepth, boolean nativeLogicalTypes) {</span>
 <span class="source-line-no">086</span><span id="line-86">      this.marshallingContext = marshallingContext;</span>
 <span class="source-line-no">087</span><span id="line-87">      this.writeDatesAsTimestamp = writeDatesAsTimestamp;</span>
-<span class="source-line-no">088</span><span id="line-88">      this.cycleHandling = cycleHandling != null ? cycleHandling : ParquetCycleHandling.NULL;</span>
+<span class="source-line-no">088</span><span id="line-88">      this.cycleHandling = or(cycleHandling, ParquetCycleHandling.NULL);</span>
 <span class="source-line-no">089</span><span id="line-89">      this.maxRecursionDepth = Math.max(1, maxRecursionDepth);</span>
 <span class="source-line-no">090</span><span id="line-90">      this.nativeLogicalTypes = nativeLogicalTypes;</span>
 <span class="source-line-no">091</span><span id="line-91">   }</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109">    */</span>
 <span class="source-line-no">110</span><span id="line-110">   public List&lt;ParquetSchemaElement&gt; buildSchema(ClassMeta&lt;?&gt; cm, Object sampleBean) {</span>
 <span class="source-line-no">111</span><span id="line-111">      var elements = new ArrayList&lt;ParquetSchemaElement&gt;();</span>
-<span class="source-line-no">112</span><span id="line-112">      var typesInProgress = new HashMap&lt;Class&lt;?&gt;, Integer&gt;();</span>
+<span class="source-line-no">112</span><span id="line-112">      var typesInProgress = new HashMap&lt;Class&lt;?&gt;,Integer&gt;();</span>
 <span class="source-line-no">113</span><span id="line-113">      addSchemaElements(elements, cm, "root", null, true, sampleBean, typesInProgress);</span>
 <span class="source-line-no">114</span><span id="line-114">      return elements;</span>
 <span class="source-line-no">115</span><span id="line-115">   }</span>
@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120">    * @param map The map instance (keys become column names).</span>
 <span class="source-line-no">121</span><span id="line-121">    * @return The depth-first list of schema elements (root first).</span>
 <span class="source-line-no">122</span><span id="line-122">    */</span>
-<span class="source-line-no">123</span><span id="line-123">   public List&lt;ParquetSchemaElement&gt; buildSchemaFromMap(Map&lt;?, ?&gt; map) {</span>
+<span class="source-line-no">123</span><span id="line-123">   public List&lt;ParquetSchemaElement&gt; buildSchemaFromMap(Map&lt;?,?&gt; map) {</span>
 <span class="source-line-no">124</span><span id="line-124">      var elements = new ArrayList&lt;ParquetSchemaElement&gt;();</span>
 <span class="source-line-no">125</span><span id="line-125">      var keys = map.keySet().stream()</span>
 <span class="source-line-no">126</span><span id="line-126">         .filter(String.class::isInstance)</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">         null,</span>
 <span class="source-line-no">139</span><span id="line-139">         null,</span>
 <span class="source-line-no">140</span><span id="line-140">         null));</span>
-<span class="source-line-no">141</span><span id="line-141">      var typesInProgress = new HashMap&lt;Class&lt;?&gt;, Integer&gt;();</span>
+<span class="source-line-no">141</span><span id="line-141">      var typesInProgress = new HashMap&lt;Class&lt;?&gt;,Integer&gt;();</span>
 <span class="source-line-no">142</span><span id="line-142">      for (var key : keys) {</span>
 <span class="source-line-no">143</span><span id="line-143">         var val = map.get(key);</span>
 <span class="source-line-no">144</span><span id="line-144">         var cm = marshallingContext.getClassMeta(val != null ? val.getClass() : Object.class);</span>
@@ -172,7 +172,7 @@
 <span class="source-line-no">159</span><span id="line-159">    */</span>
 <span class="source-line-no">160</span><span id="line-160">   public List&lt;ParquetSchemaElement&gt; buildSchemaForKeyValuePairs(Object keySample, Object valueSample) {</span>
 <span class="source-line-no">161</span><span id="line-161">      var elements = new ArrayList&lt;ParquetSchemaElement&gt;();</span>
-<span class="source-line-no">162</span><span id="line-162">      var typesInProgress = new HashMap&lt;Class&lt;?&gt;, Integer&gt;();</span>
+<span class="source-line-no">162</span><span id="line-162">      var typesInProgress = new HashMap&lt;Class&lt;?&gt;,Integer&gt;();</span>
 <span class="source-line-no">163</span><span id="line-163">      var keyCm = marshallingContext.getClassMeta(keySample != null ? keySample.getClass() : Object.class);</span>
 <span class="source-line-no">164</span><span id="line-164">      var valueCm = marshallingContext.getClassMeta(valueSample != null ? valueSample.getClass() : Object.class);</span>
 <span class="source-line-no">165</span><span id="line-165">      elements.add(new ParquetSchemaElement("root", null, null, null, 2, null, null, null, null, null));</span>
@@ -181,7 +181,7 @@
 <span class="source-line-no">168</span><span id="line-168">      return elements;</span>
 <span class="source-line-no">169</span><span id="line-169">   }</span>
 <span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">   private void addSchemaElements(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;, Integer&gt; typesInProgress) {</span>
+<span class="source-line-no">171</span><span id="line-171">   private void addSchemaElements(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;,Integer&gt; typesInProgress) {</span>
 <span class="source-line-no">172</span><span id="line-172">      if (cm.isOptional()) {</span>
 <span class="source-line-no">173</span><span id="line-173">         addOptionalSchema(elements, cm, name, parentPath, isRoot, sampleBean, typesInProgress);</span>
 <span class="source-line-no">174</span><span id="line-174">      } else if (cm.isBean()) {</span>
@@ -201,11 +201,11 @@
 <span class="source-line-no">188</span><span id="line-188">   @SuppressWarnings({</span>
 <span class="source-line-no">189</span><span id="line-189">      "java:S3776" // Cognitive Complexity: optional/value dispatch is inherently branchy</span>
 <span class="source-line-no">190</span><span id="line-190">   })</span>
-<span class="source-line-no">191</span><span id="line-191">   private void addOptionalSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;, Integer&gt; typesInProgress) {</span>
+<span class="source-line-no">191</span><span id="line-191">   private void addOptionalSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;,Integer&gt; typesInProgress) {</span>
 <span class="source-line-no">192</span><span id="line-192">      var et = cm.getElementType();</span>
 <span class="source-line-no">193</span><span id="line-193">      if (et == null) // HTT: ClassMeta always resolves Optional's type parameter to Object at minimum</span>
 <span class="source-line-no">194</span><span id="line-194">         et = marshallingContext.getClassMeta(Object.class);</span>
-<span class="source-line-no">195</span><span id="line-195">      Object innerSample = sampleBean instanceof Optional&lt;?&gt; o ? o.orElse(null) : sampleBean;</span>
+<span class="source-line-no">195</span><span id="line-195">      Object innerSample = sampleBean instanceof Optional&lt;?&gt; sampleBean2 ? sampleBean2.orElse(null) : sampleBean;</span>
 <span class="source-line-no">196</span><span id="line-196">      var optPath = parentPath != null ? parentPath + "." + name : name;</span>
 <span class="source-line-no">197</span><span id="line-197">      elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, null, null, null, null, optPath));</span>
 <span class="source-line-no">198</span><span id="line-198">      addSchemaElements(elements, et, "value", optPath, false, innerSample, typesInProgress);</span>
@@ -214,10 +214,10 @@
 <span class="source-line-no">201</span><span id="line-201">   @SuppressWarnings({</span>
 <span class="source-line-no">202</span><span id="line-202">      "java:S3776" // Cognitive Complexity: bean/cycle/property dispatch is inherently branchy</span>
 <span class="source-line-no">203</span><span id="line-203">   })</span>
-<span class="source-line-no">204</span><span id="line-204">   private void addBeanSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;, Integer&gt; typesInProgress) {</span>
+<span class="source-line-no">204</span><span id="line-204">   private void addBeanSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;,Integer&gt; typesInProgress) {</span>
 <span class="source-line-no">205</span><span id="line-205">      var bm = cm.getBeanMeta();</span>
 <span class="source-line-no">206</span><span id="line-206">      if (bm == null) // HTT: addBeanSchema is only called after isBean() check; getBeanMeta() is non-null</span>
-<span class="source-line-no">207</span><span id="line-207">         throw iaex("Class ''{0}'' is not a bean", cm.getName());</span>
+<span class="source-line-no">207</span><span id="line-207">         throw iaex("Class '%s' is not a bean", cm.getName());</span>
 <span class="source-line-no">208</span><span id="line-208">      var beanClass = cm.inner();</span>
 <span class="source-line-no">209</span><span id="line-209">      // Recursion reached here indirectly (e.g. through Optional/collection of the same type) at the depth</span>
 <span class="source-line-no">210</span><span id="line-210">      // limit: keep the legacy String back-reference placeholder so the enclosing group's child count stays</span>
@@ -226,7 +226,7 @@
 <span class="source-line-no">213</span><span id="line-213">      if (typesInProgress.getOrDefault(beanClass, 0) &gt;= maxRecursionDepth) {</span>
 <span class="source-line-no">214</span><span id="line-214">         if (cycleHandling == ParquetCycleHandling.THROW) {</span>
 <span class="source-line-no">215</span><span id="line-215">            var path = parentPath != null ? parentPath + "." + name : name; // HTT: parentPath is always non-null when recursion limit is reached at depth ≥ 2</span>
-<span class="source-line-no">216</span><span id="line-216">            throw new SerializeException("Cyclic type reference at ''{0}'' (type ''{1}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());</span>
+<span class="source-line-no">216</span><span id="line-216">            throw new SerializeException("Cyclic type reference at '%s' (type '%s'). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());</span>
 <span class="source-line-no">217</span><span id="line-217">         }</span>
 <span class="source-line-no">218</span><span id="line-218">         addLeafSchema(elements, marshallingContext.getClassMeta(String.class), name, parentPath, isRoot);</span>
 <span class="source-line-no">219</span><span id="line-219">         return;</span>
@@ -245,8 +245,8 @@
 <span class="source-line-no">232</span><span id="line-232">         var entries = new ArrayList&lt;ResolvedProp&gt;();</span>
 <span class="source-line-no">233</span><span id="line-233">         for (var p : props) {</span>
 <span class="source-line-no">234</span><span id="line-234">            Object childSample = null;</span>
-<span class="source-line-no">235</span><span id="line-235">            if (sampleBean instanceof Map&lt;?, ?&gt; m)</span>
-<span class="source-line-no">236</span><span id="line-236">               childSample = m.get(p.getName());</span>
+<span class="source-line-no">235</span><span id="line-235">            if (sampleBean instanceof Map&lt;?,?&gt; sampleBean2)</span>
+<span class="source-line-no">236</span><span id="line-236">               childSample = sampleBean2.get(p.getName());</span>
 <span class="source-line-no">237</span><span id="line-237">            ClassMeta&lt;?&gt; propCm = (ClassMeta&lt;?&gt;) p.getBeanInfo();</span>
 <span class="source-line-no">238</span><span id="line-238">            // Native logical types (GAP-9/10): a java.time temporal property carries a swap, so its</span>
 <span class="source-line-no">239</span><span id="line-239">            // resolved ClassMeta is an Object/String surrogate that hides the concrete type.  Recover the</span>
@@ -268,7 +268,7 @@
 <span class="source-line-no">255</span><span id="line-255">               propCm = marshallingContext.getClassMeta(childSample.getClass());</span>
 <span class="source-line-no">256</span><span id="line-256">            if (propCm != null &amp;&amp; propCm.isBean() &amp;&amp; typesInProgress.getOrDefault(propCm.inner(), 0) &gt;= maxRecursionDepth) { // HTT: propCm is non-null</span>
 <span class="source-line-no">257</span><span id="line-257">               if (cycleHandling == ParquetCycleHandling.THROW)</span>
-<span class="source-line-no">258</span><span id="line-258">                  throw new SerializeException("Cyclic type reference at ''{0}.{1}'' (type ''{2}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", childParentPath, p.getName(), propCm.inner().getName());</span>
+<span class="source-line-no">258</span><span id="line-258">                  throw new SerializeException("Cyclic type reference at '%s.%s' (type '%s'). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", childParentPath, p.getName(), propCm.inner().getName());</span>
 <span class="source-line-no">259</span><span id="line-259">               continue;</span>
 <span class="source-line-no">260</span><span id="line-260">            }</span>
 <span class="source-line-no">261</span><span id="line-261">            entries.add(new ResolvedProp(p.getName(), propCm, childSample));</span>
@@ -322,10 +322,10 @@
 <span class="source-line-no">309</span><span id="line-309">      return f != null &amp;&amp; ap.has(ParentProperty.class, f);</span>
 <span class="source-line-no">310</span><span id="line-310">   }</span>
 <span class="source-line-no">311</span><span id="line-311"></span>
-<span class="source-line-no">312</span><span id="line-312">   private void addListSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;, Integer&gt; typesInProgress) {</span>
+<span class="source-line-no">312</span><span id="line-312">   private void addListSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map&lt;Class&lt;?&gt;,Integer&gt; typesInProgress) {</span>
 <span class="source-line-no">313</span><span id="line-313">      var et = cm.getElementType();</span>
 <span class="source-line-no">314</span><span id="line-314">      if (et == null) // HTT: ClassMeta always provides an element type (at least Object) for list types</span>
-<span class="source-line-no">315</span><span id="line-315">         throw iaex("List element type cannot be determined for ''{0}''", cm.getName());</span>
+<span class="source-line-no">315</span><span id="line-315">         throw iaex("List element type cannot be determined for '%s'", cm.getName());</span>
 <span class="source-line-no">316</span><span id="line-316">      // Resolve element type from sample when generics are erased (et is Object) for proper list-of-bean</span>
 <span class="source-line-no">317</span><span id="line-317">      // expansion into leaf columns (e.g. members.list.element.name, members.list.element.age)</span>
 <span class="source-line-no">318</span><span id="line-318">      var sampleCollection = extractSampleCollection(sampleBean);</span>
@@ -344,12 +344,12 @@
 <span class="source-line-no">331</span><span id="line-331">   }</span>
 <span class="source-line-no">332</span><span id="line-332"></span>
 <span class="source-line-no">333</span><span id="line-333">   private static Collection&lt;?&gt; extractSampleCollection(Object sampleBean) {</span>
-<span class="source-line-no">334</span><span id="line-334">      if (sampleBean instanceof Collection&lt;?&gt; c)</span>
-<span class="source-line-no">335</span><span id="line-335">         return c;</span>
+<span class="source-line-no">334</span><span id="line-334">      if (sampleBean instanceof Collection&lt;?&gt; sampleBean2)</span>
+<span class="source-line-no">335</span><span id="line-335">         return sampleBean2;</span>
 <span class="source-line-no">336</span><span id="line-336">      return Collections.emptyList();</span>
 <span class="source-line-no">337</span><span id="line-337">   }</span>
 <span class="source-line-no">338</span><span id="line-338"></span>
-<span class="source-line-no">339</span><span id="line-339">   private void addMapSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Map&lt;Class&lt;?&gt;, Integer&gt; typesInProgress) {</span>
+<span class="source-line-no">339</span><span id="line-339">   private void addMapSchema(List&lt;ParquetSchemaElement&gt; elements, ClassMeta&lt;?&gt; cm, String name, String parentPath, boolean isRoot, Map&lt;Class&lt;?&gt;,Integer&gt; typesInProgress) {</span>
 <span class="source-line-no">340</span><span id="line-340">      var vt = cm.getValueType();</span>
 <span class="source-line-no">341</span><span id="line-341">      // Parquet MAP stores keys as STRING; non-String keys (e.g. Enum) are serialized via toString/name()</span>
 <span class="source-line-no">342</span><span id="line-342">      if (vt == null) // HTT: ClassMeta always provides a value type (at least Object) for map types</span>

@@ -40,6 +40,7 @@
   "juneau-petstore-jetty": "juneau-petstore/juneau-petstore-jetty",
   "juneau-petstore-springboot": "juneau-petstore/juneau-petstore-springboot",
   "juneau-rest": "juneau-rest",
+  "juneau-rest-auth-oauth-flow": "juneau-rest/juneau-rest-auth-oauth-flow",
   "juneau-rest-client": "juneau-rest/juneau-rest-client",
   "juneau-rest-client-apache-httpclient-45": "juneau-rest/juneau-rest-client-apache-httpclient-45",
   "juneau-rest-client-apache-httpclient-50": "juneau-rest/juneau-rest-client-apache-httpclient-50",

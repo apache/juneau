@@ -263,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(java.lang.Object,java.lang.Class)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-141">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-140">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -305,8 +305,7 @@ loadScripts(document, 'script');</script>
          <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
       <li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
          <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> containing system encoded text (or charset defined by
-         <a href="../parser/ReaderParser.Builder.html#fileCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.fileCharset(Charset)</code></a> property value).
+      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> containing system encoded text.
    </ul>
    <br>Stream-based parsers can handle the following input class types:
    <ul>
@@ -328,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-220">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-218">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
                  throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
@@ -385,8 +384,7 @@ loadScripts(document, 'script');</script>
          <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
       <li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
          <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> containing system encoded text (or charset defined by
-         <a href="../parser/ReaderParser.Builder.html#fileCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.fileCharset(Charset)</code></a> property value).
+      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> containing system encoded text.
    </ul>
    <br>Stream-based parsers can handle the following input class types:
    <ul>
@@ -418,14 +416,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="write(java.lang.Object,java.lang.Object)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-248">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-246">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                  throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Serializes a POJO to the specified output stream or writer.
 
  <p>
- Equivalent to calling <c>serializer.createSession().serialize(o, output);</c></div>
+ Equivalent to calling <c>serializer.createSession().write(o, output);</c></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>object</code> - The object to serialize.</dd>
@@ -451,12 +449,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readTokens(java.lang.Object)">
 <h3>readTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-270">readTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-268">readTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level <a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input.
 
  <p>
- Shortcut for <c>((TokenReadable)getParser()).parseTokens(<jv>input</jv>)</c>.  See
+ Shortcut for <c>((TokenReadable)getParser()).readTokens(<jv>input</jv>)</c>.  See
  <a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> for the cursor contract.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -478,12 +476,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeTokens(java.lang.Object)">
 <h3>writeTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-292">writeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-290">writeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level push generator that emits structural events one at a time.
 
  <p>
- Shortcut for <c>((TokenWritable)getSerializer()).serializeTokens(<jv>output</jv>)</c>.  See
+ Shortcut for <c>((TokenWritable)getSerializer()).writeTokens(<jv>output</jv>)</c>.  See
  <a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> for the generator contract.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -505,12 +503,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readRecords(java.lang.Object)">
 <h3>readRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-313">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-311">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor that yields each top-level value as a record.
 
  <p>
- Shortcut for <c>((RecordReadable)getParser()).parseRecords(<jv>input</jv>)</c>.  See
+ Shortcut for <c>((RecordReadable)getParser()).readRecords(<jv>input</jv>)</c>.  See
  <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> for the cursor contract.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -531,12 +529,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeRecords(java.lang.Object)">
 <h3>writeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-334">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-332">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor that emits each whole value as a record.
 
  <p>
- Shortcut for <c>((RecordWritable)getSerializer()).serializeRecords(<jv>output</jv>)</c>.  See
+ Shortcut for <c>((RecordWritable)getSerializer()).writeRecords(<jv>output</jv>)</c>.  See
  <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> for the cursor contract.
 
  <h5 class='section'>Notes:</h5><ul>
@@ -557,13 +555,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readArrayRecords(java.lang.Object)">
 <h3>readArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-355">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-353">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that yields each element of a top-level wire array as a
  separate record.
 
  <p>
- Shortcut for <c>((ArrayRecordReadable)getParser()).parseArrayRecords(<jv>input</jv>)</c>.
+ Shortcut for <c>((ArrayRecordReadable)getParser()).readArrayRecords(<jv>input</jv>)</c>.
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>This capability depends on the underlying parser.  Formats whose parser
@@ -583,13 +581,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeArrayRecords(java.lang.Object)">
 <h3>writeArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-377">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/Marshaller.html#line-375">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level
  wire array.
 
  <p>
- Shortcut for <c>((ArrayRecordWritable)getSerializer()).serializeArrayRecords(<jv>output</jv>)</c>.
+ Shortcut for <c>((ArrayRecordWritable)getSerializer()).writeArrayRecords(<jv>output</jv>)</c>.
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>This capability depends on the underlying serializer.  Formats whose

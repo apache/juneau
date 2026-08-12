@@ -134,9 +134,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#copy(org.apache.juneau.rest.server.stats.ThrownStats)" class="member-name-link">copy</a><wbr>(<a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&nbsp;stats)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#copyOrNull(org.apache.juneau.rest.server.stats.ThrownStats)" class="member-name-link">copyOrNull</a><wbr>(<a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a copy of this stats object.</div>
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">create</a><wbr>(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</code></div>
@@ -223,7 +223,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -249,15 +249,15 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="copy(org.apache.juneau.rest.server.stats.ThrownStats)">
-<h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.html#line-185">copy</a></span><wbr><span class="parameters">(<a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&nbsp;stats)</span></div>
-<div class="block">Creates a copy of this stats object.</div>
+<section class="detail" id="copyOrNull(org.apache.juneau.rest.server.stats.ThrownStats)">
+<h3>copyOrNull</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.html#line-185">copyOrNull</a></span><wbr><span class="parameters">(<a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&nbsp;value)</span></div>
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>stats</code> - The stats object to copy.</dd>
+<dd><code>value</code> - The value to copy.  Can be <jk>null</jk>, in which case <jk>null</jk> is returned.</dd>
 <dt>Returns:</dt>
-<dd>A new stats instance with copied values.</dd>
+<dd>A copy of the value, or <jk>null</jk> if the value was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -290,7 +290,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the message of the first exception at a specific location in code.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The message of the first exception at a specific location in code.</dd>
+<dd>The message of the first exception at a specific location in code, or <jk>null</jk> if the exception had no message.</dd>
 </dl>
 </section>
 </li>

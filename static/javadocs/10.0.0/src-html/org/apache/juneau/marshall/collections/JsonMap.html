@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;ofString&lt;/jsm&gt;(&lt;js&gt;"{foo:'bar'},{baz:[123,true]}"&lt;/js&gt;);</span>
 <span class="source-line-no">076</span><span id="line-76"> *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;map&lt;/jv&gt;.toString();  &lt;jc&gt;// Produces "{foo:'bar'},{baz:[123,true]}"&lt;/jc&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;jv&gt;json&lt;/jv&gt; = &lt;jv&gt;map&lt;/jv&gt;.toString(JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;);  &lt;jc&gt;// Equivalent&lt;/jc&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> *    &lt;jv&gt;json&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;);  &lt;jc&gt;// Equivalent&lt;/jc&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;jv&gt;json&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;map&lt;/jv&gt;);  &lt;jc&gt;// Equivalent&lt;/jc&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;jc&gt;// Get a map entry as an Integer&lt;/jc&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> *    &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;ofString&lt;/jsm&gt;(&lt;js&gt;"{foo:123}"&lt;/js&gt;);</span>
@@ -114,13 +114,13 @@
 <span class="source-line-no">101</span><span id="line-101">      "java:S2160", // equals() / hashCode() inherited from JsonMap; map equality is element-based</span>
 <span class="source-line-no">102</span><span id="line-102">      "java:S110" // Inheritance depth is intentional in the marshalled-map hierarchy.</span>
 <span class="source-line-no">103</span><span id="line-103">   })</span>
-<span class="source-line-no">104</span><span id="line-104">   private static class UnmodifiableJsonMap extends JsonMap {</span>
+<span class="source-line-no">104</span><span id="line-104">   private static class Unmodifiable extends JsonMap {</span>
 <span class="source-line-no">105</span><span id="line-105">      private static final long serialVersionUID = 1L;</span>
 <span class="source-line-no">106</span><span id="line-106"></span>
 <span class="source-line-no">107</span><span id="line-107">      @SuppressWarnings({</span>
 <span class="source-line-no">108</span><span id="line-108">         "synthetic-access" // Access to outer class members is intentional</span>
 <span class="source-line-no">109</span><span id="line-109">      })</span>
-<span class="source-line-no">110</span><span id="line-110">      UnmodifiableJsonMap(JsonMap contents) {</span>
+<span class="source-line-no">110</span><span id="line-110">      Unmodifiable(JsonMap contents) {</span>
 <span class="source-line-no">111</span><span id="line-111">         if (nn(contents))</span>
 <span class="source-line-no">112</span><span id="line-112">            contents.forEach(super::put);</span>
 <span class="source-line-no">113</span><span id="line-113">      }</span>
@@ -131,23 +131,23 @@
 <span class="source-line-no">118</span><span id="line-118">      }</span>
 <span class="source-line-no">119</span><span id="line-119"></span>
 <span class="source-line-no">120</span><span id="line-120">      @Override</span>
-<span class="source-line-no">121</span><span id="line-121">      public Object compute(String key, BiFunction&lt;? super String, ? super Object, ?&gt; remappingFunction) {</span>
+<span class="source-line-no">121</span><span id="line-121">      public Object compute(String key, BiFunction&lt;? super String,? super Object,?&gt; remappingFunction) {</span>
 <span class="source-line-no">122</span><span id="line-122">         throw uoroex();</span>
 <span class="source-line-no">123</span><span id="line-123">      }</span>
 <span class="source-line-no">124</span><span id="line-124"></span>
 <span class="source-line-no">125</span><span id="line-125">      @Override</span>
-<span class="source-line-no">126</span><span id="line-126">      public Object computeIfAbsent(String key, Function&lt;? super String, ?&gt; mappingFunction) {</span>
+<span class="source-line-no">126</span><span id="line-126">      public Object computeIfAbsent(String key, Function&lt;? super String,?&gt; mappingFunction) {</span>
 <span class="source-line-no">127</span><span id="line-127">         throw uoroex();</span>
 <span class="source-line-no">128</span><span id="line-128">      }</span>
 <span class="source-line-no">129</span><span id="line-129"></span>
 <span class="source-line-no">130</span><span id="line-130">      @Override</span>
-<span class="source-line-no">131</span><span id="line-131">      public Object computeIfPresent(String key, BiFunction&lt;? super String, ? super Object, ?&gt; remappingFunction) {</span>
+<span class="source-line-no">131</span><span id="line-131">      public Object computeIfPresent(String key, BiFunction&lt;? super String,? super Object,?&gt; remappingFunction) {</span>
 <span class="source-line-no">132</span><span id="line-132">         throw uoroex();</span>
 <span class="source-line-no">133</span><span id="line-133">      }</span>
 <span class="source-line-no">134</span><span id="line-134"></span>
 <span class="source-line-no">135</span><span id="line-135">      @Override</span>
 <span class="source-line-no">136</span><span id="line-136">      public Set&lt;Map.Entry&lt;String,Object&gt;&gt; entrySet() {</span>
-<span class="source-line-no">137</span><span id="line-137">         return Collections.unmodifiableSet(super.entrySet());</span>
+<span class="source-line-no">137</span><span id="line-137">         return u(super.entrySet());</span>
 <span class="source-line-no">138</span><span id="line-138">      }</span>
 <span class="source-line-no">139</span><span id="line-139"></span>
 <span class="source-line-no">140</span><span id="line-140">      @Override</span>
@@ -155,11 +155,11 @@
 <span class="source-line-no">142</span><span id="line-142"></span>
 <span class="source-line-no">143</span><span id="line-143">      @Override</span>
 <span class="source-line-no">144</span><span id="line-144">      public Set&lt;String&gt; keySet() {</span>
-<span class="source-line-no">145</span><span id="line-145">         return Collections.unmodifiableSet(super.keySet());</span>
+<span class="source-line-no">145</span><span id="line-145">         return u(super.keySet());</span>
 <span class="source-line-no">146</span><span id="line-146">      }</span>
 <span class="source-line-no">147</span><span id="line-147"></span>
 <span class="source-line-no">148</span><span id="line-148">      @Override</span>
-<span class="source-line-no">149</span><span id="line-149">      public Object merge(String key, Object value, BiFunction&lt;? super Object, ? super Object, ?&gt; remappingFunction) {</span>
+<span class="source-line-no">149</span><span id="line-149">      public Object merge(String key, Object value, BiFunction&lt;? super Object,? super Object,?&gt; remappingFunction) {</span>
 <span class="source-line-no">150</span><span id="line-150">         throw uoroex();</span>
 <span class="source-line-no">151</span><span id="line-151">      }</span>
 <span class="source-line-no">152</span><span id="line-152"></span>
@@ -169,7 +169,7 @@
 <span class="source-line-no">156</span><span id="line-156">      }</span>
 <span class="source-line-no">157</span><span id="line-157"></span>
 <span class="source-line-no">158</span><span id="line-158">      @Override</span>
-<span class="source-line-no">159</span><span id="line-159">      public void putAll(Map&lt;? extends String, ?&gt; m) {</span>
+<span class="source-line-no">159</span><span id="line-159">      public void putAll(Map&lt;? extends String,?&gt; m) {</span>
 <span class="source-line-no">160</span><span id="line-160">         throw uoroex();</span>
 <span class="source-line-no">161</span><span id="line-161">      }</span>
 <span class="source-line-no">162</span><span id="line-162"></span>
@@ -199,7 +199,7 @@
 <span class="source-line-no">186</span><span id="line-186">      }</span>
 <span class="source-line-no">187</span><span id="line-187"></span>
 <span class="source-line-no">188</span><span id="line-188">      @Override</span>
-<span class="source-line-no">189</span><span id="line-189">      public void replaceAll(BiFunction&lt;? super String, ? super Object, ?&gt; function) {</span>
+<span class="source-line-no">189</span><span id="line-189">      public void replaceAll(BiFunction&lt;? super String,? super Object,?&gt; function) {</span>
 <span class="source-line-no">190</span><span id="line-190">         throw uoroex();</span>
 <span class="source-line-no">191</span><span id="line-191">      }</span>
 <span class="source-line-no">192</span><span id="line-192"></span>
@@ -286,7 +286,7 @@
 <span class="source-line-no">273</span><span id="line-273">    *</span>
 <span class="source-line-no">274</span><span id="line-274">    * @param values</span>
 <span class="source-line-no">275</span><span id="line-275">    *    The map to copy.</span>
-<span class="source-line-no">276</span><span id="line-276">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">276</span><span id="line-276">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">277</span><span id="line-277">    *    &lt;br&gt;Keys will be converted to strings using {@link Object#toString()}.</span>
 <span class="source-line-no">278</span><span id="line-278">    * @return A new map or &lt;jk&gt;null&lt;/jk&gt; if the map was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">279</span><span id="line-279">    */</span>
@@ -397,7 +397,7 @@
 <span class="source-line-no">384</span><span id="line-384">    *</span>
 <span class="source-line-no">385</span><span id="line-385">    * @param in</span>
 <span class="source-line-no">386</span><span id="line-386">    *    The input being parsed.</span>
-<span class="source-line-no">387</span><span id="line-387">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">387</span><span id="line-387">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; or empty (results in an empty map; no parsing occurs).</span>
 <span class="source-line-no">388</span><span id="line-388">    * @param p</span>
 <span class="source-line-no">389</span><span id="line-389">    *    The parser to use to parse the input.</span>
 <span class="source-line-no">390</span><span id="line-390">    *    &lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, uses {@link JsonParser}.</span>
@@ -412,7 +412,7 @@
 <span class="source-line-no">399</span><span id="line-399">    *</span>
 <span class="source-line-no">400</span><span id="line-400">    * @param in</span>
 <span class="source-line-no">401</span><span id="line-401">    *    The map to copy.</span>
-<span class="source-line-no">402</span><span id="line-402">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">402</span><span id="line-402">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (results in an empty map).</span>
 <span class="source-line-no">403</span><span id="line-403">    *    &lt;br&gt;Keys will be converted to strings using {@link Object#toString()}.</span>
 <span class="source-line-no">404</span><span id="line-404">    */</span>
 <span class="source-line-no">405</span><span id="line-405">   public JsonMap(Map&lt;?,?&gt; in) {</span>
@@ -705,7 +705,7 @@
 <span class="source-line-no">692</span><span id="line-692">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">693</span><span id="line-693">    */</span>
 <span class="source-line-no">694</span><span id="line-694">   public void putJson(String key, String json) throws ParseException {</span>
-<span class="source-line-no">695</span><span id="line-695">      this.put(key, JsonParser.DEFAULT.parse(json, Object.class));</span>
+<span class="source-line-no">695</span><span id="line-695">      this.put(key, Json.to(json, Object.class));</span>
 <span class="source-line-no">696</span><span id="line-696">   }</span>
 <span class="source-line-no">697</span><span id="line-697"></span>
 <span class="source-line-no">698</span><span id="line-698">   @Override /* Overridden from MarshalledMap */</span>
@@ -727,14 +727,14 @@
 <span class="source-line-no">714</span><span id="line-714"></span>
 <span class="source-line-no">715</span><span id="line-715">   @Override /* Overridden from MarshalledMap */</span>
 <span class="source-line-no">716</span><span id="line-716">   public JsonMap unmodifiable() {</span>
-<span class="source-line-no">717</span><span id="line-717">      if (this instanceof UnmodifiableJsonMap this2)</span>
+<span class="source-line-no">717</span><span id="line-717">      if (this instanceof Unmodifiable this2)</span>
 <span class="source-line-no">718</span><span id="line-718">         return this2;</span>
-<span class="source-line-no">719</span><span id="line-719">      return new UnmodifiableJsonMap(this);</span>
+<span class="source-line-no">719</span><span id="line-719">      return new Unmodifiable(this);</span>
 <span class="source-line-no">720</span><span id="line-720">   }</span>
 <span class="source-line-no">721</span><span id="line-721"></span>
 <span class="source-line-no">722</span><span id="line-722">   /**</span>
 <span class="source-line-no">723</span><span id="line-723">    * Convenience method for serializing this map to the specified &lt;c&gt;Writer&lt;/c&gt; using the</span>
-<span class="source-line-no">724</span><span id="line-724">    * {@link JsonSerializer#DEFAULT} serializer.</span>
+<span class="source-line-no">724</span><span id="line-724">    * {@link Json#DEFAULT} marshaller.</span>
 <span class="source-line-no">725</span><span id="line-725">    *</span>
 <span class="source-line-no">726</span><span id="line-726">    * @param w The writer to serialize this object to.</span>
 <span class="source-line-no">727</span><span id="line-727">    * @return This object.</span>
@@ -742,7 +742,7 @@
 <span class="source-line-no">729</span><span id="line-729">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">730</span><span id="line-730">    */</span>
 <span class="source-line-no">731</span><span id="line-731">   public JsonMap writeTo(Writer w) throws IOException, SerializeException {</span>
-<span class="source-line-no">732</span><span id="line-732">      JsonSerializer.DEFAULT.serialize(this, w);</span>
+<span class="source-line-no">732</span><span id="line-732">      Json.DEFAULT.write(this, w);</span>
 <span class="source-line-no">733</span><span id="line-733">      return this;</span>
 <span class="source-line-no">734</span><span id="line-734">   }</span>
 <span class="source-line-no">735</span><span id="line-735">}</span>

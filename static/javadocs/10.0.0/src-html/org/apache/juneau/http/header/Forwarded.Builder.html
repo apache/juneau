@@ -142,14 +142,14 @@
 <span class="source-line-no">129</span><span id="line-129">    */</span>
 <span class="source-line-no">130</span><span id="line-130">   public static class Builder {</span>
 <span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">      private final List&lt;Map&lt;String,String&gt;&gt; elements = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">132</span><span id="line-132">      private final List&lt;Map&lt;String,String&gt;&gt; elements = l();</span>
 <span class="source-line-no">133</span><span id="line-133">      private Map&lt;String,String&gt; current;</span>
 <span class="source-line-no">134</span><span id="line-134"></span>
 <span class="source-line-no">135</span><span id="line-135">      /**</span>
 <span class="source-line-no">136</span><span id="line-136">       * Constructor.</span>
 <span class="source-line-no">137</span><span id="line-137">       */</span>
 <span class="source-line-no">138</span><span id="line-138">      public Builder() {</span>
-<span class="source-line-no">139</span><span id="line-139">         current = new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">139</span><span id="line-139">         current = m();</span>
 <span class="source-line-no">140</span><span id="line-140">         elements.add(current);</span>
 <span class="source-line-no">141</span><span id="line-141">      }</span>
 <span class="source-line-no">142</span><span id="line-142"></span>
@@ -221,7 +221,7 @@
 <span class="source-line-no">208</span><span id="line-208">       * @return This object.</span>
 <span class="source-line-no">209</span><span id="line-209">       */</span>
 <span class="source-line-no">210</span><span id="line-210">      public Builder next() {</span>
-<span class="source-line-no">211</span><span id="line-211">         current = new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">211</span><span id="line-211">         current = m();</span>
 <span class="source-line-no">212</span><span id="line-212">         elements.add(current);</span>
 <span class="source-line-no">213</span><span id="line-213">         return this;</span>
 <span class="source-line-no">214</span><span id="line-214">      }</span>

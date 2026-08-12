@@ -232,7 +232,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 </dl>
 </section>
 </li>
@@ -245,7 +245,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The header value.
    <br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Must not be <jk>null</jk> (a <jk>null</jk> argument throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
 </dl>
 </section>
 </li>
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The supplier of the header value.
    <br>Supplier must supply either <a href="../../header/EntityTag.html" title="class in org.apache.juneau.http.header"><code>EntityTag</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link"><code>ZonedDateTime</code></a> objects.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 </dl>
 </section>
 </li>
@@ -273,7 +273,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The header value.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> to create a header with no value.</dd>
 </dl>
 </section>
 </li>

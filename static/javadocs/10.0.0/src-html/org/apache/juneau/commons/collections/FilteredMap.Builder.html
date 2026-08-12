@@ -233,7 +233,7 @@
 <span class="source-line-no">220</span><span id="line-220">       *    &lt;jv&gt;map&lt;/jv&gt;.add(123, 5);  &lt;jc&gt;// Key will be converted from Integer to String&lt;/jc&gt;</span>
 <span class="source-line-no">221</span><span id="line-221">       * &lt;/p&gt;</span>
 <span class="source-line-no">222</span><span id="line-222">       *</span>
-<span class="source-line-no">223</span><span id="line-223">       * @param value The key conversion function. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">223</span><span id="line-223">       * @param value The key conversion function. Can be &lt;jk&gt;null&lt;/jk&gt; (keys are then used as-is without conversion).</span>
 <span class="source-line-no">224</span><span id="line-224">       * @return This object for method chaining.</span>
 <span class="source-line-no">225</span><span id="line-225">       */</span>
 <span class="source-line-no">226</span><span id="line-226">      public Builder&lt;K,V&gt; keyFunction(Function&lt;Object,K&gt; value) {</span>
@@ -260,7 +260,7 @@
 <span class="source-line-no">247</span><span id="line-247">       *    &lt;jv&gt;map&lt;/jv&gt;.add(&lt;js&gt;"key"&lt;/js&gt;, &lt;js&gt;"123"&lt;/js&gt;);  &lt;jc&gt;// Value will be converted from String to Integer&lt;/jc&gt;</span>
 <span class="source-line-no">248</span><span id="line-248">       * &lt;/p&gt;</span>
 <span class="source-line-no">249</span><span id="line-249">       *</span>
-<span class="source-line-no">250</span><span id="line-250">       * @param value The value conversion function. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">250</span><span id="line-250">       * @param value The value conversion function. Can be &lt;jk&gt;null&lt;/jk&gt; (values are then used as-is without conversion).</span>
 <span class="source-line-no">251</span><span id="line-251">       * @return This object for method chaining.</span>
 <span class="source-line-no">252</span><span id="line-252">       */</span>
 <span class="source-line-no">253</span><span id="line-253">      public Builder&lt;K,V&gt; valueFunction(Function&lt;Object,V&gt; value) {</span>
@@ -286,8 +286,8 @@
 <span class="source-line-no">273</span><span id="line-273">       *       .build();</span>
 <span class="source-line-no">274</span><span id="line-274">       * &lt;/p&gt;</span>
 <span class="source-line-no">275</span><span id="line-275">       *</span>
-<span class="source-line-no">276</span><span id="line-276">       * @param keyFunction The key conversion function. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">277</span><span id="line-277">       * @param valueFunction The value conversion function. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">276</span><span id="line-276">       * @param keyFunction The key conversion function. Can be &lt;jk&gt;null&lt;/jk&gt; (keys are then used as-is without conversion).</span>
+<span class="source-line-no">277</span><span id="line-277">       * @param valueFunction The value conversion function. Can be &lt;jk&gt;null&lt;/jk&gt; (values are then used as-is without conversion).</span>
 <span class="source-line-no">278</span><span id="line-278">       * @return This object for method chaining.</span>
 <span class="source-line-no">279</span><span id="line-279">       */</span>
 <span class="source-line-no">280</span><span id="line-280">      public Builder&lt;K,V&gt; functions(Function&lt;Object,K&gt; keyFunction, Function&lt;Object,V&gt; valueFunction) {</span>
@@ -414,7 +414,7 @@
 <span class="source-line-no">401</span><span id="line-401">   }</span>
 <span class="source-line-no">402</span><span id="line-402"></span>
 <span class="source-line-no">403</span><span id="line-403">   @Override</span>
-<span class="source-line-no">404</span><span id="line-404">   public void putAll(Map&lt;? extends K, ? extends V&gt; m) {</span>
+<span class="source-line-no">404</span><span id="line-404">   public void putAll(Map&lt;? extends K,? extends V&gt; m) {</span>
 <span class="source-line-no">405</span><span id="line-405">      for (var entry : m.entrySet()) {</span>
 <span class="source-line-no">406</span><span id="line-406">         if (filter.test(entry.getKey(), entry.getValue()))</span>
 <span class="source-line-no">407</span><span id="line-407">            map.put(entry.getKey(), entry.getValue());</span>
@@ -638,8 +638,8 @@
 <span class="source-line-no">625</span><span id="line-625">   public FilteredMap&lt;K,V&gt; addAny(Object...values) {</span>
 <span class="source-line-no">626</span><span id="line-626">      if (values != null) {</span>
 <span class="source-line-no">627</span><span id="line-627">         for (var o : values) {</span>
-<span class="source-line-no">628</span><span id="line-628">            if (o != null &amp;&amp; o instanceof Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">629</span><span id="line-629">               addAll(m);</span>
+<span class="source-line-no">628</span><span id="line-628">            if (o != null &amp;&amp; o instanceof Map&lt;?,?&gt; o2) {</span>
+<span class="source-line-no">629</span><span id="line-629">               addAll(o2);</span>
 <span class="source-line-no">630</span><span id="line-630">            }</span>
 <span class="source-line-no">631</span><span id="line-631">         }</span>
 <span class="source-line-no">632</span><span id="line-632">      }</span>
@@ -685,12 +685,12 @@
 <span class="source-line-no">672</span><span id="line-672">      if (key == null) {</span>
 <span class="source-line-no">673</span><span id="line-673">         // Allow null for non-primitive types</span>
 <span class="source-line-no">674</span><span id="line-674">         if (keyType.isPrimitive())</span>
-<span class="source-line-no">675</span><span id="line-675">            throw rex("Cannot set null key for primitive type {0}", keyType.getName());</span>
+<span class="source-line-no">675</span><span id="line-675">            throw rex("Cannot set null key for primitive type %s", keyType.getName());</span>
 <span class="source-line-no">676</span><span id="line-676">         return null;</span>
 <span class="source-line-no">677</span><span id="line-677">      }</span>
 <span class="source-line-no">678</span><span id="line-678">      if (keyType.isInstance(key))</span>
 <span class="source-line-no">679</span><span id="line-679">         return keyType.cast(key);</span>
-<span class="source-line-no">680</span><span id="line-680">      throw rex("Object of type {0} could not be converted to key type {1}", cn(key), cn(keyType));</span>
+<span class="source-line-no">680</span><span id="line-680">      throw rex("Object of type %s could not be converted to key type %s", cn(key), cn(keyType));</span>
 <span class="source-line-no">681</span><span id="line-681">   }</span>
 <span class="source-line-no">682</span><span id="line-682"></span>
 <span class="source-line-no">683</span><span id="line-683">   private V convertValue(Object value) {</span>
@@ -700,12 +700,12 @@
 <span class="source-line-no">687</span><span id="line-687">      if (value == null) {</span>
 <span class="source-line-no">688</span><span id="line-688">         // Allow null for non-primitive types</span>
 <span class="source-line-no">689</span><span id="line-689">         if (valueType.isPrimitive())</span>
-<span class="source-line-no">690</span><span id="line-690">            throw rex("Cannot set null value for primitive type {0}", valueType.getName());</span>
+<span class="source-line-no">690</span><span id="line-690">            throw rex("Cannot set null value for primitive type %s", valueType.getName());</span>
 <span class="source-line-no">691</span><span id="line-691">         return null;</span>
 <span class="source-line-no">692</span><span id="line-692">      }</span>
 <span class="source-line-no">693</span><span id="line-693">      if (valueType.isInstance(value))</span>
 <span class="source-line-no">694</span><span id="line-694">         return valueType.cast(value);</span>
-<span class="source-line-no">695</span><span id="line-695">      throw rex("Object of type {0} could not be converted to value type {1}", cn(value), cn(valueType));</span>
+<span class="source-line-no">695</span><span id="line-695">      throw rex("Object of type %s could not be converted to value type %s", cn(value), cn(valueType));</span>
 <span class="source-line-no">696</span><span id="line-696">   }</span>
 <span class="source-line-no">697</span><span id="line-697"></span>
 <span class="source-line-no">698</span><span id="line-698">   @Override</span>

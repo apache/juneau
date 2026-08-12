@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the description property on this annotation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk>, in which case an empty array is used.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -232,7 +232,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the <a href="Bean.html#methodScope()"><code>Bean.methodScope()</code></a> property on this annotation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk>, in which case an empty array is used.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -245,7 +245,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the <a href="Bean.html#name()"><code>Bean.name()</code></a> property on this annotation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk>, in which case an empty string is used.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -258,7 +258,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the <a href="Bean.html#value()"><code>Bean.value()</code></a> property on this annotation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this property.</dd>
+<dd><code>value</code> - The new value for this property.  Can be <jk>null</jk>, in which case an empty string is used.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="../AppliedAnnotationObject.Builder.html#on(java.lang.String...)">on</a></code>&nbsp;in class&nbsp;<code><a href="../AppliedAnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AppliedAnnotationObject.Builder</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The targets this annotation applies to.</dd>
+<dd><code>value</code> - The targets this annotation applies to.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -290,7 +290,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="../AppliedAnnotationObject.BuilderM.html#on(java.lang.reflect.Method...)">on</a></code>&nbsp;in class&nbsp;<code><a href="../AppliedAnnotationObject.BuilderM.html" title="class in org.apache.juneau.commons">AppliedAnnotationObject.BuilderM</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The values to append.</dd>
+<dd><code>value</code> - The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -306,7 +306,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="../AppliedAnnotationObject.BuilderM.html#on(org.apache.juneau.commons.reflect.MethodInfo...)">on</a></code>&nbsp;in class&nbsp;<code><a href="../AppliedAnnotationObject.BuilderM.html" title="class in org.apache.juneau.commons">AppliedAnnotationObject.BuilderM</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The values to append.</dd>
+<dd><code>value</code> - The values to append.  Cannot be <jk>null</jk> or contain <jk>null</jk> elements.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

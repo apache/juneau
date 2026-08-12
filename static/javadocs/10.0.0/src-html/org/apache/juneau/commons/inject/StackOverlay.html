@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">    * The frame becomes the highest-priority lookup target for subsequent {@link #getBean(Class)} /</span>
 <span class="source-line-no">084</span><span id="line-84">    * {@link #getBeanSupplier(Class)} calls until it is popped.</span>
 <span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * @param overlay The bean store to push.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">086</span><span id="line-86">    * @param overlay The bean store to push.  Must not be &lt;jk&gt;null&lt;/jk&gt; or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">087</span><span id="line-87">    * @return This object.</span>
 <span class="source-line-no">088</span><span id="line-88">    */</span>
 <span class="source-line-no">089</span><span id="line-89">   public StackOverlay push(BeanStore overlay) {</span>
@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">      // Walk the stack bottom-to-top so that higher (later-pushed) frames overwrite lower frames</span>
 <span class="source-line-no">144</span><span id="line-144">      // for entries with the same name.  Iterating an iterator gives top-to-bottom; we reverse</span>
 <span class="source-line-no">145</span><span id="line-145">      // that here by snapshotting and walking the reversed iterator.</span>
-<span class="source-line-no">146</span><span id="line-146">      Map&lt;String,T&gt; result = new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">146</span><span id="line-146">      Map&lt;String,T&gt; result = m();</span>
 <span class="source-line-no">147</span><span id="line-147">      var snapshot = new ArrayList&lt;&gt;(frames);</span>
 <span class="source-line-no">148</span><span id="line-148">      for (var i = snapshot.size() - 1; i &gt;= 0; i--)</span>
 <span class="source-line-no">149</span><span id="line-149">         snapshot.get(i).getBeansOfType(beanType).forEach(result::put);</span>

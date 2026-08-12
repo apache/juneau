@@ -288,7 +288,7 @@
 <span class="source-line-no">275</span><span id="line-275">      } catch (IOException | BasicHttpException ex) {</span>
 <span class="source-line-no">276</span><span id="line-276">         throw ex;</span>
 <span class="source-line-no">277</span><span id="line-277">      } catch (TemplateException | RuntimeException ex) {</span>
-<span class="source-line-no">278</span><span id="line-278">         throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", safeTemplate);</span>
+<span class="source-line-no">278</span><span id="line-278">         throw new InternalServerError(ex, "FreeMarker render failed for '%s'", safeTemplate);</span>
 <span class="source-line-no">279</span><span id="line-279">      }</span>
 <span class="source-line-no">280</span><span id="line-280">   }</span>
 <span class="source-line-no">281</span><span id="line-281"></span>
@@ -316,7 +316,7 @@
 <span class="source-line-no">303</span><span id="line-303">         bp = "/" + bp;</span>
 <span class="source-line-no">304</span><span id="line-304">      if (resolved.startsWith(bp))</span>
 <span class="source-line-no">305</span><span id="line-305">         return resolved.substring(bp.length());</span>
-<span class="source-line-no">306</span><span id="line-306">      throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
+<span class="source-line-no">306</span><span id="line-306">      throw iaex("Resolved path '%s' does not start with base '%s'", resolved, bp);</span>
 <span class="source-line-no">307</span><span id="line-307">   }</span>
 <span class="source-line-no">308</span><span id="line-308"></span>
 <span class="source-line-no">309</span><span id="line-309">   /**</span>

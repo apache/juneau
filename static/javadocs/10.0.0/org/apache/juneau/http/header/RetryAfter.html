@@ -322,9 +322,9 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RetryAfter.html" title="class in org.apache.juneau.http.header">RetryAfter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/RetryAfter.html#line-157">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - Delay seconds. May be <jk>null</jk>.</dd>
+<dd><code>value</code> - Delay seconds. May be <jk>null</jk>, in which case <jk>null</jk> is returned.</dd>
 <dt>Returns:</dt>
-<dd>A new instance or <jk>null</jk>.</dd>
+<dd>A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -334,9 +334,9 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RetryAfter.html" title="class in org.apache.juneau.http.header">RetryAfter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/RetryAfter.html#line-165">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - Wire string. May be <jk>null</jk>.</dd>
+<dd><code>value</code> - Wire string. May be <jk>null</jk>, in which case <jk>null</jk> is returned.</dd>
 <dt>Returns:</dt>
-<dd>A new instance or <jk>null</jk>.</dd>
+<dd>A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -358,9 +358,9 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RetryAfter.html" title="class in org.apache.juneau.http.header">RetryAfter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/RetryAfter.html#line-181">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - HTTP-date. May be <jk>null</jk>.</dd>
+<dd><code>value</code> - HTTP-date. May be <jk>null</jk>, in which case <jk>null</jk> is returned.</dd>
 <dt>Returns:</dt>
-<dd>A new instance or <jk>null</jk>.</dd>
+<dd>A new instance, or <jk>null</jk> if <c>value</c> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

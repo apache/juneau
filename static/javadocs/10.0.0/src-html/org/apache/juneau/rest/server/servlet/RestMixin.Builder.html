@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111">   /**</span>
 <span class="source-line-no">112</span><span id="line-112">    * Returns the programmatic configuration builder stashed on this mixin, or &lt;jk&gt;null&lt;/jk&gt; if none.</span>
 <span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * @return The stashed builder, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @return The stashed builder, or &lt;jk&gt;null&lt;/jk&gt; if none was injected.</span>
 <span class="source-line-no">115</span><span id="line-115">    */</span>
 <span class="source-line-no">116</span><span id="line-116">   @SuppressWarnings({</span>
 <span class="source-line-no">117</span><span id="line-117">      "java:S1452" // RestBuilder&lt;?&gt; wildcard return intentional; concrete builder type varies by REST resource class</span>
@@ -204,7 +204,7 @@
 <span class="source-line-no">191</span><span id="line-191">   @SuppressWarnings({</span>
 <span class="source-line-no">192</span><span id="line-192">      "java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.</span>
 <span class="source-line-no">193</span><span id="line-193">   })</span>
-<span class="source-line-no">194</span><span id="line-194">   public static class Builder&lt;R extends RestMixin, SELF extends Builder&lt;R, SELF&gt;&gt; extends AbstractRestBuilder&lt;R, SELF&gt; {</span>
+<span class="source-line-no">194</span><span id="line-194">   public static class Builder&lt;R extends RestMixin,SELF extends Builder&lt;R,SELF&gt;&gt; extends AbstractRestBuilder&lt;R,SELF&gt; {</span>
 <span class="source-line-no">195</span><span id="line-195"></span>
 <span class="source-line-no">196</span><span id="line-196">      /**</span>
 <span class="source-line-no">197</span><span id="line-197">       * Constructor.</span>
@@ -229,7 +229,7 @@
 <span class="source-line-no">216</span><span id="line-216">    *</span>
 <span class="source-line-no">217</span><span id="line-217">    * @param &lt;R&gt; The mixin type produced by {@link #build()}.</span>
 <span class="source-line-no">218</span><span id="line-218">    */</span>
-<span class="source-line-no">219</span><span id="line-219">   public static final class DefaultBuilder&lt;R extends RestMixin&gt; extends Builder&lt;R, DefaultBuilder&lt;R&gt;&gt; {</span>
+<span class="source-line-no">219</span><span id="line-219">   public static final class DefaultBuilder&lt;R extends RestMixin&gt; extends Builder&lt;R,DefaultBuilder&lt;R&gt;&gt; {</span>
 <span class="source-line-no">220</span><span id="line-220">      DefaultBuilder(Class&lt;R&gt; type) {</span>
 <span class="source-line-no">221</span><span id="line-221">         super(type);</span>
 <span class="source-line-no">222</span><span id="line-222">      }</span>

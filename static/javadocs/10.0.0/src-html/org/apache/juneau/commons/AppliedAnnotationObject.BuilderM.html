@@ -176,7 +176,7 @@
 <span class="source-line-no">163</span><span id="line-163">      /**</span>
 <span class="source-line-no">164</span><span id="line-164">       * Constructor.</span>
 <span class="source-line-no">165</span><span id="line-165">       *</span>
-<span class="source-line-no">166</span><span id="line-166">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">166</span><span id="line-166">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">167</span><span id="line-167">       */</span>
 <span class="source-line-no">168</span><span id="line-168">      public Builder(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">169</span><span id="line-169">         super(annotationType);</span>
@@ -185,7 +185,7 @@
 <span class="source-line-no">172</span><span id="line-172">      /**</span>
 <span class="source-line-no">173</span><span id="line-173">       * The targets this annotation applies to.</span>
 <span class="source-line-no">174</span><span id="line-174">       *</span>
-<span class="source-line-no">175</span><span id="line-175">       * @param values The targets this annotation applies to.</span>
+<span class="source-line-no">175</span><span id="line-175">       * @param values The targets this annotation applies to.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">176</span><span id="line-176">       * @return This object.</span>
 <span class="source-line-no">177</span><span id="line-177">       */</span>
 <span class="source-line-no">178</span><span id="line-178">      public Builder on(String...values) {</span>
@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209">      /**</span>
 <span class="source-line-no">210</span><span id="line-210">       * Constructor.</span>
 <span class="source-line-no">211</span><span id="line-211">       *</span>
-<span class="source-line-no">212</span><span id="line-212">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">212</span><span id="line-212">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">213</span><span id="line-213">       */</span>
 <span class="source-line-no">214</span><span id="line-214">      public BuilderC(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">215</span><span id="line-215">         super(annotationType);</span>
@@ -231,7 +231,7 @@
 <span class="source-line-no">218</span><span id="line-218">      /**</span>
 <span class="source-line-no">219</span><span id="line-219">       * Appends the constructors that this annotation applies to.</span>
 <span class="source-line-no">220</span><span id="line-220">       *</span>
-<span class="source-line-no">221</span><span id="line-221">       * @param value The values to append.</span>
+<span class="source-line-no">221</span><span id="line-221">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">222</span><span id="line-222">       * @return This object.</span>
 <span class="source-line-no">223</span><span id="line-223">       */</span>
 <span class="source-line-no">224</span><span id="line-224">      public BuilderC on(Constructor&lt;?&gt;...value) {</span>
@@ -244,7 +244,7 @@
 <span class="source-line-no">231</span><span id="line-231">      /**</span>
 <span class="source-line-no">232</span><span id="line-232">       * Appends the constructors that this annotation applies to.</span>
 <span class="source-line-no">233</span><span id="line-233">       *</span>
-<span class="source-line-no">234</span><span id="line-234">       * @param value The values to append.</span>
+<span class="source-line-no">234</span><span id="line-234">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">235</span><span id="line-235">       * @return This object.</span>
 <span class="source-line-no">236</span><span id="line-236">       */</span>
 <span class="source-line-no">237</span><span id="line-237">      public BuilderC on(ConstructorInfo...value) {</span>
@@ -282,7 +282,7 @@
 <span class="source-line-no">269</span><span id="line-269">      /**</span>
 <span class="source-line-no">270</span><span id="line-270">       * Constructor.</span>
 <span class="source-line-no">271</span><span id="line-271">       *</span>
-<span class="source-line-no">272</span><span id="line-272">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">272</span><span id="line-272">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">273</span><span id="line-273">       */</span>
 <span class="source-line-no">274</span><span id="line-274">      public BuilderM(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">275</span><span id="line-275">         super(annotationType);</span>
@@ -291,7 +291,7 @@
 <span class="source-line-no">278</span><span id="line-278">      /**</span>
 <span class="source-line-no">279</span><span id="line-279">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">280</span><span id="line-280">       *</span>
-<span class="source-line-no">281</span><span id="line-281">       * @param value The values to append.</span>
+<span class="source-line-no">281</span><span id="line-281">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">282</span><span id="line-282">       * @return This object.</span>
 <span class="source-line-no">283</span><span id="line-283">       */</span>
 <span class="source-line-no">284</span><span id="line-284">      public BuilderM on(Method...value) {</span>
@@ -304,7 +304,7 @@
 <span class="source-line-no">291</span><span id="line-291">      /**</span>
 <span class="source-line-no">292</span><span id="line-292">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">293</span><span id="line-293">       *</span>
-<span class="source-line-no">294</span><span id="line-294">       * @param value The values to append.</span>
+<span class="source-line-no">294</span><span id="line-294">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">295</span><span id="line-295">       * @return This object.</span>
 <span class="source-line-no">296</span><span id="line-296">       */</span>
 <span class="source-line-no">297</span><span id="line-297">      public BuilderM on(MethodInfo...value) {</span>
@@ -345,7 +345,7 @@
 <span class="source-line-no">332</span><span id="line-332">      /**</span>
 <span class="source-line-no">333</span><span id="line-333">       * Constructor.</span>
 <span class="source-line-no">334</span><span id="line-334">       *</span>
-<span class="source-line-no">335</span><span id="line-335">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">335</span><span id="line-335">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">336</span><span id="line-336">       */</span>
 <span class="source-line-no">337</span><span id="line-337">      public BuilderMF(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">338</span><span id="line-338">         super(annotationType);</span>
@@ -354,7 +354,7 @@
 <span class="source-line-no">341</span><span id="line-341">      /**</span>
 <span class="source-line-no">342</span><span id="line-342">       * Appends the fields that this annotation applies to.</span>
 <span class="source-line-no">343</span><span id="line-343">       *</span>
-<span class="source-line-no">344</span><span id="line-344">       * @param value The values to append.</span>
+<span class="source-line-no">344</span><span id="line-344">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">345</span><span id="line-345">       * @return This object.</span>
 <span class="source-line-no">346</span><span id="line-346">       */</span>
 <span class="source-line-no">347</span><span id="line-347">      public BuilderMF on(Field...value) {</span>
@@ -367,7 +367,7 @@
 <span class="source-line-no">354</span><span id="line-354">      /**</span>
 <span class="source-line-no">355</span><span id="line-355">       * Appends the fields that this annotation applies to.</span>
 <span class="source-line-no">356</span><span id="line-356">       *</span>
-<span class="source-line-no">357</span><span id="line-357">       * @param value The values to append.</span>
+<span class="source-line-no">357</span><span id="line-357">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">358</span><span id="line-358">       * @return This object.</span>
 <span class="source-line-no">359</span><span id="line-359">       */</span>
 <span class="source-line-no">360</span><span id="line-360">      public BuilderMF on(FieldInfo...value) {</span>
@@ -380,7 +380,7 @@
 <span class="source-line-no">367</span><span id="line-367">      /**</span>
 <span class="source-line-no">368</span><span id="line-368">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">369</span><span id="line-369">       *</span>
-<span class="source-line-no">370</span><span id="line-370">       * @param value The values to append.</span>
+<span class="source-line-no">370</span><span id="line-370">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">371</span><span id="line-371">       * @return This object.</span>
 <span class="source-line-no">372</span><span id="line-372">       */</span>
 <span class="source-line-no">373</span><span id="line-373">      public BuilderMF on(Method...value) {</span>
@@ -393,7 +393,7 @@
 <span class="source-line-no">380</span><span id="line-380">      /**</span>
 <span class="source-line-no">381</span><span id="line-381">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">382</span><span id="line-382">       *</span>
-<span class="source-line-no">383</span><span id="line-383">       * @param value The values to append.</span>
+<span class="source-line-no">383</span><span id="line-383">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">384</span><span id="line-384">       * @return This object.</span>
 <span class="source-line-no">385</span><span id="line-385">       */</span>
 <span class="source-line-no">386</span><span id="line-386">      public BuilderMF on(MethodInfo...value) {</span>
@@ -440,7 +440,7 @@
 <span class="source-line-no">427</span><span id="line-427">      /**</span>
 <span class="source-line-no">428</span><span id="line-428">       * Constructor.</span>
 <span class="source-line-no">429</span><span id="line-429">       *</span>
-<span class="source-line-no">430</span><span id="line-430">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">430</span><span id="line-430">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">431</span><span id="line-431">       */</span>
 <span class="source-line-no">432</span><span id="line-432">      public BuilderT(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">433</span><span id="line-433">         super(annotationType);</span>
@@ -449,7 +449,7 @@
 <span class="source-line-no">436</span><span id="line-436">      /**</span>
 <span class="source-line-no">437</span><span id="line-437">       * Appends the classes that this annotation applies to.</span>
 <span class="source-line-no">438</span><span id="line-438">       *</span>
-<span class="source-line-no">439</span><span id="line-439">       * @param value The values to append.</span>
+<span class="source-line-no">439</span><span id="line-439">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">440</span><span id="line-440">       * @return This object.</span>
 <span class="source-line-no">441</span><span id="line-441">       */</span>
 <span class="source-line-no">442</span><span id="line-442">      public BuilderT on(Class&lt;?&gt;...value) {</span>
@@ -462,7 +462,7 @@
 <span class="source-line-no">449</span><span id="line-449">      /**</span>
 <span class="source-line-no">450</span><span id="line-450">       * Appends the classes that this annotation applies to.</span>
 <span class="source-line-no">451</span><span id="line-451">       *</span>
-<span class="source-line-no">452</span><span id="line-452">       * @param value The values to append.</span>
+<span class="source-line-no">452</span><span id="line-452">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">453</span><span id="line-453">       * @return This object.</span>
 <span class="source-line-no">454</span><span id="line-454">       */</span>
 <span class="source-line-no">455</span><span id="line-455">      public BuilderT on(ClassInfo...value) {</span>
@@ -475,7 +475,7 @@
 <span class="source-line-no">462</span><span id="line-462">      /**</span>
 <span class="source-line-no">463</span><span id="line-463">       * Appends the classes that this annotation applies to.</span>
 <span class="source-line-no">464</span><span id="line-464">       *</span>
-<span class="source-line-no">465</span><span id="line-465">       * @param value The values to append.</span>
+<span class="source-line-no">465</span><span id="line-465">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">466</span><span id="line-466">       * @return This object.</span>
 <span class="source-line-no">467</span><span id="line-467">       */</span>
 <span class="source-line-no">468</span><span id="line-468">      public BuilderT onClass(Class&lt;?&gt;...value) {</span>
@@ -488,7 +488,7 @@
 <span class="source-line-no">475</span><span id="line-475">      /**</span>
 <span class="source-line-no">476</span><span id="line-476">       * Appends the classes that this annotation applies to.</span>
 <span class="source-line-no">477</span><span id="line-477">       *</span>
-<span class="source-line-no">478</span><span id="line-478">       * @param value The values to append.</span>
+<span class="source-line-no">478</span><span id="line-478">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">479</span><span id="line-479">       * @return This object.</span>
 <span class="source-line-no">480</span><span id="line-480">       */</span>
 <span class="source-line-no">481</span><span id="line-481">      public BuilderT onClass(ClassInfo...value) {</span>
@@ -520,7 +520,7 @@
 <span class="source-line-no">507</span><span id="line-507">      /**</span>
 <span class="source-line-no">508</span><span id="line-508">       * Constructor.</span>
 <span class="source-line-no">509</span><span id="line-509">       *</span>
-<span class="source-line-no">510</span><span id="line-510">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">510</span><span id="line-510">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">511</span><span id="line-511">       */</span>
 <span class="source-line-no">512</span><span id="line-512">      public BuilderTM(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">513</span><span id="line-513">         super(annotationType);</span>
@@ -529,7 +529,7 @@
 <span class="source-line-no">516</span><span id="line-516">      /**</span>
 <span class="source-line-no">517</span><span id="line-517">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">518</span><span id="line-518">       *</span>
-<span class="source-line-no">519</span><span id="line-519">       * @param value The values to append.</span>
+<span class="source-line-no">519</span><span id="line-519">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">520</span><span id="line-520">       * @return This object.</span>
 <span class="source-line-no">521</span><span id="line-521">       */</span>
 <span class="source-line-no">522</span><span id="line-522">      public BuilderTM on(Method...value) {</span>
@@ -542,7 +542,7 @@
 <span class="source-line-no">529</span><span id="line-529">      /**</span>
 <span class="source-line-no">530</span><span id="line-530">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">531</span><span id="line-531">       *</span>
-<span class="source-line-no">532</span><span id="line-532">       * @param value The values to append.</span>
+<span class="source-line-no">532</span><span id="line-532">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">533</span><span id="line-533">       * @return This object.</span>
 <span class="source-line-no">534</span><span id="line-534">       */</span>
 <span class="source-line-no">535</span><span id="line-535">      public BuilderTM on(MethodInfo...value) {</span>
@@ -588,7 +588,7 @@
 <span class="source-line-no">575</span><span id="line-575">      /**</span>
 <span class="source-line-no">576</span><span id="line-576">       * Constructor.</span>
 <span class="source-line-no">577</span><span id="line-577">       *</span>
-<span class="source-line-no">578</span><span id="line-578">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">578</span><span id="line-578">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">579</span><span id="line-579">       */</span>
 <span class="source-line-no">580</span><span id="line-580">      public BuilderTMF(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">581</span><span id="line-581">         super(annotationType);</span>
@@ -597,7 +597,7 @@
 <span class="source-line-no">584</span><span id="line-584">      /**</span>
 <span class="source-line-no">585</span><span id="line-585">       * Appends the fields that this annotation applies to.</span>
 <span class="source-line-no">586</span><span id="line-586">       *</span>
-<span class="source-line-no">587</span><span id="line-587">       * @param value The values to append.</span>
+<span class="source-line-no">587</span><span id="line-587">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">588</span><span id="line-588">       * @return This object.</span>
 <span class="source-line-no">589</span><span id="line-589">       */</span>
 <span class="source-line-no">590</span><span id="line-590">      public BuilderTMF on(Field...value) {</span>
@@ -610,7 +610,7 @@
 <span class="source-line-no">597</span><span id="line-597">      /**</span>
 <span class="source-line-no">598</span><span id="line-598">       * Appends the fields that this annotation applies to.</span>
 <span class="source-line-no">599</span><span id="line-599">       *</span>
-<span class="source-line-no">600</span><span id="line-600">       * @param value The values to append.</span>
+<span class="source-line-no">600</span><span id="line-600">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">601</span><span id="line-601">       * @return This object.</span>
 <span class="source-line-no">602</span><span id="line-602">       */</span>
 <span class="source-line-no">603</span><span id="line-603">      public BuilderTMF on(FieldInfo...value) {</span>
@@ -623,7 +623,7 @@
 <span class="source-line-no">610</span><span id="line-610">      /**</span>
 <span class="source-line-no">611</span><span id="line-611">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">612</span><span id="line-612">       *</span>
-<span class="source-line-no">613</span><span id="line-613">       * @param value The values to append.</span>
+<span class="source-line-no">613</span><span id="line-613">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">614</span><span id="line-614">       * @return This object.</span>
 <span class="source-line-no">615</span><span id="line-615">       */</span>
 <span class="source-line-no">616</span><span id="line-616">      public BuilderTMF on(Method...value) {</span>
@@ -636,7 +636,7 @@
 <span class="source-line-no">623</span><span id="line-623">      /**</span>
 <span class="source-line-no">624</span><span id="line-624">       * Appends the methods that this annotation applies to.</span>
 <span class="source-line-no">625</span><span id="line-625">       *</span>
-<span class="source-line-no">626</span><span id="line-626">       * @param value The values to append.</span>
+<span class="source-line-no">626</span><span id="line-626">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">627</span><span id="line-627">       * @return This object.</span>
 <span class="source-line-no">628</span><span id="line-628">       */</span>
 <span class="source-line-no">629</span><span id="line-629">      public BuilderTMF on(MethodInfo...value) {</span>
@@ -671,7 +671,7 @@
 <span class="source-line-no">658</span><span id="line-658">      /**</span>
 <span class="source-line-no">659</span><span id="line-659">       * Constructor.</span>
 <span class="source-line-no">660</span><span id="line-660">       *</span>
-<span class="source-line-no">661</span><span id="line-661">       * @param annotationType The annotation type of the annotation implementation class.</span>
+<span class="source-line-no">661</span><span id="line-661">       * @param annotationType The annotation type of the annotation implementation class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">662</span><span id="line-662">       */</span>
 <span class="source-line-no">663</span><span id="line-663">      public BuilderTMFC(Class&lt;? extends Annotation&gt; annotationType) {</span>
 <span class="source-line-no">664</span><span id="line-664">         super(annotationType);</span>
@@ -680,7 +680,7 @@
 <span class="source-line-no">667</span><span id="line-667">      /**</span>
 <span class="source-line-no">668</span><span id="line-668">       * Appends the constructors that this annotation applies to.</span>
 <span class="source-line-no">669</span><span id="line-669">       *</span>
-<span class="source-line-no">670</span><span id="line-670">       * @param value The values to append.</span>
+<span class="source-line-no">670</span><span id="line-670">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">671</span><span id="line-671">       * @return This object.</span>
 <span class="source-line-no">672</span><span id="line-672">       */</span>
 <span class="source-line-no">673</span><span id="line-673">      public BuilderTMFC on(Constructor&lt;?&gt;...value) {</span>
@@ -693,7 +693,7 @@
 <span class="source-line-no">680</span><span id="line-680">      /**</span>
 <span class="source-line-no">681</span><span id="line-681">       * Appends the constructors that this annotation applies to.</span>
 <span class="source-line-no">682</span><span id="line-682">       *</span>
-<span class="source-line-no">683</span><span id="line-683">       * @param value The values to append.</span>
+<span class="source-line-no">683</span><span id="line-683">       * @param value The values to append.  Cannot be &lt;jk&gt;null&lt;/jk&gt; or contain &lt;jk&gt;null&lt;/jk&gt; elements.</span>
 <span class="source-line-no">684</span><span id="line-684">       * @return This object.</span>
 <span class="source-line-no">685</span><span id="line-685">       */</span>
 <span class="source-line-no">686</span><span id="line-686">      public BuilderTMFC on(ConstructorInfo...value) {</span>
@@ -713,11 +713,11 @@
 <span class="source-line-no">700</span><span id="line-700">   /**</span>
 <span class="source-line-no">701</span><span id="line-701">    * Constructor.</span>
 <span class="source-line-no">702</span><span id="line-702">    *</span>
-<span class="source-line-no">703</span><span id="line-703">    * @param b The builder used to instantiate the fields of this class.</span>
+<span class="source-line-no">703</span><span id="line-703">    * @param b The builder used to instantiate the fields of this class.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">704</span><span id="line-704">    */</span>
 <span class="source-line-no">705</span><span id="line-705">   public AppliedAnnotationObject(Builder b) {</span>
 <span class="source-line-no">706</span><span id="line-706">      super(b);</span>
-<span class="source-line-no">707</span><span id="line-707">      this.on = copyOf(b.on);</span>
+<span class="source-line-no">707</span><span id="line-707">      this.on = cp(b.on);</span>
 <span class="source-line-no">708</span><span id="line-708">   }</span>
 <span class="source-line-no">709</span><span id="line-709"></span>
 <span class="source-line-no">710</span><span id="line-710">   /**</span>
@@ -726,7 +726,7 @@
 <span class="source-line-no">713</span><span id="line-713">    * @return The targets this annotation applies to.</span>
 <span class="source-line-no">714</span><span id="line-714">    */</span>
 <span class="source-line-no">715</span><span id="line-715">   public String[] on() {</span>
-<span class="source-line-no">716</span><span id="line-716">      return on;</span>
+<span class="source-line-no">716</span><span id="line-716">      return cp(on);</span>
 <span class="source-line-no">717</span><span id="line-717">   }</span>
 <span class="source-line-no">718</span><span id="line-718">}</span>
 

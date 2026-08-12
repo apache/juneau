@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-39">AuthResult</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-40">AuthResult</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Immutable value type returned by <a href="Authenticator.html#authenticate(jakarta.servlet.http.HttpServletRequest)"><code>Authenticator.authenticate(jakarta.servlet.http.HttpServletRequest)</code></a> on success.
 
@@ -195,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.security.Principal,java.lang.String...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-67">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-68">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;roles)</span></div>
 <div class="block">Creates an <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a> with the specified principal and roles using <a href="AuthResult.MergeMode.html#ADD"><code>AuthResult.MergeMode.ADD</code></a> mode.</div>
 <dl class="notes">
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.security.Principal,java.util.Set)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-79">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-80">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles)</span></div>
 <div class="block">Creates an <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a> with the specified principal and role set using <a href="AuthResult.MergeMode.html#ADD"><code>AuthResult.MergeMode.ADD</code></a> mode.</div>
 <dl class="notes">
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofRoles(java.lang.String...)">
 <h3>ofRoles</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-94">ofRoles</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;roles)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-95">ofRoles</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;roles)</span></div>
 <div class="block">Creates a roles-only <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a> (<a href="AuthResult.MergeMode.html#ADD"><code>AuthResult.MergeMode.ADD</code></a> mode, <jk>null</jk> principal).
 
  <p>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofRoles(java.util.Collection)">
 <h3>ofRoles</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-104">ofRoles</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-105">ofRoles</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles)</span></div>
 <div class="block">Creates a roles-only <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a> (<a href="AuthResult.MergeMode.html#ADD"><code>AuthResult.MergeMode.ADD</code></a> mode, <jk>null</jk> principal).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -255,7 +255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="replacing(java.security.Principal,java.lang.String...)">
 <h3>replacing</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-115">replacing</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-116">replacing</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;roles)</span></div>
 <div class="block">Creates an <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a> that <a href="AuthResult.MergeMode.html#REPLACE"><code>replaces</code></a> any accumulated identity and roles.</div>
 <dl class="notes">
@@ -270,7 +270,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="replacing(java.security.Principal,java.util.Set)">
 <h3>replacing</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-127">replacing</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-128">replacing</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a>&nbsp;principal,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roles)</span></div>
 <div class="block">Creates an <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a> that <a href="AuthResult.MergeMode.html#REPLACE"><code>replaces</code></a> any accumulated identity and roles.</div>
 <dl class="notes">
@@ -285,7 +285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPrincipal()">
 <h3>getPrincipal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-151">getPrincipal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-152">getPrincipal</a></span>()</div>
 <div class="block">Returns the authenticated principal.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -296,7 +296,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMode()">
 <h3>getMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuthResult.MergeMode.html" title="enum class in org.apache.juneau.rest.server.auth">AuthResult.MergeMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-161">getMode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuthResult.MergeMode.html" title="enum class in org.apache.juneau.rest.server.auth">AuthResult.MergeMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-162">getMode</a></span>()</div>
 <div class="block">Returns the merge mode for this result.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -309,7 +309,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRoles()">
 <h3>getRoles</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-170">getRoles</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResult.html#line-171">getRoles</a></span>()</div>
 <div class="block">Returns the unmodifiable set of roles granted to this principal.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -52,7 +52,78 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1 title="Uses of Class org.apache.juneau.marshall.sse.SseEventReader" class="title">Uses of Class<br>org.apache.juneau.marshall.sse.SseEventReader</h1>
 </div>
-No usage of org.apache.juneau.marshall.sse.SseEventReader</main>
+<div class="caption"><span>Packages that use <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Package</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client">org.apache.juneau.rest.client</a></div>
+<div class="col-last even-row-color">
+<div class="block">Next-generation REST client — transport-agnostic HTTP client built on Juneau's serialization stack.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.mcp">org.apache.juneau.rest.client.mcp</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral Model Context Protocol (MCP) client core - Streamable-HTTP transport orchestration, the
+ auth-token seam, and the pluggable response cache that per-revision <code>McpClient</code> facades build on.</div>
+</div>
+</div>
+<section class="class-uses">
+<ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.rest.client">
+<h2>Uses of <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a> in <a href="../../../rest/client/package-summary.html">org.apache.juneau.rest.client</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/client/package-summary.html">org.apache.juneau.rest.client</a> that return <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ResponseBody.</span><code><a href="../../../rest/client/ResponseBody.html#asEventStream()" class="member-name-link">asEventStream</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a closeable, cancellable cursor over a <c>text/event-stream</c> response body.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../../../rest/client/RestRequest.html#openEventStream()" class="member-name-link">openEventStream</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Executes this request and opens a closeable, cancellable cursor over the response as a
+ <c>text/event-stream</c>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.client.mcp">
+<h2>Uses of <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a> in <a href="../../../rest/client/mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/client/mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a> that return <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>protected <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AbstractMcpClient.</span><code><a href="../../../rest/client/mcp/AbstractMcpClient.html#openEventStream()" class="member-name-link">openEventStream</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a Server-Sent-Events stream on the configured endpoint, for revision-specific facades that support a
+ duplex (server-initiated) channel alongside the request/response <a href="../../../rest/client/mcp/AbstractMcpClient.html#send(org.apache.juneau.bean.jsonrpc.JsonRpcRequest)"><code>AbstractMcpClient.send(org.apache.juneau.bean.jsonrpc.JsonRpcRequest)</code></a> calls.</div>
+</div>
+<div class="col-first odd-row-color"><code>protected <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AbstractMcpClient.</span><code><a href="../../../rest/client/mcp/AbstractMcpClient.html#openEventStream(org.apache.juneau.bean.jsonrpc.JsonRpcRequest)" class="member-name-link">openEventStream</a><wbr>(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a Server-Sent-Events stream on the configured endpoint by first POSTing <code>request</code> as the request
+ body — for a revision-specific method (e.g.</div>
+</div>
+<div class="col-first even-row-color"><code>protected <a href="../SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AbstractMcpClient.</span><code><a href="../../../rest/client/mcp/AbstractMcpClient.html#openEventStream(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,java.util.Map)" class="member-name-link">openEventStream</a><wbr>(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;request,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;httpHeaders)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a Server-Sent-Events stream on the configured endpoint by first POSTing <code>request</code> as the request
+ body, with additional HTTP headers on the opening request — for a revision-specific method whose held-open
+ SSE response must agree with a header-based method/name contract (e.g.</div>
+</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</main>
 <footer role="contentinfo">
 <hr>
 <p class="legal-copy"><small>Copyright &#169; 2016&#x2013;2026 <a href="https://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>

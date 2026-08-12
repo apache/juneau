@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">    */</span>
 <span class="source-line-no">085</span><span id="line-85">   public final &lt;T&gt; T read(byte[] input, Class&lt;T&gt; type) throws ParseException {</span>
 <span class="source-line-no">086</span><span id="line-86">      try {</span>
-<span class="source-line-no">087</span><span id="line-87">         return p.parse(input, type);</span>
+<span class="source-line-no">087</span><span id="line-87">         return p.read(input, type);</span>
 <span class="source-line-no">088</span><span id="line-88">      } catch (IOException e) {</span>
 <span class="source-line-no">089</span><span id="line-89">         throw new ParseException(e);</span>
 <span class="source-line-no">090</span><span id="line-90">      }</span>
@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108">    */</span>
 <span class="source-line-no">109</span><span id="line-109">   public final &lt;T&gt; T read(byte[] input, Type type, Type...args) throws ParseException {</span>
 <span class="source-line-no">110</span><span id="line-110">      try {</span>
-<span class="source-line-no">111</span><span id="line-111">         return p.parse(input, type, args);</span>
+<span class="source-line-no">111</span><span id="line-111">         return p.read(input, type, args);</span>
 <span class="source-line-no">112</span><span id="line-112">      } catch (IOException e) {</span>
 <span class="source-line-no">113</span><span id="line-113">         throw new ParseException(e);</span>
 <span class="source-line-no">114</span><span id="line-114">      }</span>
@@ -136,7 +136,7 @@
 <span class="source-line-no">123</span><span id="line-123">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">124</span><span id="line-124">    */</span>
 <span class="source-line-no">125</span><span id="line-125">   public final byte[] write(Object o) throws SerializeException {</span>
-<span class="source-line-no">126</span><span id="line-126">      return s.serialize(o);</span>
+<span class="source-line-no">126</span><span id="line-126">      return s.write(o);</span>
 <span class="source-line-no">127</span><span id="line-127">   }</span>
 <span class="source-line-no">128</span><span id="line-128">}</span>
 

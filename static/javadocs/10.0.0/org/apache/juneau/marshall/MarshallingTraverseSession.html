@@ -324,7 +324,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.  Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -367,12 +367,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMaxDepth()">
 <h3>getMaxDepth</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-204">getMaxDepth</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-205">getMaxDepth</a></span>()</div>
 <div class="block">Max traversal depth.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The depth at which traversal is aborted if depth is reached in the POJO tree.
-   <br>If this depth is exceeded, an exception is thrown.</dd>
+<dd>The depth beyond which nodes in the POJO tree are dropped (truncated) from the output.
+   <br>Values deeper than this limit are silently omitted rather than causing an exception to be thrown.
+   <br>This is a size guard, not a cycle detector.</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">
@@ -385,7 +386,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDetectRecursions()">
 <h3>isDetectRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-213">isDetectRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-214">isDetectRecursions</a></span>()</div>
 <div class="block">Automatically detect POJO recursions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -402,7 +403,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreRecursions()">
 <h3>isIgnoreRecursions</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-223">isIgnoreRecursions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-224">isIgnoreRecursions</a></span>()</div>
 <div class="block">Ignore recursion errors.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -420,11 +421,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOptionalType(org.apache.juneau.marshall.ClassMeta)">
 <h3>getOptionalType</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-231">getOptionalType</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-232">getOptionalType</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the inner type of an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The meta to check.</dd>
+<dd><code>cm</code> - The meta to check.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The inner type of an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</dd>
 </dl>
@@ -433,11 +434,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOptionalValue(java.lang.Object)">
 <h3>getOptionalValue</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-243">getOptionalValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-244">getOptionalValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">If the specified object is an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>, returns the inner object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object to check.</dd>
+<dd><code>o</code> - The object to check.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The inner object if it's an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>, <jk>null</jk> if it's <jk>null</jk>, or else the same object.</dd>
 </dl>
@@ -446,7 +447,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStack(boolean)">
 <h3>getStack</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-264">getStack</a></span><wbr><span class="parameters">(boolean&nbsp;full)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-265">getStack</a></span><wbr><span class="parameters">(boolean&nbsp;full)</span></div>
 <div class="block">Returns the current stack trace.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -459,11 +460,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isOptional(org.apache.juneau.marshall.ClassMeta)">
 <h3>isOptional</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-287">isOptional</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-288">isOptional</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Same as <a href="ClassMeta.html#isOptional()"><code>ClassMeta.isOptional()</code></a> but gracefully handles a null <a href="ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The meta to check.</dd>
+<dd><code>cm</code> - The meta to check.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified meta is an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</dd>
 </dl>
@@ -472,7 +473,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isRoot()">
 <h3>isRoot</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-299">isRoot</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-300">isRoot</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if we're processing the root node.
 
  <p>
@@ -486,7 +487,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onError(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>onError</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-308">onError</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-309">onError</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a warning message.</div>
@@ -494,21 +495,21 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>t</code> - The throwable that was thrown (if there was one).</dd>
 <dd><code>msg</code> - The warning message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="pop()">
 <h3>pop</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-315">pop</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-320">pop</a></span>()</div>
 <div class="block">Pop an object off the stack.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-327">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-332">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">
@@ -522,28 +523,40 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="push(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">
 <h3>push</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-345">push</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-362">push</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType)</span>
                            throws <span class="exceptions"><a href="MarshallingRecursionException.html" title="class in org.apache.juneau.marshall">MarshallingRecursionException</a></span></div>
-<div class="block">Push the specified object onto the stack.</div>
+<div class="block">Push the specified object onto the stack.
+
+ <p>
+ When the current depth exceeds <a href="#getMaxDepth()"><code>maxDepth</code></a>, this method returns <jk>null</jk> so that the
+ over-depth node is dropped (truncated) from the output rather than traversed further.  Exceeding <c>maxDepth</c>
+ does <b>not</b> throw an exception — it is a size guard that truncates deeply-nested (or cyclic) models, not a
+ cycle detector.  To fail-fast on genuine cycles, enable
+ <a href="MarshallingTraverseContext.Builder.html#detectRecursions()"><code>detectRecursions</code></a>; to omit repeated nodes as
+ <jk>null</jk>, enable <a href="MarshallingTraverseContext.Builder.html#ignoreRecursions()"><code>ignoreRecursions</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>attrName</code> - The attribute name.</dd>
-<dd><code>o</code> - The current object being traversed.</dd>
-<dd><code>eType</code> - The expected class type.</dd>
+<dd><code>attrName</code> - The attribute name.  Can be <jk>null</jk> for unnamed entries (e.g. array elements); used only for stack-trace labeling.</dd>
+<dd><code>o</code> - The current object being traversed.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
+<dd><code>eType</code> - The expected class type.  Can be <jk>null</jk>, in which case the object's actual runtime type is used instead.</dd>
 <dt>Returns:</dt>
 <dd>The <a href="ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> of the object so that <c>instanceof</c> operations only need to be performed
-   once (since they can be expensive).</dd>
+   once (since they can be expensive).
+   <br>Returns <jk>null</jk> when the object is <jk>null</jk>, when <c>maxDepth</c> is exceeded (over-depth node
+   dropped), or when a recursion is detected under <a href="MarshallingTraverseContext.Builder.html#ignoreRecursions()"><code>ignoreRecursions</code></a>.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="MarshallingRecursionException.html" title="class in org.apache.juneau.marshall">MarshallingRecursionException</a></code> - If recursion occurred.</dd>
+<dd><code><a href="MarshallingRecursionException.html" title="class in org.apache.juneau.marshall">MarshallingRecursionException</a></code> - If recursion occurred while
+   <a href="MarshallingTraverseContext.Builder.html#detectRecursions()"><code>detectRecursions</code></a> is enabled without
+   <a href="MarshallingTraverseContext.Builder.html#ignoreRecursions()"><code>ignoreRecursions</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="setCurrentClass(org.apache.juneau.marshall.ClassMeta)">
 <h3>setCurrentClass</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-379">setCurrentClass</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;currentClass)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-396">setCurrentClass</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;currentClass)</span></div>
 <div class="block">Sets the current class being traversed for proper error messages.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -554,7 +567,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setCurrentProperty(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>setCurrentProperty</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-386">setCurrentProperty</a></span><wbr><span class="parameters">(<a href="../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;currentProperty)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-403">setCurrentProperty</a></span><wbr><span class="parameters">(<a href="../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;currentProperty)</span></div>
 <div class="block">Sets the current bean property being traversed for proper error messages.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -565,8 +578,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="willExceedDepth()">
 <h3>willExceedDepth</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-393">willExceedDepth</a></span>()</div>
-<div class="block">Returns <jk>true</jk> if we're about to exceed the max depth for the document.</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-414">willExceedDepth</a></span>()</div>
+<div class="block">Returns <jk>true</jk> if we're about to exceed the max depth for the document.
+
+ <p>
+ When this returns <jk>true</jk>, the over-depth value is dropped (truncated) from the output rather than
+ causing an exception to be thrown — exceeding <a href="#getMaxDepth()"><code>maxDepth</code></a> is a size guard, not a cycle detector.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd><jk>true</jk> if we're about to exceed the max depth for the document.</dd>
@@ -576,7 +593,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="willRecurse(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">
 <h3>willRecurse</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-407">willRecurse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingTraverseSession.html#line-428">willRecurse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span>
                              throws <span class="exceptions"><a href="MarshallingRecursionException.html" title="class in org.apache.juneau.marshall">MarshallingRecursionException</a></span></div>

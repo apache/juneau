@@ -244,7 +244,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bulk-set entries from a map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - Entries to add. <jk>null</jk> values are recorded as
+<dd><code>values</code> - Entries to add. Can be <jk>null</jk> (no-op).  Individual <jk>null</jk> values are recorded as
    <a href="VersionMixin.html#UNKNOWN"><code>VersionMixin.UNKNOWN</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -271,7 +271,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Reads manifest attributes from <code>/META-INF/MANIFEST.MF</code> on the supplied classloader.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>classLoader</code> - The classloader to walk.</dd>
+<dd><code>classLoader</code> - The classloader to walk. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -310,7 +310,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Reads <code>git.properties</code> from the supplied classloader.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>classLoader</code> - The classloader to walk.</dd>
+<dd><code>classLoader</code> - The classloader to walk. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

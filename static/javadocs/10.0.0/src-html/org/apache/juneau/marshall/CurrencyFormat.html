@@ -149,7 +149,7 @@
 <span class="source-line-no">136</span><span id="line-136">    * {@link #NOT_SET} falls through to {@link #ISO_CODE}. {@code null} locale is treated as</span>
 <span class="source-line-no">137</span><span id="line-137">    * {@link Locale#ROOT}.</span>
 <span class="source-line-no">138</span><span id="line-138">    *</span>
-<span class="source-line-no">139</span><span id="line-139">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">139</span><span id="line-139">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">140</span><span id="line-140">    * @param format The configured format. Can be &lt;jk&gt;null&lt;/jk&gt; (treated as {@link #ISO_CODE}).</span>
 <span class="source-line-no">141</span><span id="line-141">    * @param locale The locale used by {@link #SYMBOL} / {@link #DISPLAY_NAME}. Can be &lt;jk&gt;null&lt;/jk&gt;</span>
 <span class="source-line-no">142</span><span id="line-142">    *   (treated as {@link Locale#ROOT}).</span>
@@ -176,7 +176,7 @@
 <span class="source-line-no">163</span><span id="line-163">    * iterate-and-match scan against {@link Currency#getAvailableCurrencies()}; when multiple currencies</span>
 <span class="source-line-no">164</span><span id="line-164">    * match a symbol, prefers the locale's default currency.</span>
 <span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * @param value The wire value. Can be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">166</span><span id="line-166">    * @param value The wire value. Can be &lt;jk&gt;null&lt;/jk&gt; or blank (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">167</span><span id="line-167">    * @param format The configured format hint. Can be &lt;jk&gt;null&lt;/jk&gt; (treated as {@link #ISO_CODE}).</span>
 <span class="source-line-no">168</span><span id="line-168">    * @param locale The locale used to disambiguate {@link #SYMBOL} / {@link #DISPLAY_NAME} matches.</span>
 <span class="source-line-no">169</span><span id="line-169">    *   Can be &lt;jk&gt;null&lt;/jk&gt; (treated as {@link Locale#ROOT}).</span>
@@ -198,7 +198,7 @@
 <span class="source-line-no">185</span><span id="line-185">         // Fall through to symbol / display-name scan.</span>
 <span class="source-line-no">186</span><span id="line-186">      }</span>
 <span class="source-line-no">187</span><span id="line-187">      return switch (fmt) {</span>
-<span class="source-line-no">188</span><span id="line-188">         case NOT_SET, ISO_CODE -&gt; throw iaex("Invalid currency code ''{0}''", value);</span>
+<span class="source-line-no">188</span><span id="line-188">         case NOT_SET, ISO_CODE -&gt; throw iaex("Invalid currency code '%s'", value);</span>
 <span class="source-line-no">189</span><span id="line-189">         case SYMBOL -&gt; findBySymbol(s, loc, value);</span>
 <span class="source-line-no">190</span><span id="line-190">         case DISPLAY_NAME -&gt; findByDisplayName(s, loc, value);</span>
 <span class="source-line-no">191</span><span id="line-191">      };</span>
@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209"></span>
 <span class="source-line-no">210</span><span id="line-210">   private static Currency resolveAmbiguousMatches(List&lt;Currency&gt; matches, Locale loc, String original, String kind) {</span>
 <span class="source-line-no">211</span><span id="line-211">      if (matches.isEmpty())</span>
-<span class="source-line-no">212</span><span id="line-212">         throw iaex("Could not resolve currency {0} ''{1}'' in locale {2}", kind, original, loc);</span>
+<span class="source-line-no">212</span><span id="line-212">         throw iaex("Could not resolve currency %s '%s' in locale %s", kind, original, loc);</span>
 <span class="source-line-no">213</span><span id="line-213">      if (matches.size() == 1)</span>
 <span class="source-line-no">214</span><span id="line-214">         return matches.get(0);</span>
 <span class="source-line-no">215</span><span id="line-215">      // Prefer the locale's default currency when the locale has one.</span>
@@ -233,7 +233,7 @@
 <span class="source-line-no">220</span><span id="line-220">      } catch (@SuppressWarnings("unused") IllegalArgumentException ignored) {</span>
 <span class="source-line-no">221</span><span id="line-221">         // Locale has no associated currency (e.g. Locale.ROOT, Locale.ENGLISH, Locale.JAPAN may or may not).</span>
 <span class="source-line-no">222</span><span id="line-222">      }</span>
-<span class="source-line-no">223</span><span id="line-223">      throw iaex("Ambiguous currency {0} ''{1}'' in locale {2}: matches {3}", kind, original, loc, matches);</span>
+<span class="source-line-no">223</span><span id="line-223">      throw iaex("Ambiguous currency %s '%s' in locale %s: matches %s", kind, original, loc, matches);</span>
 <span class="source-line-no">224</span><span id="line-224">   }</span>
 <span class="source-line-no">225</span><span id="line-225"></span>
 <span class="source-line-no">226</span><span id="line-226">   /**</span>

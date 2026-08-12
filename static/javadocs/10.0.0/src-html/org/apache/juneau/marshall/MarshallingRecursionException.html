@@ -31,28 +31,26 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.text.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">/**</span>
-<span class="source-line-no">024</span><span id="line-24"> * Exception that indicates that a recursion was detected while traversing a POJO model.</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * @serial exclude</span>
-<span class="source-line-no">028</span><span id="line-28"> */</span>
-<span class="source-line-no">029</span><span id="line-29">public class MarshallingRecursionException extends Exception {</span>
+<span class="source-line-no">021</span><span id="line-21">/**</span>
+<span class="source-line-no">022</span><span id="line-22"> * Exception that indicates that a recursion was detected while traversing a POJO model.</span>
+<span class="source-line-no">023</span><span id="line-23"> *</span>
+<span class="source-line-no">024</span><span id="line-24"> *</span>
+<span class="source-line-no">025</span><span id="line-25"> * @serial exclude</span>
+<span class="source-line-no">026</span><span id="line-26"> */</span>
+<span class="source-line-no">027</span><span id="line-27">public class MarshallingRecursionException extends Exception {</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">   private static final long serialVersionUID = 1L;</span>
 <span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33">   /**</span>
-<span class="source-line-no">034</span><span id="line-34">    * Constructor.</span>
-<span class="source-line-no">035</span><span id="line-35">    *</span>
-<span class="source-line-no">036</span><span id="line-36">    * @param message The {@link MessageFormat}-style message.</span>
-<span class="source-line-no">037</span><span id="line-37">    * @param args Optional {@link MessageFormat}-style arguments.</span>
-<span class="source-line-no">038</span><span id="line-38">    */</span>
-<span class="source-line-no">039</span><span id="line-39">   public MarshallingRecursionException(String message, Object...args) {</span>
-<span class="source-line-no">040</span><span id="line-40">      super(f(message, args));</span>
-<span class="source-line-no">041</span><span id="line-41">   }</span>
-<span class="source-line-no">042</span><span id="line-42">}</span>
+<span class="source-line-no">031</span><span id="line-31">   /**</span>
+<span class="source-line-no">032</span><span id="line-32">    * Constructor.</span>
+<span class="source-line-no">033</span><span id="line-33">    *</span>
+<span class="source-line-no">034</span><span id="line-34">    * @param message The {@link String#format(String, Object...) String.format}-style message (&lt;c&gt;%s&lt;/c&gt; placeholders).</span>
+<span class="source-line-no">035</span><span id="line-35">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
+<span class="source-line-no">036</span><span id="line-36">    */</span>
+<span class="source-line-no">037</span><span id="line-37">   public MarshallingRecursionException(String message, Object...args) {</span>
+<span class="source-line-no">038</span><span id="line-38">      super(f(message, args));</span>
+<span class="source-line-no">039</span><span id="line-39">   }</span>
+<span class="source-line-no">040</span><span id="line-40">}</span>
 
 
 

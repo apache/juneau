@@ -78,10 +78,24 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpTypedHandlers.html#line-29">McpTypedHandlers</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpTypedHandlers.html#line-51">McpTypedHandlers</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Adapters that convert <a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpTypedToolHandler</code></a> / <a href="McpTypedPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpTypedPromptHandler</code></a> into the raw
- <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a> / <a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpPromptHandler</code></a> interfaces consumed by <a href="McpDispatcher.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpDispatcher</code></a>.</div>
+<div class="block">Bridges <a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>typed tool handlers</code></a> into raw <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a>s.
+
+ <p>
+ The single public entry point is <a href="#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)"><code>adaptTool(McpTypedToolHandler)</code></a>, which:
+ <ul>
+   <li>Derives the input and output JSON Schemas once (at adaptation time) from the typed handler's declared
+      <a href="McpTypedToolHandler.html#argumentType()"><code>argument</code></a> and <a href="McpTypedToolHandler.html#resultType()"><code>result</code></a>
+      types, caching them in a single <a href="McpToolSpec.html" title="class in org.apache.juneau.rest.server.mcp"><code>descriptor</code></a> instance returned on every
+      <a href="McpToolHandler.html#descriptor()"><code>McpToolHandler.descriptor()</code></a> call.
+   <li>Binds incoming JSON arguments into an instance of the argument type, mapping binding failures to
+      JSON-RPC <code>-32602</code> (invalid params).
+   <li>Invokes the typed handler and canonicalizes the returned value into a generic JSON tree in a single
+      serialization pass, mapping canonicalization and structural-safety failures to JSON-RPC <code>-32603</code>
+      (internal error).
+   <li>Optionally mirrors the canonical structured content as a single text content block.
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -96,16 +110,22 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;A&gt;&nbsp;<a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#adaptPrompt(org.apache.juneau.rest.server.mcp.McpTypedPromptHandler)" class="member-name-link">adaptPrompt</a><wbr>(<a href="McpTypedPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedPromptHandler</a>&lt;A&gt;&nbsp;typed)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;A,<wbr>
+R&gt;&nbsp;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)" class="member-name-link">adaptTool</a><wbr>(<a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;A,<wbr>R&gt;&nbsp;typed)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Converts a typed prompt handler into a raw handler suitable for <a href="McpServerConfig.html#addPrompt(org.apache.juneau.rest.server.mcp.McpPromptHandler...)"><code>McpServerConfig.addPrompt(McpPromptHandler...)</code></a>.</div>
+<div class="block">Adapts a typed tool handler into a raw <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;A,<wbr>
 R&gt;&nbsp;<a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)" class="member-name-link">adaptTool</a><wbr>(<a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;A,<wbr>R&gt;&nbsp;typed)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#tool(java.lang.String,java.lang.String,java.lang.Class,java.lang.Class,java.util.function.BiFunction)" class="member-name-link">tool</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;argumentType,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;R&gt;&nbsp;resultType,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;A,<wbr><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr>R&gt;&nbsp;call)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Converts a typed tool handler into a raw handler suitable for <a href="McpServerConfig.html#addTool(org.apache.juneau.rest.server.mcp.McpToolHandler...)"><code>McpServerConfig.addTool(McpToolHandler...)</code></a>.</div>
+<div class="block">Builds a typed tool from a name, description, argument/result types, and a <code>call</code> lambda, then adapts
+ it into a raw <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a> via <a href="#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)"><code>adaptTool(McpTypedToolHandler)</code></a>.</div>
 </div>
 </div>
 </div>
@@ -128,45 +148,47 @@ R&gt;&nbsp;<a href="McpToolHandler.html" title="interface in org.apache.juneau.r
 <section class="detail" id="adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)">
 <h3>adaptTool</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;A,<wbr>
-R&gt;</span>&nbsp;<span class="return-type"><a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpTypedHandlers.html#line-51">adaptTool</a></span><wbr><span class="parameters">(<a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;A,<wbr>R&gt;&nbsp;typed)</span></div>
-<div class="block">Converts a typed tool handler into a raw handler suitable for <a href="McpServerConfig.html#addTool(org.apache.juneau.rest.server.mcp.McpToolHandler...)"><code>McpServerConfig.addTool(McpToolHandler...)</code></a>.
-
- <p>
- Conversion behavior:
- <ul>
-   <li>The incoming <code>Map&lt;String,Object&gt;</code> arguments are serialized to JSON and re-parsed as
-       <a href="McpTypedToolHandler.html#argumentType()"><code>McpTypedToolHandler.argumentType()</code></a> via <a href="../../../marshall/marshaller/Json.html#of(java.lang.Object)"><code>Json.of(Object)</code></a> / <a href="../../../marshall/marshaller/Json.html#to(java.lang.String,java.lang.Class)"><code>Json.to(String, Class)</code></a>.
-   <li>If the typed handler returns a <a href="../../../bean/mcp/CallToolResult.html" title="class in org.apache.juneau.bean.mcp"><code>CallToolResult</code></a>, it is passed through unchanged.
-   <li>Otherwise, the return value is JSON-serialized and wrapped in a single <a href="../../../bean/mcp/TextContent.html" title="class in org.apache.juneau.bean.mcp"><code>TextContent</code></a>
-       inside a <a href="../../../bean/mcp/CallToolResult.html" title="class in org.apache.juneau.bean.mcp"><code>CallToolResult</code></a>.
- </ul></div>
+R&gt;</span>&nbsp;<span class="return-type"><a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpTypedHandlers.html#line-69">adaptTool</a></span><wbr><span class="parameters">(<a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;A,<wbr>R&gt;&nbsp;typed)</span></div>
+<div class="block">Adapts a typed tool handler into a raw <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>A</code> - Argument type.</dd>
-<dd><code>R</code> - Return type.</dd>
+<dd><code>A</code> - The tool argument type.</dd>
+<dd><code>R</code> - The tool result type.</dd>
 <dt>Parameters:</dt>
-<dd><code>typed</code> - The typed handler. Never <code>null</code>.</dd>
+<dd><code>typed</code> - The typed handler to adapt. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>A raw handler delegating to <code>typed</code>.</dd>
+<dd>A raw handler that derives schemas, binds arguments, and canonicalizes results. Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="adaptPrompt(org.apache.juneau.rest.server.mcp.McpTypedPromptHandler)">
-<h3>adaptPrompt</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;A&gt;</span>&nbsp;<span class="return-type"><a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpPromptHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpTypedHandlers.html#line-78">adaptPrompt</a></span><wbr><span class="parameters">(<a href="McpTypedPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedPromptHandler</a>&lt;A&gt;&nbsp;typed)</span></div>
-<div class="block">Converts a typed prompt handler into a raw handler suitable for <a href="McpServerConfig.html#addPrompt(org.apache.juneau.rest.server.mcp.McpPromptHandler...)"><code>McpServerConfig.addPrompt(McpPromptHandler...)</code></a>.
+<section class="detail" id="tool(java.lang.String,java.lang.String,java.lang.Class,java.lang.Class,java.util.function.BiFunction)">
+<h3>tool</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;A,<wbr>
+R&gt;</span>&nbsp;<span class="return-type"><a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpTypedHandlers.html#line-117">tool</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;argumentType,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;R&gt;&nbsp;resultType,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;A,<wbr><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr>R&gt;&nbsp;call)</span></div>
+<div class="block">Builds a typed tool from a name, description, argument/result types, and a <code>call</code> lambda, then adapts
+ it into a raw <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a> via <a href="#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)"><code>adaptTool(McpTypedToolHandler)</code></a>.
 
  <p>
- The incoming arguments map is JSON-roundtripped into <a href="McpTypedPromptHandler.html#argumentType()"><code>McpTypedPromptHandler.argumentType()</code></a> before
- delegating to the typed implementation.</div>
+ The sanctioned one-expression path for the common case: declaring a typed tool no longer requires a named
+ class implementing <a href="McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpTypedToolHandler</code></a>. Schema derivation, argument binding, and result
+ canonicalization are exactly what <a href="#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)"><code>adaptTool(McpTypedToolHandler)</code></a> already does.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>A</code> - Argument type.</dd>
+<dd><code>A</code> - The tool argument type.</dd>
+<dd><code>R</code> - The tool result type.</dd>
 <dt>Parameters:</dt>
-<dd><code>typed</code> - The typed handler. Never <code>null</code>.</dd>
+<dd><code>name</code> - The tool name. Must not be <jk>null</jk>.</dd>
+<dd><code>description</code> - The human-readable tool description. Can be <jk>null</jk>.</dd>
+<dd><code>argumentType</code> - The tool argument class, used for both schema derivation and argument binding. Must not be <jk>null</jk>.</dd>
+<dd><code>resultType</code> - The tool result class, used for schema derivation. Must not be <jk>null</jk>.</dd>
+<dd><code>call</code> - The call body, invoked with the bound argument and the per-request bean store. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>A raw handler delegating to <code>typed</code>.</dd>
+<dd>A raw handler that derives schemas, binds arguments, and canonicalizes results. Never <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

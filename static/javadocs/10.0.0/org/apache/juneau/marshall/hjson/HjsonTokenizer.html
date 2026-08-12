@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-34">HjsonTokenizer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-36">HjsonTokenizer</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Tokenizer for Hjson format.
 
@@ -200,11 +200,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Reader)">
 <h3>HjsonTokenizer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-140">HjsonTokenizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;reader)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-143">HjsonTokenizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;reader)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>reader</code> - The reader to tokenize.</dd>
+<dd><code>reader</code> - The reader to tokenize.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -219,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLine()">
 <h3>getLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-150">getLine</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-153">getLine</a></span>()</div>
 <div class="block">Returns the current line number (1-based).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -230,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getColumn()">
 <h3>getColumn</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-159">getColumn</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-162">getColumn</a></span>()</div>
 <div class="block">Returns the current column number (1-based).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -241,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="peek()">
 <h3>peek</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HjsonTokenizer.Token.html" title="class in org.apache.juneau.marshall.hjson">HjsonTokenizer.Token</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-169">peek</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HjsonTokenizer.Token.html" title="class in org.apache.juneau.marshall.hjson">HjsonTokenizer.Token</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-172">peek</a></span>()
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Peeks at the next token without consuming it.</div>
 <dl class="notes">
@@ -255,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read()">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HjsonTokenizer.Token.html" title="class in org.apache.juneau.marshall.hjson">HjsonTokenizer.Token</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-181">read</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HjsonTokenizer.Token.html" title="class in org.apache.juneau.marshall.hjson">HjsonTokenizer.Token</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-184">read</a></span>()
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads and consumes the next token.</div>
 <dl class="notes">
@@ -269,7 +270,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="skipWhitespaceAndComments()">
 <h3>skipWhitespaceAndComments</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-222">skipWhitespaceAndComments</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-225">skipWhitespaceAndComments</a></span>()
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Skips whitespace and comments.</div>
 <dl class="notes">
@@ -281,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readQuotedString()">
 <h3>readQuotedString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-354">readQuotedString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-357">readQuotedString</a></span>()
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a quoted string ("..." or '...') with JSON-style escaping.</div>
 <dl class="notes">
@@ -295,7 +296,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readQuotelessString()">
 <h3>readQuotelessString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-413">readQuotelessString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-416">readQuotelessString</a></span>()
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a quoteless string (to end of line, trimmed).</div>
 <dl class="notes">
@@ -309,7 +310,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readMultilineString(int)">
 <h3>readMultilineString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-434">readMultilineString</a></span><wbr><span class="parameters">(int&nbsp;indentBaseline)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hjson/HjsonTokenizer.html#line-437">readMultilineString</a></span><wbr><span class="parameters">(int&nbsp;indentBaseline)</span>
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a multiline string ('''...''').
  Caller must have already consumed the opening '''.</div>

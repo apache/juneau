@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.marshall.encoders.*;</span>
@@ -363,61 +363,61 @@
 <span class="source-line-no">350</span><span id="line-350">      Impl(MixinAnnotation.Builder b) {</span>
 <span class="source-line-no">351</span><span id="line-351">         super(b);</span>
 <span class="source-line-no">352</span><span id="line-352">         type = b.type;</span>
-<span class="source-line-no">353</span><span id="line-353">         guards = copyOf(b.guards);</span>
+<span class="source-line-no">353</span><span id="line-353">         guards = cp(b.guards);</span>
 <span class="source-line-no">354</span><span id="line-354">         roleGuard = b.roleGuard;</span>
 <span class="source-line-no">355</span><span id="line-355">         rolesDeclared = b.rolesDeclared;</span>
-<span class="source-line-no">356</span><span id="line-356">         converters = copyOf(b.converters);</span>
-<span class="source-line-no">357</span><span id="line-357">         encoders = copyOf(b.encoders);</span>
-<span class="source-line-no">358</span><span id="line-358">         serializers = copyOf(b.serializers);</span>
-<span class="source-line-no">359</span><span id="line-359">         parsers = copyOf(b.parsers);</span>
-<span class="source-line-no">360</span><span id="line-360">         responseProcessors = copyOf(b.responseProcessors);</span>
-<span class="source-line-no">361</span><span id="line-361">         restOpArgs = copyOf(b.restOpArgs);</span>
+<span class="source-line-no">356</span><span id="line-356">         converters = cp(b.converters);</span>
+<span class="source-line-no">357</span><span id="line-357">         encoders = cp(b.encoders);</span>
+<span class="source-line-no">358</span><span id="line-358">         serializers = cp(b.serializers);</span>
+<span class="source-line-no">359</span><span id="line-359">         parsers = cp(b.parsers);</span>
+<span class="source-line-no">360</span><span id="line-360">         responseProcessors = cp(b.responseProcessors);</span>
+<span class="source-line-no">361</span><span id="line-361">         restOpArgs = cp(b.restOpArgs);</span>
 <span class="source-line-no">362</span><span id="line-362">         callLogger = b.callLogger;</span>
 <span class="source-line-no">363</span><span id="line-363">         partSerializer = b.partSerializer;</span>
 <span class="source-line-no">364</span><span id="line-364">         partParser = b.partParser;</span>
 <span class="source-line-no">365</span><span id="line-365">         debug = b.debug;</span>
 <span class="source-line-no">366</span><span id="line-366">         messages = b.messages;</span>
-<span class="source-line-no">367</span><span id="line-367">         defaultRequestHeaders = copyOf(b.defaultRequestHeaders);</span>
-<span class="source-line-no">368</span><span id="line-368">         defaultResponseHeaders = copyOf(b.defaultResponseHeaders);</span>
-<span class="source-line-no">369</span><span id="line-369">         defaultRequestAttributes = copyOf(b.defaultRequestAttributes);</span>
-<span class="source-line-no">370</span><span id="line-370">         produces = copyOf(b.produces);</span>
-<span class="source-line-no">371</span><span id="line-371">         consumes = copyOf(b.consumes);</span>
+<span class="source-line-no">367</span><span id="line-367">         defaultRequestHeaders = cp(b.defaultRequestHeaders);</span>
+<span class="source-line-no">368</span><span id="line-368">         defaultResponseHeaders = cp(b.defaultResponseHeaders);</span>
+<span class="source-line-no">369</span><span id="line-369">         defaultRequestAttributes = cp(b.defaultRequestAttributes);</span>
+<span class="source-line-no">370</span><span id="line-370">         produces = cp(b.produces);</span>
+<span class="source-line-no">371</span><span id="line-371">         consumes = cp(b.consumes);</span>
 <span class="source-line-no">372</span><span id="line-372">         defaultAccept = b.defaultAccept;</span>
 <span class="source-line-no">373</span><span id="line-373">         defaultContentType = b.defaultContentType;</span>
 <span class="source-line-no">374</span><span id="line-374">         defaultCharset = b.defaultCharset;</span>
 <span class="source-line-no">375</span><span id="line-375">         maxInput = b.maxInput;</span>
 <span class="source-line-no">376</span><span id="line-376">         path = b.path;</span>
-<span class="source-line-no">377</span><span id="line-377">         paths = copyOf(b.paths);</span>
-<span class="source-line-no">378</span><span id="line-378">         noInherit = copyOf(b.noInherit);</span>
+<span class="source-line-no">377</span><span id="line-377">         paths = cp(b.paths);</span>
+<span class="source-line-no">378</span><span id="line-378">         noInherit = cp(b.noInherit);</span>
 <span class="source-line-no">379</span><span id="line-379">      }</span>
 <span class="source-line-no">380</span><span id="line-380"></span>
 <span class="source-line-no">381</span><span id="line-381">      @Override /* Overridden from Mixin */ public Class&lt;?&gt; type() { return type; }</span>
-<span class="source-line-no">382</span><span id="line-382">      @Override /* Overridden from Mixin */ public Class&lt;? extends RestGuard&gt;[] guards() { return guards; }</span>
+<span class="source-line-no">382</span><span id="line-382">      @Override /* Overridden from Mixin */ public Class&lt;? extends RestGuard&gt;[] guards() { return cp(guards); }</span>
 <span class="source-line-no">383</span><span id="line-383">      @Override /* Overridden from Mixin */ public String roleGuard() { return roleGuard; }</span>
 <span class="source-line-no">384</span><span id="line-384">      @Override /* Overridden from Mixin */ public String rolesDeclared() { return rolesDeclared; }</span>
-<span class="source-line-no">385</span><span id="line-385">      @Override /* Overridden from Mixin */ public Class&lt;? extends RestConverter&gt;[] converters() { return converters; }</span>
-<span class="source-line-no">386</span><span id="line-386">      @Override /* Overridden from Mixin */ public Class&lt;? extends Encoder&gt;[] encoders() { return encoders; }</span>
-<span class="source-line-no">387</span><span id="line-387">      @Override /* Overridden from Mixin */ public Class&lt;? extends Serializer&gt;[] serializers() { return serializers; }</span>
-<span class="source-line-no">388</span><span id="line-388">      @Override /* Overridden from Mixin */ public Class&lt;?&gt;[] parsers() { return parsers; }</span>
-<span class="source-line-no">389</span><span id="line-389">      @Override /* Overridden from Mixin */ public Class&lt;? extends ResponseProcessor&gt;[] responseProcessors() { return responseProcessors; }</span>
-<span class="source-line-no">390</span><span id="line-390">      @Override /* Overridden from Mixin */ public Class&lt;? extends RestOpArg&gt;[] restOpArgs() { return restOpArgs; }</span>
+<span class="source-line-no">385</span><span id="line-385">      @Override /* Overridden from Mixin */ public Class&lt;? extends RestConverter&gt;[] converters() { return cp(converters); }</span>
+<span class="source-line-no">386</span><span id="line-386">      @Override /* Overridden from Mixin */ public Class&lt;? extends Encoder&gt;[] encoders() { return cp(encoders); }</span>
+<span class="source-line-no">387</span><span id="line-387">      @Override /* Overridden from Mixin */ public Class&lt;? extends Serializer&gt;[] serializers() { return cp(serializers); }</span>
+<span class="source-line-no">388</span><span id="line-388">      @Override /* Overridden from Mixin */ public Class&lt;?&gt;[] parsers() { return cp(parsers); }</span>
+<span class="source-line-no">389</span><span id="line-389">      @Override /* Overridden from Mixin */ public Class&lt;? extends ResponseProcessor&gt;[] responseProcessors() { return cp(responseProcessors); }</span>
+<span class="source-line-no">390</span><span id="line-390">      @Override /* Overridden from Mixin */ public Class&lt;? extends RestOpArg&gt;[] restOpArgs() { return cp(restOpArgs); }</span>
 <span class="source-line-no">391</span><span id="line-391">      @Override /* Overridden from Mixin */ public Class&lt;? extends CallLogger&gt; callLogger() { return callLogger; }</span>
 <span class="source-line-no">392</span><span id="line-392">      @Override /* Overridden from Mixin */ public Class&lt;? extends HttpPartSerializer&gt; partSerializer() { return partSerializer; }</span>
 <span class="source-line-no">393</span><span id="line-393">      @Override /* Overridden from Mixin */ public Class&lt;? extends HttpPartParser&gt; partParser() { return partParser; }</span>
 <span class="source-line-no">394</span><span id="line-394">      @Override /* Overridden from Mixin */ public Debug debug() { return debug; }</span>
 <span class="source-line-no">395</span><span id="line-395">      @Override /* Overridden from Mixin */ public String messages() { return messages; }</span>
-<span class="source-line-no">396</span><span id="line-396">      @Override /* Overridden from Mixin */ public String[] defaultRequestHeaders() { return defaultRequestHeaders; }</span>
-<span class="source-line-no">397</span><span id="line-397">      @Override /* Overridden from Mixin */ public String[] defaultResponseHeaders() { return defaultResponseHeaders; }</span>
-<span class="source-line-no">398</span><span id="line-398">      @Override /* Overridden from Mixin */ public String[] defaultRequestAttributes() { return defaultRequestAttributes; }</span>
-<span class="source-line-no">399</span><span id="line-399">      @Override /* Overridden from Mixin */ public String[] produces() { return produces; }</span>
-<span class="source-line-no">400</span><span id="line-400">      @Override /* Overridden from Mixin */ public String[] consumes() { return consumes; }</span>
+<span class="source-line-no">396</span><span id="line-396">      @Override /* Overridden from Mixin */ public String[] defaultRequestHeaders() { return cp(defaultRequestHeaders); }</span>
+<span class="source-line-no">397</span><span id="line-397">      @Override /* Overridden from Mixin */ public String[] defaultResponseHeaders() { return cp(defaultResponseHeaders); }</span>
+<span class="source-line-no">398</span><span id="line-398">      @Override /* Overridden from Mixin */ public String[] defaultRequestAttributes() { return cp(defaultRequestAttributes); }</span>
+<span class="source-line-no">399</span><span id="line-399">      @Override /* Overridden from Mixin */ public String[] produces() { return cp(produces); }</span>
+<span class="source-line-no">400</span><span id="line-400">      @Override /* Overridden from Mixin */ public String[] consumes() { return cp(consumes); }</span>
 <span class="source-line-no">401</span><span id="line-401">      @Override /* Overridden from Mixin */ public String defaultAccept() { return defaultAccept; }</span>
 <span class="source-line-no">402</span><span id="line-402">      @Override /* Overridden from Mixin */ public String defaultContentType() { return defaultContentType; }</span>
 <span class="source-line-no">403</span><span id="line-403">      @Override /* Overridden from Mixin */ public String defaultCharset() { return defaultCharset; }</span>
 <span class="source-line-no">404</span><span id="line-404">      @Override /* Overridden from Mixin */ public String maxInput() { return maxInput; }</span>
 <span class="source-line-no">405</span><span id="line-405">      @Override /* Overridden from Mixin */ public String path() { return path; }</span>
-<span class="source-line-no">406</span><span id="line-406">      @Override /* Overridden from Mixin */ public String[] paths() { return paths; }</span>
-<span class="source-line-no">407</span><span id="line-407">      @Override /* Overridden from Mixin */ public String[] noInherit() { return noInherit; }</span>
+<span class="source-line-no">406</span><span id="line-406">      @Override /* Overridden from Mixin */ public String[] paths() { return cp(paths); }</span>
+<span class="source-line-no">407</span><span id="line-407">      @Override /* Overridden from Mixin */ public String[] noInherit() { return cp(noInherit); }</span>
 <span class="source-line-no">408</span><span id="line-408">   }</span>
 <span class="source-line-no">409</span><span id="line-409"></span>
 <span class="source-line-no">410</span><span id="line-410">   /**</span>

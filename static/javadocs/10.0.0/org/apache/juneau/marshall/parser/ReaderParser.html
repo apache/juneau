@@ -88,16 +88,16 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../csv/CsvParser.html" title="class in org.apache.juneau.marshall.csv">CsvParser</a></code>, <code><a href="../hjson/HjsonParser.html" title="class in org.apache.juneau.marshall.hjson">HjsonParser</a></code>, <code><a href="../hocon/HoconParser.html" title="class in org.apache.juneau.marshall.hocon">HoconParser</a></code>, <code><a href="../ini/IniParser.html" title="class in org.apache.juneau.marshall.ini">IniParser</a></code>, <code><a href="../json/JsonParser.html" title="class in org.apache.juneau.marshall.json">JsonParser</a></code>, <code><a href="../markdown/MarkdownParser.html" title="class in org.apache.juneau.marshall.markdown">MarkdownParser</a></code>, <code><a href="../plaintext/PlainTextParser.html" title="class in org.apache.juneau.marshall.plaintext">PlainTextParser</a></code>, <code><a href="../jena/RdfParser.html" title="class in org.apache.juneau.marshall.jena">RdfParser</a></code>, <code><a href="../sse/SseParser.html" title="class in org.apache.juneau.marshall.sse">SseParser</a></code>, <code><a href="../toml/TomlParser.html" title="class in org.apache.juneau.marshall.toml">TomlParser</a></code>, <code><a href="../uon/UonParser.html" title="class in org.apache.juneau.marshall.uon">UonParser</a></code>, <code><a href="../xml/XmlParser.html" title="class in org.apache.juneau.marshall.xml">XmlParser</a></code>, <code><a href="../yaml/YamlParser.html" title="class in org.apache.juneau.marshall.yaml">YamlParser</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-46">ReaderParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-47">ReaderParser</a></span>
 <span class="extends-implements">extends <a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></span></div>
-<div class="block">Subclass of <a href="Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> for characters-based parsers.
+<div class="block">Subclass of <a href="Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> for character-based parsers.
 
  <h5 class='topic'>Description</h5>
  <p>
  This class is typically the parent class of all character-based parsers.
  It has 1 abstract method to implement on the session object...
  <ul>
-   <li><c>parse(ParserSession, ClassMeta)</c>
+   <li><a href="ParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)"><code>ParserSession.doRead(ParserPipe, ClassMeta)</code></a>
  </ul>
 
  <h5 class='section'>Notes:</h5><ul>
@@ -188,29 +188,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Create a session builder based on the properties defined on this context.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFileCharset()" class="member-name-link">getFileCharset</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSession()" class="member-name-link">getSession</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">File charset.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSession()" class="member-name-link">getSession</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a session to use for this context.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStreamCharset()" class="member-name-link">getStreamCharset</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStreamCharset()" class="member-name-link">getStreamCharset</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Input stream charset.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isReaderParser()" class="member-name-link">isReaderParser</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isReaderParser()" class="member-name-link">isReaderParser</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if this parser subclasses from <a href="ReaderParser.html" title="class in org.apache.juneau.marshall.parser"><code>ReaderParser</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 </div>
 </div>
@@ -218,7 +213,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.Parser">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></h3>
-<code><a href="Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="Parser.html#copy()">copy</a>, <a href="Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doParse</a>, <a href="Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="Parser.html#getListener()">getListener</a>, <a href="Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="Parser.html#getNulls()">getNulls</a>, <a href="Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="Parser.html#parse(java.lang.Object,java.lang.Class)">parse</a>, <a href="Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="Parser.html#parse(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="Parser.html#parse(java.lang.String,java.lang.Class)">parse</a>, <a href="Parser.html#parse(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="Parser.html#parse(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="Parser.html#parseArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">parseArgs</a>, <a href="Parser.html#parseIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">parseIntoCollection</a>, <a href="Parser.html#parseIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">parseIntoMap</a>, <a href="Parser.html#parseWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">parseWithOuter</a></code></div>
+<code><a href="Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="Parser.html#copy()">copy</a>, <a href="Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doRead</a>, <a href="Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="Parser.html#getListener()">getListener</a>, <a href="Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="Parser.html#getNulls()">getNulls</a>, <a href="Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="Parser.html#read(java.lang.Object,java.lang.Class)">read</a>, <a href="Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="Parser.html#read(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="Parser.html#read(java.lang.String,java.lang.Class)">read</a>, <a href="Parser.html#read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="Parser.html#read(java.lang.String,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="Parser.html#readArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">readArgs</a>, <a href="Parser.html#readIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">readIntoCollection</a>, <a href="Parser.html#readIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">readIntoMap</a>, <a href="Parser.html#readWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">readWithOuter</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingContextable">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingContextable.html" title="class in org.apache.juneau.marshall">MarshallingContextable</a></h3>
 <code><a href="../MarshallingContextable.html#getDurationFormat()">getDurationFormat</a>, <a href="../MarshallingContextable.html#getMarshallingContext()">getMarshallingContext</a>, <a href="../MarshallingContextable.html#getPeriodFormat()">getPeriodFormat</a></code></div>
@@ -242,11 +237,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ReaderParser.Builder)">
 <h3>ReaderParser</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-228">ReaderParser</a></span><wbr><span class="parameters">(<a href="ReaderParser.Builder.html" title="class in org.apache.juneau.marshall.parser">ReaderParser.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-191">ReaderParser</a></span><wbr><span class="parameters">(<a href="ReaderParser.Builder.html" title="class in org.apache.juneau.marshall.parser">ReaderParser.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.
+   <br>Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -261,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ReaderParser.Builder.html" title="class in org.apache.juneau.marshall.parser">ReaderParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-213">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ReaderParser.Builder.html" title="class in org.apache.juneau.marshall.parser">ReaderParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-176">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -272,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-234">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-196">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -290,7 +286,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-239">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-201">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -307,7 +303,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isReaderParser()">
 <h3>isReaderParser</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-242">isReaderParser</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-204">isReaderParser</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Parser.html#isReaderParser()">Parser</a></code></span></div>
 <div class="block">Returns <jk>true</jk> if this parser subclasses from <a href="ReaderParser.html" title="class in org.apache.juneau.marshall.parser"><code>ReaderParser</code></a>.</div>
 <dl class="notes">
@@ -319,26 +315,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getFileCharset()">
-<h3>getFileCharset</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-252">getFileCharset</a></span>()</div>
-<div class="block">File charset.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The character set to use for reading <c>Files</c> from the file system.</dd>
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list-long">
-<li><a href="ReaderParser.Builder.html#fileCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.fileCharset(Charset)</code></a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="getStreamCharset()">
 <h3>getStreamCharset</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-261">getStreamCharset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-214">getStreamCharset</a></span>()</div>
 <div class="block">Input stream charset.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -355,7 +334,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-263">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParser.html#line-216">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

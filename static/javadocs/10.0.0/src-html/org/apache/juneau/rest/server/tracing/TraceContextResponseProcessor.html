@@ -103,38 +103,71 @@
 <span class="source-line-no">090</span><span id="line-90">    */</span>
 <span class="source-line-no">091</span><span id="line-91">   public static final String ATTR_TRACESTATE = "juneau.tracestate";</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   private static final String HEADER_TRACEPARENT = "traceparent";</span>
-<span class="source-line-no">094</span><span id="line-94">   private static final String HEADER_TRACESTATE = "tracestate";</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   private static final Logger LOG = Logger.getLogger(TraceContextResponseProcessor.class.getName());</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   @Override /* Overridden from ResponseProcessor */</span>
-<span class="source-line-no">099</span><span id="line-99">   public int process(RestOpSession opSession) throws IOException, BasicHttpException {</span>
-<span class="source-line-no">100</span><span id="line-100">      var req = opSession.getRequest();</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">      // NoOp short-circuit: no active tracer stashed a trace context for this request.</span>
-<span class="source-line-no">103</span><span id="line-103">      var traceparent = req.getAttribute(ATTR_TRACEPARENT).as(String.class).orElse(null);</span>
-<span class="source-line-no">104</span><span id="line-104">      if (isEmpty(traceparent))</span>
-<span class="source-line-no">105</span><span id="line-105">         return NEXT;</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">      var res = opSession.getResponse();</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">      // Headers already flushed (e.g. streaming / SSE response) — body was also written; chain is done.</span>
-<span class="source-line-no">110</span><span id="line-110">      if (res.getHttpServletResponse().isCommitted()) {</span>
-<span class="source-line-no">111</span><span id="line-111">         LOG.log(Level.FINE, () -&gt; "Response already committed; skipping traceparent/tracestate header injection.");</span>
-<span class="source-line-no">112</span><span id="line-112">         return FINISHED;</span>
-<span class="source-line-no">113</span><span id="line-113">      }</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">      res.setHeader(HEADER_TRACEPARENT, traceparent);</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">      var tracestate = req.getAttribute(ATTR_TRACESTATE).as(String.class).orElse(null);</span>
-<span class="source-line-no">118</span><span id="line-118">      if (tracestate != null &amp;&amp; ! tracestate.isEmpty())</span>
-<span class="source-line-no">119</span><span id="line-119">         res.setHeader(HEADER_TRACESTATE, tracestate);</span>
-<span class="source-line-no">120</span><span id="line-120"></span>
-<span class="source-line-no">121</span><span id="line-121">      // Headers only — let the downstream processors render the body.</span>
-<span class="source-line-no">122</span><span id="line-122">      return NEXT;</span>
-<span class="source-line-no">123</span><span id="line-123">   }</span>
-<span class="source-line-no">124</span><span id="line-124">}</span>
+<span class="source-line-no">093</span><span id="line-93">   /**</span>
+<span class="source-line-no">094</span><span id="line-94">    * Request-attribute key under which a {@link TracerHook} bridge stashes the rendered, non-empty W3C</span>
+<span class="source-line-no">095</span><span id="line-95">    * {@code baggage} value.</span>
+<span class="source-line-no">096</span><span id="line-96">    *</span>
+<span class="source-line-no">097</span><span id="line-97">    * &lt;p&gt;</span>
+<span class="source-line-no">098</span><span id="line-98">    * Unlike {@link #ATTR_TRACEPARENT} / {@link #ATTR_TRACESTATE}, this processor does &lt;b&gt;not&lt;/b&gt; read</span>
+<span class="source-line-no">099</span><span id="line-99">    * this attribute and never emits a {@code baggage} response header from it &amp;mdash; {@code baggage} is</span>
+<span class="source-line-no">100</span><span id="line-100">    * stashed purely so a dated MCP adapter can echo it into a successful result's {@code _meta} (added in</span>
+<span class="source-line-no">101</span><span id="line-101">    * a later task). Ordinary HTTP response-header behavior for {@code traceparent} / {@code tracestate} is</span>
+<span class="source-line-no">102</span><span id="line-102">    * unaffected by this constant's existence.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * @since 10.0.0</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   public static final String ATTR_BAGGAGE = "juneau.baggage";</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108">   /**</span>
+<span class="source-line-no">109</span><span id="line-109">    * Request-attribute key under which {@link RestOpInvoker} stashes the active {@link Scope} for the</span>
+<span class="source-line-no">110</span><span id="line-110">    * duration of one {@code @RestOp} handler invocation.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * &lt;p&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * Populated only on the active-tracer path &amp;mdash; see the no-tracer fast-path contract documented on</span>
+<span class="source-line-no">114</span><span id="line-114">    * {@link TracerHook} &amp;mdash; and cleared once that invocation's synchronous or deferred observability</span>
+<span class="source-line-no">115</span><span id="line-115">    * lifecycle closes the scope. A dated MCP adapter running inside the handler already resolves this</span>
+<span class="source-line-no">116</span><span id="line-116">    * same {@link RestRequest} through its own request-scoped {@code BeanStore} entry; reading this</span>
+<span class="source-line-no">117</span><span id="line-117">    * attribute off that request lets it call {@link Scope#recordRpcError(int, String)} before returning a</span>
+<span class="source-line-no">118</span><span id="line-118">    * JSON-RPC error response &amp;mdash; a JSON-RPC error is dispatched over HTTP {@code 200}, so it never</span>
+<span class="source-line-no">119</span><span id="line-119">    * otherwise reaches {@link Scope#setStatusCode(int)} with anything but the adapter's uniform success</span>
+<span class="source-line-no">120</span><span id="line-120">    * status.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @since 10.0.0</span>
+<span class="source-line-no">123</span><span id="line-123">    */</span>
+<span class="source-line-no">124</span><span id="line-124">   public static final String ATTR_SCOPE = "juneau.tracerScope";</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   private static final String HEADER_TRACEPARENT = "traceparent";</span>
+<span class="source-line-no">127</span><span id="line-127">   private static final String HEADER_TRACESTATE = "tracestate";</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   private static final Logger LOG = Logger.getLogger(TraceContextResponseProcessor.class.getName());</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   @Override /* Overridden from ResponseProcessor */</span>
+<span class="source-line-no">132</span><span id="line-132">   public int process(RestOpSession opSession) throws IOException, BasicHttpException {</span>
+<span class="source-line-no">133</span><span id="line-133">      var req = opSession.getRequest();</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">      // NoOp short-circuit: no active tracer stashed a trace context for this request.</span>
+<span class="source-line-no">136</span><span id="line-136">      var traceparent = req.getAttribute(ATTR_TRACEPARENT).as(String.class).orElse(null);</span>
+<span class="source-line-no">137</span><span id="line-137">      if (isEmpty(traceparent))</span>
+<span class="source-line-no">138</span><span id="line-138">         return NEXT;</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      var res = opSession.getResponse();</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">      // Headers already flushed (e.g. streaming / SSE response) — body was also written; chain is done.</span>
+<span class="source-line-no">143</span><span id="line-143">      if (res.getHttpServletResponse().isCommitted()) {</span>
+<span class="source-line-no">144</span><span id="line-144">         LOG.log(Level.FINE, () -&gt; "Response already committed; skipping traceparent/tracestate header injection.");</span>
+<span class="source-line-no">145</span><span id="line-145">         return FINISHED;</span>
+<span class="source-line-no">146</span><span id="line-146">      }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">      res.setHeader(HEADER_TRACEPARENT, traceparent);</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">      var tracestate = req.getAttribute(ATTR_TRACESTATE).as(String.class).orElse(null);</span>
+<span class="source-line-no">151</span><span id="line-151">      if (tracestate != null &amp;&amp; ! tracestate.isEmpty())</span>
+<span class="source-line-no">152</span><span id="line-152">         res.setHeader(HEADER_TRACESTATE, tracestate);</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">      // Headers only — let the downstream processors render the body.</span>
+<span class="source-line-no">155</span><span id="line-155">      return NEXT;</span>
+<span class="source-line-no">156</span><span id="line-156">   }</span>
+<span class="source-line-no">157</span><span id="line-157">}</span>
 
 
 

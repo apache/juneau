@@ -172,9 +172,9 @@
 <span class="source-line-no">159</span><span id="line-159">       */</span>
 <span class="source-line-no">160</span><span id="line-160">      public Builder range(long startValue, long endValue) {</span>
 <span class="source-line-no">161</span><span id="line-161">         if (startValue &lt; 0)</span>
-<span class="source-line-no">162</span><span id="line-162">            throw iaex("range start must be non-negative: {0}", startValue);</span>
+<span class="source-line-no">162</span><span id="line-162">            throw iaex("range start must be non-negative: %s", startValue);</span>
 <span class="source-line-no">163</span><span id="line-163">         if (endValue &lt; startValue)</span>
-<span class="source-line-no">164</span><span id="line-164">            throw iaex("range end {0} must be &gt;= start {1}", endValue, startValue);</span>
+<span class="source-line-no">164</span><span id="line-164">            throw iaex("range end %s must be &gt;= start %s", endValue, startValue);</span>
 <span class="source-line-no">165</span><span id="line-165">         start = startValue;</span>
 <span class="source-line-no">166</span><span id="line-166">         end = endValue;</span>
 <span class="source-line-no">167</span><span id="line-167">         rangeUnsatisfied = false;</span>
@@ -205,7 +205,7 @@
 <span class="source-line-no">192</span><span id="line-192">       */</span>
 <span class="source-line-no">193</span><span id="line-193">      public Builder length(long value) {</span>
 <span class="source-line-no">194</span><span id="line-194">         if (value &lt; 0)</span>
-<span class="source-line-no">195</span><span id="line-195">            throw iaex("complete-length must be non-negative: {0}", value);</span>
+<span class="source-line-no">195</span><span id="line-195">            throw iaex("complete-length must be non-negative: %s", value);</span>
 <span class="source-line-no">196</span><span id="line-196">         completeLength = value;</span>
 <span class="source-line-no">197</span><span id="line-197">         lengthUnknown = false;</span>
 <span class="source-line-no">198</span><span id="line-198">         return this;</span>

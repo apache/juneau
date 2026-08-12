@@ -160,55 +160,53 @@
 <span class="source-line-no">147</span><span id="line-147">    * The comparison uses deep equality checking for array elements via {@link Shorts#eq(Object, Object)}.</span>
 <span class="source-line-no">148</span><span id="line-148">    *</span>
 <span class="source-line-no">149</span><span id="line-149">    * &lt;p&gt;</span>
-<span class="source-line-no">150</span><span id="line-150">    * This method does not perform null or type checking - it assumes the caller has verified the object</span>
-<span class="source-line-no">151</span><span id="line-151">    * is a non-null {@code HashKey} instance. Passing {@code null} or a non-{@code HashKey} object will</span>
-<span class="source-line-no">152</span><span id="line-152">    * result in a {@code ClassCastException} or {@code NullPointerException}.</span>
-<span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param o The object to compare with (must be a non-null {@code HashKey} instance).</span>
-<span class="source-line-no">155</span><span id="line-155">    * @return {@code true} if the objects are equal, {@code false} otherwise.</span>
-<span class="source-line-no">156</span><span id="line-156">    */</span>
-<span class="source-line-no">157</span><span id="line-157">   @Override</span>
-<span class="source-line-no">158</span><span id="line-158">   public boolean equals(Object o) {</span>
-<span class="source-line-no">159</span><span id="line-159">      if (!(o instanceof HashKey))</span>
-<span class="source-line-no">160</span><span id="line-160">         return false;</span>
-<span class="source-line-no">161</span><span id="line-161">      var x = (HashKey)o;</span>
-<span class="source-line-no">162</span><span id="line-162">      if (array.length != x.array.length)</span>
-<span class="source-line-no">163</span><span id="line-163">         return false;</span>
-<span class="source-line-no">164</span><span id="line-164">      for (var i = 0; i &lt; array.length; i++)</span>
-<span class="source-line-no">165</span><span id="line-165">         if (neq(array[i], x.array[i]))</span>
-<span class="source-line-no">166</span><span id="line-166">            return false;</span>
-<span class="source-line-no">167</span><span id="line-167">      return true;</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   /**</span>
-<span class="source-line-no">171</span><span id="line-171">    * Returns the hash code for this hash key.</span>
-<span class="source-line-no">172</span><span id="line-172">    *</span>
-<span class="source-line-no">173</span><span id="line-173">    * &lt;p&gt;</span>
-<span class="source-line-no">174</span><span id="line-174">    * The hash code is computed from all values in the key using {@link Arrays#deepHashCode(Object[])}.</span>
-<span class="source-line-no">175</span><span id="line-175">    * This ensures that equal keys have equal hash codes, making {@code HashKey} suitable for use</span>
-<span class="source-line-no">176</span><span id="line-176">    * as keys in hash-based collections like {@link HashMap} and {@link HashSet}.</span>
-<span class="source-line-no">177</span><span id="line-177">    * Arrays with the same contents (but different references) will produce the same hash code.</span>
-<span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * @return The hash code value for this object.</span>
-<span class="source-line-no">180</span><span id="line-180">    */</span>
-<span class="source-line-no">181</span><span id="line-181">   @Override</span>
-<span class="source-line-no">182</span><span id="line-182">   public int hashCode() {</span>
-<span class="source-line-no">183</span><span id="line-183">      return hashCode;</span>
-<span class="source-line-no">184</span><span id="line-184">   }</span>
-<span class="source-line-no">185</span><span id="line-185"></span>
-<span class="source-line-no">186</span><span id="line-186">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">187</span><span id="line-187">      // @formatter:off</span>
-<span class="source-line-no">188</span><span id="line-188">      return filteredBeanPropertyMap()</span>
-<span class="source-line-no">189</span><span id="line-189">         .a(PROP_hashCode, hashCode())</span>
-<span class="source-line-no">190</span><span id="line-190">         .a(PROP_array, array);</span>
-<span class="source-line-no">191</span><span id="line-191">      // @formatter:on</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">195</span><span id="line-195">   public String toString() {</span>
-<span class="source-line-no">196</span><span id="line-196">      return r(properties());</span>
-<span class="source-line-no">197</span><span id="line-197">   }</span>
-<span class="source-line-no">198</span><span id="line-198">}</span>
+<span class="source-line-no">150</span><span id="line-150">    * A &lt;jk&gt;null&lt;/jk&gt; argument, or an object that is not a {@code HashKey} instance, returns &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * @param o The object to compare with. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">153</span><span id="line-153">    * @return {@code true} if the objects are equal, {@code false} otherwise (including when &lt;c&gt;o&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt; or not a {@code HashKey}).</span>
+<span class="source-line-no">154</span><span id="line-154">    */</span>
+<span class="source-line-no">155</span><span id="line-155">   @Override</span>
+<span class="source-line-no">156</span><span id="line-156">   public boolean equals(Object o) {</span>
+<span class="source-line-no">157</span><span id="line-157">      if (!(o instanceof HashKey))</span>
+<span class="source-line-no">158</span><span id="line-158">         return false;</span>
+<span class="source-line-no">159</span><span id="line-159">      var x = (HashKey)o;</span>
+<span class="source-line-no">160</span><span id="line-160">      if (array.length != x.array.length)</span>
+<span class="source-line-no">161</span><span id="line-161">         return false;</span>
+<span class="source-line-no">162</span><span id="line-162">      for (var i = 0; i &lt; array.length; i++)</span>
+<span class="source-line-no">163</span><span id="line-163">         if (neq(array[i], x.array[i]))</span>
+<span class="source-line-no">164</span><span id="line-164">            return false;</span>
+<span class="source-line-no">165</span><span id="line-165">      return true;</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">   /**</span>
+<span class="source-line-no">169</span><span id="line-169">    * Returns the hash code for this hash key.</span>
+<span class="source-line-no">170</span><span id="line-170">    *</span>
+<span class="source-line-no">171</span><span id="line-171">    * &lt;p&gt;</span>
+<span class="source-line-no">172</span><span id="line-172">    * The hash code is computed from all values in the key using {@link Arrays#deepHashCode(Object[])}.</span>
+<span class="source-line-no">173</span><span id="line-173">    * This ensures that equal keys have equal hash codes, making {@code HashKey} suitable for use</span>
+<span class="source-line-no">174</span><span id="line-174">    * as keys in hash-based collections like {@link HashMap} and {@link HashSet}.</span>
+<span class="source-line-no">175</span><span id="line-175">    * Arrays with the same contents (but different references) will produce the same hash code.</span>
+<span class="source-line-no">176</span><span id="line-176">    *</span>
+<span class="source-line-no">177</span><span id="line-177">    * @return The hash code value for this object.</span>
+<span class="source-line-no">178</span><span id="line-178">    */</span>
+<span class="source-line-no">179</span><span id="line-179">   @Override</span>
+<span class="source-line-no">180</span><span id="line-180">   public int hashCode() {</span>
+<span class="source-line-no">181</span><span id="line-181">      return hashCode;</span>
+<span class="source-line-no">182</span><span id="line-182">   }</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">185</span><span id="line-185">      // @formatter:off</span>
+<span class="source-line-no">186</span><span id="line-186">      return filteredBeanPropertyMap()</span>
+<span class="source-line-no">187</span><span id="line-187">         .a(PROP_hashCode, hashCode())</span>
+<span class="source-line-no">188</span><span id="line-188">         .a(PROP_array, array);</span>
+<span class="source-line-no">189</span><span id="line-189">      // @formatter:on</span>
+<span class="source-line-no">190</span><span id="line-190">   }</span>
+<span class="source-line-no">191</span><span id="line-191"></span>
+<span class="source-line-no">192</span><span id="line-192">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">193</span><span id="line-193">   public String toString() {</span>
+<span class="source-line-no">194</span><span id="line-194">      return r(properties());</span>
+<span class="source-line-no">195</span><span id="line-195">   }</span>
+<span class="source-line-no">196</span><span id="line-196">}</span>
 
 
 

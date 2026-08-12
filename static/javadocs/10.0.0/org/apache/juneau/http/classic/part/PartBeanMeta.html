@@ -180,32 +180,35 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The part bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The part bean type.</dd>
+<dd><code>type</code> - The part bean type.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The metadata, or <jk>null</jk> if a valid constructor could not be found.</dd>
+<dd>The metadata for the specified type.  Never <jk>null</jk> (a bean with no usable constructor causes <a href="#construct(java.lang.String,java.lang.Object)"><code>construct(String,Object)</code></a> to throw instead).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="construct(java.lang.Object)">
 <h3>construct</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/part/PartBeanMeta.html#line-126">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/part/PartBeanMeta.html#line-128">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Constructs a part bean with the specified name or value.
 
  <p>
  Can only be used on beans where the part name is known.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The part value.</dd>
+<dd><code>value</code> - The part value.
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent, depending on the target bean type's constructor shape — see <a href="#construct(java.lang.String,java.lang.Object)"><code>construct(String, Object)</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>A newly constructed bean.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code> - If bean could not be constructed (e.g. couldn't find a constructor).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="construct(java.lang.String,java.lang.Object)">
 <h3>construct</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/part/PartBeanMeta.html#line-142">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PartBeanMeta.html" title="type parameter in PartBeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/part/PartBeanMeta.html#line-145">construct</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Constructs a part bean with the specified name or value.</div>
 <dl class="notes">
@@ -213,7 +216,8 @@ loadScripts(document, 'script');</script>
 <dd><code>name</code> - The part name.
    <br>If <jk>null</jk>, uses the value pulled from the <a href="../../Header.html#name()"><code>@Header(name)</code></a> or
    <a href="../../Header.html#value()"><code>@Header(value)</code></a> annotations.</dd>
-<dd><code>value</code> - The part value.</dd>
+<dd><code>value</code> - The part value.
+   <br>Can be <jk>null</jk>.  The effect is implementation-dependent, depending on the target bean type's constructor shape (e.g. coerced to <c>String</c> for a single-<c>String</c>-arg constructor, passed through unchanged otherwise).</dd>
 <dt>Returns:</dt>
 <dd>A newly constructed bean.</dd>
 <dt>Throws:</dt>
@@ -224,7 +228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema()">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/part/PartBeanMeta.html#line-177">getSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/part/PartBeanMeta.html#line-180">getSchema</a></span>()</div>
 <div class="block">Returns schema information about this part.
 
  <p>

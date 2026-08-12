@@ -93,8 +93,8 @@
 <span class="source-line-no">080</span><span id="line-80">   public EphemeralStore(Duration ttl, int maxEntries, Clock clock) {</span>
 <span class="source-line-no">081</span><span id="line-81">      assertArgNotNull("ttl", ttl);</span>
 <span class="source-line-no">082</span><span id="line-82">      assertArg(!ttl.isZero() &amp;&amp; !ttl.isNegative(), "ttl must be positive");</span>
-<span class="source-line-no">083</span><span id="line-83">      assertArg(ttl.compareTo(MAX_TTL) &lt;= 0, "ttl must not exceed 30 minutes (was {0})", ttl);</span>
-<span class="source-line-no">084</span><span id="line-84">      assertArg(maxEntries &gt; 0, "maxEntries must be positive (was {0})", maxEntries);</span>
+<span class="source-line-no">083</span><span id="line-83">      assertArg(ttl.compareTo(MAX_TTL) &lt;= 0, "ttl must not exceed 30 minutes (was %s)", ttl);</span>
+<span class="source-line-no">084</span><span id="line-84">      assertArg(maxEntries &gt; 0, "maxEntries must be positive (was %s)", maxEntries);</span>
 <span class="source-line-no">085</span><span id="line-85">      this.ttl = ttl;</span>
 <span class="source-line-no">086</span><span id="line-86">      this.maxEntries = maxEntries;</span>
 <span class="source-line-no">087</span><span id="line-87">      this.clock = assertArgNotNull("clock", clock);</span>

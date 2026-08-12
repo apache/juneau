@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Renders the manifest's main attributes (build/version/git metadata) as a sorted map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>manifest</code> - The resolved manifest, or <jk>null</jk>.</dd>
+<dd><code>manifest</code> - The resolved manifest, or <jk>null</jk> (in which case an empty map is returned).</dd>
 <dt>Returns:</dt>
 <dd>A sorted map of manifest attribute &rarr; value (empty when <code>manifest</code> is <jk>null</jk>); never <jk>null</jk>.</dd>
 </dl>

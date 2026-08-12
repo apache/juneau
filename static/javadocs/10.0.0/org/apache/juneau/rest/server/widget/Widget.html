@@ -385,7 +385,7 @@ implements <a href="../../../marshall/html/HtmlWidget.html" title="interface in 
 <div class="block">Returns the file finder to use for finding files on the file system.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The HTTP request object.</dd>
+<dd><code>req</code> - The HTTP request object. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The file finder to used for finding files on the file system.</dd>
 </dl>
@@ -402,7 +402,7 @@ implements <a href="../../../marshall/html/HtmlWidget.html" title="interface in 
  Comment are assumed to be <js>"&lt;!-- --&gt;"</js> code blocks.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The HTTP request object.</dd>
+<dd><code>req</code> - The HTTP request object. Must not be <jk>null</jk>.</dd>
 <dd><code>name</code> - Name of the desired resource.</dd>
 <dt>Returns:</dt>
 <dd>The resource converted to a string, or <jk>null</jk> if the resource could not be found.</dd>
@@ -424,7 +424,7 @@ implements <a href="../../../marshall/html/HtmlWidget.html" title="interface in 
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The current HTTP request.</dd>
+<dd><code>req</code> - The current HTTP request. Must not be <jk>null</jk>.</dd>
 <dd><code>res</code> - The current HTTP response.</dd>
 <dd><code>name</code> - Name of the desired resource.</dd>
 <dt>Returns:</dt>
@@ -445,7 +445,7 @@ implements <a href="../../../marshall/html/HtmlWidget.html" title="interface in 
  Comments are assumed to be Java-style block comments: <js>"/*"</js>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The HTTP request object.</dd>
+<dd><code>req</code> - The HTTP request object. Must not be <jk>null</jk>.</dd>
 <dd><code>name</code> - Name of the desired resource.</dd>
 <dt>Returns:</dt>
 <dd>The resource converted to a string, or <jk>null</jk> if the resource could not be found.</dd>
@@ -467,7 +467,7 @@ implements <a href="../../../marshall/html/HtmlWidget.html" title="interface in 
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The current HTTP request.</dd>
+<dd><code>req</code> - The current HTTP request. Must not be <jk>null</jk>.</dd>
 <dd><code>res</code> - The current HTTP response.</dd>
 <dd><code>name</code> - Name of the desired resource.</dd>
 <dt>Returns:</dt>
@@ -488,7 +488,7 @@ implements <a href="../../../marshall/html/HtmlWidget.html" title="interface in 
  Comments are assumed to be Java-style block comments: <js>"/*"</js>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The HTTP request object.</dd>
+<dd><code>req</code> - The HTTP request object. Must not be <jk>null</jk>.</dd>
 <dd><code>name</code> - Name of the desired resource.</dd>
 <dt>Returns:</dt>
 <dd>The resource converted to a string, or <jk>null</jk> if the resource could not be found.</dd>
@@ -510,7 +510,7 @@ implements <a href="../../../marshall/html/HtmlWidget.html" title="interface in 
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The current HTTP request.</dd>
+<dd><code>req</code> - The current HTTP request. Must not be <jk>null</jk>.</dd>
 <dd><code>res</code> - The current HTTP response.</dd>
 <dd><code>name</code> - Name of the desired resource.</dd>
 <dt>Returns:</dt>

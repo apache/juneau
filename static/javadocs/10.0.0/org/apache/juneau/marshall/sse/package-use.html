@@ -64,8 +64,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Server-Sent Events (SSE) marshalling support — <code>text/event-stream</code>.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.sse">org.apache.juneau.rest.server.sse</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client">org.apache.juneau.rest.client</a></div>
 <div class="col-last even-row-color">
+<div class="block">Next-generation REST client — transport-agnostic HTTP client built on Juneau's serialization stack.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.mcp">org.apache.juneau.rest.client.mcp</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral Model Context Protocol (MCP) client core - Streamable-HTTP transport orchestration, the
+ auth-token seam, and the pluggable response cache that per-revision <code>McpClient</code> facades build on.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.sse">org.apache.juneau.rest.server.sse</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Server-Sent Events (SSE) support for Juneau REST servers.</div>
 </div>
 </div>
@@ -132,6 +145,46 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/SseSerializerSession.Builder.html#org.apache.juneau.marshall.sse">SseSerializerSession.Builder</a></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.client">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.sse</a> used by <a href="../../rest/client/package-summary.html">org.apache.juneau.rest.client</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SseEventReader.html#org.apache.juneau.rest.client">SseEventReader</a></div>
+<div class="col-last even-row-color">
+<div class="block">Line-driven <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html" title="class or interface in java.util" class="external-link"><code>Iterator</code></a> over the events in a <c>text/event-stream</c>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.client.mcp">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.sse</a> used by <a href="../../rest/client/mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SseEventReader.html#org.apache.juneau.rest.client.mcp">SseEventReader</a></div>
+<div class="col-last even-row-color">
+<div class="block">Line-driven <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html" title="class or interface in java.util" class="external-link"><code>Iterator</code></a> over the events in a <c>text/event-stream</c>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.sse</a> used by <a href="../../rest/server/mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SseEvent.html#org.apache.juneau.rest.server.mcp">SseEvent</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents a single <a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">Server-Sent Event</a>
+ (SSE) frame on the wire.</div>
 </div>
 </div>
 </section>

@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">   /**</span>
 <span class="source-line-no">140</span><span id="line-140">    * Convenience method for checking if the specified type is this class.</span>
 <span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * @param t The type to check.</span>
+<span class="source-line-no">142</span><span id="line-142">    * @param t The type to check.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;false&lt;/jk&gt;).</span>
 <span class="source-line-no">143</span><span id="line-143">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified type is this class.</span>
 <span class="source-line-no">144</span><span id="line-144">    */</span>
 <span class="source-line-no">145</span><span id="line-145">   public static boolean isType(Type t) {</span>
@@ -179,7 +179,7 @@
 <span class="source-line-no">166</span><span id="line-166">   /**</span>
 <span class="source-line-no">167</span><span id="line-167">    * Returns the generic parameter type of the Holder type.</span>
 <span class="source-line-no">168</span><span id="line-168">    *</span>
-<span class="source-line-no">169</span><span id="line-169">    * @param t The type to find the parameter type of.</span>
+<span class="source-line-no">169</span><span id="line-169">    * @param t The type to find the parameter type of.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">170</span><span id="line-170">    * @return The parameter type of the value, or &lt;jk&gt;null&lt;/jk&gt; if the type is not a subclass of &lt;c&gt;Holder&lt;/c&gt;.</span>
 <span class="source-line-no">171</span><span id="line-171">    */</span>
 <span class="source-line-no">172</span><span id="line-172">   public static Type getParameterType(Type t) {</span>
@@ -199,7 +199,7 @@
 <span class="source-line-no">186</span><span id="line-186">   /**</span>
 <span class="source-line-no">187</span><span id="line-187">    * Returns the unwrapped type.</span>
 <span class="source-line-no">188</span><span id="line-188">    *</span>
-<span class="source-line-no">189</span><span id="line-189">    * @param t The type to unwrap.</span>
+<span class="source-line-no">189</span><span id="line-189">    * @param t The type to unwrap.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">190</span><span id="line-190">    * @return The unwrapped type, or the same type if the type isn't {@link Holder}.</span>
 <span class="source-line-no">191</span><span id="line-191">    */</span>
 <span class="source-line-no">192</span><span id="line-192">   public static Type unwrap(Type t) {</span>
@@ -218,7 +218,7 @@
 <span class="source-line-no">205</span><span id="line-205">   /**</span>
 <span class="source-line-no">206</span><span id="line-206">    * Constructor.</span>
 <span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    * @param t Initial value.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @param t Initial value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">209</span><span id="line-209">    */</span>
 <span class="source-line-no">210</span><span id="line-210">   public Holder(T t) {</span>
 <span class="source-line-no">211</span><span id="line-211">      set(t);</span>
@@ -310,7 +310,7 @@
 <span class="source-line-no">297</span><span id="line-297">    *    String &lt;jv&gt;newValue&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.get();                   &lt;jc&gt;// Returns "new"&lt;/jc&gt;</span>
 <span class="source-line-no">298</span><span id="line-298">    * &lt;/p&gt;</span>
 <span class="source-line-no">299</span><span id="line-299">    *</span>
-<span class="source-line-no">300</span><span id="line-300">    * @param t The new value.</span>
+<span class="source-line-no">300</span><span id="line-300">    * @param t The new value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">301</span><span id="line-301">    * @return The value before it was set.</span>
 <span class="source-line-no">302</span><span id="line-302">    */</span>
 <span class="source-line-no">303</span><span id="line-303">   public T getAndSet(T t) {</span>
@@ -465,7 +465,7 @@
 <span class="source-line-no">452</span><span id="line-452">   /**</span>
 <span class="source-line-no">453</span><span id="line-453">    * Returns the contents of this value or the default value if &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">454</span><span id="line-454">    *</span>
-<span class="source-line-no">455</span><span id="line-455">    * @param def The default value.</span>
+<span class="source-line-no">455</span><span id="line-455">    * @param def The default value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">456</span><span id="line-456">    * @return The contents of this value or the default value if &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">457</span><span id="line-457">    */</span>
 <span class="source-line-no">458</span><span id="line-458">   public T orElse(T def) {</span>
@@ -539,7 +539,7 @@
 <span class="source-line-no">526</span><span id="line-526">    * &lt;/p&gt;</span>
 <span class="source-line-no">527</span><span id="line-527">    *</span>
 <span class="source-line-no">528</span><span id="line-528">    * @param condition The condition to check.</span>
-<span class="source-line-no">529</span><span id="line-529">    * @param t The value to set if condition is &lt;jk&gt;true&lt;/jk&gt;.</span>
+<span class="source-line-no">529</span><span id="line-529">    * @param t The value to set if condition is &lt;jk&gt;true&lt;/jk&gt;.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">530</span><span id="line-530">    * @return This object.</span>
 <span class="source-line-no">531</span><span id="line-531">    */</span>
 <span class="source-line-no">532</span><span id="line-532">   public Holder&lt;T&gt; setIf(boolean condition, T t) {</span>

@@ -79,9 +79,9 @@
 <span class="source-line-no">066</span><span id="line-66">   public HttpProtocolVersion {</span>
 <span class="source-line-no">067</span><span id="line-67">      assertArgNotNull("protocol", protocol);</span>
 <span class="source-line-no">068</span><span id="line-68">      if (major &lt; 0)</span>
-<span class="source-line-no">069</span><span id="line-69">         throw new IllegalArgumentException("Major version must be &gt;= 0, got " + major);</span>
+<span class="source-line-no">069</span><span id="line-69">         throw iaex("Major version must be &gt;= 0, got %s", major);</span>
 <span class="source-line-no">070</span><span id="line-70">      if (minor &lt; 0)</span>
-<span class="source-line-no">071</span><span id="line-71">         throw new IllegalArgumentException("Minor version must be &gt;= 0, got " + minor);</span>
+<span class="source-line-no">071</span><span id="line-71">         throw iaex("Minor version must be &gt;= 0, got %s", minor);</span>
 <span class="source-line-no">072</span><span id="line-72">   }</span>
 <span class="source-line-no">073</span><span id="line-73"></span>
 <span class="source-line-no">074</span><span id="line-74">   /**</span>
@@ -111,11 +111,11 @@
 <span class="source-line-no">098</span><span id="line-98">      assertArgNotNull("s", s);</span>
 <span class="source-line-no">099</span><span id="line-99">      var slash = s.indexOf('/');</span>
 <span class="source-line-no">100</span><span id="line-100">      if (slash &lt; 0)</span>
-<span class="source-line-no">101</span><span id="line-101">         throw iaex("Invalid protocol version: {0}", s);</span>
+<span class="source-line-no">101</span><span id="line-101">         throw iaex("Invalid protocol version: %s", s);</span>
 <span class="source-line-no">102</span><span id="line-102">      var protocol = s.substring(0, slash);</span>
 <span class="source-line-no">103</span><span id="line-103">      var rest = s.substring(slash + 1);</span>
 <span class="source-line-no">104</span><span id="line-104">      var dot = rest.indexOf('.');</span>
-<span class="source-line-no">105</span><span id="line-105">      Supplier&lt;RuntimeException&gt; err = () -&gt; iaex("Invalid protocol version: {0}", s);</span>
+<span class="source-line-no">105</span><span id="line-105">      Supplier&lt;RuntimeException&gt; err = () -&gt; iaex("Invalid protocol version: %s", s);</span>
 <span class="source-line-no">106</span><span id="line-106">      if (dot &lt; 0)</span>
 <span class="source-line-no">107</span><span id="line-107">         return new HttpProtocolVersion(protocol, parseInt(rest, err), 0);</span>
 <span class="source-line-no">108</span><span id="line-108">      return new HttpProtocolVersion(protocol, parseInt(rest.substring(0, dot), err), parseInt(rest.substring(dot + 1), err));</span>

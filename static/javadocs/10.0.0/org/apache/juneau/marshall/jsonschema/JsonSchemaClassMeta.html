@@ -154,7 +154,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The class that this annotation is defined on.</dd>
+<dd><code>cm</code> - The class that this annotation is defined on.  Must not be <jk>null</jk>.</dd>
 <dd><code>mp</code> - JSON-schema metadata provider (for finding information about other artifacts).</dd>
 </dl>
 </section>
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons"><code>@Schema</code></a> annotation defined on the class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The value of the annotation, or <jk>null</jk> if not specified.</dd>
+<dd>The value of the annotation as a generic map.  Never <jk>null</jk> - returns an empty map if not specified.</dd>
 </dl>
 </section>
 </li>

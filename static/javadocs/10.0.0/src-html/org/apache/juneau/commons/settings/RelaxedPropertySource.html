@@ -102,54 +102,55 @@
 <span class="source-line-no">089</span><span id="line-89">    *</span>
 <span class="source-line-no">090</span><span id="line-90">    * @param name The requested property name.</span>
 <span class="source-line-no">091</span><span id="line-91">    * @return The candidate names to probe, in priority order.</span>
-<span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   static List&lt;String&gt; candidates(String name) {</span>
-<span class="source-line-no">094</span><span id="line-94">      var out = new ArrayList&lt;String&gt;(3);</span>
-<span class="source-line-no">095</span><span id="line-95">      out.add(name);</span>
-<span class="source-line-no">096</span><span id="line-96">      var tokens = tokenize(name);</span>
-<span class="source-line-no">097</span><span id="line-97">      if (! tokens.isEmpty()) {</span>
-<span class="source-line-no">098</span><span id="line-98">         addIfNew(out, String.join("_", tokens).toUpperCase(Locale.ROOT));</span>
-<span class="source-line-no">099</span><span id="line-99">         addIfNew(out, String.join(".", tokens).toLowerCase(Locale.ROOT));</span>
-<span class="source-line-no">100</span><span id="line-100">      }</span>
-<span class="source-line-no">101</span><span id="line-101">      return out;</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   /**</span>
-<span class="source-line-no">105</span><span id="line-105">    * Splits a name into lowercase-normalized word tokens, breaking on any non-alphanumeric run and on each</span>
-<span class="source-line-no">106</span><span id="line-106">    * lower&amp;rarr;upper camel-case boundary.  E.g. {@code "MySection/myKey"} &amp;rarr; {@code [my, section, my, key]}.</span>
-<span class="source-line-no">107</span><span id="line-107">    */</span>
-<span class="source-line-no">108</span><span id="line-108">   private static List&lt;String&gt; tokenize(String name) {</span>
-<span class="source-line-no">109</span><span id="line-109">      var tokens = new ArrayList&lt;String&gt;();</span>
-<span class="source-line-no">110</span><span id="line-110">      var sb = new StringBuilder();</span>
-<span class="source-line-no">111</span><span id="line-111">      char prev = 0;</span>
-<span class="source-line-no">112</span><span id="line-112">      for (var i = 0; i &lt; name.length(); i++) {</span>
-<span class="source-line-no">113</span><span id="line-113">         var c = name.charAt(i);</span>
-<span class="source-line-no">114</span><span id="line-114">         if (! Character.isLetterOrDigit(c)) {</span>
-<span class="source-line-no">115</span><span id="line-115">            // Separator (., -, /, _, space, …): flush the current token.</span>
-<span class="source-line-no">116</span><span id="line-116">            if (! sb.isEmpty()) {</span>
-<span class="source-line-no">117</span><span id="line-117">               tokens.add(sb.toString());</span>
-<span class="source-line-no">118</span><span id="line-118">               sb.setLength(0);</span>
-<span class="source-line-no">119</span><span id="line-119">            }</span>
-<span class="source-line-no">120</span><span id="line-120">         } else {</span>
-<span class="source-line-no">121</span><span id="line-121">            // camelCase boundary: lower/digit followed by upper starts a new token.</span>
-<span class="source-line-no">122</span><span id="line-122">            if (! sb.isEmpty() &amp;&amp; Character.isUpperCase(c) &amp;&amp; (Character.isLowerCase(prev) || Character.isDigit(prev))) {</span>
-<span class="source-line-no">123</span><span id="line-123">               tokens.add(sb.toString());</span>
-<span class="source-line-no">124</span><span id="line-124">               sb.setLength(0);</span>
-<span class="source-line-no">125</span><span id="line-125">            }</span>
-<span class="source-line-no">126</span><span id="line-126">            sb.append(Character.toLowerCase(c));</span>
-<span class="source-line-no">127</span><span id="line-127">         }</span>
-<span class="source-line-no">128</span><span id="line-128">         prev = c;</span>
-<span class="source-line-no">129</span><span id="line-129">      }</span>
-<span class="source-line-no">130</span><span id="line-130">      if (! sb.isEmpty())</span>
-<span class="source-line-no">131</span><span id="line-131">         tokens.add(sb.toString());</span>
-<span class="source-line-no">132</span><span id="line-132">      return tokens;</span>
-<span class="source-line-no">133</span><span id="line-133">   }</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   private static void addIfNew(List&lt;String&gt; out, String candidate) {</span>
-<span class="source-line-no">136</span><span id="line-136">      if (! out.contains(candidate))</span>
-<span class="source-line-no">137</span><span id="line-137">         out.add(candidate);</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139">}</span>
+<span class="source-line-no">092</span><span id="line-92">    * @since 10.0.0</span>
+<span class="source-line-no">093</span><span id="line-93">    */</span>
+<span class="source-line-no">094</span><span id="line-94">   public static List&lt;String&gt; candidates(String name) {</span>
+<span class="source-line-no">095</span><span id="line-95">      var out = new ArrayList&lt;String&gt;(3);</span>
+<span class="source-line-no">096</span><span id="line-96">      out.add(name);</span>
+<span class="source-line-no">097</span><span id="line-97">      var tokens = tokenize(name);</span>
+<span class="source-line-no">098</span><span id="line-98">      if (! tokens.isEmpty()) {</span>
+<span class="source-line-no">099</span><span id="line-99">         addIfNew(out, String.join("_", tokens).toUpperCase(Locale.ROOT));</span>
+<span class="source-line-no">100</span><span id="line-100">         addIfNew(out, String.join(".", tokens).toLowerCase(Locale.ROOT));</span>
+<span class="source-line-no">101</span><span id="line-101">      }</span>
+<span class="source-line-no">102</span><span id="line-102">      return out;</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   /**</span>
+<span class="source-line-no">106</span><span id="line-106">    * Splits a name into lowercase-normalized word tokens, breaking on any non-alphanumeric run and on each</span>
+<span class="source-line-no">107</span><span id="line-107">    * lower&amp;rarr;upper camel-case boundary.  E.g. {@code "MySection/myKey"} &amp;rarr; {@code [my, section, my, key]}.</span>
+<span class="source-line-no">108</span><span id="line-108">    */</span>
+<span class="source-line-no">109</span><span id="line-109">   private static List&lt;String&gt; tokenize(String name) {</span>
+<span class="source-line-no">110</span><span id="line-110">      var tokens = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">111</span><span id="line-111">      var sb = new StringBuilder();</span>
+<span class="source-line-no">112</span><span id="line-112">      char prev = 0;</span>
+<span class="source-line-no">113</span><span id="line-113">      for (var i = 0; i &lt; name.length(); i++) {</span>
+<span class="source-line-no">114</span><span id="line-114">         var c = name.charAt(i);</span>
+<span class="source-line-no">115</span><span id="line-115">         if (! Character.isLetterOrDigit(c)) {</span>
+<span class="source-line-no">116</span><span id="line-116">            // Separator (., -, /, _, space, …): flush the current token.</span>
+<span class="source-line-no">117</span><span id="line-117">            if (! sb.isEmpty()) {</span>
+<span class="source-line-no">118</span><span id="line-118">               tokens.add(sb.toString());</span>
+<span class="source-line-no">119</span><span id="line-119">               sb.setLength(0);</span>
+<span class="source-line-no">120</span><span id="line-120">            }</span>
+<span class="source-line-no">121</span><span id="line-121">         } else {</span>
+<span class="source-line-no">122</span><span id="line-122">            // camelCase boundary: lower/digit followed by upper starts a new token.</span>
+<span class="source-line-no">123</span><span id="line-123">            if (! sb.isEmpty() &amp;&amp; Character.isUpperCase(c) &amp;&amp; (Character.isLowerCase(prev) || Character.isDigit(prev))) {</span>
+<span class="source-line-no">124</span><span id="line-124">               tokens.add(sb.toString());</span>
+<span class="source-line-no">125</span><span id="line-125">               sb.setLength(0);</span>
+<span class="source-line-no">126</span><span id="line-126">            }</span>
+<span class="source-line-no">127</span><span id="line-127">            sb.append(Character.toLowerCase(c));</span>
+<span class="source-line-no">128</span><span id="line-128">         }</span>
+<span class="source-line-no">129</span><span id="line-129">         prev = c;</span>
+<span class="source-line-no">130</span><span id="line-130">      }</span>
+<span class="source-line-no">131</span><span id="line-131">      if (! sb.isEmpty())</span>
+<span class="source-line-no">132</span><span id="line-132">         tokens.add(sb.toString());</span>
+<span class="source-line-no">133</span><span id="line-133">      return tokens;</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   private static void addIfNew(List&lt;String&gt; out, String candidate) {</span>
+<span class="source-line-no">137</span><span id="line-137">      if (! out.contains(candidate))</span>
+<span class="source-line-no">138</span><span id="line-138">         out.add(candidate);</span>
+<span class="source-line-no">139</span><span id="line-139">   }</span>
+<span class="source-line-no">140</span><span id="line-140">}</span>
 
 
 

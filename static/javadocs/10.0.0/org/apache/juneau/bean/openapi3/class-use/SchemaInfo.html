@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#addAnyOf(java.lang.Object...)" class="member-name-link">addAnyOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Adds one or more values to the <property>allOf</property> property.</div>
+<div class="block">Adds one or more values to the <property>anyOf</property> property.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#addEnum(java.lang.Object...)" class="member-name-link">addEnum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</code></div>
@@ -89,17 +89,28 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#addOneOf(java.lang.Object...)" class="member-name-link">addOneOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Adds one or more values to the <property>allOf</property> property.</div>
+<div class="block">Adds one or more values to the <property>oneOf</property> property.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#addRequired(java.lang.String...)" class="member-name-link">addRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#addProperty(java.lang.String,org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">addProperty</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Same as <a href="../SchemaInfo.html#addRequired(java.lang.String...)"><code>addRequired(String...)</code></a>.</div>
+<div class="block">Bean property appender:  <property>properties</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#copy()" class="member-name-link">copy</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#addRequired(java.lang.String...)" class="member-name-link">addRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Same as <a href="../SchemaInfo.html#addRequired(java.lang.String...)"><code>addRequired(String...)</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#copy()" class="member-name-link">copy</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Make a deep copy of this object.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApiCopyUtils.</span><code><a href="../OpenApiCopyUtils.html#copyOf(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">copyOf</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#getAdditionalProperties()" class="member-name-link">getAdditionalProperties</a>()</code></div>
@@ -160,7 +171,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#setAnyOf(java.util.Collection)" class="member-name-link">setAnyOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property setter:  <property>allOf</property>.</div>
+<div class="block">Bean property setter:  <property>anyOf</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#setDefault(java.lang.Object)" class="member-name-link">setDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
@@ -275,7 +286,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#setOneOf(java.util.Collection)" class="member-name-link">setOneOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property setter:  <property>allOf</property>.</div>
+<div class="block">Bean property setter:  <property>oneOf</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#setPattern(java.lang.String)" class="member-name-link">setPattern</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -320,7 +331,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#setWriteOnly(java.lang.Boolean)" class="member-name-link">setWriteOnly</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property setter:  <property>WriteOnly</property>.</div>
+<div class="block">Bean property setter:  <property>writeOnly</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#setXml(org.apache.juneau.bean.openapi3.Xml)" class="member-name-link">setXml</a><wbr>(<a href="../Xml.html" title="class in org.apache.juneau.bean.openapi3">Xml</a>&nbsp;value)</code></div>
@@ -355,6 +366,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SchemaInfo.</span><code><a href="../SchemaInfo.html#addProperty(java.lang.String,org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">addProperty</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property appender:  <property>properties</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApiCopyUtils.</span><code><a href="../OpenApiCopyUtils.html#copyOf(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">copyOf</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
+</div>
 <div class="col-first even-row-color"><code>static final <a href="../HeaderInfo.html" title="class in org.apache.juneau.bean.openapi3">HeaderInfo</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">OpenApiBuilder.</span><code><a href="../OpenApiBuilder.html#headerInfo(org.apache.juneau.bean.openapi3.SchemaInfo)" class="member-name-link">headerInfo</a><wbr>(<a href="../SchemaInfo.html" title="class in org.apache.juneau.bean.openapi3">SchemaInfo</a>&nbsp;schema)</code></div>
 <div class="col-last even-row-color">

@@ -181,10 +181,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The path being matched against.  Can be <jk>null</jk>.</dd>
+<dd><code>path</code> - The path being matched against.  Must not be <jk>null</jk> (a <jk>null</jk> argument causes <a href="#getPrefix()"><code>getPrefix()</code></a>/<a href="#getSuffix()"><code>getSuffix()</code></a> to throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>).</dd>
 <dd><code>matchedParts</code> - The number of parts that were matched against the path.</dd>
-<dd><code>keys</code> - The variable keys.  Can be <jk>null</jk>.</dd>
-<dd><code>values</code> - The variable values.  Can be <jk>null</jk>.</dd>
+<dd><code>keys</code> - The variable keys.  Can be <jk>null</jk> (no path variables are recorded; the variable map resolves to empty).</dd>
+<dd><code>values</code> - The variable values.  Can be <jk>null</jk> if <c>keys</c> is also <jk>null</jk>; otherwise must align positionally with <c>keys</c>.</dd>
 </dl>
 </section>
 </li>

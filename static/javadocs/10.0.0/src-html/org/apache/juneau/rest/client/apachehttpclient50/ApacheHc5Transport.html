@@ -104,56 +104,70 @@
 <span class="source-line-no">091</span><span id="line-91">      } catch (IOException e) {</span>
 <span class="source-line-no">092</span><span id="line-92">         throw new TransportException("HTTP transport error: " + e.getMessage(), e);</span>
 <span class="source-line-no">093</span><span id="line-93">      }</span>
-<span class="source-line-no">094</span><span id="line-94">      return buildTransportResponse(hcResponse);</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   @Override /* Closeable */</span>
-<span class="source-line-no">098</span><span id="line-98">   public void close() throws IOException {</span>
-<span class="source-line-no">099</span><span id="line-99">      httpClient.close();</span>
-<span class="source-line-no">100</span><span id="line-100">   }</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">103</span><span id="line-103">   // Internal helpers</span>
-<span class="source-line-no">104</span><span id="line-104">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   private static ClassicHttpRequest buildHcRequest(TransportRequest request) throws TransportException {</span>
-<span class="source-line-no">107</span><span id="line-107">      var builder = ClassicRequestBuilder.create(request.getMethod()).setUri(request.getUri());</span>
-<span class="source-line-no">108</span><span id="line-108">      for (var h : request.getHeaders())</span>
-<span class="source-line-no">109</span><span id="line-109">         builder.addHeader(h.name(), h.value());</span>
-<span class="source-line-no">110</span><span id="line-110">      var body = request.getBody();</span>
-<span class="source-line-no">111</span><span id="line-111">      if (body != null)</span>
-<span class="source-line-no">112</span><span id="line-112">         builder.setEntity(buildEntity(body));</span>
-<span class="source-line-no">113</span><span id="line-113">      try {</span>
-<span class="source-line-no">114</span><span id="line-114">         return builder.build();</span>
-<span class="source-line-no">115</span><span id="line-115">      } catch (Exception e) {</span>
-<span class="source-line-no">116</span><span id="line-116">         throw new TransportException("Failed to build HTTP request: " + e.getMessage(), e);</span>
-<span class="source-line-no">117</span><span id="line-117">      }</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">094</span><span id="line-94">      try {</span>
+<span class="source-line-no">095</span><span id="line-95">         return buildTransportResponse(hcResponse);</span>
+<span class="source-line-no">096</span><span id="line-96">      } catch (TransportException | RuntimeException e) {</span>
+<span class="source-line-no">097</span><span id="line-97">         // If response wiring fails the closeCallback never runs, so close here to release the leased connection.</span>
+<span class="source-line-no">098</span><span id="line-98">         closeQuietly(hcResponse);</span>
+<span class="source-line-no">099</span><span id="line-99">         throw e;</span>
+<span class="source-line-no">100</span><span id="line-100">      }</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   private static void closeQuietly(ClassicHttpResponse hcResponse) {</span>
+<span class="source-line-no">104</span><span id="line-104">      try {</span>
+<span class="source-line-no">105</span><span id="line-105">         hcResponse.close();</span>
+<span class="source-line-no">106</span><span id="line-106">      } catch (IOException e) {</span>
+<span class="source-line-no">107</span><span id="line-107">         // Best-effort cleanup on an already-failing path; nothing more can be done.</span>
+<span class="source-line-no">108</span><span id="line-108">      }</span>
+<span class="source-line-no">109</span><span id="line-109">   }</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   @Override /* Closeable */</span>
+<span class="source-line-no">112</span><span id="line-112">   public void close() throws IOException {</span>
+<span class="source-line-no">113</span><span id="line-113">      httpClient.close();</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">117</span><span id="line-117">   // Internal helpers</span>
+<span class="source-line-no">118</span><span id="line-118">   // -----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   private static HttpEntity buildEntity(TransportBody body) {</span>
-<span class="source-line-no">121</span><span id="line-121">      var ct = body.getContentType();</span>
-<span class="source-line-no">122</span><span id="line-122">      var contentType = ct != null ? ContentType.parse(ct) : ContentType.APPLICATION_OCTET_STREAM;</span>
-<span class="source-line-no">123</span><span id="line-123">      return new EntityTemplate(body.getContentLength(), contentType, null, body::writeTo);</span>
-<span class="source-line-no">124</span><span id="line-124">   }</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">   private static TransportResponse buildTransportResponse(ClassicHttpResponse hcResponse) throws TransportException {</span>
-<span class="source-line-no">127</span><span id="line-127">      var builder = TransportResponse.builder()</span>
-<span class="source-line-no">128</span><span id="line-128">         .statusCode(hcResponse.getCode())</span>
-<span class="source-line-no">129</span><span id="line-129">         .reasonPhrase(hcResponse.getReasonPhrase());</span>
-<span class="source-line-no">130</span><span id="line-130">      builder.closeCallback(hcResponse);</span>
-<span class="source-line-no">131</span><span id="line-131">      for (var h : hcResponse.getHeaders())</span>
-<span class="source-line-no">132</span><span id="line-132">         builder.header(h.getName(), h.getValue());</span>
-<span class="source-line-no">133</span><span id="line-133">      var entity = hcResponse.getEntity();</span>
-<span class="source-line-no">134</span><span id="line-134">      if (entity != null) {</span>
-<span class="source-line-no">135</span><span id="line-135">         try {</span>
-<span class="source-line-no">136</span><span id="line-136">            builder.body(entity.getContent());</span>
-<span class="source-line-no">137</span><span id="line-137">         } catch (IOException e) {</span>
-<span class="source-line-no">138</span><span id="line-138">            throw new TransportException("Failed to read response body: " + e.getMessage(), e);</span>
-<span class="source-line-no">139</span><span id="line-139">         }</span>
-<span class="source-line-no">140</span><span id="line-140">      }</span>
-<span class="source-line-no">141</span><span id="line-141">      return builder.build();</span>
-<span class="source-line-no">142</span><span id="line-142">   }</span>
-<span class="source-line-no">143</span><span id="line-143">}</span>
+<span class="source-line-no">120</span><span id="line-120">   private static ClassicHttpRequest buildHcRequest(TransportRequest request) throws TransportException {</span>
+<span class="source-line-no">121</span><span id="line-121">      var builder = ClassicRequestBuilder.create(request.getMethod()).setUri(request.getUri());</span>
+<span class="source-line-no">122</span><span id="line-122">      for (var h : request.getHeaders())</span>
+<span class="source-line-no">123</span><span id="line-123">         builder.addHeader(h.name(), h.value());</span>
+<span class="source-line-no">124</span><span id="line-124">      var body = request.getBody();</span>
+<span class="source-line-no">125</span><span id="line-125">      if (body != null)</span>
+<span class="source-line-no">126</span><span id="line-126">         builder.setEntity(buildEntity(body));</span>
+<span class="source-line-no">127</span><span id="line-127">      try {</span>
+<span class="source-line-no">128</span><span id="line-128">         return builder.build();</span>
+<span class="source-line-no">129</span><span id="line-129">      } catch (Exception e) {</span>
+<span class="source-line-no">130</span><span id="line-130">         throw new TransportException("Failed to build HTTP request: " + e.getMessage(), e);</span>
+<span class="source-line-no">131</span><span id="line-131">      }</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   private static HttpEntity buildEntity(TransportBody body) {</span>
+<span class="source-line-no">135</span><span id="line-135">      var ct = body.getContentType();</span>
+<span class="source-line-no">136</span><span id="line-136">      var contentType = ct != null ? ContentType.parse(ct) : ContentType.APPLICATION_OCTET_STREAM;</span>
+<span class="source-line-no">137</span><span id="line-137">      return new EntityTemplate(body.getContentLength(), contentType, null, body::writeTo);</span>
+<span class="source-line-no">138</span><span id="line-138">   }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">   private static TransportResponse buildTransportResponse(ClassicHttpResponse hcResponse) throws TransportException {</span>
+<span class="source-line-no">141</span><span id="line-141">      var builder = TransportResponse.builder()</span>
+<span class="source-line-no">142</span><span id="line-142">         .statusCode(hcResponse.getCode())</span>
+<span class="source-line-no">143</span><span id="line-143">         .reasonPhrase(hcResponse.getReasonPhrase());</span>
+<span class="source-line-no">144</span><span id="line-144">      builder.closeCallback(hcResponse);</span>
+<span class="source-line-no">145</span><span id="line-145">      for (var h : hcResponse.getHeaders())</span>
+<span class="source-line-no">146</span><span id="line-146">         builder.header(h.getName(), h.getValue());</span>
+<span class="source-line-no">147</span><span id="line-147">      var entity = hcResponse.getEntity();</span>
+<span class="source-line-no">148</span><span id="line-148">      if (entity != null) {</span>
+<span class="source-line-no">149</span><span id="line-149">         try {</span>
+<span class="source-line-no">150</span><span id="line-150">            builder.body(entity.getContent());</span>
+<span class="source-line-no">151</span><span id="line-151">         } catch (IOException e) {</span>
+<span class="source-line-no">152</span><span id="line-152">            throw new TransportException("Failed to read response body: " + e.getMessage(), e);</span>
+<span class="source-line-no">153</span><span id="line-153">         }</span>
+<span class="source-line-no">154</span><span id="line-154">      }</span>
+<span class="source-line-no">155</span><span id="line-155">      return builder.build();</span>
+<span class="source-line-no">156</span><span id="line-156">   }</span>
+<span class="source-line-no">157</span><span id="line-157">}</span>
 
 
 

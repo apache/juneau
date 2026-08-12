@@ -56,12 +56,12 @@
 <span class="source-line-no">043</span><span id="line-43"></span>
 <span class="source-line-no">044</span><span id="line-44">      var pojo = new Pojo("id", "name");</span>
 <span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">      var flat = htmlSerializer.serialize(pojo);</span>
+<span class="source-line-no">046</span><span id="line-46">      var flat = htmlSerializer.write(pojo);</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
 <span class="source-line-no">048</span><span id="line-48">      // Print out the created POJO in JSON format.</span>
 <span class="source-line-no">049</span><span id="line-49">      Logger.getLogger(HtmlSimpleExample.class).info(flat);</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">      var parse = htmlParser.parse(flat, Pojo.class);</span>
+<span class="source-line-no">051</span><span id="line-51">      var parse = htmlParser.read(flat, Pojo.class);</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
 <span class="source-line-no">053</span><span id="line-53">      assert parse.getId().equals(pojo.getId());</span>
 <span class="source-line-no">054</span><span id="line-54">      assert parse.getName().equals(pojo.getName());</span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59">       *  &lt;div class="data" id="data"&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;name&lt;/td&gt;&lt;td&gt;name&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;id&lt;/td&gt;&lt;td&gt;id&lt;/td&gt;&lt;/tr&gt;</span>
 <span class="source-line-no">060</span><span id="line-60">       *  &lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/article&gt;&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;</span>
 <span class="source-line-no">061</span><span id="line-61">       */</span>
-<span class="source-line-no">062</span><span id="line-62">      var docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);</span>
+<span class="source-line-no">062</span><span id="line-62">      var docSerialized = HtmlDocSerializer.DEFAULT.write(pojo);</span>
 <span class="source-line-no">063</span><span id="line-63">      Logger.getLogger(HtmlSimpleExample.class).info(docSerialized);</span>
 <span class="source-line-no">064</span><span id="line-64"></span>
 <span class="source-line-no">065</span><span id="line-65">      // The object above can be parsed thanks to the @BeanCtor(properties = id,name) annotation on Pojo</span>

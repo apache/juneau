@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="RestMatcherList.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcherList</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.html#line-37">RestMatcherList.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.html#line-38">RestMatcherList.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.inject.BeanStore)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-47">Builder</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-48">Builder</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanStore()">
 <h3>beanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-57">beanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-58">beanStore</a></span>()</div>
 <div class="block">Returns the bean store used by this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -186,11 +186,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Class...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestMatcherList.Builder.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcherList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-67">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestMatcherList.Builder.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcherList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-69">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;...&nbsp;values)</span></div>
 <div class="block">Appends the specified rest matcher classes to the list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The values to add.</dd>
+<dd><code>values</code> - The values to add.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -199,11 +200,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.juneau.rest.server.matcher.RestMatcher...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestMatcherList.Builder.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcherList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-82">append</a></span><wbr><span class="parameters">(<a href="RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestMatcherList.Builder.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcherList.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-85">append</a></span><wbr><span class="parameters">(<a href="RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>...&nbsp;values)</span></div>
 <div class="block">Appends the specified rest matcher objects to the list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The values to add.</dd>
+<dd><code>values</code> - The values to add.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -212,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestMatcherList.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcherList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-93">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestMatcherList.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcherList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/matcher/RestMatcherList.Builder.html#line-96">build</a></span>()</div>
 <div class="block">Builds the list.</div>
 <dl class="notes">
 <dt>Returns:</dt>

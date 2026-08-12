@@ -170,11 +170,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fromBigDecimal(java.math.BigDecimal)">
 <h3>fromBigDecimal</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BsonDecimal128.html" title="class in org.apache.juneau.marshall.bson">BsonDecimal128</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-76">fromBigDecimal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BsonDecimal128.html" title="class in org.apache.juneau.marshall.bson">BsonDecimal128</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-77">fromBigDecimal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a>&nbsp;value)</span></div>
 <div class="block">Creates a Decimal128 from the given BigDecimal.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The decimal value.</dd>
+<dd><code>value</code> - The decimal value.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The Decimal128 instance.</dd>
 <dt>Throws:</dt>
@@ -185,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHigh()">
 <h3>getHigh</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-153">getHigh</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-154">getHigh</a></span>()</div>
 <div class="block">Returns the high-order 64 bits.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -196,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLow()">
 <h3>getLow</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-162">getLow</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-163">getLow</a></span>()</div>
 <div class="block">Returns the low-order 64 bits.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -207,7 +208,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toBigDecimal()">
 <h3>toBigDecimal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-172">toBigDecimal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-173">toBigDecimal</a></span>()</div>
 <div class="block">Converts to BigDecimal.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -220,7 +221,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toBigDecimalOrNull()">
 <h3>toBigDecimalOrNull</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-195">toBigDecimalOrNull</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonDecimal128.html#line-196">toBigDecimalOrNull</a></span>()</div>
 <div class="block">Converts to BigDecimal, normalizing the special IEEE-754 values that have no BigDecimal representation.
 
  <p>

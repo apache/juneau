@@ -45,104 +45,153 @@
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * Provides a simplified wrapper around JGit for server configuration repository management.</span>
 <span class="source-line-no">034</span><span id="line-34"> * Used to fetch configuration files from a remote Git repository.</span>
-<span class="source-line-no">035</span><span id="line-35"> */</span>
-<span class="source-line-no">036</span><span id="line-36">@SuppressWarnings(</span>
-<span class="source-line-no">037</span><span id="line-37">   "resource" // localRepo and git are JGit resources opened in the constructor; lifecycle managed by this class's operations</span>
-<span class="source-line-no">038</span><span id="line-38">)</span>
-<span class="source-line-no">039</span><span id="line-39">public class GitControl {</span>
-<span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">   private String localPath;</span>
-<span class="source-line-no">042</span><span id="line-42">   private String remotePath;</span>
-<span class="source-line-no">043</span><span id="line-43">   private Repository localRepo;</span>
-<span class="source-line-no">044</span><span id="line-44">   private Git git;</span>
-<span class="source-line-no">045</span><span id="line-45">   private CredentialsProvider cp;</span>
-<span class="source-line-no">046</span><span id="line-46">   private String name = "username";</span>
-<span class="source-line-no">047</span><span id="line-47">   private String password = "password";</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Constructor.</span>
-<span class="source-line-no">051</span><span id="line-51">    *</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param localPath Local directory path for the repository.</span>
-<span class="source-line-no">053</span><span id="line-53">    * @param remotePath Remote Git repository URI.</span>
-<span class="source-line-no">054</span><span id="line-54">    * @throws IOException If the repository cannot be opened.</span>
-<span class="source-line-no">055</span><span id="line-55">    */</span>
-<span class="source-line-no">056</span><span id="line-56">   public GitControl(String localPath, String remotePath) throws IOException {</span>
-<span class="source-line-no">057</span><span id="line-57">      this.localPath = localPath;</span>
-<span class="source-line-no">058</span><span id="line-58">      this.remotePath = remotePath;</span>
-<span class="source-line-no">059</span><span id="line-59">      this.localRepo = new FileRepository(localPath + "/.git");</span>
-<span class="source-line-no">060</span><span id="line-60">      cp = new UsernamePasswordCredentialsProvider(this.name, this.password);</span>
-<span class="source-line-no">061</span><span id="line-61">      git = new Git(localRepo);</span>
-<span class="source-line-no">062</span><span id="line-62">   }</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   /**</span>
-<span class="source-line-no">065</span><span id="line-65">    * Stages all files for commit.</span>
-<span class="source-line-no">066</span><span id="line-66">    *</span>
-<span class="source-line-no">067</span><span id="line-67">    * @throws GitAPIException If staging fails.</span>
-<span class="source-line-no">068</span><span id="line-68">    */</span>
-<span class="source-line-no">069</span><span id="line-69">   public void addToRepo() throws GitAPIException {</span>
-<span class="source-line-no">070</span><span id="line-70">      var add = git.add();</span>
-<span class="source-line-no">071</span><span id="line-71">      add.addFilepattern(".").call();</span>
-<span class="source-line-no">072</span><span id="line-72">   }</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   /**</span>
-<span class="source-line-no">075</span><span id="line-75">    * Checks out the specified branch from origin.</span>
-<span class="source-line-no">076</span><span id="line-76">    *</span>
-<span class="source-line-no">077</span><span id="line-77">    * @param name Branch name.</span>
-<span class="source-line-no">078</span><span id="line-78">    * @throws GitAPIException If checkout fails.</span>
-<span class="source-line-no">079</span><span id="line-79">    */</span>
-<span class="source-line-no">080</span><span id="line-80">   public void branch(String name) throws GitAPIException {</span>
-<span class="source-line-no">081</span><span id="line-81">      git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();</span>
-<span class="source-line-no">082</span><span id="line-82">   }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   /**</span>
-<span class="source-line-no">085</span><span id="line-85">    * Clones the remote repository to the local path.</span>
-<span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * @throws GitAPIException If clone fails.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   public void cloneRepo() throws GitAPIException {</span>
-<span class="source-line-no">090</span><span id="line-90">      Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();</span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * The underlying JGit {@link Repository} and {@link Git} handles are opened in the constructor and released by</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@link #close()}, so instances must be used with try-with-resources to avoid leaking file/native handles.</span>
+<span class="source-line-no">039</span><span id="line-39"> */</span>
+<span class="source-line-no">040</span><span id="line-40">public class GitControl implements AutoCloseable {</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">   private final String localPath;</span>
+<span class="source-line-no">043</span><span id="line-43">   private final String remotePath;</span>
+<span class="source-line-no">044</span><span id="line-44">   @SuppressWarnings("resource") // Owned by this AutoCloseable; released in close().</span>
+<span class="source-line-no">045</span><span id="line-45">   private final Repository localRepo;</span>
+<span class="source-line-no">046</span><span id="line-46">   @SuppressWarnings("resource") // Owned by this AutoCloseable; released in close().</span>
+<span class="source-line-no">047</span><span id="line-47">   private final Git git;</span>
+<span class="source-line-no">048</span><span id="line-48">   private final CredentialsProvider cp;</span>
+<span class="source-line-no">049</span><span id="line-49">   private final boolean forcePush;</span>
+<span class="source-line-no">050</span><span id="line-50"></span>
+<span class="source-line-no">051</span><span id="line-51">   /**</span>
+<span class="source-line-no">052</span><span id="line-52">    * Constructor.</span>
+<span class="source-line-no">053</span><span id="line-53">    *</span>
+<span class="source-line-no">054</span><span id="line-54">    * &lt;p&gt;</span>
+<span class="source-line-no">055</span><span id="line-55">    * Equivalent to {@link #GitControl(String, String, String, String, boolean) GitControl(localPath, remotePath,</span>
+<span class="source-line-no">056</span><span id="line-56">    * null, null, false)}: no credentials (anonymous transport) and non-force push.</span>
+<span class="source-line-no">057</span><span id="line-57">    *</span>
+<span class="source-line-no">058</span><span id="line-58">    * @param localPath Local directory path for the repository.</span>
+<span class="source-line-no">059</span><span id="line-59">    * @param remotePath Remote Git repository URI.</span>
+<span class="source-line-no">060</span><span id="line-60">    * @throws IOException If the repository cannot be opened.</span>
+<span class="source-line-no">061</span><span id="line-61">    */</span>
+<span class="source-line-no">062</span><span id="line-62">   public GitControl(String localPath, String remotePath) throws IOException {</span>
+<span class="source-line-no">063</span><span id="line-63">      this(localPath, remotePath, null, null, false);</span>
+<span class="source-line-no">064</span><span id="line-64">   }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Constructor.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * &lt;p&gt;</span>
+<span class="source-line-no">070</span><span id="line-70">    * Credentials are supplied by the caller (typically from operator configuration or a secret store) rather than</span>
+<span class="source-line-no">071</span><span id="line-71">    * hardcoded.  Pass {@code null} for {@code username} to use anonymous transport.</span>
+<span class="source-line-no">072</span><span id="line-72">    *</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param localPath Local directory path for the repository.</span>
+<span class="source-line-no">074</span><span id="line-74">    * @param remotePath Remote Git repository URI.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param username Git username, or &lt;jk&gt;null&lt;/jk&gt; for anonymous transport.</span>
+<span class="source-line-no">076</span><span id="line-76">    * @param password Git password/token.  Ignored when {@code username} is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">077</span><span id="line-77">    * @param forcePush Whether {@link #pushToRepo()} performs a force-push (destructive remote history rewrite).</span>
+<span class="source-line-no">078</span><span id="line-78">    *    &lt;br&gt;Force-push is opt-in; defaults to &lt;jk&gt;false&lt;/jk&gt; in the other constructors.</span>
+<span class="source-line-no">079</span><span id="line-79">    * @throws IOException If the repository cannot be opened.</span>
+<span class="source-line-no">080</span><span id="line-80">    */</span>
+<span class="source-line-no">081</span><span id="line-81">   @SuppressWarnings({</span>
+<span class="source-line-no">082</span><span id="line-82">      "resource" // localRepo (FileRepository) and git (Git) are long-lived fields closed in close(); Git wraps the externally-created Repository without closing it, so both are released there. Warnings surface at the constructor assignments (lines 84/87).</span>
+<span class="source-line-no">083</span><span id="line-83">   })</span>
+<span class="source-line-no">084</span><span id="line-84">   public GitControl(String localPath, String remotePath, String username, String password, boolean forcePush) throws IOException {</span>
+<span class="source-line-no">085</span><span id="line-85">      this.localPath = localPath;</span>
+<span class="source-line-no">086</span><span id="line-86">      this.remotePath = remotePath;</span>
+<span class="source-line-no">087</span><span id="line-87">      this.localRepo = new FileRepository(localPath + "/.git");</span>
+<span class="source-line-no">088</span><span id="line-88">      this.cp = username == null ? null : new UsernamePasswordCredentialsProvider(username, password);</span>
+<span class="source-line-no">089</span><span id="line-89">      this.forcePush = forcePush;</span>
+<span class="source-line-no">090</span><span id="line-90">      git = new Git(localRepo);</span>
 <span class="source-line-no">091</span><span id="line-91">   }</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
 <span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Commits staged changes with the specified message.</span>
+<span class="source-line-no">094</span><span id="line-94">    * Closes the underlying JGit {@link Git} and {@link Repository} handles.</span>
 <span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param message Commit message.</span>
-<span class="source-line-no">097</span><span id="line-97">    * @throws JGitInternalException If an internal JGit error occurs.</span>
-<span class="source-line-no">098</span><span id="line-98">    * @throws GitAPIException If commit fails.</span>
+<span class="source-line-no">096</span><span id="line-96">    * &lt;p&gt;</span>
+<span class="source-line-no">097</span><span id="line-97">    * The {@link Git} instance wraps an externally-supplied {@link Repository} (it does not close it on</span>
+<span class="source-line-no">098</span><span id="line-98">    * {@link Git#close()}), so both are released explicitly here.</span>
 <span class="source-line-no">099</span><span id="line-99">    */</span>
-<span class="source-line-no">100</span><span id="line-100">   public void commitToRepo(String message)</span>
-<span class="source-line-no">101</span><span id="line-101">      throws JGitInternalException, GitAPIException {</span>
-<span class="source-line-no">102</span><span id="line-102">      git.commit().setMessage(message).call();</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Pulls the latest changes from the remote repository.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * @throws GitAPIException If pull fails.</span>
-<span class="source-line-no">109</span><span id="line-109">    */</span>
-<span class="source-line-no">110</span><span id="line-110">   public void pullFromRepo() throws GitAPIException {</span>
-<span class="source-line-no">111</span><span id="line-111">      git.pull().call();</span>
-<span class="source-line-no">112</span><span id="line-112">   }</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   /**</span>
-<span class="source-line-no">115</span><span id="line-115">    * Pushes all committed changes to the remote repository.</span>
-<span class="source-line-no">116</span><span id="line-116">    *</span>
-<span class="source-line-no">117</span><span id="line-117">    * @throws JGitInternalException If an internal JGit error occurs.</span>
-<span class="source-line-no">118</span><span id="line-118">    * @throws GitAPIException If push fails.</span>
-<span class="source-line-no">119</span><span id="line-119">    */</span>
-<span class="source-line-no">120</span><span id="line-120">   public void pushToRepo() throws JGitInternalException, GitAPIException {</span>
-<span class="source-line-no">121</span><span id="line-121">      var pc = git.push();</span>
-<span class="source-line-no">122</span><span id="line-122">      pc.setCredentialsProvider(cp).setForce(true).setPushAll();</span>
-<span class="source-line-no">123</span><span id="line-123">      try {</span>
-<span class="source-line-no">124</span><span id="line-124">         var it = pc.call().iterator();</span>
-<span class="source-line-no">125</span><span id="line-125">         if (it.hasNext()) {</span>
-<span class="source-line-no">126</span><span id="line-126">            Logger.getLogger(GitControl.class).info("{}", it.next().toString());</span>
-<span class="source-line-no">127</span><span id="line-127">         }</span>
-<span class="source-line-no">128</span><span id="line-128">      } catch (InvalidRemoteException e) {</span>
-<span class="source-line-no">129</span><span id="line-129">         Logger.getLogger(GitControl.class).warning(e, "Error pushing to remote repository.");</span>
-<span class="source-line-no">130</span><span id="line-130">      }</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132">}</span>
+<span class="source-line-no">100</span><span id="line-100">   @Override</span>
+<span class="source-line-no">101</span><span id="line-101">   public void close() {</span>
+<span class="source-line-no">102</span><span id="line-102">      git.close();</span>
+<span class="source-line-no">103</span><span id="line-103">      localRepo.close();</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   /**</span>
+<span class="source-line-no">107</span><span id="line-107">    * Stages all files for commit.</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * @throws GitAPIException If staging fails.</span>
+<span class="source-line-no">110</span><span id="line-110">    */</span>
+<span class="source-line-no">111</span><span id="line-111">   public void addToRepo() throws GitAPIException {</span>
+<span class="source-line-no">112</span><span id="line-112">      var add = git.add();</span>
+<span class="source-line-no">113</span><span id="line-113">      add.addFilepattern(".").call();</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Checks out the specified branch from origin.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * @param name Branch name.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">120</span><span id="line-120">    * @throws GitAPIException If checkout fails.</span>
+<span class="source-line-no">121</span><span id="line-121">    */</span>
+<span class="source-line-no">122</span><span id="line-122">   public void branch(String name) throws GitAPIException {</span>
+<span class="source-line-no">123</span><span id="line-123">      git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /**</span>
+<span class="source-line-no">127</span><span id="line-127">    * Clones the remote repository to the local path.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * @throws GitAPIException If clone fails.</span>
+<span class="source-line-no">130</span><span id="line-130">    */</span>
+<span class="source-line-no">131</span><span id="line-131">   public void cloneRepo() throws GitAPIException {</span>
+<span class="source-line-no">132</span><span id="line-132">      // call() returns a Git handle wrapping the freshly-cloned repo; the clone (working tree on disk) is the</span>
+<span class="source-line-no">133</span><span id="line-133">      // side-effect we want, so close the returned handle immediately to avoid leaking file/native handles.</span>
+<span class="source-line-no">134</span><span id="line-134">      try (var g = Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call()) {</span>
+<span class="source-line-no">135</span><span id="line-135">         // No further operations needed on the cloned handle.</span>
+<span class="source-line-no">136</span><span id="line-136">      }</span>
+<span class="source-line-no">137</span><span id="line-137">   }</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">   /**</span>
+<span class="source-line-no">140</span><span id="line-140">    * Commits staged changes with the specified message.</span>
+<span class="source-line-no">141</span><span id="line-141">    *</span>
+<span class="source-line-no">142</span><span id="line-142">    * @param message Commit message.</span>
+<span class="source-line-no">143</span><span id="line-143">    * @throws JGitInternalException If an internal JGit error occurs.</span>
+<span class="source-line-no">144</span><span id="line-144">    * @throws GitAPIException If commit fails.</span>
+<span class="source-line-no">145</span><span id="line-145">    */</span>
+<span class="source-line-no">146</span><span id="line-146">   public void commitToRepo(String message)</span>
+<span class="source-line-no">147</span><span id="line-147">      throws JGitInternalException, GitAPIException {</span>
+<span class="source-line-no">148</span><span id="line-148">      git.commit().setMessage(message).call();</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   /**</span>
+<span class="source-line-no">152</span><span id="line-152">    * Pulls the latest changes from the remote repository.</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * @throws GitAPIException If pull fails.</span>
+<span class="source-line-no">155</span><span id="line-155">    */</span>
+<span class="source-line-no">156</span><span id="line-156">   public void pullFromRepo() throws GitAPIException {</span>
+<span class="source-line-no">157</span><span id="line-157">      git.pull().call();</span>
+<span class="source-line-no">158</span><span id="line-158">   }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">   /**</span>
+<span class="source-line-no">161</span><span id="line-161">    * Pushes all committed changes to the remote repository.</span>
+<span class="source-line-no">162</span><span id="line-162">    *</span>
+<span class="source-line-no">163</span><span id="line-163">    * @throws JGitInternalException If an internal JGit error occurs.</span>
+<span class="source-line-no">164</span><span id="line-164">    * @throws GitAPIException If push fails.</span>
+<span class="source-line-no">165</span><span id="line-165">    */</span>
+<span class="source-line-no">166</span><span id="line-166">   public void pushToRepo() throws JGitInternalException, GitAPIException {</span>
+<span class="source-line-no">167</span><span id="line-167">      var pc = git.push();</span>
+<span class="source-line-no">168</span><span id="line-168">      if (cp != null)</span>
+<span class="source-line-no">169</span><span id="line-169">         pc.setCredentialsProvider(cp);</span>
+<span class="source-line-no">170</span><span id="line-170">      // Force-push is opt-in (see constructor); a destructive remote history rewrite is never performed by default.</span>
+<span class="source-line-no">171</span><span id="line-171">      pc.setForce(forcePush).setPushAll();</span>
+<span class="source-line-no">172</span><span id="line-172">      try {</span>
+<span class="source-line-no">173</span><span id="line-173">         var it = pc.call().iterator();</span>
+<span class="source-line-no">174</span><span id="line-174">         if (it.hasNext()) {</span>
+<span class="source-line-no">175</span><span id="line-175">            Logger.getLogger(GitControl.class).info("{}", it.next().toString());</span>
+<span class="source-line-no">176</span><span id="line-176">         }</span>
+<span class="source-line-no">177</span><span id="line-177">      } catch (InvalidRemoteException e) {</span>
+<span class="source-line-no">178</span><span id="line-178">         Logger.getLogger(GitControl.class).warning(e, "Error pushing to remote repository.");</span>
+<span class="source-line-no">179</span><span id="line-179">      }</span>
+<span class="source-line-no">180</span><span id="line-180">   }</span>
+<span class="source-line-no">181</span><span id="line-181">}</span>
 
 
 

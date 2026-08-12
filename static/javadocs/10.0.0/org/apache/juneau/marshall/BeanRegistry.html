@@ -161,25 +161,26 @@ implements <a href="../commons/bean/BeanRegistryLookup.html" title="interface in
 <li>
 <section class="detail" id="getClassMeta(java.lang.String)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-92">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-93">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</span></div>
 <div class="block">Gets the class metadata for the specified bean type name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>typeName</code> - The bean type name as defined by <a href="Marshalled.html#typeName()"><code>@Marshalled(typeName)</code></a>.
-   Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).</dd>
+   Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The class metadata for the bean.</dd>
+<dd>The class metadata for the bean, or <jk>null</jk> if the registry is empty, the type name is <jk>null</jk>, or no matching entry was found.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getTypeName(org.apache.juneau.marshall.ClassMeta)">
 <h3>getTypeName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-115">getTypeName</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-116">getTypeName</a></span><wbr><span class="parameters">(<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Given the specified class, return the dictionary name for it.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>c</code> - The class to lookup in this registry.</dd>
+<dd><code>c</code> - The class to lookup in this registry. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.</dd>
 </dl>
@@ -188,7 +189,7 @@ implements <a href="../commons/bean/BeanRegistryLookup.html" title="interface in
 <li>
 <section class="detail" id="getTypeName(java.lang.Class)">
 <h3>getTypeName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-130">getTypeName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-131">getTypeName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Given the specified raw class, return the dictionary name for it.
 
  <p>
@@ -199,7 +200,7 @@ implements <a href="../commons/bean/BeanRegistryLookup.html" title="interface in
 <dt>Specified by:</dt>
 <dd><code><a href="../commons/bean/BeanRegistryLookup.html#getTypeName(java.lang.Class)">getTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../commons/bean/BeanRegistryLookup.html" title="interface in org.apache.juneau.commons.bean">BeanRegistryLookup</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>c</code> - The class to lookup in this registry.</dd>
+<dd><code>c</code> - The class to lookup in this registry. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.</dd>
 </dl>
@@ -208,13 +209,13 @@ implements <a href="../commons/bean/BeanRegistryLookup.html" title="interface in
 <li>
 <section class="detail" id="hasName(java.lang.String)">
 <h3>hasName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-141">hasName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-142">hasName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</span></div>
 <div class="block">Returns <jk>true</jk> if this dictionary has an entry for the specified type name.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../commons/bean/BeanRegistryLookup.html#hasName(java.lang.String)">hasName</a></code>&nbsp;in interface&nbsp;<code><a href="../commons/bean/BeanRegistryLookup.html" title="interface in org.apache.juneau.commons.bean">BeanRegistryLookup</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>typeName</code> - The bean type name.</dd>
+<dd><code>typeName</code> - The bean type name. Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if this dictionary has an entry for the specified type name.</dd>
 </dl>
@@ -223,13 +224,13 @@ implements <a href="../commons/bean/BeanRegistryLookup.html" title="interface in
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-146">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-147">properties</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-152">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/BeanRegistry.html#line-153">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

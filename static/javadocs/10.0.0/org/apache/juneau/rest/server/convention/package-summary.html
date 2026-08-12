@@ -81,7 +81,7 @@ loadScripts(document, 'script');</script>
       <code>/robots.txt</code> (deny-all by default) and <code>/sitemap.xml</code> (empty
       <code>&lt;urlset&gt;</code> by default); both builder-driven.
    <li class='jc'><a href="VersionMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>VersionMixin</code></a> —
-      <code>/version</code>, <code>/info</code>, and <code>/about</code> returning the same JSON metadata
+      <code>/version</code> (SVL-configurable) returning a JSON metadata
       map; defaults read <code>MANIFEST.MF</code> + <code>git.properties</code> from the classpath.
    <li class='jc'><a href="WellKnownMixin.html" title="class in org.apache.juneau.rest.server.convention"><code>WellKnownMixin</code></a> —
       <code>/.well-known/security.txt</code> per RFC 9116; 404 unless explicitly configured.

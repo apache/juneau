@@ -237,7 +237,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The object to copy.</dd>
+<dd><code>copyFrom</code> - The object to copy.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -256,7 +256,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <div class="block">Returns <jk>true</jk> if the <a href="#cast(java.lang.Object)"><code>cast(Object)</code></a> method can be used on the specified object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object to check.</dd>
+<dd><code>o</code> - The object to check.  Can be <jk>null</jk> (returns <jk>false</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the <a href="#cast(java.lang.Object)"><code>cast(Object)</code></a> method can be used on the specified object.</dd>
 </dl>
@@ -297,9 +297,9 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <div class="block">Creates a <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link"><code>NameValuePair</code></a> from a name/value pair string (e.g. <js>"Foo: bar"</js>)</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pair</code> - The pair string.</dd>
+<dd><code>pair</code> - The pair string.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link"><code>NameValuePair</code></a> object.</dd>
+<dd>A new <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/NameValuePair.html" title="class or interface in org.apache.http" class="external-link"><code>NameValuePair</code></a> object, or <jk>null</jk> if the input was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
  a non-empty payload.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder.</dd>
+<dd><code>builder</code> - The builder. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -308,7 +308,7 @@ loadScripts(document, 'script');</script>
  serializers explicitly.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>res</code> - The current REST response.</dd>
+<dd><code>res</code> - The current REST response. Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If an I/O error occurs while writing the response.</dd>
 </dl>

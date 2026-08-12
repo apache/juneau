@@ -84,8 +84,9 @@ loadScripts(document, 'script');</script>
 <dd><a href="SoapXmlApplyAnnotation.html" title="class in org.apache.juneau.marshall.soap">SoapXmlApplyAnnotation</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/soap/SoapXmlApplyAnnotation.html#line-36">SoapXmlApplyAnnotation.Applier</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/soap/SoapXmlApplyAnnotation.html#line-42">SoapXmlApplyAnnotation.Applier</a></span>
 <span class="extends-implements">extends <a href="../AnnotationApplier.html" title="class in org.apache.juneau.marshall">AnnotationApplier</a>&lt;<a href="SoapXmlApply.html" title="annotation interface in org.apache.juneau.marshall.soap">SoapXmlApply</a>,<wbr><a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&gt;</span></div>
+<div class="block">Applies targeted <a href="SoapXmlApply.html" title="annotation interface in org.apache.juneau.marshall.soap"><code>SoapXmlApply</code></a> annotations to a <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall"><code>Context.Builder</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -98,7 +99,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.commons.svl.VarResolverSession)" class="member-name-link">Applier</a><wbr>(<a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;vr)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -142,7 +145,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.svl.VarResolverSession)">
 <h3>Applier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/soap/SoapXmlApplyAnnotation.Applier.html#line-41">Applier</a></span><wbr><span class="parameters">(<a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;vr)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/soap/SoapXmlApplyAnnotation.Applier.html#line-53">Applier</a></span><wbr><span class="parameters">(<a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;vr)</span></div>
+<div class="block">Constructor.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>vr</code> - The resolver for resolving values in annotations.
+   <br>Must not be <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -156,7 +165,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="apply(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.marshall.Context.Builder)">
 <h3>apply</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/soap/SoapXmlApplyAnnotation.Applier.html#line-45">apply</a></span><wbr><span class="parameters">(<a href="../../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="SoapXmlApply.html" title="annotation interface in org.apache.juneau.marshall.soap">SoapXmlApply</a>&gt;&nbsp;ai,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/soap/SoapXmlApplyAnnotation.Applier.html#line-57">apply</a></span><wbr><span class="parameters">(<a href="../../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="SoapXmlApply.html" title="annotation interface in org.apache.juneau.marshall.soap">SoapXmlApply</a>&gt;&nbsp;ai,
  <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&nbsp;b)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../AnnotationApplier.html#apply(org.apache.juneau.commons.reflect.AnnotationInfo,B)">AnnotationApplier</a></code></span></div>
 <div class="block">Apply the specified annotation to the specified property store builder.</div>

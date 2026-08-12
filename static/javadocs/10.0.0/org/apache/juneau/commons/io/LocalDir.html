@@ -329,7 +329,7 @@ loadScripts(document, 'script');</script>
    LocalFile <jv>file2</jv> = <jv>dir</jv>.resolve(<js>"pages/about.html"</js>);
  </p>
 
- <h5 class='section'>Security (CWE-22 / path-traversal):</h5>
+ <h5 class='section'>Security (path-traversal):</h5>
  <p>
  For filesystem-root <code>LocalDir</code> instances, path resolution is delegated to
  <a href="../utils/FileUtils.html#resolveSafely(java.io.File,java.lang.String)"><code>FileUtils.resolveSafely(java.io.File, String)</code></a> which enforces a strict boundary check:

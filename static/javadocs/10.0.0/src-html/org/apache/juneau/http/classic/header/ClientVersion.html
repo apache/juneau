@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line-106">    * @param value</span>
 <span class="source-line-no">107</span><span id="line-107">    *    The header value.</span>
 <span class="source-line-no">108</span><span id="line-108">    *    &lt;br&gt;Must be parsable by {@link Version#of(String)}</span>
-<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">110</span><span id="line-110">    */</span>
 <span class="source-line-no">111</span><span id="line-111">   public ClientVersion(String value) {</span>
 <span class="source-line-no">112</span><span id="line-112">      super(NAME, value);</span>
@@ -135,7 +135,7 @@
 <span class="source-line-no">122</span><span id="line-122">    *</span>
 <span class="source-line-no">123</span><span id="line-123">    * @param value</span>
 <span class="source-line-no">124</span><span id="line-124">    *    The supplier of the header value.</span>
-<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">126</span><span id="line-126">    */</span>
 <span class="source-line-no">127</span><span id="line-127">   public ClientVersion(Supplier&lt;Version&gt; value) {</span>
 <span class="source-line-no">128</span><span id="line-128">      super(NAME, (String)null);</span>
@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">    *</span>
 <span class="source-line-no">136</span><span id="line-136">    * @param value</span>
 <span class="source-line-no">137</span><span id="line-137">    *    The header value.</span>
-<span class="source-line-no">138</span><span id="line-138">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">138</span><span id="line-138">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">139</span><span id="line-139">    */</span>
 <span class="source-line-no">140</span><span id="line-140">   public ClientVersion(Version value) {</span>
 <span class="source-line-no">141</span><span id="line-141">      super(NAME, s(value));</span>

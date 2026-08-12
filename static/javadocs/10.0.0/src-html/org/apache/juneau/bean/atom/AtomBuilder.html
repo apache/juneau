@@ -46,11 +46,11 @@
 <span class="source-line-no">033</span><span id="line-33"> *    Feed &lt;jv&gt;feed&lt;/jv&gt; =</span>
 <span class="source-line-no">034</span><span id="line-34"> *       &lt;jsm&gt;feed&lt;/jsm&gt;(&lt;js&gt;"tag:juneau.sample.com,2013:1"&lt;/js&gt;, &lt;js&gt;"Juneau ATOM specification"&lt;/js&gt;,</span>
 <span class="source-line-no">035</span><span id="line-35"> *          &lt;js&gt;"2013-05-08T12:29:29Z"&lt;/js&gt;)</span>
-<span class="source-line-no">036</span><span id="line-36"> *       .subtitle(&lt;jsm&gt;text&lt;/jsm&gt;(&lt;js&gt;"html"&lt;/js&gt;)</span>
-<span class="source-line-no">037</span><span id="line-37"> *          .children(&lt;js&gt;"A &amp;lt;em&amp;gt;lot&amp;lt;/em&amp;gt; of effort went into making this effortless"&lt;/js&gt;))</span>
-<span class="source-line-no">038</span><span id="line-38"> *       .links(</span>
+<span class="source-line-no">036</span><span id="line-36"> *       .setSubtitle(&lt;jsm&gt;text&lt;/jsm&gt;(&lt;js&gt;"html"&lt;/js&gt;)</span>
+<span class="source-line-no">037</span><span id="line-37"> *          .setText(&lt;js&gt;"A &amp;lt;em&amp;gt;lot&amp;lt;/em&amp;gt; of effort went into making this effortless"&lt;/js&gt;))</span>
+<span class="source-line-no">038</span><span id="line-38"> *       .setLinks(</span>
 <span class="source-line-no">039</span><span id="line-39"> *          &lt;jsm&gt;link&lt;/jsm&gt;(&lt;js&gt;"alternate"&lt;/js&gt;, &lt;js&gt;"text/html"&lt;/js&gt;, &lt;js&gt;"http://www.sample.com/"&lt;/js&gt;)</span>
-<span class="source-line-no">040</span><span id="line-40"> *             .hreflang(&lt;js&gt;"en"&lt;/js&gt;),</span>
+<span class="source-line-no">040</span><span id="line-40"> *             .setHreflang(&lt;js&gt;"en"&lt;/js&gt;),</span>
 <span class="source-line-no">041</span><span id="line-41"> *          &lt;jsm&gt;link&lt;/jsm&gt;(&lt;js&gt;"self"&lt;/js&gt;, &lt;js&gt;"application/atom+xml"&lt;/js&gt;, &lt;js&gt;"http://www.sample.com/feed.atom"&lt;/js&gt;)</span>
 <span class="source-line-no">042</span><span id="line-42"> *       );</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/p&gt;</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51">   /**</span>
 <span class="source-line-no">052</span><span id="line-52">    * Creates a {@link Category} element with the specified {@link Category#setTerm(String)} attribute.</span>
 <span class="source-line-no">053</span><span id="line-53">    *</span>
-<span class="source-line-no">054</span><span id="line-54">    * @param term The {@link Category#setTerm(String)} attribute.</span>
+<span class="source-line-no">054</span><span id="line-54">    * @param term The {@link Category#setTerm(String)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">055</span><span id="line-55">    * @return The new element.</span>
 <span class="source-line-no">056</span><span id="line-56">    */</span>
 <span class="source-line-no">057</span><span id="line-57">   public static final Category category(String term) {</span>
@@ -83,7 +83,7 @@
 <span class="source-line-no">070</span><span id="line-70">   /**</span>
 <span class="source-line-no">071</span><span id="line-71">    * Creates a {@link Content} element.</span>
 <span class="source-line-no">072</span><span id="line-72">    *</span>
-<span class="source-line-no">073</span><span id="line-73">    * @param type The {@link Content#setType(String)} attribute.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param type The {@link Content#setType(String)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">074</span><span id="line-74">    * @return The new element.</span>
 <span class="source-line-no">075</span><span id="line-75">    */</span>
 <span class="source-line-no">076</span><span id="line-76">   public static final Content content(String type) {</span>
@@ -94,9 +94,9 @@
 <span class="source-line-no">081</span><span id="line-81">    * Creates an {@link Entry} element with the specified {@link Entry#setId(Id)}, {@link Entry#setTitle(Text)}, and</span>
 <span class="source-line-no">082</span><span id="line-82">    * {@link Entry#setUpdated(Calendar)} attributes.</span>
 <span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param id The {@link Entry#setId(Id)} attribute.</span>
-<span class="source-line-no">085</span><span id="line-85">    * @param title The {@link Entry#setTitle(Text)} attribute.</span>
-<span class="source-line-no">086</span><span id="line-86">    * @param updated The {@link Entry#setUpdated(Calendar)} attribute.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param id The {@link Entry#setId(Id)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param title The {@link Entry#setTitle(Text)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
+<span class="source-line-no">086</span><span id="line-86">    * @param updated The {@link Entry#setUpdated(Calendar)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">087</span><span id="line-87">    * @return The new element.</span>
 <span class="source-line-no">088</span><span id="line-88">    */</span>
 <span class="source-line-no">089</span><span id="line-89">   public static final Entry entry(Id id, Text title, Calendar updated) {</span>
@@ -107,9 +107,9 @@
 <span class="source-line-no">094</span><span id="line-94">    * Creates an {@link Entry} element with the specified {@link Entry#setId(Id)}, {@link Entry#setTitle(Text)}, and</span>
 <span class="source-line-no">095</span><span id="line-95">    * {@link Entry#setUpdated(Calendar)} attributes.</span>
 <span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param id The {@link Entry#setId(Id)} attribute.</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param title The {@link Entry#setTitle(Text)} attribute.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param updated The {@link Entry#setUpdated(Calendar)} attribute.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @param id The {@link Entry#setId(Id)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the property is set to an {@link Id} with no text (not left unset).</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param title The {@link Entry#setTitle(Text)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the property is set to a {@link Text} with no text (not left unset).</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param updated The {@link Entry#setUpdated(Calendar)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank to leave the property unset.</span>
 <span class="source-line-no">100</span><span id="line-100">    * @return The new element.</span>
 <span class="source-line-no">101</span><span id="line-101">    */</span>
 <span class="source-line-no">102</span><span id="line-102">   public static final Entry entry(String id, String title, String updated) {</span>
@@ -120,9 +120,9 @@
 <span class="source-line-no">107</span><span id="line-107">    * Creates a {@link Feed} element with the specified {@link Feed#setId(Id)}, {@link Entry#setTitle(Text)}, and</span>
 <span class="source-line-no">108</span><span id="line-108">    * {@link Feed#setUpdated(Calendar)} attributes.</span>
 <span class="source-line-no">109</span><span id="line-109">    *</span>
-<span class="source-line-no">110</span><span id="line-110">    * @param id The {@link Feed#setId(Id)} attribute.</span>
-<span class="source-line-no">111</span><span id="line-111">    * @param title The {@link Feed#setTitle(Text)} attribute.</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param updated The {@link Feed#setUpdated(Calendar)} attribute.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param id The {@link Feed#setId(Id)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param title The {@link Feed#setTitle(Text)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param updated The {@link Feed#setUpdated(Calendar)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">113</span><span id="line-113">    * @return The new element.</span>
 <span class="source-line-no">114</span><span id="line-114">    */</span>
 <span class="source-line-no">115</span><span id="line-115">   public static final Feed feed(Id id, Text title, Calendar updated) {</span>
@@ -133,9 +133,9 @@
 <span class="source-line-no">120</span><span id="line-120">    * Creates a {@link Feed} element with the specified {@link Feed#setId(Id)}, {@link Entry#setTitle(Text)}, and</span>
 <span class="source-line-no">121</span><span id="line-121">    * {@link Feed#setUpdated(Calendar)} attributes.</span>
 <span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param id The {@link Feed#setId(Id)} attribute.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @param title The {@link Feed#setTitle(Text)} attribute.</span>
-<span class="source-line-no">125</span><span id="line-125">    * @param updated The {@link Feed#setUpdated(Calendar)} attribute.</span>
+<span class="source-line-no">123</span><span id="line-123">    * @param id The {@link Feed#setId(Id)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the property is set to an {@link Id} with no text (not left unset).</span>
+<span class="source-line-no">124</span><span id="line-124">    * @param title The {@link Feed#setTitle(Text)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the property is set to a {@link Text} with no text (not left unset).</span>
+<span class="source-line-no">125</span><span id="line-125">    * @param updated The {@link Feed#setUpdated(Calendar)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank to leave the property unset.</span>
 <span class="source-line-no">126</span><span id="line-126">    * @return The new element.</span>
 <span class="source-line-no">127</span><span id="line-127">    */</span>
 <span class="source-line-no">128</span><span id="line-128">   public static final Feed feed(String id, String title, String updated) {</span>
@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">   /**</span>
 <span class="source-line-no">133</span><span id="line-133">    * Creates a {@link Generator} element with the specified {@link Generator#setText(String)} child node.</span>
 <span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param text The {@link Generator#setText(String)} child node.</span>
+<span class="source-line-no">135</span><span id="line-135">    * @param text The {@link Generator#setText(String)} child node.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">136</span><span id="line-136">    * @return The new element.</span>
 <span class="source-line-no">137</span><span id="line-137">    */</span>
 <span class="source-line-no">138</span><span id="line-138">   public static final Generator generator(String text) {</span>
@@ -162,7 +162,7 @@
 <span class="source-line-no">149</span><span id="line-149">    * &lt;p&gt;</span>
 <span class="source-line-no">150</span><span id="line-150">    * URIs defined by {@link UriResolver} can be used for values.</span>
 <span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * @param uri The {@link Icon#setUri(Object)} attribute.</span>
+<span class="source-line-no">152</span><span id="line-152">    * @param uri The {@link Icon#setUri(Object)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">153</span><span id="line-153">    * @return The new element.</span>
 <span class="source-line-no">154</span><span id="line-154">    */</span>
 <span class="source-line-no">155</span><span id="line-155">   public static final Icon icon(Object uri) {</span>
@@ -172,7 +172,7 @@
 <span class="source-line-no">159</span><span id="line-159">   /**</span>
 <span class="source-line-no">160</span><span id="line-160">    * Creates an {@link Id} element with the specified {@link Id#setText(String)} child node.</span>
 <span class="source-line-no">161</span><span id="line-161">    *</span>
-<span class="source-line-no">162</span><span id="line-162">    * @param text The {@link Id#setText(String)} child node.</span>
+<span class="source-line-no">162</span><span id="line-162">    * @param text The {@link Id#setText(String)} child node.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">163</span><span id="line-163">    * @return The new element.</span>
 <span class="source-line-no">164</span><span id="line-164">    */</span>
 <span class="source-line-no">165</span><span id="line-165">   public static final Id id(String text) {</span>
@@ -183,9 +183,9 @@
 <span class="source-line-no">170</span><span id="line-170">    * Creates a {@link Link} element with the specified {@link Link#setRel(String)}, {@link Link#setType(String)}, and</span>
 <span class="source-line-no">171</span><span id="line-171">    * {@link Link#setHref(String)} attributes.</span>
 <span class="source-line-no">172</span><span id="line-172">    *</span>
-<span class="source-line-no">173</span><span id="line-173">    * @param rel The {@link Link#setRel(String)} attribute.</span>
-<span class="source-line-no">174</span><span id="line-174">    * @param type The {@link Link#setType(String)} attribute.</span>
-<span class="source-line-no">175</span><span id="line-175">    * @param href The {@link Link#setHref(String)} attribute.</span>
+<span class="source-line-no">173</span><span id="line-173">    * @param rel The {@link Link#setRel(String)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
+<span class="source-line-no">174</span><span id="line-174">    * @param type The {@link Link#setType(String)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
+<span class="source-line-no">175</span><span id="line-175">    * @param href The {@link Link#setHref(String)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">176</span><span id="line-176">    * @return The new element.</span>
 <span class="source-line-no">177</span><span id="line-177">    */</span>
 <span class="source-line-no">178</span><span id="line-178">   public static final Link link(String rel, String type, String href) {</span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">    * &lt;p&gt;</span>
 <span class="source-line-no">190</span><span id="line-190">    * URIs defined by {@link UriResolver} can be used for values.</span>
 <span class="source-line-no">191</span><span id="line-191">    *</span>
-<span class="source-line-no">192</span><span id="line-192">    * @param uri The {@link Logo#setUri(Object)} attribute.</span>
+<span class="source-line-no">192</span><span id="line-192">    * @param uri The {@link Logo#setUri(Object)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">193</span><span id="line-193">    * @return The new element.</span>
 <span class="source-line-no">194</span><span id="line-194">    */</span>
 <span class="source-line-no">195</span><span id="line-195">   public static final Logo logo(Object uri) {</span>
@@ -212,7 +212,7 @@
 <span class="source-line-no">199</span><span id="line-199">   /**</span>
 <span class="source-line-no">200</span><span id="line-200">    * Creates a {@link Person} element with the specified {@link Person#setName(String)} attribute.</span>
 <span class="source-line-no">201</span><span id="line-201">    *</span>
-<span class="source-line-no">202</span><span id="line-202">    * @param name The {@link Person#setName(String)} attribute.</span>
+<span class="source-line-no">202</span><span id="line-202">    * @param name The {@link Person#setName(String)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">203</span><span id="line-203">    * @return The new element.</span>
 <span class="source-line-no">204</span><span id="line-204">    */</span>
 <span class="source-line-no">205</span><span id="line-205">   public static final Person person(String name) {</span>
@@ -240,7 +240,7 @@
 <span class="source-line-no">227</span><span id="line-227">   /**</span>
 <span class="source-line-no">228</span><span id="line-228">    * Creates a {@link Text} element with the specified {@link Text#setType(String)} attribute.</span>
 <span class="source-line-no">229</span><span id="line-229">    *</span>
-<span class="source-line-no">230</span><span id="line-230">    * @param type The {@link Text#setType(String)} attribute.</span>
+<span class="source-line-no">230</span><span id="line-230">    * @param type The {@link Text#setType(String)} attribute.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">231</span><span id="line-231">    * @return The new element.</span>
 <span class="source-line-no">232</span><span id="line-232">    */</span>
 <span class="source-line-no">233</span><span id="line-233">   public static final Text text(String type) {</span>

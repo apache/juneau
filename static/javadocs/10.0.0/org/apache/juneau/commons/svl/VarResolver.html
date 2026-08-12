@@ -379,7 +379,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Same as <a href="#createSession()"><code>createSession()</code></a> except allows you to specify a bean store for resolving beans.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanStore</code> - The bean store to associate with this session.</dd>
+<dd><code>beanStore</code> - The bean store to associate with this session.  May be <code>null</code>.</dd>
 <dt>Returns:</dt>
 <dd>A new resolver session.</dd>
 </dl>
@@ -397,9 +397,9 @@ loadScripts(document, 'script');</script>
  variables.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The input string.</dd>
+<dd><code>s</code> - The input string.  May be <code>null</code>.</dd>
 <dt>Returns:</dt>
-<dd>The string with variables resolved, or the same string if it doesn't contain any variables to resolve.</dd>
+<dd>The string with variables resolved, or the same string if it doesn't contain any variables to resolve.  Returns <code>null</code> if the input was <code>null</code>.</dd>
 </dl>
 </section>
 </li>
@@ -492,8 +492,8 @@ loadScripts(document, 'script');</script>
  variables.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The input string.</dd>
-<dd><code>w</code> - The writer to send the result to.</dd>
+<dd><code>s</code> - The input string.  May be <code>null</code>, in which case the writer is left unchanged.</dd>
+<dd><code>w</code> - The writer to send the result to.  Must not be <code>null</code>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying stream.</dd>
 </dl>

@@ -662,67 +662,115 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isInjectAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isInjectAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-86">isInjectAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-89">isInjectAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation is an inject marker.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the annotation is an inject marker.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isNamedAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isNamedAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-94">isNamedAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-100">isNamedAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation is a named qualifier.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the annotation is a named qualifier.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isQualifierMeta(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isQualifierMeta</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-102">isQualifierMeta</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-111">isQualifierMeta</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if this annotation type itself is annotated with a qualifier marker.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if this annotation type itself is annotated with a qualifier marker.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isSingletonAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isSingletonAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-111">isSingletonAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-123">isSingletonAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation is a singleton marker.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the annotation is a singleton marker.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isProviderType(java.lang.Class)">
 <h3>isProviderType</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-119">isProviderType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-134">isProviderType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;type)</span></div>
 <div class="block">Returns <jk>true</jk> if the class is a supported provider interface.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>type</code> - The class to inspect.  Can be <jk>null</jk>, in which case <jk>false</jk> is returned.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the class is a supported provider interface.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isPostConstructAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isPostConstructAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-126">isPostConstructAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-144">isPostConstructAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation is a post-construct lifecycle marker.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the annotation is a post-construct lifecycle marker.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isPreDestroyAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isPreDestroyAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-134">isPreDestroyAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-155">isPreDestroyAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation is a pre-destroy lifecycle marker.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd><jk>true</jk> if the annotation is a pre-destroy lifecycle marker.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="qualifierValue(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>qualifierValue</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-146">qualifierValue</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-170">qualifierValue</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Reads qualifier value from an annotation when supported.
 
  <p>
  For <c>@Named</c>, returns the annotation value directly.  For qualifier-meta annotations,
  this returns the annotation's own <c>value()</c> attribute if present and string-typed.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>The qualifier value, or <jk>null</jk> if the annotation carries no qualifier value.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isValueAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isValueAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-165">isValueAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-189">isValueAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation is a config-value marker.
 
  <p>
@@ -731,7 +779,7 @@ loadScripts(document, 'script');</script>
  dependency in <code>juneau-commons</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotation</code> - The annotation to inspect.</dd>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if <code>annotation</code> is one of the recognized <code>@Value</code> variants.</dd>
 </dl>
@@ -740,7 +788,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="valueExpression(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>valueExpression</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-181">valueExpression</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-205">valueExpression</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns the configuration expression carried by a <code>@Value</code> annotation, or <code>null</code>
  if the annotation is not a recognized <code>@Value</code>.
 
@@ -749,7 +797,7 @@ loadScripts(document, 'script');</script>
  attribute, so a uniform <code>getValue()</code> lookup against the annotation works for either.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotation</code> - The annotation to inspect.</dd>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The <code>value()</code> string, or <code>null</code> if <code>annotation</code> is not a <code>@Value</code>.</dd>
 </dl>
@@ -758,7 +806,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isValidAnnotation(org.apache.juneau.commons.reflect.AnnotationInfo)">
 <h3>isValidAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-198">isValidAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/JsrSupport.html#line-222">isValidAnnotation</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;?&gt;&nbsp;annotation)</span></div>
 <div class="block">Returns <jk>true</jk> if the annotation is a Jakarta Bean Validation opt-in marker.
 
  <p>
@@ -767,7 +815,7 @@ loadScripts(document, 'script');</script>
  compile-time Jakarta Validation or Spring dependency in <code>juneau-commons</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>annotation</code> - The annotation to inspect.</dd>
+<dd><code>annotation</code> - The annotation to inspect.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if <code>annotation</code> is one of the recognized validation opt-in markers.</dd>
 </dl>

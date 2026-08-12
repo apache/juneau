@@ -260,7 +260,7 @@
 <span class="source-line-no">247</span><span id="line-247">      // @formatter:on</span>
 <span class="source-line-no">248</span><span id="line-248">   }</span>
 <span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">   private static HtmlElement modelBlockSummary(String modelName, JsonMap model) {</span>
+<span class="source-line-no">250</span><span id="line-250">   private static Div modelBlockSummary(String modelName, JsonMap model) {</span>
 <span class="source-line-no">251</span><span id="line-251">      // @formatter:off</span>
 <span class="source-line-no">252</span><span id="line-252">      return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(</span>
 <span class="source-line-no">253</span><span id="line-253">         span(modelName).class_("method-button"),</span>
@@ -277,13 +277,13 @@
 <span class="source-line-no">264</span><span id="line-264">   }</span>
 <span class="source-line-no">265</span><span id="line-265"></span>
 <span class="source-line-no">266</span><span id="line-266">   // Creates the "Model" header.</span>
-<span class="source-line-no">267</span><span id="line-267">   private static HtmlElement modelsBlockSummary() {</span>
+<span class="source-line-no">267</span><span id="line-267">   private static Div modelsBlockSummary() {</span>
 <span class="source-line-no">268</span><span id="line-268">      return div().class_("tag-block-summary").onclick("toggleTagBlock(this)").children(span("Models").class_("name"));</span>
 <span class="source-line-no">269</span><span id="line-269">   }</span>
 <span class="source-line-no">270</span><span id="line-270"></span>
 <span class="source-line-no">271</span><span id="line-271">   private static Div opBlock(Session s, String path, String opName, Operation op) {</span>
 <span class="source-line-no">272</span><span id="line-272"></span>
-<span class="source-line-no">273</span><span id="line-273">      var opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();</span>
+<span class="source-line-no">273</span><span id="line-273">      var opClass = op.isDeprecated() ? "deprecated" : lcr(opName);</span>
 <span class="source-line-no">274</span><span id="line-274">      if (! op.isDeprecated() &amp;&amp; ! STANDARD_METHODS.contains(opClass)) // HTT - opBlock only called with standard method names from OperationMap; custom method branch unreachable</span>
 <span class="source-line-no">275</span><span id="line-275">         opClass = "other";</span>
 <span class="source-line-no">276</span><span id="line-276"></span>
@@ -295,10 +295,10 @@
 <span class="source-line-no">282</span><span id="line-282">      // @formatter:on</span>
 <span class="source-line-no">283</span><span id="line-283">   }</span>
 <span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   private static HtmlElement opBlockSummary(String path, String opName, Operation op) {</span>
+<span class="source-line-no">285</span><span id="line-285">   private static Div opBlockSummary(String path, String opName, Operation op) {</span>
 <span class="source-line-no">286</span><span id="line-286">      // @formatter:off</span>
 <span class="source-line-no">287</span><span id="line-287">      return div().class_("op-block-summary").onclick("toggleOpBlock(this)").children(</span>
-<span class="source-line-no">288</span><span id="line-288">         span(opName.toUpperCase()).class_("method-button"),</span>
+<span class="source-line-no">288</span><span id="line-288">         span(ucr(opName)).class_("method-button"),</span>
 <span class="source-line-no">289</span><span id="line-289">         span(path).class_("path"),</span>
 <span class="source-line-no">290</span><span id="line-290">         nn(op.getSummary()) ? span(op.getSummary()).class_("summary") : null</span>
 <span class="source-line-no">291</span><span id="line-291">      );</span>
@@ -384,10 +384,10 @@
 <span class="source-line-no">371</span><span id="line-371">   }</span>
 <span class="source-line-no">372</span><span id="line-372"></span>
 <span class="source-line-no">373</span><span id="line-373">   // Creates the "pet  Everything about your Pets  ext-link" header.</span>
-<span class="source-line-no">374</span><span id="line-374">   private static HtmlElement tagBlockSummary(Tag t) {</span>
+<span class="source-line-no">374</span><span id="line-374">   private static Div tagBlockSummary(Tag t) {</span>
 <span class="source-line-no">375</span><span id="line-375">      var ed = t.getExternalDocs();</span>
 <span class="source-line-no">376</span><span id="line-376"></span>
-<span class="source-line-no">377</span><span id="line-377">      var children = new ArrayList&lt;HtmlElement&gt;();</span>
+<span class="source-line-no">377</span><span id="line-377">      var children = new ArrayList&lt;HtmlElement&lt;?&gt;&gt;();</span>
 <span class="source-line-no">378</span><span id="line-378">      children.add(span(t.getName()).class_("name"));</span>
 <span class="source-line-no">379</span><span id="line-379">      children.add(span(toBRL(t.getDescription())).class_("description"));</span>
 <span class="source-line-no">380</span><span id="line-380"></span>

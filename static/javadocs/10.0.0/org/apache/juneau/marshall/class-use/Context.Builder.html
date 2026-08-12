@@ -327,9 +327,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Creates a builder from this context object.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Context.</span><code><a href="../Context.html#createBuilder(java.lang.Class)" class="member-name-link">createBuilder</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../Context.html" title="class in org.apache.juneau.marshall">Context</a>&gt;&nbsp;type)</code></div>
+<div class="col-first odd-row-color"><code>static <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Context.Builder.</span><code><a href="../Context.Builder.html#copyOrNull(org.apache.juneau.marshall.Context.Builder)" class="member-name-link">copyOrNull</a><wbr>(<a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&lt;?&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Context.</span><code><a href="../Context.html#createBuilder(java.lang.Class)" class="member-name-link">createBuilder</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../Context.html" title="class in org.apache.juneau.marshall">Context</a>&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Instantiates a builder of the specified context class.</div>
 </div>
 </div>
@@ -390,9 +395,14 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">UriApplyAnnotation.Applier.</span><code><a href="../UriApplyAnnotation.Applier.html#apply(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.marshall.Context.Builder)" class="member-name-link">apply</a><wbr>(<a href="../../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../UriApply.html" title="annotation interface in org.apache.juneau.marshall">UriApply</a>&gt;&nbsp;ai,
  <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&nbsp;b)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Context.</span><code><a href="../Context.html#init(org.apache.juneau.marshall.Context.Builder)" class="member-name-link">init</a><wbr>(<a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&nbsp;builder)</code></div>
+<div class="col-first odd-row-color"><code>static <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Context.Builder.</span><code><a href="../Context.Builder.html#copyOrNull(org.apache.juneau.marshall.Context.Builder)" class="member-name-link">copyOrNull</a><wbr>(<a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&lt;?&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Null-safe copy: returns a deep copy of the specified value, or <jk>null</jk> if the value is <jk>null</jk>.</div>
+</div>
+<div class="col-first even-row-color"><code>protected void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Context.</span><code><a href="../Context.html#init(org.apache.juneau.marshall.Context.Builder)" class="member-name-link">init</a><wbr>(<a href="../Context.Builder.html" title="class in org.apache.juneau.marshall">Context.Builder</a>&nbsp;builder)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Perform optional initialization on builder before it is used.</div>
 </div>
 </div>

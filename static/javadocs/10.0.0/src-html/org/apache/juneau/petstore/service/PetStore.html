@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.concurrent.atomic.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.json5.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.marshaller.*;</span>
 <span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.petstore.dto.*;</span>
 <span class="source-line-no">029</span><span id="line-29"></span>
 <span class="source-line-no">030</span><span id="line-30">/**</span>
@@ -107,12 +107,12 @@
 <span class="source-line-no">094</span><span id="line-94">      var loader = PetStore.class.getClassLoader();</span>
 <span class="source-line-no">095</span><span id="line-95">      try (var in = loader.getResourceAsStream(resourcePath)) {</span>
 <span class="source-line-no">096</span><span id="line-96">         if (in == null)</span>
-<span class="source-line-no">097</span><span id="line-97">            return new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">097</span><span id="line-97">            return l();</span>
 <span class="source-line-no">098</span><span id="line-98">         try (var reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {</span>
-<span class="source-line-no">099</span><span id="line-99">            return Json5Parser.DEFAULT.parse(reader, List.class, elementType);</span>
+<span class="source-line-no">099</span><span id="line-99">            return Json5.DEFAULT.read(reader, List.class, elementType);</span>
 <span class="source-line-no">100</span><span id="line-100">         }</span>
 <span class="source-line-no">101</span><span id="line-101">      } catch (Exception e) {</span>
-<span class="source-line-no">102</span><span id="line-102">         throw brex(e, "Failed to load petstore seed resource ''{0}''", resourcePath);</span>
+<span class="source-line-no">102</span><span id="line-102">         throw brex(e, "Failed to load petstore seed resource '%s'", resourcePath);</span>
 <span class="source-line-no">103</span><span id="line-103">      }</span>
 <span class="source-line-no">104</span><span id="line-104">   }</span>
 <span class="source-line-no">105</span><span id="line-105"></span>
@@ -126,199 +126,202 @@
 <span class="source-line-no">113</span><span id="line-113">    * @return All pets, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">114</span><span id="line-114">    */</span>
 <span class="source-line-no">115</span><span id="line-115">   public Collection&lt;Pet&gt; getPets() {</span>
-<span class="source-line-no">116</span><span id="line-116">      return pets.values();</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   /**</span>
-<span class="source-line-no">120</span><span id="line-120">    * Returns a pet by ID.</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @param id The pet ID.</span>
-<span class="source-line-no">123</span><span id="line-123">    * @return The pet, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   public Pet getPet(long id) {</span>
-<span class="source-line-no">126</span><span id="line-126">      return pets.get(id);</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   /**</span>
-<span class="source-line-no">130</span><span id="line-130">    * Creates a new pet.</span>
-<span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * &lt;p&gt;</span>
-<span class="source-line-no">133</span><span id="line-133">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param pet The pet to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">136</span><span id="line-136">    * @return The created pet (same instance, with assigned ID).</span>
-<span class="source-line-no">137</span><span id="line-137">    */</span>
-<span class="source-line-no">138</span><span id="line-138">   public Pet createPet(Pet pet) {</span>
-<span class="source-line-no">139</span><span id="line-139">      if (pet == null)</span>
-<span class="source-line-no">140</span><span id="line-140">         throw iaex("Pet must not be null");</span>
-<span class="source-line-no">141</span><span id="line-141">      var id = nextPetId.incrementAndGet();</span>
-<span class="source-line-no">142</span><span id="line-142">      pet.setId(id);</span>
-<span class="source-line-no">143</span><span id="line-143">      pets.put(id, pet);</span>
-<span class="source-line-no">144</span><span id="line-144">      return pet;</span>
-<span class="source-line-no">145</span><span id="line-145">   }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   /**</span>
-<span class="source-line-no">148</span><span id="line-148">    * Updates an existing pet.</span>
-<span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * @param pet The pet to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing pet.</span>
-<span class="source-line-no">151</span><span id="line-151">    * @return The updated pet.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
-<span class="source-line-no">153</span><span id="line-153">    */</span>
-<span class="source-line-no">154</span><span id="line-154">   public Pet updatePet(Pet pet) {</span>
-<span class="source-line-no">155</span><span id="line-155">      if (pet == null)</span>
-<span class="source-line-no">156</span><span id="line-156">         throw iaex("Pet must not be null");</span>
-<span class="source-line-no">157</span><span id="line-157">      if (! pets.containsKey(pet.getId()))</span>
-<span class="source-line-no">158</span><span id="line-158">         throw new PetstoreNotFoundException("Pet not found: id=" + pet.getId());</span>
-<span class="source-line-no">159</span><span id="line-159">      pets.put(pet.getId(), pet);</span>
-<span class="source-line-no">160</span><span id="line-160">      return pet;</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">   /**</span>
-<span class="source-line-no">164</span><span id="line-164">    * Deletes a pet by ID.</span>
-<span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * @param id The pet ID.</span>
-<span class="source-line-no">167</span><span id="line-167">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
-<span class="source-line-no">168</span><span id="line-168">    */</span>
-<span class="source-line-no">169</span><span id="line-169">   public void deletePet(long id) {</span>
-<span class="source-line-no">170</span><span id="line-170">      if (pets.remove(id) == null)</span>
-<span class="source-line-no">171</span><span id="line-171">         throw new PetstoreNotFoundException("Pet not found: id=" + id);</span>
-<span class="source-line-no">172</span><span id="line-172">   }</span>
-<span class="source-line-no">173</span><span id="line-173"></span>
-<span class="source-line-no">174</span><span id="line-174">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">175</span><span id="line-175">   // Orders</span>
-<span class="source-line-no">176</span><span id="line-176">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">177</span><span id="line-177"></span>
-<span class="source-line-no">178</span><span id="line-178">   /**</span>
-<span class="source-line-no">179</span><span id="line-179">    * Returns all orders.</span>
-<span class="source-line-no">180</span><span id="line-180">    *</span>
-<span class="source-line-no">181</span><span id="line-181">    * @return All orders, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">182</span><span id="line-182">    */</span>
-<span class="source-line-no">183</span><span id="line-183">   public Collection&lt;Order&gt; getOrders() {</span>
-<span class="source-line-no">184</span><span id="line-184">      return orders.values();</span>
-<span class="source-line-no">185</span><span id="line-185">   }</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">   /**</span>
-<span class="source-line-no">188</span><span id="line-188">    * Returns an order by ID.</span>
-<span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * @param id The order ID.</span>
-<span class="source-line-no">191</span><span id="line-191">    * @return The order, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">192</span><span id="line-192">    */</span>
-<span class="source-line-no">193</span><span id="line-193">   public Order getOrder(long id) {</span>
-<span class="source-line-no">194</span><span id="line-194">      return orders.get(id);</span>
-<span class="source-line-no">195</span><span id="line-195">   }</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">   /**</span>
-<span class="source-line-no">198</span><span id="line-198">    * Creates a new order.</span>
-<span class="source-line-no">199</span><span id="line-199">    *</span>
-<span class="source-line-no">200</span><span id="line-200">    * &lt;p&gt;</span>
-<span class="source-line-no">201</span><span id="line-201">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
-<span class="source-line-no">202</span><span id="line-202">    *</span>
-<span class="source-line-no">203</span><span id="line-203">    * @param order The order to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">204</span><span id="line-204">    * @return The created order (same instance, with assigned ID).</span>
-<span class="source-line-no">205</span><span id="line-205">    */</span>
-<span class="source-line-no">206</span><span id="line-206">   public Order createOrder(Order order) {</span>
-<span class="source-line-no">207</span><span id="line-207">      if (order == null)</span>
-<span class="source-line-no">208</span><span id="line-208">         throw iaex("Order must not be null");</span>
-<span class="source-line-no">209</span><span id="line-209">      var id = nextOrderId.incrementAndGet();</span>
-<span class="source-line-no">210</span><span id="line-210">      order.setId(id);</span>
-<span class="source-line-no">211</span><span id="line-211">      orders.put(id, order);</span>
-<span class="source-line-no">212</span><span id="line-212">      return order;</span>
-<span class="source-line-no">213</span><span id="line-213">   }</span>
-<span class="source-line-no">214</span><span id="line-214"></span>
-<span class="source-line-no">215</span><span id="line-215">   /**</span>
-<span class="source-line-no">216</span><span id="line-216">    * Updates an existing order.</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * @param order The order to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing order.</span>
-<span class="source-line-no">219</span><span id="line-219">    * @return The updated order.</span>
-<span class="source-line-no">220</span><span id="line-220">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
-<span class="source-line-no">221</span><span id="line-221">    */</span>
-<span class="source-line-no">222</span><span id="line-222">   public Order updateOrder(Order order) {</span>
-<span class="source-line-no">223</span><span id="line-223">      if (order == null)</span>
-<span class="source-line-no">224</span><span id="line-224">         throw iaex("Order must not be null");</span>
-<span class="source-line-no">225</span><span id="line-225">      if (! orders.containsKey(order.getId()))</span>
-<span class="source-line-no">226</span><span id="line-226">         throw new PetstoreNotFoundException("Order not found: id=" + order.getId());</span>
-<span class="source-line-no">227</span><span id="line-227">      orders.put(order.getId(), order);</span>
-<span class="source-line-no">228</span><span id="line-228">      return order;</span>
-<span class="source-line-no">229</span><span id="line-229">   }</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">   /**</span>
-<span class="source-line-no">232</span><span id="line-232">    * Deletes an order by ID.</span>
-<span class="source-line-no">233</span><span id="line-233">    *</span>
-<span class="source-line-no">234</span><span id="line-234">    * @param id The order ID.</span>
-<span class="source-line-no">235</span><span id="line-235">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
-<span class="source-line-no">236</span><span id="line-236">    */</span>
-<span class="source-line-no">237</span><span id="line-237">   public void deleteOrder(long id) {</span>
-<span class="source-line-no">238</span><span id="line-238">      if (orders.remove(id) == null)</span>
-<span class="source-line-no">239</span><span id="line-239">         throw new PetstoreNotFoundException("Order not found: id=" + id);</span>
-<span class="source-line-no">240</span><span id="line-240">   }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">243</span><span id="line-243">   // Users</span>
-<span class="source-line-no">244</span><span id="line-244">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">245</span><span id="line-245"></span>
-<span class="source-line-no">246</span><span id="line-246">   /**</span>
-<span class="source-line-no">247</span><span id="line-247">    * Returns all users.</span>
-<span class="source-line-no">248</span><span id="line-248">    *</span>
-<span class="source-line-no">249</span><span id="line-249">    * @return All users, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">250</span><span id="line-250">    */</span>
-<span class="source-line-no">251</span><span id="line-251">   public Collection&lt;User&gt; getUsers() {</span>
-<span class="source-line-no">252</span><span id="line-252">      return users.values();</span>
-<span class="source-line-no">253</span><span id="line-253">   }</span>
-<span class="source-line-no">254</span><span id="line-254"></span>
-<span class="source-line-no">255</span><span id="line-255">   /**</span>
-<span class="source-line-no">256</span><span id="line-256">    * Returns a user by username.</span>
-<span class="source-line-no">257</span><span id="line-257">    *</span>
-<span class="source-line-no">258</span><span id="line-258">    * @param username The username (primary key).</span>
-<span class="source-line-no">259</span><span id="line-259">    * @return The user, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">260</span><span id="line-260">    */</span>
-<span class="source-line-no">261</span><span id="line-261">   public User getUser(String username) {</span>
-<span class="source-line-no">262</span><span id="line-262">      return users.get(username);</span>
-<span class="source-line-no">263</span><span id="line-263">   }</span>
-<span class="source-line-no">264</span><span id="line-264"></span>
-<span class="source-line-no">265</span><span id="line-265">   /**</span>
-<span class="source-line-no">266</span><span id="line-266">    * Creates a new user.</span>
-<span class="source-line-no">267</span><span id="line-267">    *</span>
-<span class="source-line-no">268</span><span id="line-268">    * @param user The user to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a non-null username not already in use.</span>
-<span class="source-line-no">269</span><span id="line-269">    * @return The created user.</span>
-<span class="source-line-no">270</span><span id="line-270">    * @throws IllegalArgumentException If the username is already in use.</span>
-<span class="source-line-no">271</span><span id="line-271">    */</span>
-<span class="source-line-no">272</span><span id="line-272">   public User createUser(User user) {</span>
-<span class="source-line-no">273</span><span id="line-273">      if (user == null)</span>
-<span class="source-line-no">274</span><span id="line-274">         throw iaex("User must not be null");</span>
-<span class="source-line-no">275</span><span id="line-275">      if (user.getUsername() == null)</span>
-<span class="source-line-no">276</span><span id="line-276">         throw iaex("User username must not be null");</span>
-<span class="source-line-no">277</span><span id="line-277">      if (users.putIfAbsent(user.getUsername(), user) != null)</span>
-<span class="source-line-no">278</span><span id="line-278">         throw iaex("User already exists: username=''{0}''", user.getUsername());</span>
-<span class="source-line-no">279</span><span id="line-279">      return user;</span>
-<span class="source-line-no">280</span><span id="line-280">   }</span>
-<span class="source-line-no">281</span><span id="line-281"></span>
-<span class="source-line-no">282</span><span id="line-282">   /**</span>
-<span class="source-line-no">283</span><span id="line-283">    * Updates an existing user.</span>
-<span class="source-line-no">284</span><span id="line-284">    *</span>
-<span class="source-line-no">285</span><span id="line-285">    * @param user The user to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a username matching an existing user.</span>
-<span class="source-line-no">286</span><span id="line-286">    * @return The updated user.</span>
-<span class="source-line-no">287</span><span id="line-287">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
-<span class="source-line-no">288</span><span id="line-288">    */</span>
-<span class="source-line-no">289</span><span id="line-289">   public User updateUser(User user) {</span>
-<span class="source-line-no">290</span><span id="line-290">      if (user == null)</span>
-<span class="source-line-no">291</span><span id="line-291">         throw iaex("User must not be null");</span>
-<span class="source-line-no">292</span><span id="line-292">      if (! users.containsKey(user.getUsername()))</span>
-<span class="source-line-no">293</span><span id="line-293">         throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());</span>
-<span class="source-line-no">294</span><span id="line-294">      users.put(user.getUsername(), user);</span>
-<span class="source-line-no">295</span><span id="line-295">      return user;</span>
-<span class="source-line-no">296</span><span id="line-296">   }</span>
-<span class="source-line-no">297</span><span id="line-297"></span>
-<span class="source-line-no">298</span><span id="line-298">   /**</span>
-<span class="source-line-no">299</span><span id="line-299">    * Deletes a user by username.</span>
-<span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * @param username The username.</span>
-<span class="source-line-no">302</span><span id="line-302">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
-<span class="source-line-no">303</span><span id="line-303">    */</span>
-<span class="source-line-no">304</span><span id="line-304">   public void deleteUser(String username) {</span>
-<span class="source-line-no">305</span><span id="line-305">      if (users.remove(username) == null)</span>
-<span class="source-line-no">306</span><span id="line-306">         throw new PetstoreNotFoundException("User not found: username=" + username);</span>
-<span class="source-line-no">307</span><span id="line-307">   }</span>
-<span class="source-line-no">308</span><span id="line-308">}</span>
+<span class="source-line-no">116</span><span id="line-116">      // Return an immutable snapshot so callers can't mutate the backing store through the returned collection.</span>
+<span class="source-line-no">117</span><span id="line-117">      return List.copyOf(pets.values());</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   /**</span>
+<span class="source-line-no">121</span><span id="line-121">    * Returns a pet by ID.</span>
+<span class="source-line-no">122</span><span id="line-122">    *</span>
+<span class="source-line-no">123</span><span id="line-123">    * @param id The pet ID.</span>
+<span class="source-line-no">124</span><span id="line-124">    * @return The pet, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">125</span><span id="line-125">    */</span>
+<span class="source-line-no">126</span><span id="line-126">   public Pet getPet(long id) {</span>
+<span class="source-line-no">127</span><span id="line-127">      return pets.get(id);</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">   /**</span>
+<span class="source-line-no">131</span><span id="line-131">    * Creates a new pet.</span>
+<span class="source-line-no">132</span><span id="line-132">    *</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * @param pet The pet to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">137</span><span id="line-137">    * @return The created pet (same instance, with assigned ID).</span>
+<span class="source-line-no">138</span><span id="line-138">    */</span>
+<span class="source-line-no">139</span><span id="line-139">   public Pet createPet(Pet pet) {</span>
+<span class="source-line-no">140</span><span id="line-140">      if (pet == null)</span>
+<span class="source-line-no">141</span><span id="line-141">         throw iaex("Pet must not be null");</span>
+<span class="source-line-no">142</span><span id="line-142">      var id = nextPetId.incrementAndGet();</span>
+<span class="source-line-no">143</span><span id="line-143">      pet.setId(id);</span>
+<span class="source-line-no">144</span><span id="line-144">      pets.put(id, pet);</span>
+<span class="source-line-no">145</span><span id="line-145">      return pet;</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   /**</span>
+<span class="source-line-no">149</span><span id="line-149">    * Updates an existing pet.</span>
+<span class="source-line-no">150</span><span id="line-150">    *</span>
+<span class="source-line-no">151</span><span id="line-151">    * @param pet The pet to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing pet.</span>
+<span class="source-line-no">152</span><span id="line-152">    * @return The updated pet.</span>
+<span class="source-line-no">153</span><span id="line-153">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
+<span class="source-line-no">154</span><span id="line-154">    */</span>
+<span class="source-line-no">155</span><span id="line-155">   public Pet updatePet(Pet pet) {</span>
+<span class="source-line-no">156</span><span id="line-156">      if (pet == null)</span>
+<span class="source-line-no">157</span><span id="line-157">         throw iaex("Pet must not be null");</span>
+<span class="source-line-no">158</span><span id="line-158">      if (! pets.containsKey(pet.getId()))</span>
+<span class="source-line-no">159</span><span id="line-159">         throw new PetstoreNotFoundException("Pet not found: id=" + pet.getId());</span>
+<span class="source-line-no">160</span><span id="line-160">      pets.put(pet.getId(), pet);</span>
+<span class="source-line-no">161</span><span id="line-161">      return pet;</span>
+<span class="source-line-no">162</span><span id="line-162">   }</span>
+<span class="source-line-no">163</span><span id="line-163"></span>
+<span class="source-line-no">164</span><span id="line-164">   /**</span>
+<span class="source-line-no">165</span><span id="line-165">    * Deletes a pet by ID.</span>
+<span class="source-line-no">166</span><span id="line-166">    *</span>
+<span class="source-line-no">167</span><span id="line-167">    * @param id The pet ID.</span>
+<span class="source-line-no">168</span><span id="line-168">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
+<span class="source-line-no">169</span><span id="line-169">    */</span>
+<span class="source-line-no">170</span><span id="line-170">   public void deletePet(long id) {</span>
+<span class="source-line-no">171</span><span id="line-171">      if (pets.remove(id) == null)</span>
+<span class="source-line-no">172</span><span id="line-172">         throw new PetstoreNotFoundException("Pet not found: id=" + id);</span>
+<span class="source-line-no">173</span><span id="line-173">   }</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">176</span><span id="line-176">   // Orders</span>
+<span class="source-line-no">177</span><span id="line-177">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">178</span><span id="line-178"></span>
+<span class="source-line-no">179</span><span id="line-179">   /**</span>
+<span class="source-line-no">180</span><span id="line-180">    * Returns all orders.</span>
+<span class="source-line-no">181</span><span id="line-181">    *</span>
+<span class="source-line-no">182</span><span id="line-182">    * @return All orders, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">183</span><span id="line-183">    */</span>
+<span class="source-line-no">184</span><span id="line-184">   public Collection&lt;Order&gt; getOrders() {</span>
+<span class="source-line-no">185</span><span id="line-185">      return List.copyOf(orders.values());</span>
+<span class="source-line-no">186</span><span id="line-186">   }</span>
+<span class="source-line-no">187</span><span id="line-187"></span>
+<span class="source-line-no">188</span><span id="line-188">   /**</span>
+<span class="source-line-no">189</span><span id="line-189">    * Returns an order by ID.</span>
+<span class="source-line-no">190</span><span id="line-190">    *</span>
+<span class="source-line-no">191</span><span id="line-191">    * @param id The order ID.</span>
+<span class="source-line-no">192</span><span id="line-192">    * @return The order, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">193</span><span id="line-193">    */</span>
+<span class="source-line-no">194</span><span id="line-194">   public Order getOrder(long id) {</span>
+<span class="source-line-no">195</span><span id="line-195">      return orders.get(id);</span>
+<span class="source-line-no">196</span><span id="line-196">   }</span>
+<span class="source-line-no">197</span><span id="line-197"></span>
+<span class="source-line-no">198</span><span id="line-198">   /**</span>
+<span class="source-line-no">199</span><span id="line-199">    * Creates a new order.</span>
+<span class="source-line-no">200</span><span id="line-200">    *</span>
+<span class="source-line-no">201</span><span id="line-201">    * &lt;p&gt;</span>
+<span class="source-line-no">202</span><span id="line-202">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
+<span class="source-line-no">203</span><span id="line-203">    *</span>
+<span class="source-line-no">204</span><span id="line-204">    * @param order The order to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">205</span><span id="line-205">    * @return The created order (same instance, with assigned ID).</span>
+<span class="source-line-no">206</span><span id="line-206">    */</span>
+<span class="source-line-no">207</span><span id="line-207">   public Order createOrder(Order order) {</span>
+<span class="source-line-no">208</span><span id="line-208">      if (order == null)</span>
+<span class="source-line-no">209</span><span id="line-209">         throw iaex("Order must not be null");</span>
+<span class="source-line-no">210</span><span id="line-210">      var id = nextOrderId.incrementAndGet();</span>
+<span class="source-line-no">211</span><span id="line-211">      order.setId(id);</span>
+<span class="source-line-no">212</span><span id="line-212">      orders.put(id, order);</span>
+<span class="source-line-no">213</span><span id="line-213">      return order;</span>
+<span class="source-line-no">214</span><span id="line-214">   }</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">   /**</span>
+<span class="source-line-no">217</span><span id="line-217">    * Updates an existing order.</span>
+<span class="source-line-no">218</span><span id="line-218">    *</span>
+<span class="source-line-no">219</span><span id="line-219">    * @param order The order to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing order.</span>
+<span class="source-line-no">220</span><span id="line-220">    * @return The updated order.</span>
+<span class="source-line-no">221</span><span id="line-221">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
+<span class="source-line-no">222</span><span id="line-222">    */</span>
+<span class="source-line-no">223</span><span id="line-223">   public Order updateOrder(Order order) {</span>
+<span class="source-line-no">224</span><span id="line-224">      if (order == null)</span>
+<span class="source-line-no">225</span><span id="line-225">         throw iaex("Order must not be null");</span>
+<span class="source-line-no">226</span><span id="line-226">      if (! orders.containsKey(order.getId()))</span>
+<span class="source-line-no">227</span><span id="line-227">         throw new PetstoreNotFoundException("Order not found: id=" + order.getId());</span>
+<span class="source-line-no">228</span><span id="line-228">      orders.put(order.getId(), order);</span>
+<span class="source-line-no">229</span><span id="line-229">      return order;</span>
+<span class="source-line-no">230</span><span id="line-230">   }</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">   /**</span>
+<span class="source-line-no">233</span><span id="line-233">    * Deletes an order by ID.</span>
+<span class="source-line-no">234</span><span id="line-234">    *</span>
+<span class="source-line-no">235</span><span id="line-235">    * @param id The order ID.</span>
+<span class="source-line-no">236</span><span id="line-236">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
+<span class="source-line-no">237</span><span id="line-237">    */</span>
+<span class="source-line-no">238</span><span id="line-238">   public void deleteOrder(long id) {</span>
+<span class="source-line-no">239</span><span id="line-239">      if (orders.remove(id) == null)</span>
+<span class="source-line-no">240</span><span id="line-240">         throw new PetstoreNotFoundException("Order not found: id=" + id);</span>
+<span class="source-line-no">241</span><span id="line-241">   }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">244</span><span id="line-244">   // Users</span>
+<span class="source-line-no">245</span><span id="line-245">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">246</span><span id="line-246"></span>
+<span class="source-line-no">247</span><span id="line-247">   /**</span>
+<span class="source-line-no">248</span><span id="line-248">    * Returns all users.</span>
+<span class="source-line-no">249</span><span id="line-249">    *</span>
+<span class="source-line-no">250</span><span id="line-250">    * @return All users, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">251</span><span id="line-251">    */</span>
+<span class="source-line-no">252</span><span id="line-252">   public Collection&lt;User&gt; getUsers() {</span>
+<span class="source-line-no">253</span><span id="line-253">      return List.copyOf(users.values());</span>
+<span class="source-line-no">254</span><span id="line-254">   }</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">   /**</span>
+<span class="source-line-no">257</span><span id="line-257">    * Returns a user by username.</span>
+<span class="source-line-no">258</span><span id="line-258">    *</span>
+<span class="source-line-no">259</span><span id="line-259">    * @param username The username (primary key).</span>
+<span class="source-line-no">260</span><span id="line-260">    * @return The user, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">261</span><span id="line-261">    */</span>
+<span class="source-line-no">262</span><span id="line-262">   public User getUser(String username) {</span>
+<span class="source-line-no">263</span><span id="line-263">      return users.get(username);</span>
+<span class="source-line-no">264</span><span id="line-264">   }</span>
+<span class="source-line-no">265</span><span id="line-265"></span>
+<span class="source-line-no">266</span><span id="line-266">   /**</span>
+<span class="source-line-no">267</span><span id="line-267">    * Creates a new user.</span>
+<span class="source-line-no">268</span><span id="line-268">    *</span>
+<span class="source-line-no">269</span><span id="line-269">    * @param user The user to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a non-null username not already in use.</span>
+<span class="source-line-no">270</span><span id="line-270">    * @return The created user.</span>
+<span class="source-line-no">271</span><span id="line-271">    * @throws IllegalArgumentException If the username is already in use.</span>
+<span class="source-line-no">272</span><span id="line-272">    */</span>
+<span class="source-line-no">273</span><span id="line-273">   public User createUser(User user) {</span>
+<span class="source-line-no">274</span><span id="line-274">      if (user == null)</span>
+<span class="source-line-no">275</span><span id="line-275">         throw iaex("User must not be null");</span>
+<span class="source-line-no">276</span><span id="line-276">      if (user.getUsername() == null)</span>
+<span class="source-line-no">277</span><span id="line-277">         throw iaex("User username must not be null");</span>
+<span class="source-line-no">278</span><span id="line-278">      if (users.putIfAbsent(user.getUsername(), user) != null)</span>
+<span class="source-line-no">279</span><span id="line-279">         throw iaex("User already exists: username='%s'", user.getUsername());</span>
+<span class="source-line-no">280</span><span id="line-280">      return user;</span>
+<span class="source-line-no">281</span><span id="line-281">   }</span>
+<span class="source-line-no">282</span><span id="line-282"></span>
+<span class="source-line-no">283</span><span id="line-283">   /**</span>
+<span class="source-line-no">284</span><span id="line-284">    * Updates an existing user.</span>
+<span class="source-line-no">285</span><span id="line-285">    *</span>
+<span class="source-line-no">286</span><span id="line-286">    * @param user The user to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a username matching an existing user.</span>
+<span class="source-line-no">287</span><span id="line-287">    * @return The updated user.</span>
+<span class="source-line-no">288</span><span id="line-288">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
+<span class="source-line-no">289</span><span id="line-289">    */</span>
+<span class="source-line-no">290</span><span id="line-290">   public User updateUser(User user) {</span>
+<span class="source-line-no">291</span><span id="line-291">      if (user == null)</span>
+<span class="source-line-no">292</span><span id="line-292">         throw iaex("User must not be null");</span>
+<span class="source-line-no">293</span><span id="line-293">      if (user.getUsername() == null)</span>
+<span class="source-line-no">294</span><span id="line-294">         throw iaex("User username must not be null");</span>
+<span class="source-line-no">295</span><span id="line-295">      if (! users.containsKey(user.getUsername()))</span>
+<span class="source-line-no">296</span><span id="line-296">         throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());</span>
+<span class="source-line-no">297</span><span id="line-297">      users.put(user.getUsername(), user);</span>
+<span class="source-line-no">298</span><span id="line-298">      return user;</span>
+<span class="source-line-no">299</span><span id="line-299">   }</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">   /**</span>
+<span class="source-line-no">302</span><span id="line-302">    * Deletes a user by username.</span>
+<span class="source-line-no">303</span><span id="line-303">    *</span>
+<span class="source-line-no">304</span><span id="line-304">    * @param username The username.</span>
+<span class="source-line-no">305</span><span id="line-305">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
+<span class="source-line-no">306</span><span id="line-306">    */</span>
+<span class="source-line-no">307</span><span id="line-307">   public void deleteUser(String username) {</span>
+<span class="source-line-no">308</span><span id="line-308">      if (users.remove(username) == null)</span>
+<span class="source-line-no">309</span><span id="line-309">         throw new PetstoreNotFoundException("User not found: username=" + username);</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311">}</span>
 
 
 

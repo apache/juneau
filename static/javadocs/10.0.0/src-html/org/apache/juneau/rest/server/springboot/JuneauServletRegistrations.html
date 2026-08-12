@@ -90,40 +90,38 @@
 <span class="source-line-no">077</span><span id="line-77">    */</span>
 <span class="source-line-no">078</span><span id="line-78">   public static &lt;T extends Servlet&gt; ServletRegistrationBean&lt;T&gt; forServlet(T servlet, BeanStore beanStore) {</span>
 <span class="source-line-no">079</span><span id="line-79">      if (servlet == null)</span>
-<span class="source-line-no">080</span><span id="line-80">         throw new IllegalArgumentException("Argument 'servlet' must not be null");</span>
+<span class="source-line-no">080</span><span id="line-80">         throw iaex("Argument 'servlet' must not be null");</span>
 <span class="source-line-no">081</span><span id="line-81">      var resolved = RestContext.resolveTopLevelPaths(servlet.getClass(), servlet, beanStore);</span>
 <span class="source-line-no">082</span><span id="line-82">      if (resolved.length == 0)</span>
-<span class="source-line-no">083</span><span id="line-83">         throw new IllegalArgumentException("Servlet "</span>
-<span class="source-line-no">084</span><span id="line-84">            + cn(servlet)</span>
-<span class="source-line-no">085</span><span id="line-85">            + " resolves to no top-level paths; declare @Rest(paths=...) or override getPaths().");</span>
-<span class="source-line-no">086</span><span id="line-86">      var mappings = new String[resolved.length];</span>
-<span class="source-line-no">087</span><span id="line-87">      for (var i = 0; i &lt; resolved.length; i++)</span>
-<span class="source-line-no">088</span><span id="line-88">         mappings[i] = toUrlMapping(resolved[i]);</span>
-<span class="source-line-no">089</span><span id="line-89">      var bean = new ServletRegistrationBean&lt;&gt;(servlet, mappings);</span>
-<span class="source-line-no">090</span><span id="line-90">      bean.setName(cn(servlet));</span>
-<span class="source-line-no">091</span><span id="line-91">      return bean;</span>
-<span class="source-line-no">092</span><span id="line-92">   }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   /**</span>
-<span class="source-line-no">095</span><span id="line-95">    * Normalizes a resolved top-level path into a servlet URL mapping.</span>
-<span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * &lt;p&gt;</span>
-<span class="source-line-no">098</span><span id="line-98">    * Mirrors the microservice {@code JettyServerComponent.normalizeExactPathSpec(...)} contract:</span>
-<span class="source-line-no">099</span><span id="line-99">    * trims trailing slashes, ensures a leading slash, and leaves any {@code /*} suffix intact (so a</span>
-<span class="source-line-no">100</span><span id="line-100">    * prefix mount like {@code /jsp/*} stays a prefix mapping while an exact mount like</span>
-<span class="source-line-no">101</span><span id="line-101">    * {@code /healthz} stays exact) &amp;mdash; cross-runtime parity with the Jetty mount path.</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   private static String toUrlMapping(String rawPath) {</span>
-<span class="source-line-no">104</span><span id="line-104">      var p = rawPath == null ? "" : rawPath;</span>
-<span class="source-line-no">105</span><span id="line-105">      while (p.endsWith("/") &amp;&amp; p.length() &gt; 1)</span>
-<span class="source-line-no">106</span><span id="line-106">         p = p.substring(0, p.length() - 1);</span>
-<span class="source-line-no">107</span><span id="line-107">      if (p.isEmpty())</span>
-<span class="source-line-no">108</span><span id="line-108">         return "/";</span>
-<span class="source-line-no">109</span><span id="line-109">      if (! p.startsWith("/"))</span>
-<span class="source-line-no">110</span><span id="line-110">         p = "/" + p;</span>
-<span class="source-line-no">111</span><span id="line-111">      return p;</span>
-<span class="source-line-no">112</span><span id="line-112">   }</span>
-<span class="source-line-no">113</span><span id="line-113">}</span>
+<span class="source-line-no">083</span><span id="line-83">         throw iaex("Servlet %s resolves to no top-level paths; declare @Rest(paths=...) or override getPaths().", cn(servlet));</span>
+<span class="source-line-no">084</span><span id="line-84">      var mappings = new String[resolved.length];</span>
+<span class="source-line-no">085</span><span id="line-85">      for (var i = 0; i &lt; resolved.length; i++)</span>
+<span class="source-line-no">086</span><span id="line-86">         mappings[i] = toUrlMapping(resolved[i]);</span>
+<span class="source-line-no">087</span><span id="line-87">      var bean = new ServletRegistrationBean&lt;&gt;(servlet, mappings);</span>
+<span class="source-line-no">088</span><span id="line-88">      bean.setName(cn(servlet));</span>
+<span class="source-line-no">089</span><span id="line-89">      return bean;</span>
+<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Normalizes a resolved top-level path into a servlet URL mapping.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * &lt;p&gt;</span>
+<span class="source-line-no">096</span><span id="line-96">    * Mirrors the microservice {@code JettyServerComponent.normalizeExactPathSpec(...)} contract:</span>
+<span class="source-line-no">097</span><span id="line-97">    * trims trailing slashes, ensures a leading slash, and leaves any {@code /*} suffix intact (so a</span>
+<span class="source-line-no">098</span><span id="line-98">    * prefix mount like {@code /jsp/*} stays a prefix mapping while an exact mount like</span>
+<span class="source-line-no">099</span><span id="line-99">    * {@code /healthz} stays exact) &amp;mdash; cross-runtime parity with the Jetty mount path.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   private static String toUrlMapping(String rawPath) {</span>
+<span class="source-line-no">102</span><span id="line-102">      var p = rawPath == null ? "" : rawPath;</span>
+<span class="source-line-no">103</span><span id="line-103">      while (p.endsWith("/") &amp;&amp; p.length() &gt; 1)</span>
+<span class="source-line-no">104</span><span id="line-104">         p = p.substring(0, p.length() - 1);</span>
+<span class="source-line-no">105</span><span id="line-105">      if (p.isEmpty())</span>
+<span class="source-line-no">106</span><span id="line-106">         return "/";</span>
+<span class="source-line-no">107</span><span id="line-107">      if (! p.startsWith("/"))</span>
+<span class="source-line-no">108</span><span id="line-108">         p = "/" + p;</span>
+<span class="source-line-no">109</span><span id="line-109">      return p;</span>
+<span class="source-line-no">110</span><span id="line-110">   }</span>
+<span class="source-line-no">111</span><span id="line-111">}</span>
 
 
 

@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"></span>
 <span class="source-line-no">072</span><span id="line-72">         var colonIndex = trim.indexOf(':');</span>
 <span class="source-line-no">073</span><span id="line-73">         if (colonIndex &lt;= 0)</span>
-<span class="source-line-no">074</span><span id="line-74">            throw new IOException("Invalid YAML config line: " + line);</span>
+<span class="source-line-no">074</span><span id="line-74">            throw ioex("Invalid YAML config line: %s", line);</span>
 <span class="source-line-no">075</span><span id="line-75"></span>
 <span class="source-line-no">076</span><span id="line-76">         var key = trim.substring(0, colonIndex).trim();</span>
 <span class="source-line-no">077</span><span id="line-77">         var rest = trim.substring(colonIndex + 1).trim();</span>
@@ -125,7 +125,7 @@
 <span class="source-line-no">112</span><span id="line-112">   @Override /* ConfigFormat */</span>
 <span class="source-line-no">113</span><span id="line-113">   public String fromInternal(ConfigMap map) {</span>
 <span class="source-line-no">114</span><span id="line-114">      var sb = new StringBuilder();</span>
-<span class="source-line-no">115</span><span id="line-115">      List&lt;String&gt; opened = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">115</span><span id="line-115">      List&lt;String&gt; opened = l();</span>
 <span class="source-line-no">116</span><span id="line-116">      for (var section : map.getSections()) {</span>
 <span class="source-line-no">117</span><span id="line-117">         var segments = splitPath(section);</span>
 <span class="source-line-no">118</span><span id="line-118">         var common = commonPrefix(opened, segments);</span>

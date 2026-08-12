@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The initial value.</dd>
+<dd><code>value</code> - The initial value.  Can be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -229,7 +229,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The initial value.</dd>
+<dd><code>value</code> - The initial value.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new float value.</dd>
 </dl>
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>precision</code> - The maximum allowed difference for equality. Must be non-negative and is the first parameter.</dd>
-<dd><code>values</code> - The values to compare to.</dd>
+<dd><code>values</code> - The values to compare to.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the current value matches any of the specified values within the precision.</dd>
 <dt>Throws:</dt>

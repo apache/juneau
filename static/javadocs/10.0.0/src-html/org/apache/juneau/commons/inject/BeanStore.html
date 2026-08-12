@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81">    *</span>
 <span class="source-line-no">082</span><span id="line-82">    * @param &lt;T&gt; The bean type.</span>
 <span class="source-line-no">083</span><span id="line-83">    * @param beanType The bean type.</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param name The bean name.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param name The bean name.  Can be &lt;jk&gt;null&lt;/jk&gt; for unnamed beans.</span>
 <span class="source-line-no">085</span><span id="line-85">    * @return The bean, or {@link Optional#empty()} if no bean of the specified type and name exists.</span>
 <span class="source-line-no">086</span><span id="line-86">    */</span>
 <span class="source-line-no">087</span><span id="line-87">   &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType, String name);</span>
@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97">    * @param beanType The bean type.</span>
 <span class="source-line-no">098</span><span id="line-98">    * @return A map of bean names to bean instances.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">099</span><span id="line-99">    */</span>
-<span class="source-line-no">100</span><span id="line-100">   &lt;T&gt; Map&lt;String, T&gt; getBeansOfType(Class&lt;T&gt; beanType);</span>
+<span class="source-line-no">100</span><span id="line-100">   &lt;T&gt; Map&lt;String,T&gt; getBeansOfType(Class&lt;T&gt; beanType);</span>
 <span class="source-line-no">101</span><span id="line-101"></span>
 <span class="source-line-no">102</span><span id="line-102">   /**</span>
 <span class="source-line-no">103</span><span id="line-103">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this store contains at least one bean of the specified type.</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this store contains a bean of the specified type and name.</span>
 <span class="source-line-no">112</span><span id="line-112">    *</span>
 <span class="source-line-no">113</span><span id="line-113">    * @param beanType The bean type.</span>
-<span class="source-line-no">114</span><span id="line-114">    * @param name The bean name.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @param name The bean name.  Can be &lt;jk&gt;null&lt;/jk&gt; for unnamed beans.</span>
 <span class="source-line-no">115</span><span id="line-115">    * @return &lt;jk&gt;true&lt;/jk&gt; if this store contains a bean of the specified type and name.</span>
 <span class="source-line-no">116</span><span id="line-116">    */</span>
 <span class="source-line-no">117</span><span id="line-117">   boolean hasBean(Class&lt;?&gt; beanType, String name);</span>
@@ -150,7 +150,7 @@
 <span class="source-line-no">137</span><span id="line-137">    * &lt;/p&gt;</span>
 <span class="source-line-no">138</span><span id="line-138">    *</span>
 <span class="source-line-no">139</span><span id="line-139">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">140</span><span id="line-140">    * @param type The bean type to instantiate.</span>
+<span class="source-line-no">140</span><span id="line-140">    * @param type The bean type to instantiate.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">141</span><span id="line-141">    * @return The instantiated bean.</span>
 <span class="source-line-no">142</span><span id="line-142">    */</span>
 <span class="source-line-no">143</span><span id="line-143">   default &lt;T&gt; T instantiate(Class&lt;T&gt; type) {</span>
@@ -177,7 +177,7 @@
 <span class="source-line-no">164</span><span id="line-164">    *</span>
 <span class="source-line-no">165</span><span id="line-165">    * @param &lt;T&gt; The bean type.</span>
 <span class="source-line-no">166</span><span id="line-166">    * @param beanType The bean type.</span>
-<span class="source-line-no">167</span><span id="line-167">    * @param name The bean name.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">167</span><span id="line-167">    * @param name The bean name.  Can be &lt;jk&gt;null&lt;/jk&gt; for unnamed beans.</span>
 <span class="source-line-no">168</span><span id="line-168">    * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.</span>
 <span class="source-line-no">169</span><span id="line-169">    */</span>
 <span class="source-line-no">170</span><span id="line-170">   &lt;T&gt; Optional&lt;Supplier&lt;T&gt;&gt; getBeanSupplier(Class&lt;T&gt; beanType, String name);</span>
@@ -227,7 +227,7 @@
 <span class="source-line-no">214</span><span id="line-214">    * @param beanType The type of bean to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">215</span><span id="line-215">    * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.</span>
 <span class="source-line-no">216</span><span id="line-216">    *    Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">217</span><span id="line-217">    * @param filter Optional predicate restricting which methods are eligible.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">217</span><span id="line-217">    * @param filter Optional predicate restricting which methods are eligible.  Can be &lt;jk&gt;null&lt;/jk&gt; (any method qualifies).</span>
 <span class="source-line-no">218</span><span id="line-218">    * @param extraBeans Optional bean instances visible to parameter resolution for this call only.</span>
 <span class="source-line-no">219</span><span id="line-219">    *    These are &lt;em&gt;not&lt;/em&gt; registered in the store.</span>
 <span class="source-line-no">220</span><span id="line-220">    * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching</span>
@@ -283,8 +283,8 @@
 <span class="source-line-no">270</span><span id="line-270">    *    &lt;li&gt;Parameters typed as {@link Optional} (always considered satisfied).</span>
 <span class="source-line-no">271</span><span id="line-271">    * &lt;/ul&gt;</span>
 <span class="source-line-no">272</span><span id="line-272">    *</span>
-<span class="source-line-no">273</span><span id="line-273">    * @param executable The constructor or method to inspect.</span>
-<span class="source-line-no">274</span><span id="line-274">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">273</span><span id="line-273">    * @param executable The constructor or method to inspect.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">274</span><span id="line-274">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
 <span class="source-line-no">275</span><span id="line-275">    * @return &lt;jk&gt;true&lt;/jk&gt; if every required parameter can be resolved from this store.</span>
 <span class="source-line-no">276</span><span id="line-276">    */</span>
 <span class="source-line-no">277</span><span id="line-277">   default boolean hasAllParams(ExecutableInfo executable, Object outer) {</span>
@@ -309,8 +309,8 @@
 <span class="source-line-no">296</span><span id="line-296">    * others the bean instance (or &lt;jk&gt;null&lt;/jk&gt; when missing) is returned.  See {@link #hasAllParams}</span>
 <span class="source-line-no">297</span><span id="line-297">    * for the full skip rules.</span>
 <span class="source-line-no">298</span><span id="line-298">    *</span>
-<span class="source-line-no">299</span><span id="line-299">    * @param executable The constructor or method to resolve parameters for.</span>
-<span class="source-line-no">300</span><span id="line-300">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">299</span><span id="line-299">    * @param executable The constructor or method to resolve parameters for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">300</span><span id="line-300">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
 <span class="source-line-no">301</span><span id="line-301">    * @return An array of resolved parameter values, one per parameter of &lt;c&gt;executable&lt;/c&gt;.</span>
 <span class="source-line-no">302</span><span id="line-302">    */</span>
 <span class="source-line-no">303</span><span id="line-303">   default Object[] getParams(ExecutableInfo executable, Object outer) {</span>
@@ -337,8 +337,8 @@
 <span class="source-line-no">324</span><span id="line-324">    * Intended for diagnostic error messages — see {@link #hasAllParams} for the exact match rules.</span>
 <span class="source-line-no">325</span><span id="line-325">    * Skipped parameters (outer-instance match, {@link Optional}) never appear in the result.</span>
 <span class="source-line-no">326</span><span id="line-326">    *</span>
-<span class="source-line-no">327</span><span id="line-327">    * @param executable The constructor or method to inspect.</span>
-<span class="source-line-no">328</span><span id="line-328">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">327</span><span id="line-327">    * @param executable The constructor or method to inspect.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">328</span><span id="line-328">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
 <span class="source-line-no">329</span><span id="line-329">    * @return A comma-delimited list of missing parameter type names, or &lt;jk&gt;null&lt;/jk&gt; when none are missing.</span>
 <span class="source-line-no">330</span><span id="line-330">    */</span>
 <span class="source-line-no">331</span><span id="line-331">   default String getMissingParams(ExecutableInfo executable, Object outer) {</span>

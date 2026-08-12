@@ -62,10 +62,10 @@
 <span class="source-line-no">049</span><span id="line-49">   /**</span>
 <span class="source-line-no">050</span><span id="line-50">    * Constructor.</span>
 <span class="source-line-no">051</span><span id="line-51">    *</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param path The path being matched against.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">052</span><span id="line-52">    * @param path The path being matched against.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; argument causes {@link #getPrefix()}/{@link #getSuffix()} to throw {@link NullPointerException}).</span>
 <span class="source-line-no">053</span><span id="line-53">    * @param matchedParts The number of parts that were matched against the path.</span>
-<span class="source-line-no">054</span><span id="line-54">    * @param keys The variable keys.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">055</span><span id="line-55">    * @param values The variable values.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">054</span><span id="line-54">    * @param keys The variable keys.  Can be &lt;jk&gt;null&lt;/jk&gt; (no path variables are recorded; the variable map resolves to empty).</span>
+<span class="source-line-no">055</span><span id="line-55">    * @param values The variable values.  Can be &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;keys&lt;/c&gt; is also &lt;jk&gt;null&lt;/jk&gt;; otherwise must align positionally with &lt;c&gt;keys&lt;/c&gt;.</span>
 <span class="source-line-no">056</span><span id="line-56">    */</span>
 <span class="source-line-no">057</span><span id="line-57">   protected UrlPathMatch(String path, int matchedParts, String[] keys, String[] values) {</span>
 <span class="source-line-no">058</span><span id="line-58">      this.path = path;</span>

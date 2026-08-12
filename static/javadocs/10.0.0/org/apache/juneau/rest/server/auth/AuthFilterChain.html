@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Filter</code>, <code><a href="Authenticator.html" title="interface in org.apache.juneau.rest.server.auth">Authenticator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-91">AuthFilterChain</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-92">AuthFilterChain</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements jakarta.servlet.Filter, <a href="Authenticator.html" title="interface in org.apache.juneau.rest.server.auth">Authenticator</a></span></div>
 <div class="block">Orchestrates multiple <a href="AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> instances with first-success principal resolution, role aggregation, and
@@ -238,11 +238,11 @@ implements jakarta.servlet.Filter, <a href="Authenticator.html" title="interface
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.AuthFilterChain.Builder)">
 <h3>AuthFilterChain</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-186">AuthFilterChain</a></span><wbr><span class="parameters">(<a href="AuthFilterChain.Builder.html" title="class in org.apache.juneau.rest.server.auth">AuthFilterChain.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-197">AuthFilterChain</a></span><wbr><span class="parameters">(<a href="AuthFilterChain.Builder.html" title="class in org.apache.juneau.rest.server.auth">AuthFilterChain.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder containing the filter entries.</dd>
+<dd><code>builder</code> - The builder containing the filter entries. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -257,7 +257,7 @@ implements jakarta.servlet.Filter, <a href="Authenticator.html" title="interface
 <li>
 <section class="detail" id="create(org.apache.juneau.commons.inject.BeanStore)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthFilterChain.Builder.html" title="class in org.apache.juneau.rest.server.auth">AuthFilterChain.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-175">create</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="AuthFilterChain.Builder.html" title="class in org.apache.juneau.rest.server.auth">AuthFilterChain.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-186">create</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -270,7 +270,7 @@ implements jakarta.servlet.Filter, <a href="Authenticator.html" title="interface
 <li>
 <section class="detail" id="doFilter(jakarta.servlet.ServletRequest,jakarta.servlet.ServletResponse,jakarta.servlet.FilterChain)">
 <h3>doFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-196">doFilter</a></span><wbr><span class="parameters">(jakarta.servlet.ServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-207">doFilter</a></span><wbr><span class="parameters">(jakarta.servlet.ServletRequest&nbsp;req,
  jakarta.servlet.ServletResponse&nbsp;resp,
  jakarta.servlet.FilterChain&nbsp;chain)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
@@ -291,7 +291,7 @@ jakarta.servlet.ServletException</span></div>
 <li>
 <section class="detail" id="authenticate(jakarta.servlet.http.HttpServletRequest)">
 <h3>authenticate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-231">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;hreq)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-242">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;hreq)</span>
                                   throws <span class="exceptions"><a href="AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block">Runs the composed <a href="AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> entries for the request and folds their results, without writing any
  response.
@@ -320,7 +320,7 @@ jakarta.servlet.ServletException</span></div>
 <li>
 <section class="detail" id="init(jakarta.servlet.FilterConfig)">
 <h3>init</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-302">init</a></span><wbr><span class="parameters">(jakarta.servlet.FilterConfig&nbsp;cfg)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-313">init</a></span><wbr><span class="parameters">(jakarta.servlet.FilterConfig&nbsp;cfg)</span>
           throws <span class="exceptions">jakarta.servlet.ServletException</span></div>
 <div class="block">No-op default implementation.</div>
 <dl class="notes">
@@ -334,7 +334,7 @@ jakarta.servlet.ServletException</span></div>
 <li>
 <section class="detail" id="destroy()">
 <h3>destroy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-310">destroy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthFilterChain.html#line-321">destroy</a></span>()</div>
 <div class="block">No-op default implementation.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

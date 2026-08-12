@@ -149,12 +149,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.json.JsonMetaProvider)">
 <h3>JsonClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonClassMeta.html#line-43">JsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonClassMeta.html#line-44">JsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm,
  <a href="JsonMetaProvider.html" title="interface in org.apache.juneau.marshall.json">JsonMetaProvider</a>&nbsp;mp)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cm</code> - The class that this annotation is defined on.</dd>
+<dd><code>cm</code> - The class that this annotation is defined on.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>mp</code> - JSON metadata provider (for finding information about other artifacts).</dd>
 </dl>
 </section>
@@ -170,7 +171,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getWrapperAttr()">
 <h3>getWrapperAttr</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonClassMeta.html#line-56">getWrapperAttr</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonClassMeta.html#line-57">getWrapperAttr</a></span>()</div>
 <div class="block">Returns the <a href="Json.html#wrapperAttr()"><code>@Json(wrapperAttr)</code></a> annotation defined on the class.</div>
 <dl class="notes">
 <dt>Returns:</dt>

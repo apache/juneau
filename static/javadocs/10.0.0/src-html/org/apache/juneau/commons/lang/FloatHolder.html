@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(3.14f, &lt;jv&gt;value&lt;/jv&gt;.get());</span>
 <span class="source-line-no">080</span><span id="line-80">    * &lt;/p&gt;</span>
 <span class="source-line-no">081</span><span id="line-81">    *</span>
-<span class="source-line-no">082</span><span id="line-82">    * @param value The initial value.</span>
+<span class="source-line-no">082</span><span id="line-82">    * @param value The initial value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">083</span><span id="line-83">    * @return A new float value.</span>
 <span class="source-line-no">084</span><span id="line-84">    */</span>
 <span class="source-line-no">085</span><span id="line-85">   public static FloatHolder of(Float value) {</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">   /**</span>
 <span class="source-line-no">090</span><span id="line-90">    * Constructor.</span>
 <span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * @param value The initial value.</span>
+<span class="source-line-no">092</span><span id="line-92">    * @param value The initial value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">093</span><span id="line-93">    */</span>
 <span class="source-line-no">094</span><span id="line-94">   public FloatHolder(Float value) {</span>
 <span class="source-line-no">095</span><span id="line-95">      super(value);</span>
@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">    * &lt;/p&gt;</span>
 <span class="source-line-no">153</span><span id="line-153">    *</span>
 <span class="source-line-no">154</span><span id="line-154">    * @param precision The maximum allowed difference for equality. Must be non-negative and is the first parameter.</span>
-<span class="source-line-no">155</span><span id="line-155">    * @param values The values to compare to.</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param values The values to compare to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">156</span><span id="line-156">    * @return &lt;jk&gt;true&lt;/jk&gt; if the current value matches any of the specified values within the precision.</span>
 <span class="source-line-no">157</span><span id="line-157">    * @throws IllegalArgumentException if precision is negative.</span>
 <span class="source-line-no">158</span><span id="line-158">    */</span>

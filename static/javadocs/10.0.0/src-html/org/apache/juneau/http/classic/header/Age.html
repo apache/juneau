@@ -127,7 +127,7 @@
 <span class="source-line-no">114</span><span id="line-114">    *</span>
 <span class="source-line-no">115</span><span id="line-115">    * @param value</span>
 <span class="source-line-no">116</span><span id="line-116">    *    The header value.</span>
-<span class="source-line-no">117</span><span id="line-117">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">117</span><span id="line-117">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">118</span><span id="line-118">    */</span>
 <span class="source-line-no">119</span><span id="line-119">   public Age(Integer value) {</span>
 <span class="source-line-no">120</span><span id="line-120">      super(NAME, value);</span>
@@ -139,7 +139,7 @@
 <span class="source-line-no">126</span><span id="line-126">    * @param value</span>
 <span class="source-line-no">127</span><span id="line-127">    *    The header value.</span>
 <span class="source-line-no">128</span><span id="line-128">    *    &lt;br&gt;Must be parsable using {@link Integer#parseInt(String)}.</span>
-<span class="source-line-no">129</span><span id="line-129">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">129</span><span id="line-129">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">130</span><span id="line-130">    */</span>
 <span class="source-line-no">131</span><span id="line-131">   public Age(String value) {</span>
 <span class="source-line-no">132</span><span id="line-132">      super(NAME, value);</span>
@@ -153,7 +153,7 @@
 <span class="source-line-no">140</span><span id="line-140">    *</span>
 <span class="source-line-no">141</span><span id="line-141">    * @param value</span>
 <span class="source-line-no">142</span><span id="line-142">    *    The supplier of the header value.</span>
-<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">144</span><span id="line-144">    */</span>
 <span class="source-line-no">145</span><span id="line-145">   public Age(Supplier&lt;Integer&gt; value) {</span>
 <span class="source-line-no">146</span><span id="line-146">      super(NAME, value);</span>

@@ -29,9 +29,9 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.classic.response;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.http.classic.response.PreconditionFailed.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.text.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.http.classic.response.PreconditionFailed.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import org.apache.http.*;</span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59">   private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);</span>
 <span class="source-line-no">060</span><span id="line-60"></span>
 <span class="source-line-no">061</span><span id="line-61">   /** Reusable unmodifiable instance */</span>
-<span class="source-line-no">062</span><span id="line-62">   public static final PreconditionFailed INSTANCE = new PreconditionFailed().setUnmodifiable();</span>
+<span class="source-line-no">062</span><span id="line-62">   public static final PreconditionFailed INSTANCE = new PreconditionFailed().unmodifiable();</span>
 <span class="source-line-no">063</span><span id="line-63"></span>
 <span class="source-line-no">064</span><span id="line-64">   /**</span>
 <span class="source-line-no">065</span><span id="line-65">    * Constructor.</span>
@@ -98,8 +98,8 @@
 <span class="source-line-no">085</span><span id="line-85">   /**</span>
 <span class="source-line-no">086</span><span id="line-86">    * Constructor.</span>
 <span class="source-line-no">087</span><span id="line-87">    *</span>
-<span class="source-line-no">088</span><span id="line-88">    * @param msg The message.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param args Optional {@link MessageFormat}-style arguments in the message.</span>
+<span class="source-line-no">088</span><span id="line-88">    * @param msg The message.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the reason phrase is used as the message.</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments in the message.</span>
 <span class="source-line-no">090</span><span id="line-90">    */</span>
 <span class="source-line-no">091</span><span id="line-91">   public PreconditionFailed(String msg, Object...args) {</span>
 <span class="source-line-no">092</span><span id="line-92">      this((Throwable)null, msg, args);</span>
@@ -108,7 +108,7 @@
 <span class="source-line-no">095</span><span id="line-95">   /**</span>
 <span class="source-line-no">096</span><span id="line-96">    * Constructor.</span>
 <span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param cause The cause.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param cause The cause.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the reason phrase is used as the message and no cause is chained.</span>
 <span class="source-line-no">099</span><span id="line-99">    */</span>
 <span class="source-line-no">100</span><span id="line-100">   public PreconditionFailed(Throwable cause) {</span>
 <span class="source-line-no">101</span><span id="line-101">      this(cause, cause == null ? REASON_PHRASE : cause.getMessage());</span>
@@ -117,8 +117,8 @@
 <span class="source-line-no">104</span><span id="line-104">   /**</span>
 <span class="source-line-no">105</span><span id="line-105">    * Constructor.</span>
 <span class="source-line-no">106</span><span id="line-106">    *</span>
-<span class="source-line-no">107</span><span id="line-107">    * @param cause The caused-by exception.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">108</span><span id="line-108">    * @param msg The message.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">107</span><span id="line-107">    * @param cause The caused-by exception.  Can be &lt;jk&gt;null&lt;/jk&gt; (no cause is chained).</span>
+<span class="source-line-no">108</span><span id="line-108">    * @param msg The message.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the cause's message is used, or the reason phrase if the cause is also &lt;jk&gt;null&lt;/jk&gt; or has no message.</span>
 <span class="source-line-no">109</span><span id="line-109">    * @param args The message arguments.</span>
 <span class="source-line-no">110</span><span id="line-110">    */</span>
 <span class="source-line-no">111</span><span id="line-111">   public PreconditionFailed(Throwable cause, String msg, Object...args) {</span>
@@ -129,7 +129,7 @@
 <span class="source-line-no">116</span><span id="line-116">   /**</span>
 <span class="source-line-no">117</span><span id="line-117">    * Copy constructor.</span>
 <span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * @param copyFrom The bean to copy.</span>
+<span class="source-line-no">119</span><span id="line-119">    * @param copyFrom The bean to copy.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">120</span><span id="line-120">    */</span>
 <span class="source-line-no">121</span><span id="line-121">   protected PreconditionFailed(PreconditionFailed copyFrom) {</span>
 <span class="source-line-no">122</span><span id="line-122">      super(copyFrom);</span>
@@ -222,12 +222,41 @@
 <span class="source-line-no">209</span><span id="line-209">      return this;</span>
 <span class="source-line-no">210</span><span id="line-210">   }</span>
 <span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212">   @Override /* Overridden from BasicRuntimeException */</span>
-<span class="source-line-no">213</span><span id="line-213">   public PreconditionFailed setUnmodifiable() {</span>
-<span class="source-line-no">214</span><span id="line-214">      super.setUnmodifiable();</span>
-<span class="source-line-no">215</span><span id="line-215">      return this;</span>
-<span class="source-line-no">216</span><span id="line-216">   }</span>
-<span class="source-line-no">217</span><span id="line-217">}</span>
+<span class="source-line-no">212</span><span id="line-212">   @Override /* Overridden from BasicHttpException */</span>
+<span class="source-line-no">213</span><span id="line-213">   public PreconditionFailed unmodifiable() {</span>
+<span class="source-line-no">214</span><span id="line-214">      return this instanceof UnmodifiableBean ? this : new Unmodifiable(this);</span>
+<span class="source-line-no">215</span><span id="line-215">   }</span>
+<span class="source-line-no">216</span><span id="line-216"></span>
+<span class="source-line-no">217</span><span id="line-217">   /**</span>
+<span class="source-line-no">218</span><span id="line-218">    * Unmodifiable point-in-time snapshot of the enclosing {@link PreconditionFailed} exception.</span>
+<span class="source-line-no">219</span><span id="line-219">    *</span>
+<span class="source-line-no">220</span><span id="line-220">    * &lt;p&gt;</span>
+<span class="source-line-no">221</span><span id="line-221">    * Its only behavioral override is {@link #modify(Runnable)}, which throws — because all mutation is funneled through</span>
+<span class="source-line-no">222</span><span id="line-222">    * {@code modify(...)}, this single override freezes the entire mutation surface.</span>
+<span class="source-line-no">223</span><span id="line-223">    */</span>
+<span class="source-line-no">224</span><span id="line-224">   public static class Unmodifiable extends PreconditionFailed implements UnmodifiableBean {</span>
+<span class="source-line-no">225</span><span id="line-225"></span>
+<span class="source-line-no">226</span><span id="line-226">      private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">      /**</span>
+<span class="source-line-no">229</span><span id="line-229">       * Constructor.</span>
+<span class="source-line-no">230</span><span id="line-230">       *</span>
+<span class="source-line-no">231</span><span id="line-231">       * @param copyFrom The exception to snapshot.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">232</span><span id="line-232">       */</span>
+<span class="source-line-no">233</span><span id="line-233">      @SuppressWarnings({</span>
+<span class="source-line-no">234</span><span id="line-234">         "java:S1699" // Paradigm intentionally calls the overridable freeze() from the ctor to deep-freeze sub-beans.</span>
+<span class="source-line-no">235</span><span id="line-235">      })</span>
+<span class="source-line-no">236</span><span id="line-236">      protected Unmodifiable(PreconditionFailed copyFrom) {</span>
+<span class="source-line-no">237</span><span id="line-237">         super(copyFrom);</span>
+<span class="source-line-no">238</span><span id="line-238">         freeze();</span>
+<span class="source-line-no">239</span><span id="line-239">      }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">      @Override /* Overridden from BasicHttpException */</span>
+<span class="source-line-no">242</span><span id="line-242">      protected BasicHttpException modify(Runnable mutation) {</span>
+<span class="source-line-no">243</span><span id="line-243">         throw uoex("Bean is unmodifiable.");</span>
+<span class="source-line-no">244</span><span id="line-244">      }</span>
+<span class="source-line-no">245</span><span id="line-245">   }</span>
+<span class="source-line-no">246</span><span id="line-246">}</span>
 
 
 

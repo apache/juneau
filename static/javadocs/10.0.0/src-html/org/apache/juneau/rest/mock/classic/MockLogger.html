@@ -238,24 +238,30 @@
 <span class="source-line-no">225</span><span id="line-225">         synchronized (this) {</span>
 <span class="source-line-no">226</span><span id="line-226">            f = formatter.get();</span>
 <span class="source-line-no">227</span><span id="line-227">            if (f == null) { // HTT - double-checked locking; false branch requires concurrent thread</span>
-<span class="source-line-no">228</span><span id="line-228">               String oldFormat = System.getProperty(FORMAT_PROPERTY);</span>
-<span class="source-line-no">229</span><span id="line-229">               System.setProperty(FORMAT_PROPERTY, format.get());</span>
-<span class="source-line-no">230</span><span id="line-230">               f = new SimpleFormatter();</span>
-<span class="source-line-no">231</span><span id="line-231">               formatter.set(f);</span>
-<span class="source-line-no">232</span><span id="line-232">               if (oldFormat == null)</span>
-<span class="source-line-no">233</span><span id="line-233">                  System.clearProperty(FORMAT_PROPERTY);</span>
-<span class="source-line-no">234</span><span id="line-234">               else</span>
-<span class="source-line-no">235</span><span id="line-235">                  System.setProperty(FORMAT_PROPERTY, oldFormat);</span>
-<span class="source-line-no">236</span><span id="line-236">            }</span>
-<span class="source-line-no">237</span><span id="line-237">         }</span>
-<span class="source-line-no">238</span><span id="line-238">      }</span>
-<span class="source-line-no">239</span><span id="line-239">      return f;</span>
-<span class="source-line-no">240</span><span id="line-240">   }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">   private LogRecord last() {</span>
-<span class="source-line-no">243</span><span id="line-243">      return logRecords.get(logRecords.size() - 1);</span>
-<span class="source-line-no">244</span><span id="line-244">   }</span>
-<span class="source-line-no">245</span><span id="line-245">}</span>
+<span class="source-line-no">228</span><span id="line-228">               // Intentional, contained global-property mutation: the JDK's SimpleFormatter reads its layout</span>
+<span class="source-line-no">229</span><span id="line-229">               // exclusively from the raw java.util.logging.SimpleFormatter.format system property at</span>
+<span class="source-line-no">230</span><span id="line-230">               // construction time.  There is no constructor/API to inject the format, and the Settings</span>
+<span class="source-line-no">231</span><span id="line-231">               // abstraction cannot intercept a JDK-internal raw read, so we must set the property, construct</span>
+<span class="source-line-no">232</span><span id="line-232">               // the formatter, then restore the prior value.  The mutation is fully guarded by this lock and</span>
+<span class="source-line-no">233</span><span id="line-233">               // paired save/restore.</span>
+<span class="source-line-no">234</span><span id="line-234">               String oldFormat = System.getProperty(FORMAT_PROPERTY);</span>
+<span class="source-line-no">235</span><span id="line-235">               System.setProperty(FORMAT_PROPERTY, format.get());</span>
+<span class="source-line-no">236</span><span id="line-236">               f = new SimpleFormatter();</span>
+<span class="source-line-no">237</span><span id="line-237">               formatter.set(f);</span>
+<span class="source-line-no">238</span><span id="line-238">               if (oldFormat == null)</span>
+<span class="source-line-no">239</span><span id="line-239">                  System.clearProperty(FORMAT_PROPERTY);</span>
+<span class="source-line-no">240</span><span id="line-240">               else</span>
+<span class="source-line-no">241</span><span id="line-241">                  System.setProperty(FORMAT_PROPERTY, oldFormat);</span>
+<span class="source-line-no">242</span><span id="line-242">            }</span>
+<span class="source-line-no">243</span><span id="line-243">         }</span>
+<span class="source-line-no">244</span><span id="line-244">      }</span>
+<span class="source-line-no">245</span><span id="line-245">      return f;</span>
+<span class="source-line-no">246</span><span id="line-246">   }</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">   private LogRecord last() {</span>
+<span class="source-line-no">249</span><span id="line-249">      return logRecords.get(logRecords.size() - 1);</span>
+<span class="source-line-no">250</span><span id="line-250">   }</span>
+<span class="source-line-no">251</span><span id="line-251">}</span>
 
 
 

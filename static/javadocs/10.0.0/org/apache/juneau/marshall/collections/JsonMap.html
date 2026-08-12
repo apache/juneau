@@ -139,7 +139,7 @@ loadScripts(document, 'script');</script>
    <jv>map</jv> = JsonMap.<jsm>ofString</jsm>(<js>"{foo:'bar'},{baz:[123,true]}"</js>);
    String <jv>json</jv> = <jv>map</jv>.toString();  <jc>// Produces "{foo:'bar'},{baz:[123,true]}"</jc>
    <jv>json</jv> = <jv>map</jv>.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
-   <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);  <jc>// Equivalent</jc>
+   <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>map</jv>);  <jc>// Equivalent</jc>
 
    <jc>// Get a map entry as an Integer</jc>
    <jv>map</jv> = JsonMap.<jsm>ofString</jsm>(<js>"{foo:123}"</js>);
@@ -483,7 +483,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeTo(java.io.Writer)" class="member-name-link">writeTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience method for serializing this map to the specified <c>Writer</c> using the
- <a href="../json/JsonSerializer.html#DEFAULT"><code>JsonSerializer.DEFAULT</code></a> serializer.</div>
+ <a href="../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a> marshaller.</div>
 </div>
 </div>
 </div>
@@ -573,7 +573,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>in</code> - The input being parsed.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> or empty (results in an empty map; no parsing occurs).</dd>
 <dd><code>p</code> - The parser to use to parse the input.
    <br>If <jk>null</jk>, uses <a href="../json/JsonParser.html" title="class in org.apache.juneau.marshall.json"><code>JsonParser</code></a>.</dd>
 <dt>Throws:</dt>
@@ -589,7 +589,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>in</code> - The map to copy.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk> (results in an empty map).
    <br>Keys will be converted to strings using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.</dd>
 </dl>
 </section>
@@ -698,7 +698,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>values</code> - The map to copy.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).
    <br>Keys will be converted to strings using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>A new map or <jk>null</jk> if the map was <jk>null</jk>.</dd>
@@ -806,7 +806,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="MarshalledMap.html#append(java.util.Map)">append</a></code>&nbsp;in class&nbsp;<code><a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections">MarshalledMap</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>values</code> - The map to copy.  Can be <jk>null</jk>.</dd>
+<dd><code>values</code> - The map to copy.  Can be <jk>null</jk> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -1378,7 +1378,7 @@ loadScripts(document, 'script');</script>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <div class="block">Convenience method for serializing this map to the specified <c>Writer</c> using the
- <a href="../json/JsonSerializer.html#DEFAULT"><code>JsonSerializer.DEFAULT</code></a> serializer.</div>
+ <a href="../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a> marshaller.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>w</code> - The writer to serialize this object to.</dd>

@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44">   /**</span>
 <span class="source-line-no">045</span><span id="line-45">    * Joins an array of strings with newlines.</span>
 <span class="source-line-no">046</span><span id="line-46">    *</span>
-<span class="source-line-no">047</span><span id="line-47">    * @param s The array to join.</span>
+<span class="source-line-no">047</span><span id="line-47">    * @param s The arrays to join.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">048</span><span id="line-48">    * @return A new joined string.</span>
 <span class="source-line-no">049</span><span id="line-49">    */</span>
 <span class="source-line-no">050</span><span id="line-50">   public static String joinnl(String[]...s) {</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58">   /**</span>
 <span class="source-line-no">059</span><span id="line-59">    * Parses a generic object as JSON and converts it to an {@link JsonMap}.</span>
 <span class="source-line-no">060</span><span id="line-60">    *</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param o The object to convert.</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param o The object to convert.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns a new empty {@link JsonMap}).</span>
 <span class="source-line-no">062</span><span id="line-62">    * @return</span>
 <span class="source-line-no">063</span><span id="line-63">    *    The parsed contents (a new empty {@link JsonMap} if {@code o} is &lt;jk&gt;null&lt;/jk&gt; or an empty string),</span>
 <span class="source-line-no">064</span><span id="line-64">    *    never &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -96,13 +96,13 @@
 <span class="source-line-no">083</span><span id="line-83">         return o2;</span>
 <span class="source-line-no">084</span><span id="line-84">      if (o instanceof MarshalledMap o2)</span>
 <span class="source-line-no">085</span><span id="line-85">         return new JsonMap(o2);</span>
-<span class="source-line-no">086</span><span id="line-86">      throw new ParseException("Unexpected data type ''{0}''.  Expected Map or String.", cn(o));</span>
+<span class="source-line-no">086</span><span id="line-86">      throw new ParseException("Unexpected data type '%s'.  Expected Map or String.", cn(o));</span>
 <span class="source-line-no">087</span><span id="line-87">   }</span>
 <span class="source-line-no">088</span><span id="line-88"></span>
 <span class="source-line-no">089</span><span id="line-89">   /**</span>
 <span class="source-line-no">090</span><span id="line-90">    * Concatenates and parses a string array as a JSON object.</span>
 <span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * @param ss The array to concatenate and parse.</span>
+<span class="source-line-no">092</span><span id="line-92">    * @param ss The array to concatenate and parse.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">093</span><span id="line-93">    * @return</span>
 <span class="source-line-no">094</span><span id="line-94">    *    The parsed contents (a new empty {@link JsonMap} if the array is empty or joins to an empty string),</span>
 <span class="source-line-no">095</span><span id="line-95">    *    never &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109">   /**</span>
 <span class="source-line-no">110</span><span id="line-110">    * Concatenates and parses a string array as JSON array or comma-delimited list.</span>
 <span class="source-line-no">111</span><span id="line-111">    *</span>
-<span class="source-line-no">112</span><span id="line-112">    * @param ss The array to concatenate and parse.</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param ss The array to concatenate and parse.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">113</span><span id="line-113">    * @return</span>
 <span class="source-line-no">114</span><span id="line-114">    *    The parsed contents (a new empty mutable {@link Set} if the array is empty or joins to an empty string),</span>
 <span class="source-line-no">115</span><span id="line-115">    *    never &lt;jk&gt;null&lt;/jk&gt;.</span>

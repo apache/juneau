@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>is</code> - The input stream to convert to bytes.
-   <br>Can be <jk>null</jk>.
+   <br>Can be <jk>null</jk> (returns an empty array).
    <br>The stream is automatically closed.</dd>
 <dt>Returns:</dt>
 <dd>The byte array.</dd>
@@ -223,15 +223,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toStream(byte[],org.apache.juneau.marshall.ClassMeta)">
 <h3>toStream</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swaps/InputStreamSwap.html#line-127">toStream</a></span><wbr><span class="parameters">(byte[]&nbsp;b,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swaps/InputStreamSwap.html#line-131">toStream</a></span><wbr><span class="parameters">(byte[]&nbsp;b,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</span></div>
 <div class="block">Convert the specified byte array into an input stream.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>b</code> - The byte array.</dd>
-<dd><code>hint</code> - Contains a hint about what subtype is being requested.</dd>
+<dd><code>hint</code> - Contains a hint about what subtype is being requested.
+   <br>Can be <jk>null</jk>, in which case <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> is assumed.</dd>
 <dt>Returns:</dt>
-<dd>The byte array.</dd>
+<dd>The contents of the byte array as an input stream, or <jk>null</jk> if the hint requests a
+   stream subtype other than <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/ByteArrayInputStream.html" title="class or interface in java.io" class="external-link"><code>ByteArrayInputStream</code></a>.</dd>
 </dl>
 </section>
 </li>

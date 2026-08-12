@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line-125">   public static class Builder {</span>
 <span class="source-line-no">126</span><span id="line-126"></span>
 <span class="source-line-no">127</span><span id="line-127">      private String unit = "bytes";</span>
-<span class="source-line-no">128</span><span id="line-128">      private final List&lt;String&gt; specs = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">128</span><span id="line-128">      private final List&lt;String&gt; specs = l();</span>
 <span class="source-line-no">129</span><span id="line-129"></span>
 <span class="source-line-no">130</span><span id="line-130">      /**</span>
 <span class="source-line-no">131</span><span id="line-131">       * Sets the range unit (default &lt;c&gt;bytes&lt;/c&gt;).</span>
@@ -166,9 +166,9 @@
 <span class="source-line-no">153</span><span id="line-153">       */</span>
 <span class="source-line-no">154</span><span id="line-154">      public Builder range(long startValue, long endValue) {</span>
 <span class="source-line-no">155</span><span id="line-155">         if (startValue &lt; 0)</span>
-<span class="source-line-no">156</span><span id="line-156">            throw iaex("range start must be non-negative: {0}", startValue);</span>
+<span class="source-line-no">156</span><span id="line-156">            throw iaex("range start must be non-negative: %s", startValue);</span>
 <span class="source-line-no">157</span><span id="line-157">         if (endValue &lt; startValue)</span>
-<span class="source-line-no">158</span><span id="line-158">            throw iaex("range end {0} must be &gt;= start {1}", endValue, startValue);</span>
+<span class="source-line-no">158</span><span id="line-158">            throw iaex("range end %s must be &gt;= start %s", endValue, startValue);</span>
 <span class="source-line-no">159</span><span id="line-159">         return spec(startValue + "-" + endValue);</span>
 <span class="source-line-no">160</span><span id="line-160">      }</span>
 <span class="source-line-no">161</span><span id="line-161"></span>
@@ -181,7 +181,7 @@
 <span class="source-line-no">168</span><span id="line-168">       */</span>
 <span class="source-line-no">169</span><span id="line-169">      public Builder from(long startValue) {</span>
 <span class="source-line-no">170</span><span id="line-170">         if (startValue &lt; 0)</span>
-<span class="source-line-no">171</span><span id="line-171">            throw iaex("range start must be non-negative: {0}", startValue);</span>
+<span class="source-line-no">171</span><span id="line-171">            throw iaex("range start must be non-negative: %s", startValue);</span>
 <span class="source-line-no">172</span><span id="line-172">         return spec(startValue + "-");</span>
 <span class="source-line-no">173</span><span id="line-173">      }</span>
 <span class="source-line-no">174</span><span id="line-174"></span>
@@ -194,7 +194,7 @@
 <span class="source-line-no">181</span><span id="line-181">       */</span>
 <span class="source-line-no">182</span><span id="line-182">      public Builder suffix(long length) {</span>
 <span class="source-line-no">183</span><span id="line-183">         if (length &lt; 0)</span>
-<span class="source-line-no">184</span><span id="line-184">            throw iaex("suffix length must be non-negative: {0}", length);</span>
+<span class="source-line-no">184</span><span id="line-184">            throw iaex("suffix length must be non-negative: %s", length);</span>
 <span class="source-line-no">185</span><span id="line-185">         return spec("-" + length);</span>
 <span class="source-line-no">186</span><span id="line-186">      }</span>
 <span class="source-line-no">187</span><span id="line-187"></span>

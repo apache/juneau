@@ -147,8 +147,8 @@
 <span class="source-line-no">134</span><span id="line-134">    * and should not be called directly. Use the static factory methods {@link #of(Constructor)} or</span>
 <span class="source-line-no">135</span><span id="line-135">    * obtain ConstructorInfo instances from {@link ClassInfo#getConstructor(Constructor)}.</span>
 <span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * @param declaringClass The ClassInfo for the class that declares this constructor.</span>
-<span class="source-line-no">138</span><span id="line-138">    * @param inner The constructor being wrapped.</span>
+<span class="source-line-no">137</span><span id="line-137">    * @param declaringClass The ClassInfo for the class that declares this constructor. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">138</span><span id="line-138">    * @param inner The constructor being wrapped. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">139</span><span id="line-139">    */</span>
 <span class="source-line-no">140</span><span id="line-140">   protected ConstructorInfo(ClassInfo declaringClass, Constructor&lt;?&gt; inner) {</span>
 <span class="source-line-no">141</span><span id="line-141">      super(declaringClass, inner);</span>
@@ -218,7 +218,7 @@
 <span class="source-line-no">205</span><span id="line-205">    */</span>
 <span class="source-line-no">206</span><span id="line-206">   @Override</span>
 <span class="source-line-no">207</span><span id="line-207">   public boolean equals(Object obj) {</span>
-<span class="source-line-no">208</span><span id="line-208">      return obj instanceof ConstructorInfo other &amp;&amp; eq(this, other, (x, y) -&gt; eq(x.inner, y.inner));</span>
+<span class="source-line-no">208</span><span id="line-208">      return obj instanceof ConstructorInfo obj2 &amp;&amp; eq(this, obj2, (x, y) -&gt; eq(x.inner, y.inner));</span>
 <span class="source-line-no">209</span><span id="line-209">   }</span>
 <span class="source-line-no">210</span><span id="line-210"></span>
 <span class="source-line-no">211</span><span id="line-211">   /**</span>
@@ -259,7 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">         } catch (InvocationTargetException e) {</span>
 <span class="source-line-no">247</span><span id="line-247">            throw exex(e.getTargetException());</span>
 <span class="source-line-no">248</span><span id="line-248">         }</span>
-<span class="source-line-no">249</span><span id="line-249">      }, e -&gt; exex(e));  // HTT</span>
+<span class="source-line-no">249</span><span id="line-249">      }, Shorts::exex);  // HTT</span>
 <span class="source-line-no">250</span><span id="line-250">   }</span>
 <span class="source-line-no">251</span><span id="line-251"></span>
 <span class="source-line-no">252</span><span id="line-252">   /**</span>

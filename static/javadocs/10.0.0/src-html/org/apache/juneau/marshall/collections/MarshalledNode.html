@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75">    * and fluent building to work the value should be (or contain) the {@link MarshalledMap}/{@link MarshalledList}</span>
 <span class="source-line-no">076</span><span id="line-76">    * family, but any {@link Map}/{@link List} is accepted.</span>
 <span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * @param value The value to wrap. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">078</span><span id="line-78">    * @param value The value to wrap. Can be &lt;jk&gt;null&lt;/jk&gt; (creates a &lt;i&gt;null&lt;/i&gt; node).</span>
 <span class="source-line-no">079</span><span id="line-79">    * @return A new node wrapping the value, never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">080</span><span id="line-80">    */</span>
 <span class="source-line-no">081</span><span id="line-81">   public static MarshalledNode of(Object value) {</span>
@@ -224,7 +224,7 @@
 <span class="source-line-no">211</span><span id="line-211">   /**</span>
 <span class="source-line-no">212</span><span id="line-212">    * Returns the raw backing value wrapped by this node.</span>
 <span class="source-line-no">213</span><span id="line-213">    *</span>
-<span class="source-line-no">214</span><span id="line-214">    * @return The raw backing value. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">214</span><span id="line-214">    * @return The raw backing value, or &lt;jk&gt;null&lt;/jk&gt; if this is a &lt;i&gt;null&lt;/i&gt; node.</span>
 <span class="source-line-no">215</span><span id="line-215">    */</span>
 <span class="source-line-no">216</span><span id="line-216">   public Object value() {</span>
 <span class="source-line-no">217</span><span id="line-217">      return value;</span>

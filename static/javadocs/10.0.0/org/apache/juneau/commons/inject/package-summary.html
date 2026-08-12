@@ -195,68 +195,82 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab4">
 <div class="block">Runtime context for evaluating <a href="Condition.html" title="interface in org.apache.juneau.commons.inject"><code>Condition</code></a> instances.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Configuration.html" title="annotation interface in org.apache.juneau.commons.inject">Configuration</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="ConfigProperties.html" title="annotation interface in org.apache.juneau.commons.inject">ConfigProperties</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab7">
+<div class="block">Declares a class as a prefix-scoped, whole-object config binding target — Juneau's analog of
+ Spring's <code>@ConfigurationProperties</code>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConfigPropertiesBinder.html" title="class in org.apache.juneau.commons.inject">ConfigPropertiesBinder</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Reusable, prefix-scoped whole-object config binder — usable with or without the
+ <a href="ConfigProperties.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@ConfigProperties</code></a> annotation.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ConfigPropertiesValidator.html" title="interface in org.apache.juneau.commons.inject">ConfigPropertiesValidator</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Post-bind extension seam for <a href="ConfigPropertiesBinder.html" title="class in org.apache.juneau.commons.inject"><code>ConfigPropertiesBinder</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Configuration.html" title="annotation interface in org.apache.juneau.commons.inject">Configuration</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab7">
 <div class="block">Marks a type that contributes one or more <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>Bean</code></a> declarations.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Inject.html" title="annotation interface in org.apache.juneau.commons.inject">Inject</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Inject.html" title="annotation interface in org.apache.juneau.commons.inject">Inject</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Marks constructors, methods, fields, or parameters as injection points.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsrSupport.html" title="class in org.apache.juneau.commons.inject">JsrSupport</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsrSupport.html" title="class in org.apache.juneau.commons.inject">JsrSupport</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">FQN-based support for JSR-style annotation detection.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Named.html" title="annotation interface in org.apache.juneau.commons.inject">Named</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Named.html" title="annotation interface in org.apache.juneau.commons.inject">Named</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Identifies a bean-injection qualifier for constructor/method parameters and fields.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Order.html" title="annotation interface in org.apache.juneau.commons.inject">Order</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab7">
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Order.html" title="annotation interface in org.apache.juneau.commons.inject">Order</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab7">
 <div class="block">Ordering hint for beans where lower values have higher precedence.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="PostConstruct.html" title="annotation interface in org.apache.juneau.commons.inject">PostConstruct</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="PostConstruct.html" title="annotation interface in org.apache.juneau.commons.inject">PostConstruct</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Marks a no-arg lifecycle callback invoked after dependency injection.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="PreDestroy.html" title="annotation interface in org.apache.juneau.commons.inject">PreDestroy</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab7">
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="PreDestroy.html" title="annotation interface in org.apache.juneau.commons.inject">PreDestroy</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab7">
 <div class="block">Marks a no-arg lifecycle callback invoked during store shutdown.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Primary.html" title="annotation interface in org.apache.juneau.commons.inject">Primary</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Primary.html" title="annotation interface in org.apache.juneau.commons.inject">Primary</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Marks a bean contribution as preferred when multiple candidates exist.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="Provider.html" title="interface in org.apache.juneau.commons.inject">Provider</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="Provider.html" title="interface in org.apache.juneau.commons.inject">Provider</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Lightweight provider interface equivalent to JSR-330 provider contracts.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Qualifier.html" title="annotation interface in org.apache.juneau.commons.inject">Qualifier</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Qualifier.html" title="annotation interface in org.apache.juneau.commons.inject">Qualifier</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Meta-annotation used to declare qualifier annotations.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Singleton.html" title="annotation interface in org.apache.juneau.commons.inject">Singleton</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab7">
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Singleton.html" title="annotation interface in org.apache.juneau.commons.inject">Singleton</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab7">
 <div class="block">Scope marker indicating one instance per <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Snapshot.html" title="class in org.apache.juneau.commons.inject">Snapshot</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Snapshot.html" title="class in org.apache.juneau.commons.inject">Snapshot</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Opaque handle for a single pushed overlay frame on a <a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>WritableBeanStore</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StackOverlay.html" title="class in org.apache.juneau.commons.inject">StackOverlay</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StackOverlay.html" title="class in org.apache.juneau.commons.inject">StackOverlay</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Stack-aware <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> overlay.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Value.html" title="annotation interface in org.apache.juneau.commons.inject">Value</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Value.html" title="annotation interface in org.apache.juneau.commons.inject">Value</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Resolves a configuration value into a constructor parameter, setter, or field.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ValueResolver.html" title="class in org.apache.juneau.commons.inject">ValueResolver</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ValueResolver.html" title="class in org.apache.juneau.commons.inject">ValueResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Internal helper used by the reflection layer to resolve <code>@Value</code>-annotated injection sites.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> with methods for adding beans.</div>
 </div>
 </div>

@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="marshallingContext">
 <h3>marshallingContext</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3220">marshallingContext</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3239">marshallingContext</a></span></div>
 </section>
 </li>
 </ul>
@@ -218,11 +218,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.MarshallingContextable.Builder)">
 <h3>MarshallingContextable</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3227">MarshallingContextable</a></span><wbr><span class="parameters">(<a href="MarshallingContextable.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContextable.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3247">MarshallingContextable</a></span><wbr><span class="parameters">(<a href="MarshallingContextable.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContextable.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>b</code> - The builder for this object.</dd>
+<dd><code>b</code> - The builder for this object.
+   <br>Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -237,7 +238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMarshallingContext()">
 <h3>getMarshallingContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3237">getMarshallingContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3257">getMarshallingContext</a></span>()</div>
 <div class="block">Returns the bean context for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -248,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDurationFormat()">
 <h3>getDurationFormat</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3244">getDurationFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3264">getDurationFormat</a></span>()</div>
 <div class="block">Duration wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -259,7 +260,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPeriodFormat()">
 <h3>getPeriodFormat</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3251">getPeriodFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3271">getPeriodFormat</a></span>()</div>
 <div class="block">Period wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -270,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3253">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContextable.html#line-3273">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

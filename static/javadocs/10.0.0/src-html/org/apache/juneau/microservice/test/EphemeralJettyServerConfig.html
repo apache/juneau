@@ -63,36 +63,37 @@
 <span class="source-line-no">050</span><span id="line-50">    * @return A configured {@link Server} bound to port 0 (OS-assigned ephemeral port).</span>
 <span class="source-line-no">051</span><span id="line-51">    */</span>
 <span class="source-line-no">052</span><span id="line-52">   @Bean</span>
-<span class="source-line-no">053</span><span id="line-53">   public Server jettyServer() {</span>
-<span class="source-line-no">054</span><span id="line-54">      var server = new Server();</span>
-<span class="source-line-no">055</span><span id="line-55">      var connector = new ServerConnector(server);</span>
-<span class="source-line-no">056</span><span id="line-56">      connector.setPort(0);</span>
-<span class="source-line-no">057</span><span id="line-57">      server.addConnector(connector);</span>
-<span class="source-line-no">058</span><span id="line-58">      var sch = new ServletContextHandler();</span>
-<span class="source-line-no">059</span><span id="line-59">      sch.setContextPath("/");</span>
-<span class="source-line-no">060</span><span id="line-60">      server.setAttribute("ServletContextHandler", sch);</span>
-<span class="source-line-no">061</span><span id="line-61">      server.setHandler(sch);</span>
-<span class="source-line-no">062</span><span id="line-62">      return server;</span>
-<span class="source-line-no">063</span><span id="line-63">   }</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Disables the 30s graceful-shutdown drain wait for integration tests.</span>
-<span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * &lt;p&gt;</span>
-<span class="source-line-no">069</span><span id="line-69">    * {@code JettyServerComponent} applies a 30s {@code stopTimeout} default to support zero-downtime k8s</span>
-<span class="source-line-no">070</span><span id="line-70">    * rollouts.  In ephemeral test servers there are no load balancers or in-flight production traffic, so</span>
-<span class="source-line-no">071</span><span id="line-71">    * the drain wait only adds ~1s per test class to the suite runtime.  Setting it to zero restores fast</span>
-<span class="source-line-no">072</span><span id="line-72">    * shutdown.</span>
-<span class="source-line-no">073</span><span id="line-73">    *</span>
-<span class="source-line-no">074</span><span id="line-74">    * @return {@link JettySettings} with {@code stopTimeout} set to zero.</span>
-<span class="source-line-no">075</span><span id="line-75">    */</span>
-<span class="source-line-no">076</span><span id="line-76">   @Bean</span>
-<span class="source-line-no">077</span><span id="line-77">   public JettySettings jettySettings() {</span>
-<span class="source-line-no">078</span><span id="line-78">      return JettySettings.create()</span>
-<span class="source-line-no">079</span><span id="line-79">         .stopTimeout(Duration.ZERO)</span>
-<span class="source-line-no">080</span><span id="line-80">         .build();</span>
-<span class="source-line-no">081</span><span id="line-81">   }</span>
-<span class="source-line-no">082</span><span id="line-82">}</span>
+<span class="source-line-no">053</span><span id="line-53">   @SuppressWarnings("resource") // connector is added to and owned by the server; closed when the server stops.</span>
+<span class="source-line-no">054</span><span id="line-54">   public Server jettyServer() {</span>
+<span class="source-line-no">055</span><span id="line-55">      var server = new Server();</span>
+<span class="source-line-no">056</span><span id="line-56">      var connector = new ServerConnector(server);</span>
+<span class="source-line-no">057</span><span id="line-57">      connector.setPort(0);</span>
+<span class="source-line-no">058</span><span id="line-58">      server.addConnector(connector);</span>
+<span class="source-line-no">059</span><span id="line-59">      var sch = new ServletContextHandler();</span>
+<span class="source-line-no">060</span><span id="line-60">      sch.setContextPath("/");</span>
+<span class="source-line-no">061</span><span id="line-61">      server.setAttribute("ServletContextHandler", sch);</span>
+<span class="source-line-no">062</span><span id="line-62">      server.setHandler(sch);</span>
+<span class="source-line-no">063</span><span id="line-63">      return server;</span>
+<span class="source-line-no">064</span><span id="line-64">   }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Disables the 30s graceful-shutdown drain wait for integration tests.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * &lt;p&gt;</span>
+<span class="source-line-no">070</span><span id="line-70">    * {@code JettyServerComponent} applies a 30s {@code stopTimeout} default to support zero-downtime k8s</span>
+<span class="source-line-no">071</span><span id="line-71">    * rollouts.  In ephemeral test servers there are no load balancers or in-flight production traffic, so</span>
+<span class="source-line-no">072</span><span id="line-72">    * the drain wait only adds ~1s per test class to the suite runtime.  Setting it to zero restores fast</span>
+<span class="source-line-no">073</span><span id="line-73">    * shutdown.</span>
+<span class="source-line-no">074</span><span id="line-74">    *</span>
+<span class="source-line-no">075</span><span id="line-75">    * @return {@link JettySettings} with {@code stopTimeout} set to zero.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   @Bean</span>
+<span class="source-line-no">078</span><span id="line-78">   public JettySettings jettySettings() {</span>
+<span class="source-line-no">079</span><span id="line-79">      return JettySettings.create()</span>
+<span class="source-line-no">080</span><span id="line-80">         .stopTimeout(Duration.ZERO)</span>
+<span class="source-line-no">081</span><span id="line-81">         .build();</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83">}</span>
 
 
 

@@ -227,8 +227,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>bc</code> - The bean context to use for looking up annotations.</dd>
-<dd><code>ci</code> - The class to try to constructor a dynamic swap on.</dd>
+<dd><code>bc</code> - The bean context to use for looking up annotations. Must not be <jk>null</jk>.</dd>
+<dd><code>ci</code> - The class to try to constructor a dynamic swap on. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>An object swap instance, or <jk>null</jk> if one could not be created.</dd>
 </dl>

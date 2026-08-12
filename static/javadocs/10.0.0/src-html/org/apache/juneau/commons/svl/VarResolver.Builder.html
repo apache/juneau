@@ -103,13 +103,13 @@
 <span class="source-line-no">090</span><span id="line-90">         this.beanStore = new BasicBeanStore();</span>
 <span class="source-line-no">091</span><span id="line-91">         vars = VarList.create();</span>
 <span class="source-line-no">092</span><span id="line-92">         userBeans = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">093</span><span id="line-93">         functions = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">093</span><span id="line-93">         functions = l();</span>
 <span class="source-line-no">094</span><span id="line-94">      }</span>
 <span class="source-line-no">095</span><span id="line-95"></span>
 <span class="source-line-no">096</span><span id="line-96">      /**</span>
 <span class="source-line-no">097</span><span id="line-97">       * Copy constructor.</span>
 <span class="source-line-no">098</span><span id="line-98">       *</span>
-<span class="source-line-no">099</span><span id="line-99">       * @param copyFrom The bean to copy from.</span>
+<span class="source-line-no">099</span><span id="line-99">       * @param copyFrom The bean to copy from.  Must not be {@code null}.</span>
 <span class="source-line-no">100</span><span id="line-100">       */</span>
 <span class="source-line-no">101</span><span id="line-101">      protected Builder(VarResolver copyFrom) {</span>
 <span class="source-line-no">102</span><span id="line-102">         this.beanStore = copyFrom.beanStore;</span>
@@ -443,7 +443,7 @@
 <span class="source-line-no">430</span><span id="line-430">   /**</span>
 <span class="source-line-no">431</span><span id="line-431">    * Same as {@link #createSession()} except allows you to specify a bean store for resolving beans.</span>
 <span class="source-line-no">432</span><span id="line-432">    *</span>
-<span class="source-line-no">433</span><span id="line-433">    * @param beanStore The bean store to associate with this session.</span>
+<span class="source-line-no">433</span><span id="line-433">    * @param beanStore The bean store to associate with this session.  May be {@code null}.</span>
 <span class="source-line-no">434</span><span id="line-434">    * @return A new resolver session.</span>
 <span class="source-line-no">435</span><span id="line-435">    */</span>
 <span class="source-line-no">436</span><span id="line-436">   public VarResolverSession createSession(WritableBeanStore beanStore) {</span>
@@ -458,8 +458,8 @@
 <span class="source-line-no">445</span><span id="line-445">    * &lt;br&gt;This method can only be used if the string doesn't contain variables that rely on the existence of session</span>
 <span class="source-line-no">446</span><span id="line-446">    * variables.</span>
 <span class="source-line-no">447</span><span id="line-447">    *</span>
-<span class="source-line-no">448</span><span id="line-448">    * @param s The input string.</span>
-<span class="source-line-no">449</span><span id="line-449">    * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.</span>
+<span class="source-line-no">448</span><span id="line-448">    * @param s The input string.  May be {@code null}.</span>
+<span class="source-line-no">449</span><span id="line-449">    * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.  Returns {@code null} if the input was {@code null}.</span>
 <span class="source-line-no">450</span><span id="line-450">    */</span>
 <span class="source-line-no">451</span><span id="line-451">   public String resolve(String s) {</span>
 <span class="source-line-no">452</span><span id="line-452">      return createSession(null).resolve(s);</span>
@@ -542,8 +542,8 @@
 <span class="source-line-no">529</span><span id="line-529">    * &lt;br&gt;This method can only be used if the string doesn't contain variables that rely on the existence of session</span>
 <span class="source-line-no">530</span><span id="line-530">    * variables.</span>
 <span class="source-line-no">531</span><span id="line-531">    *</span>
-<span class="source-line-no">532</span><span id="line-532">    * @param s The input string.</span>
-<span class="source-line-no">533</span><span id="line-533">    * @param w The writer to send the result to.</span>
+<span class="source-line-no">532</span><span id="line-532">    * @param s The input string.  May be {@code null}, in which case the writer is left unchanged.</span>
+<span class="source-line-no">533</span><span id="line-533">    * @param w The writer to send the result to.  Must not be {@code null}.</span>
 <span class="source-line-no">534</span><span id="line-534">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">535</span><span id="line-535">    */</span>
 <span class="source-line-no">536</span><span id="line-536">   public void resolveTo(String s, Writer w) throws IOException {</span>

@@ -297,7 +297,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="lookup(java.lang.String)">
 <h3>lookup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/SignedCookieSessionStore.html#line-189">lookup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/SignedCookieSessionStore.html#line-188">lookup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#lookup(java.lang.String)">SessionStore</a></code></span></div>
 <div class="block">Resolves a session from a cookie value.</div>
 <dl class="notes">
@@ -315,7 +315,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="invalidate(java.lang.String)">
 <h3>invalidate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/SignedCookieSessionStore.html#line-229">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/SignedCookieSessionStore.html#line-228">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#invalidate(java.lang.String)">SessionStore</a></code></span></div>
 <div class="block">Invalidates the session identified by the supplied cookie value.  No-op if absent.</div>
 <dl class="notes">
@@ -329,7 +329,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="supportsServerSideRevocation()">
 <h3>supportsServerSideRevocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/SignedCookieSessionStore.html#line-234">supportsServerSideRevocation</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/SignedCookieSessionStore.html#line-233">supportsServerSideRevocation</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#supportsServerSideRevocation()">SessionStore</a></code></span></div>
 <div class="block">Returns whether this store can revoke sessions server-side (a prerequisite for back-channel
  logout).

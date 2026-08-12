@@ -315,18 +315,18 @@
 <span class="source-line-no">302</span><span id="line-302">       *    List&amp;lt;MyBean&amp;gt; &lt;jv&gt;list&lt;/jv&gt; = &lt;jsm&gt;createListOfMyBeans&lt;/jsm&gt;();</span>
 <span class="source-line-no">303</span><span id="line-303">       *</span>
 <span class="source-line-no">304</span><span id="line-304">       *    &lt;jc&gt;// Serialize to RDF/XML as loose resources&lt;/jc&gt;</span>
-<span class="source-line-no">305</span><span id="line-305">       *    String &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;list&lt;/jv&gt;);</span>
+<span class="source-line-no">305</span><span id="line-305">       *    String &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;list&lt;/jv&gt;);</span>
 <span class="source-line-no">306</span><span id="line-306">       *</span>
 <span class="source-line-no">307</span><span id="line-307">       *    &lt;jc&gt;// Parse back into a Java collection&lt;/jc&gt;</span>
-<span class="source-line-no">308</span><span id="line-308">       *    &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">308</span><span id="line-308">       *    &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">309</span><span id="line-309">       *</span>
 <span class="source-line-no">310</span><span id="line-310">       *    MyBean[] &lt;jv&gt;bean&lt;/jv&gt; = &lt;jsm&gt;createArrayOfMyBeans&lt;/jsm&gt;();</span>
 <span class="source-line-no">311</span><span id="line-311">       *</span>
 <span class="source-line-no">312</span><span id="line-312">       *    &lt;jc&gt;// Serialize to RDF/XML as loose resources&lt;/jc&gt;</span>
-<span class="source-line-no">313</span><span id="line-313">       *    &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;beans&lt;/jv&gt;);</span>
+<span class="source-line-no">313</span><span id="line-313">       *    &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;beans&lt;/jv&gt;);</span>
 <span class="source-line-no">314</span><span id="line-314">       *</span>
 <span class="source-line-no">315</span><span id="line-315">       *    &lt;jc&gt;// Parse back into a bean array&lt;/jc&gt;</span>
-<span class="source-line-no">316</span><span id="line-316">       *    &lt;jv&gt;beans&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">316</span><span id="line-316">       *    &lt;jv&gt;beans&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;rdfXml&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">317</span><span id="line-317">       * &lt;/p&gt;</span>
 <span class="source-line-no">318</span><span id="line-318">       *</span>
 <span class="source-line-no">319</span><span id="line-319">       * @return This object.</span>
@@ -1059,136 +1059,137 @@
 <span class="source-line-no">1046</span><span id="line-1046">    * Constructor.</span>
 <span class="source-line-no">1047</span><span id="line-1047">    *</span>
 <span class="source-line-no">1048</span><span id="line-1048">    * @param builder The builder for this object.</span>
-<span class="source-line-no">1049</span><span id="line-1049">    */</span>
-<span class="source-line-no">1050</span><span id="line-1050">   public RdfParser(Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">1051</span><span id="line-1051">      super(builder.consumes(getConsumes(builder)));</span>
-<span class="source-line-no">1052</span><span id="line-1052"></span>
-<span class="source-line-no">1053</span><span id="line-1053">      collectionFormat = builder.collectionFormat;</span>
-<span class="source-line-no">1054</span><span id="line-1054">      juneauBpNs = builder.juneauBpNs;</span>
-<span class="source-line-no">1055</span><span id="line-1055">      juneauNs = builder.juneauNs;</span>
-<span class="source-line-no">1056</span><span id="line-1056">      language = builder.language;</span>
-<span class="source-line-no">1057</span><span id="line-1057">      looseCollections = builder.looseCollections;</span>
-<span class="source-line-no">1058</span><span id="line-1058">      trimWhitespace = builder.trimWhitespace;</span>
-<span class="source-line-no">1059</span><span id="line-1059">      jenaSettings = new TreeMap&lt;&gt;(builder.jenaSettings);</span>
-<span class="source-line-no">1060</span><span id="line-1060">   }</span>
-<span class="source-line-no">1061</span><span id="line-1061"></span>
-<span class="source-line-no">1062</span><span id="line-1062">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">1063</span><span id="line-1063">   public Builder&lt;?&gt; copy() {</span>
-<span class="source-line-no">1064</span><span id="line-1064">      return new DefaultBuilder(this);</span>
-<span class="source-line-no">1065</span><span id="line-1065">   }</span>
-<span class="source-line-no">1066</span><span id="line-1066"></span>
-<span class="source-line-no">1067</span><span id="line-1067">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">1068</span><span id="line-1068">   public RdfParserSession.Builder createSession() {</span>
-<span class="source-line-no">1069</span><span id="line-1069">      return RdfParserSession.create(this);</span>
-<span class="source-line-no">1070</span><span id="line-1070">   }</span>
-<span class="source-line-no">1071</span><span id="line-1071"></span>
-<span class="source-line-no">1072</span><span id="line-1072">   @Override /* Overridden from RdfMetaProvider */</span>
-<span class="source-line-no">1073</span><span id="line-1073">   public RdfBeanMeta getRdfBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
-<span class="source-line-no">1074</span><span id="line-1074">      return rdfBeanMetas.computeIfAbsent(bm, k -&gt; new RdfBeanMeta(k, this));</span>
-<span class="source-line-no">1075</span><span id="line-1075">   }</span>
-<span class="source-line-no">1076</span><span id="line-1076"></span>
-<span class="source-line-no">1077</span><span id="line-1077">   @Override /* Overridden from RdfMetaProvider */</span>
-<span class="source-line-no">1078</span><span id="line-1078">   public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">1079</span><span id="line-1079">      return rdfBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new RdfBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">1080</span><span id="line-1080">   }</span>
-<span class="source-line-no">1081</span><span id="line-1081"></span>
-<span class="source-line-no">1082</span><span id="line-1082">   @Override /* Overridden from RdfMetaProvider */</span>
-<span class="source-line-no">1083</span><span id="line-1083">   public RdfClassMeta getRdfClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">1084</span><span id="line-1084">      return rdfClassMetas.computeIfAbsent(cm, k -&gt; new RdfClassMeta(k, this));</span>
-<span class="source-line-no">1085</span><span id="line-1085">   }</span>
-<span class="source-line-no">1086</span><span id="line-1086"></span>
-<span class="source-line-no">1087</span><span id="line-1087">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">1088</span><span id="line-1088">   public RdfParserSession getSession() { return createSession().build(); }</span>
-<span class="source-line-no">1089</span><span id="line-1089"></span>
-<span class="source-line-no">1090</span><span id="line-1090">   @Override /* Overridden from XmlMetaProvider */</span>
-<span class="source-line-no">1091</span><span id="line-1091">   public XmlBeanMeta getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
-<span class="source-line-no">1092</span><span id="line-1092">      return xmlBeanMetas.computeIfAbsent(bm, k -&gt; new XmlBeanMeta(k, this));</span>
-<span class="source-line-no">1093</span><span id="line-1093">   }</span>
-<span class="source-line-no">1094</span><span id="line-1094"></span>
-<span class="source-line-no">1095</span><span id="line-1095">   @Override /* Overridden from XmlMetaProvider */</span>
-<span class="source-line-no">1096</span><span id="line-1096">   public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">1097</span><span id="line-1097">      return xmlBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new XmlBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">1098</span><span id="line-1098">   }</span>
-<span class="source-line-no">1099</span><span id="line-1099"></span>
-<span class="source-line-no">1100</span><span id="line-1100">   @Override /* Overridden from XmlMetaProvider */</span>
-<span class="source-line-no">1101</span><span id="line-1101">   public XmlClassMeta getXmlClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">1102</span><span id="line-1102">      return xmlClassMetas.computeIfAbsent(cm, k -&gt; new XmlClassMeta(k, this));</span>
-<span class="source-line-no">1103</span><span id="line-1103">   }</span>
-<span class="source-line-no">1104</span><span id="line-1104"></span>
-<span class="source-line-no">1105</span><span id="line-1105">   /**</span>
-<span class="source-line-no">1106</span><span id="line-1106">    * RDF format for representing collections and arrays.</span>
-<span class="source-line-no">1107</span><span id="line-1107">    *</span>
-<span class="source-line-no">1108</span><span id="line-1108">    * @see RdfParser.Builder#collectionFormat(RdfCollectionFormat)</span>
-<span class="source-line-no">1109</span><span id="line-1109">    * @return</span>
-<span class="source-line-no">1110</span><span id="line-1110">    *    RDF format for representing collections and arrays.</span>
-<span class="source-line-no">1111</span><span id="line-1111">    */</span>
-<span class="source-line-no">1112</span><span id="line-1112">   protected final RdfCollectionFormat getCollectionFormat() { return collectionFormat; }</span>
-<span class="source-line-no">1113</span><span id="line-1113"></span>
-<span class="source-line-no">1114</span><span id="line-1114">   /**</span>
-<span class="source-line-no">1115</span><span id="line-1115">    * All Jena-related configuration properties.</span>
-<span class="source-line-no">1116</span><span id="line-1116">    *</span>
-<span class="source-line-no">1117</span><span id="line-1117">    * @return</span>
-<span class="source-line-no">1118</span><span id="line-1118">    *    A map of all Jena-related configuration properties.</span>
-<span class="source-line-no">1119</span><span id="line-1119">    */</span>
-<span class="source-line-no">1120</span><span id="line-1120">   protected final Map&lt;String,Object&gt; getJenaSettings() { return jenaSettings; }</span>
-<span class="source-line-no">1121</span><span id="line-1121"></span>
-<span class="source-line-no">1122</span><span id="line-1122">   /**</span>
-<span class="source-line-no">1123</span><span id="line-1123">    * Default XML namespace for bean properties.</span>
-<span class="source-line-no">1124</span><span id="line-1124">    *</span>
-<span class="source-line-no">1125</span><span id="line-1125">    * @see RdfParser.Builder#juneauBpNs(Namespace)</span>
-<span class="source-line-no">1126</span><span id="line-1126">    * @return</span>
-<span class="source-line-no">1127</span><span id="line-1127">    *    Default XML namespace for bean properties.</span>
-<span class="source-line-no">1128</span><span id="line-1128">    */</span>
-<span class="source-line-no">1129</span><span id="line-1129">   protected final Namespace getJuneauBpNs() { return juneauBpNs; }</span>
-<span class="source-line-no">1130</span><span id="line-1130"></span>
-<span class="source-line-no">1131</span><span id="line-1131">   /**</span>
-<span class="source-line-no">1132</span><span id="line-1132">    * XML namespace for Juneau properties.</span>
-<span class="source-line-no">1133</span><span id="line-1133">    *</span>
-<span class="source-line-no">1134</span><span id="line-1134">    * @see RdfParser.Builder#juneauNs(Namespace)</span>
-<span class="source-line-no">1135</span><span id="line-1135">    * @return</span>
-<span class="source-line-no">1136</span><span id="line-1136">    *    XML namespace for Juneau properties.</span>
-<span class="source-line-no">1137</span><span id="line-1137">    */</span>
-<span class="source-line-no">1138</span><span id="line-1138">   protected final Namespace getJuneauNs() { return juneauNs; }</span>
-<span class="source-line-no">1139</span><span id="line-1139"></span>
-<span class="source-line-no">1140</span><span id="line-1140">   /**</span>
-<span class="source-line-no">1141</span><span id="line-1141">    * RDF language.</span>
-<span class="source-line-no">1142</span><span id="line-1142">    *</span>
-<span class="source-line-no">1143</span><span id="line-1143">    * @see RdfParser.Builder#language(String)</span>
-<span class="source-line-no">1144</span><span id="line-1144">    * @return</span>
-<span class="source-line-no">1145</span><span id="line-1145">    *    The RDF language to use.</span>
-<span class="source-line-no">1146</span><span id="line-1146">    */</span>
-<span class="source-line-no">1147</span><span id="line-1147">   protected final String getLanguage() { return language; }</span>
-<span class="source-line-no">1148</span><span id="line-1148"></span>
-<span class="source-line-no">1149</span><span id="line-1149">   /**</span>
-<span class="source-line-no">1150</span><span id="line-1150">    * Collections should be serialized and parsed as loose collections.</span>
-<span class="source-line-no">1151</span><span id="line-1151">    *</span>
-<span class="source-line-no">1152</span><span id="line-1152">    * @see RdfParser.Builder#looseCollections()</span>
-<span class="source-line-no">1153</span><span id="line-1153">    * @return</span>
-<span class="source-line-no">1154</span><span id="line-1154">    *    &lt;jk&gt;true&lt;/jk&gt; if collections of resources are handled as loose collections of resources in RDF instead of</span>
-<span class="source-line-no">1155</span><span id="line-1155">    *    resources that are children of an RDF collection (e.g. Sequence, Bag).</span>
-<span class="source-line-no">1156</span><span id="line-1156">    */</span>
-<span class="source-line-no">1157</span><span id="line-1157">   protected final boolean isLooseCollections() { return looseCollections; }</span>
-<span class="source-line-no">1158</span><span id="line-1158"></span>
-<span class="source-line-no">1159</span><span id="line-1159">   /**</span>
-<span class="source-line-no">1160</span><span id="line-1160">    * Trim whitespace from text elements.</span>
-<span class="source-line-no">1161</span><span id="line-1161">    *</span>
-<span class="source-line-no">1162</span><span id="line-1162">    * @see RdfParser.Builder#trimWhitespace()</span>
-<span class="source-line-no">1163</span><span id="line-1163">    * @return</span>
-<span class="source-line-no">1164</span><span id="line-1164">    *    &lt;jk&gt;true&lt;/jk&gt; if whitespace in text elements will be automatically trimmed.</span>
-<span class="source-line-no">1165</span><span id="line-1165">    */</span>
-<span class="source-line-no">1166</span><span id="line-1166">   protected final boolean isTrimWhitespace() { return trimWhitespace; }</span>
-<span class="source-line-no">1167</span><span id="line-1167"></span>
-<span class="source-line-no">1168</span><span id="line-1168">   @Override /* Overridden from ReaderParser */</span>
-<span class="source-line-no">1169</span><span id="line-1169">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">1170</span><span id="line-1170">      return super.properties()</span>
-<span class="source-line-no">1171</span><span id="line-1171">         .a(PROP_collectionFormat, collectionFormat)</span>
-<span class="source-line-no">1172</span><span id="line-1172">         .a(PROP_juneauBpNs, juneauBpNs)</span>
-<span class="source-line-no">1173</span><span id="line-1173">         .a(PROP_juneauNs, juneauNs)</span>
-<span class="source-line-no">1174</span><span id="line-1174">         .a(PROP_language, language)</span>
-<span class="source-line-no">1175</span><span id="line-1175">         .a(PROP_looseCollections, looseCollections)</span>
-<span class="source-line-no">1176</span><span id="line-1176">         .a(PROP_trimWhitespace, trimWhitespace);</span>
-<span class="source-line-no">1177</span><span id="line-1177">   }</span>
-<span class="source-line-no">1178</span><span id="line-1178">}</span>
+<span class="source-line-no">1049</span><span id="line-1049">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1050</span><span id="line-1050">    */</span>
+<span class="source-line-no">1051</span><span id="line-1051">   public RdfParser(Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">1052</span><span id="line-1052">      super(builder.consumes(getConsumes(builder)));</span>
+<span class="source-line-no">1053</span><span id="line-1053"></span>
+<span class="source-line-no">1054</span><span id="line-1054">      collectionFormat = builder.collectionFormat;</span>
+<span class="source-line-no">1055</span><span id="line-1055">      juneauBpNs = builder.juneauBpNs;</span>
+<span class="source-line-no">1056</span><span id="line-1056">      juneauNs = builder.juneauNs;</span>
+<span class="source-line-no">1057</span><span id="line-1057">      language = builder.language;</span>
+<span class="source-line-no">1058</span><span id="line-1058">      looseCollections = builder.looseCollections;</span>
+<span class="source-line-no">1059</span><span id="line-1059">      trimWhitespace = builder.trimWhitespace;</span>
+<span class="source-line-no">1060</span><span id="line-1060">      jenaSettings = new TreeMap&lt;&gt;(builder.jenaSettings);</span>
+<span class="source-line-no">1061</span><span id="line-1061">   }</span>
+<span class="source-line-no">1062</span><span id="line-1062"></span>
+<span class="source-line-no">1063</span><span id="line-1063">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">1064</span><span id="line-1064">   public Builder&lt;?&gt; copy() {</span>
+<span class="source-line-no">1065</span><span id="line-1065">      return new DefaultBuilder(this);</span>
+<span class="source-line-no">1066</span><span id="line-1066">   }</span>
+<span class="source-line-no">1067</span><span id="line-1067"></span>
+<span class="source-line-no">1068</span><span id="line-1068">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">1069</span><span id="line-1069">   public RdfParserSession.Builder createSession() {</span>
+<span class="source-line-no">1070</span><span id="line-1070">      return RdfParserSession.create(this);</span>
+<span class="source-line-no">1071</span><span id="line-1071">   }</span>
+<span class="source-line-no">1072</span><span id="line-1072"></span>
+<span class="source-line-no">1073</span><span id="line-1073">   @Override /* Overridden from RdfMetaProvider */</span>
+<span class="source-line-no">1074</span><span id="line-1074">   public RdfBeanMeta getRdfBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
+<span class="source-line-no">1075</span><span id="line-1075">      return rdfBeanMetas.computeIfAbsent(bm, k -&gt; new RdfBeanMeta(k, this));</span>
+<span class="source-line-no">1076</span><span id="line-1076">   }</span>
+<span class="source-line-no">1077</span><span id="line-1077"></span>
+<span class="source-line-no">1078</span><span id="line-1078">   @Override /* Overridden from RdfMetaProvider */</span>
+<span class="source-line-no">1079</span><span id="line-1079">   public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">1080</span><span id="line-1080">      return rdfBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new RdfBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">1081</span><span id="line-1081">   }</span>
+<span class="source-line-no">1082</span><span id="line-1082"></span>
+<span class="source-line-no">1083</span><span id="line-1083">   @Override /* Overridden from RdfMetaProvider */</span>
+<span class="source-line-no">1084</span><span id="line-1084">   public RdfClassMeta getRdfClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">1085</span><span id="line-1085">      return rdfClassMetas.computeIfAbsent(cm, k -&gt; new RdfClassMeta(k, this));</span>
+<span class="source-line-no">1086</span><span id="line-1086">   }</span>
+<span class="source-line-no">1087</span><span id="line-1087"></span>
+<span class="source-line-no">1088</span><span id="line-1088">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">1089</span><span id="line-1089">   public RdfParserSession getSession() { return createSession().build(); }</span>
+<span class="source-line-no">1090</span><span id="line-1090"></span>
+<span class="source-line-no">1091</span><span id="line-1091">   @Override /* Overridden from XmlMetaProvider */</span>
+<span class="source-line-no">1092</span><span id="line-1092">   public XmlBeanMeta getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {</span>
+<span class="source-line-no">1093</span><span id="line-1093">      return xmlBeanMetas.computeIfAbsent(bm, k -&gt; new XmlBeanMeta(k, this));</span>
+<span class="source-line-no">1094</span><span id="line-1094">   }</span>
+<span class="source-line-no">1095</span><span id="line-1095"></span>
+<span class="source-line-no">1096</span><span id="line-1096">   @Override /* Overridden from XmlMetaProvider */</span>
+<span class="source-line-no">1097</span><span id="line-1097">   public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">1098</span><span id="line-1098">      return xmlBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new XmlBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">1099</span><span id="line-1099">   }</span>
+<span class="source-line-no">1100</span><span id="line-1100"></span>
+<span class="source-line-no">1101</span><span id="line-1101">   @Override /* Overridden from XmlMetaProvider */</span>
+<span class="source-line-no">1102</span><span id="line-1102">   public XmlClassMeta getXmlClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">1103</span><span id="line-1103">      return xmlClassMetas.computeIfAbsent(cm, k -&gt; new XmlClassMeta(k, this));</span>
+<span class="source-line-no">1104</span><span id="line-1104">   }</span>
+<span class="source-line-no">1105</span><span id="line-1105"></span>
+<span class="source-line-no">1106</span><span id="line-1106">   /**</span>
+<span class="source-line-no">1107</span><span id="line-1107">    * RDF format for representing collections and arrays.</span>
+<span class="source-line-no">1108</span><span id="line-1108">    *</span>
+<span class="source-line-no">1109</span><span id="line-1109">    * @see RdfParser.Builder#collectionFormat(RdfCollectionFormat)</span>
+<span class="source-line-no">1110</span><span id="line-1110">    * @return</span>
+<span class="source-line-no">1111</span><span id="line-1111">    *    RDF format for representing collections and arrays.</span>
+<span class="source-line-no">1112</span><span id="line-1112">    */</span>
+<span class="source-line-no">1113</span><span id="line-1113">   protected final RdfCollectionFormat getCollectionFormat() { return collectionFormat; }</span>
+<span class="source-line-no">1114</span><span id="line-1114"></span>
+<span class="source-line-no">1115</span><span id="line-1115">   /**</span>
+<span class="source-line-no">1116</span><span id="line-1116">    * All Jena-related configuration properties.</span>
+<span class="source-line-no">1117</span><span id="line-1117">    *</span>
+<span class="source-line-no">1118</span><span id="line-1118">    * @return</span>
+<span class="source-line-no">1119</span><span id="line-1119">    *    A map of all Jena-related configuration properties.</span>
+<span class="source-line-no">1120</span><span id="line-1120">    */</span>
+<span class="source-line-no">1121</span><span id="line-1121">   protected final Map&lt;String,Object&gt; getJenaSettings() { return u(jenaSettings); }</span>
+<span class="source-line-no">1122</span><span id="line-1122"></span>
+<span class="source-line-no">1123</span><span id="line-1123">   /**</span>
+<span class="source-line-no">1124</span><span id="line-1124">    * Default XML namespace for bean properties.</span>
+<span class="source-line-no">1125</span><span id="line-1125">    *</span>
+<span class="source-line-no">1126</span><span id="line-1126">    * @see RdfParser.Builder#juneauBpNs(Namespace)</span>
+<span class="source-line-no">1127</span><span id="line-1127">    * @return</span>
+<span class="source-line-no">1128</span><span id="line-1128">    *    Default XML namespace for bean properties.</span>
+<span class="source-line-no">1129</span><span id="line-1129">    */</span>
+<span class="source-line-no">1130</span><span id="line-1130">   protected final Namespace getJuneauBpNs() { return juneauBpNs; }</span>
+<span class="source-line-no">1131</span><span id="line-1131"></span>
+<span class="source-line-no">1132</span><span id="line-1132">   /**</span>
+<span class="source-line-no">1133</span><span id="line-1133">    * XML namespace for Juneau properties.</span>
+<span class="source-line-no">1134</span><span id="line-1134">    *</span>
+<span class="source-line-no">1135</span><span id="line-1135">    * @see RdfParser.Builder#juneauNs(Namespace)</span>
+<span class="source-line-no">1136</span><span id="line-1136">    * @return</span>
+<span class="source-line-no">1137</span><span id="line-1137">    *    XML namespace for Juneau properties.</span>
+<span class="source-line-no">1138</span><span id="line-1138">    */</span>
+<span class="source-line-no">1139</span><span id="line-1139">   protected final Namespace getJuneauNs() { return juneauNs; }</span>
+<span class="source-line-no">1140</span><span id="line-1140"></span>
+<span class="source-line-no">1141</span><span id="line-1141">   /**</span>
+<span class="source-line-no">1142</span><span id="line-1142">    * RDF language.</span>
+<span class="source-line-no">1143</span><span id="line-1143">    *</span>
+<span class="source-line-no">1144</span><span id="line-1144">    * @see RdfParser.Builder#language(String)</span>
+<span class="source-line-no">1145</span><span id="line-1145">    * @return</span>
+<span class="source-line-no">1146</span><span id="line-1146">    *    The RDF language to use.</span>
+<span class="source-line-no">1147</span><span id="line-1147">    */</span>
+<span class="source-line-no">1148</span><span id="line-1148">   protected final String getLanguage() { return language; }</span>
+<span class="source-line-no">1149</span><span id="line-1149"></span>
+<span class="source-line-no">1150</span><span id="line-1150">   /**</span>
+<span class="source-line-no">1151</span><span id="line-1151">    * Collections should be serialized and parsed as loose collections.</span>
+<span class="source-line-no">1152</span><span id="line-1152">    *</span>
+<span class="source-line-no">1153</span><span id="line-1153">    * @see RdfParser.Builder#looseCollections()</span>
+<span class="source-line-no">1154</span><span id="line-1154">    * @return</span>
+<span class="source-line-no">1155</span><span id="line-1155">    *    &lt;jk&gt;true&lt;/jk&gt; if collections of resources are handled as loose collections of resources in RDF instead of</span>
+<span class="source-line-no">1156</span><span id="line-1156">    *    resources that are children of an RDF collection (e.g. Sequence, Bag).</span>
+<span class="source-line-no">1157</span><span id="line-1157">    */</span>
+<span class="source-line-no">1158</span><span id="line-1158">   protected final boolean isLooseCollections() { return looseCollections; }</span>
+<span class="source-line-no">1159</span><span id="line-1159"></span>
+<span class="source-line-no">1160</span><span id="line-1160">   /**</span>
+<span class="source-line-no">1161</span><span id="line-1161">    * Trim whitespace from text elements.</span>
+<span class="source-line-no">1162</span><span id="line-1162">    *</span>
+<span class="source-line-no">1163</span><span id="line-1163">    * @see RdfParser.Builder#trimWhitespace()</span>
+<span class="source-line-no">1164</span><span id="line-1164">    * @return</span>
+<span class="source-line-no">1165</span><span id="line-1165">    *    &lt;jk&gt;true&lt;/jk&gt; if whitespace in text elements will be automatically trimmed.</span>
+<span class="source-line-no">1166</span><span id="line-1166">    */</span>
+<span class="source-line-no">1167</span><span id="line-1167">   protected final boolean isTrimWhitespace() { return trimWhitespace; }</span>
+<span class="source-line-no">1168</span><span id="line-1168"></span>
+<span class="source-line-no">1169</span><span id="line-1169">   @Override /* Overridden from ReaderParser */</span>
+<span class="source-line-no">1170</span><span id="line-1170">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">1171</span><span id="line-1171">      return super.properties()</span>
+<span class="source-line-no">1172</span><span id="line-1172">         .a(PROP_collectionFormat, collectionFormat)</span>
+<span class="source-line-no">1173</span><span id="line-1173">         .a(PROP_juneauBpNs, juneauBpNs)</span>
+<span class="source-line-no">1174</span><span id="line-1174">         .a(PROP_juneauNs, juneauNs)</span>
+<span class="source-line-no">1175</span><span id="line-1175">         .a(PROP_language, language)</span>
+<span class="source-line-no">1176</span><span id="line-1176">         .a(PROP_looseCollections, looseCollections)</span>
+<span class="source-line-no">1177</span><span id="line-1177">         .a(PROP_trimWhitespace, trimWhitespace);</span>
+<span class="source-line-no">1178</span><span id="line-1178">   }</span>
+<span class="source-line-no">1179</span><span id="line-1179">}</span>
 
 
 

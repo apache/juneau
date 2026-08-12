@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141">            return o2.toString();</span>
 <span class="source-line-no">142</span><span id="line-142">         if (o instanceof ZonedDateTime o2)</span>
 <span class="source-line-no">143</span><span id="line-143">            return RFC_1123_DATE_TIME.format(o2);</span>
-<span class="source-line-no">144</span><span id="line-144">         throw rex("Invalid object type returned by supplier: {0}", cn(o));</span>
+<span class="source-line-no">144</span><span id="line-144">         throw rex("Invalid object type returned by supplier: %s", cn(o));</span>
 <span class="source-line-no">145</span><span id="line-145">      }</span>
 <span class="source-line-no">146</span><span id="line-146">      if (nn(delaySeconds))</span>
 <span class="source-line-no">147</span><span id="line-147">         return delaySeconds.toString();</span>
@@ -164,16 +164,16 @@
 <span class="source-line-no">151</span><span id="line-151">   }</span>
 <span class="source-line-no">152</span><span id="line-152"></span>
 <span class="source-line-no">153</span><span id="line-153">   /**</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param value Delay seconds. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">155</span><span id="line-155">    * @return A new instance or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">154</span><span id="line-154">    * @param value Delay seconds. May be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">155</span><span id="line-155">    * @return A new instance, or &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;value&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">156</span><span id="line-156">    */</span>
 <span class="source-line-no">157</span><span id="line-157">   public static RetryAfter of(Integer value) {</span>
 <span class="source-line-no">158</span><span id="line-158">      return value == null ? null : new RetryAfter(value);</span>
 <span class="source-line-no">159</span><span id="line-159">   }</span>
 <span class="source-line-no">160</span><span id="line-160"></span>
 <span class="source-line-no">161</span><span id="line-161">   /**</span>
-<span class="source-line-no">162</span><span id="line-162">    * @param value Wire string. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">163</span><span id="line-163">    * @return A new instance or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">162</span><span id="line-162">    * @param value Wire string. May be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">163</span><span id="line-163">    * @return A new instance, or &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;value&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">164</span><span id="line-164">    */</span>
 <span class="source-line-no">165</span><span id="line-165">   public static RetryAfter of(String value) {</span>
 <span class="source-line-no">166</span><span id="line-166">      return value == null ? null : new RetryAfter(value);</span>
@@ -188,8 +188,8 @@
 <span class="source-line-no">175</span><span id="line-175">   }</span>
 <span class="source-line-no">176</span><span id="line-176"></span>
 <span class="source-line-no">177</span><span id="line-177">   /**</span>
-<span class="source-line-no">178</span><span id="line-178">    * @param value HTTP-date. May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">179</span><span id="line-179">    * @return A new instance or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">178</span><span id="line-178">    * @param value HTTP-date. May be &lt;jk&gt;null&lt;/jk&gt;, in which case &lt;jk&gt;null&lt;/jk&gt; is returned.</span>
+<span class="source-line-no">179</span><span id="line-179">    * @return A new instance, or &lt;jk&gt;null&lt;/jk&gt; if &lt;c&gt;value&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">180</span><span id="line-180">    */</span>
 <span class="source-line-no">181</span><span id="line-181">   public static RetryAfter of(ZonedDateTime value) {</span>
 <span class="source-line-no">182</span><span id="line-182">      return value == null ? null : new RetryAfter(value);</span>

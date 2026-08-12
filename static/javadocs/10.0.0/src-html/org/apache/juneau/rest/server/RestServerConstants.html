@@ -245,84 +245,87 @@
 <span class="source-line-no">232</span><span id="line-232">   /** The {@code "mixins"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the class-chain walk when resolving operation mixins. */</span>
 <span class="source-line-no">233</span><span id="line-233">   public static final String PROPERTY_mixins = "mixins";</span>
 <span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">   /** The {@code "value"} annotation attribute name — used by {@code @RestOp}/verb annotations to hold the (optional method-prefixed) path; folded into {@link #PROPERTY_path}. */</span>
-<span class="source-line-no">236</span><span id="line-236">   public static final String PROPERTY_value = "value";</span>
+<span class="source-line-no">235</span><span id="line-235">   /** The {@code "children"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the class-chain walk when resolving routed children. */</span>
+<span class="source-line-no">236</span><span id="line-236">   public static final String PROPERTY_children = "children";</span>
 <span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">   /**</span>
-<span class="source-line-no">239</span><span id="line-239">    * The {@code "observability"} annotation attribute name — tri-state per-resource / per-op observability control.</span>
-<span class="source-line-no">240</span><span id="line-240">    * {@code "true"} opts the resource in and requires a wired backend (startup-fail if missing); {@code "false"} short-circuits</span>
-<span class="source-line-no">241</span><span id="line-241">    * the observability block entirely; {@code ""} (default) inherits / uses the existing silent-no-op behavior.</span>
-<span class="source-line-no">242</span><span id="line-242">    *</span>
-<span class="source-line-no">243</span><span id="line-243">    * @see Rest#observability()</span>
-<span class="source-line-no">244</span><span id="line-244">    * @see RestOp#observability()</span>
-<span class="source-line-no">245</span><span id="line-245">    */</span>
-<span class="source-line-no">246</span><span id="line-246">   public static final String PROPERTY_observability = "observability";</span>
-<span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248">   /**</span>
-<span class="source-line-no">249</span><span id="line-249">    * The {@code "metricName"} annotation attribute name — per-op override for the metric name passed to</span>
-<span class="source-line-no">250</span><span id="line-250">    * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Empty string (default) uses</span>
-<span class="source-line-no">251</span><span id="line-251">    * the recorder's own default name derivation.</span>
-<span class="source-line-no">252</span><span id="line-252">    *</span>
-<span class="source-line-no">253</span><span id="line-253">    * @see RestOp#metricName()</span>
-<span class="source-line-no">254</span><span id="line-254">    */</span>
-<span class="source-line-no">255</span><span id="line-255">   public static final String PROPERTY_metricName = "metricName";</span>
-<span class="source-line-no">256</span><span id="line-256"></span>
-<span class="source-line-no">257</span><span id="line-257">   /**</span>
-<span class="source-line-no">258</span><span id="line-258">    * The {@code "metricTags"} annotation attribute name — per-op additional metric tags passed to</span>
-<span class="source-line-no">259</span><span id="line-259">    * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Format: comma-separated</span>
-<span class="source-line-no">260</span><span id="line-260">    * {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}). Empty string (default) means</span>
-<span class="source-line-no">261</span><span id="line-261">    * no additional tags.</span>
-<span class="source-line-no">262</span><span id="line-262">    *</span>
-<span class="source-line-no">263</span><span id="line-263">    * @see RestOp#metricTags()</span>
-<span class="source-line-no">264</span><span id="line-264">    */</span>
-<span class="source-line-no">265</span><span id="line-265">   public static final String PROPERTY_metricTags = "metricTags";</span>
-<span class="source-line-no">266</span><span id="line-266"></span>
-<span class="source-line-no">267</span><span id="line-267">   /**</span>
-<span class="source-line-no">268</span><span id="line-268">    * Servlet-request attribute key under which the per-request id minted or honored by</span>
-<span class="source-line-no">269</span><span id="line-269">    * {@code org.apache.juneau.rest.server.filter.RequestIdFilter} is stashed.</span>
-<span class="source-line-no">270</span><span id="line-270">    *</span>
-<span class="source-line-no">271</span><span id="line-271">    * &lt;p&gt;</span>
-<span class="source-line-no">272</span><span id="line-272">    * Call loggers and observability layers should resolve the id via this key so they all see the same value:</span>
-<span class="source-line-no">273</span><span id="line-273">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">274</span><span id="line-274">    *    String &lt;jv&gt;id&lt;/jv&gt; = (String)&lt;jv&gt;req&lt;/jv&gt;.getAttribute(RestServerConstants.&lt;jsf&gt;REQUEST_ID&lt;/jsf&gt;);</span>
-<span class="source-line-no">275</span><span id="line-275">    * &lt;/p&gt;</span>
-<span class="source-line-no">276</span><span id="line-276">    *</span>
-<span class="source-line-no">277</span><span id="line-277">    * @since 10.0.0</span>
-<span class="source-line-no">278</span><span id="line-278">    */</span>
-<span class="source-line-no">279</span><span id="line-279">   public static final String REQUEST_ID = "requestId";</span>
-<span class="source-line-no">280</span><span id="line-280"></span>
-<span class="source-line-no">281</span><span id="line-281">   /**</span>
-<span class="source-line-no">282</span><span id="line-282">    * Servlet-request attribute key under which the authenticated {@link java.security.Principal}</span>
-<span class="source-line-no">283</span><span id="line-283">    * is stashed by {@code org.apache.juneau.rest.server.auth.BearerTokenGuard} /</span>
-<span class="source-line-no">284</span><span id="line-284">    * {@code org.apache.juneau.rest.server.auth.ApiKeyGuard} and resolved by</span>
-<span class="source-line-no">285</span><span id="line-285">    * {@code org.apache.juneau.rest.server.auth.AuthArg} for {@code @Auth Principal} parameters.</span>
-<span class="source-line-no">286</span><span id="line-286">    *</span>
-<span class="source-line-no">287</span><span id="line-287">    * &lt;p&gt;</span>
-<span class="source-line-no">288</span><span id="line-288">    * Op handlers can resolve the principal via the typed argument injector:</span>
-<span class="source-line-no">289</span><span id="line-289">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">290</span><span id="line-290">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(path=&lt;js&gt;"/me"&lt;/js&gt;)</span>
-<span class="source-line-no">291</span><span id="line-291">    *    &lt;jk&gt;public&lt;/jk&gt; Profile me(&lt;ja&gt;@Auth&lt;/ja&gt; Principal &lt;jv&gt;p&lt;/jv&gt;) { ... }</span>
-<span class="source-line-no">292</span><span id="line-292">    * &lt;/p&gt;</span>
-<span class="source-line-no">293</span><span id="line-293">    *</span>
-<span class="source-line-no">294</span><span id="line-294">    * &lt;p&gt;</span>
-<span class="source-line-no">295</span><span id="line-295">    * Or directly:</span>
-<span class="source-line-no">296</span><span id="line-296">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">297</span><span id="line-297">    *    Principal &lt;jv&gt;p&lt;/jv&gt; = (Principal)&lt;jv&gt;req&lt;/jv&gt;.getAttribute(RestServerConstants.&lt;jsf&gt;PRINCIPAL_ATTR&lt;/jsf&gt;);</span>
-<span class="source-line-no">298</span><span id="line-298">    * &lt;/p&gt;</span>
-<span class="source-line-no">299</span><span id="line-299">    *</span>
-<span class="source-line-no">300</span><span id="line-300">    * @since 10.0.0</span>
-<span class="source-line-no">301</span><span id="line-301">    */</span>
-<span class="source-line-no">302</span><span id="line-302">   public static final String PRINCIPAL_ATTR = "juneau.principal";</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   /**</span>
-<span class="source-line-no">305</span><span id="line-305">    * Default header name read by {@code org.apache.juneau.rest.server.auth.ApiKeyGuard} when configured</span>
-<span class="source-line-no">306</span><span id="line-306">    * with the {@link org.apache.juneau.rest.server.auth.ApiKeyGuard.Source#HEADER HEADER} source and no</span>
-<span class="source-line-no">307</span><span id="line-307">    * custom name is supplied.</span>
-<span class="source-line-no">308</span><span id="line-308">    *</span>
-<span class="source-line-no">309</span><span id="line-309">    * @since 10.0.0</span>
-<span class="source-line-no">310</span><span id="line-310">    */</span>
-<span class="source-line-no">311</span><span id="line-311">   public static final String API_KEY_HEADER = "X-API-Key";</span>
-<span class="source-line-no">312</span><span id="line-312">}</span>
+<span class="source-line-no">238</span><span id="line-238">   /** The {@code "value"} annotation attribute name — used by {@code @RestOp}/verb annotations to hold the (optional method-prefixed) path; folded into {@link #PROPERTY_path}. */</span>
+<span class="source-line-no">239</span><span id="line-239">   public static final String PROPERTY_value = "value";</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   /**</span>
+<span class="source-line-no">242</span><span id="line-242">    * The {@code "observability"} annotation attribute name — tri-state per-resource / per-op observability control.</span>
+<span class="source-line-no">243</span><span id="line-243">    * {@code "true"} opts the resource in and requires a wired backend (startup-fail if missing); {@code "false"} short-circuits</span>
+<span class="source-line-no">244</span><span id="line-244">    * the observability block entirely; {@code ""} (default) inherits / uses the existing silent-no-op behavior.</span>
+<span class="source-line-no">245</span><span id="line-245">    *</span>
+<span class="source-line-no">246</span><span id="line-246">    * @see Rest#observability()</span>
+<span class="source-line-no">247</span><span id="line-247">    * @see RestOp#observability()</span>
+<span class="source-line-no">248</span><span id="line-248">    */</span>
+<span class="source-line-no">249</span><span id="line-249">   public static final String PROPERTY_observability = "observability";</span>
+<span class="source-line-no">250</span><span id="line-250"></span>
+<span class="source-line-no">251</span><span id="line-251">   /**</span>
+<span class="source-line-no">252</span><span id="line-252">    * The {@code "metricName"} annotation attribute name — per-op override for the metric name passed to</span>
+<span class="source-line-no">253</span><span id="line-253">    * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Empty string (default) uses</span>
+<span class="source-line-no">254</span><span id="line-254">    * the recorder's own default name derivation.</span>
+<span class="source-line-no">255</span><span id="line-255">    *</span>
+<span class="source-line-no">256</span><span id="line-256">    * @see RestOp#metricName()</span>
+<span class="source-line-no">257</span><span id="line-257">    */</span>
+<span class="source-line-no">258</span><span id="line-258">   public static final String PROPERTY_metricName = "metricName";</span>
+<span class="source-line-no">259</span><span id="line-259"></span>
+<span class="source-line-no">260</span><span id="line-260">   /**</span>
+<span class="source-line-no">261</span><span id="line-261">    * The {@code "metricTags"} annotation attribute name — per-op additional metric tags passed to</span>
+<span class="source-line-no">262</span><span id="line-262">    * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Format: comma-separated</span>
+<span class="source-line-no">263</span><span id="line-263">    * {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}). Empty string (default) means</span>
+<span class="source-line-no">264</span><span id="line-264">    * no additional tags.</span>
+<span class="source-line-no">265</span><span id="line-265">    *</span>
+<span class="source-line-no">266</span><span id="line-266">    * @see RestOp#metricTags()</span>
+<span class="source-line-no">267</span><span id="line-267">    */</span>
+<span class="source-line-no">268</span><span id="line-268">   public static final String PROPERTY_metricTags = "metricTags";</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   /**</span>
+<span class="source-line-no">271</span><span id="line-271">    * Servlet-request attribute key under which the per-request id minted or honored by</span>
+<span class="source-line-no">272</span><span id="line-272">    * {@code org.apache.juneau.rest.server.filter.RequestIdFilter} is stashed.</span>
+<span class="source-line-no">273</span><span id="line-273">    *</span>
+<span class="source-line-no">274</span><span id="line-274">    * &lt;p&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">    * Call loggers and observability layers should resolve the id via this key so they all see the same value:</span>
+<span class="source-line-no">276</span><span id="line-276">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">277</span><span id="line-277">    *    String &lt;jv&gt;id&lt;/jv&gt; = (String)&lt;jv&gt;req&lt;/jv&gt;.getAttribute(RestServerConstants.&lt;jsf&gt;REQUEST_ID&lt;/jsf&gt;);</span>
+<span class="source-line-no">278</span><span id="line-278">    * &lt;/p&gt;</span>
+<span class="source-line-no">279</span><span id="line-279">    *</span>
+<span class="source-line-no">280</span><span id="line-280">    * @since 10.0.0</span>
+<span class="source-line-no">281</span><span id="line-281">    */</span>
+<span class="source-line-no">282</span><span id="line-282">   public static final String REQUEST_ID = "requestId";</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   /**</span>
+<span class="source-line-no">285</span><span id="line-285">    * Servlet-request attribute key under which the authenticated {@link java.security.Principal}</span>
+<span class="source-line-no">286</span><span id="line-286">    * is stashed by {@code org.apache.juneau.rest.server.auth.BearerTokenGuard} /</span>
+<span class="source-line-no">287</span><span id="line-287">    * {@code org.apache.juneau.rest.server.auth.ApiKeyGuard} and resolved by</span>
+<span class="source-line-no">288</span><span id="line-288">    * {@code org.apache.juneau.rest.server.auth.AuthArg} for {@code @Auth Principal} parameters.</span>
+<span class="source-line-no">289</span><span id="line-289">    *</span>
+<span class="source-line-no">290</span><span id="line-290">    * &lt;p&gt;</span>
+<span class="source-line-no">291</span><span id="line-291">    * Op handlers can resolve the principal via the typed argument injector:</span>
+<span class="source-line-no">292</span><span id="line-292">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">293</span><span id="line-293">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(path=&lt;js&gt;"/me"&lt;/js&gt;)</span>
+<span class="source-line-no">294</span><span id="line-294">    *    &lt;jk&gt;public&lt;/jk&gt; Profile me(&lt;ja&gt;@Auth&lt;/ja&gt; Principal &lt;jv&gt;p&lt;/jv&gt;) { ... }</span>
+<span class="source-line-no">295</span><span id="line-295">    * &lt;/p&gt;</span>
+<span class="source-line-no">296</span><span id="line-296">    *</span>
+<span class="source-line-no">297</span><span id="line-297">    * &lt;p&gt;</span>
+<span class="source-line-no">298</span><span id="line-298">    * Or directly:</span>
+<span class="source-line-no">299</span><span id="line-299">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">300</span><span id="line-300">    *    Principal &lt;jv&gt;p&lt;/jv&gt; = (Principal)&lt;jv&gt;req&lt;/jv&gt;.getAttribute(RestServerConstants.&lt;jsf&gt;PRINCIPAL_ATTR&lt;/jsf&gt;);</span>
+<span class="source-line-no">301</span><span id="line-301">    * &lt;/p&gt;</span>
+<span class="source-line-no">302</span><span id="line-302">    *</span>
+<span class="source-line-no">303</span><span id="line-303">    * @since 10.0.0</span>
+<span class="source-line-no">304</span><span id="line-304">    */</span>
+<span class="source-line-no">305</span><span id="line-305">   public static final String PRINCIPAL_ATTR = "juneau.principal";</span>
+<span class="source-line-no">306</span><span id="line-306"></span>
+<span class="source-line-no">307</span><span id="line-307">   /**</span>
+<span class="source-line-no">308</span><span id="line-308">    * Default header name read by {@code org.apache.juneau.rest.server.auth.ApiKeyGuard} when configured</span>
+<span class="source-line-no">309</span><span id="line-309">    * with the {@link org.apache.juneau.rest.server.auth.ApiKeyGuard.Source#HEADER HEADER} source and no</span>
+<span class="source-line-no">310</span><span id="line-310">    * custom name is supplied.</span>
+<span class="source-line-no">311</span><span id="line-311">    *</span>
+<span class="source-line-no">312</span><span id="line-312">    * @since 10.0.0</span>
+<span class="source-line-no">313</span><span id="line-313">    */</span>
+<span class="source-line-no">314</span><span id="line-314">   public static final String API_KEY_HEADER = "X-API-Key";</span>
+<span class="source-line-no">315</span><span id="line-315">}</span>
 
 
 

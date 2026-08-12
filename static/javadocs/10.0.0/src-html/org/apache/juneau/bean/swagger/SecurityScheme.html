@@ -153,8 +153,8 @@
 <span class="source-line-no">140</span><span id="line-140">    * &lt;p&gt;</span>
 <span class="source-line-no">141</span><span id="line-141">    * The available scopes for the OAuth2 security scheme.</span>
 <span class="source-line-no">142</span><span id="line-142">    *</span>
-<span class="source-line-no">143</span><span id="line-143">    * @param key The scope key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">144</span><span id="line-144">    * @param value The scope value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">143</span><span id="line-143">    * @param key The scope key.  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
+<span class="source-line-no">144</span><span id="line-144">    * @param value The scope value.  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">145</span><span id="line-145">    * @return This object.</span>
 <span class="source-line-no">146</span><span id="line-146">    */</span>
 <span class="source-line-no">147</span><span id="line-147">   public SecurityScheme addScope(String key, String value) {</span>
@@ -453,7 +453,7 @@
 <span class="source-line-no">440</span><span id="line-440">    */</span>
 <span class="source-line-no">441</span><span id="line-441">   public SecurityScheme setType(String value) {</span>
 <span class="source-line-no">442</span><span id="line-442">      if (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))</span>
-<span class="source-line-no">443</span><span id="line-443">         throw rex("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));</span>
+<span class="source-line-no">443</span><span id="line-443">         throw rex("Invalid value passed in to setType(String).  Value='%s', valid values=%s", value, Json5.of(VALID_TYPES));</span>
 <span class="source-line-no">444</span><span id="line-444">      type = value;</span>
 <span class="source-line-no">445</span><span id="line-445">      return this;</span>
 <span class="source-line-no">446</span><span id="line-446">   }</span>

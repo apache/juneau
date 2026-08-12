@@ -161,7 +161,7 @@
 <span class="source-line-no">148</span><span id="line-148">    * @param value</span>
 <span class="source-line-no">149</span><span id="line-149">    *    The header value.</span>
 <span class="source-line-no">150</span><span id="line-150">    *    &lt;br&gt;Must be parsable by {@link StringRanges#of(String)}.</span>
-<span class="source-line-no">151</span><span id="line-151">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">151</span><span id="line-151">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">152</span><span id="line-152">    */</span>
 <span class="source-line-no">153</span><span id="line-153">   public TE(String value) {</span>
 <span class="source-line-no">154</span><span id="line-154">      super(NAME, value);</span>
@@ -172,7 +172,7 @@
 <span class="source-line-no">159</span><span id="line-159">    *</span>
 <span class="source-line-no">160</span><span id="line-160">    * @param value</span>
 <span class="source-line-no">161</span><span id="line-161">    *    The header value.</span>
-<span class="source-line-no">162</span><span id="line-162">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">162</span><span id="line-162">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">163</span><span id="line-163">    */</span>
 <span class="source-line-no">164</span><span id="line-164">   public TE(StringRanges value) {</span>
 <span class="source-line-no">165</span><span id="line-165">      super(NAME, value);</span>
@@ -186,7 +186,7 @@
 <span class="source-line-no">173</span><span id="line-173">    *</span>
 <span class="source-line-no">174</span><span id="line-174">    * @param value</span>
 <span class="source-line-no">175</span><span id="line-175">    *    The supplier of the header value.</span>
-<span class="source-line-no">176</span><span id="line-176">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">176</span><span id="line-176">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">177</span><span id="line-177">    */</span>
 <span class="source-line-no">178</span><span id="line-178">   public TE(Supplier&lt;StringRanges&gt; value) {</span>
 <span class="source-line-no">179</span><span id="line-179">      super(NAME, value);</span>

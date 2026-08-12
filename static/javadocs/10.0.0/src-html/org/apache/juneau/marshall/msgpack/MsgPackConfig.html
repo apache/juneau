@@ -83,15 +83,26 @@
 <span class="source-line-no">070</span><span id="line-70">   String addBeanTypes() default "";</span>
 <span class="source-line-no">071</span><span id="line-71"></span>
 <span class="source-line-no">072</span><span id="line-72">   /**</span>
-<span class="source-line-no">073</span><span id="line-73">    * Optional rank for this config.</span>
+<span class="source-line-no">073</span><span id="line-73">    * Maximum allowed wire-declared length (in bytes) for MessagePack binary and string payloads when parsing.</span>
 <span class="source-line-no">074</span><span id="line-74">    *</span>
 <span class="source-line-no">075</span><span id="line-75">    * &lt;p&gt;</span>
-<span class="source-line-no">076</span><span id="line-76">    * Can be used to override default ordering and application of config annotations.</span>
-<span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * @return The annotation value.</span>
-<span class="source-line-no">079</span><span id="line-79">    */</span>
-<span class="source-line-no">080</span><span id="line-80">   int rank() default 0;</span>
-<span class="source-line-no">081</span><span id="line-81">}</span>
+<span class="source-line-no">076</span><span id="line-76">    * Guards against malformed or adversarial input where a small payload declares a huge length.</span>
+<span class="source-line-no">077</span><span id="line-77">    * Default is &lt;js&gt;"16777216"&lt;/js&gt; (16 MiB). A value of &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
+<span class="source-line-no">078</span><span id="line-78">    *</span>
+<span class="source-line-no">079</span><span id="line-79">    * @return The annotation value.</span>
+<span class="source-line-no">080</span><span id="line-80">    */</span>
+<span class="source-line-no">081</span><span id="line-81">   String maxLength() default "";</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /**</span>
+<span class="source-line-no">084</span><span id="line-84">    * Optional rank for this config.</span>
+<span class="source-line-no">085</span><span id="line-85">    *</span>
+<span class="source-line-no">086</span><span id="line-86">    * &lt;p&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * Can be used to override default ordering and application of config annotations.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @return The annotation value.</span>
+<span class="source-line-no">090</span><span id="line-90">    */</span>
+<span class="source-line-no">091</span><span id="line-91">   int rank() default 0;</span>
+<span class="source-line-no">092</span><span id="line-92">}</span>
 
 
 

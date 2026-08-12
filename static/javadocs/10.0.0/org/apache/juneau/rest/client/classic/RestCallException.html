@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-37">RestCallException</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-35">RestCallException</a></span>
 <span class="extends-implements">extends <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpException.html" title="class or interface in org.apache.http" class="external-link">HttpException</a></span></div>
 <div class="block">Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.
 
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(int,org.apache.juneau.http.classic.header.Thrown,java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>RestCallException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-81">RestCallException</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-79">RestCallException</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
  <a href="../../../http/classic/header/Thrown.html" title="class in org.apache.juneau.http.classic.header">Thrown</a>&nbsp;thrown,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
@@ -182,27 +182,27 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>statusCode</code> - The HTTP response status code.  Use <c>0</c> if no connection could be made.</dd>
-<dd><code>thrown</code> - The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk>.</dd>
+<dd><code>thrown</code> - The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk> if the header is not present.</dd>
 <dd><code>cause</code> - The cause of this exception.</dd>
-<dd><code>message</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>message</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message (<c>%s</c> placeholders).</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.classic.RestResponse,java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>RestCallException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-95">RestCallException</a></span><wbr><span class="parameters">(<a href="RestResponse.html" title="class in org.apache.juneau.rest.client.classic">RestResponse</a>&nbsp;response,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-93">RestCallException</a></span><wbr><span class="parameters">(<a href="RestResponse.html" title="class in org.apache.juneau.rest.client.classic">RestResponse</a>&nbsp;response,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>response</code> - The HTTP response.  Can be <jk>null</jk>.</dd>
+<dd><code>response</code> - The HTTP response.  Can be <jk>null</jk> (treated as a connection failure: status code <c>0</c> with no thrown info).</dd>
 <dd><code>cause</code> - The cause of this exception.</dd>
-<dd><code>message</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.</dd>
+<dd><code>message</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style message (<c>%s</c> placeholders).</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.</dd>
 </dl>
 </section>
 </li>
@@ -217,7 +217,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getCause(java.lang.Class)">
 <h3>getCause</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-106">getCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-104">getCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Similar to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getCause()" title="class or interface in java.lang" class="external-link"><code>Throwable.getCause()</code></a> but searches until it finds the throwable of the specified type.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -232,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponseCode()">
 <h3>getResponseCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-115">getResponseCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-113">getResponseCode</a></span>()</div>
 <div class="block">Returns the HTTP response status code.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -243,11 +243,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getThrown()">
 <h3>getThrown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/classic/header/Thrown.html" title="class in org.apache.juneau.http.classic.header">Thrown</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-122">getThrown</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/classic/header/Thrown.html" title="class in org.apache.juneau.http.classic.header">Thrown</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/classic/RestCallException.html#line-120">getThrown</a></span>()</div>
 <div class="block">Returns the value of the <js>"Thrown"</js> header on the response.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The value of the <js>"Thrown"</js> header on the response, never <jk>null</jk>.</dd>
+<dd>The value of the <js>"Thrown"</js> header on the response, or <jk>null</jk> if not present.</dd>
 </dl>
 </section>
 </li>

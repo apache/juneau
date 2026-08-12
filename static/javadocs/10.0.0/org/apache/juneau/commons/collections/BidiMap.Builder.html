@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="BidiMap.html" title="class in org.apache.juneau.commons.collections">BidiMap</a>&lt;<a href="BidiMap.html" title="type parameter in BidiMap">K</a>,<wbr><a href="BidiMap.html" title="type parameter in BidiMap">V</a>&gt;</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-107">BidiMap.Builder</a>&lt;K,<wbr>V&gt;</span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.html#line-108">BidiMap.Builder</a>&lt;K,<wbr>V&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder class for <a href="BidiMap.html" title="class in org.apache.juneau.commons.collections"><code>BidiMap</code></a>.
 
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-107">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-108">Builder</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -179,7 +179,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(K,V)">
 <h3 id="add(java.lang.Object,java.lang.Object)">add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>,<wbr><a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-124">add</a></span><wbr><span class="parameters">(<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>,<wbr><a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-125">add</a></span><wbr><span class="parameters">(<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>&nbsp;key,
  <a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">V</a>&nbsp;value)</span></div>
 <div class="block">Adds a key-value pair to this map.
 
@@ -188,8 +188,8 @@ loadScripts(document, 'script');</script>
  during the <a href="#build()"><code>build()</code></a> operation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key. Can be <jk>null</jk>.</dd>
-<dd><code>value</code> - The value. Can be <jk>null</jk>.</dd>
+<dd><code>key</code> - The key. Can be <jk>null</jk> (filtered out, along with its value, during <a href="#build()"><code>build()</code></a>).</dd>
+<dd><code>value</code> - The value. Can be <jk>null</jk> (filtered out, along with its key, during <a href="#build()"><code>build()</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="class in org.apache.juneau.commons.collections">BidiMap</a>&lt;<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>,<wbr><a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-146">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.html" title="class in org.apache.juneau.commons.collections">BidiMap</a>&lt;<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>,<wbr><a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-147">build</a></span>()</div>
 <div class="block">Builds a new <a href="BidiMap.html" title="class in org.apache.juneau.commons.collections"><code>BidiMap</code></a> from the entries added to this builder.
 
  <p>
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unmodifiable()">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>,<wbr><a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-159">unmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BidiMap.Builder.html" title="class in org.apache.juneau.commons.collections">BidiMap.Builder</a>&lt;<a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">K</a>,<wbr><a href="BidiMap.Builder.html" title="type parameter in BidiMap.Builder">V</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/BidiMap.Builder.html#line-160">unmodifiable</a></span>()</div>
 <div class="block">Makes the resulting map unmodifiable.
 
  <p>

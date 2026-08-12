@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../bson/BsonInputStream.html" title="class in org.apache.juneau.marshall.bson">BsonInputStream</a></code>, <code><a href="../cbor/CborInputStream.html" title="class in org.apache.juneau.marshall.cbor">CborInputStream</a></code>, <code><a href="../msgpack/MsgPackInputStream.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackInputStream</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-35">ParserInputStream</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-37">ParserInputStream</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>
 implements <a href="Positionable.html" title="interface in org.apache.juneau.marshall.parser">Positionable</a></span></div>
 <div class="block">Input stream meant to be used as input for stream-based parsers.
@@ -128,12 +128,27 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.mar
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkLength(long,long,java.lang.String)" class="member-name-link">checkLength</a><wbr>(long&nbsp;len,
+ long&nbsp;maxLength,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;what)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Validates a wire-declared length/count against sane bounds before it is used to size an allocation or
+ drive a container loop.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#checkLength(long,java.lang.String)" class="member-name-link">checkLength</a><wbr>(long&nbsp;len,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;what)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Validates a wire-declared length/count against sane bounds before it is used to size an allocation or
+ drive a container loop, using this stream's configured maximum.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Position.html" title="class in org.apache.juneau.marshall.parser">Position</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPosition()" class="member-name-link">getPosition</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -142,6 +157,12 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.mar
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read()" class="member-name-link">read</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMaxLength(int)" class="member-name-link">setMaxLength</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the maximum allowed wire-declared length (in bytes) for payloads and element counts read off the
+ stream before they are used to size an allocation or drive a container loop.</div>
+</div>
 </div>
 </div>
 </div>
@@ -165,12 +186,13 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.mar
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe)">
 <h3>ParserInputStream</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-50">ParserInputStream</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-55">ParserInputStream</a></span><wbr><span class="parameters">(<a href="ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pipe</code> - The parser input.</dd>
+<dd><code>pipe</code> - The parser input.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying stream.</dd>
 </dl>
@@ -185,9 +207,70 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.mar
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="setMaxLength(int)">
+<h3>setMaxLength</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-70">setMaxLength</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Sets the maximum allowed wire-declared length (in bytes) for payloads and element counts read off the
+ stream before they are used to size an allocation or drive a container loop.
+
+ <p>
+ Guards against malformed input where a small payload declares a huge or negative length that would
+ otherwise trigger <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/OutOfMemoryError.html" title="class or interface in java.lang" class="external-link"><code>OutOfMemoryError</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NegativeArraySizeException.html" title="class or interface in java.lang" class="external-link"><code>NegativeArraySizeException</code></a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The maximum length in bytes.  Values &le; 0 disable the cap (only the negative-length check remains).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="checkLength(long,java.lang.String)">
+<h3>checkLength</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-83">checkLength</a></span><wbr><span class="parameters">(long&nbsp;len,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;what)</span>
+                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Validates a wire-declared length/count against sane bounds before it is used to size an allocation or
+ drive a container loop, using this stream's configured maximum.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>len</code> - The declared length/count read off the wire.</dd>
+<dd><code>what</code> - A short description of the field being read (for the error message).</dd>
+<dt>Returns:</dt>
+<dd>The validated length as an int.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the length is negative (or beyond int range) or exceeds the configured maximum.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="checkLength(long,long,java.lang.String)">
+<h3>checkLength</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-102">checkLength</a></span><wbr><span class="parameters">(long&nbsp;len,
+ long&nbsp;maxLength,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;what)</span>
+                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Validates a wire-declared length/count against sane bounds before it is used to size an allocation or
+ drive a container loop.
+
+ <p>
+ Shared bounds-check used by the stream-based parsers and by other low-level readers (such as the
+ Protobuf reader) that do not extend this class but need the same guard.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>len</code> - The declared length/count read off the wire.</dd>
+<dd><code>maxLength</code> - The maximum allowed length.  Values &le; 0 are treated as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html#MAX_VALUE" title="class or interface in java.lang" class="external-link"><code>Integer.MAX_VALUE</code></a>
+   (only the negative-length check applies).</dd>
+<dd><code>what</code> - A short description of the field being read (for the error message).</dd>
+<dt>Returns:</dt>
+<dd>The validated length as an int.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the length is negative (or beyond int range) or exceeds the configured maximum.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getPosition()">
 <h3>getPosition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Position.html" title="class in org.apache.juneau.marshall.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-55">getPosition</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Position.html" title="class in org.apache.juneau.marshall.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-111">getPosition</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Positionable.html#getPosition()">Positionable</a></code></span></div>
 <div class="block">Returns the current position in a reader or input stream.</div>
 <dl class="notes">
@@ -201,7 +284,7 @@ implements <a href="Positionable.html" title="interface in org.apache.juneau.mar
 <li>
 <section class="detail" id="read()">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-58">read</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserInputStream.html#line-114">read</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>

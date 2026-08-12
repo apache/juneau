@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46">public class StringRange {</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
 <span class="source-line-no">048</span><span id="line-48">   private static HeaderElement parse(String value) {</span>
-<span class="source-line-no">049</span><span id="line-49">      HeaderElement[] elements = HeaderValueParser.parseElements(emptyIfNull(trim(value)));</span>
+<span class="source-line-no">049</span><span id="line-49">      HeaderElement[] elements = HeaderValueParser.readElements(emptyIfNull(trim(value)));</span>
 <span class="source-line-no">050</span><span id="line-50">      return (elements.length &gt; 0 ? elements[0] : new HeaderElement("*", NameValuePair.EMPTY_ARRAY));</span>
 <span class="source-line-no">051</span><span id="line-51">   }</span>
 <span class="source-line-no">052</span><span id="line-52"></span>

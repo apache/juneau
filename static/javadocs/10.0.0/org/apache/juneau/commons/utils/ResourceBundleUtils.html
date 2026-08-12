@@ -128,8 +128,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Same as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ResourceBundle.html#getBundle(java.lang.String,java.util.Locale,java.lang.ClassLoader)" title="class or interface in java.util" class="external-link"><code>ResourceBundle.getBundle(String, Locale, ClassLoader)</code></a> but never throws a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/MissingResourceException.html" title="class or interface in java.util" class="external-link"><code>MissingResourceException</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>baseName</code> - The base name of the resource bundle, a fully qualified class name.</dd>
-<dd><code>locale</code> - The locale for which a resource bundle is desired.</dd>
+<dd><code>baseName</code> - The base name of the resource bundle, a fully qualified class name.  Must not be <jk>null</jk>.</dd>
+<dd><code>locale</code> - The locale for which a resource bundle is desired.  Must not be <jk>null</jk>.</dd>
 <dd><code>loader</code> - The class loader from which to load the resource bundle. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The matching resource bundle, or <jk>null</jk> if it could not be found.</dd>

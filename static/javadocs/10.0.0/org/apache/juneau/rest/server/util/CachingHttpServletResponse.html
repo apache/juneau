@@ -176,7 +176,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>res</code> - The wrapped servlet response.</dd>
+<dd><code>res</code> - The wrapped servlet response. Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying stream.</dd>
 </dl>
@@ -198,9 +198,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Wraps the specified response inside a <a href="CachingHttpServletResponse.html" title="class in org.apache.juneau.rest.server.util"><code>CachingHttpServletResponse</code></a> if it isn't already.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>res</code> - The response to wrap.</dd>
+<dd><code>res</code> - The response to wrap. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The wrapped request.</dd>
+<dd>The wrapped response.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying content stream.</dd>
 </dl>

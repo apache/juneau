@@ -422,8 +422,8 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau.commons
  immediately after construction.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>bean</code> - The bean to wrap inside this map.</dd>
-<dd><code>meta</code> - The metadata associated with the bean class.</dd>
+<dd><code>bean</code> - The bean to wrap inside this map.  Can be <jk>null</jk> for a read-only bean whose properties are supplied later and instantiated via <a href="#getBean()"><code>getBean()</code></a>.</dd>
+<dd><code>meta</code> - The metadata associated with the bean class.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -444,7 +444,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau.commons
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>bean</code> - The bean being wrapped.</dd>
+<dd><code>bean</code> - The bean being wrapped.  Must not be <jk>null</jk> (its runtime class is used to build the metadata).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="BeanMap.html" title="class in org.apache.juneau.commons.bean"><code>BeanMap</code></a> instance wrapping the bean.</dd>
 </dl>
@@ -465,7 +465,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau.commons
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
-<dd><code>bean</code> - The bean being wrapped.</dd>
+<dd><code>bean</code> - The bean being wrapped.  Can be <jk>null</jk> for a read-only bean whose properties are supplied later and instantiated via <a href="#getBean()"><code>getBean()</code></a>.</dd>
 <dd><code>meta</code> - The bean metadata.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="BeanMap.html" title="class in org.apache.juneau.commons.bean"><code>BeanMap</code></a> instance wrapping the bean.</dd>
@@ -485,7 +485,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau.commons
  conversions) after bean-modeling construction.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The bean session that produced this bean map.  Typically a marshalling-session implementation.</dd>
+<dd><code>value</code> - The bean session that produced this bean map.  Typically a marshalling-session implementation.  Can be <jk>null</jk> to detach the session.</dd>
 </dl>
 </section>
 </li>
@@ -502,7 +502,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau.commons
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>property</code> - Property name or child-element name (if <code>@Xml(childName)</code> is specified).</dd>
-<dd><code>value</code> - The value to add to the collection or array.</dd>
+<dd><code>value</code> - The value to add to the collection or array.  Can be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -879,7 +879,7 @@ implements <a href="Delegate.html" title="interface in org.apache.juneau.commons
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractMap.html#put(K,V)" title="class or interface in java.util" class="external-link">put</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractMap.html" title="class or interface in java.util" class="external-link">AbstractMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>property</code> - The name of the property to set.</dd>
-<dd><code>value</code> - The value to set the property to.</dd>
+<dd><code>value</code> - The value to set the property to.  Can be <jk>null</jk> to set the property to <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>If the <code>beanMapPutReturnsOldValue</code> setting is <jk>true</jk> on the session's bean configuration,
    then the old value of the property is returned.

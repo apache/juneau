@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40">    */</span>
 <span class="source-line-no">041</span><span id="line-41">   private DateUtils() {}</span>
 <span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">   private static final Cache&lt;String, DateTimeFormatter&gt; DATE_TIME_FORMATTER_CACHE = Cache.of(String.class, DateTimeFormatter.class)</span>
+<span class="source-line-no">043</span><span id="line-43">   private static final Cache&lt;String,DateTimeFormatter&gt; DATE_TIME_FORMATTER_CACHE = Cache.of(String.class, DateTimeFormatter.class)</span>
 <span class="source-line-no">044</span><span id="line-44">      .maxSize(100)</span>
 <span class="source-line-no">045</span><span id="line-45">      .supplier(pattern -&gt; {</span>
 <span class="source-line-no">046</span><span id="line-46">         if (isEmpty(pattern))</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61">   /**</span>
 <span class="source-line-no">062</span><span id="line-62">    * Returns a {@link DateTimeFormatter} using either a pattern or predefined pattern name.</span>
 <span class="source-line-no">063</span><span id="line-63">    *</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param pattern The pattern (e.g. &lt;js&gt;"yyyy-MM-dd"&lt;/js&gt;) or pattern name (e.g. &lt;js&gt;"ISO_INSTANT"&lt;/js&gt;).</span>
+<span class="source-line-no">064</span><span id="line-64">    * @param pattern The pattern (e.g. &lt;js&gt;"yyyy-MM-dd"&lt;/js&gt;) or pattern name (e.g. &lt;js&gt;"ISO_INSTANT"&lt;/js&gt;).  Can be &lt;jk&gt;null&lt;/jk&gt; or empty, in which case {@link DateTimeFormatter#ISO_INSTANT} is returned.</span>
 <span class="source-line-no">065</span><span id="line-65">    * @return The formatter.</span>
 <span class="source-line-no">066</span><span id="line-66">    */</span>
 <span class="source-line-no">067</span><span id="line-67">   public static DateTimeFormatter getDateTimeFormatter(String pattern) {</span>

@@ -76,7 +76,7 @@ loadScripts(document, 'script');</script>
 
  <ul class='javatreec'>
    <li class='jc'><a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>EchoMixin</code></a> —
-      <code>/echo/*</code> and <code>/debug/echo/*</code> request echo, gated behind the host's
+      <code>/echo/*</code> request echo (SVL-configurable mount), gated behind the host's
       <a href="../debug/DebugEnablement.html" title="class in org.apache.juneau.rest.server.debug"><code>DebugEnablement</code></a>; sensitive headers
       (<code>Authorization</code>, <code>Cookie</code>, etc.) are redacted by default.
    <li class='jc'><a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminMixin</code></a> —
@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
       <a href="../guard/DenyAllGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>DenyAllGuard</code></a> until the importer registers an
       <code>@Bean RestGuardList</code> factory.
    <li class='jc'><a href="RouteIndexMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>RouteIndexMixin</code></a> —
-      <code>/options</code> and <code>/routes</code> returning a JSON list of every
+      <code>/options</code> (SVL-configurable mount) returning a JSON list of every
       <code>@RestOp</code>-annotated method on the host (plus mixins), excluding
       <code>@OpSwagger(ignore=true)</code> ops.
  </ul>

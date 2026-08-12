@@ -31,119 +31,162 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.rest.server.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.processor.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.view.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">import freemarker.template.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">/**</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@link ResponseProcessor} that detects {@link FreemarkerView}-typed return values and asks the</span>
-<span class="source-line-no">030</span><span id="line-30"> * configured {@link Configuration} to render them directly onto the response writer.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * Auto-registered by {@link FreemarkerMixin} via</span>
-<span class="source-line-no">034</span><span id="line-34"> * {@link Rest#responseProcessors() @Rest(responseProcessors=...)}</span>
-<span class="source-line-no">035</span><span id="line-35"> * &amp;mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want</span>
-<span class="source-line-no">036</span><span id="line-36"> * to handle {@code FreemarkerView} returns &lt;i&gt;without&lt;/i&gt; adopting the mixin can add this class</span>
-<span class="source-line-no">037</span><span id="line-37"> * to their own</span>
-<span class="source-line-no">038</span><span id="line-38"> * {@link Rest#responseProcessors() responseProcessors} list.</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;ol class='spaced-list'&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Inspect the response content. If the value is not a {@link FreemarkerView}, return</span>
-<span class="source-line-no">044</span><span id="line-44"> *       {@link ResponseProcessor#NEXT NEXT} so the rest of the chain runs.</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Read the active {@link FreemarkerMixin} from the {@code RestContext} bean store</span>
-<span class="source-line-no">046</span><span id="line-46"> *       to discover the {@link Configuration} (lazy default if no configuration bean is</span>
-<span class="source-line-no">047</span><span id="line-47"> *       registered) and the optional template-suffix knob.</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;Apply every entry from {@link FreemarkerView#getResponseHeaders()} via</span>
-<span class="source-line-no">049</span><span id="line-49"> *       {@link jakarta.servlet.http.HttpServletResponse#setHeader(String, String)</span>
-<span class="source-line-no">050</span><span id="line-50"> *       res.setHeader(...)}.</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;li&gt;Default {@code Content-Type} to {@code text/html;charset=UTF-8} if the caller did not set</span>
-<span class="source-line-no">052</span><span id="line-52"> *       one explicitly. FreeMarker's bridge-default {@code Configuration} uses</span>
-<span class="source-line-no">053</span><span id="line-53"> *       {@code HTMLOutputFormat} so HTML is the natural target; an explicit caller header wins.</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;li&gt;Call {@code configuration.getTemplate(templateName).process(view.getAttributes(),</span>
-<span class="source-line-no">055</span><span id="line-55"> *       res.getWriter())} to stream the rendered output.</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;When no FreeMarker engine is on the classpath, the {@link Configuration}-typed import</span>
-<span class="source-line-no">057</span><span id="line-57"> *       here fails to load at first use and surfaces {@link #NO_ENGINE_DIAGNOSTIC} naming the</span>
-<span class="source-line-no">058</span><span id="line-58"> *       missing dependency.</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;/ol&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='jc'&gt;{@link FreemarkerMixin}</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link FreemarkerView}</span>
-<span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors"&gt;Response Processors&lt;/a&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport"&gt;FreeMarker View Support&lt;/a&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/ul&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * @since 10.0.0</span>
-<span class="source-line-no">069</span><span id="line-69"> */</span>
-<span class="source-line-no">070</span><span id="line-70">@SuppressWarnings({</span>
-<span class="source-line-no">071</span><span id="line-71">   "resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.</span>
-<span class="source-line-no">072</span><span id="line-72">})</span>
-<span class="source-line-no">073</span><span id="line-73">public class FreemarkerViewRenderer implements ViewRenderer {</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /** Default {@code Content-Type} applied when the view does not specify one explicitly. */</span>
-<span class="source-line-no">076</span><span id="line-76">   public static final String DEFAULT_CONTENT_TYPE = "text/html;charset=UTF-8";</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * Diagnostic message emitted when no FreeMarker engine can be found on the classpath at</span>
-<span class="source-line-no">080</span><span id="line-80">    * render-time.</span>
-<span class="source-line-no">081</span><span id="line-81">    *</span>
-<span class="source-line-no">082</span><span id="line-82">    * &lt;p&gt;</span>
-<span class="source-line-no">083</span><span id="line-83">    * Public so tests and consumer apps can pattern-match against the message text without</span>
-<span class="source-line-no">084</span><span id="line-84">    * depending on internal string literals.</span>
-<span class="source-line-no">085</span><span id="line-85">    */</span>
-<span class="source-line-no">086</span><span id="line-86">   public static final String NO_ENGINE_DIAGNOSTIC = """</span>
-<span class="source-line-no">087</span><span id="line-87">      No Apache FreeMarker engine is available on the classpath. Add:</span>
-<span class="source-line-no">088</span><span id="line-88">        - org.freemarker:freemarker                       (FreeMarker engine core)</span>
-<span class="source-line-no">089</span><span id="line-89">      Or, for Spring Boot:</span>
-<span class="source-line-no">090</span><span id="line-90">        - org.springframework.boot:spring-boot-starter-freemarker</span>
-<span class="source-line-no">091</span><span id="line-91">          (autoconfigures a freemarker.template.Configuration bean the bridge picks up).</span>
-<span class="source-line-no">092</span><span id="line-92">      Or register a custom @Bean freemarker.template.Configuration with whatever loaders /</span>
-<span class="source-line-no">093</span><span id="line-93">      encodings / output formats you need.</span>
-<span class="source-line-no">094</span><span id="line-94">      See https://juneau.apache.org/docs/topics/FreemarkerViewSupport for the full matrix.""";</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   @Override /* Overridden from ResponseProcessor */</span>
-<span class="source-line-no">097</span><span id="line-97">   public int process(RestOpSession opSession) throws IOException, BasicHttpException {</span>
-<span class="source-line-no">098</span><span id="line-98">      var req = opSession.getRequest();</span>
-<span class="source-line-no">099</span><span id="line-99">      var res = opSession.getResponse();</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">      var content = res.getContent(Object.class);</span>
-<span class="source-line-no">102</span><span id="line-102">      if (! (content instanceof FreemarkerView view))</span>
-<span class="source-line-no">103</span><span id="line-103">         return NEXT;</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">      // Resolve the bridge resource (carries Configuration + cached default + templateSuffix).</span>
-<span class="source-line-no">106</span><span id="line-106">      // Fall back to a fresh FreemarkerMixin when the renderer is used standalone</span>
-<span class="source-line-no">107</span><span id="line-107">      // without the mixin.</span>
-<span class="source-line-no">108</span><span id="line-108">      var bridge = req.getContext().getBeanStore()</span>
-<span class="source-line-no">109</span><span id="line-109">         .getBean(FreemarkerMixin.class)</span>
-<span class="source-line-no">110</span><span id="line-110">         .orElseGet(FreemarkerMixin::new);</span>
-<span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">      // Apply caller-supplied response headers first so a caller-provided Content-Type wins</span>
-<span class="source-line-no">113</span><span id="line-113">      // over the bridge's default below.</span>
-<span class="source-line-no">114</span><span id="line-114">      view.getResponseHeaders().forEach(res::setHeader);</span>
-<span class="source-line-no">115</span><span id="line-115">      if (! res.containsHeader("Content-Type"))</span>
-<span class="source-line-no">116</span><span id="line-116">         res.setHeader("Content-Type", DEFAULT_CONTENT_TYPE);</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">      var templateName = bridge.applyTemplateSuffix(view.getTemplateName());</span>
-<span class="source-line-no">119</span><span id="line-119">      try {</span>
-<span class="source-line-no">120</span><span id="line-120">         var cfg = bridge.resolveConfiguration(req);</span>
-<span class="source-line-no">121</span><span id="line-121">         var template = cfg.getTemplate(templateName);</span>
-<span class="source-line-no">122</span><span id="line-122">         template.process(view.getAttributes(), res.getWriter());</span>
-<span class="source-line-no">123</span><span id="line-123">         res.getWriter().flush();</span>
-<span class="source-line-no">124</span><span id="line-124">         return FINISHED;</span>
-<span class="source-line-no">125</span><span id="line-125">      } catch (LinkageError ex) {</span>
-<span class="source-line-no">126</span><span id="line-126">         throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);</span>
-<span class="source-line-no">127</span><span id="line-127">      } catch (IOException ex) {</span>
-<span class="source-line-no">128</span><span id="line-128">         throw ex;</span>
-<span class="source-line-no">129</span><span id="line-129">      } catch (TemplateException | RuntimeException ex) {</span>
-<span class="source-line-no">130</span><span id="line-130">         throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", templateName);</span>
-<span class="source-line-no">131</span><span id="line-131">      }</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133">}</span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.processor.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.rest.server.view.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">import freemarker.template.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link ResponseProcessor} that detects {@link FreemarkerView}-typed return values and asks the</span>
+<span class="source-line-no">031</span><span id="line-31"> * configured {@link Configuration} to render them directly onto the response writer.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * Auto-registered by {@link FreemarkerMixin} via</span>
+<span class="source-line-no">035</span><span id="line-35"> * {@link Rest#responseProcessors() @Rest(responseProcessors=...)}</span>
+<span class="source-line-no">036</span><span id="line-36"> * &amp;mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want</span>
+<span class="source-line-no">037</span><span id="line-37"> * to handle {@code FreemarkerView} returns &lt;i&gt;without&lt;/i&gt; adopting the mixin can add this class</span>
+<span class="source-line-no">038</span><span id="line-38"> * to their own</span>
+<span class="source-line-no">039</span><span id="line-39"> * {@link Rest#responseProcessors() responseProcessors} list.</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;ol class='spaced-list'&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Inspect the response content. If the value is not a {@link FreemarkerView}, return</span>
+<span class="source-line-no">045</span><span id="line-45"> *       {@link ResponseProcessor#NEXT NEXT} so the rest of the chain runs.</span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Read the active {@link FreemarkerMixin} from the {@code RestContext} bean store</span>
+<span class="source-line-no">047</span><span id="line-47"> *       to discover the {@link Configuration} (lazy default if no configuration bean is</span>
+<span class="source-line-no">048</span><span id="line-48"> *       registered) and the optional template-suffix knob.</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;Apply every entry from {@link FreemarkerView#getResponseHeaders()} via</span>
+<span class="source-line-no">050</span><span id="line-50"> *       {@link jakarta.servlet.http.HttpServletResponse#setHeader(String, String)</span>
+<span class="source-line-no">051</span><span id="line-51"> *       res.setHeader(...)}.</span>
+<span class="source-line-no">052</span><span id="line-52"> *    &lt;li&gt;Default {@code Content-Type} to {@code text/html;charset=UTF-8} if the caller did not set</span>
+<span class="source-line-no">053</span><span id="line-53"> *       one explicitly. FreeMarker's bridge-default {@code Configuration} uses</span>
+<span class="source-line-no">054</span><span id="line-54"> *       {@code HTMLOutputFormat} so HTML is the natural target; an explicit caller header wins.</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;Call {@code configuration.getTemplate(templateName).process(view.getAttributes(),</span>
+<span class="source-line-no">056</span><span id="line-56"> *       res.getWriter())} to stream the rendered output.</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;li&gt;When no FreeMarker engine is on the classpath, the {@link Configuration}-typed import</span>
+<span class="source-line-no">058</span><span id="line-58"> *       here fails to load at first use and surfaces {@link #NO_ENGINE_DIAGNOSTIC} naming the</span>
+<span class="source-line-no">059</span><span id="line-59"> *       missing dependency.</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;/ol&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link FreemarkerMixin}</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='jc'&gt;{@link FreemarkerView}</span>
+<span class="source-line-no">065</span><span id="line-65"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors"&gt;Response Processors&lt;/a&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport"&gt;FreeMarker View Support&lt;/a&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;/ul&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *</span>
+<span class="source-line-no">069</span><span id="line-69"> * @since 10.0.0</span>
+<span class="source-line-no">070</span><span id="line-70"> */</span>
+<span class="source-line-no">071</span><span id="line-71">@SuppressWarnings({</span>
+<span class="source-line-no">072</span><span id="line-72">   "resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.</span>
+<span class="source-line-no">073</span><span id="line-73">})</span>
+<span class="source-line-no">074</span><span id="line-74">public class FreemarkerViewRenderer implements ViewRenderer {</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /** Default {@code Content-Type} applied when the view does not specify one explicitly. */</span>
+<span class="source-line-no">077</span><span id="line-77">   public static final String DEFAULT_CONTENT_TYPE = "text/html;charset=UTF-8";</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Diagnostic message emitted when no FreeMarker engine can be found on the classpath at</span>
+<span class="source-line-no">081</span><span id="line-81">    * render-time.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * &lt;p&gt;</span>
+<span class="source-line-no">084</span><span id="line-84">    * Public so tests and consumer apps can pattern-match against the message text without</span>
+<span class="source-line-no">085</span><span id="line-85">    * depending on internal string literals.</span>
+<span class="source-line-no">086</span><span id="line-86">    */</span>
+<span class="source-line-no">087</span><span id="line-87">   public static final String NO_ENGINE_DIAGNOSTIC = """</span>
+<span class="source-line-no">088</span><span id="line-88">      No Apache FreeMarker engine is available on the classpath. Add:</span>
+<span class="source-line-no">089</span><span id="line-89">        - org.freemarker:freemarker                       (FreeMarker engine core)</span>
+<span class="source-line-no">090</span><span id="line-90">      Or, for Spring Boot:</span>
+<span class="source-line-no">091</span><span id="line-91">        - org.springframework.boot:spring-boot-starter-freemarker</span>
+<span class="source-line-no">092</span><span id="line-92">          (autoconfigures a freemarker.template.Configuration bean the bridge picks up).</span>
+<span class="source-line-no">093</span><span id="line-93">      Or register a custom @Bean freemarker.template.Configuration with whatever loaders /</span>
+<span class="source-line-no">094</span><span id="line-94">      encodings / output formats you need.</span>
+<span class="source-line-no">095</span><span id="line-95">      See https://juneau.apache.org/docs/topics/FreemarkerViewSupport for the full matrix.""";</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   // Lazily-created fallback used when no FreemarkerMixin bean is registered.  Cached (double-checked) so</span>
+<span class="source-line-no">098</span><span id="line-98">   // the bridge-default Configuration and its template cache are built once instead of rebuilt per render.</span>
+<span class="source-line-no">099</span><span id="line-99">   // Created lazily (not eagerly) so a missing FreeMarker engine still surfaces at render time as</span>
+<span class="source-line-no">100</span><span id="line-100">   // NO_ENGINE_DIAGNOSTIC rather than during RestContext construction.</span>
+<span class="source-line-no">101</span><span id="line-101">   @SuppressWarnings({</span>
+<span class="source-line-no">102</span><span id="line-102">      "java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-built fallback FreemarkerMixin in fallbackMixin(); the reference is publish-once (fully constructed before assignment, immutable thereafter) and never compound-mutated.</span>
+<span class="source-line-no">103</span><span id="line-103">   })</span>
+<span class="source-line-no">104</span><span id="line-104">   private volatile FreemarkerMixin fallbackMixin;</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   @Override /* Overridden from ResponseProcessor */</span>
+<span class="source-line-no">107</span><span id="line-107">   public int process(RestOpSession opSession) throws IOException, BasicHttpException {</span>
+<span class="source-line-no">108</span><span id="line-108">      var req = opSession.getRequest();</span>
+<span class="source-line-no">109</span><span id="line-109">      var res = opSession.getResponse();</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">      var content = res.getContent(Object.class);</span>
+<span class="source-line-no">112</span><span id="line-112">      if (! (content instanceof FreemarkerView content2))</span>
+<span class="source-line-no">113</span><span id="line-113">         return NEXT;</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">      // Resolve the bridge resource (carries Configuration + cached default + templateSuffix).</span>
+<span class="source-line-no">116</span><span id="line-116">      // Fall back to a cached FreemarkerMixin when the renderer is used standalone</span>
+<span class="source-line-no">117</span><span id="line-117">      // without the mixin.</span>
+<span class="source-line-no">118</span><span id="line-118">      var bridge = req.getContext().getBeanStore()</span>
+<span class="source-line-no">119</span><span id="line-119">         .getBean(FreemarkerMixin.class)</span>
+<span class="source-line-no">120</span><span id="line-120">         .orElseGet(this::fallbackMixin);</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">      // Apply caller-supplied response headers first so a caller-provided Content-Type wins</span>
+<span class="source-line-no">123</span><span id="line-123">      // over the bridge's default below.</span>
+<span class="source-line-no">124</span><span id="line-124">      content2.getResponseHeaders().forEach(res::setHeader);</span>
+<span class="source-line-no">125</span><span id="line-125">      if (! res.containsHeader("Content-Type"))</span>
+<span class="source-line-no">126</span><span id="line-126">         res.setHeader("Content-Type", DEFAULT_CONTENT_TYPE);</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">      // Apply the same traversal gate the raw /freemarker/* mount uses so a typed-View template name</span>
+<span class="source-line-no">129</span><span id="line-129">      // assembled from user input (e.g. FreemarkerView.of(userInput)) cannot escape the configured base</span>
+<span class="source-line-no">130</span><span id="line-130">      // path via '../' segments.  Mirrors the JSP bridge's typed-View gate.</span>
+<span class="source-line-no">131</span><span id="line-131">      String safeName;</span>
+<span class="source-line-no">132</span><span id="line-132">      try {</span>
+<span class="source-line-no">133</span><span id="line-133">         safeName = gateTemplateName(bridge.getBasePath(), content2.getTemplateName());</span>
+<span class="source-line-no">134</span><span id="line-134">      } catch (IllegalArgumentException ex) {</span>
+<span class="source-line-no">135</span><span id="line-135">         throw new InternalServerError(ex, "FreeMarker template name escapes configured base path: '%s'", content2.getTemplateName());</span>
+<span class="source-line-no">136</span><span id="line-136">      }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">      var templateName = bridge.applyTemplateSuffix(safeName);</span>
+<span class="source-line-no">139</span><span id="line-139">      try {</span>
+<span class="source-line-no">140</span><span id="line-140">         var cfg = bridge.resolveConfiguration(req);</span>
+<span class="source-line-no">141</span><span id="line-141">         var template = cfg.getTemplate(templateName);</span>
+<span class="source-line-no">142</span><span id="line-142">         template.process(content2.getAttributes(), res.getWriter());</span>
+<span class="source-line-no">143</span><span id="line-143">         res.getWriter().flush();</span>
+<span class="source-line-no">144</span><span id="line-144">         return FINISHED;</span>
+<span class="source-line-no">145</span><span id="line-145">      } catch (LinkageError ex) {</span>
+<span class="source-line-no">146</span><span id="line-146">         throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);</span>
+<span class="source-line-no">147</span><span id="line-147">      } catch (IOException ex) {</span>
+<span class="source-line-no">148</span><span id="line-148">         throw ex;</span>
+<span class="source-line-no">149</span><span id="line-149">      } catch (TemplateException | RuntimeException ex) {</span>
+<span class="source-line-no">150</span><span id="line-150">         throw new InternalServerError(ex, "FreeMarker render failed for '%s'", templateName);</span>
+<span class="source-line-no">151</span><span id="line-151">      }</span>
+<span class="source-line-no">152</span><span id="line-152">   }</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">   // Rejects '../'-style traversal in a typed-View template name using the same virtual-path gate the raw</span>
+<span class="source-line-no">155</span><span id="line-155">   // mount applies, returning the configuration-relative template name.  Delegates to the shared</span>
+<span class="source-line-no">156</span><span id="line-156">   // FileUtils.resolveVirtualPathSafely + FreemarkerDispatcher.stripBasePath used by the raw render path.</span>
+<span class="source-line-no">157</span><span id="line-157">   static String gateTemplateName(String basePath, String templateName) {</span>
+<span class="source-line-no">158</span><span id="line-158">      var resolved = FileUtils.resolveVirtualPathSafely(basePath, templateName);</span>
+<span class="source-line-no">159</span><span id="line-159">      return FreemarkerDispatcher.stripBasePath(basePath, resolved);</span>
+<span class="source-line-no">160</span><span id="line-160">   }</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">   // Returns the cached fallback mixin, creating it once (double-checked) on first standalone render.</span>
+<span class="source-line-no">163</span><span id="line-163">   private FreemarkerMixin fallbackMixin() {</span>
+<span class="source-line-no">164</span><span id="line-164">      var local = fallbackMixin;</span>
+<span class="source-line-no">165</span><span id="line-165">      if (local == null) {</span>
+<span class="source-line-no">166</span><span id="line-166">         synchronized (this) {</span>
+<span class="source-line-no">167</span><span id="line-167">            local = fallbackMixin;</span>
+<span class="source-line-no">168</span><span id="line-168">            if (local == null) {</span>
+<span class="source-line-no">169</span><span id="line-169">               local = new FreemarkerMixin();</span>
+<span class="source-line-no">170</span><span id="line-170">               fallbackMixin = local;</span>
+<span class="source-line-no">171</span><span id="line-171">            }</span>
+<span class="source-line-no">172</span><span id="line-172">         }</span>
+<span class="source-line-no">173</span><span id="line-173">      }</span>
+<span class="source-line-no">174</span><span id="line-174">      return local;</span>
+<span class="source-line-no">175</span><span id="line-175">   }</span>
+<span class="source-line-no">176</span><span id="line-176">}</span>
 
 
 

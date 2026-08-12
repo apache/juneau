@@ -194,35 +194,50 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Create a session builder based on the properties defined on this context.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParquetBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetBeanPropertyMeta</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParquetBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getParquetBeanPropertyMeta</a><wbr>(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxCount()" class="member-name-link">getMaxCount</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the maximum allowed wire-declared element count (row/value counts).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxInputLength()" class="member-name-link">getMaxInputLength</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the maximum allowed size (in bytes) of the whole Parquet input buffered before parsing.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxLength()" class="member-name-link">getMaxLength</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the maximum allowed wire-declared length (in bytes) for a single Parquet page.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParquetBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetBeanPropertyMeta</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParquetBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getParquetBeanPropertyMeta</a><wbr>(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the Parquet-specific metadata on the specified bean property.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParquetClassMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetClassMeta</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParquetClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getParquetClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParquetClassMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetClassMeta</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getParquetClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getParquetClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the Parquet-specific metadata on the specified class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isArrayRecordStreaming()" class="member-name-link">isArrayRecordStreaming</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isArrayRecordStreaming()" class="member-name-link">isArrayRecordStreaming</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The Parquet array-record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRecordStreaming()" class="member-name-link">isRecordStreaming</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRecordStreaming()" class="member-name-link">isRecordStreaming</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The Parquet record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseArrayRecords(java.lang.Object)" class="member-name-link">parseArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readArrayRecords(java.lang.Object)" class="member-name-link">readArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator for the buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default
  session arguments</b>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseRecords(java.lang.Object)" class="member-name-link">parseRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readRecords(java.lang.Object)" class="member-name-link">readRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Convenience delegator for the whole-value <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default session
  arguments</b>.</div>
 </div>
@@ -234,7 +249,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <code><a href="../parser/InputStreamParser.html#getBinaryFormat()">getBinaryFormat</a>, <a href="../parser/InputStreamParser.html#getSession()">getSession</a>, <a href="../parser/InputStreamParser.html#isReaderParser()">isReaderParser</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.Parser">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></h3>
-<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doParse</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parseArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">parseArgs</a>, <a href="../parser/Parser.html#parseIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../parser/Parser.html#parseIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">parseIntoMap</a>, <a href="../parser/Parser.html#parseWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">parseWithOuter</a>, <a href="../parser/Parser.html#properties()">properties</a></code></div>
+<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doRead</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#properties()">properties</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#readArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">readArgs</a>, <a href="../parser/Parser.html#readIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">readIntoCollection</a>, <a href="../parser/Parser.html#readIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">readIntoMap</a>, <a href="../parser/Parser.html#readWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">readWithOuter</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingContextable">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingContextable.html" title="class in org.apache.juneau.marshall">MarshallingContextable</a></h3>
 <code><a href="../MarshallingContextable.html#getDurationFormat()">getDurationFormat</a>, <a href="../MarshallingContextable.html#getMarshallingContext()">getMarshallingContext</a>, <a href="../MarshallingContextable.html#getPeriodFormat()">getPeriodFormat</a></code></div>
@@ -246,7 +261,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.ArrayRecordReadable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></h3>
-<code><a href="../stream/ArrayRecordReadable.html#parseArrayRecords(java.lang.Object,java.lang.String)">parseArrayRecords</a></code></div>
+<code><a href="../stream/ArrayRecordReadable.html#readArrayRecords(java.lang.Object,java.lang.String)">readArrayRecords</a></code></div>
 </section>
 </li>
 </ul>
@@ -261,7 +276,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParquetParser.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-55">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParquetParser.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-59">DEFAULT</a></span></div>
 <div class="block">Default parser.</div>
 </section>
 </li>
@@ -276,7 +291,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parquet.ParquetParser.Builder)">
 <h3>ParquetParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-130">ParquetParser</a></span><wbr><span class="parameters">(<a href="ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-199">ParquetParser</a></span><wbr><span class="parameters">(<a href="ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -295,7 +310,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-119">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-185">create</a></span>()</div>
 <div class="block">Creates a new parser builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -304,9 +319,42 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
+<section class="detail" id="getMaxLength()">
+<h3>getMaxLength</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-212">getMaxLength</a></span>()</div>
+<div class="block">Returns the maximum allowed wire-declared length (in bytes) for a single Parquet page.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The maximum length in bytes.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaxCount()">
+<h3>getMaxCount</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-221">getMaxCount</a></span>()</div>
+<div class="block">Returns the maximum allowed wire-declared element count (row/value counts).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The maximum count.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getMaxInputLength()">
+<h3>getMaxInputLength</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-230">getMaxInputLength</a></span>()</div>
+<div class="block">Returns the maximum allowed size (in bytes) of the whole Parquet input buffered before parsing.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The maximum input size in bytes.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-135">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-234">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -323,7 +371,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetParserSession.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-140">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetParserSession.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-239">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -341,7 +389,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getParquetBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getParquetBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-145">getParquetBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-244">getParquetBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ParquetMetaProvider.html#getParquetBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">ParquetMetaProvider</a></code></span></div>
 <div class="block">Returns the Parquet-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -357,7 +405,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getParquetClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getParquetClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetClassMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-151">getParquetClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetClassMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-250">getParquetClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ParquetMetaProvider.html#getParquetClassMeta(org.apache.juneau.marshall.ClassMeta)">ParquetMetaProvider</a></code></span></div>
 <div class="block">Returns the Parquet-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -371,16 +419,16 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
-<section class="detail" id="parseRecords(java.lang.Object)">
-<h3>parseRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-165">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readRecords(java.lang.Object)">
+<h3>readRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-264">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the whole-value <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default session
  arguments</b>.  The real implementation lives on
- <a href="ParquetParserSession.html#parseRecords(java.lang.Object)"><code>ParquetParserSession.parseRecords(Object)</code></a>.</div>
+ <a href="ParquetParserSession.html#readRecords(java.lang.Object)"><code>ParquetParserSession.readRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/RecordReadable.html#parseRecords(java.lang.Object)">parseRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
+<dd><code><a href="../stream/RecordReadable.html#readRecords(java.lang.Object)">readRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -391,16 +439,16 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 </section>
 </li>
 <li>
-<section class="detail" id="parseArrayRecords(java.lang.Object)">
-<h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-179">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readArrayRecords(java.lang.Object)">
+<h3>readArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-278">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default
  session arguments</b>.  The real implementation lives on
- <a href="ParquetParserSession.html#parseArrayRecords(java.lang.Object)"><code>ParquetParserSession.parseArrayRecords(Object)</code></a>.</div>
+ <a href="ParquetParserSession.html#readArrayRecords(java.lang.Object)"><code>ParquetParserSession.readArrayRecords(Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordReadable.html#parseArrayRecords(java.lang.Object)">parseArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordReadable.html#readArrayRecords(java.lang.Object)">readArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -413,7 +461,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-189">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-288">isRecordStreaming</a></span>()</div>
 <div class="block">The Parquet record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -426,7 +474,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="isArrayRecordStreaming()">
 <h3>isArrayRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-197">isArrayRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetParser.html#line-296">isArrayRecordStreaming</a></span>()</div>
 <div class="block">The Parquet array-record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-26">Suppliers</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-27">Suppliers</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Supplier factories: memoizing wrappers moved from the former <code>Utils</code>.</div>
 </section>
@@ -142,7 +142,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Suppliers</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-33">Suppliers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-36">Suppliers</a></span>()</div>
 <div class="block">Constructor — this class is meant to be subclassed.</div>
 </section>
 </li>
@@ -157,15 +157,31 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="memoize(java.util.function.Supplier)">
 <h3>memoize</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-36">memoize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-45">memoize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</span></div>
 <div class="block">Thread-safe memoizing supplier (computes once, caches).</div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The type of value supplied.</dd>
+<dt>Parameters:</dt>
+<dd><code>supplier</code> - The underlying supplier to memoize.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new memoizing supplier.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="memoizer(java.util.function.Supplier)">
 <h3>memoizer</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-52">memoizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Suppliers.html#line-67">memoizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</span></div>
 <div class="block">Resettable memoizing supplier.</div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The type of value supplied.</dd>
+<dt>Parameters:</dt>
+<dd><code>supplier</code> - The underlying supplier to memoize.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new resettable memoizing supplier.</dd>
+</dl>
 </section>
 </li>
 </ul>

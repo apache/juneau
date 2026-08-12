@@ -64,56 +64,58 @@
 <span class="source-line-no">051</span><span id="line-51">    * Constructor.</span>
 <span class="source-line-no">052</span><span id="line-52">    *</span>
 <span class="source-line-no">053</span><span id="line-53">    * @param beanStore The bean store containing injectable beans for this provider.</span>
-<span class="source-line-no">054</span><span id="line-54">    */</span>
-<span class="source-line-no">055</span><span id="line-55">   public BasicOpenApiProvider(BeanStore beanStore) {</span>
-<span class="source-line-no">056</span><span id="line-56">      // @formatter:off</span>
-<span class="source-line-no">057</span><span id="line-57">      this(</span>
-<span class="source-line-no">058</span><span id="line-58">         OpenApiProvider</span>
-<span class="source-line-no">059</span><span id="line-59">            .create(beanStore)</span>
-<span class="source-line-no">060</span><span id="line-60">            .varResolver(()-&gt;beanStore.getBean(VarResolver.class).get())</span>
-<span class="source-line-no">061</span><span id="line-61">            .fileFinder(()-&gt;beanStore.getBean(FileFinder.class).get())</span>
-<span class="source-line-no">062</span><span id="line-62">            .messages(()-&gt;beanStore.getBean(Messages.class).get())</span>
-<span class="source-line-no">063</span><span id="line-63">            .jsonSchemaGenerator(()-&gt;beanStore.getBean(JsonSchemaGenerator.class).get())</span>
-<span class="source-line-no">064</span><span id="line-64">      );</span>
-<span class="source-line-no">065</span><span id="line-65">      // @formatter:on</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /**</span>
-<span class="source-line-no">069</span><span id="line-69">    * Constructor.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param builder The builder containing the settings for this OpenAPI provider.</span>
-<span class="source-line-no">072</span><span id="line-72">    */</span>
-<span class="source-line-no">073</span><span id="line-73">   public BasicOpenApiProvider(OpenApiProvider.Builder builder) {</span>
-<span class="source-line-no">074</span><span id="line-74">      this.beanStore = builder.beanStore;</span>
-<span class="source-line-no">075</span><span id="line-75">      this.vr = builder.varResolver().orElse(beanStore.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));</span>
-<span class="source-line-no">076</span><span id="line-76">      this.js = builder.jsonSchemaGenerator().orElse(beanStore.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));</span>
-<span class="source-line-no">077</span><span id="line-77">      this.messages = builder.messages().orElse(null);</span>
-<span class="source-line-no">078</span><span id="line-78">      this.fileFinder = builder.fileFinder().orElse(null);</span>
-<span class="source-line-no">079</span><span id="line-79">   }</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /**</span>
-<span class="source-line-no">082</span><span id="line-82">    * Returns the OpenAPI 3.1 document associated with the specified context of a {@link Rest}-annotated class.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * &lt;p&gt;</span>
-<span class="source-line-no">085</span><span id="line-85">    * Subclasses can override this to provide their own method for generating the document.</span>
-<span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * @param context The context of the {@link Rest}-annotated class.</span>
-<span class="source-line-no">088</span><span id="line-88">    * @param locale The request locale.</span>
-<span class="source-line-no">089</span><span id="line-89">    * @return A new {@link OpenApi} object.</span>
-<span class="source-line-no">090</span><span id="line-90">    * @throws Exception If an error occurred producing the document.</span>
-<span class="source-line-no">091</span><span id="line-91">    */</span>
-<span class="source-line-no">092</span><span id="line-92">   @Override /* Overridden from OpenApiProvider */</span>
-<span class="source-line-no">093</span><span id="line-93">   public OpenApi getOpenApi(RestContext context, Locale locale) throws Exception {</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">      var c = context.getResourceClass();</span>
-<span class="source-line-no">096</span><span id="line-96">      var ff = nn(fileFinder) ? fileFinder : FileFinder.create(beanStore).cp(c, null, false).build();</span>
-<span class="source-line-no">097</span><span id="line-97">      var mb = nn(messages) ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);</span>
-<span class="source-line-no">098</span><span id="line-98">      var vrs = vr.createSession().bean(Messages.class, mb);</span>
-<span class="source-line-no">099</span><span id="line-99">      var session = new BasicOpenApiProviderSession(context, locale, ff, mb, vrs, js.getSession());</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">      return session.getOpenApi();</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103">}</span>
+<span class="source-line-no">054</span><span id="line-54">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">055</span><span id="line-55">    */</span>
+<span class="source-line-no">056</span><span id="line-56">   public BasicOpenApiProvider(BeanStore beanStore) {</span>
+<span class="source-line-no">057</span><span id="line-57">      // @formatter:off</span>
+<span class="source-line-no">058</span><span id="line-58">      this(</span>
+<span class="source-line-no">059</span><span id="line-59">         OpenApiProvider</span>
+<span class="source-line-no">060</span><span id="line-60">            .create(beanStore)</span>
+<span class="source-line-no">061</span><span id="line-61">            .varResolver(()-&gt;beanStore.getBean(VarResolver.class).get())</span>
+<span class="source-line-no">062</span><span id="line-62">            .fileFinder(()-&gt;beanStore.getBean(FileFinder.class).get())</span>
+<span class="source-line-no">063</span><span id="line-63">            .messages(()-&gt;beanStore.getBean(Messages.class).get())</span>
+<span class="source-line-no">064</span><span id="line-64">            .jsonSchemaGenerator(()-&gt;beanStore.getBean(JsonSchemaGenerator.class).get())</span>
+<span class="source-line-no">065</span><span id="line-65">      );</span>
+<span class="source-line-no">066</span><span id="line-66">      // @formatter:on</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Constructor.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param builder The builder containing the settings for this OpenAPI provider.</span>
+<span class="source-line-no">073</span><span id="line-73">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">074</span><span id="line-74">    */</span>
+<span class="source-line-no">075</span><span id="line-75">   public BasicOpenApiProvider(OpenApiProvider.Builder builder) {</span>
+<span class="source-line-no">076</span><span id="line-76">      this.beanStore = builder.beanStore;</span>
+<span class="source-line-no">077</span><span id="line-77">      this.vr = builder.varResolver().orElse(beanStore.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));</span>
+<span class="source-line-no">078</span><span id="line-78">      this.js = builder.jsonSchemaGenerator().orElse(beanStore.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));</span>
+<span class="source-line-no">079</span><span id="line-79">      this.messages = builder.messages().orElse(null);</span>
+<span class="source-line-no">080</span><span id="line-80">      this.fileFinder = builder.fileFinder().orElse(null);</span>
+<span class="source-line-no">081</span><span id="line-81">   }</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /**</span>
+<span class="source-line-no">084</span><span id="line-84">    * Returns the OpenAPI 3.1 document associated with the specified context of a {@link Rest}-annotated class.</span>
+<span class="source-line-no">085</span><span id="line-85">    *</span>
+<span class="source-line-no">086</span><span id="line-86">    * &lt;p&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * Subclasses can override this to provide their own method for generating the document.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param context The context of the {@link Rest}-annotated class.</span>
+<span class="source-line-no">090</span><span id="line-90">    * @param locale The request locale.</span>
+<span class="source-line-no">091</span><span id="line-91">    * @return A new {@link OpenApi} object.</span>
+<span class="source-line-no">092</span><span id="line-92">    * @throws Exception If an error occurred producing the document.</span>
+<span class="source-line-no">093</span><span id="line-93">    */</span>
+<span class="source-line-no">094</span><span id="line-94">   @Override /* Overridden from OpenApiProvider */</span>
+<span class="source-line-no">095</span><span id="line-95">   public OpenApi getOpenApi(RestContext context, Locale locale) throws Exception {</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">      var c = context.getResourceClass();</span>
+<span class="source-line-no">098</span><span id="line-98">      var ff = nn(fileFinder) ? fileFinder : FileFinder.create(beanStore).cp(c, null, false).build();</span>
+<span class="source-line-no">099</span><span id="line-99">      var mb = nn(messages) ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);</span>
+<span class="source-line-no">100</span><span id="line-100">      var vrs = vr.createSession().bean(Messages.class, mb);</span>
+<span class="source-line-no">101</span><span id="line-101">      var session = new BasicOpenApiProviderSession(context, locale, ff, mb, vrs, js.getSession());</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">      return session.getOpenApi();</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105">}</span>
 
 
 

@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.html#line-69">HoconValue.HoconObject</a></span>
+<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.html#line-70">HoconValue.HoconObject</a></span>
 <span class="extends-implements">extends <a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span></div>
 <div class="block">HOCON object (maps to Java bean or Map).</div>
 </section>
@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>HoconObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-69">HoconObject</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-70">HoconObject</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getType()">
 <h3>getType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.Type.html" title="enum class in org.apache.juneau.marshall.hocon">HoconValue.Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-72">getType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.Type.html" title="enum class in org.apache.juneau.marshall.hocon">HoconValue.Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-73">getType</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HoconValue.html#getType()">HoconValue</a></code></span></div>
 <div class="block">Returns the value type.</div>
 <dl class="notes">
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMembers()">
 <h3>getMembers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link">LinkedHashMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-82">getMembers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link">LinkedHashMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-83">getMembers</a></span>()</div>
 <div class="block">Returns the members.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -208,23 +208,25 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="merge(org.apache.juneau.marshall.hocon.HoconValue.HoconObject)">
 <h3>merge</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-94">merge</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconObject.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconObject</a>&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-96">merge</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconObject.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconObject</a>&nbsp;other)</span></div>
 <div class="block">Merges another object into this one (HOCON object merging).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>other</code> - The other object to merge.</dd>
+<dd><code>other</code> - The other object to merge.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="setPath(java.lang.String[],org.apache.juneau.marshall.hocon.HoconValue)">
 <h3>setPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-112">setPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-115">setPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;path,
  <a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;value)</span></div>
 <div class="block">Sets a value at a dotted path (e.g., a.b.c).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - Path components.</dd>
+<dd><code>path</code> - Path components.
+   <br>Can be <jk>null</jk> or empty (no-op).</dd>
 <dd><code>value</code> - The value.</dd>
 </dl>
 </section>
@@ -232,13 +234,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPath(java.lang.String[])">
 <h3>getPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-137">getPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconObject.html#line-142">getPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;path)</span></div>
 <div class="block">Gets a value at a dotted path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - Path components.</dd>
+<dd><code>path</code> - Path components.
+   <br>Can be <jk>null</jk> or empty (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The value, or <jk>null</jk>.</dd>
+<dd>The value, or <jk>null</jk> if the path is <jk>null</jk>, empty, or does not resolve to an existing
+   value.</dd>
 </dl>
 </section>
 </li>

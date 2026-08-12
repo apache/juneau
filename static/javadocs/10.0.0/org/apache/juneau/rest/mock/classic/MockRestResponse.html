@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>client</code> - The RestClient that created this response.</dd>
 <dd><code>request</code> - The REST request.</dd>
-<dd><code>response</code> - The HTTP response.  Can be <jk>null</jk>.</dd>
+<dd><code>response</code> - The HTTP response.  Can be <jk>null</jk> (a default empty response with a status code of <c>0</c> is substituted).</dd>
 <dd><code>parser</code> - The overridden parser passed into <a href="../../client/classic/RestRequest.html#parser(org.apache.juneau.marshall.parser.Parser)"><code>RestRequest.parser(Parser)</code></a>.</dd>
 </dl>
 </section>

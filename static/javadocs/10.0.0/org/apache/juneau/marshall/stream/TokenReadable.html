@@ -90,7 +90,7 @@ extends <a href="RecordReadable.html" title="interface in org.apache.juneau.mars
 
  <p>
  Because <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> IS-A <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a>, FULL formats get the record surface for
- free &mdash; the <a href="#parseRecords(java.lang.Object)"><code>parseRecords(Object)</code></a> default returns <a href="#parseTokens(java.lang.Object)"><code>parseTokens(Object)</code></a>.
+ free &mdash; the <a href="#readRecords(java.lang.Object)"><code>readRecords(Object)</code></a> default returns <a href="#readTokens(java.lang.Object)"><code>readTokens(Object)</code></a>.
  Capability is detected via <code>instanceof</code>; a format that supports tokens is a
  <code>TokenReadable</code> (and transitively a <a href="RecordReadable.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReadable</code></a>).
 
@@ -113,13 +113,13 @@ extends <a href="RecordReadable.html" title="interface in org.apache.juneau.mars
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#parseRecords(java.lang.Object)" class="member-name-link">parseRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#readRecords(java.lang.Object)" class="member-name-link">readRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">FULL formats get record semantics for free &mdash; a <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> IS-A
  <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#parseTokens(java.lang.Object)" class="member-name-link">parseTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readTokens(java.lang.Object)" class="member-name-link">readTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Opens a low-level <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input.</div>
 </div>
@@ -141,15 +141,15 @@ extends <a href="RecordReadable.html" title="interface in org.apache.juneau.mars
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="parseTokens(java.lang.Object)">
-<h3>parseTokens</h3>
-<div class="member-signature"><span class="return-type"><a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReadable.html#line-49">parseTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readTokens(java.lang.Object)">
+<h3>readTokens</h3>
+<div class="member-signature"><span class="return-type"><a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReadable.html#line-49">readTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor over the specified input.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.  Subtypes define the supported types (typically
-   <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> / <code>byte[]</code> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>).</dd>
+   <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> / <code><jk>byte</jk>[]</code>).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> cursor positioned at <a href="TokenType.html#NOT_AVAILABLE"><code>TokenType.NOT_AVAILABLE</code></a>.</dd>
 <dt>Throws:</dt>
@@ -158,19 +158,19 @@ extends <a href="RecordReadable.html" title="interface in org.apache.juneau.mars
 </section>
 </li>
 <li>
-<section class="detail" id="parseRecords(java.lang.Object)">
-<h3>parseRecords</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReadable.html#line-59">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readRecords(java.lang.Object)">
+<h3>readRecords</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReadable.html#line-59">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">FULL formats get record semantics for free &mdash; a <a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> IS-A
  <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="RecordReadable.html#parseRecords(java.lang.Object)">parseRecords</a></code>&nbsp;in interface&nbsp;<code><a href="RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
+<dd><code><a href="RecordReadable.html#readRecords(java.lang.Object)">readRecords</a></code>&nbsp;in interface&nbsp;<code><a href="RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor (the same object as <a href="#parseTokens(java.lang.Object)"><code>parseTokens(Object)</code></a>).</dd>
+<dd>A new <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor (the same object as <a href="#readTokens(java.lang.Object)"><code>readTokens(Object)</code></a>).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If a problem occurred reading the underlying input.</dd>
 </dl>

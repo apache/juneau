@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-56">HttpStatusLineBean</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-54">HttpStatusLineBean</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a></span></div>
 <div class="block">Default immutable implementation of <a href="../HttpStatusLine.html" title="interface in org.apache.juneau.http"><code>HttpStatusLine</code></a>.
@@ -193,7 +193,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="of(int,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpStatusLineBean.html" title="class in org.apache.juneau.http.response">HttpStatusLineBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-75">of</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpStatusLineBean.html" title="class in org.apache.juneau.http.response">HttpStatusLineBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-73">of</a></span><wbr><span class="parameters">(int&nbsp;statusCode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reasonPhrase)</span></div>
 <div class="block">Creates an <code>HTTP/1.1</code> status line with the given status code and reason phrase.</div>
 <dl class="notes">
@@ -208,7 +208,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="of(java.lang.String,int,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpStatusLineBean.html" title="class in org.apache.juneau.http.response">HttpStatusLineBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-87">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;protocolVersion,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpStatusLineBean.html" title="class in org.apache.juneau.http.response">HttpStatusLineBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-85">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;protocolVersion,
  int&nbsp;statusCode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reasonPhrase)</span></div>
 <div class="block">Creates a status line with a parsed protocol version, status code, and reason phrase.</div>
@@ -225,7 +225,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="of(org.apache.juneau.http.HttpProtocolVersion,int,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpStatusLineBean.html" title="class in org.apache.juneau.http.response">HttpStatusLineBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-99">of</a></span><wbr><span class="parameters">(<a href="../HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;protocolVersion,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpStatusLineBean.html" title="class in org.apache.juneau.http.response">HttpStatusLineBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-97">of</a></span><wbr><span class="parameters">(<a href="../HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;protocolVersion,
  int&nbsp;statusCode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reasonPhrase)</span></div>
 <div class="block">Creates a status line with the given typed protocol version, status code, and reason phrase.</div>
@@ -242,7 +242,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getStatusCode()">
 <h3>getStatusCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-103">getStatusCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-101">getStatusCode</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpStatusLine.html#getStatusCode()">HttpStatusLine</a></code></span></div>
 <div class="block">Returns the HTTP status code (e.g. <code>200</code>, <code>404</code>).</div>
 <dl class="notes">
@@ -256,7 +256,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getReasonPhrase()">
 <h3>getReasonPhrase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-108">getReasonPhrase</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-106">getReasonPhrase</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpStatusLine.html#getReasonPhrase()">HttpStatusLine</a></code></span></div>
 <div class="block">Returns the human-readable reason phrase (e.g. <code>"OK"</code>, <code>"Not Found"</code>), or <jk>null</jk> if absent.</div>
 <dl class="notes">
@@ -270,7 +270,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getProtocolVersion()">
 <h3>getProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-113">getProtocolVersion</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-111">getProtocolVersion</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpStatusLine.html#getProtocolVersion()">HttpStatusLine</a></code></span></div>
 <div class="block">Returns the HTTP protocol version (e.g. <a href="../HttpProtocolVersion.html#HTTP_1_1"><code>HttpProtocolVersion.HTTP_1_1</code></a>).</div>
 <dl class="notes">
@@ -284,7 +284,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-118">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-116">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -294,7 +294,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-126">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-124">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -304,7 +304,7 @@ implements <a href="../HttpStatusLine.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-132">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/response/HttpStatusLineBean.html#line-130">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

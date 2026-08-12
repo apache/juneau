@@ -71,13 +71,13 @@
 <span class="source-line-no">058</span><span id="line-58"> * The getters will be called in order until the first non-null value is returned...</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"1"&lt;/js&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
+<span class="source-line-no">061</span><span id="line-61"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merge&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"1"&lt;/js&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"1"&lt;/js&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merge&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;js&gt;"2"&lt;/js&gt;));</span>
 <span class="source-line-no">065</span><span id="line-65"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"2"&lt;/js&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merger&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;));</span>
+<span class="source-line-no">067</span><span id="line-67"> *    &lt;jv&gt;merge&lt;/jv&gt; = ObjectMerger.&lt;jsm&gt;merge&lt;/jsm&gt;(IA.&lt;jk&gt;class&lt;/jk&gt;, &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;), &lt;jk&gt;new&lt;/jk&gt; A(&lt;jk&gt;null&lt;/jk&gt;));</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;, &lt;jv&gt;merge&lt;/jv&gt;.getX());</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;/p&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
@@ -103,82 +103,89 @@
 <span class="source-line-no">090</span><span id="line-90">      private final Object[] pojos;</span>
 <span class="source-line-no">091</span><span id="line-91">      private final boolean callAllNonGetters;</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">      public MergeInvocationHandler(boolean callAllNonGetters, Object...pojos) {</span>
-<span class="source-line-no">094</span><span id="line-94">         this.callAllNonGetters = callAllNonGetters;</span>
-<span class="source-line-no">095</span><span id="line-95">         this.pojos = pojos;</span>
-<span class="source-line-no">096</span><span id="line-96">      }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">      /**</span>
-<span class="source-line-no">099</span><span id="line-99">       * Implemented to handle the method called.</span>
-<span class="source-line-no">100</span><span id="line-100">       * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
-<span class="source-line-no">101</span><span id="line-101">       */</span>
-<span class="source-line-no">102</span><span id="line-102">      @Override /* Overridden from InvocationHandler */</span>
-<span class="source-line-no">103</span><span id="line-103">      @SuppressWarnings({</span>
-<span class="source-line-no">104</span><span id="line-104">         "java:S3776" // Cognitive complexity acceptable for proxy method invocation routing</span>
-<span class="source-line-no">105</span><span id="line-105">      })</span>
-<span class="source-line-no">106</span><span id="line-106">      public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {</span>
-<span class="source-line-no">107</span><span id="line-107">         Object r = null;</span>
-<span class="source-line-no">108</span><span id="line-108">         var isGetter = args == null &amp;&amp; method.getReturnType() != Void.class;</span>
-<span class="source-line-no">109</span><span id="line-109">         for (var pojo : pojos) {</span>
-<span class="source-line-no">110</span><span id="line-110">            if (nn(pojo)) {</span>
-<span class="source-line-no">111</span><span id="line-111">               try {</span>
-<span class="source-line-no">112</span><span id="line-112">                  r = method.invoke(pojo, args);</span>
-<span class="source-line-no">113</span><span id="line-113">               } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {</span>
-<span class="source-line-no">114</span><span id="line-114">                  throw new ExecutableException(e);</span>
-<span class="source-line-no">115</span><span id="line-115">               }</span>
-<span class="source-line-no">116</span><span id="line-116">               if (isGetter) {</span>
-<span class="source-line-no">117</span><span id="line-117">                  if (nn(r))</span>
-<span class="source-line-no">118</span><span id="line-118">                     return r;</span>
-<span class="source-line-no">119</span><span id="line-119">               } else {</span>
-<span class="source-line-no">120</span><span id="line-120">                  if (! callAllNonGetters)</span>
-<span class="source-line-no">121</span><span id="line-121">                     return r;</span>
+<span class="source-line-no">093</span><span id="line-93">      /**</span>
+<span class="source-line-no">094</span><span id="line-94">       * Constructor.</span>
+<span class="source-line-no">095</span><span id="line-95">       *</span>
+<span class="source-line-no">096</span><span id="line-96">       * @param callAllNonGetters If &lt;jk&gt;true&lt;/jk&gt;, non-getter methods are invoked on all POJOs; if &lt;jk&gt;false&lt;/jk&gt;,</span>
+<span class="source-line-no">097</span><span id="line-97">       *    only on the first POJO.</span>
+<span class="source-line-no">098</span><span id="line-98">       * @param pojos The POJOs to merge, in priority order.</span>
+<span class="source-line-no">099</span><span id="line-99">       */</span>
+<span class="source-line-no">100</span><span id="line-100">      public MergeInvocationHandler(boolean callAllNonGetters, Object...pojos) {</span>
+<span class="source-line-no">101</span><span id="line-101">         this.callAllNonGetters = callAllNonGetters;</span>
+<span class="source-line-no">102</span><span id="line-102">         this.pojos = pojos;</span>
+<span class="source-line-no">103</span><span id="line-103">      }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">      /**</span>
+<span class="source-line-no">106</span><span id="line-106">       * Implemented to handle the method called.</span>
+<span class="source-line-no">107</span><span id="line-107">       * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
+<span class="source-line-no">108</span><span id="line-108">       */</span>
+<span class="source-line-no">109</span><span id="line-109">      @Override /* Overridden from InvocationHandler */</span>
+<span class="source-line-no">110</span><span id="line-110">      @SuppressWarnings({</span>
+<span class="source-line-no">111</span><span id="line-111">         "java:S3776" // Cognitive complexity acceptable for proxy method invocation routing</span>
+<span class="source-line-no">112</span><span id="line-112">      })</span>
+<span class="source-line-no">113</span><span id="line-113">      public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {</span>
+<span class="source-line-no">114</span><span id="line-114">         Object r = null;</span>
+<span class="source-line-no">115</span><span id="line-115">         var isGetter = args == null &amp;&amp; method.getReturnType() != Void.class;</span>
+<span class="source-line-no">116</span><span id="line-116">         for (var pojo : pojos) {</span>
+<span class="source-line-no">117</span><span id="line-117">            if (nn(pojo)) {</span>
+<span class="source-line-no">118</span><span id="line-118">               try {</span>
+<span class="source-line-no">119</span><span id="line-119">                  r = method.invoke(pojo, args);</span>
+<span class="source-line-no">120</span><span id="line-120">               } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {</span>
+<span class="source-line-no">121</span><span id="line-121">                  throw new ExecutableException(e);</span>
 <span class="source-line-no">122</span><span id="line-122">               }</span>
-<span class="source-line-no">123</span><span id="line-123">            }</span>
-<span class="source-line-no">124</span><span id="line-124">         }</span>
-<span class="source-line-no">125</span><span id="line-125">         return r;</span>
-<span class="source-line-no">126</span><span id="line-126">      }</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   /**</span>
-<span class="source-line-no">130</span><span id="line-130">    * Create a proxy interface on top of zero or more POJOs.</span>
-<span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param &lt;T&gt; The pojo types.</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param interfaceClass The common interface class.</span>
-<span class="source-line-no">134</span><span id="line-134">    * @param callAllNonGetters</span>
-<span class="source-line-no">135</span><span id="line-135">    *    If &lt;jk&gt;true&lt;/jk&gt;, when calling a method that's not a getter, the method will be invoked on all POJOs.</span>
-<span class="source-line-no">136</span><span id="line-136">    *    &lt;br&gt;Otherwise, the method will only be called on the first POJO.</span>
-<span class="source-line-no">137</span><span id="line-137">    * @param pojos</span>
-<span class="source-line-no">138</span><span id="line-138">    *    Zero or more POJOs to merge.</span>
-<span class="source-line-no">139</span><span id="line-139">    *    &lt;br&gt;Can contain nulls.</span>
-<span class="source-line-no">140</span><span id="line-140">    * @return A proxy interface over the merged POJOs.</span>
-<span class="source-line-no">141</span><span id="line-141">    */</span>
-<span class="source-line-no">142</span><span id="line-142">   @SuppressWarnings({</span>
-<span class="source-line-no">143</span><span id="line-143">      "unchecked" // Type erasure requires cast to T for proxy creation</span>
-<span class="source-line-no">144</span><span id="line-144">   })</span>
-<span class="source-line-no">145</span><span id="line-145">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, boolean callAllNonGetters, T...pojos) {</span>
-<span class="source-line-no">146</span><span id="line-146">      return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new MergeInvocationHandler(callAllNonGetters, pojos));</span>
-<span class="source-line-no">147</span><span id="line-147">   }</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   /**</span>
-<span class="source-line-no">150</span><span id="line-150">    * Create a proxy interface on top of zero or more POJOs.</span>
-<span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">    * This is a shortcut to calling &lt;code&gt;merge(interfaceClass, &lt;jk&gt;false&lt;/jk&gt;, pojos);&lt;/code&gt;</span>
-<span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * @param &lt;T&gt; The pojo types.</span>
-<span class="source-line-no">156</span><span id="line-156">    * @param interfaceClass The common interface class.</span>
-<span class="source-line-no">157</span><span id="line-157">    * @param pojos</span>
-<span class="source-line-no">158</span><span id="line-158">    *    Zero or more POJOs to merge.</span>
-<span class="source-line-no">159</span><span id="line-159">    *    &lt;br&gt;Can contain nulls.</span>
-<span class="source-line-no">160</span><span id="line-160">    * @return A proxy interface over the merged POJOs.</span>
-<span class="source-line-no">161</span><span id="line-161">    */</span>
-<span class="source-line-no">162</span><span id="line-162">   @SuppressWarnings({</span>
-<span class="source-line-no">163</span><span id="line-163">      "unchecked" // Type erasure requires cast to T for proxy creation</span>
-<span class="source-line-no">164</span><span id="line-164">   })</span>
-<span class="source-line-no">165</span><span id="line-165">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, T...pojos) {</span>
-<span class="source-line-no">166</span><span id="line-166">      return merge(interfaceClass, false, pojos);</span>
-<span class="source-line-no">167</span><span id="line-167">   }</span>
-<span class="source-line-no">168</span><span id="line-168">}</span>
+<span class="source-line-no">123</span><span id="line-123">               if (isGetter) {</span>
+<span class="source-line-no">124</span><span id="line-124">                  if (nn(r))</span>
+<span class="source-line-no">125</span><span id="line-125">                     return r;</span>
+<span class="source-line-no">126</span><span id="line-126">               } else {</span>
+<span class="source-line-no">127</span><span id="line-127">                  if (! callAllNonGetters)</span>
+<span class="source-line-no">128</span><span id="line-128">                     return r;</span>
+<span class="source-line-no">129</span><span id="line-129">               }</span>
+<span class="source-line-no">130</span><span id="line-130">            }</span>
+<span class="source-line-no">131</span><span id="line-131">         }</span>
+<span class="source-line-no">132</span><span id="line-132">         return r;</span>
+<span class="source-line-no">133</span><span id="line-133">      }</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   /**</span>
+<span class="source-line-no">137</span><span id="line-137">    * Create a proxy interface on top of zero or more POJOs.</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    * @param &lt;T&gt; The pojo types.</span>
+<span class="source-line-no">140</span><span id="line-140">    * @param interfaceClass The common interface class.</span>
+<span class="source-line-no">141</span><span id="line-141">    * @param callAllNonGetters</span>
+<span class="source-line-no">142</span><span id="line-142">    *    If &lt;jk&gt;true&lt;/jk&gt;, when calling a method that's not a getter, the method will be invoked on all POJOs.</span>
+<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Otherwise, the method will only be called on the first POJO.</span>
+<span class="source-line-no">144</span><span id="line-144">    * @param pojos</span>
+<span class="source-line-no">145</span><span id="line-145">    *    Zero or more POJOs to merge.</span>
+<span class="source-line-no">146</span><span id="line-146">    *    &lt;br&gt;Can contain nulls.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @return A proxy interface over the merged POJOs.</span>
+<span class="source-line-no">148</span><span id="line-148">    */</span>
+<span class="source-line-no">149</span><span id="line-149">   @SuppressWarnings({</span>
+<span class="source-line-no">150</span><span id="line-150">      "unchecked" // Type erasure requires cast to T for proxy creation</span>
+<span class="source-line-no">151</span><span id="line-151">   })</span>
+<span class="source-line-no">152</span><span id="line-152">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, boolean callAllNonGetters, T...pojos) {</span>
+<span class="source-line-no">153</span><span id="line-153">      return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new MergeInvocationHandler(callAllNonGetters, pojos));</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   /**</span>
+<span class="source-line-no">157</span><span id="line-157">    * Create a proxy interface on top of zero or more POJOs.</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;p&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    * This is a shortcut to calling &lt;code&gt;merge(interfaceClass, &lt;jk&gt;false&lt;/jk&gt;, pojos);&lt;/code&gt;</span>
+<span class="source-line-no">161</span><span id="line-161">    *</span>
+<span class="source-line-no">162</span><span id="line-162">    * @param &lt;T&gt; The pojo types.</span>
+<span class="source-line-no">163</span><span id="line-163">    * @param interfaceClass The common interface class.</span>
+<span class="source-line-no">164</span><span id="line-164">    * @param pojos</span>
+<span class="source-line-no">165</span><span id="line-165">    *    Zero or more POJOs to merge.</span>
+<span class="source-line-no">166</span><span id="line-166">    *    &lt;br&gt;Can contain nulls.</span>
+<span class="source-line-no">167</span><span id="line-167">    * @return A proxy interface over the merged POJOs.</span>
+<span class="source-line-no">168</span><span id="line-168">    */</span>
+<span class="source-line-no">169</span><span id="line-169">   @SuppressWarnings({</span>
+<span class="source-line-no">170</span><span id="line-170">      "unchecked" // Type erasure requires cast to T for proxy creation</span>
+<span class="source-line-no">171</span><span id="line-171">   })</span>
+<span class="source-line-no">172</span><span id="line-172">   public static &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, T...pojos) {</span>
+<span class="source-line-no">173</span><span id="line-173">      return merge(interfaceClass, false, pojos);</span>
+<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">175</span><span id="line-175">}</span>
 
 
 

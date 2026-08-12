@@ -29,90 +29,102 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.server.config.repository;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.nio.file.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.config.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * Command that fetches configuration from a Git repository for a given project and branch.</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * Clones or pulls the configured Git repo, then loads application and project-specific</span>
-<span class="source-line-no">030</span><span id="line-30"> * configuration files into a map of {@link ConfigItem} values.</span>
-<span class="source-line-no">031</span><span id="line-31"> */</span>
-<span class="source-line-no">032</span><span id="line-32">public class GetConfiguration implements Command, GetValue&lt;Map&lt;String,ConfigItem&gt;&gt; {</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   private static final String APPLICATION = "APPLICATION";</span>
-<span class="source-line-no">035</span><span id="line-35">   private static final String PROJECT = "PROJECT";</span>
-<span class="source-line-no">036</span><span id="line-36">   private static final String EXT = ".cfg";</span>
-<span class="source-line-no">037</span><span id="line-37">   private static final String BAR = "/";</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">   private Map&lt;String,ConfigItem&gt; configs = new HashMap&lt;&gt;();</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.FileUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.nio.file.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.config.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">/**</span>
+<span class="source-line-no">029</span><span id="line-29"> * Command that fetches configuration from a Git repository for a given project and branch.</span>
+<span class="source-line-no">030</span><span id="line-30"> *</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * Clones or pulls the configured Git repo, then loads application and project-specific</span>
+<span class="source-line-no">033</span><span id="line-33"> * configuration files into a map of {@link ConfigItem} values.</span>
+<span class="source-line-no">034</span><span id="line-34"> */</span>
+<span class="source-line-no">035</span><span id="line-35">public class GetConfiguration implements Command, GetValue&lt;Map&lt;String,ConfigItem&gt;&gt; {</span>
+<span class="source-line-no">036</span><span id="line-36"></span>
+<span class="source-line-no">037</span><span id="line-37">   private static final String APPLICATION = "APPLICATION";</span>
+<span class="source-line-no">038</span><span id="line-38">   private static final String PROJECT = "PROJECT";</span>
+<span class="source-line-no">039</span><span id="line-39">   private static final String EXT = ".cfg";</span>
 <span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">   @SuppressWarnings({</span>
-<span class="source-line-no">042</span><span id="line-42">      "java:S1845" // Field name intentionally differs only by case from static field PROJECT</span>
-<span class="source-line-no">043</span><span id="line-43">   })</span>
-<span class="source-line-no">044</span><span id="line-44">   private String project;</span>
-<span class="source-line-no">045</span><span id="line-45">   private String branch;</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   /**</span>
-<span class="source-line-no">048</span><span id="line-48">    * Constructor.</span>
-<span class="source-line-no">049</span><span id="line-49">    *</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param project Project name.</span>
-<span class="source-line-no">051</span><span id="line-51">    * @param branch Branch name.</span>
-<span class="source-line-no">052</span><span id="line-52">    */</span>
-<span class="source-line-no">053</span><span id="line-53">   public GetConfiguration(String project, String branch) {</span>
-<span class="source-line-no">054</span><span id="line-54">      this.branch = branch;</span>
-<span class="source-line-no">055</span><span id="line-55">      this.project = project;</span>
-<span class="source-line-no">056</span><span id="line-56">   }</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   /** {@inheritDoc} */</span>
-<span class="source-line-no">059</span><span id="line-59">   @Override</span>
-<span class="source-line-no">060</span><span id="line-60">   public void execute() throws Exception {</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">      var config = Config.create().name("juneau-server-config.cfg").build();</span>
+<span class="source-line-no">041</span><span id="line-41">   private Map&lt;String,ConfigItem&gt; configs = new HashMap&lt;&gt;();</span>
+<span class="source-line-no">042</span><span id="line-42"></span>
+<span class="source-line-no">043</span><span id="line-43">   @SuppressWarnings({</span>
+<span class="source-line-no">044</span><span id="line-44">      "java:S1845" // Field name intentionally differs only by case from static field PROJECT</span>
+<span class="source-line-no">045</span><span id="line-45">   })</span>
+<span class="source-line-no">046</span><span id="line-46">   private String project;</span>
+<span class="source-line-no">047</span><span id="line-47">   private String branch;</span>
+<span class="source-line-no">048</span><span id="line-48"></span>
+<span class="source-line-no">049</span><span id="line-49">   /**</span>
+<span class="source-line-no">050</span><span id="line-50">    * Constructor.</span>
+<span class="source-line-no">051</span><span id="line-51">    *</span>
+<span class="source-line-no">052</span><span id="line-52">    * @param project Project name.</span>
+<span class="source-line-no">053</span><span id="line-53">    * @param branch Branch name.</span>
+<span class="source-line-no">054</span><span id="line-54">    */</span>
+<span class="source-line-no">055</span><span id="line-55">   public GetConfiguration(String project, String branch) {</span>
+<span class="source-line-no">056</span><span id="line-56">      this.branch = branch;</span>
+<span class="source-line-no">057</span><span id="line-57">      this.project = project;</span>
+<span class="source-line-no">058</span><span id="line-58">   }</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   /** {@inheritDoc} */</span>
+<span class="source-line-no">061</span><span id="line-61">   @Override</span>
+<span class="source-line-no">062</span><span id="line-62">   public void execute() throws Exception {</span>
 <span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">      var pathStr = config.get("GitServer/pathLocal").orElse(null);</span>
+<span class="source-line-no">064</span><span id="line-64">      var config = Config.create().name("juneau-server-config.cfg").build();</span>
 <span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">      var git = config.get("GitServer/gitRemote").orElse(null);</span>
+<span class="source-line-no">066</span><span id="line-66">      var pathStr = config.get("GitServer/pathLocal").orElse(null);</span>
 <span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">      var gitControl = new GitControl(pathStr, git);</span>
+<span class="source-line-no">068</span><span id="line-68">      var git = config.get("GitServer/gitRemote").orElse(null);</span>
 <span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">      var path = new File(pathStr);</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">      if (path.isDirectory()) {</span>
-<span class="source-line-no">073</span><span id="line-73">         gitControl.pullFromRepo();</span>
-<span class="source-line-no">074</span><span id="line-74">      } else {</span>
-<span class="source-line-no">075</span><span id="line-75">         gitControl.cloneRepo();</span>
-<span class="source-line-no">076</span><span id="line-76">      }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">      gitControl.branch(branch);</span>
-<span class="source-line-no">079</span><span id="line-79">      gitControl.pullFromRepo();</span>
+<span class="source-line-no">070</span><span id="line-70">      // Fail fast with a clear message when the operator has not configured the local checkout directory,</span>
+<span class="source-line-no">071</span><span id="line-71">      // rather than surfacing an opaque NullPointerException from new File(null) below.</span>
+<span class="source-line-no">072</span><span id="line-72">      if (pathStr == null)</span>
+<span class="source-line-no">073</span><span id="line-73">         throw new IllegalStateException("Required configuration 'GitServer/pathLocal' is not set.");</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">      // Trusted operator-configured local git checkout directory (GitServer/pathLocal).</span>
+<span class="source-line-no">076</span><span id="line-76">      // Serves as the confinement root for the project/application config file lookups below.</span>
+<span class="source-line-no">077</span><span id="line-77">      var root = new File(pathStr);</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">      try (var gitControl = new GitControl(pathStr, git)) {</span>
 <span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">      var fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);</span>
-<span class="source-line-no">082</span><span id="line-82">      var fileProjectStr = this.project.concat(EXT);</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">      var fileDefault = new File(pathStr.concat(BAR).concat(fileDefaultStr));</span>
-<span class="source-line-no">085</span><span id="line-85">      if (fileDefault.exists()) {</span>
-<span class="source-line-no">086</span><span id="line-86">         var lines = new String(Files.readAllBytes(fileDefault.toPath()));</span>
-<span class="source-line-no">087</span><span id="line-87">         configs.put(APPLICATION, new ConfigItem(lines));</span>
-<span class="source-line-no">088</span><span id="line-88">      }</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">      var fileProject = new File(pathStr.concat(BAR).concat(fileProjectStr));</span>
-<span class="source-line-no">091</span><span id="line-91">      if (fileProject.exists()) {</span>
-<span class="source-line-no">092</span><span id="line-92">         var linesProject = new String(Files.readAllBytes(fileProject.toPath()));</span>
-<span class="source-line-no">093</span><span id="line-93">         configs.put(PROJECT, new ConfigItem(linesProject));</span>
-<span class="source-line-no">094</span><span id="line-94">      }</span>
-<span class="source-line-no">095</span><span id="line-95">   }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">   /** {@inheritDoc} */</span>
-<span class="source-line-no">098</span><span id="line-98">   @Override</span>
-<span class="source-line-no">099</span><span id="line-99">   public Map&lt;String,ConfigItem&gt; get() {</span>
-<span class="source-line-no">100</span><span id="line-100">      return configs;</span>
-<span class="source-line-no">101</span><span id="line-101">   }</span>
-<span class="source-line-no">102</span><span id="line-102">}</span>
+<span class="source-line-no">081</span><span id="line-81">         if (root.isDirectory()) {</span>
+<span class="source-line-no">082</span><span id="line-82">            gitControl.pullFromRepo();</span>
+<span class="source-line-no">083</span><span id="line-83">         } else {</span>
+<span class="source-line-no">084</span><span id="line-84">            gitControl.cloneRepo();</span>
+<span class="source-line-no">085</span><span id="line-85">         }</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">         gitControl.branch(branch);</span>
+<span class="source-line-no">088</span><span id="line-88">         gitControl.pullFromRepo();</span>
+<span class="source-line-no">089</span><span id="line-89">      }</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">      var fileDefaultStr = lcr(APPLICATION).concat(EXT);</span>
+<span class="source-line-no">092</span><span id="line-92">      var fileProjectStr = this.project.concat(EXT);</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">      // Resolve the config file names under the checkout root through the shared boundary check</span>
+<span class="source-line-no">095</span><span id="line-95">      // so a crafted project name cannot escape the repo directory (empty = file absent).</span>
+<span class="source-line-no">096</span><span id="line-96">      var fileDefault = resolveSafely(root, fileDefaultStr).orElse(null);</span>
+<span class="source-line-no">097</span><span id="line-97">      if (fileDefault != null) {</span>
+<span class="source-line-no">098</span><span id="line-98">         var lines = new String(Files.readAllBytes(fileDefault.toPath()));</span>
+<span class="source-line-no">099</span><span id="line-99">         configs.put(APPLICATION, new ConfigItem(lines));</span>
+<span class="source-line-no">100</span><span id="line-100">      }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">      var fileProject = resolveSafely(root, fileProjectStr).orElse(null);</span>
+<span class="source-line-no">103</span><span id="line-103">      if (fileProject != null) {</span>
+<span class="source-line-no">104</span><span id="line-104">         var linesProject = new String(Files.readAllBytes(fileProject.toPath()));</span>
+<span class="source-line-no">105</span><span id="line-105">         configs.put(PROJECT, new ConfigItem(linesProject));</span>
+<span class="source-line-no">106</span><span id="line-106">      }</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   /** {@inheritDoc} */</span>
+<span class="source-line-no">110</span><span id="line-110">   @Override</span>
+<span class="source-line-no">111</span><span id="line-111">   public Map&lt;String,ConfigItem&gt; get() {</span>
+<span class="source-line-no">112</span><span id="line-112">      return Map.copyOf(configs);</span>
+<span class="source-line-no">113</span><span id="line-113">   }</span>
+<span class="source-line-no">114</span><span id="line-114">}</span>
 
 
 

@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../marshall/Marshalled.html" title="annotation interface in org.apache.juneau.marshall">@Marshalled</a>
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-64">Problem</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-66">Problem</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block"><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807 &mdash; Problem Details for HTTP APIs</a>
  bean.
@@ -101,7 +101,7 @@ loadScripts(document, 'script');</script>
       .set(<js>"balance"</js>, 30)
       .set(<js>"accounts"</js>, <jsm>list</jsm>(<js>"/account/12345"</js>, <js>"/account/67890"</js>));
 
-   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>problem</jv>);
+   String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>problem</jv>);
  </p>
 
  <h5 class='section'>Notes:</h5>
@@ -270,7 +270,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_TYPE">
 <h3>DEFAULT_TYPE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-72">DEFAULT_TYPE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-74">DEFAULT_TYPE</a></span></div>
 <div class="block">The default <code>type</code> URI defined by
  <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.1">RFC 7807 &sect;3.1</a> for problem
  documents that omit the <code>type</code> member.</div>
@@ -287,7 +287,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Problem</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-65">Problem</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-67">Problem</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fromStatus(int,java.lang.String,java.lang.String)">
 <h3>fromStatus</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-96">fromStatus</a></span><wbr><span class="parameters">(int&nbsp;status,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-98">fromStatus</a></span><wbr><span class="parameters">(int&nbsp;status,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</span></div>
 <div class="block">Convenience factory for the common &quot;build a problem from a status code + title + detail&quot; call site.
@@ -315,8 +315,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>status</code> - The HTTP status code (e.g. <code>404</code>).</dd>
-<dd><code>title</code> - A short, human-readable summary of the problem type. Can be <jk>null</jk>.</dd>
-<dd><code>detail</code> - A human-readable explanation specific to this occurrence. Can be <jk>null</jk>.</dd>
+<dd><code>title</code> - A short, human-readable summary of the problem type. Can be <jk>null</jk> to leave the title unset.</dd>
+<dd><code>detail</code> - A human-readable explanation specific to this occurrence. Can be <jk>null</jk> to leave the detail unset.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a> populated with the supplied values.</dd>
 </dl>
@@ -325,7 +325,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getType()">
 <h3>getType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-110">getType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-112">getType</a></span>()</div>
 <div class="block">The <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.1">type</a> URI that identifies
  the problem type.
 
@@ -342,7 +342,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getTypeOrDefault()">
 <h3>getTypeOrDefault</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanIgnore.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanIgnore</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-125">getTypeOrDefault</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-127">getTypeOrDefault</a></span>()</div>
 <div class="block">Returns the <code>type</code> URI, defaulting to <a href="#DEFAULT_TYPE"><code>DEFAULT_TYPE</code></a> (<code>"about:blank"</code>) per
  <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.1">RFC 7807 &sect;3.1</a> when the
  field is <jk>null</jk>.
@@ -359,7 +359,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setType(java.net.URI)">
 <h3>setType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-136">setType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-138">setType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>type</code> URI.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTitle()">
 <h3>getTitle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-147">getTitle</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-149">getTitle</a></span>()</div>
 <div class="block">The <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.1">title</a> &mdash; a short,
  human-readable summary of the problem type.</div>
 <dl class="notes">
@@ -384,7 +384,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setTitle(java.lang.String)">
 <h3>setTitle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-157">setTitle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-159">setTitle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>title</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -397,7 +397,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStatus()">
 <h3>getStatus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-171">getStatus</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-173">getStatus</a></span>()</div>
 <div class="block">The <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.1">status</a> &mdash; the HTTP
  status code originally generated by the origin server for this occurrence.
 
@@ -412,7 +412,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setStatus(java.lang.Integer)">
 <h3>setStatus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-181">setStatus</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-183">setStatus</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>status</code> HTTP status code.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -425,7 +425,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDetail()">
 <h3>getDetail</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-192">getDetail</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-194">getDetail</a></span>()</div>
 <div class="block">The <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.1">detail</a> &mdash; a
  human-readable explanation specific to this occurrence of the problem.</div>
 <dl class="notes">
@@ -437,7 +437,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDetail(java.lang.String)">
 <h3>setDetail</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-202">setDetail</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-204">setDetail</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>detail</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -450,7 +450,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInstance()">
 <h3>getInstance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-213">getInstance</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-215">getInstance</a></span>()</div>
 <div class="block">The <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.1">instance</a> URI that
  identifies the specific occurrence of the problem.</div>
 <dl class="notes">
@@ -462,7 +462,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setInstance(java.net.URI)">
 <h3>setInstance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-223">setInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-225">setInstance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>instance</code> URI.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -476,7 +476,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="extraKeys()">
 <h3>extraKeys</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanProp</a>("*")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-234">extraKeys</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-236">extraKeys</a></span>()</div>
 <div class="block">Generic <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.2">extension-member</a>
  keyset.</div>
 <dl class="notes">
@@ -489,7 +489,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanProp</a>("*")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-250">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-252">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property)</span></div>
 <div class="block">Generic extension-member getter.
 
  <p>
@@ -498,7 +498,7 @@ loadScripts(document, 'script');</script>
  that flatten into the top-level JSON object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to retrieve. Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name to retrieve. Can be <jk>null</jk> (a <jk>null</jk> key simply resolves to no value).</dd>
 <dt>Returns:</dt>
 <dd>The property value, or <jk>null</jk> if the property does not exist.</dd>
 </dl>
@@ -508,7 +508,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
 <div class="member-signature"><span class="annotations"><a href="../../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanProp</a>("*")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-267">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807">Problem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/Problem.html#line-269">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;property,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Generic extension-member setter.
 
@@ -518,8 +518,8 @@ loadScripts(document, 'script');</script>
  The extension map is lazily initialised on first use.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set. Must not be <jk>null</jk>.</dd>
-<dd><code>value</code> - The new value for the property.</dd>
+<dd><code>property</code> - The property name to set. Can be <jk>null</jk> (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/LinkedHashMap.html" title="class or interface in java.util" class="external-link"><code>LinkedHashMap</code></a> tolerates a <jk>null</jk> key).</dd>
+<dd><code>value</code> - The new value for the property. Can be <jk>null</jk> (stored as <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

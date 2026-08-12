@@ -144,7 +144,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="merge(org.apache.juneau.config.store.ConfigStore,java.lang.String,java.lang.String,java.util.List,org.apache.juneau.config.format.ConfigFormat)">
 <h3>merge</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/internal/ProfileMerge.html#line-61">merge</a></span><wbr><span class="parameters">(<a href="../store/ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a>&nbsp;store,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/config/internal/ProfileMerge.html#line-67">merge</a></span><wbr><span class="parameters">(<a href="../store/ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a>&nbsp;store,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;baseName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;baseContents,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;profiles,
@@ -155,9 +155,12 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>store</code> - The store the throwaway parse maps are associated with (used only for parse context; never written).</dd>
 <dd><code>baseName</code> - The base config name (for parse diagnostics).</dd>
-<dd><code>baseContents</code> - The raw base config contents (format-native).</dd>
-<dd><code>profiles</code> - Ordered profile overlays (activation order); each is a raw format-native contents string.  May be empty.</dd>
-<dd><code>format</code> - The config format used to parse every input.</dd>
+<dd><code>baseContents</code> - The raw base config contents (format-native).
+   <br>Can be <jk>null</jk> (treated as empty contents).</dd>
+<dd><code>profiles</code> - Ordered profile overlays (activation order); each is a raw format-native contents string.
+   <br>May be empty, but must not be <jk>null</jk>.</dd>
+<dd><code>format</code> - The config format used to parse every input.
+   <br>Can be <jk>null</jk> (defaults to <a href="../format/IniConfigFormat.html" title="class in org.apache.juneau.config.format"><code>IniConfigFormat</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>The merged contents as an internal-INI string.</dd>
 <dt>Throws:</dt>

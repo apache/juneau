@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,java.lang.Class,org.apache.juneau.commons.function.ThrowingFunction,org.apache.juneau.commons.function.ThrowingFunction)">
 <h3>FunctionalSwap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/FunctionalSwap.html#line-65">FunctionalSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a>&gt;&nbsp;normalClass,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/FunctionalSwap.html#line-67">FunctionalSwap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a>&gt;&nbsp;normalClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a>&gt;&nbsp;swappedClass,
  <a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a>,<wbr><a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a>&gt;&nbsp;swapFunction,
  <a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a>,<wbr><a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a>&gt;&nbsp;unswapFunction)</span></div>
@@ -211,7 +211,8 @@ loadScripts(document, 'script');</script>
 <dd><code>normalClass</code> - The normal class.</dd>
 <dd><code>swappedClass</code> - The swapped class.</dd>
 <dd><code>swapFunction</code> - The function for converting from normal to swapped.</dd>
-<dd><code>unswapFunction</code> - The function for converting swapped to normal.</dd>
+<dd><code>unswapFunction</code> - The function for converting swapped to normal.
+   Can be <jk>null</jk> if this swap is serialize-only (calling <a href="#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)"><code>unswap(MarshallingSession, Object, ClassMeta, String)</code></a> then throws a <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser"><code>ParseException</code></a>).</dd>
 </dl>
 </section>
 </li>
@@ -226,7 +227,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.marshall.MarshallingSession,T,java.lang.String)">
 <h3 id="swap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,java.lang.String)">swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/FunctionalSwap.html#line-71">swap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/FunctionalSwap.html#line-73">swap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span>
        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
@@ -250,7 +251,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)">
 <h3 id="unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String)">unswap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/FunctionalSwap.html#line-78">unswap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/swap/FunctionalSwap.html#line-80">unswap</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span>

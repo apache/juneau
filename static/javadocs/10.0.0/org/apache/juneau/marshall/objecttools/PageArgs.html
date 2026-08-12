@@ -177,10 +177,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>position</code> - The zero-indexed position to start the page on.</dd>
-<dd><code>limit</code> - The number of rows to return.</dd>
+<dd><code>position</code> - The zero-indexed position to start the page on.  Can be <jk>null</jk> (defaults to <c>0</c>).</dd>
+<dd><code>limit</code> - The number of rows to return.  Can be <jk>null</jk> (defaults to <c>-1</c>).</dd>
 <dt>Returns:</dt>
-<dd>A new <a href="PageArgs.html" title="class in org.apache.juneau.marshall.objecttools"><code>PageArgs</code></a> object.</dd>
+<dd>A new <a href="PageArgs.html" title="class in org.apache.juneau.marshall.objecttools"><code>PageArgs</code></a> object, or <jk>null</jk> if both <c>position</c> and <c>limit</c> are <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

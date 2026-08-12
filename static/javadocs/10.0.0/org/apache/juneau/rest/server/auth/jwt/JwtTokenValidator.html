@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-104">JwtTokenValidator</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-106">JwtTokenValidator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a></span></div>
 <div class="block"><a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a> that validates signed JWTs against a JWKS-backed key source.
@@ -254,7 +254,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.jwt.JwtTokenValidator.Builder)">
 <h3>JwtTokenValidator</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-381">JwtTokenValidator</a></span><wbr><span class="parameters">(<a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-385">JwtTokenValidator</a></span><wbr><span class="parameters">(<a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -273,7 +273,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-123">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-125">create</a></span>()</div>
 <div class="block">Static creator.
 
  <p>
@@ -290,7 +290,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="create(org.apache.juneau.commons.inject.BeanStore)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-133">create</a></span><wbr><span class="parameters">(<a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JwtTokenValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.jwt">JwtTokenValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-135">create</a></span><wbr><span class="parameters">(<a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Static creator with explicit bean store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -303,7 +303,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getIssuer()">
 <h3>getIssuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-398">getIssuer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-402">getIssuer</a></span>()</div>
 <div class="block">Returns the issuer this validator requires on tokens.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -314,7 +314,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getAudience()">
 <h3>getAudience</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-407">getAudience</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-411">getAudience</a></span>()</div>
 <div class="block">Returns the audience this validator requires on tokens.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -325,7 +325,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getAlgorithms()">
 <h3>getAlgorithms</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;com.nimbusds.jose.JWSAlgorithm&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-416">getAlgorithms</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;com.nimbusds.jose.JWSAlgorithm&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-420">getAlgorithms</a></span>()</div>
 <div class="block">Returns the allowlist of signing algorithms.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -336,7 +336,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getClockSkew()">
 <h3>getClockSkew</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-425">getClockSkew</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-429">getClockSkew</a></span>()</div>
 <div class="block">Returns the configured clock-skew tolerance.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -347,7 +347,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="validate(java.lang.String)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-429">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/jwt/JwtTokenValidator.html#line-433">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span>
                    throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../TokenValidator.html#validate(java.lang.String)">TokenValidator</a></code></span></div>
 <div class="block">Validates the supplied bearer token and returns the associated <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a>.</div>

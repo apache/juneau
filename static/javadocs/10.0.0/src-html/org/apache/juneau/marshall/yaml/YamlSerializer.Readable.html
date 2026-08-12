@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *    &lt;jc&gt;// Use one of the default serializers to serialize a POJO&lt;/jc&gt;</span>
-<span class="source-line-no">077</span><span id="line-77"> *    String &lt;jv&gt;yaml&lt;/jv&gt; = YamlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
+<span class="source-line-no">077</span><span id="line-77"> *    String &lt;jv&gt;yaml&lt;/jv&gt; = YamlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
 <span class="source-line-no">078</span><span id="line-78"> *</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;jc&gt;// Create a custom serializer&lt;/jc&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> *    YamlSerializer &lt;jv&gt;serializer&lt;/jv&gt; = YamlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().build();</span>
@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83"> *    &lt;jv&gt;serializer&lt;/jv&gt; = YamlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.copy().ws().build();</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
 <span class="source-line-no">085</span><span id="line-85"> *    &lt;jc&gt;// Serialize a POJO to YAML&lt;/jc&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> *    String &lt;jv&gt;yaml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.serialize(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
+<span class="source-line-no">086</span><span id="line-86"> *    String &lt;jv&gt;yaml&lt;/jv&gt; = &lt;jv&gt;serializer&lt;/jv&gt;.write(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
 <span class="source-line-no">087</span><span id="line-87"> * &lt;/p&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> *</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;h5 class='figure'&gt;Example output (Map of name/age):&lt;/h5&gt;</span>
@@ -315,29 +315,29 @@
 <span class="source-line-no">302</span><span id="line-302">   /**</span>
 <span class="source-line-no">303</span><span id="line-303">    * Convenience delegator for the whole-value {@link RecordWriter} using &lt;b&gt;default session</span>
 <span class="source-line-no">304</span><span id="line-304">    * arguments&lt;/b&gt;.  The real implementation lives on</span>
-<span class="source-line-no">305</span><span id="line-305">    * {@link YamlSerializerSession#serializeRecords(Object)}.</span>
+<span class="source-line-no">305</span><span id="line-305">    * {@link YamlSerializerSession#writeRecords(Object)}.</span>
 <span class="source-line-no">306</span><span id="line-306">    *</span>
 <span class="source-line-no">307</span><span id="line-307">    * @param output The output.</span>
 <span class="source-line-no">308</span><span id="line-308">    * @return A new {@link RecordWriter}.</span>
 <span class="source-line-no">309</span><span id="line-309">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">310</span><span id="line-310">    */</span>
 <span class="source-line-no">311</span><span id="line-311">   @Override /* RecordWritable */</span>
-<span class="source-line-no">312</span><span id="line-312">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">313</span><span id="line-313">      return getSession().serializeRecords(output);</span>
+<span class="source-line-no">312</span><span id="line-312">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">313</span><span id="line-313">      return getSession().writeRecords(output);</span>
 <span class="source-line-no">314</span><span id="line-314">   }</span>
 <span class="source-line-no">315</span><span id="line-315"></span>
 <span class="source-line-no">316</span><span id="line-316">   /**</span>
 <span class="source-line-no">317</span><span id="line-317">    * Convenience delegator for the buffered array-element {@link RecordWriter} using &lt;b&gt;default</span>
 <span class="source-line-no">318</span><span id="line-318">    * session arguments&lt;/b&gt;.  The real implementation lives on</span>
-<span class="source-line-no">319</span><span id="line-319">    * {@link YamlSerializerSession#serializeArrayRecords(Object)}.</span>
+<span class="source-line-no">319</span><span id="line-319">    * {@link YamlSerializerSession#writeArrayRecords(Object)}.</span>
 <span class="source-line-no">320</span><span id="line-320">    *</span>
 <span class="source-line-no">321</span><span id="line-321">    * @param output The output.</span>
 <span class="source-line-no">322</span><span id="line-322">    * @return A new {@link RecordWriter}.</span>
 <span class="source-line-no">323</span><span id="line-323">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">324</span><span id="line-324">    */</span>
 <span class="source-line-no">325</span><span id="line-325">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">326</span><span id="line-326">   public RecordWriter serializeArrayRecords(Object output) throws IOException {</span>
-<span class="source-line-no">327</span><span id="line-327">      return getSession().serializeArrayRecords(output);</span>
+<span class="source-line-no">326</span><span id="line-326">   public RecordWriter writeArrayRecords(Object output) throws IOException {</span>
+<span class="source-line-no">327</span><span id="line-327">      return getSession().writeArrayRecords(output);</span>
 <span class="source-line-no">328</span><span id="line-328">   }</span>
 <span class="source-line-no">329</span><span id="line-329"></span>
 <span class="source-line-no">330</span><span id="line-330">   /**</span>

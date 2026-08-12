@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124">@SuppressWarnings({</span>
 <span class="source-line-no">125</span><span id="line-125">   "java:S110", // Inheritance depth acceptable</span>
 <span class="source-line-no">126</span><span id="line-126">   "java:S115", // Constants use UPPER_snakeCase convention</span>
-<span class="source-line-no">127</span><span id="line-127">   "resource"   // parseTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">127</span><span id="line-127">   "resource"   // readTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.</span>
 <span class="source-line-no">128</span><span id="line-128">})</span>
 <span class="source-line-no">129</span><span id="line-129">public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenReadable, ArrayRecordReadable {</span>
 <span class="source-line-no">130</span><span id="line-130"></span>
@@ -227,11 +227,11 @@
 <span class="source-line-no">214</span><span id="line-214">       *</span>
 <span class="source-line-no">215</span><span id="line-215">       *    &lt;jc&gt;// Should fail because input has multiple POJOs.&lt;/jc&gt;</span>
 <span class="source-line-no">216</span><span id="line-216">       *    String &lt;jv&gt;json&lt;/jv&gt; = &lt;js&gt;"{foo:'bar'}{baz:'qux'}"&lt;/js&gt;;</span>
-<span class="source-line-no">217</span><span id="line-217">       *    MyBean &lt;jv&gt;myBean&lt;/jv&gt; =&lt;jv&gt;parser&lt;/jv&gt;.parse(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">217</span><span id="line-217">       *    MyBean &lt;jv&gt;myBean&lt;/jv&gt; =&lt;jv&gt;parser&lt;/jv&gt;.read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">218</span><span id="line-218">       * &lt;/p&gt;</span>
 <span class="source-line-no">219</span><span id="line-219">       *</span>
 <span class="source-line-no">220</span><span id="line-220">       * &lt;p&gt;</span>
-<span class="source-line-no">221</span><span id="line-221">       * &lt;b&gt;Token streams:&lt;/b&gt; this setting is not honored by {@link #parseTokens(Object) parseTokens}</span>
+<span class="source-line-no">221</span><span id="line-221">       * &lt;b&gt;Token streams:&lt;/b&gt; this setting is not honored by {@link #readTokens(Object) readTokens}</span>
 <span class="source-line-no">222</span><span id="line-222">       * &amp;mdash; the cursor leaves end-of-input checking to the caller.</span>
 <span class="source-line-no">223</span><span id="line-223">       *</span>
 <span class="source-line-no">224</span><span id="line-224">       * @return This object.</span>
@@ -310,12 +310,12 @@
 <span class="source-line-no">297</span><span id="line-297"></span>
 <span class="source-line-no">298</span><span id="line-298">   /**</span>
 <span class="source-line-no">299</span><span id="line-299">    * Convenience delegator that opens a {@link JsonTokenReader} over the input using</span>
-<span class="source-line-no">300</span><span id="line-300">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #parse(Object, Class)}).</span>
+<span class="source-line-no">300</span><span id="line-300">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #read(Object, Class)}).</span>
 <span class="source-line-no">301</span><span id="line-301">    *</span>
 <span class="source-line-no">302</span><span id="line-302">    * &lt;p&gt;</span>
-<span class="source-line-no">303</span><span id="line-303">    * The real implementation lives on {@link JsonParserSession#parseTokens(Object)}.  Callers</span>
+<span class="source-line-no">303</span><span id="line-303">    * The real implementation lives on {@link JsonParserSession#readTokens(Object)}.  Callers</span>
 <span class="source-line-no">304</span><span id="line-304">    * that need request-derived configuration (locale, timezone, schema, swaps) should call</span>
-<span class="source-line-no">305</span><span id="line-305">    * {@link #createSession()} and invoke {@link JsonParserSession#parseTokens(Object)} on the</span>
+<span class="source-line-no">305</span><span id="line-305">    * {@link #createSession()} and invoke {@link JsonParserSession#readTokens(Object)} on the</span>
 <span class="source-line-no">306</span><span id="line-306">    * built session instead.</span>
 <span class="source-line-no">307</span><span id="line-307">    *</span>
 <span class="source-line-no">308</span><span id="line-308">    * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},</span>
@@ -324,8 +324,8 @@
 <span class="source-line-no">311</span><span id="line-311">    * @throws IOException If a problem occurred opening the underlying input.</span>
 <span class="source-line-no">312</span><span id="line-312">    */</span>
 <span class="source-line-no">313</span><span id="line-313">   @Override /* TokenReadable */</span>
-<span class="source-line-no">314</span><span id="line-314">   public TokenReader parseTokens(Object input) throws IOException {</span>
-<span class="source-line-no">315</span><span id="line-315">      return getSession().parseTokens(input);</span>
+<span class="source-line-no">314</span><span id="line-314">   public TokenReader readTokens(Object input) throws IOException {</span>
+<span class="source-line-no">315</span><span id="line-315">      return getSession().readTokens(input);</span>
 <span class="source-line-no">316</span><span id="line-316">   }</span>
 <span class="source-line-no">317</span><span id="line-317"></span>
 <span class="source-line-no">318</span><span id="line-318">   /**</span>
@@ -340,16 +340,16 @@
 <span class="source-line-no">327</span><span id="line-327"></span>
 <span class="source-line-no">328</span><span id="line-328">   /**</span>
 <span class="source-line-no">329</span><span id="line-329">    * Convenience delegator for the streaming array-element {@link RecordReader} (uses default</span>
-<span class="source-line-no">330</span><span id="line-330">    * session args; see {@link #parseTokens(Object)}).  Real impl on</span>
-<span class="source-line-no">331</span><span id="line-331">    * {@link JsonParserSession#parseArrayRecords(Object)}.</span>
+<span class="source-line-no">330</span><span id="line-330">    * session args; see {@link #readTokens(Object)}).  Real impl on</span>
+<span class="source-line-no">331</span><span id="line-331">    * {@link JsonParserSession#readArrayRecords(Object)}.</span>
 <span class="source-line-no">332</span><span id="line-332">    *</span>
 <span class="source-line-no">333</span><span id="line-333">    * @param input The input.</span>
 <span class="source-line-no">334</span><span id="line-334">    * @return A new element-streamed {@link RecordReader}.</span>
 <span class="source-line-no">335</span><span id="line-335">    * @throws IOException If a problem occurred opening the underlying input.</span>
 <span class="source-line-no">336</span><span id="line-336">    */</span>
 <span class="source-line-no">337</span><span id="line-337">   @Override /* ArrayRecordReadable */</span>
-<span class="source-line-no">338</span><span id="line-338">   public RecordReader parseArrayRecords(Object input) throws IOException {</span>
-<span class="source-line-no">339</span><span id="line-339">      return getSession().parseArrayRecords(input);</span>
+<span class="source-line-no">338</span><span id="line-338">   public RecordReader readArrayRecords(Object input) throws IOException {</span>
+<span class="source-line-no">339</span><span id="line-339">      return getSession().readArrayRecords(input);</span>
 <span class="source-line-no">340</span><span id="line-340">   }</span>
 <span class="source-line-no">341</span><span id="line-341">}</span>
 

@@ -262,43 +262,51 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Creates a <a href="../../bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> instance for the specified bean type info.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#findMarshalledTypeName(org.apache.juneau.commons.bean.BeanConfigContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">findMarshalledTypeName</a><wbr>(<a href="../../bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config,
- <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;classInfo)</code></div>
+<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../../bean/BeanMeta.BeanMetaValue.html" title="class in org.apache.juneau.commons.bean">BeanMeta.BeanMetaValue</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanMeta.</span><code><a href="../../bean/BeanMeta.html#create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">create</a><wbr>(<a href="../../bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;T&gt;&nbsp;cm,
+ <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass,
+ <a href="../../bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Returns the marshalling-side <code>@Marshalled(typeName)</code> value for the bean, or <jk>null</jk> if not set.</div>
+<div class="block">Same as <a href="../../bean/BeanMeta.html#create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo)"><code>BeanMeta.create(BeanInfo, ClassInfo)</code></a> but allows an explicit <a href="../../bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> to override the one
+ that would otherwise be derived from the bean filter or <a href="../../bean/BeanConfigContext.html#getPropertyNamer()"><code>BeanConfigContext.getPropertyNamer()</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#findTypeNameInParents(java.lang.Object,org.apache.juneau.commons.reflect.ClassInfo,java.lang.Class)" class="member-name-link">findTypeNameInParents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;marshallingContext,
+<div class="col-second odd-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#findMarshalledTypeName(org.apache.juneau.commons.bean.BeanConfigContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">findMarshalledTypeName</a><wbr>(<a href="../../bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config,
+ <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;classInfo)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the marshalling-side <code>@Marshalled(typeName)</code> value for the bean, or <jk>null</jk> if not set.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#findTypeNameInParents(java.lang.Object,org.apache.juneau.commons.reflect.ClassInfo,java.lang.Class)" class="member-name-link">findTypeNameInParents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;marshallingContext,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;classInfo,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;rawClass)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Walks the parent classes/interfaces of <code>classInfo</code> and returns the first dictionary-name mapping for
  <code>rawClass</code> found in any parent's registry, or <jk>null</jk> if none.</div>
 </div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#hasBeanRegistrationAnnotation(org.apache.juneau.commons.bean.BeanConfigContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">hasBeanRegistrationAnnotation</a><wbr>(<a href="../../bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config,
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#hasBeanRegistrationAnnotation(org.apache.juneau.commons.bean.BeanConfigContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">hasBeanRegistrationAnnotation</a><wbr>(<a href="../../bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;classInfo)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Returns <jk>true</jk> if the supplied class has a "registered as bean" annotation (e.g.</div>
 </div>
-<div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanConfigContext.</span><code><a href="../../bean/BeanConfigContext.html#isNotABean(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">isNotABean</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanConfigContext.</span><code><a href="../../bean/BeanConfigContext.html#isNotABean(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">isNotABean</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Returns <jk>true</jk> if the specified class is excluded from bean detection.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanTypeResolver.</span><code><a href="../../bean/BeanTypeResolver.html#resolveType(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)" class="member-name-link">resolveType</a><wbr>(<a href="../AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../../bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;lastBeanProp,
+<div class="col-first odd-row-color"><code><a href="../../bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanTypeResolver.</span><code><a href="../../bean/BeanTypeResolver.html#resolveType(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)" class="member-name-link">resolveType</a><wbr>(<a href="../AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../../bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;lastBeanProp,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type,
  <a href="../TypeVariables.html" title="class in org.apache.juneau.commons.reflect">TypeVariables</a>&nbsp;typeVarImpls)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Resolves the bean-property type-info for a property given its (optional)
  <a href="../../bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanProp</code></a> annotation and Java type.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#resolveTypePropertyName(org.apache.juneau.commons.bean.BeanConfigContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">resolveTypePropertyName</a><wbr>(<a href="../../bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config,
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanMetaInitializer.</span><code><a href="../../bean/BeanMetaInitializer.html#resolveTypePropertyName(org.apache.juneau.commons.bean.BeanConfigContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">resolveTypePropertyName</a><wbr>(<a href="../../bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;classInfo)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Returns the marshalling-side <code>@Marshalled(typePropertyName)</code> value for the bean, or <jk>null</jk> if
  not set.</div>
 </div>
@@ -333,6 +341,16 @@ loadScripts(document, 'script');</script>
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
+</div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-second odd-row-color"><code><a href="../../bean/BeanMeta.html#%3Cinit%3E(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.bean.BeanFilter,java.lang.String%5B%5D,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">BeanMeta</a><wbr>(<a href="../../bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="../../bean/BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;cm,
+ <a href="../../bean/BeanFilter.html" title="interface in org.apache.juneau.commons.bean">BeanFilter</a>&nbsp;bf,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;pNames,
+ <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass,
+ <a href="../../bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamerOverride)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Same as <a href="../../bean/BeanMeta.html#%3Cinit%3E(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.bean.BeanFilter,java.lang.String%5B%5D,org.apache.juneau.commons.reflect.ClassInfo)"><code>BeanMeta(BeanInfo, BeanFilter, String[], ClassInfo)</code></a> but allows an explicit
+ <a href="../../bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> override.</div>
 </div>
 </div>
 </section>

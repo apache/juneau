@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;jc&gt;// Use one of the default serializers to serialize a POJO&lt;/jc&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
+<span class="source-line-no">078</span><span id="line-78"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;jc&gt;// Create a custom serializer that doesn't use whitespace and newlines&lt;/jc&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> *    HtmlSerializer &lt;jv&gt;serializer&lt;/jv&gt; = HtmlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().ws().build();</span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line-88"> *    &lt;jc&gt;// Produces: &lt;/jc&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> *    &lt;jc&gt;// &amp;lt;ul&amp;gt;&amp;lt;li&amp;gt;1&amp;lt;li&amp;gt;2&amp;lt;li&amp;gt;3&amp;lt;/ul&amp;gt;&lt;/jc&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> *    List &lt;jv&gt;list&lt;/jv&gt; = JsonList.&lt;jsm&gt;of&lt;/jsm&gt;(1, 2, 3);</span>
-<span class="source-line-no">091</span><span id="line-91"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;list&lt;/jv&gt;);</span>
+<span class="source-line-no">091</span><span id="line-91"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;list&lt;/jv&gt;);</span>
 <span class="source-line-no">092</span><span id="line-92"> *</span>
 <span class="source-line-no">093</span><span id="line-93"> *    &lt;jc&gt;// Produces: &lt;/jc&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> *    &lt;jc&gt;//    &amp;lt;table&amp;gt; &lt;/jc&gt;</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102"> *       JsonMap.&lt;jsm&gt;ofText&lt;/jsm&gt;(&lt;js&gt;"{firstName:'Billy',lastName:'TheKid'}"&lt;/js&gt;),</span>
 <span class="source-line-no">103</span><span id="line-103"> *       JsonMap.&lt;jsm&gt;ofText&lt;/jsm&gt;(&lt;js&gt;"{firstName:'Barney',lastName:'Miller'}"&lt;/js&gt;)</span>
 <span class="source-line-no">104</span><span id="line-104"> *    );</span>
-<span class="source-line-no">105</span><span id="line-105"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;list&lt;/jv&gt;);</span>
+<span class="source-line-no">105</span><span id="line-105"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;list&lt;/jv&gt;);</span>
 <span class="source-line-no">106</span><span id="line-106"> *</span>
 <span class="source-line-no">107</span><span id="line-107"> *    &lt;jc&gt;// Produces: &lt;/jc&gt;</span>
 <span class="source-line-no">108</span><span id="line-108"> *    &lt;jc&gt;//    &amp;lt;table&amp;gt; &lt;/jc&gt;</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111"> *    &lt;jc&gt;//       &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;baz&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;123&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt; &lt;/jc&gt;</span>
 <span class="source-line-no">112</span><span id="line-112"> *    &lt;jc&gt;//    &amp;lt;/table&amp;gt; &lt;/jc&gt;</span>
 <span class="source-line-no">113</span><span id="line-113"> *    Map &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;ofText&lt;/jsm&gt;(&lt;js&gt;"{foo:'bar',baz:123}"&lt;/js&gt;);</span>
-<span class="source-line-no">114</span><span id="line-114"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;);</span>
+<span class="source-line-no">114</span><span id="line-114"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;map&lt;/jv&gt;);</span>
 <span class="source-line-no">115</span><span id="line-115"> *</span>
 <span class="source-line-no">116</span><span id="line-116"> *    &lt;jc&gt;// HTML elements can be nested arbitrarily deep&lt;/jc&gt;</span>
 <span class="source-line-no">117</span><span id="line-117"> *    &lt;jc&gt;// Produces: &lt;/jc&gt;</span>
@@ -143,7 +143,7 @@
 <span class="source-line-no">130</span><span id="line-130"> *    Map &lt;jv&gt;map&lt;/jv&gt; = JsonMap.&lt;jsm&gt;ofText&lt;/jsm&gt;(&lt;js&gt;"{foo:'bar',baz:123}"&lt;/js&gt;);</span>
 <span class="source-line-no">131</span><span id="line-131"> *    &lt;jv&gt;map&lt;/jv&gt;.put(&lt;js&gt;"someNumbers"&lt;/js&gt;, JsonList.&lt;jsm&gt;of&lt;/jsm&gt;(1, 2, 3));</span>
 <span class="source-line-no">132</span><span id="line-132"> *    &lt;jv&gt;map&lt;/jv&gt;.put(&lt;js&gt;"someSubMap"&lt;/js&gt;, JsonMap.&lt;jsm&gt;ofText&lt;/jsm&gt;(&lt;js&gt;"{a:'b'}"&lt;/js&gt;));</span>
-<span class="source-line-no">133</span><span id="line-133"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;map&lt;/jv&gt;);</span>
+<span class="source-line-no">133</span><span id="line-133"> *    String &lt;jv&gt;html&lt;/jv&gt; = HtmlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;map&lt;/jv&gt;);</span>
 <span class="source-line-no">134</span><span id="line-134"> * &lt;/p&gt;</span>
 <span class="source-line-no">135</span><span id="line-135"> *</span>
 <span class="source-line-no">136</span><span id="line-136"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -286,8 +286,8 @@
 <span class="source-line-no">273</span><span id="line-273">       *       .addKeyValueTableHeaders()</span>
 <span class="source-line-no">274</span><span id="line-274">       *       .build();</span>
 <span class="source-line-no">275</span><span id="line-275">       *</span>
-<span class="source-line-no">276</span><span id="line-276">       *    String &lt;jv&gt;withoutHeaders&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
-<span class="source-line-no">277</span><span id="line-277">       *    String &lt;jv&gt;withHeaders&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">276</span><span id="line-276">       *    String &lt;jv&gt;withoutHeaders&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">277</span><span id="line-277">       *    String &lt;jv&gt;withHeaders&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">278</span><span id="line-278">       * &lt;/p&gt;</span>
 <span class="source-line-no">279</span><span id="line-279">       *</span>
 <span class="source-line-no">280</span><span id="line-280">       * &lt;p&gt;</span>
@@ -369,8 +369,8 @@
 <span class="source-line-no">356</span><span id="line-356">       *       .disableDetectLabelParameters()</span>
 <span class="source-line-no">357</span><span id="line-357">       *       .build();</span>
 <span class="source-line-no">358</span><span id="line-358">       *</span>
-<span class="source-line-no">359</span><span id="line-359">       *    String &lt;jv&gt;withLabels&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
-<span class="source-line-no">360</span><span id="line-360">       *    String &lt;jv&gt;withoutLabels&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">359</span><span id="line-359">       *    String &lt;jv&gt;withLabels&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">360</span><span id="line-360">       *    String &lt;jv&gt;withoutLabels&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">361</span><span id="line-361">       * &lt;/p&gt;</span>
 <span class="source-line-no">362</span><span id="line-362">       *</span>
 <span class="source-line-no">363</span><span id="line-363">       * &lt;p&gt;</span>
@@ -442,8 +442,8 @@
 <span class="source-line-no">429</span><span id="line-429">       *       .disableDetectLinksInStrings()</span>
 <span class="source-line-no">430</span><span id="line-430">       *       .build();</span>
 <span class="source-line-no">431</span><span id="line-431">       *</span>
-<span class="source-line-no">432</span><span id="line-432">       *    String &lt;jv&gt;withLinks&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
-<span class="source-line-no">433</span><span id="line-433">       *    String &lt;jv&gt;withoutLinks&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">432</span><span id="line-432">       *    String &lt;jv&gt;withLinks&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">433</span><span id="line-433">       *    String &lt;jv&gt;withoutLinks&lt;/jv&gt; = &lt;jv&gt;serializer2&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">434</span><span id="line-434">       * &lt;/p&gt;</span>
 <span class="source-line-no">435</span><span id="line-435">       *</span>
 <span class="source-line-no">436</span><span id="line-436">       * &lt;p&gt;</span>
@@ -544,7 +544,7 @@
 <span class="source-line-no">531</span><span id="line-531">       *    WriterSerializer &lt;jv&gt;serializer1&lt;/jv&gt; = HtmlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().anchorText(&lt;jsf&gt;TO_STRING&lt;/jsf&gt;).build();</span>
 <span class="source-line-no">532</span><span id="line-532">       *</span>
 <span class="source-line-no">533</span><span id="line-533">       *    &lt;jc&gt;// Produces: &amp;lt;a href='http://www.apache.org?foo=bar#myAnchor'&amp;gt;http://www.apache.org?foo=bar#myAnchor&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">534</span><span id="line-534">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">534</span><span id="line-534">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">535</span><span id="line-535">       *          &lt;/p&gt;</span>
 <span class="source-line-no">536</span><span id="line-536">       *       &lt;li class='jf'&gt;{@link AnchorText#PROPERTY_NAME PROPERTY_NAME} - Set to the bean property name.</span>
 <span class="source-line-no">537</span><span id="line-537">       *          &lt;br&gt;</span>
@@ -559,7 +559,7 @@
 <span class="source-line-no">546</span><span id="line-546">       *    WriterSerializer &lt;jv&gt;serializer1&lt;/jv&gt; = HtmlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().anchorText(&lt;jsf&gt;PROPERTY_NAME&lt;/jsf&gt;).build();</span>
 <span class="source-line-no">547</span><span id="line-547">       *</span>
 <span class="source-line-no">548</span><span id="line-548">       *    &lt;jc&gt;// Produces: &amp;lt;a href='http://www.apache.org?foo=bar#myAnchor'&amp;gt;f1&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">549</span><span id="line-549">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">549</span><span id="line-549">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">550</span><span id="line-550">       *          &lt;/p&gt;</span>
 <span class="source-line-no">551</span><span id="line-551">       *       &lt;li class='jf'&gt;{@link AnchorText#URI URI} - Set to the URI value.</span>
 <span class="source-line-no">552</span><span id="line-552">       *          &lt;br&gt;</span>
@@ -574,7 +574,7 @@
 <span class="source-line-no">561</span><span id="line-561">       *    WriterSerializer &lt;jv&gt;serializer1&lt;/jv&gt; = HtmlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().anchorText(&lt;jsf&gt;URI&lt;/jsf&gt;).build();</span>
 <span class="source-line-no">562</span><span id="line-562">       *</span>
 <span class="source-line-no">563</span><span id="line-563">       *    &lt;jc&gt;// Produces: &amp;lt;a href='http://www.apache.org?foo=bar#myAnchor'&amp;gt;http://www.apache.org?foo=bar&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">564</span><span id="line-564">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">564</span><span id="line-564">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">565</span><span id="line-565">       *          &lt;/p&gt;</span>
 <span class="source-line-no">566</span><span id="line-566">       *       &lt;li class='jf'&gt;{@link AnchorText#LAST_TOKEN LAST_TOKEN} - Set to the last token of the URI value.</span>
 <span class="source-line-no">567</span><span id="line-567">       *          &lt;br&gt;</span>
@@ -589,7 +589,7 @@
 <span class="source-line-no">576</span><span id="line-576">       *    WriterSerializer &lt;jv&gt;serializer1&lt;/jv&gt; = HtmlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().anchorText(&lt;jsf&gt;LAST_TOKEN&lt;/jsf&gt;).build();</span>
 <span class="source-line-no">577</span><span id="line-577">       *</span>
 <span class="source-line-no">578</span><span id="line-578">       *    &lt;jc&gt;// Produces: &amp;lt;a href='http://www.apache.org/foo/bar?baz=qux#myAnchor'&amp;gt;bar&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">579</span><span id="line-579">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">579</span><span id="line-579">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">580</span><span id="line-580">       *          &lt;/p&gt;</span>
 <span class="source-line-no">581</span><span id="line-581">       *       &lt;li class='jf'&gt;{@link AnchorText#URI_ANCHOR URI_ANCHOR} - Set to the anchor of the URL.</span>
 <span class="source-line-no">582</span><span id="line-582">       *          &lt;br&gt;</span>
@@ -604,7 +604,7 @@
 <span class="source-line-no">591</span><span id="line-591">       *    WriterSerializer &lt;jv&gt;serializer1&lt;/jv&gt; = HtmlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().anchorText(&lt;jsf&gt;URI_ANCHOR&lt;/jsf&gt;).build();</span>
 <span class="source-line-no">592</span><span id="line-592">       *</span>
 <span class="source-line-no">593</span><span id="line-593">       *    &lt;jc&gt;// Produces: &amp;lt;a href='http://www.apache.org/foo/bar?baz=qux#myAnchor'&amp;gt;myAnchor&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">594</span><span id="line-594">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">594</span><span id="line-594">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">595</span><span id="line-595">       *          &lt;/p&gt;</span>
 <span class="source-line-no">596</span><span id="line-596">       *       &lt;li class='jf'&gt;{@link AnchorText#CONTEXT_RELATIVE CONTEXT_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a context-relative path.</span>
 <span class="source-line-no">597</span><span id="line-597">       *          &lt;br&gt;</span>
@@ -625,7 +625,7 @@
 <span class="source-line-no">612</span><span id="line-612">       *       .build();</span>
 <span class="source-line-no">613</span><span id="line-613">       *</span>
 <span class="source-line-no">614</span><span id="line-614">       *    &lt;jc&gt;// Produces: &amp;lt;a href&amp;#61;'/myContext/myServlet/bar/baz'&amp;gt;myServlet/bar/baz&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">615</span><span id="line-615">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">615</span><span id="line-615">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">616</span><span id="line-616">       *          &lt;/p&gt;</span>
 <span class="source-line-no">617</span><span id="line-617">       *       &lt;li class='jf'&gt;{@link AnchorText#SERVLET_RELATIVE SERVLET_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a servlet-relative path.</span>
 <span class="source-line-no">618</span><span id="line-618">       *          &lt;br&gt;</span>
@@ -646,7 +646,7 @@
 <span class="source-line-no">633</span><span id="line-633">       *       .build();</span>
 <span class="source-line-no">634</span><span id="line-634">       *</span>
 <span class="source-line-no">635</span><span id="line-635">       *    &lt;jc&gt;// Produces: &amp;lt;a href&amp;#61;'/myContext/myServlet/bar/baz'&amp;gt;bar/baz&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">636</span><span id="line-636">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">636</span><span id="line-636">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">637</span><span id="line-637">       *          &lt;/p&gt;</span>
 <span class="source-line-no">638</span><span id="line-638">       *       &lt;li class='jf'&gt;{@link AnchorText#PATH_RELATIVE PATH_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a path-relative path.</span>
 <span class="source-line-no">639</span><span id="line-639">       *          &lt;br&gt;</span>
@@ -667,7 +667,7 @@
 <span class="source-line-no">654</span><span id="line-654">       *       .build();</span>
 <span class="source-line-no">655</span><span id="line-655">       *</span>
 <span class="source-line-no">656</span><span id="line-656">       *    &lt;jc&gt;// Produces: &amp;lt;a href&amp;#61;'/myContext/myServlet/foo/bar/baz'&amp;gt;bar/baz&amp;lt;/a&amp;gt;&lt;/jc&gt;</span>
-<span class="source-line-no">657</span><span id="line-657">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.serialize(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
+<span class="source-line-no">657</span><span id="line-657">       *    String &lt;jv&gt;html&lt;/jv&gt; = &lt;jv&gt;serializer1&lt;/jv&gt;.write(&lt;jk&gt;new&lt;/jk&gt; MyBean());</span>
 <span class="source-line-no">658</span><span id="line-658">       *          &lt;/p&gt;</span>
 <span class="source-line-no">659</span><span id="line-659">       *    &lt;/ul&gt;</span>
 <span class="source-line-no">660</span><span id="line-660">       * &lt;/ul&gt;</span>

@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-77">FloatFormat</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-79">FloatFormat</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a>&gt;</span></div>
 <div class="block">Supported wire formats for non-finite <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> values
  (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html#NaN" title="class or interface in java.lang" class="external-link"><code>NaN</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html#POSITIVE_INFINITY" title="class or interface in java.lang" class="external-link"><code>+Infinity</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html#NEGATIVE_INFINITY" title="class or interface in java.lang" class="external-link"><code>-Infinity</code></a>).
@@ -252,14 +252,14 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NOT_SET">
 <h3>NOT_SET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-83">NOT_SET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-85">NOT_SET</a></span></div>
 <div class="block">Sentinel meaning "no value configured" — falls through to the next-higher precedence level.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="NaN_AS_NULL">
 <h3>NaN_AS_NULL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-94">NaN_AS_NULL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-96">NaN_AS_NULL</a></span></div>
 <div class="block">Emit <code>null</code> for <code>NaN</code> / <code>±Infinity</code> (the default).
 
  <p>
@@ -272,7 +272,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NaN_AS_STRING">
 <h3>NaN_AS_STRING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-103">NaN_AS_STRING</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-105">NaN_AS_STRING</a></span></div>
 <div class="block">Emit the quoted string <code>"NaN"</code> / <code>"Infinity"</code> / <code>"-Infinity"</code>.
 
  <p>
@@ -283,7 +283,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NaN_AS_NUMBER">
 <h3>NaN_AS_NUMBER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-112">NaN_AS_NUMBER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-114">NaN_AS_NUMBER</a></span></div>
 <div class="block">Emit the bare <code>NaN</code> / <code>Infinity</code> / <code>-Infinity</code> token.
 
  <p>
@@ -294,7 +294,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NaN_AS_ERROR">
 <h3>NaN_AS_ERROR</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-120">NaN_AS_ERROR</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-122">NaN_AS_ERROR</a></span></div>
 <div class="block">Throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> when a non-finite value is encountered.
 
  <p>
@@ -312,7 +312,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-77">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-79">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -324,7 +324,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-77">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-79">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -343,7 +343,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="format(double,org.apache.juneau.marshall.FloatFormat)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-144">format</a></span><wbr><span class="parameters">(double&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-146">format</a></span><wbr><span class="parameters">(double&nbsp;value,
  <a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats the specified <code>double</code> using this format.
 
@@ -374,7 +374,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="format(float,org.apache.juneau.marshall.FloatFormat)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-164">format</a></span><wbr><span class="parameters">(float&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-166">format</a></span><wbr><span class="parameters">(float&nbsp;value,
  <a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats the specified <code>float</code> using this format.
 
@@ -397,7 +397,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="parse(java.lang.String,org.apache.juneau.marshall.FloatFormat,java.lang.Class)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-213">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-215">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;targetType)</span></div>
 <div class="block">Parses the specified wire value into a non-finite-aware <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a>.
@@ -410,8 +410,8 @@ not permitted.)</div>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The target type (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a>).</dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank.</dd>
-<dd><code>format</code> - The configured format hint (informational only — parsing is format-agnostic). Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
+<dd><code>format</code> - The configured format hint (informational only — parsing is format-agnostic). Can be <jk>null</jk> (ignored; parsing is format-agnostic).</dd>
 <dd><code>targetType</code> - The desired return type — <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>The parsed value, or <jk>null</jk> if <code>value</code> is <jk>null</jk> or blank.</dd>
@@ -423,7 +423,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isNumeric()">
 <h3>isNumeric</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-266">isNumeric</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/FloatFormat.html#line-268">isNumeric</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this format always emits a bare numeric wire token for non-finite values.
 
  <p>

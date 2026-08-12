@@ -95,8 +95,8 @@
 <span class="source-line-no">082</span><span id="line-82">public final class MustacheView implements View {</span>
 <span class="source-line-no">083</span><span id="line-83"></span>
 <span class="source-line-no">084</span><span id="line-84">   private final String templateName;</span>
-<span class="source-line-no">085</span><span id="line-85">   private final Map&lt;String, Object&gt; attributes;</span>
-<span class="source-line-no">086</span><span id="line-86">   private final Map&lt;String, String&gt; responseHeaders;</span>
+<span class="source-line-no">085</span><span id="line-85">   private final Map&lt;String,Object&gt; attributes;</span>
+<span class="source-line-no">086</span><span id="line-86">   private final Map&lt;String,String&gt; responseHeaders;</span>
 <span class="source-line-no">087</span><span id="line-87"></span>
 <span class="source-line-no">088</span><span id="line-88">   /**</span>
 <span class="source-line-no">089</span><span id="line-89">    * Creates a new {@code MustacheView} carrying the given template name and no attributes.</span>
@@ -120,7 +120,7 @@
 <span class="source-line-no">107</span><span id="line-107">      return new MustacheView(templateName, Map.of(), Map.of());</span>
 <span class="source-line-no">108</span><span id="line-108">   }</span>
 <span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   private MustacheView(String templateName, Map&lt;String, Object&gt; attributes, Map&lt;String, String&gt; responseHeaders) {</span>
+<span class="source-line-no">110</span><span id="line-110">   private MustacheView(String templateName, Map&lt;String,Object&gt; attributes, Map&lt;String,String&gt; responseHeaders) {</span>
 <span class="source-line-no">111</span><span id="line-111">      this.templateName = templateName;</span>
 <span class="source-line-no">112</span><span id="line-112">      this.attributes = attributes;</span>
 <span class="source-line-no">113</span><span id="line-113">      this.responseHeaders = responseHeaders;</span>
@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">      if (isBlank(key))</span>
 <span class="source-line-no">136</span><span id="line-136">         throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">137</span><span id="line-137">      if (value == null)</span>
-<span class="source-line-no">138</span><span id="line-138">         throw iaex("attribute value must not be null (attribute ''{0}'')", key);</span>
+<span class="source-line-no">138</span><span id="line-138">         throw iaex("attribute value must not be null (attribute '%s')", key);</span>
 <span class="source-line-no">139</span><span id="line-139">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">140</span><span id="line-140">      copy.put(key, value);</span>
 <span class="source-line-no">141</span><span id="line-141">      return new MustacheView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -164,7 +164,7 @@
 <span class="source-line-no">151</span><span id="line-151">    * @throws IllegalArgumentException If any entry has a {@code null}/blank key or a {@code null}</span>
 <span class="source-line-no">152</span><span id="line-152">    *    value.</span>
 <span class="source-line-no">153</span><span id="line-153">    */</span>
-<span class="source-line-no">154</span><span id="line-154">   public MustacheView attrs(Map&lt;String, ?&gt; values) {</span>
+<span class="source-line-no">154</span><span id="line-154">   public MustacheView attrs(Map&lt;String,?&gt; values) {</span>
 <span class="source-line-no">155</span><span id="line-155">      if (values == null || values.isEmpty())</span>
 <span class="source-line-no">156</span><span id="line-156">         return this;</span>
 <span class="source-line-no">157</span><span id="line-157">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
@@ -172,7 +172,7 @@
 <span class="source-line-no">159</span><span id="line-159">         if (isBlank(k))</span>
 <span class="source-line-no">160</span><span id="line-160">            throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">161</span><span id="line-161">         if (v == null)</span>
-<span class="source-line-no">162</span><span id="line-162">            throw iaex("attribute value must not be null (attribute ''{0}'')", k);</span>
+<span class="source-line-no">162</span><span id="line-162">            throw iaex("attribute value must not be null (attribute '%s')", k);</span>
 <span class="source-line-no">163</span><span id="line-163">         copy.put(k, v);</span>
 <span class="source-line-no">164</span><span id="line-164">      });</span>
 <span class="source-line-no">165</span><span id="line-165">      return new MustacheView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">      if (isBlank(name))</span>
 <span class="source-line-no">185</span><span id="line-185">         throw iaex("header name must not be null or blank");</span>
 <span class="source-line-no">186</span><span id="line-186">      if (value == null)</span>
-<span class="source-line-no">187</span><span id="line-187">         throw iaex("header value must not be null (header ''{0}'')", name);</span>
+<span class="source-line-no">187</span><span id="line-187">         throw iaex("header value must not be null (header '%s')", name);</span>
 <span class="source-line-no">188</span><span id="line-188">      var copy = new LinkedHashMap&lt;&gt;(responseHeaders);</span>
 <span class="source-line-no">189</span><span id="line-189">      copy.put(name, value);</span>
 <span class="source-line-no">190</span><span id="line-190">      return new MustacheView(templateName, attributes, Map.copyOf(copy));</span>
@@ -209,12 +209,12 @@
 <span class="source-line-no">196</span><span id="line-196">   }</span>
 <span class="source-line-no">197</span><span id="line-197"></span>
 <span class="source-line-no">198</span><span id="line-198">   @Override /* Overridden from View */</span>
-<span class="source-line-no">199</span><span id="line-199">   public Map&lt;String, Object&gt; getAttributes() {</span>
+<span class="source-line-no">199</span><span id="line-199">   public Map&lt;String,Object&gt; getAttributes() {</span>
 <span class="source-line-no">200</span><span id="line-200">      return attributes;</span>
 <span class="source-line-no">201</span><span id="line-201">   }</span>
 <span class="source-line-no">202</span><span id="line-202"></span>
 <span class="source-line-no">203</span><span id="line-203">   @Override /* Overridden from View */</span>
-<span class="source-line-no">204</span><span id="line-204">   public Map&lt;String, String&gt; getResponseHeaders() {</span>
+<span class="source-line-no">204</span><span id="line-204">   public Map&lt;String,String&gt; getResponseHeaders() {</span>
 <span class="source-line-no">205</span><span id="line-205">      return responseHeaders;</span>
 <span class="source-line-no">206</span><span id="line-206">   }</span>
 <span class="source-line-no">207</span><span id="line-207"></span>

@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-95">TomlParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-96">TomlParser</a></span>
 <span class="extends-implements">extends <a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>
 implements <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></span></div>
 <div class="block">Parses TOML v1.0.0 text into POJOs.
@@ -125,13 +125,13 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
  <p class='bjava'>
    <jc>// Parse TOML into a JsonMap</jc>
    String <jv>toml</jv> = <js>"name = \"myapp\"\nport = 8080"</js>;
-   JsonMap <jv>parsed</jv> = TomlParser.<jsf>DEFAULT</jsf>.parse(<jv>toml</jv>, JsonMap.<jk>class</jk>);
+   JsonMap <jv>parsed</jv> = TomlParser.<jsf>DEFAULT</jsf>.read(<jv>toml</jv>, JsonMap.<jk>class</jk>);
 
    <jc>// Parse into a bean</jc>
-   MyConfig <jv>config</jv> = TomlParser.<jsf>DEFAULT</jsf>.parse(<jv>toml</jv>, MyConfig.<jk>class</jk>);
+   MyConfig <jv>config</jv> = TomlParser.<jsf>DEFAULT</jsf>.read(<jv>toml</jv>, MyConfig.<jk>class</jk>);
 
    <jc>// Parse into a parameterized type (e.g. Map with type args)</jc>
-   Map&lt;String, Object&gt; <jv>map</jv> = TomlParser.<jsf>DEFAULT</jsf>.parse(<jv>toml</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Object.<jk>class</jk>);
+   Map&lt;String, Object&gt; <jv>map</jv> = TomlParser.<jsf>DEFAULT</jsf>.read(<jv>toml</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Object.<jk>class</jk>);
 
    <jc>// Use the marshaller for convenience</jc>
    <jv>parsed</jv> = Toml.<jsm>to</jsm>(<jv>toml</jv>, JsonMap.<jk>class</jk>);
@@ -264,26 +264,26 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseRecords(java.lang.Object)" class="member-name-link">parseRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Convenience delegator that opens a <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readRecords(java.lang.Object)" class="member-name-link">readRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Convenience delegator that opens a <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> over the input using
+ <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ReaderParser">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a></h3>
-<code><a href="../parser/ReaderParser.html#getFileCharset()">getFileCharset</a>, <a href="../parser/ReaderParser.html#getSession()">getSession</a>, <a href="../parser/ReaderParser.html#getStreamCharset()">getStreamCharset</a>, <a href="../parser/ReaderParser.html#isReaderParser()">isReaderParser</a></code></div>
+<code><a href="../parser/ReaderParser.html#getSession()">getSession</a>, <a href="../parser/ReaderParser.html#getStreamCharset()">getStreamCharset</a>, <a href="../parser/ReaderParser.html#isReaderParser()">isReaderParser</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.Parser">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a></h3>
-<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doParse</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.Class)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">parse</a>, <a href="../parser/Parser.html#parse(java.lang.String,org.apache.juneau.marshall.ClassMeta)">parse</a>, <a href="../parser/Parser.html#parseArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">parseArgs</a>, <a href="../parser/Parser.html#parseIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../parser/Parser.html#parseIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">parseIntoMap</a>, <a href="../parser/Parser.html#parseWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">parseWithOuter</a></code></div>
+<code><a href="../parser/Parser.html#canHandle(java.lang.String)">canHandle</a>, <a href="../parser/Parser.html#createParserBuilder(java.lang.Class)">createParserBuilder</a>, <a href="../parser/Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">doRead</a>, <a href="../parser/Parser.html#getDebugOutputLines()">getDebugOutputLines</a>, <a href="../parser/Parser.html#getListener()">getListener</a>, <a href="../parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../parser/Parser.html#getNulls()">getNulls</a>, <a href="../parser/Parser.html#getPrimaryMediaType()">getPrimaryMediaType</a>, <a href="../parser/Parser.html#isAutoCloseStreams()">isAutoCloseStreams</a>, <a href="../parser/Parser.html#isTrimStrings()">isTrimStrings</a>, <a href="../parser/Parser.html#isUnbuffered()">isUnbuffered</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.Class)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="../parser/Parser.html#read(java.lang.String,org.apache.juneau.marshall.ClassMeta)">read</a>, <a href="../parser/Parser.html#readArgs(java.lang.Object,java.lang.reflect.Type%5B%5D)">readArgs</a>, <a href="../parser/Parser.html#readIntoCollection(java.lang.Object,java.util.Collection,java.lang.reflect.Type)">readIntoCollection</a>, <a href="../parser/Parser.html#readIntoMap(java.lang.Object,java.util.Map,java.lang.reflect.Type,java.lang.reflect.Type)">readIntoMap</a>, <a href="../parser/Parser.html#readWithOuter(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.lang.Object)">readWithOuter</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingContextable">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingContextable.html" title="class in org.apache.juneau.marshall">MarshallingContextable</a></h3>
 <code><a href="../MarshallingContextable.html#getDurationFormat()">getDurationFormat</a>, <a href="../MarshallingContextable.html#getMarshallingContext()">getMarshallingContext</a>, <a href="../MarshallingContextable.html#getPeriodFormat()">getPeriodFormat</a></code></div>
@@ -307,14 +307,14 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TomlParser.html" title="class in org.apache.juneau.marshall.toml">TomlParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-157">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TomlParser.html" title="class in org.apache.juneau.marshall.toml">TomlParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-158">DEFAULT</a></span></div>
 <div class="block">Default parser instance.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="nullValue">
 <h3>nullValue</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-168">nullValue</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-169">nullValue</a></span></div>
 </section>
 </li>
 </ul>
@@ -328,7 +328,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.toml.TomlParser.Builder)">
 <h3>TomlParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-175">TomlParser</a></span><wbr><span class="parameters">(<a href="TomlParser.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-176">TomlParser</a></span><wbr><span class="parameters">(<a href="TomlParser.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -347,7 +347,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TomlParser.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-164">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TomlParser.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-165">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -358,7 +358,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="getNullValue()">
 <h3>getNullValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-185">getNullValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-186">getNullValue</a></span>()</div>
 <div class="block">Returns the string treated as null when parsing.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -369,7 +369,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlParserSession.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-189">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlParserSession.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-190">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -387,7 +387,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlParser.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-194">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlParser.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-195">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -404,7 +404,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-199">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-200">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">
@@ -416,21 +416,21 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 </section>
 </li>
 <li>
-<section class="detail" id="parseRecords(java.lang.Object)">
-<h3>parseRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-218">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
-                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="readRecords(java.lang.Object)">
+<h3>readRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-219">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> over the input using
- <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).
+ <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).
 
  <p>
- The real implementation lives on <a href="TomlParserSession.html#parseRecords(java.lang.Object)"><code>TomlParserSession.parseRecords(Object)</code></a>.  Callers
+ The real implementation lives on <a href="TomlParserSession.html#readRecords(java.lang.Object)"><code>TomlParserSession.readRecords(Object)</code></a>.  Callers
  that need request-derived configuration (locale, timezone, schema, swaps) should call
- <a href="#createSession()"><code>createSession()</code></a> and invoke <a href="TomlParserSession.html#parseRecords(java.lang.Object)"><code>TomlParserSession.parseRecords(Object)</code></a> on the
+ <a href="#createSession()"><code>createSession()</code></a> and invoke <a href="TomlParserSession.html#readRecords(java.lang.Object)"><code>TomlParserSession.readRecords(Object)</code></a> on the
  built session instead.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/RecordReadable.html#parseRecords(java.lang.Object)">parseRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
+<dd><code><a href="../stream/RecordReadable.html#readRecords(java.lang.Object)">readRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - The input.</dd>
 <dt>Returns:</dt>
@@ -443,14 +443,14 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-223">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlParser.html#line-224">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordReadable.html#isRecordStreaming()">RecordReadable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../stream/RecordReadable.html#isRecordStreaming()">isRecordStreaming</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if <a href="../stream/RecordReadable.html#parseRecords(java.lang.Object)"><code>RecordReadable.parseRecords(Object)</code></a> returns an O(1)-memory streaming
+<dd><jk>true</jk> if <a href="../stream/RecordReadable.html#readRecords(java.lang.Object)"><code>RecordReadable.readRecords(Object)</code></a> returns an O(1)-memory streaming
    cursor; <jk>false</jk> for buffered (whole-value) formats backed by
    <a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>.</dd>
 </dl>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.json;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.annotation.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -111,7 +111,7 @@
 <span class="source-line-no">098</span><span id="line-98"></span>
 <span class="source-line-no">099</span><span id="line-99">      Object(JsonAnnotation.Builder b) {</span>
 <span class="source-line-no">100</span><span id="line-100">         super(b);</span>
-<span class="source-line-no">101</span><span id="line-101">         description = copyOf(b.description);</span>
+<span class="source-line-no">101</span><span id="line-101">         description = cp(b.description);</span>
 <span class="source-line-no">102</span><span id="line-102">         wrapperAttr = b.wrapperAttr;</span>
 <span class="source-line-no">103</span><span id="line-103">      }</span>
 <span class="source-line-no">104</span><span id="line-104"></span>

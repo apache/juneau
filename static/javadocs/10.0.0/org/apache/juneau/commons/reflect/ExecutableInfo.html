@@ -463,7 +463,7 @@ loadScripts(document, 'script');</script>
  of <a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> or <a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ConstructorInfo</code></a> instead.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>declaringClass</code> - The ClassInfo for the class that declares this method or constructor.</dd>
+<dd><code>declaringClass</code> - The ClassInfo for the class that declares this method or constructor. Must not be <jk>null</jk>.</dd>
 <dd><code>inner</code> - The constructor or method that this info represents. Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
@@ -645,7 +645,7 @@ loadScripts(document, 'script');</script>
 <dt>Type Parameters:</dt>
 <dd><code>A</code> - The annotation type.</dd>
 <dt>Parameters:</dt>
-<dd><code>type</code> - The annotation type.</dd>
+<dd><code>type</code> - The annotation type. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A stream of matching annotations.</dd>
 </dl>

@@ -158,7 +158,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.lang.Object)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-59">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-60">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Converts the specified object into a <a href="Namespace.html" title="class in org.apache.juneau.marshall.xml"><code>Namespace</code></a> object.
 
  <p>
@@ -169,16 +169,17 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The input.</dd>
+<dd><code>o</code> - The input.
+   <br>Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The namespace object, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.</dd>
+<dd>The namespace object, or <jk>null</jk> if the input was <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="createArray(java.lang.Object)">
 <h3>createArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-83">createArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-85">createArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Converts the specified object into an array of <a href="Namespace.html" title="class in org.apache.juneau.marshall.xml"><code>Namespace</code></a> object.
 
  <p>
@@ -190,20 +191,22 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The input.</dd>
+<dd><code>o</code> - The input.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The namespace objects, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.</dd>
+<dd>The namespace objects.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-126">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-129">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Create a <a href="Namespace.html" title="class in org.apache.juneau.marshall.xml"><code>Namespace</code></a> from a <js>"name:uri"</js> string pair.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The key/pair string.</dd>
+<dd><code>key</code> - The key/pair string.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The namespace object.</dd>
 </dl>
@@ -212,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-148">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-153">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uri)</span></div>
 <div class="block">Create a <a href="Namespace.html" title="class in org.apache.juneau.marshall.xml"><code>Namespace</code></a> with the specified name and URI.
 
@@ -220,8 +223,10 @@ loadScripts(document, 'script');</script>
  Previously-encountered name/uri pairs return a cached copy.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The namespace name.  See <a href="#getName()"><code>getName()</code></a>.</dd>
-<dd><code>uri</code> - The namespace URI.  See <a href="#getUri()"><code>getUri()</code></a>.</dd>
+<dd><code>name</code> - The namespace name.  See <a href="#getName()"><code>getName()</code></a>.
+   <br>Can be <jk>null</jk> (the namespace has no name).</dd>
+<dd><code>uri</code> - The namespace URI.  See <a href="#getUri()"><code>getUri()</code></a>.
+   <br>Can be <jk>null</jk> (the namespace has no URI).</dd>
 <dt>Returns:</dt>
 <dd>The namespace object.</dd>
 </dl>
@@ -230,29 +235,29 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-180">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-185">getName</a></span>()</div>
 <div class="block">Returns the namespace name.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The namespace name.</dd>
+<dd>The namespace name, or <jk>null</jk> if it was not specified.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getUri()">
 <h3>getUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-187">getUri</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-192">getUri</a></span>()</div>
 <div class="block">Returns the namespace URI.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The namespace URI.</dd>
+<dd>The namespace URI, or <jk>null</jk> if it was not specified.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-189">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/Namespace.html#line-194">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

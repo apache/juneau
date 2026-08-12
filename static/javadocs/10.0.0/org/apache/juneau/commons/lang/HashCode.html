@@ -257,7 +257,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object whose hashcode will be hashed with this object.</dd>
+<dd><code>o</code> - The object whose hashcode will be hashed with this object.  Can be <jk>null</jk> (adds <c>0</c> to the hash code).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>See Also:</dt>
@@ -295,7 +295,7 @@ loadScripts(document, 'script');</script>
  Default implementation does nothing.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>o</code> - The object to normalize before getting it's hashcode.</dd>
+<dd><code>o</code> - The object to normalize before getting it's hashcode.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The normalized object.</dd>
 </dl>

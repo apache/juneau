@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../cbor/CborTokenReader.html" title="class in org.apache.juneau.marshall.cbor">CborTokenReader</a></code>, <code><a href="../json5l/Json5lTokenReader.html" title="class in org.apache.juneau.marshall.json5l">Json5lTokenReader</a></code>, <code><a href="../json5/Json5TokenReader.html" title="class in org.apache.juneau.marshall.json5">Json5TokenReader</a></code>, <code><a href="../jsonl/JsonlTokenReader.html" title="class in org.apache.juneau.marshall.jsonl">JsonlTokenReader</a></code>, <code><a href="../json/JsonTokenReader.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader</a></code>, <code><a href="../msgpack/MsgPackTokenReader.html" title="class in org.apache.juneau.marshall.msgpack">MsgPackTokenReader</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-65">TokenReader</a></span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-67">TokenReader</a></span><span class="extends-implements">
 extends <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span></div>
 <div class="block">Public low-level pull-parser cursor over a Juneau-formatted document.
 
@@ -95,7 +95,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
  <h5 class='section'>Usage:</h5>
  <p class='bjava'>
    <jc>// Tokenize a JSON document without materializing it.</jc>
-   <jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.parseTokens(<js>"{\"a\":1,\"b\":[true,null]}"</js>)) {
+   <jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readTokens(<js>"{\"a\":1,\"b\":[true,null]}"</js>)) {
       <jk>while</jk> (<jv>r</jv>.next() != TokenType.<jsf>END_OF_STREAM</jsf>) {
          <jk>switch</jk> (<jv>r</jv>.getCurrentToken()) {
             <jk>case</jk> <jsf>FIELD_NAME</jsf>   -&gt; handleKey(<jv>r</jv>.getFieldName());
@@ -252,7 +252,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Same as <a href="#read(java.lang.Class)"><code>read(Class)</code></a> but accepts a parameterized <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link"><code>Type</code></a> and optional type
- arguments (the same shape as <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.parse(Object, Type, Type...)</code></a>).</div>
+ arguments (the same shape as <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.read(Object, Type, Type...)</code></a>).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;T</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#read(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">read</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
@@ -284,7 +284,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="MSG_READ_NON_VALUE_STATE">
 <h3>MSG_READ_NON_VALUE_STATE</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-76">MSG_READ_NON_VALUE_STATE</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-78">MSG_READ_NON_VALUE_STATE</a></span></div>
 <div class="block">Canonical message thrown as an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> when <a href="#read(java.lang.Class)"><code>read(Class)</code></a> is
  called while the cursor is not positioned at a value boundary.
 
@@ -313,7 +313,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="next()">
 <h3>next</h3>
-<div class="member-signature"><span class="return-type"><a href="TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-90">next</a></span>()
+<div class="member-signature"><span class="return-type"><a href="TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-92">next</a></span>()
         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Advances the cursor to the next token.</div>
@@ -331,7 +331,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getCurrentToken()">
 <h3>getCurrentToken</h3>
-<div class="member-signature"><span class="return-type"><a href="TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-98">getCurrentToken</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="TokenType.html" title="enum class in org.apache.juneau.marshall.stream">TokenType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-100">getCurrentToken</a></span>()</div>
 <div class="block">Returns the current token type without advancing.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -343,7 +343,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getDepth()">
 <h3>getDepth</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-110">getDepth</a></span>()</div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-112">getDepth</a></span>()</div>
 <div class="block">Returns the current depth of the cursor.
 
  <p>
@@ -359,7 +359,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getFieldName()">
 <h3>getFieldName</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-118">getFieldName</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-120">getFieldName</a></span>()</div>
 <div class="block">Returns the field name when the current token is <a href="TokenType.html#FIELD_NAME"><code>TokenType.FIELD_NAME</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -372,7 +372,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getString()">
 <h3>getString</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-132">getString</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-134">getString</a></span>()</div>
 <div class="block">Returns the current scalar value as a string.
 
  <p>
@@ -391,7 +391,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getNumber()">
 <h3>getNumber</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-146">getNumber</a></span>()
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-148">getNumber</a></span>()
           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Returns the current numeric value as a parsed <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link"><code>Number</code></a>.
 
@@ -411,7 +411,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getNumberLexeme()">
 <h3>getNumberLexeme</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-158">getNumberLexeme</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-160">getNumberLexeme</a></span>()</div>
 <div class="block">Returns the original numeric lexeme for the current numeric token.
 
  <p>
@@ -428,7 +428,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getBool()">
 <h3>getBool</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-166">getBool</a></span>()</div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-168">getBool</a></span>()</div>
 <div class="block">Returns the current boolean value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -441,7 +441,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getBinary()">
 <h3>getBinary</h3>
-<div class="member-signature"><span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-178">getBinary</a></span>()</div>
+<div class="member-signature"><span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-180">getBinary</a></span>()</div>
 <div class="block">Returns the current binary value.
 
  <p>
@@ -458,7 +458,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="canRead()">
 <h3>canRead</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-202">canRead</a></span>()
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-204">canRead</a></span>()
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Returns <jk>true</jk> if <a href="#read(java.lang.Class)"><code>read(Class)</code></a> is currently callable on this cursor &mdash;
@@ -467,7 +467,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
  <p>
  This is the natural loop predicate when streaming records:
  <p class='bjava'>
-   <jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.parseTokens(<jv>input</jv>)) {
+   <jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readTokens(<jv>input</jv>)) {
       <jv>r</jv>.next();  <jc>// consume the opening [ </jc>
       <jk>while</jk> (<jv>r</jv>.canRead()) {
          Item <jv>item</jv> = <jv>r</jv>.read(Item.<jk>class</jk>);
@@ -491,7 +491,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="read(java.lang.Class)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-239">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-241">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Consumes the upcoming value (object, array, or scalar) and binds it to a POJO via the
@@ -537,7 +537,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="read(org.apache.juneau.marshall.ClassMeta)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-253">read</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-255">read</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="#read(java.lang.Class)"><code>read(Class)</code></a> but accepts a pre-resolved <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a>.</div>
@@ -559,12 +559,12 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="read(java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-269">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-271">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Same as <a href="#read(java.lang.Class)"><code>read(Class)</code></a> but accepts a parameterized <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link"><code>Type</code></a> and optional type
- arguments (the same shape as <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.parse(Object, Type, Type...)</code></a>).</div>
+ arguments (the same shape as <a href="../parser/Parser.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Parser.read(Object, Type, Type...)</code></a>).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="RecordReader.html#read(java.lang.reflect.Type,java.lang.reflect.Type...)">read</a></code>&nbsp;in interface&nbsp;<code><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></dd>
@@ -584,7 +584,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="skipChildren()">
 <h3>skipChildren</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-286">skipChildren</a></span>()
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-288">skipChildren</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Skips over the children of the current structural token.
@@ -604,7 +604,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="isStreaming()">
 <h3>isStreaming</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-293">isStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-295">isStreaming</a></span>()</div>
 <div class="block">Structural token cursors are always O(1)-memory streamers.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -617,7 +617,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-302">close</a></span>()
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-304">close</a></span>()
     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Closes the underlying stream.
 
@@ -638,7 +638,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getNativeKind()">
 <h3>getNativeKind</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="BinaryNativeKind.html" title="enum class in org.apache.juneau.marshall.stream">BinaryNativeKind</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-320">getNativeKind</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="BinaryNativeKind.html" title="enum class in org.apache.juneau.marshall.stream">BinaryNativeKind</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-322">getNativeKind</a></span>()</div>
 <div class="block">Returns the binary-native classification of the current token.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -650,7 +650,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getTagCount()">
 <h3>getTagCount</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-330">getTagCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-332">getTagCount</a></span>()</div>
 <div class="block">Returns the number of semantic tags wrapping the current token.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -662,7 +662,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getTag(int)">
 <h3>getTag</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-341">getTag</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-343">getTag</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Returns the semantic tag at the specified position in the tag stack.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -677,7 +677,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getExtType()">
 <h3>getExtType</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-352">getExtType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-354">getExtType</a></span>()</div>
 <div class="block">Returns the typed-binary type byte for the current token.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -691,7 +691,7 @@ extends <a href="RecordReader.html" title="interface in org.apache.juneau.marsha
 <li>
 <section class="detail" id="getSimpleValue()">
 <h3>getSimpleValue</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-363">getSimpleValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/TokenReader.html#line-365">getSimpleValue</a></span>()</div>
 <div class="block">Returns the opaque simple value for the current token.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -72,12 +72,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block"><code>HttpTransport</code> implementation for the next-generation REST client backed by the Jetty 12 HTTP client.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client.okhttp">org.apache.juneau.rest.client.okhttp</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client.mcp">org.apache.juneau.rest.client.mcp</a></div>
 <div class="col-last even-row-color">
+<div class="block">Revision-neutral Model Context Protocol (MCP) client core - Streamable-HTTP transport orchestration, the
+ auth-token seam, and the pluggable response cache that per-revision <code>McpClient</code> facades build on.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.okhttp">org.apache.juneau.rest.client.okhttp</a></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>HttpTransport</code> implementation for the next-generation REST client backed by OkHttp.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.mock">org.apache.juneau.rest.mock</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.mock">org.apache.juneau.rest.mock</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Server Mock API</div>
 </div>
 </div>
@@ -206,6 +211,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JettyHttpTransportProvider.</span><code><a href="../jetty/JettyHttpTransportProvider.html#create()" class="member-name-link">create</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.client.mcp">
+<h2>Uses of <a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a> in <a href="../mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a></h2>
+<div class="caption"><span>Methods in <a href="../mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a> with parameters of type <a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../mcp/AbstractMcpClient.Builder.html" title="type parameter in AbstractMcpClient.Builder">SELF</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AbstractMcpClient.Builder.</span><code><a href="../mcp/AbstractMcpClient.Builder.html#transport(org.apache.juneau.rest.client.HttpTransport)" class="member-name-link">transport</a><wbr>(<a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the HTTP transport used by the underlying <a href="../RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>.</div>
+</div>
 </div>
 </section>
 </li>

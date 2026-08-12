@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-60">TemporalFormat</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-61">TemporalFormat</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a>&gt;</span></div>
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link"><code>TemporalAccessor</code></a> values.
 
@@ -282,14 +282,14 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="NOT_SET">
 <h3>NOT_SET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-63">NOT_SET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-64">NOT_SET</a></span></div>
 <div class="block">Sentinel meaning "no value configured" — falls through to the next-higher precedence level.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-74">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-75">DEFAULT</a></span></div>
 <div class="block">Per-subtype default formatter (the historical wire output).
 
  <p>
@@ -302,126 +302,126 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="BASIC_ISO_DATE">
 <h3>BASIC_ISO_DATE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-77">BASIC_ISO_DATE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-78">BASIC_ISO_DATE</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#BASIC_ISO_DATE" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.BASIC_ISO_DATE</code></a>: <js>"20111203"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_DATE">
 <h3>ISO_DATE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-80">ISO_DATE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-81">ISO_DATE</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_DATE" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_DATE</code></a>: <js>"2011-12-03+01:00"</js> or <js>"2011-12-03"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_DATE_TIME">
 <h3>ISO_DATE_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-83">ISO_DATE_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-84">ISO_DATE_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_DATE_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_DATE_TIME</code></a>: <js>"2011-12-03T10:15:30+01:00[Europe/Paris]"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_INSTANT">
 <h3>ISO_INSTANT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-86">ISO_INSTANT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-87">ISO_INSTANT</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_INSTANT" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_INSTANT</code></a>: <js>"2011-12-03T10:15:30Z"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_LOCAL_DATE">
 <h3>ISO_LOCAL_DATE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-89">ISO_LOCAL_DATE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-90">ISO_LOCAL_DATE</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_LOCAL_DATE</code></a>: <js>"2011-12-03"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_LOCAL_DATE_TIME">
 <h3>ISO_LOCAL_DATE_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-92">ISO_LOCAL_DATE_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-93">ISO_LOCAL_DATE_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_LOCAL_DATE_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_LOCAL_DATE_TIME</code></a>: <js>"2011-12-03T10:15:30"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_LOCAL_TIME">
 <h3>ISO_LOCAL_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-95">ISO_LOCAL_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-96">ISO_LOCAL_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_LOCAL_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_LOCAL_TIME</code></a>: <js>"10:15:30"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_OFFSET_DATE">
 <h3>ISO_OFFSET_DATE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-98">ISO_OFFSET_DATE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-99">ISO_OFFSET_DATE</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_OFFSET_DATE" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_OFFSET_DATE</code></a>: <js>"2011-12-03+01:00"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_OFFSET_DATE_TIME">
 <h3>ISO_OFFSET_DATE_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-101">ISO_OFFSET_DATE_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-102">ISO_OFFSET_DATE_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_OFFSET_DATE_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_OFFSET_DATE_TIME</code></a>: <js>"2011-12-03T10:15:30+01:00"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_OFFSET_TIME">
 <h3>ISO_OFFSET_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-104">ISO_OFFSET_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-105">ISO_OFFSET_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_OFFSET_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_OFFSET_TIME</code></a>: <js>"10:15:30+01:00"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_ORDINAL_DATE">
 <h3>ISO_ORDINAL_DATE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-107">ISO_ORDINAL_DATE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-108">ISO_ORDINAL_DATE</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_ORDINAL_DATE" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_ORDINAL_DATE</code></a>: <js>"2012-337"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_TIME">
 <h3>ISO_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-110">ISO_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-111">ISO_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_TIME</code></a>: <js>"10:15:30+01:00"</js> or <js>"10:15:30"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_WEEK_DATE">
 <h3>ISO_WEEK_DATE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-113">ISO_WEEK_DATE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-114">ISO_WEEK_DATE</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_WEEK_DATE" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_WEEK_DATE</code></a>: <js>"2012-W48-6"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_YEAR">
 <h3>ISO_YEAR</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-116">ISO_YEAR</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-117">ISO_YEAR</a></span></div>
 <div class="block">Year only — pattern <code>"uuuu"</code>: <js>"2012"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_YEAR_MONTH">
 <h3>ISO_YEAR_MONTH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-119">ISO_YEAR_MONTH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-120">ISO_YEAR_MONTH</a></span></div>
 <div class="block">Year and month — pattern <code>"uuuu-MM"</code>: <js>"2012-12"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ISO_ZONED_DATE_TIME">
 <h3>ISO_ZONED_DATE_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-122">ISO_ZONED_DATE_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-123">ISO_ZONED_DATE_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#ISO_ZONED_DATE_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.ISO_ZONED_DATE_TIME</code></a>: <js>"2011-12-03T10:15:30+01:00[Europe/Paris]"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="RFC_1123_DATE_TIME">
 <h3>RFC_1123_DATE_TIME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-125">RFC_1123_DATE_TIME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-126">RFC_1123_DATE_TIME</a></span></div>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#RFC_1123_DATE_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.RFC_1123_DATE_TIME</code></a>: <js>"Tue, 3 Jun 2008 11:05:30 GMT"</js>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="MILLIS">
 <h3>MILLIS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-152">MILLIS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-153">MILLIS</a></span></div>
 <div class="block">Epoch milliseconds as a numeric value.
 
  <p>
@@ -458,7 +458,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-60">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-61">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -470,7 +470,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-60">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-61">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -489,7 +489,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isMillisNumeric(java.lang.Class)">
 <h3>isMillisNumeric</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-191">isMillisNumeric</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-192">isMillisNumeric</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> when <a href="#MILLIS"><code>MILLIS</code></a> produces a numeric wire string for the specified subtype.
 
  <p>
@@ -514,12 +514,12 @@ not permitted.)</div>
 <li>
 <section class="detail" id="format(java.time.temporal.TemporalAccessor,java.time.ZoneId)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-205">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-206">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link">ZoneId</a>&nbsp;zoneId)</span></div>
 <div class="block">Formats the specified value using this format.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The value to format. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dd><code>zoneId</code> - The default zone id used for time-only / unzoned values.</dd>
 <dt>Returns:</dt>
 <dd>The formatted string, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.
@@ -532,7 +532,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="parse(java.lang.String,java.lang.Class,java.time.ZoneId)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-257">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-258">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;targetType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link">ZoneId</a>&nbsp;zoneId)</span></div>
 <div class="block">Parses the specified wire value using this format.</div>
@@ -540,7 +540,7 @@ not permitted.)</div>
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The temporal subtype.</dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank.</dd>
+<dd><code>value</code> - The wire value. Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
 <dd><code>targetType</code> - The target temporal subtype.  Must be either a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link"><code>Temporal</code></a> subtype or
                    <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/MonthDay.html" title="class or interface in java.time" class="external-link"><code>MonthDay</code></a> (the only non-<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/Temporal.html" title="class or interface in java.time.temporal" class="external-link"><code>Temporal</code></a> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link"><code>TemporalAccessor</code></a> the JDK
                    currently exposes).</dd>
@@ -553,7 +553,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isNumeric()">
 <h3>isNumeric</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-325">isNumeric</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/TemporalFormat.html#line-326">isNumeric</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this format is numeric on the wire.</div>
 <dl class="notes">
 <dt>Returns:</dt>

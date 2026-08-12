@@ -95,31 +95,32 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#compareTo(org.apache.juneau.commons.lang.Version)" class="member-name-link">compareTo</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#equals(org.apache.juneau.commons.lang.Version)" class="member-name-link">equals</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Returns <jk>true</jk> if the specified version is equal to this version.</div>
-</div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtLeast(org.apache.juneau.commons.lang.Version)" class="member-name-link">isAtLeast</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns <jk>true</jk> if the specified version is at least this version.</div>
-</div>
-<div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtLeast(org.apache.juneau.commons.lang.Version,boolean)" class="member-name-link">isAtLeast</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v,
- boolean&nbsp;exclusive)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtLeast(org.apache.juneau.commons.lang.Version)" class="member-name-link">isAtLeast</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns <jk>true</jk> if the specified version is at least this version.</div>
 </div>
 <div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtMost(org.apache.juneau.commons.lang.Version)" class="member-name-link">isAtMost</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtLeast(org.apache.juneau.commons.lang.Version,boolean)" class="member-name-link">isAtLeast</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v,
+ boolean&nbsp;exclusive)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns <jk>true</jk> if the specified version is at least this version.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtMost(org.apache.juneau.commons.lang.Version)" class="member-name-link">isAtMost</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns <jk>true</jk> if the specified version is at most this version.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtMost(org.apache.juneau.commons.lang.Version,boolean)" class="member-name-link">isAtMost</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v,
+ boolean&nbsp;exclusive)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns <jk>true</jk> if the specified version is at most this version.</div>
 </div>
 <div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#isAtMost(org.apache.juneau.commons.lang.Version,boolean)" class="member-name-link">isAtMost</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v,
- boolean&nbsp;exclusive)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Version.</span><code><a href="../Version.html#matches(org.apache.juneau.commons.lang.Version)" class="member-name-link">matches</a><wbr>(<a href="../Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;v)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Returns <jk>true</jk> if the specified version is at most this version.</div>
+<div class="block">Returns <jk>true</jk> if this version matches the specified version, comparing only the parts they have in
+ common (i.e. one version is a prefix of the other).</div>
 </div>
 </div>
 </section>

@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(org.apache.juneau.commons.svl.VarResolverSession)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-153">resolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-155">resolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session)</span></div>
 <div class="block">Resolves this template against the given session.
 
  <p>
@@ -215,14 +215,16 @@ loadScripts(document, 'script');</script>
    against, but cached <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> references will only honor that resolver's registry —
    see the "compile-binding contract" note in the class javadoc.</dd>
 <dt>Returns:</dt>
-<dd>The resolved string. Never <code>null</code>.</dd>
+<dd>The resolved string, or <code>null</code> if this template was compiled from a <code>null</code> source
+   (mirroring <a href="VarResolverSession.html#resolve(java.lang.String)"><code>VarResolverSession.resolve(String)</code></a> returning <code>null</code> for <code>null</code> input).
+   Otherwise never <code>null</code>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)">
 <h3>resolveTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-176">resolveTo</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-178">resolveTo</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Resolves this template against the given session and writes the result directly to
@@ -234,8 +236,8 @@ loadScripts(document, 'script');</script>
  downstream serializers can stream large content efficiently.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>session</code> - The session to resolve against.</dd>
-<dd><code>out</code> - The writer to append to.</dd>
+<dd><code>session</code> - The session to resolve against.  Must not be <code>null</code>.</dd>
+<dd><code>out</code> - The writer to append to.  Must not be <code>null</code>.</dd>
 <dt>Returns:</dt>
 <dd><code>out</code>, for fluent-API chaining.</dd>
 <dt>Throws:</dt>
@@ -246,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asSupplier(org.apache.juneau.commons.svl.VarResolverSession)">
 <h3>asSupplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-198">asSupplier</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-200">asSupplier</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session)</span></div>
 <div class="block">Returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> that resolves this template against the given session each time
  its <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html#get()" title="class or interface in java.util.function" class="external-link"><code>Supplier.get()</code></a> method is called.
 
@@ -265,7 +267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asSupplierWithFreshSessions(org.apache.juneau.commons.svl.VarResolver)">
 <h3>asSupplierWithFreshSessions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-216">asSupplierWithFreshSessions</a></span><wbr><span class="parameters">(<a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a>&nbsp;vr)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-218">asSupplierWithFreshSessions</a></span><wbr><span class="parameters">(<a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a>&nbsp;vr)</span></div>
 <div class="block">Returns a threadsafe <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a> that opens a fresh <a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl"><code>VarResolverSession</code></a> on
  every <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html#get()" title="class or interface in java.util.function" class="external-link"><code>Supplier.get()</code></a> call.
 
@@ -286,7 +288,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isLiteral()">
 <h3>isLiteral</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-243">isLiteral</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-245">isLiteral</a></span>()</div>
 <div class="block">Returns <code>true</code> if this template contains no variable references and resolves to a
  fixed string.
 
@@ -315,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSource()">
 <h3>getSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-256">getSource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-258">getSource</a></span>()</div>
 <div class="block">Returns the raw input string this template was compiled from.
 
  <p>
@@ -330,15 +332,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveToUnchecked(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)">
 <h3>resolveToUnchecked</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-336">resolveToUnchecked</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-330">resolveToUnchecked</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</span></div>
 <div class="block">Convenience helper for callers that need to <a href="#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)"><code>resolveTo(VarResolverSession, Writer)</code></a>
  but don't want to handle <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>. Wraps any thrown <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> in a
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> via the standard <code>ThrowableUtils.toRex</code> helper.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>session</code> - The session to resolve against.</dd>
-<dd><code>out</code> - The writer to append to.</dd>
+<dd><code>session</code> - The session to resolve against.  Must not be <code>null</code>.</dd>
+<dd><code>out</code> - The writer to append to.  Must not be <code>null</code>.</dd>
 <dt>Returns:</dt>
 <dd><code>out</code>.</dd>
 </dl>
@@ -347,7 +349,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-344">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarTemplate.html#line-338">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

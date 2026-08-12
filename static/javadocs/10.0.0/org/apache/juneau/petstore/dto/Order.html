@@ -241,7 +241,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the shipping date as an ISO 8601 string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The shipping date as an ISO 8601 string.  Can be <jk>null</jk>.</dd>
+<dd>The shipping date as an ISO 8601 string.  Can be <jk>null</jk> if the order has not yet shipped.</dd>
 </dl>
 </section>
 </li>
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the shipping date.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.  Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The new value.  Can be <jk>null</jk> to indicate the order has not shipped.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

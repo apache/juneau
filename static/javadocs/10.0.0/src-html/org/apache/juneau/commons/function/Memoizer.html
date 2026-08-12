@@ -223,7 +223,7 @@
 <span class="source-line-no">210</span><span id="line-210">    * @return A Memoizer describing the result of applying a mapping function to the value of this Memoizer, if a value is present, otherwise an empty Memoizer.</span>
 <span class="source-line-no">211</span><span id="line-211">    */</span>
 <span class="source-line-no">212</span><span id="line-212">   @Override</span>
-<span class="source-line-no">213</span><span id="line-213">   public &lt;U&gt; Memoizer&lt;U&gt; map(Function&lt;? super T, ? extends U&gt; mapper) {</span>
+<span class="source-line-no">213</span><span id="line-213">   public &lt;U&gt; Memoizer&lt;U&gt; map(Function&lt;? super T,? extends U&gt; mapper) {</span>
 <span class="source-line-no">214</span><span id="line-214">      assertArgNotNull(ARG_mapper, mapper);</span>
 <span class="source-line-no">215</span><span id="line-215">      return new Memoizer&lt;&gt;(() -&gt; {</span>
 <span class="source-line-no">216</span><span id="line-216">         T value = get();</span>

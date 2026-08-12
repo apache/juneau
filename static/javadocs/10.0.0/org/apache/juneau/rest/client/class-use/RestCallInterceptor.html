@@ -60,6 +60,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Next-generation REST client — transport-agnostic HTTP client built on Juneau's serialization stack.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.mcp">org.apache.juneau.rest.client.mcp</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral Model Context Protocol (MCP) client core - Streamable-HTTP transport orchestration, the
+ auth-token seam, and the pluggable response cache that per-revision <code>McpClient</code> facades build on.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -80,6 +85,33 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#interceptors(org.apache.juneau.rest.client.RestCallInterceptor...)" class="member-name-link">interceptors</a><wbr>(<a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Adds per-request lifecycle interceptors.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.client.mcp">
+<h2>Uses of <a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a> in <a href="../mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a></h2>
+<div class="caption"><span>Classes in <a href="../mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a> that implement <a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../mcp/McpAuthInterceptor.html" class="type-name-link" title="class in org.apache.juneau.rest.client.mcp">McpAuthInterceptor</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A builder-configurable auth-token seam implemented as a <a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client"><code>RestCallInterceptor</code></a>.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../mcp/package-summary.html">org.apache.juneau.rest.client.mcp</a> with parameters of type <a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../mcp/AbstractMcpClient.Builder.html" title="type parameter in AbstractMcpClient.Builder">SELF</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AbstractMcpClient.Builder.</span><code><a href="../mcp/AbstractMcpClient.Builder.html#interceptor(org.apache.juneau.rest.client.RestCallInterceptor)" class="member-name-link">interceptor</a><wbr>(<a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Adds a lifecycle interceptor (e.g. the auth-token seam) to the underlying <a href="../RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>.</div>
 </div>
 </div>
 </section>

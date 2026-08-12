@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-105">SamlAuthFilter.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-117">SamlAuthFilter.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder for <a href="SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml"><code>SamlAuthFilter</code></a>.</div>
 </section>
@@ -132,6 +132,18 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the request path that carries the SAML assertion.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxInflatedBytes(long)" class="member-name-link">maxInflatedBytes</a><wbr>(long&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the ceiling on the number of decompressed bytes accepted from a <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a>
+ <code>SAMLResponse</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxInflateRatio(int)" class="member-name-link">maxInflateRatio</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the ceiling on the decompressed-to-compressed size ratio accepted from a
+ <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a> <code>SAMLResponse</code>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#realm(java.lang.String)" class="member-name-link">realm</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the <code>WWW-Authenticate: SAML realm="&lt;value&gt;"</code> challenge realm.</div>
@@ -166,7 +178,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-113">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-127">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -181,7 +193,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validator(org.apache.juneau.rest.server.auth.saml.SamlAssertionValidator)">
 <h3>validator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-121">validator</a></span><wbr><span class="parameters">(<a href="SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-135">validator</a></span><wbr><span class="parameters">(<a href="SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAssertionValidator</a>&nbsp;value)</span></div>
 <div class="block">Sets the SAML assertion validator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -194,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="binding(org.apache.juneau.rest.server.auth.saml.SamlBinding)">
 <h3>binding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-132">binding</a></span><wbr><span class="parameters">(<a href="SamlBinding.html" title="enum class in org.apache.juneau.rest.server.auth.saml">SamlBinding</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-146">binding</a></span><wbr><span class="parameters">(<a href="SamlBinding.html" title="enum class in org.apache.juneau.rest.server.auth.saml">SamlBinding</a>&nbsp;value)</span></div>
 <div class="block">Sets the SAML binding the filter listens for.  Defaults to <a href="SamlBinding.html#POST"><code>SamlBinding.POST</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -207,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consumerPath(java.lang.String)">
 <h3>consumerPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-143">consumerPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-157">consumerPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the request path that carries the SAML assertion.  Defaults to <code>/saml/acs</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -220,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rolesClaim(java.lang.String)">
 <h3>rolesClaim</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-154">rolesClaim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-168">rolesClaim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the claim name used to extract roles from the resolved <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -233,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="realm(java.lang.String)">
 <h3>realm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-165">realm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-179">realm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>WWW-Authenticate: SAML realm="&lt;value&gt;"</code> challenge realm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -244,9 +256,48 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="maxInflatedBytes(long)">
+<h3>maxInflatedBytes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-197">maxInflatedBytes</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="block">Sets the ceiling on the number of decompressed bytes accepted from a <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a>
+ <code>SAMLResponse</code>.  Defaults to <a href="SamlAuthFilter.html#DEFAULT_MAX_INFLATED_BYTES"><code>SamlAuthFilter.DEFAULT_MAX_INFLATED_BYTES</code></a>.
+
+ <p>
+ A REDIRECT-binding <code>SAMLResponse</code> is DEFLATE-compressed in transit, so a small query-string
+ payload can expand to a much larger document.  Decompression stops and the request is rejected once
+ the running output exceeds this cap, so a highly-compressible payload cannot drive an unbounded
+ allocation.  A value <code>&lt;= 0</code> disables the absolute cap (the ratio guard still applies).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The maximum decompressed size in bytes.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxInflateRatio(int)">
+<h3>maxInflateRatio</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-214">maxInflateRatio</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Sets the ceiling on the decompressed-to-compressed size ratio accepted from a
+ <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a> <code>SAMLResponse</code>.  Defaults to
+ <a href="SamlAuthFilter.html#DEFAULT_MAX_INFLATE_RATIO"><code>SamlAuthFilter.DEFAULT_MAX_INFLATE_RATIO</code></a>.
+
+ <p>
+ This guard catches a highly-compressible payload even when the absolute
+ <a href="#maxInflatedBytes(long)"><code>byte cap</code></a> is generous.  A value <code>&lt;= 0</code> disables the ratio guard.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The maximum output-to-input ratio.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-175">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.Builder.html#line-224">build</a></span>()</div>
 <div class="block">Builds the filter.</div>
 <dl class="notes">
 <dt>Returns:</dt>

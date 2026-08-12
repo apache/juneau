@@ -179,7 +179,7 @@
 <span class="source-line-no">166</span><span id="line-166">   public void getOpenApiJson(RestRequest req, RestResponse res) throws IOException {</span>
 <span class="source-line-no">167</span><span id="line-167">      var doc = req.getOpenApi().orElseThrow(NotFound::new);</span>
 <span class="source-line-no">168</span><span id="line-168">      try (var w = res.getDirectWriter("application/json")) {</span>
-<span class="source-line-no">169</span><span id="line-169">         JsonSerializer.DEFAULT_READABLE.serialize(doc, w);</span>
+<span class="source-line-no">169</span><span id="line-169">         JsonSerializer.DEFAULT_READABLE.write(doc, w);</span>
 <span class="source-line-no">170</span><span id="line-170">      }</span>
 <span class="source-line-no">171</span><span id="line-171">   }</span>
 <span class="source-line-no">172</span><span id="line-172"></span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">   public void getOpenApiYaml(RestRequest req, RestResponse res) throws IOException {</span>
 <span class="source-line-no">190</span><span id="line-190">      var doc = req.getOpenApi().orElseThrow(NotFound::new);</span>
 <span class="source-line-no">191</span><span id="line-191">      try (var w = res.getDirectWriter("application/yaml")) {</span>
-<span class="source-line-no">192</span><span id="line-192">         YamlSerializer.DEFAULT_READABLE.serialize(doc, w);</span>
+<span class="source-line-no">192</span><span id="line-192">         YamlSerializer.DEFAULT_READABLE.write(doc, w);</span>
 <span class="source-line-no">193</span><span id="line-193">      }</span>
 <span class="source-line-no">194</span><span id="line-194">   }</span>
 <span class="source-line-no">195</span><span id="line-195">}</span>

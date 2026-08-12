@@ -232,9 +232,9 @@ not permitted.)</div>
 <div class="block">Formats the specified period using this format.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format.</dd>
+<dd><code>value</code> - The value to format.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The formatted value.</dd>
+<dd>The formatted value, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -245,9 +245,9 @@ not permitted.)</div>
 <div class="block">Parses the specified wire value using this format.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to parse.</dd>
+<dd><code>value</code> - The value to parse.  Can be <jk>null</jk> or blank (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
-<dd>The parsed period.</dd>
+<dd>The parsed period, or <jk>null</jk> if <code>value</code> is <jk>null</jk> or blank.</dd>
 </dl>
 </section>
 </li>

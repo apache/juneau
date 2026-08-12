@@ -380,7 +380,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <dd><code>client</code> - The client used to build this request.</dd>
 <dd><code>request</code> - The request object.</dd>
 <dd><code>response</code> - The response object.</dd>
-<dd><code>parser</code> - The parser to use to consume the body.  Can be <jk>null</jk>.</dd>
+<dd><code>parser</code> - The parser to use to consume the body.  Can be <jk>null</jk> to use the response's negotiated/default parser.</dd>
 </dl>
 </section>
 </li>
@@ -427,7 +427,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
          <li><a href="ResponseContent.html" title="class in org.apache.juneau.rest.client.classic"><code>ResponseContent</code></a>/<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link"><code>HttpEntity</code></a> - Returns access to this object.
          <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> - Returns access to the raw reader of the response.
          <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> - Returns access to the raw input stream of the response.
-         <li><a href="../../../http/classic/resource/HttpResource.html" title="interface in org.apache.juneau.http.classic.resource"><code>HttpResource</code></a> - Response will be converted to an <a href="../../../http/classic/resource/BasicResource.html" title="class in org.apache.juneau.http.classic.resource"><code>BasicResource</code></a>.
+         <li><a href="../../../http/classic/resource/HttpResource.html" title="interface in org.apache.juneau.http.classic.resource"><code>HttpResource</code></a> - Response will be converted to a <a href="../../../http/classic/resource/StreamResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StreamResource</code></a>.
          <li>Any type that takes in an <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link"><code>HttpResponse</code></a> object.
       </ul>
    <li class='note'>
@@ -574,7 +574,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
          <li><a href="ResponseContent.html" title="class in org.apache.juneau.rest.client.classic"><code>ResponseContent</code></a>/<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link"><code>HttpEntity</code></a> - Returns access to this object.
          <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> - Returns access to the raw reader of the response.
          <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> - Returns access to the raw input stream of the response.
-         <li><a href="../../../http/classic/resource/HttpResource.html" title="interface in org.apache.juneau.http.classic.resource"><code>HttpResource</code></a> - Response will be converted to an <a href="../../../http/classic/resource/BasicResource.html" title="class in org.apache.juneau.http.classic.resource"><code>BasicResource</code></a>.
+         <li><a href="../../../http/classic/resource/HttpResource.html" title="interface in org.apache.juneau.http.classic.resource"><code>HttpResource</code></a> - Response will be converted to a <a href="../../../http/classic/resource/StreamResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StreamResource</code></a>.
          <li>Any type that takes in an <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link"><code>HttpResponse</code></a> object.
       </ul>
    <li class='note'>
@@ -635,7 +635,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
                throws <span class="exceptions"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block">Returns the HTTP response message body as a byte array.
 
-   The HTTP response message body reader, never <jk>null</jk>.
+   The HTTP response message body as a byte array, never <jk>null</jk>.
    <br>For responses without a body(e.g. HTTP 204), returns an empty array.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1261,7 +1261,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#getContentEncoding--" title="class or interface in org.apache.http" class="external-link">getContentEncoding</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
 <dt>Returns:</dt>
-<dd>The <c>Content-Encoding</c> header for this entity, or <jk>null</jk> if the content encoding is unknown.</dd>
+<dd>The <c>Content-Encoding</c> header for this entity.  Never <jk>null</jk>, but wraps a <jk>null</jk> value if the content encoding is unknown.</dd>
 </dl>
 </section>
 </li>
@@ -1292,7 +1292,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html#getContentType--" title="class or interface in org.apache.http" class="external-link">getContentType</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a></code></dd>
 <dt>Returns:</dt>
-<dd>The <c>Content-Type</c> header for this entity, or <jk>null</jk> if the content type is unknown.</dd>
+<dd>The <c>Content-Type</c> header for this entity.  Never <jk>null</jk>, but wraps a <jk>null</jk> value if the content type is unknown.</dd>
 </dl>
 </section>
 </li>
@@ -1364,7 +1364,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  If not specified, uses the parser defined on the client set via <a href="RestClient.Builder.html#parser(java.lang.Class)"><code>RestClient.Builder.parser(Class)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new part parser to use for this body.</dd>
+<dd><code>value</code> - The new parser to use for this body.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

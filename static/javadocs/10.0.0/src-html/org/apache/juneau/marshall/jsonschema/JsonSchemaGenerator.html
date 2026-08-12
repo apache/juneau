@@ -436,7 +436,7 @@
 <span class="source-line-no">423</span><span id="line-423">   /**</span>
 <span class="source-line-no">424</span><span id="line-424">    * Constructor.</span>
 <span class="source-line-no">425</span><span id="line-425">    *</span>
-<span class="source-line-no">426</span><span id="line-426">    * @param builder The builder for this object.</span>
+<span class="source-line-no">426</span><span id="line-426">    * @param builder The builder for this object.  Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">427</span><span id="line-427">    */</span>
 <span class="source-line-no">428</span><span id="line-428">   public JsonSchemaGenerator(Builder builder) {</span>
 <span class="source-line-no">429</span><span id="line-429">      super(builder.detectRecursions().ignoreRecursions());</span>
@@ -504,7 +504,7 @@
 <span class="source-line-no">491</span><span id="line-491">    * The type is ignored if it's specified in the {@link Builder#ignoreTypes(String...)} setting.</span>
 <span class="source-line-no">492</span><span id="line-492">    * &lt;br&gt;Ignored types return &lt;jk&gt;null&lt;/jk&gt; on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.</span>
 <span class="source-line-no">493</span><span id="line-493">    *</span>
-<span class="source-line-no">494</span><span id="line-494">    * @param cm The type to check.</span>
+<span class="source-line-no">494</span><span id="line-494">    * @param cm The type to check.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">495</span><span id="line-495">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified type is ignored.</span>
 <span class="source-line-no">496</span><span id="line-496">    */</span>
 <span class="source-line-no">497</span><span id="line-497">   public boolean isIgnoredType(ClassMeta&lt;?&gt; cm) {</span>

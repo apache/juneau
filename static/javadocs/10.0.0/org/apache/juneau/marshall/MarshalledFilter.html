@@ -405,7 +405,7 @@ implements <a href="../commons/bean/BeanFilter.html" title="interface in org.apa
 <dt>Specified by:</dt>
 <dd><code><a href="../commons/bean/BeanFilter.html#getProperties()">getProperties</a></code>&nbsp;in interface&nbsp;<code><a href="../commons/bean/BeanFilter.html" title="interface in org.apache.juneau.commons.bean">BeanFilter</a></code></dd>
 <dt>Returns:</dt>
-<dd>The names of the properties associated with a bean class, or and empty set if all bean properties should
+<dd>The names of the properties associated with a bean class, or an empty set if all bean properties should
    be used.</dd>
 </dl>
 </section>
@@ -495,7 +495,7 @@ implements <a href="../commons/bean/BeanFilter.html" title="interface in org.apa
 <div class="block">Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
 
  <p>
- This method is only used when the <a href="#getProperties()"><code>getProperties()</code></a> method returns <jk>null</jk>.
+ This method is only used when the <a href="#getProperties()"><code>getProperties()</code></a> method returns an empty set.
  Otherwise, the ordering of the properties in the returned value is used.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

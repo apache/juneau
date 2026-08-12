@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line-106">    * @param name The header name.</span>
 <span class="source-line-no">107</span><span id="line-107">    * @param value</span>
 <span class="source-line-no">108</span><span id="line-108">    *    The header value.</span>
-<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">109</span><span id="line-109">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">110</span><span id="line-110">    * @throws IllegalArgumentException If name is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">111</span><span id="line-111">    */</span>
 <span class="source-line-no">112</span><span id="line-112">   public BasicLongHeader(String name, Long value) {</span>
@@ -135,7 +135,7 @@
 <span class="source-line-no">122</span><span id="line-122">    * @param value</span>
 <span class="source-line-no">123</span><span id="line-123">    *    The header value.</span>
 <span class="source-line-no">124</span><span id="line-124">    *    &lt;br&gt;Must be parsable by {@link Long#parseLong(String)}.</span>
-<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">126</span><span id="line-126">    * @throws IllegalArgumentException If name is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">127</span><span id="line-127">    */</span>
 <span class="source-line-no">128</span><span id="line-128">   public BasicLongHeader(String name, String value) {</span>
@@ -153,7 +153,7 @@
 <span class="source-line-no">140</span><span id="line-140">    * @param name The header name.</span>
 <span class="source-line-no">141</span><span id="line-141">    * @param value</span>
 <span class="source-line-no">142</span><span id="line-142">    *    The supplier of the header value.</span>
-<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">144</span><span id="line-144">    * @throws IllegalArgumentException If name is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">145</span><span id="line-145">    */</span>
 <span class="source-line-no">146</span><span id="line-146">   public BasicLongHeader(String name, Supplier&lt;Long&gt; value) {</span>
@@ -210,7 +210,7 @@
 <span class="source-line-no">197</span><span id="line-197">   /**</span>
 <span class="source-line-no">198</span><span id="line-198">    * Returns the header value as a {@link Long}.</span>
 <span class="source-line-no">199</span><span id="line-199">    *</span>
-<span class="source-line-no">200</span><span id="line-200">    * @return The header value as a {@link Long}.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">200</span><span id="line-200">    * @return The header value as a {@link Long}, or &lt;jk&gt;null&lt;/jk&gt; if the header has no value.</span>
 <span class="source-line-no">201</span><span id="line-201">    */</span>
 <span class="source-line-no">202</span><span id="line-202">   public Long toLong() {</span>
 <span class="source-line-no">203</span><span id="line-203">      return value();</span>
@@ -219,7 +219,7 @@
 <span class="source-line-no">206</span><span id="line-206">   private static Long parse(String value) {</span>
 <span class="source-line-no">207</span><span id="line-207">      if (value == null)</span>
 <span class="source-line-no">208</span><span id="line-208">         return null;</span>
-<span class="source-line-no">209</span><span id="line-209">      return parseLong(value, () -&gt; iaex("Value ''{0}'' could not be parsed as a long.", value));</span>
+<span class="source-line-no">209</span><span id="line-209">      return parseLong(value, () -&gt; iaex("Value '%s' could not be parsed as a long.", value));</span>
 <span class="source-line-no">210</span><span id="line-210">   }</span>
 <span class="source-line-no">211</span><span id="line-211"></span>
 <span class="source-line-no">212</span><span id="line-212">   private Long value() {</span>

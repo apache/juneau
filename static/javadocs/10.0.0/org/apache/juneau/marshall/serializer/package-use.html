@@ -229,38 +229,41 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.marshall">org.apache.juneau.petstore.marshall</a></div>
 <div class="col-last even-row-color">
+<div class="block">Petstore-local marshalling support.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Apache Juneau Petstore - Spring Boot deployment.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client">org.apache.juneau.rest.client</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client">org.apache.juneau.rest.client</a></div>
+<div class="col-last even-row-color">
 <div class="block">Next-generation REST client — transport-agnostic HTTP client built on Juneau's serialization stack.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Client API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.mock.classic">org.apache.juneau.rest.mock.classic</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.mock.classic">org.apache.juneau.rest.mock.classic</a></div>
+<div class="col-last even-row-color">
 <div class="block">Mocked REST client and supporting classes for in-JVM testing built on the classic Apache HttpClient API.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.config">org.apache.juneau.rest.server.config</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.config">org.apache.juneau.rest.server.config</a></div>
+<div class="col-last even-row-color">
 <div class="block">Predefined REST configuration interfaces</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Response Converters</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
 </div>
 </div>
 <section class="package-uses">
@@ -1887,6 +1890,35 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/SerializerConfig.html#org.apache.juneau.petstore.jetty">SerializerConfig</a></div>
 <div class="col-last even-row-color">
 <div class="block">Annotation for specifying config properties defined in <a href="Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a>, <a href="OutputStreamSerializer.html" title="class in org.apache.juneau.marshall.serializer"><code>OutputStreamSerializer</code></a>, and <a href="WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer"><code>WriterSerializer</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.marshall">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.serializer</a> used by <a href="../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/OutputStreamSerializer.html#org.apache.juneau.petstore.marshall">OutputStreamSerializer</a></div>
+<div class="col-last even-row-color">
+<div class="block">Subclass of <a href="Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a> for byte-based serializers.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/SerializeException.html#org.apache.juneau.petstore.marshall">SerializeException</a></div>
+<div class="col-last odd-row-color">
+<div class="block">General exception thrown whenever an error occurs during serialization.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/Serializer.html#org.apache.juneau.petstore.marshall">Serializer</a></div>
+<div class="col-last even-row-color">
+<div class="block">Parent class for all Juneau serializers.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/SerializerPipe.html#org.apache.juneau.petstore.marshall">SerializerPipe</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A wrapper around an object that a serializer sends its output to.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/SerializerSession.html#org.apache.juneau.petstore.marshall">SerializerSession</a></div>
+<div class="col-last even-row-color">
+<div class="block">Serializer session that lives for the duration of a single use of <a href="Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a>.</div>
 </div>
 </div>
 </section>

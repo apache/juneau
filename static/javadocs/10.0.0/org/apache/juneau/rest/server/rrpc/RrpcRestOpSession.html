@@ -188,11 +188,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.rrpc.RrpcRestOpSession.Builder)">
 <h3>RrpcRestOpSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-101">RrpcRestOpSession</a></span><wbr><span class="parameters">(<a href="RrpcRestOpSession.Builder.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-102">RrpcRestOpSession</a></span><wbr><span class="parameters">(<a href="RrpcRestOpSession.Builder.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>builder</code> - The builder for this object.</dd>
+<dd><code>builder</code> - The builder for this object.
+   <br>Cannot be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -224,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finish()">
 <h3>finish</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-106">finish</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-107">finish</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../RestOpSession.html#finish()">RestOpSession</a></code></span></div>
 <div class="block">Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.</div>
 <dl class="notes">
@@ -238,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run()">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-112">run</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-113">run</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../RestOpSession.html#run()">RestOpSession</a></code></span></div>
 <div class="block">Runs this session.
@@ -263,7 +264,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="status(org.apache.juneau.http.HttpStatusLine)">
 <h3>status</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-164">status</a></span><wbr><span class="parameters">(<a href="../../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-168">status</a></span><wbr><span class="parameters">(<a href="../../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../RestOpSession.html#status(org.apache.juneau.http.HttpStatusLine)">RestOpSession</a></code></span></div>
 <div class="block">Sets the status of the response.</div>
 <dl class="notes">

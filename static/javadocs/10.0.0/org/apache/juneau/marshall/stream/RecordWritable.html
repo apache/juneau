@@ -92,8 +92,8 @@ loadScripts(document, 'script');</script>
  <ul>
    <li>the convenience <a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a>
       subclass &mdash; a thin delegator that mirrors
-      <a href="../serializer/Serializer.html#serialize(java.lang.Object)"><code>serialize(...)</code></a> by
-      forwarding to <code>getSession().serializeRecords(output)</code>;
+      <a href="../serializer/Serializer.html#write(java.lang.Object)"><code>write(...)</code></a> by
+      forwarding to <code>getSession().writeRecords(output)</code>;
    <li>the <a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerSession</code></a>
       subclass (where the live <code>BeanSession</code>/<code>MarshallingContext</code> is) &mdash; the real
       cursor creation.
@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#serializeRecords(java.lang.Object)" class="member-name-link">serializeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writeRecords(java.lang.Object)" class="member-name-link">writeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Opens a low-level <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output.</div>
 </div>
@@ -146,15 +146,15 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="serializeRecords(java.lang.Object)">
-<h3>serializeRecords</h3>
-<div class="member-signature"><span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordWritable.html#line-64">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeRecords(java.lang.Object)">
+<h3>writeRecords</h3>
+<div class="member-signature"><span class="return-type"><a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/stream/RecordWritable.html#line-64">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level <a href="RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output.
 
  <p>
  When invoked on a convenience <a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a> the cursor is opened with <b>default session args</b> (mirroring
- <a href="../serializer/Serializer.html#serialize(java.lang.Object)"><code>serialize(...)</code></a>).
+ <a href="../serializer/Serializer.html#write(java.lang.Object)"><code>write(...)</code></a>).
  Callers that need request-derived configuration should instead call
  <code>createSession(args).build()</code> and invoke this method on the resulting
  <a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerSession</code></a>.</div>
@@ -176,7 +176,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd><jk>true</jk> if <a href="#serializeRecords(java.lang.Object)"><code>serializeRecords(Object)</code></a> returns an O(1)-memory streaming
+<dd><jk>true</jk> if <a href="#writeRecords(java.lang.Object)"><code>writeRecords(Object)</code></a> returns an O(1)-memory streaming
    cursor; <jk>false</jk> for buffered (whole-value) formats backed by
    <a href="RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>.</dd>
 </dl>

@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47">    * {@inheritDoc}</span>
 <span class="source-line-no">048</span><span id="line-48">    */</span>
 <span class="source-line-no">049</span><span id="line-49">   @Override</span>
-<span class="source-line-no">050</span><span id="line-50">   public void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {</span>
+<span class="source-line-no">050</span><span id="line-50">   public void doWrite(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {</span>
 <span class="source-line-no">051</span><span id="line-51">      var image = (RenderedImage)o;</span>
 <span class="source-line-no">052</span><span id="line-52">      MediaType mediaType = session.getMediaType();</span>
 <span class="source-line-no">053</span><span id="line-53">      try (var os = pipe.getOutputStream()) {</span>

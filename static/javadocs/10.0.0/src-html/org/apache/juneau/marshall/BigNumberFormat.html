@@ -142,7 +142,7 @@
 <span class="source-line-no">129</span><span id="line-129">    *    &lt;li&gt;{@link String} → emit as a quoted string.</span>
 <span class="source-line-no">130</span><span id="line-130">    * &lt;/ul&gt;</span>
 <span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">133</span><span id="line-133">    * @param format The configured format. Can be &lt;jk&gt;null&lt;/jk&gt; (treated as {@link #NUMBER}).</span>
 <span class="source-line-no">134</span><span id="line-134">    * @return The formatted value (a {@link BigInteger} for numeric output, a {@link String} for string output),</span>
 <span class="source-line-no">135</span><span id="line-135">    *   or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -170,7 +170,7 @@
 <span class="source-line-no">157</span><span id="line-157">    * {@link #STRING} since fractional values cannot be safely represented in a JS double regardless of</span>
 <span class="source-line-no">158</span><span id="line-158">    * magnitude.  Zero-scale values are tested against the integer {@code ±(2^53 − 1)} bound.</span>
 <span class="source-line-no">159</span><span id="line-159">    *</span>
-<span class="source-line-no">160</span><span id="line-160">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">160</span><span id="line-160">    * @param value The value to format. Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">161</span><span id="line-161">    * @param format The configured format. Can be &lt;jk&gt;null&lt;/jk&gt; (treated as {@link #NUMBER}).</span>
 <span class="source-line-no">162</span><span id="line-162">    * @return The formatted value (a {@link BigDecimal} for numeric output, a {@link String} for string output),</span>
 <span class="source-line-no">163</span><span id="line-163">    *   or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -198,8 +198,8 @@
 <span class="source-line-no">185</span><span id="line-185">    * informational only.</span>
 <span class="source-line-no">186</span><span id="line-186">    *</span>
 <span class="source-line-no">187</span><span id="line-187">    * @param &lt;T&gt; The target type ({@link BigInteger} or {@link BigDecimal}).</span>
-<span class="source-line-no">188</span><span id="line-188">    * @param value The wire value. Can be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">189</span><span id="line-189">    * @param format The configured format (informational only — parsing is format-agnostic). Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">188</span><span id="line-188">    * @param value The wire value. Can be &lt;jk&gt;null&lt;/jk&gt; or blank (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">189</span><span id="line-189">    * @param format The configured format (informational only — parsing is format-agnostic). Can be &lt;jk&gt;null&lt;/jk&gt; (ignored; parsing is format-agnostic).</span>
 <span class="source-line-no">190</span><span id="line-190">    * @param targetType The desired return type — {@link BigInteger} or {@link BigDecimal}.</span>
 <span class="source-line-no">191</span><span id="line-191">    * @return The parsed value, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">192</span><span id="line-192">    * @throws IllegalArgumentException If the value cannot be parsed as a number or {@code targetType} is unsupported.</span>
@@ -221,9 +221,9 @@
 <span class="source-line-no">208</span><span id="line-208">            return (T) new BigInteger(s);</span>
 <span class="source-line-no">209</span><span id="line-209">         if (BigDecimal.class.equals(targetType))</span>
 <span class="source-line-no">210</span><span id="line-210">            return (T) new BigDecimal(s);</span>
-<span class="source-line-no">211</span><span id="line-211">         throw iaex("Unsupported BigNumberFormat target type: {0}", targetType.getName());</span>
+<span class="source-line-no">211</span><span id="line-211">         throw iaex("Unsupported BigNumberFormat target type: %s", targetType.getName());</span>
 <span class="source-line-no">212</span><span id="line-212">      } catch (NumberFormatException e) {</span>
-<span class="source-line-no">213</span><span id="line-213">         throw iaex("Invalid big-number value ''{0}'' for format {1}: {2}", value, format, e.getMessage());</span>
+<span class="source-line-no">213</span><span id="line-213">         throw iaex("Invalid big-number value '%s' for format %s: %s", value, format, e.getMessage());</span>
 <span class="source-line-no">214</span><span id="line-214">      }</span>
 <span class="source-line-no">215</span><span id="line-215">   }</span>
 <span class="source-line-no">216</span><span id="line-216"></span>

@@ -83,8 +83,25 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new parser builder.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ParquetParser.Builder.</span><code><a href="../ParquetParser.Builder.html#nullKeyString(java.lang.String)" class="member-name-link">nullKeyString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ParquetParser.Builder.</span><code><a href="../ParquetParser.Builder.html#maxCount(int)" class="member-name-link">maxCount</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">The maximum allowed wire-declared element count (file/row-group row counts, column-chunk value
+ counts).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ParquetParser.Builder.</span><code><a href="../ParquetParser.Builder.html#maxInputLength(int)" class="member-name-link">maxInputLength</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ParquetParser.Builder.</span><code><a href="../ParquetParser.Builder.html#maxLength(int)" class="member-name-link">maxLength</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or
+ uncompressed).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../ParquetParser.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetParser.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ParquetParser.Builder.</span><code><a href="../ParquetParser.Builder.html#nullKeyString(java.lang.String)" class="member-name-link">nullKeyString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">The string used when parsing Parquet MAP keys that represent <jk>null</jk>.</div>
 </div>
 </div>

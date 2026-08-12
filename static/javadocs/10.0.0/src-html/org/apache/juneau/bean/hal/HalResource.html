@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.bean.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.json.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.marshaller.*;</span>
 <span class="source-line-no">028</span><span id="line-28"></span>
 <span class="source-line-no">029</span><span id="line-29">/**</span>
 <span class="source-line-no">030</span><span id="line-30"> * Represents a HAL Resource Object as defined by</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> *          &lt;jk&gt;new&lt;/jk&gt; HalLink().setName(&lt;js&gt;"acme"&lt;/js&gt;).setHref(&lt;js&gt;"https://acme.example/{rel}"&lt;/js&gt;).setTemplated(&lt;jk&gt;true&lt;/jk&gt;))</span>
 <span class="source-line-no">052</span><span id="line-52"> *       .set(&lt;js&gt;"total"&lt;/js&gt;, 99.50);</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> *    String &lt;jv&gt;json&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;order&lt;/jv&gt;);</span>
+<span class="source-line-no">054</span><span id="line-54"> *    String &lt;jv&gt;json&lt;/jv&gt; = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;order&lt;/jv&gt;);</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;/p&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93">   @BeanProp("_links")</span>
 <span class="source-line-no">094</span><span id="line-94">   @Swap(HalLinkOrArraySwap.class)</span>
 <span class="source-line-no">095</span><span id="line-95">   public Map&lt;String,Object&gt; getLinks() {</span>
-<span class="source-line-no">096</span><span id="line-96">      return _links;</span>
+<span class="source-line-no">096</span><span id="line-96">      return u(_links);</span>
 <span class="source-line-no">097</span><span id="line-97">   }</span>
 <span class="source-line-no">098</span><span id="line-98"></span>
 <span class="source-line-no">099</span><span id="line-99">   /**</span>
@@ -129,8 +129,8 @@
 <span class="source-line-no">116</span><span id="line-116">    * If a value already exists for {@code relation}, it is replaced with the supplied single link. To accumulate</span>
 <span class="source-line-no">117</span><span id="line-117">    * multiple links under the same relation use {@link #addLinks(String, HalLink...)} instead.</span>
 <span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * @param relation The link relation (e.g. {@code "self"}, {@code "next"}, {@code "curies"}).</span>
-<span class="source-line-no">120</span><span id="line-120">    * @param value The link to set.</span>
+<span class="source-line-no">119</span><span id="line-119">    * @param relation The link relation (e.g. {@code "self"}, {@code "next"}, {@code "curies"}).  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
+<span class="source-line-no">120</span><span id="line-120">    * @param value The link to set.  Can be &lt;jk&gt;null&lt;/jk&gt; (stored as a &lt;jk&gt;null&lt;/jk&gt; entry under the relation).</span>
 <span class="source-line-no">121</span><span id="line-121">    * @return This object.</span>
 <span class="source-line-no">122</span><span id="line-122">    */</span>
 <span class="source-line-no">123</span><span id="line-123">   public HalResource addLink(String relation, HalLink value) {</span>
@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">    * If the current value at {@code relation} is a single {@link HalLink}, it is promoted to a {@link HalLinkArray}</span>
 <span class="source-line-no">136</span><span id="line-136">    * containing the original link and the appended ones.</span>
 <span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    * @param relation The link relation.</span>
+<span class="source-line-no">138</span><span id="line-138">    * @param relation The link relation.  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">139</span><span id="line-139">    * @param values The links to append.</span>
 <span class="source-line-no">140</span><span id="line-140">    * @return This object.</span>
 <span class="source-line-no">141</span><span id="line-141">    */</span>
@@ -158,10 +158,10 @@
 <span class="source-line-no">145</span><span id="line-145">         _links = map();</span>
 <span class="source-line-no">146</span><span id="line-146">      var existing = _links.get(relation);</span>
 <span class="source-line-no">147</span><span id="line-147">      HalLinkArray arr;</span>
-<span class="source-line-no">148</span><span id="line-148">      if (existing instanceof HalLinkArray a) {</span>
-<span class="source-line-no">149</span><span id="line-149">         arr = a;</span>
-<span class="source-line-no">150</span><span id="line-150">      } else if (existing instanceof HalLink l) {</span>
-<span class="source-line-no">151</span><span id="line-151">         arr = new HalLinkArray(l);</span>
+<span class="source-line-no">148</span><span id="line-148">      if (existing instanceof HalLinkArray existing2) {</span>
+<span class="source-line-no">149</span><span id="line-149">         arr = existing2;</span>
+<span class="source-line-no">150</span><span id="line-150">      } else if (existing instanceof HalLink existing2) {</span>
+<span class="source-line-no">151</span><span id="line-151">         arr = new HalLinkArray(existing2);</span>
 <span class="source-line-no">152</span><span id="line-152">         _links.put(relation, arr);</span>
 <span class="source-line-no">153</span><span id="line-153">      } else {</span>
 <span class="source-line-no">154</span><span id="line-154">         arr = new HalLinkArray();</span>
@@ -183,7 +183,7 @@
 <span class="source-line-no">170</span><span id="line-170">   @BeanProp("_embedded")</span>
 <span class="source-line-no">171</span><span id="line-171">   @Swap(HalResourceOrArraySwap.class)</span>
 <span class="source-line-no">172</span><span id="line-172">   public Map&lt;String,Object&gt; getEmbedded() {</span>
-<span class="source-line-no">173</span><span id="line-173">      return _embedded;</span>
+<span class="source-line-no">173</span><span id="line-173">      return u(_embedded);</span>
 <span class="source-line-no">174</span><span id="line-174">   }</span>
 <span class="source-line-no">175</span><span id="line-175"></span>
 <span class="source-line-no">176</span><span id="line-176">   /**</span>
@@ -206,8 +206,8 @@
 <span class="source-line-no">193</span><span id="line-193">   /**</span>
 <span class="source-line-no">194</span><span id="line-194">    * Convenience method that embeds a single sub-resource under the given relation.</span>
 <span class="source-line-no">195</span><span id="line-195">    *</span>
-<span class="source-line-no">196</span><span id="line-196">    * @param relation The relation name.</span>
-<span class="source-line-no">197</span><span id="line-197">    * @param value The sub-resource.</span>
+<span class="source-line-no">196</span><span id="line-196">    * @param relation The relation name.  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
+<span class="source-line-no">197</span><span id="line-197">    * @param value The sub-resource.  Can be &lt;jk&gt;null&lt;/jk&gt; (stored as a &lt;jk&gt;null&lt;/jk&gt; entry under the relation).</span>
 <span class="source-line-no">198</span><span id="line-198">    * @return This object.</span>
 <span class="source-line-no">199</span><span id="line-199">    */</span>
 <span class="source-line-no">200</span><span id="line-200">   public HalResource addEmbedded(String relation, HalResource value) {</span>
@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209">    * Convenience method that appends one or more sub-resources to a {@link HalResourceArray} stored under</span>
 <span class="source-line-no">210</span><span id="line-210">    * {@code relation}.</span>
 <span class="source-line-no">211</span><span id="line-211">    *</span>
-<span class="source-line-no">212</span><span id="line-212">    * @param relation The relation name.</span>
+<span class="source-line-no">212</span><span id="line-212">    * @param relation The relation name.  Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">213</span><span id="line-213">    * @param values The sub-resources to append.</span>
 <span class="source-line-no">214</span><span id="line-214">    * @return This object.</span>
 <span class="source-line-no">215</span><span id="line-215">    */</span>
@@ -232,10 +232,10 @@
 <span class="source-line-no">219</span><span id="line-219">         _embedded = map();</span>
 <span class="source-line-no">220</span><span id="line-220">      var existing = _embedded.get(relation);</span>
 <span class="source-line-no">221</span><span id="line-221">      HalResourceArray arr;</span>
-<span class="source-line-no">222</span><span id="line-222">      if (existing instanceof HalResourceArray a) {</span>
-<span class="source-line-no">223</span><span id="line-223">         arr = a;</span>
-<span class="source-line-no">224</span><span id="line-224">      } else if (existing instanceof HalResource r) {</span>
-<span class="source-line-no">225</span><span id="line-225">         arr = new HalResourceArray(r);</span>
+<span class="source-line-no">222</span><span id="line-222">      if (existing instanceof HalResourceArray existing2) {</span>
+<span class="source-line-no">223</span><span id="line-223">         arr = existing2;</span>
+<span class="source-line-no">224</span><span id="line-224">      } else if (existing instanceof HalResource existing2) {</span>
+<span class="source-line-no">225</span><span id="line-225">         arr = new HalResourceArray(existing2);</span>
 <span class="source-line-no">226</span><span id="line-226">         _embedded.put(relation, arr);</span>
 <span class="source-line-no">227</span><span id="line-227">      } else {</span>
 <span class="source-line-no">228</span><span id="line-228">         arr = new HalResourceArray();</span>
@@ -252,13 +252,13 @@
 <span class="source-line-no">239</span><span id="line-239">    */</span>
 <span class="source-line-no">240</span><span id="line-240">   @BeanProp("*")</span>
 <span class="source-line-no">241</span><span id="line-241">   public Set&lt;String&gt; extraKeys() {</span>
-<span class="source-line-no">242</span><span id="line-242">      return properties == null ? Collections.emptySet() : properties.keySet();</span>
+<span class="source-line-no">242</span><span id="line-242">      return properties == null ? Collections.emptySet() : u(properties.keySet());</span>
 <span class="source-line-no">243</span><span id="line-243">   }</span>
 <span class="source-line-no">244</span><span id="line-244"></span>
 <span class="source-line-no">245</span><span id="line-245">   /**</span>
 <span class="source-line-no">246</span><span id="line-246">    * Generic property getter.</span>
 <span class="source-line-no">247</span><span id="line-247">    *</span>
-<span class="source-line-no">248</span><span id="line-248">    * @param property The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">248</span><span id="line-248">    * @param property The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">249</span><span id="line-249">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if the property is not set.</span>
 <span class="source-line-no">250</span><span id="line-250">    */</span>
 <span class="source-line-no">251</span><span id="line-251">   @BeanProp("*")</span>
@@ -273,8 +273,8 @@
 <span class="source-line-no">260</span><span id="line-260">    * &lt;p&gt;</span>
 <span class="source-line-no">261</span><span id="line-261">    * Use this to set arbitrary payload fields alongside {@code _links} and {@code _embedded}.</span>
 <span class="source-line-no">262</span><span id="line-262">    *</span>
-<span class="source-line-no">263</span><span id="line-263">    * @param property The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">264</span><span id="line-264">    * @param value The new value for the property.</span>
+<span class="source-line-no">263</span><span id="line-263">    * @param property The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;, or an {@link IllegalArgumentException} is thrown.</span>
+<span class="source-line-no">264</span><span id="line-264">    * @param value The new value for the property. Can be &lt;jk&gt;null&lt;/jk&gt; (stored as &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">265</span><span id="line-265">    * @return This object.</span>
 <span class="source-line-no">266</span><span id="line-266">    */</span>
 <span class="source-line-no">267</span><span id="line-267">   @BeanProp("*")</span>
@@ -288,7 +288,7 @@
 <span class="source-line-no">275</span><span id="line-275"></span>
 <span class="source-line-no">276</span><span id="line-276">   @Override /* Overridden from Object */</span>
 <span class="source-line-no">277</span><span id="line-277">   public String toString() {</span>
-<span class="source-line-no">278</span><span id="line-278">      return JsonSerializer.DEFAULT.toString(this);</span>
+<span class="source-line-no">278</span><span id="line-278">      return Json.of(this);</span>
 <span class="source-line-no">279</span><span id="line-279">   }</span>
 <span class="source-line-no">280</span><span id="line-280">}</span>
 

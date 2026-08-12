@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">    * @param value</span>
 <span class="source-line-no">104</span><span id="line-104">    *    The header value.</span>
 <span class="source-line-no">105</span><span id="line-105">    *    &lt;br&gt;Must be parsable by {@link StringRanges#of(String)}.</span>
-<span class="source-line-no">106</span><span id="line-106">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">107</span><span id="line-107">    * @throws IllegalArgumentException If name is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">108</span><span id="line-108">    */</span>
 <span class="source-line-no">109</span><span id="line-109">   public BasicStringRangesHeader(String name, String value) {</span>
@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line-119">    * @param name The header name.</span>
 <span class="source-line-no">120</span><span id="line-120">    * @param value</span>
 <span class="source-line-no">121</span><span id="line-121">    *    The header value.</span>
-<span class="source-line-no">122</span><span id="line-122">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">122</span><span id="line-122">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">123</span><span id="line-123">    * @throws IllegalArgumentException If name is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">124</span><span id="line-124">    */</span>
 <span class="source-line-no">125</span><span id="line-125">   public BasicStringRangesHeader(String name, StringRanges value) {</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">    * @param name The header name.</span>
 <span class="source-line-no">139</span><span id="line-139">    * @param value</span>
 <span class="source-line-no">140</span><span id="line-140">    *    The supplier of the header value.</span>
-<span class="source-line-no">141</span><span id="line-141">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">141</span><span id="line-141">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to create a header with no value.</span>
 <span class="source-line-no">142</span><span id="line-142">    * @throws IllegalArgumentException If name is &lt;jk&gt;null&lt;/jk&gt; or empty.</span>
 <span class="source-line-no">143</span><span id="line-143">    */</span>
 <span class="source-line-no">144</span><span id="line-144">   public BasicStringRangesHeader(String name, Supplier&lt;StringRanges&gt; value) {</span>
@@ -224,7 +224,7 @@
 <span class="source-line-no">211</span><span id="line-211">   /**</span>
 <span class="source-line-no">212</span><span id="line-212">    * Returns the header value as a {@link StringRanges}.</span>
 <span class="source-line-no">213</span><span id="line-213">    *</span>
-<span class="source-line-no">214</span><span id="line-214">    * @return The header value as a {@link StringRanges}.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">214</span><span id="line-214">    * @return The header value as a {@link StringRanges}, or &lt;jk&gt;null&lt;/jk&gt; if the header has no value.</span>
 <span class="source-line-no">215</span><span id="line-215">    */</span>
 <span class="source-line-no">216</span><span id="line-216">   public StringRanges toStringRanges() {</span>
 <span class="source-line-no">217</span><span id="line-217">      return value();</span>

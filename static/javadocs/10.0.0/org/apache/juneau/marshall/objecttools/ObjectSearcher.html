@@ -291,9 +291,9 @@ implements <a href="ObjectTool.html" title="interface in org.apache.juneau.marsh
 <dd><code>factories</code> - The matcher factories to use.
    <br>If not specified, uses the following:
    <ul>
-      <li><a href="StringMatcherFactory.html#DEFAULT"><code>StringMatcherFactory.DEFAULT</code></a>
       <li><a href="NumberMatcherFactory.html#DEFAULT"><code>NumberMatcherFactory.DEFAULT</code></a>
       <li><a href="TimeMatcherFactory.html#DEFAULT"><code>TimeMatcherFactory.DEFAULT</code></a>
+      <li><a href="StringMatcherFactory.html#DEFAULT"><code>StringMatcherFactory.DEFAULT</code></a>
    </ul></dd>
 <dt>Returns:</dt>
 <dd>A new <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a> object.</dd>
@@ -333,7 +333,7 @@ implements <a href="ObjectTool.html" title="interface in org.apache.juneau.marsh
 <dd><code>input</code> - The input.</dd>
 <dd><code>searchArgs</code> - The search arguments.  See <a href="SearchArgs.html" title="class in org.apache.juneau.marshall.objecttools"><code>SearchArgs</code></a> for format.</dd>
 <dt>Returns:</dt>
-<dd>A list of maps/beans matching the</dd>
+<dd>A list of the matching maps/beans, or <jk>null</jk> if the result is not a list, collection, or array.</dd>
 </dl>
 </section>
 </li>

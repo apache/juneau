@@ -1,0 +1,23 @@
+# Modules that are intentionally NOT listed on /about's ecosystem table (or any other
+# inventory page checked by check-doc-inventory.py).
+#
+# One module name per line. Lines starting with '#' and blank lines are ignored.
+# Every entry here must have a one-line rationale in the comment above it.
+#
+# NOTE: pure aggregator/parent POMs (juneau, juneau-core, juneau-rest, etc.) are
+# excluded structurally via the AGGREGATOR_POMS set in check-doc-inventory.py, not
+# via this file — don't duplicate them here.
+#
+# See TODO-347 (apache/juneau .work/todo) for the audit that produced this list.
+
+# --- Test-only / internal helper modules (not part of the public ecosystem) ---
+juneau-test-utils
+juneau-test-marshall-utils
+juneau-microservice-test
+juneau-microservice-examples
+
+# --- Petstore submodules: /about intentionally shows one rolled-up "juneau-petstore"
+#     row rather than breaking out the three deployment variants. ---
+juneau-petstore-core
+juneau-petstore-jetty
+juneau-petstore-springboot

@@ -193,7 +193,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>resolution</code> - Rule on how URIs should be resolved.</dd>
 <dd><code>relativity</code> - Rule on what relative URIs are relative to.</dd>
-<dd><code>uriContext</code> - Current URI context (i.e. the current URI 'location').</dd>
+<dd><code>uriContext</code> - Current URI context (i.e. the current URI 'location'). Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>resolution</code> - Rule on how URIs should be resolved.</dd>
 <dd><code>relativity</code> - Rule on what relative URIs are relative to.</dd>
-<dd><code>uriContext</code> - Current URI context (i.e. the current URI 'location').</dd>
+<dd><code>uriContext</code> - Current URI context (i.e. the current URI 'location'). Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="UriResolver.html" title="class in org.apache.juneau.marshall"><code>UriResolver</code></a> object.</dd>
 </dl>
@@ -230,8 +230,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Same as <a href="#resolve(java.lang.Object)"><code>resolve(Object)</code></a> except appends result to the specified appendable.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>a</code> - The appendable to append the URL to.</dd>
-<dd><code>o</code> - The URI to convert to absolute form.</dd>
+<dd><code>a</code> - The appendable to append the URL to. Must not be <jk>null</jk>.</dd>
+<dd><code>o</code> - The URI to convert to absolute form. Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured <a href="UriResolution.html" title="enum class in org.apache.juneau.marshall"><code>UriResolution</code></a> and <a href="UriRelativity.html" title="enum class in org.apache.juneau.marshall"><code>UriRelativity</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>The same appendable passed in.</dd>
 </dl>
@@ -256,8 +256,8 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>relativeTo</code> - The URI to relativize against.</dd>
-<dd><code>uri</code> - The URI to relativize.</dd>
+<dd><code>relativeTo</code> - The URI to relativize against. Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured <a href="UriResolution.html" title="enum class in org.apache.juneau.marshall"><code>UriResolution</code></a> and <a href="UriRelativity.html" title="enum class in org.apache.juneau.marshall"><code>UriRelativity</code></a>.</dd>
+<dd><code>uri</code> - The URI to relativize. Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured <a href="UriResolution.html" title="enum class in org.apache.juneau.marshall"><code>UriResolution</code></a> and <a href="UriRelativity.html" title="enum class in org.apache.juneau.marshall"><code>UriRelativity</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>The relativized URI.</dd>
 </dl>
@@ -266,11 +266,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(java.lang.Object)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/UriResolver.html#line-325">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/UriResolver.html#line-326">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
 <div class="block">Converts the specified URI to absolute form based on values in this context.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>uri</code> - The URI to convert to absolute form.
+   Can be <jk>null</jk>.  The effect is implementation-dependent, varying with the configured <a href="UriResolution.html" title="enum class in org.apache.juneau.marshall"><code>UriResolution</code></a> and <a href="UriRelativity.html" title="enum class in org.apache.juneau.marshall"><code>UriRelativity</code></a>.
    Can be any of the following:
    <ul>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link"><code>URI</code></a>

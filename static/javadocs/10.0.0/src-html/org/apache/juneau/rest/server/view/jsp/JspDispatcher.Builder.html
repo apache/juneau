@@ -118,7 +118,7 @@
 <span class="source-line-no">105</span><span id="line-105">         var ctx = req.getServletContext();</span>
 <span class="source-line-no">106</span><span id="line-106">         var rd = ctx.getRequestDispatcher(target);</span>
 <span class="source-line-no">107</span><span id="line-107">         if (rd == null)</span>
-<span class="source-line-no">108</span><span id="line-108">            throw new InternalServerError("Could not resolve RequestDispatcher for ''{0}''. {1}",</span>
+<span class="source-line-no">108</span><span id="line-108">            throw new InternalServerError("Could not resolve RequestDispatcher for '%s'. %s",</span>
 <span class="source-line-no">109</span><span id="line-109">               target, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);</span>
 <span class="source-line-no">110</span><span id="line-110">         rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());</span>
 <span class="source-line-no">111</span><span id="line-111">      } catch (NoClassDefFoundError ex) {</span>
@@ -126,7 +126,7 @@
 <span class="source-line-no">113</span><span id="line-113">      } catch (IOException | NotFound ex) {</span>
 <span class="source-line-no">114</span><span id="line-114">         throw ex;</span>
 <span class="source-line-no">115</span><span id="line-115">      } catch (Exception ex) {</span>
-<span class="source-line-no">116</span><span id="line-116">         throw new InternalServerError(ex, "JSP render failed for ''{0}''", target);</span>
+<span class="source-line-no">116</span><span id="line-116">         throw new InternalServerError(ex, "JSP render failed for '%s'", target);</span>
 <span class="source-line-no">117</span><span id="line-117">      }</span>
 <span class="source-line-no">118</span><span id="line-118">   }</span>
 <span class="source-line-no">119</span><span id="line-119"></span>

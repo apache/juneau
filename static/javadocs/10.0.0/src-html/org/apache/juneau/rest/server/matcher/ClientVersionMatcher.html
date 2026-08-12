@@ -57,32 +57,33 @@
 <span class="source-line-no">044</span><span id="line-44">    * @param clientVersionHeader</span>
 <span class="source-line-no">045</span><span id="line-45">    *    The HTTP request header name containing the client version.</span>
 <span class="source-line-no">046</span><span id="line-46">    *    If &lt;jk&gt;null&lt;/jk&gt; or an empty string, uses &lt;js&gt;"Client-Version"&lt;/js&gt;</span>
-<span class="source-line-no">047</span><span id="line-47">    * @param mi The version string that the client version must match.</span>
-<span class="source-line-no">048</span><span id="line-48">    */</span>
-<span class="source-line-no">049</span><span id="line-49">   public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {</span>
-<span class="source-line-no">050</span><span id="line-50">      this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;</span>
-<span class="source-line-no">051</span><span id="line-51">      // @formatter:off</span>
-<span class="source-line-no">052</span><span id="line-52">      var clientVersion = AP.find(mi)</span>
-<span class="source-line-no">053</span><span id="line-53">         .stream()</span>
-<span class="source-line-no">054</span><span id="line-54">         .filter(REST_OP_GROUP)</span>
-<span class="source-line-no">055</span><span id="line-55">         .flatMap(ai -&gt; ai.getValue(String.class, "clientVersion").stream())</span>
-<span class="source-line-no">056</span><span id="line-56">         .filter(NOT_EMPTY)</span>
-<span class="source-line-no">057</span><span id="line-57">         .findFirst()</span>
-<span class="source-line-no">058</span><span id="line-58">         .orElse(null);</span>
-<span class="source-line-no">059</span><span id="line-59">      // @formatter:on</span>
-<span class="source-line-no">060</span><span id="line-60">      range = new VersionRange(clientVersion);</span>
-<span class="source-line-no">061</span><span id="line-61">   }</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   @Override /* Overridden from RestMatcher */</span>
-<span class="source-line-no">064</span><span id="line-64">   public boolean matches(HttpServletRequest req) {</span>
-<span class="source-line-no">065</span><span id="line-65">      return range.matches(req.getHeader(clientVersionHeader));</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   @Override /* Overridden from RestMatcher */</span>
-<span class="source-line-no">069</span><span id="line-69">   public boolean required() {</span>
-<span class="source-line-no">070</span><span id="line-70">      return true;</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72">}</span>
+<span class="source-line-no">047</span><span id="line-47">    * @param mi The Java method info that this matcher is being applied to (used to resolve the</span>
+<span class="source-line-no">048</span><span id="line-48">    *    {@code @RestOp(clientVersion)} annotation value).</span>
+<span class="source-line-no">049</span><span id="line-49">    */</span>
+<span class="source-line-no">050</span><span id="line-50">   public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {</span>
+<span class="source-line-no">051</span><span id="line-51">      this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;</span>
+<span class="source-line-no">052</span><span id="line-52">      // @formatter:off</span>
+<span class="source-line-no">053</span><span id="line-53">      var clientVersion = AP.find(mi)</span>
+<span class="source-line-no">054</span><span id="line-54">         .stream()</span>
+<span class="source-line-no">055</span><span id="line-55">         .filter(REST_OP_GROUP)</span>
+<span class="source-line-no">056</span><span id="line-56">         .flatMap(ai -&gt; ai.getValue(String.class, "clientVersion").stream())</span>
+<span class="source-line-no">057</span><span id="line-57">         .filter(NOT_EMPTY)</span>
+<span class="source-line-no">058</span><span id="line-58">         .findFirst()</span>
+<span class="source-line-no">059</span><span id="line-59">         .orElse(null);</span>
+<span class="source-line-no">060</span><span id="line-60">      // @formatter:on</span>
+<span class="source-line-no">061</span><span id="line-61">      range = new VersionRange(clientVersion);</span>
+<span class="source-line-no">062</span><span id="line-62">   }</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   @Override /* Overridden from RestMatcher */</span>
+<span class="source-line-no">065</span><span id="line-65">   public boolean matches(HttpServletRequest req) {</span>
+<span class="source-line-no">066</span><span id="line-66">      return range.matches(req.getHeader(clientVersionHeader));</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   @Override /* Overridden from RestMatcher */</span>
+<span class="source-line-no">070</span><span id="line-70">   public boolean required() {</span>
+<span class="source-line-no">071</span><span id="line-71">      return true;</span>
+<span class="source-line-no">072</span><span id="line-72">   }</span>
+<span class="source-line-no">073</span><span id="line-73">}</span>
 
 
 

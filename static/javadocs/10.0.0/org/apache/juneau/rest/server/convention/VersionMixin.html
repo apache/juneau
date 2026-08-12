@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  Compose into a host resource via
- <a href="../Rest.html#mixins()"><code>@Rest(mixins=VersionMixin.class)</code></a>; the three URLs become available
+ <a href="../Rest.html#mixins()"><code>@Rest(mixins=VersionMixin.class)</code></a>; the <code>/version</code> URL becomes available
  alongside the host's own endpoints with no further wiring.
 
  <h5 class='section'>Configurable mount path:</h5>
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Output:</h5>
 
  <p>
- All three URLs return the same JSON map &mdash; e.g.:
+ The endpoint returns a JSON map &mdash; e.g.:
  <p class='bjson'>
    {
       <jok>"name"</jok>: <jov>"my-app"</jov>,

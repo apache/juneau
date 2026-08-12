@@ -161,20 +161,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParser(org.apache.juneau.marshall.httppart.HttpPartParserSession)">
 <h3>getParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-110">getParser</a></span><wbr><span class="parameters">(<a href="../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a>&nbsp;defaultParser)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-112">getParser</a></span><wbr><span class="parameters">(<a href="../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a>&nbsp;defaultParser)</span></div>
 <div class="block">Returns the parser to use for parsing the bean property value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>defaultParser</code> - The default parsing to use if not defined on the annotation.</dd>
+<dd><code>defaultParser</code> - The default parser to use if not defined on the annotation. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The parsing to use for serializing the bean property value.</dd>
+<dd>The parser to use for parsing the bean property value, or <c>defaultParser</c> (which can be <jk>null</jk>)
+   if no parser is configured on the annotation.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getPartName()">
 <h3>getPartName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-119">getPartName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-121">getPartName</a></span>()</div>
 <div class="block">Returns the HTTP part name for this property (query parameter name for example).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -185,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPartType()">
 <h3>getPartType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-128">getPartType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-130">getPartType</a></span>()</div>
 <div class="block">Returns the HTTP part type for this property (query parameter for example).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -197,7 +198,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSchema()">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-137">getSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-139">getSchema</a></span>()</div>
 <div class="block">Returns the schema information gathered from annotations on the method and return type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -209,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSerializer()">
 <h3>getSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-144">getSerializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#line-146">getSerializer</a></span>()</div>
 <div class="block">Returns the serializer to use for serializing the bean property value.</div>
 <dl class="notes">
 <dt>Returns:</dt>

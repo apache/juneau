@@ -59,36 +59,37 @@
 <span class="source-line-no">046</span><span id="line-46">       * Constructor.</span>
 <span class="source-line-no">047</span><span id="line-47">       *</span>
 <span class="source-line-no">048</span><span id="line-48">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">049</span><span id="line-49">       */</span>
-<span class="source-line-no">050</span><span id="line-50">      public SerializerApply(VarResolverSession vr) {</span>
-<span class="source-line-no">051</span><span id="line-51">         super(HtmlDocConfig.class, HtmlDocSerializer.Builder.class, vr);</span>
-<span class="source-line-no">052</span><span id="line-52">      }</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">      @SuppressWarnings({</span>
-<span class="source-line-no">055</span><span id="line-55">         "unchecked" // Varargs method requires unchecked cast</span>
-<span class="source-line-no">056</span><span id="line-56">      })</span>
-<span class="source-line-no">057</span><span id="line-57">      @Override</span>
-<span class="source-line-no">058</span><span id="line-58">      public void apply(AnnotationInfo&lt;HtmlDocConfig&gt; ai, HtmlDocSerializer.Builder b) {</span>
-<span class="source-line-no">059</span><span id="line-59">         HtmlDocConfig a = ai.inner();</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">         strings(a.aside()).ifPresent(b::aside);</span>
-<span class="source-line-no">062</span><span id="line-62">         strings(a.footer()).ifPresent(b::footer);</span>
-<span class="source-line-no">063</span><span id="line-63">         strings(a.head()).ifPresent(b::head);</span>
-<span class="source-line-no">064</span><span id="line-64">         strings(a.header()).ifPresent(b::header);</span>
-<span class="source-line-no">065</span><span id="line-65">         strings(a.nav()).ifPresent(b::nav);</span>
-<span class="source-line-no">066</span><span id="line-66">         strings(a.navlinks()).ifPresent(b::navlinks);</span>
-<span class="source-line-no">067</span><span id="line-67">         strings(a.script()).ifPresent(b::script);</span>
-<span class="source-line-no">068</span><span id="line-68">         strings(a.style()).ifPresent(b::style);</span>
-<span class="source-line-no">069</span><span id="line-69">         strings(a.stylesheet()).ifPresent(b::stylesheet);</span>
-<span class="source-line-no">070</span><span id="line-70">         string(a.asideFloat()).filter(x -&gt; ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(b::asideFloat);</span>
-<span class="source-line-no">071</span><span id="line-71">         string(a.noResultsMessage()).ifPresent(b::noResultsMessage);</span>
-<span class="source-line-no">072</span><span id="line-72">         bool(a.nowrap()).ifPresent(b::nowrap);</span>
-<span class="source-line-no">073</span><span id="line-73">         bool(a.resolveBodyVars()).ifPresent(b::resolveBodyVars);</span>
-<span class="source-line-no">074</span><span id="line-74">         type(a.template()).ifPresent(b::template);</span>
-<span class="source-line-no">075</span><span id="line-75">         classes(a.widgets()).ifPresent(b::widgets);</span>
-<span class="source-line-no">076</span><span id="line-76">      }</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78">}</span>
+<span class="source-line-no">049</span><span id="line-49">       *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">050</span><span id="line-50">       */</span>
+<span class="source-line-no">051</span><span id="line-51">      public SerializerApply(VarResolverSession vr) {</span>
+<span class="source-line-no">052</span><span id="line-52">         super(HtmlDocConfig.class, HtmlDocSerializer.Builder.class, vr);</span>
+<span class="source-line-no">053</span><span id="line-53">      }</span>
+<span class="source-line-no">054</span><span id="line-54"></span>
+<span class="source-line-no">055</span><span id="line-55">      @SuppressWarnings({</span>
+<span class="source-line-no">056</span><span id="line-56">         "unchecked" // Varargs method requires unchecked cast</span>
+<span class="source-line-no">057</span><span id="line-57">      })</span>
+<span class="source-line-no">058</span><span id="line-58">      @Override</span>
+<span class="source-line-no">059</span><span id="line-59">      public void apply(AnnotationInfo&lt;HtmlDocConfig&gt; ai, HtmlDocSerializer.Builder b) {</span>
+<span class="source-line-no">060</span><span id="line-60">         HtmlDocConfig a = ai.inner();</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">         strings(a.aside()).ifPresent(b::aside);</span>
+<span class="source-line-no">063</span><span id="line-63">         strings(a.footer()).ifPresent(b::footer);</span>
+<span class="source-line-no">064</span><span id="line-64">         strings(a.head()).ifPresent(b::head);</span>
+<span class="source-line-no">065</span><span id="line-65">         strings(a.header()).ifPresent(b::header);</span>
+<span class="source-line-no">066</span><span id="line-66">         strings(a.nav()).ifPresent(b::nav);</span>
+<span class="source-line-no">067</span><span id="line-67">         strings(a.navlinks()).ifPresent(b::navlinks);</span>
+<span class="source-line-no">068</span><span id="line-68">         strings(a.script()).ifPresent(b::script);</span>
+<span class="source-line-no">069</span><span id="line-69">         strings(a.style()).ifPresent(b::style);</span>
+<span class="source-line-no">070</span><span id="line-70">         strings(a.stylesheet()).ifPresent(b::stylesheet);</span>
+<span class="source-line-no">071</span><span id="line-71">         string(a.asideFloat()).filter(x -&gt; ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(b::asideFloat);</span>
+<span class="source-line-no">072</span><span id="line-72">         string(a.noResultsMessage()).ifPresent(b::noResultsMessage);</span>
+<span class="source-line-no">073</span><span id="line-73">         bool(a.nowrap()).ifPresent(b::nowrap);</span>
+<span class="source-line-no">074</span><span id="line-74">         bool(a.resolveBodyVars()).ifPresent(b::resolveBodyVars);</span>
+<span class="source-line-no">075</span><span id="line-75">         type(a.template()).ifPresent(b::template);</span>
+<span class="source-line-no">076</span><span id="line-76">         classes(a.widgets()).ifPresent(b::widgets);</span>
+<span class="source-line-no">077</span><span id="line-77">      }</span>
+<span class="source-line-no">078</span><span id="line-78">   }</span>
+<span class="source-line-no">079</span><span id="line-79">}</span>
 
 
 

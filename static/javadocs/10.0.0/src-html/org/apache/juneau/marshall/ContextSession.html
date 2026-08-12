@@ -36,74 +36,74 @@
 <span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">import java.text.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import java.util.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import java.util.function.*;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.commons.collections.*;</span>
-<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.commons.conversion.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.commons.function.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.commons.reflect.*;</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35">/**</span>
-<span class="source-line-no">036</span><span id="line-36"> * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li class='warn'&gt;This class is not typically thread safe.</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> */</span>
-<span class="source-line-no">043</span><span id="line-43">@SuppressWarnings({</span>
-<span class="source-line-no">044</span><span id="line-44">   "java:S115" // Constants use UPPER_snakeCase convention</span>
-<span class="source-line-no">045</span><span id="line-45">})</span>
-<span class="source-line-no">046</span><span id="line-46">public abstract class ContextSession {</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">   // Property name constants</span>
-<span class="source-line-no">049</span><span id="line-49">   private static final String PROP_debug = "debug";</span>
-<span class="source-line-no">050</span><span id="line-50">   private static final String PROP_ContextSession_debug = "ContextSession.debug";</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   // Argument name constants for assertArgNotNull</span>
-<span class="source-line-no">053</span><span id="line-53">   private static final String ARG_ctx = "ctx";</span>
-<span class="source-line-no">054</span><span id="line-54">   private static final String ARG_value = "value";</span>
-<span class="source-line-no">055</span><span id="line-55">   private static final String ARG_msg = "msg";</span>
-<span class="source-line-no">056</span><span id="line-56">   private static final String ARG_args = "args";</span>
-<span class="source-line-no">057</span><span id="line-57">   private static final String ARG_type = "type";</span>
-<span class="source-line-no">058</span><span id="line-58">   private static final String ARG_apply = "apply";</span>
-<span class="source-line-no">059</span><span id="line-59">   private static final String ARG_key = "key";</span>
-<span class="source-line-no">060</span><span id="line-60">   private static final String ARG_builder = "builder";</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   /**</span>
-<span class="source-line-no">063</span><span id="line-63">    * Builder class.</span>
-<span class="source-line-no">064</span><span id="line-64">    */</span>
-<span class="source-line-no">065</span><span id="line-65">   @SuppressWarnings({</span>
-<span class="source-line-no">066</span><span id="line-66">      "java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.</span>
-<span class="source-line-no">067</span><span id="line-67">   })</span>
-<span class="source-line-no">068</span><span id="line-68">   public abstract static class Builder&lt;SELF extends Builder&lt;SELF&gt;&gt; {</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">      /**</span>
-<span class="source-line-no">071</span><span id="line-71">       * Returns this object cast to the self (CRTP) type.</span>
-<span class="source-line-no">072</span><span id="line-72">       *</span>
-<span class="source-line-no">073</span><span id="line-73">       * @return This object.</span>
-<span class="source-line-no">074</span><span id="line-74">       */</span>
-<span class="source-line-no">075</span><span id="line-75">      @SuppressWarnings({</span>
-<span class="source-line-no">076</span><span id="line-76">         "unchecked" // CRTP self-type cast is safe by construction.</span>
-<span class="source-line-no">077</span><span id="line-77">      })</span>
-<span class="source-line-no">078</span><span id="line-78">      protected final SELF self() {</span>
-<span class="source-line-no">079</span><span id="line-79">         return (SELF)this;</span>
-<span class="source-line-no">080</span><span id="line-80">      }</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">      private Boolean debug;</span>
-<span class="source-line-no">083</span><span id="line-83">      private boolean unmodifiable;</span>
-<span class="source-line-no">084</span><span id="line-84">      private Context ctx;</span>
-<span class="source-line-no">085</span><span id="line-85">      private Memoizer&lt;LinkedHashMap&lt;String,Object&gt;&gt; properties;</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">      /**</span>
-<span class="source-line-no">088</span><span id="line-88">       * Convenience method for converting values using {@link BasicConverter}.</span>
-<span class="source-line-no">089</span><span id="line-89">       *</span>
-<span class="source-line-no">090</span><span id="line-90">       * @param &lt;T&gt; The target type.</span>
-<span class="source-line-no">091</span><span id="line-91">       * @param value The value to convert.</span>
+<span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.function.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.commons.collections.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.commons.conversion.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.commons.function.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.commons.reflect.*;</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">/**</span>
+<span class="source-line-no">035</span><span id="line-35"> * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li class='warn'&gt;This class is not typically thread safe.</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> */</span>
+<span class="source-line-no">042</span><span id="line-42">@SuppressWarnings({</span>
+<span class="source-line-no">043</span><span id="line-43">   "java:S115" // Constants use UPPER_snakeCase convention</span>
+<span class="source-line-no">044</span><span id="line-44">})</span>
+<span class="source-line-no">045</span><span id="line-45">public abstract class ContextSession {</span>
+<span class="source-line-no">046</span><span id="line-46"></span>
+<span class="source-line-no">047</span><span id="line-47">   // Property name constants</span>
+<span class="source-line-no">048</span><span id="line-48">   private static final String PROP_debug = "debug";</span>
+<span class="source-line-no">049</span><span id="line-49">   private static final String PROP_ContextSession_debug = "ContextSession.debug";</span>
+<span class="source-line-no">050</span><span id="line-50"></span>
+<span class="source-line-no">051</span><span id="line-51">   // Argument name constants for assertArgNotNull</span>
+<span class="source-line-no">052</span><span id="line-52">   private static final String ARG_ctx = "ctx";</span>
+<span class="source-line-no">053</span><span id="line-53">   private static final String ARG_value = "value";</span>
+<span class="source-line-no">054</span><span id="line-54">   private static final String ARG_msg = "msg";</span>
+<span class="source-line-no">055</span><span id="line-55">   private static final String ARG_args = "args";</span>
+<span class="source-line-no">056</span><span id="line-56">   private static final String ARG_type = "type";</span>
+<span class="source-line-no">057</span><span id="line-57">   private static final String ARG_apply = "apply";</span>
+<span class="source-line-no">058</span><span id="line-58">   private static final String ARG_key = "key";</span>
+<span class="source-line-no">059</span><span id="line-59">   private static final String ARG_builder = "builder";</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">   /**</span>
+<span class="source-line-no">062</span><span id="line-62">    * Builder class.</span>
+<span class="source-line-no">063</span><span id="line-63">    */</span>
+<span class="source-line-no">064</span><span id="line-64">   @SuppressWarnings({</span>
+<span class="source-line-no">065</span><span id="line-65">      "java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.</span>
+<span class="source-line-no">066</span><span id="line-66">   })</span>
+<span class="source-line-no">067</span><span id="line-67">   public abstract static class Builder&lt;SELF extends Builder&lt;SELF&gt;&gt; {</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">      /**</span>
+<span class="source-line-no">070</span><span id="line-70">       * Returns this object cast to the self (CRTP) type.</span>
+<span class="source-line-no">071</span><span id="line-71">       *</span>
+<span class="source-line-no">072</span><span id="line-72">       * @return This object.</span>
+<span class="source-line-no">073</span><span id="line-73">       */</span>
+<span class="source-line-no">074</span><span id="line-74">      @SuppressWarnings({</span>
+<span class="source-line-no">075</span><span id="line-75">         "unchecked" // CRTP self-type cast is safe by construction.</span>
+<span class="source-line-no">076</span><span id="line-76">      })</span>
+<span class="source-line-no">077</span><span id="line-77">      protected final SELF self() {</span>
+<span class="source-line-no">078</span><span id="line-78">         return (SELF)this;</span>
+<span class="source-line-no">079</span><span id="line-79">      }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">      private Boolean debug;</span>
+<span class="source-line-no">082</span><span id="line-82">      private boolean unmodifiable;</span>
+<span class="source-line-no">083</span><span id="line-83">      private Context ctx;</span>
+<span class="source-line-no">084</span><span id="line-84">      private Memoizer&lt;LinkedHashMap&lt;String,Object&gt;&gt; properties;</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">      /**</span>
+<span class="source-line-no">087</span><span id="line-87">       * Convenience method for converting values using {@link BasicConverter}.</span>
+<span class="source-line-no">088</span><span id="line-88">       *</span>
+<span class="source-line-no">089</span><span id="line-89">       * @param &lt;T&gt; The target type.</span>
+<span class="source-line-no">090</span><span id="line-90">       * @param value The value to convert.</span>
+<span class="source-line-no">091</span><span id="line-91">       *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">092</span><span id="line-92">       * @param type The target class.</span>
-<span class="source-line-no">093</span><span id="line-93">       * @return The converted value.</span>
+<span class="source-line-no">093</span><span id="line-93">       * @return The converted value, or &lt;jk&gt;null&lt;/jk&gt; if the input value was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">094</span><span id="line-94">       */</span>
 <span class="source-line-no">095</span><span id="line-95">      protected static &lt;T&gt; T cvt(Object value, Class&lt;T&gt; type) {</span>
 <span class="source-line-no">096</span><span id="line-96">         return BasicConverter.INSTANCE.to(value, null, null, type);</span>
@@ -262,15 +262,15 @@
 <span class="source-line-no">249</span><span id="line-249">    *</span>
 <span class="source-line-no">250</span><span id="line-250">    * @param msg The warning message.</span>
 <span class="source-line-no">251</span><span id="line-251">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">252</span><span id="line-252">    * @param args Optional {@link MessageFormat}-style arguments.</span>
-<span class="source-line-no">253</span><span id="line-253">    *    &lt;br&gt;Cannot contain &lt;jk&gt;null&lt;/jk&gt; values.</span>
+<span class="source-line-no">252</span><span id="line-252">    * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</span>
+<span class="source-line-no">253</span><span id="line-253">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt; (individual values may be &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">254</span><span id="line-254">    */</span>
 <span class="source-line-no">255</span><span id="line-255">   public void addWarning(String msg, Object...args) {</span>
 <span class="source-line-no">256</span><span id="line-256">      assertArgsNotNull(ARG_msg, msg, ARG_args, args);</span>
 <span class="source-line-no">257</span><span id="line-257">      if (unmodifiable)</span>
 <span class="source-line-no">258</span><span id="line-258">         return;</span>
 <span class="source-line-no">259</span><span id="line-259">      if (warnings == null)</span>
-<span class="source-line-no">260</span><span id="line-260">         warnings = new LinkedList&lt;&gt;();</span>
+<span class="source-line-no">260</span><span id="line-260">         warnings = ll();</span>
 <span class="source-line-no">261</span><span id="line-261">      warnings.add((warnings.size() + 1) + ": " + f(msg, args));</span>
 <span class="source-line-no">262</span><span id="line-262">   }</span>
 <span class="source-line-no">263</span><span id="line-263"></span>
@@ -299,7 +299,7 @@
 <span class="source-line-no">286</span><span id="line-286">   /**</span>
 <span class="source-line-no">287</span><span id="line-287">    * Returns the warnings that occurred in this session.</span>
 <span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * @return The warnings that occurred in this session, or &lt;jk&gt;null&lt;/jk&gt; if no warnings occurred.</span>
+<span class="source-line-no">289</span><span id="line-289">    * @return The warnings that occurred in this session, or an empty list if no warnings occurred.</span>
 <span class="source-line-no">290</span><span id="line-290">    */</span>
 <span class="source-line-no">291</span><span id="line-291">   public final List&lt;String&gt; getWarnings() { return warnings == null ? emptyList() : warnings; }</span>
 <span class="source-line-no">292</span><span id="line-292"></span>

@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -93,6 +93,10 @@ loadScripts(document, 'script');</script>
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpMessage.html" title="class or interface in org.apache.http" class="external-link">HttpMessage</a></code>, <code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a></code></dd>
 </dl>
+<dl class="notes">
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="PayloadTooLarge.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge.Unmodifiable</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../Response.html" title="annotation interface in org.apache.juneau.http">@Response</a>
 <a href="../../StatusCode.html" title="annotation interface in org.apache.juneau.http">@StatusCode</a>(413)
@@ -110,6 +114,23 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="PayloadTooLarge.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="PayloadTooLarge.html" title="class in org.apache.juneau.http.classic.response"><code>PayloadTooLarge</code></a> exception.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -266,16 +287,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the protocol version on the status line.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PayloadTooLarge.html" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies whether this bean should be unmodifiable.</div>
+<div class="block">Returns an unmodifiable snapshot of this bean.</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.http.classic.response.BasicHttpException">Methods inherited from class&nbsp;org.apache.juneau.http.classic.response.<a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></h3>
-<code><a href="BasicHttpException.html#addHeader(java.lang.String,java.lang.String)">addHeader</a>, <a href="BasicHttpException.html#addHeader(org.apache.http.Header)">addHeader</a>, <a href="BasicHttpException.html#assertStatusCode(org.apache.http.HttpResponse)">assertStatusCode</a>, <a href="BasicHttpException.html#containsHeader(java.lang.String)">containsHeader</a>, <a href="BasicHttpException.html#equals(java.lang.Object)">equals</a>, <a href="BasicHttpException.html#getAllHeaders()">getAllHeaders</a>, <a href="BasicHttpException.html#getEntity()">getEntity</a>, <a href="BasicHttpException.html#getFirstHeader(java.lang.String)">getFirstHeader</a>, <a href="BasicHttpException.html#getFullStackMessage(boolean)">getFullStackMessage</a>, <a href="BasicHttpException.html#getHeaders()">getHeaders</a>, <a href="BasicHttpException.html#getHeaders(java.lang.String)">getHeaders</a>, <a href="BasicHttpException.html#getLastHeader(java.lang.String)">getLastHeader</a>, <a href="BasicHttpException.html#getLocale()">getLocale</a>, <a href="BasicHttpException.html#getMessage()">getMessage</a>, <a href="BasicHttpException.html#getParams()">getParams</a>, <a href="BasicHttpException.html#getProtocolVersion()">getProtocolVersion</a>, <a href="BasicHttpException.html#getRootCause()">getRootCause</a>, <a href="BasicHttpException.html#getStatusLine()">getStatusLine</a>, <a href="BasicHttpException.html#hashCode()">hashCode</a>, <a href="BasicHttpException.html#headerIterator()">headerIterator</a>, <a href="BasicHttpException.html#headerIterator(java.lang.String)">headerIterator</a>, <a href="BasicHttpException.html#removeHeader(org.apache.http.Header)">removeHeader</a>, <a href="BasicHttpException.html#removeHeaders(java.lang.String)">removeHeaders</a>, <a href="BasicHttpException.html#setEntity(org.apache.http.HttpEntity)">setEntity</a>, <a href="BasicHttpException.html#setHeader(java.lang.String,java.lang.String)">setHeader</a>, <a href="BasicHttpException.html#setHeader(org.apache.http.Header)">setHeader</a>, <a href="BasicHttpException.html#setHeaders(org.apache.http.Header%5B%5D)">setHeaders</a>, <a href="BasicHttpException.html#setLocale(java.util.Locale)">setLocale</a>, <a href="BasicHttpException.html#setParams(org.apache.http.params.HttpParams)">setParams</a>, <a href="BasicHttpException.html#setReasonPhrase(java.lang.String)">setReasonPhrase</a>, <a href="BasicHttpException.html#setStatusCode(int)">setStatusCode</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.http.ProtocolVersion,int)">setStatusLine</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.http.ProtocolVersion,int,java.lang.String)">setStatusLine</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.http.StatusLine)">setStatusLine</a>, <a href="BasicHttpException.html#toString()">toString</a></code></div>
+<code><a href="BasicHttpException.html#addHeader(java.lang.String,java.lang.String)">addHeader</a>, <a href="BasicHttpException.html#addHeader(org.apache.http.Header)">addHeader</a>, <a href="BasicHttpException.html#assertStatusCode(org.apache.http.HttpResponse)">assertStatusCode</a>, <a href="BasicHttpException.html#containsHeader(java.lang.String)">containsHeader</a>, <a href="BasicHttpException.html#equals(java.lang.Object)">equals</a>, <a href="BasicHttpException.html#freeze()">freeze</a>, <a href="BasicHttpException.html#getAllHeaders()">getAllHeaders</a>, <a href="BasicHttpException.html#getEntity()">getEntity</a>, <a href="BasicHttpException.html#getFirstHeader(java.lang.String)">getFirstHeader</a>, <a href="BasicHttpException.html#getFullStackMessage(boolean)">getFullStackMessage</a>, <a href="BasicHttpException.html#getHeaders()">getHeaders</a>, <a href="BasicHttpException.html#getHeaders(java.lang.String)">getHeaders</a>, <a href="BasicHttpException.html#getLastHeader(java.lang.String)">getLastHeader</a>, <a href="BasicHttpException.html#getLocale()">getLocale</a>, <a href="BasicHttpException.html#getMessage()">getMessage</a>, <a href="BasicHttpException.html#getParams()">getParams</a>, <a href="BasicHttpException.html#getProtocolVersion()">getProtocolVersion</a>, <a href="BasicHttpException.html#getRootCause()">getRootCause</a>, <a href="BasicHttpException.html#getStatusLine()">getStatusLine</a>, <a href="BasicHttpException.html#hashCode()">hashCode</a>, <a href="BasicHttpException.html#headerIterator()">headerIterator</a>, <a href="BasicHttpException.html#headerIterator(java.lang.String)">headerIterator</a>, <a href="BasicHttpException.html#isUnmodifiable()">isUnmodifiable</a>, <a href="BasicHttpException.html#modify(java.lang.Runnable)">modify</a>, <a href="BasicHttpException.html#removeHeader(org.apache.http.Header)">removeHeader</a>, <a href="BasicHttpException.html#removeHeaders(java.lang.String)">removeHeaders</a>, <a href="BasicHttpException.html#setEntity(org.apache.http.HttpEntity)">setEntity</a>, <a href="BasicHttpException.html#setHeader(java.lang.String,java.lang.String)">setHeader</a>, <a href="BasicHttpException.html#setHeader(org.apache.http.Header)">setHeader</a>, <a href="BasicHttpException.html#setHeaders(org.apache.http.Header%5B%5D)">setHeaders</a>, <a href="BasicHttpException.html#setLocale(java.util.Locale)">setLocale</a>, <a href="BasicHttpException.html#setParams(org.apache.http.params.HttpParams)">setParams</a>, <a href="BasicHttpException.html#setReasonPhrase(java.lang.String)">setReasonPhrase</a>, <a href="BasicHttpException.html#setStatusCode(int)">setStatusCode</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.http.ProtocolVersion,int)">setStatusLine</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.http.ProtocolVersion,int,java.lang.String)">setStatusLine</a>, <a href="BasicHttpException.html#setStatusLine(org.apache.http.StatusLine)">setStatusLine</a>, <a href="BasicHttpException.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Throwable">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#addSuppressed(java.lang.Throwable)" title="class or interface in java.lang" class="external-link">addSuppressed</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#fillInStackTrace()" title="class or interface in java.lang" class="external-link">fillInStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getCause()" title="class or interface in java.lang" class="external-link">getCause</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getLocalizedMessage()" title="class or interface in java.lang" class="external-link">getLocalizedMessage</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getStackTrace()" title="class or interface in java.lang" class="external-link">getStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getSuppressed()" title="class or interface in java.lang" class="external-link">getSuppressed</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#initCause(java.lang.Throwable)" title="class or interface in java.lang" class="external-link">initCause</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#printStackTrace()" title="class or interface in java.lang" class="external-link">printStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#printStackTrace(java.io.PrintStream)" title="class or interface in java.lang" class="external-link">printStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#printStackTrace(java.io.PrintWriter)" title="class or interface in java.lang" class="external-link">printStackTrace</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#setStackTrace(java.lang.StackTraceElement%5B%5D)" title="class or interface in java.lang" class="external-link">setStackTrace</a></code></div>
@@ -369,8 +390,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>msg</code> - The message.  Can be <jk>null</jk>.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments in the message.</dd>
+<dd><code>msg</code> - The message.  Can be <jk>null</jk>, in which case the reason phrase is used as the message.</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments in the message.</dd>
 </dl>
 </section>
 </li>
@@ -381,7 +402,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cause</code> - The cause.  Can be <jk>null</jk>.</dd>
+<dd><code>cause</code> - The cause.  Can be <jk>null</jk>, in which case the reason phrase is used as the message and no cause is chained.</dd>
 </dl>
 </section>
 </li>
@@ -394,8 +415,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>cause</code> - The caused-by exception.  Can be <jk>null</jk>.</dd>
-<dd><code>msg</code> - The message.  Can be <jk>null</jk>.</dd>
+<dd><code>cause</code> - The caused-by exception.  Can be <jk>null</jk> (no cause is chained).</dd>
+<dd><code>msg</code> - The message.  Can be <jk>null</jk>, in which case the cause's message is used, or the reason phrase if the cause is also <jk>null</jk> or has no message.</dd>
 <dd><code>args</code> - The message arguments.</dd>
 </dl>
 </section>
@@ -407,7 +428,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The bean to copy.</dd>
+<dd><code>copyFrom</code> - The bean to copy.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -440,7 +461,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setContent(org.apache.http.HttpEntity)">setContent</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The body on this response.</dd>
+<dd><code>value</code> - The body on this response.  Can be <jk>null</jk> to unset the property.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -456,7 +477,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setContent(java.lang.String)">setContent</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The body on this response.</dd>
+<dd><code>value</code> - The body on this response.  Can be <jk>null</jk> (treated as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -490,7 +511,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setHeaders(org.apache.juneau.http.classic.header.HeaderList)">setHeaders</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -541,7 +562,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setLocale2(java.util.Locale)">setLocale2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Can be <jk>null</jk>.  The effect is implementation-dependent, depending on the configured <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ReasonPhraseCatalog.html" title="class or interface in org.apache.http" class="external-link"><code>ReasonPhraseCatalog</code></a> (e.g. ignored by <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/impl/EnglishReasonPhraseCatalog.html" title="class or interface in org.apache.http.impl" class="external-link"><code>EnglishReasonPhraseCatalog</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -578,7 +599,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setProtocolVersion(org.apache.http.ProtocolVersion)">setProtocolVersion</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Can be <jk>null</jk>, in which case the default protocol version is cleared and <a href="../BasicStatusLine.html#getProtocolVersion()"><code>BasicStatusLine.getProtocolVersion()</code></a> returns <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -598,7 +619,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setReasonPhrase2(java.lang.String)">setReasonPhrase2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Can be <jk>null</jk> to fall back to the reason phrase catalog.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -617,7 +638,7 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)">setReasonPhraseCatalog</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Can be <jk>null</jk> to fall back to <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/impl/EnglishReasonPhraseCatalog.html#INSTANCE" title="class or interface in org.apache.http.impl" class="external-link"><code>EnglishReasonPhraseCatalog.INSTANCE</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -655,25 +676,29 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="BasicHttpException.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)">setStatusLine</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dd><code>value</code> - The new value.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setUnmodifiable()">
-<h3>setUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PayloadTooLarge.html" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/PayloadTooLarge.html#line-212">setUnmodifiable</a></span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setUnmodifiable()">BasicHttpException</a></code></span></div>
-<div class="block">Specifies whether this bean should be unmodifiable.
+<section class="detail" id="unmodifiable()">
+<h3>unmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PayloadTooLarge.html" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/PayloadTooLarge.html#line-212">unmodifiable</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#unmodifiable()">BasicHttpException</a></code></span></div>
+<div class="block">Returns an unmodifiable snapshot of this bean.
+
  <p>
- When enabled, attempting to set any properties on this bean will cause an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
+ The returned instance is a point-in-time copy of the leaf's nested <code>Unmodifiable</code> type; any attempt to set a
+ property on it throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.  This method is idempotent: if this bean is already
+ unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+ modifiable unless it was already unmodifiable).</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="BasicHttpException.html#setUnmodifiable()">setUnmodifiable</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
+<dd><code><a href="BasicHttpException.html#unmodifiable()">unmodifiable</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpException.html" title="class in org.apache.juneau.http.classic.response">BasicHttpException</a></code></dd>
 <dt>Returns:</dt>
-<dd>This object.</dd>
+<dd>An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</dd>
 </dl>
 </section>
 </li>

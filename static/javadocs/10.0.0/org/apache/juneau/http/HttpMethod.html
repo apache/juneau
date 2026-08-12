@@ -391,7 +391,7 @@ loadScripts(document, 'script');</script>
  By default, anything not in this list can have content:  <c>GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE</c>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The HTTP method.</dd>
+<dd><code>name</code> - The HTTP method. Can be <jk>null</jk> (treated as an empty string, which returns <jk>true</jk>).</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if specified http method has content.</dd>
 </dl>

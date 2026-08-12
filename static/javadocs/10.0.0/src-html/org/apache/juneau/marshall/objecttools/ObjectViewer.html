@@ -70,105 +70,100 @@
 <span class="source-line-no">057</span><span id="line-57">   "unchecked", // Type erasure requires unchecked casts</span>
 <span class="source-line-no">058</span><span id="line-58">   "rawtypes", // Raw types necessary for generic type handling</span>
 <span class="source-line-no">059</span><span id="line-59">   "java:S6541", // Stateless utility, singleton for convenience</span>
-<span class="source-line-no">060</span><span id="line-60">   "java:S6542", // Singleton required for ObjectTool pattern; stateless DEFAULT instance</span>
-<span class="source-line-no">061</span><span id="line-61">   "java:S6548"  // Singleton pattern is intentional; DEFAULT is a stateless, thread-safe shared tool</span>
-<span class="source-line-no">062</span><span id="line-62">})</span>
-<span class="source-line-no">063</span><span id="line-63">public class ObjectViewer implements ObjectTool&lt;ViewArgs&gt; {</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Default reusable searcher.</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   @SuppressWarnings({</span>
-<span class="source-line-no">069</span><span id="line-69">      "java:S6541", // Stateless utility, singleton for convenience</span>
-<span class="source-line-no">070</span><span id="line-70">      "java:S6542"  // Singleton required for ObjectTool pattern; stateless DEFAULT instance</span>
-<span class="source-line-no">071</span><span id="line-71">   })</span>
-<span class="source-line-no">072</span><span id="line-72">   public static final ObjectViewer DEFAULT = new ObjectViewer();</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   /**</span>
-<span class="source-line-no">075</span><span id="line-75">    * Static creator.</span>
-<span class="source-line-no">076</span><span id="line-76">    *</span>
-<span class="source-line-no">077</span><span id="line-77">    * @return A new {@link ObjectViewer} object.</span>
-<span class="source-line-no">078</span><span id="line-78">    */</span>
-<span class="source-line-no">079</span><span id="line-79">   @SuppressWarnings({</span>
-<span class="source-line-no">080</span><span id="line-80">      "java:S6542"  // create() intentionally allows new instances; DEFAULT singleton for convenience</span>
-<span class="source-line-no">081</span><span id="line-81">   })</span>
-<span class="source-line-no">082</span><span id="line-82">   public static ObjectViewer create() {</span>
-<span class="source-line-no">083</span><span id="line-83">      return new ObjectViewer();</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   @Override /* Overridden from ObjectTool */</span>
-<span class="source-line-no">087</span><span id="line-87">   public Object run(MarshallingSession session, Object input, ViewArgs args) {</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">      if (input == null)</span>
-<span class="source-line-no">090</span><span id="line-90">         return null;</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">      List&lt;String&gt; view = args.getView();</span>
-<span class="source-line-no">093</span><span id="line-93">      ClassMeta type = session.getClassMetaForObject(input);</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">      if (type.isBeanMap())</span>
-<span class="source-line-no">096</span><span id="line-96">         return new DelegateBeanMap(((BeanMap)input).getBean(), session).filterKeys(view);</span>
-<span class="source-line-no">097</span><span id="line-97">      if (type.isMap())</span>
-<span class="source-line-no">098</span><span id="line-98">         return new DelegateMap((Map)input, session).filterKeys(view);</span>
-<span class="source-line-no">099</span><span id="line-99">      if (type.isBean())</span>
-<span class="source-line-no">100</span><span id="line-100">         return new DelegateBeanMap(input, session).filterKeys(view);</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">      List&lt;Object&gt; l = null;</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">      if (type.isArray()) {</span>
-<span class="source-line-no">105</span><span id="line-105">         var size = Array.getLength(input);</span>
-<span class="source-line-no">106</span><span id="line-106">         l = listOfSize(size);</span>
-<span class="source-line-no">107</span><span id="line-107">         for (var i = 0; i &lt; size; i++)</span>
-<span class="source-line-no">108</span><span id="line-108">            l.add(Array.get(input, i));</span>
-<span class="source-line-no">109</span><span id="line-109">      } else if (type.isCollection()) {</span>
-<span class="source-line-no">110</span><span id="line-110">         var c = (Collection)input;</span>
-<span class="source-line-no">111</span><span id="line-111">         l = listOfSize(c.size());</span>
-<span class="source-line-no">112</span><span id="line-112">         List&lt;Object&gt; l2 = l;</span>
-<span class="source-line-no">113</span><span id="line-113">         c.forEach(l2::add);</span>
-<span class="source-line-no">114</span><span id="line-114">      } else {</span>
-<span class="source-line-no">115</span><span id="line-115">         return input;</span>
-<span class="source-line-no">116</span><span id="line-116">      }</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">      for (ListIterator li = l.listIterator(); li.hasNext();) {</span>
-<span class="source-line-no">119</span><span id="line-119">         Object o = li.next();</span>
-<span class="source-line-no">120</span><span id="line-120">         ClassMeta cm2 = session.getClassMetaForObject(o);</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">         if (cm2 == null)</span>
-<span class="source-line-no">123</span><span id="line-123">            o = null;</span>
-<span class="source-line-no">124</span><span id="line-124">         else if (cm2.isBeanMap())</span>
-<span class="source-line-no">125</span><span id="line-125">            o = new DelegateBeanMap(((BeanMap)o).getBean(), session).filterKeys(view);</span>
-<span class="source-line-no">126</span><span id="line-126">         else if (cm2.isMap())</span>
-<span class="source-line-no">127</span><span id="line-127">            o = new DelegateMap((Map)o, session).filterKeys(view);</span>
-<span class="source-line-no">128</span><span id="line-128">         else if (cm2.isBean())</span>
-<span class="source-line-no">129</span><span id="line-129">            o = new DelegateBeanMap(o, session).filterKeys(view);</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">         li.set(o);</span>
-<span class="source-line-no">132</span><span id="line-132">      }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">      return l;</span>
-<span class="source-line-no">135</span><span id="line-135">   }</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">   /**</span>
-<span class="source-line-no">138</span><span id="line-138">    * Runs this viewer on the specified collection or array of objects.</span>
-<span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * @param input The input.  Must be an array or collection.</span>
-<span class="source-line-no">141</span><span id="line-141">    * @param args The view args.  See {@link ViewArgs} for format.</span>
-<span class="source-line-no">142</span><span id="line-142">    * @return The extracted properties from the collection of objects.</span>
-<span class="source-line-no">143</span><span id="line-143">    */</span>
-<span class="source-line-no">144</span><span id="line-144">   public List&lt;Map&gt; run(Object input, String args) {</span>
-<span class="source-line-no">145</span><span id="line-145">      return (List&lt;Map&gt;)run(MarshallingContext.DEFAULT_SESSION, input, ViewArgs.create(args));</span>
-<span class="source-line-no">146</span><span id="line-146">   }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">   /**</span>
-<span class="source-line-no">149</span><span id="line-149">    * Runs this viewer on a singleton object.</span>
-<span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * @param input The input.  Must be a singleton object.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @param args The view args.  See {@link ViewArgs} for format.</span>
-<span class="source-line-no">153</span><span id="line-153">    * @return The extracted properties from the object.</span>
-<span class="source-line-no">154</span><span id="line-154">    */</span>
-<span class="source-line-no">155</span><span id="line-155">   public Map runSingle(Object input, String args) {</span>
-<span class="source-line-no">156</span><span id="line-156">      return (Map)run(MarshallingContext.DEFAULT_SESSION, input, ViewArgs.create(args));</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158">}</span>
+<span class="source-line-no">060</span><span id="line-60">   "java:S6548"  // Singleton pattern is intentional; DEFAULT is a stateless, thread-safe shared tool</span>
+<span class="source-line-no">061</span><span id="line-61">})</span>
+<span class="source-line-no">062</span><span id="line-62">public class ObjectViewer implements ObjectTool&lt;ViewArgs&gt; {</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   /**</span>
+<span class="source-line-no">065</span><span id="line-65">    * Default reusable searcher.</span>
+<span class="source-line-no">066</span><span id="line-66">    */</span>
+<span class="source-line-no">067</span><span id="line-67">   @SuppressWarnings({</span>
+<span class="source-line-no">068</span><span id="line-68">      "java:S6541" // Stateless utility, singleton for convenience</span>
+<span class="source-line-no">069</span><span id="line-69">   })</span>
+<span class="source-line-no">070</span><span id="line-70">   public static final ObjectViewer DEFAULT = new ObjectViewer();</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">   /**</span>
+<span class="source-line-no">073</span><span id="line-73">    * Static creator.</span>
+<span class="source-line-no">074</span><span id="line-74">    *</span>
+<span class="source-line-no">075</span><span id="line-75">    * @return A new {@link ObjectViewer} object.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   public static ObjectViewer create() {</span>
+<span class="source-line-no">078</span><span id="line-78">      return new ObjectViewer();</span>
+<span class="source-line-no">079</span><span id="line-79">   }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   @Override /* Overridden from ObjectTool */</span>
+<span class="source-line-no">082</span><span id="line-82">   public Object run(MarshallingSession session, Object input, ViewArgs args) {</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">      if (input == null)</span>
+<span class="source-line-no">085</span><span id="line-85">         return null;</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">      List&lt;String&gt; view = args.getView();</span>
+<span class="source-line-no">088</span><span id="line-88">      ClassMeta type = session.getClassMetaForObject(input);</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">      if (type.isBeanMap())</span>
+<span class="source-line-no">091</span><span id="line-91">         return new DelegateBeanMap(((BeanMap)input).getBean(), session).filterKeys(view);</span>
+<span class="source-line-no">092</span><span id="line-92">      if (type.isMap())</span>
+<span class="source-line-no">093</span><span id="line-93">         return new DelegateMap((Map)input, session).filterKeys(view);</span>
+<span class="source-line-no">094</span><span id="line-94">      if (type.isBean())</span>
+<span class="source-line-no">095</span><span id="line-95">         return new DelegateBeanMap(input, session).filterKeys(view);</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">      List&lt;Object&gt; l = null;</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">      if (type.isArray()) {</span>
+<span class="source-line-no">100</span><span id="line-100">         var size = Array.getLength(input);</span>
+<span class="source-line-no">101</span><span id="line-101">         l = listOfSize(size);</span>
+<span class="source-line-no">102</span><span id="line-102">         for (var i = 0; i &lt; size; i++)</span>
+<span class="source-line-no">103</span><span id="line-103">            l.add(Array.get(input, i));</span>
+<span class="source-line-no">104</span><span id="line-104">      } else if (type.isCollection()) {</span>
+<span class="source-line-no">105</span><span id="line-105">         var c = (Collection)input;</span>
+<span class="source-line-no">106</span><span id="line-106">         l = listOfSize(c.size());</span>
+<span class="source-line-no">107</span><span id="line-107">         List&lt;Object&gt; l2 = l;</span>
+<span class="source-line-no">108</span><span id="line-108">         c.forEach(l2::add);</span>
+<span class="source-line-no">109</span><span id="line-109">      } else {</span>
+<span class="source-line-no">110</span><span id="line-110">         return input;</span>
+<span class="source-line-no">111</span><span id="line-111">      }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">      for (ListIterator li = l.listIterator(); li.hasNext();) {</span>
+<span class="source-line-no">114</span><span id="line-114">         Object o = li.next();</span>
+<span class="source-line-no">115</span><span id="line-115">         ClassMeta cm2 = session.getClassMetaForObject(o);</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">         if (cm2 == null)</span>
+<span class="source-line-no">118</span><span id="line-118">            o = null;</span>
+<span class="source-line-no">119</span><span id="line-119">         else if (cm2.isBeanMap())</span>
+<span class="source-line-no">120</span><span id="line-120">            o = new DelegateBeanMap(((BeanMap)o).getBean(), session).filterKeys(view);</span>
+<span class="source-line-no">121</span><span id="line-121">         else if (cm2.isMap())</span>
+<span class="source-line-no">122</span><span id="line-122">            o = new DelegateMap((Map)o, session).filterKeys(view);</span>
+<span class="source-line-no">123</span><span id="line-123">         else if (cm2.isBean())</span>
+<span class="source-line-no">124</span><span id="line-124">            o = new DelegateBeanMap(o, session).filterKeys(view);</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">         li.set(o);</span>
+<span class="source-line-no">127</span><span id="line-127">      }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">      return l;</span>
+<span class="source-line-no">130</span><span id="line-130">   }</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">   /**</span>
+<span class="source-line-no">133</span><span id="line-133">    * Runs this viewer on the specified collection or array of objects.</span>
+<span class="source-line-no">134</span><span id="line-134">    *</span>
+<span class="source-line-no">135</span><span id="line-135">    * @param input The input.  Must be an array or collection.</span>
+<span class="source-line-no">136</span><span id="line-136">    * @param args The view args.  See {@link ViewArgs} for format.</span>
+<span class="source-line-no">137</span><span id="line-137">    * @return The extracted properties from the collection of objects.</span>
+<span class="source-line-no">138</span><span id="line-138">    */</span>
+<span class="source-line-no">139</span><span id="line-139">   public List&lt;Map&gt; run(Object input, String args) {</span>
+<span class="source-line-no">140</span><span id="line-140">      return (List&lt;Map&gt;)run(MarshallingContext.DEFAULT_SESSION, input, ViewArgs.create(args));</span>
+<span class="source-line-no">141</span><span id="line-141">   }</span>
+<span class="source-line-no">142</span><span id="line-142"></span>
+<span class="source-line-no">143</span><span id="line-143">   /**</span>
+<span class="source-line-no">144</span><span id="line-144">    * Runs this viewer on a singleton object.</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * @param input The input.  Must be a singleton object.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @param args The view args.  See {@link ViewArgs} for format.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @return The extracted properties from the object.</span>
+<span class="source-line-no">149</span><span id="line-149">    */</span>
+<span class="source-line-no">150</span><span id="line-150">   public Map runSingle(Object input, String args) {</span>
+<span class="source-line-no">151</span><span id="line-151">      return (Map)run(MarshallingContext.DEFAULT_SESSION, input, ViewArgs.create(args));</span>
+<span class="source-line-no">152</span><span id="line-152">   }</span>
+<span class="source-line-no">153</span><span id="line-153">}</span>
 
 
 

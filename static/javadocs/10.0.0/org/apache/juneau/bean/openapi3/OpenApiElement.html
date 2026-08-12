@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
  Can be used to retrieve non-standard Swagger fields such as <js>"$ref"</js>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to retrieve.  Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name to retrieve.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dt>Returns:</dt>
 <dd>The property value, or <jk>null</jk> if the property does not exist or is not set.</dd>
 </dl>
@@ -255,7 +255,7 @@ loadScripts(document, 'script');</script>
  Can be used to set non-standard Swagger fields such as <js>"$ref"</js>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>.</dd>
+<dd><code>property</code> - The property name to set.  Must not be <jk>null</jk>, or an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> is thrown.</dd>
 <dd><code>value</code> - The new value for the property.</dd>
 <dt>Returns:</dt>
 <dd>This object</dd>

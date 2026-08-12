@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120"> *       &lt;jc&gt;// Log the result of the request.&lt;/jc&gt;</span>
 <span class="source-line-no">121</span><span id="line-121"> *       &lt;ja&gt;@RestPostCall&lt;/ja&gt;</span>
 <span class="source-line-no">122</span><span id="line-122"> *       &lt;jk&gt;public void&lt;/jk&gt; onPostCall(RestResponse &lt;jv&gt;res&lt;/jv&gt;, Logger &lt;jv&gt;logger&lt;/jv&gt;) {</span>
-<span class="source-line-no">123</span><span id="line-123"> *          &lt;jv&gt;logger&lt;/jv&gt;.fine(&lt;js&gt;Output {0} was set on the response."&lt;/js&gt;, &lt;jv&gt;res&lt;/jv&gt;.getOutput());</span>
+<span class="source-line-no">123</span><span id="line-123"> *          &lt;jv&gt;logger&lt;/jv&gt;.fine(&lt;js&gt;"Output %s was set on the response."&lt;/js&gt;, &lt;jv&gt;res&lt;/jv&gt;.getContent());</span>
 <span class="source-line-no">124</span><span id="line-124"> *       }</span>
 <span class="source-line-no">125</span><span id="line-125"> *    }</span>
 <span class="source-line-no">126</span><span id="line-126"> * &lt;/p&gt;</span>

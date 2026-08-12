@@ -172,9 +172,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Identical to <code>HttpServletRequest.getPathInfo()</code> but doesn't decode encoded characters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The HTTP request</dd>
+<dd><code>req</code> - The HTTP request. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The un-decoded path info.</dd>
+<dd>The un-decoded path info, or <jk>null</jk> if there is no extra path information.</dd>
 </dl>
 </section>
 </li>
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The value to convert.</dd>
+<dd><code>s</code> - The value to convert. Can be <jk>null</jk> (treated as an empty string, yielding an empty result).</dd>
 <dt>Returns:</dt>
 <dd>The converted path.</dd>
 </dl>
@@ -324,7 +324,7 @@ loadScripts(document, 'script');</script>
  The path-info follows the servlet path but precedes the query string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to validate.</dd>
+<dd><code>value</code> - The value to validate. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The validated value (may be <jk>null</jk>).</dd>
 <dt>Throws:</dt>

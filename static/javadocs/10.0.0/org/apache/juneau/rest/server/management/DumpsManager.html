@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-50">DumpsManager</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-52">DumpsManager</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Shared worker for the diagnostic dump endpoints (<code>/threaddump</code>, <code>/heapdump</code>).
 
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>DumpsManager</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-50">DumpsManager</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-52">DumpsManager</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveSettings(org.apache.juneau.rest.server.RestContext)">
 <h3>resolveSettings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DumpsSettings.html" title="class in org.apache.juneau.rest.server.management">DumpsSettings</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-58">resolveSettings</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DumpsSettings.html" title="class in org.apache.juneau.rest.server.management">DumpsSettings</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-60">resolveSettings</a></span><wbr><span class="parameters">(<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;context)</span></div>
 <div class="block">Resolves the <a href="DumpsSettings.html" title="class in org.apache.juneau.rest.server.management"><code>DumpsSettings</code></a> from the host context's bean store, falling back to the deny-all default.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="threadDump()">
 <h3>threadDump</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-72">threadDump</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-74">threadDump</a></span>()</div>
 <div class="block">Renders a full thread dump from the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.management/java/lang/management/ThreadMXBean.html" title="class or interface in java.lang.management" class="external-link"><code>ThreadMXBean</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="heapDump(java.io.File,boolean)">
 <h3>heapDump</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-93">heapDump</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-95">heapDump</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;target,
  boolean&nbsp;live)</span></div>
 <div class="block">Writes a heap dump (hprof) to the supplied file via the HotSpot <code>HotSpotDiagnosticMXBean</code>.
 
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
  <b>must not already exist</b> (a <code>dumpHeap</code> requirement).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>target</code> - The hprof output file (must not pre-exist).</dd>
+<dd><code>target</code> - The hprof output file.  Must not be <jk>null</jk> (and must not pre-exist).</dd>
 <dd><code>live</code> - If <jk>true</jk>, dump only live (reachable) objects.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the dump was written; <jk>false</jk> if this JVM has no HotSpot heap-dump support
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="heapDumpStream(boolean)">
 <h3>heapDumpStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-122">heapDumpStream</a></span><wbr><span class="parameters">(boolean&nbsp;live)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/management/DumpsManager.html#line-124">heapDumpStream</a></span><wbr><span class="parameters">(boolean&nbsp;live)</span>
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Produces a heap dump and returns it as a self-deleting input stream.
 

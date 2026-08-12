@@ -56,51 +56,346 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp">org.apache.juneau.examples.mcp</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.examples.mcp.secured">org.apache.juneau.examples.mcp.secured</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.examples.mcp.spring">org.apache.juneau.examples.mcp.spring</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20250618">org.apache.juneau.rest.server.mcp.v20250618</a></div>
 <div class="col-last even-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">MCP <code>2025-06-18</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last odd-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
 </div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.mcp</a> used by <a href="../../../examples/mcp/package-summary.html">org.apache.juneau.examples.mcp</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/AbstractMcpRestServlet.html#org.apache.juneau.examples.mcp">AbstractMcpRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Drop-in <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> subclass that exposes a single MCP JSON-RPC endpoint at <code>POST /</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpServerConfig.html#org.apache.juneau.examples.mcp">McpServerConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Aggregate configuration consumed by the bound <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpRevision</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.secured">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.mcp</a> used by <a href="../../../examples/mcp/secured/package-summary.html">org.apache.juneau.examples.mcp.secured</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/AbstractMcpRestServlet.html#org.apache.juneau.examples.mcp.secured">AbstractMcpRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Drop-in <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> subclass that exposes a single MCP JSON-RPC endpoint at <code>POST /</code>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.examples.mcp.spring">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.mcp</a> used by <a href="../../../examples/mcp/spring/package-summary.html">org.apache.juneau.examples.mcp.spring</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/McpEndpointMixin.html#org.apache.juneau.examples.mcp.spring">McpEndpointMixin</a></div>
+<div class="col-last even-row-color">
+<div class="block">Mixin interface that exposes an MCP JSON-RPC endpoint at <code>POST /mcp</code> on any Juneau REST resource.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpServerConfig.html#org.apache.juneau.examples.mcp.spring">McpServerConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Aggregate configuration consumed by the bound <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpRevision</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.rest.server.mcp">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.mcp</a> used by <a href="package-summary.html">org.apache.juneau.rest.server.mcp</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/McpChangeEvent.html#org.apache.juneau.rest.server.mcp">McpChangeEvent</a></div>
+<div class="col-last even-row-color">
+<div class="block">A single revision-neutral change event published through <a href="McpSubscriptions.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpSubscriptions</code></a> and fanned out by an
+ <a href="McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpSubscriptionBroker</code></a> to every matching <a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpSubscription</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpChangeKind.html#org.apache.juneau.rest.server.mcp">McpChangeKind</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The kind of change a neutral MCP subscription can be notified about.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpCompleter.html#org.apache.juneau.rest.server.mcp">McpCompleter</a></div>
+<div class="col-last even-row-color">
+<div class="block">Application behavior invoked for a <code>completion/complete</code> request against a declared prompt
+ argument (<a href="McpPromptArgument.html#getCompleter()"><code>McpPromptArgument.getCompleter()</code></a>) or resource-template variable
+ (<a href="McpResourceTemplateHandler.html#completer(java.lang.String)"><code>McpResourceTemplateHandler.completer(String)</code></a>).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpCompletionRef.html#org.apache.juneau.rest.server.mcp">McpCompletionRef</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral identification of the declaration a <code>completion/complete</code> request targets.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpCompletionRef.Kind.html#org.apache.juneau.rest.server.mcp">McpCompletionRef.Kind</a></div>
+<div class="col-last even-row-color">
+<div class="block">The kind of declaration a <a href="McpCompletionRef.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpCompletionRef</code></a> targets.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpCompletionRequest.html#org.apache.juneau.rest.server.mcp">McpCompletionRequest</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral invocation of an <a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpCompleter</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpCompletionResult.html#org.apache.juneau.rest.server.mcp">McpCompletionResult</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral, as-returned-by-the-application result of an <a href="McpCompleter.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpCompleter</code></a> invocation.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpCompletionResult.Normalized.html#org.apache.juneau.rest.server.mcp">McpCompletionResult.Normalized</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The normalized shape of a completion result, ready for wire mapping.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpContentBlock.html#org.apache.juneau.rest.server.mcp">McpContentBlock</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral content block returned by tool calls and prompt messages.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpContentBlock.Kind.html#org.apache.juneau.rest.server.mcp">McpContentBlock.Kind</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Which content variant is populated.</div>
+</div>
 <div class="col-first even-row-color"><a href="class-use/McpCursor.html#org.apache.juneau.rest.server.mcp">McpCursor</a></div>
 <div class="col-last even-row-color">
-<div class="block">Pagination strategy for MCP <code>list</code> dispatchers (tools / prompts / resources).</div>
+<div class="block">Pagination strategy for MCP <code>list</code> dispatchers (tools / prompts / resources / resource templates).</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/McpPage.html#org.apache.juneau.rest.server.mcp">McpPage</a></div>
+<div class="col-first odd-row-color"><a href="class-use/McpDispatchResult.html#org.apache.juneau.rest.server.mcp">McpDispatchResult</a></div>
 <div class="col-last odd-row-color">
+<div class="block">The non-notification result of one <a href="McpRevision.html#dispatch(org.apache.juneau.rest.server.mcp.McpExchange,org.apache.juneau.rest.server.mcp.McpServerConfig,org.apache.juneau.commons.inject.BeanStore)"><code>McpRevision.dispatch(McpExchange, McpServerConfig, org.apache.juneau.commons.inject.BeanStore)</code></a>
+ call: either a complete JSON-RPC response envelope (<a href="McpResponseResult.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpResponseResult</code></a>) or a held-open streaming
+ publisher (<a href="McpStreamResult.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpStreamResult</code></a>, for a revision-specific method whose successful result is not a
+ single JSON-RPC envelope, e.g. the <code>2026-07-28</code> <code>subscriptions/listen</code> method).</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpErrorKind.html#org.apache.juneau.rest.server.mcp">McpErrorKind</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral classification of a dispatch failure.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpExchange.html#org.apache.juneau.rest.server.mcp">McpExchange</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The inbound JSON-RPC envelope plus request-header access, with no servlet or HTTP types attached.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpPage.html#org.apache.juneau.rest.server.mcp">McpPage</a></div>
+<div class="col-last even-row-color">
 <div class="block">Slice of MCP descriptors returned by <a href="McpCursor.html#page(java.util.List,java.lang.String,org.apache.juneau.commons.inject.BeanStore)"><code>McpCursor.page(List, String, org.apache.juneau.commons.inject.BeanStore)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpPromptArgument.html#org.apache.juneau.rest.server.mcp">McpPromptArgument</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral declared argument of a prompt.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/McpPromptHandler.html#org.apache.juneau.rest.server.mcp">McpPromptHandler</a></div>
 <div class="col-last even-row-color">
 <div class="block">Handler for a single MCP prompt.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/McpResourceHandler.html#org.apache.juneau.rest.server.mcp">McpResourceHandler</a></div>
+<div class="col-first odd-row-color"><a href="class-use/McpPromptMessage.html#org.apache.juneau.rest.server.mcp">McpPromptMessage</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Revision-neutral single message within a prompt result.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpPromptOutcome.html#org.apache.juneau.rest.server.mcp">McpPromptOutcome</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral result of a <code>prompts/get</code> invocation.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpPromptSpec.html#org.apache.juneau.rest.server.mcp">McpPromptSpec</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral prompt descriptor returned from <code>prompts/list</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpResourceContents.html#org.apache.juneau.rest.server.mcp">McpResourceContents</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral resource payload, either inline text or a base64 blob.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpResourceContents.Kind.html#org.apache.juneau.rest.server.mcp">McpResourceContents.Kind</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Which payload variant is populated.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpResourceHandler.html#org.apache.juneau.rest.server.mcp">McpResourceHandler</a></div>
+<div class="col-last even-row-color">
 <div class="block">Handler for a single MCP resource.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/McpServerConfig.html#org.apache.juneau.rest.server.mcp">McpServerConfig</a></div>
+<div class="col-first odd-row-color"><a href="class-use/McpResourceOutcome.html#org.apache.juneau.rest.server.mcp">McpResourceOutcome</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral result of a <code>resources/read</code> invocation.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpResourceSpec.html#org.apache.juneau.rest.server.mcp">McpResourceSpec</a></div>
 <div class="col-last even-row-color">
-<div class="block">Aggregate configuration consumed by <a href="McpDispatcher.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpDispatcher</code></a>.</div>
+<div class="block">Revision-neutral resource descriptor returned from <code>resources/list</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpResourceTemplateHandler.html#org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Handler for a single MCP resource template.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpResourceTemplateHandler.ReadFunction.html#org.apache.juneau.rest.server.mcp">McpResourceTemplateHandler.ReadFunction</a></div>
+<div class="col-last even-row-color">
+<div class="block">A three-argument function from (<code>uri</code>, <code>variables</code>, <code>ctx</code>) to a
+ <a href="McpResourceOutcome.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpResourceOutcome</code></a>, matching <a href="McpResourceTemplateHandler.ReadFunction.html#read(java.lang.String,java.util.Map,org.apache.juneau.commons.inject.BeanStore)"><code>McpResourceTemplateHandler.ReadFunction.read(String, Map, BeanStore)</code></a>'s signature.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpResourceTemplateSpec.html#org.apache.juneau.rest.server.mcp">McpResourceTemplateSpec</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral resource-template descriptor returned from <code>resources/templates/list</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpRevision.html#org.apache.juneau.rest.server.mcp">McpRevision</a></div>
+<div class="col-last even-row-color">
+<div class="block">Service-provider interface implemented once per MCP protocol revision.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpRole.html#org.apache.juneau.rest.server.mcp">McpRole</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral role for <a href="McpPromptMessage.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpPromptMessage</code></a> entries.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpSchema.html#org.apache.juneau.rest.server.mcp">McpSchema</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral carrier for a tool's input schema.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpServerConfig.html#org.apache.juneau.rest.server.mcp">McpServerConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Aggregate configuration consumed by the bound <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpRevision</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpServerConfig.ResourceTemplateMatch.html#org.apache.juneau.rest.server.mcp">McpServerConfig.ResourceTemplateMatch</a></div>
+<div class="col-last even-row-color">
+<div class="block">The result of <a href="McpServerConfig.html#resolveResourceTemplate(java.lang.String)"><code>McpServerConfig.resolveResourceTemplate(String)</code></a>: the winning resource-template handler paired
+ with the variables decoded from the concrete request URI.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpSubscription.html#org.apache.juneau.rest.server.mcp">McpSubscription</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Per-subscription queue handle minted by an <a href="McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpSubscriptionBroker</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpSubscriptionBroker.html#org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></div>
+<div class="col-last even-row-color">
+<div class="block">Revision-neutral registry + filtered fan-out publisher for MCP <code>subscriptions/listen</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpSubscriptionFilter.html#org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A revision-neutral, immutable subscription filter: the set of change kinds and resource URIs one
+ <a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpSubscription</code></a> is interested in.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpSubscriptions.html#org.apache.juneau.rest.server.mcp">McpSubscriptions</a></div>
+<div class="col-last even-row-color">
+<div class="block">App-facing, revision-neutral change-publish SPI for MCP <code>subscriptions/listen</code>.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/McpToolHandler.html#org.apache.juneau.rest.server.mcp">McpToolHandler</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Handler for a single MCP tool.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/McpTypedPromptHandler.html#org.apache.juneau.rest.server.mcp">McpTypedPromptHandler</a></div>
+<div class="col-first even-row-color"><a href="class-use/McpToolOutcome.html#org.apache.juneau.rest.server.mcp">McpToolOutcome</a></div>
 <div class="col-last even-row-color">
-<div class="block">Typed variant of <a href="McpPromptHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpPromptHandler</code></a> where MCP <code>prompts/get</code> arguments bind into a Juneau bean.</div>
+<div class="block">Revision-neutral result of a <code>tools/call</code> invocation.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/McpTypedToolHandler.html#org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a></div>
+<div class="col-first odd-row-color"><a href="class-use/McpToolSpec.html#org.apache.juneau.rest.server.mcp">McpToolSpec</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Typed variant of <a href="McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a> where MCP <code>tools/call</code> arguments bind into a Juneau bean.</div>
+<div class="block">Revision-neutral tool descriptor returned from <code>tools/list</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpTypedToolHandler.html#org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a></div>
+<div class="col-last even-row-color">
+<div class="block">Strongly-typed tool handler whose argument and result Java types drive schema derivation and binding.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpUriTemplateMatcher.html#org.apache.juneau.rest.server.mcp">McpUriTemplateMatcher</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Hand-rolled, dependency-free compiler and reverse matcher for the narrow, reliably-invertible subset of
+ <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc6570">RFC 6570</a> URI templates used by MCP
+ resource-template reads.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20250618">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.mcp</a> used by <a href="v20250618/package-summary.html">org.apache.juneau.rest.server.mcp.v20250618</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/AbstractMcpRestServlet.html#org.apache.juneau.rest.server.mcp.v20250618">AbstractMcpRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Drop-in <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> subclass that exposes a single MCP JSON-RPC endpoint at <code>POST /</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpDispatchResult.html#org.apache.juneau.rest.server.mcp.v20250618">McpDispatchResult</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The non-notification result of one <a href="McpRevision.html#dispatch(org.apache.juneau.rest.server.mcp.McpExchange,org.apache.juneau.rest.server.mcp.McpServerConfig,org.apache.juneau.commons.inject.BeanStore)"><code>McpRevision.dispatch(McpExchange, McpServerConfig, org.apache.juneau.commons.inject.BeanStore)</code></a>
+ call: either a complete JSON-RPC response envelope (<a href="McpResponseResult.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpResponseResult</code></a>) or a held-open streaming
+ publisher (<a href="McpStreamResult.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpStreamResult</code></a>, for a revision-specific method whose successful result is not a
+ single JSON-RPC envelope, e.g. the <code>2026-07-28</code> <code>subscriptions/listen</code> method).</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpEndpointMixin.html#org.apache.juneau.rest.server.mcp.v20250618">McpEndpointMixin</a></div>
+<div class="col-last even-row-color">
+<div class="block">Mixin interface that exposes an MCP JSON-RPC endpoint at <code>POST /mcp</code> on any Juneau REST resource.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpErrorKind.html#org.apache.juneau.rest.server.mcp.v20250618">McpErrorKind</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral classification of a dispatch failure.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpExchange.html#org.apache.juneau.rest.server.mcp.v20250618">McpExchange</a></div>
+<div class="col-last even-row-color">
+<div class="block">The inbound JSON-RPC envelope plus request-header access, with no servlet or HTTP types attached.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpPromptHandler.html#org.apache.juneau.rest.server.mcp.v20250618">McpPromptHandler</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Handler for a single MCP prompt.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpRevision.html#org.apache.juneau.rest.server.mcp.v20250618">McpRevision</a></div>
+<div class="col-last even-row-color">
+<div class="block">Service-provider interface implemented once per MCP protocol revision.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpServerConfig.html#org.apache.juneau.rest.server.mcp.v20250618">McpServerConfig</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Aggregate configuration consumed by the bound <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpRevision</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.mcp</a> used by <a href="v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/AbstractMcpRestServlet.html#org.apache.juneau.rest.server.mcp.v20260728">AbstractMcpRestServlet</a></div>
+<div class="col-last even-row-color">
+<div class="block">Drop-in <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> subclass that exposes a single MCP JSON-RPC endpoint at <code>POST /</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpDispatchResult.html#org.apache.juneau.rest.server.mcp.v20260728">McpDispatchResult</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The non-notification result of one <a href="McpRevision.html#dispatch(org.apache.juneau.rest.server.mcp.McpExchange,org.apache.juneau.rest.server.mcp.McpServerConfig,org.apache.juneau.commons.inject.BeanStore)"><code>McpRevision.dispatch(McpExchange, McpServerConfig, org.apache.juneau.commons.inject.BeanStore)</code></a>
+ call: either a complete JSON-RPC response envelope (<a href="McpResponseResult.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpResponseResult</code></a>) or a held-open streaming
+ publisher (<a href="McpStreamResult.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpStreamResult</code></a>, for a revision-specific method whose successful result is not a
+ single JSON-RPC envelope, e.g. the <code>2026-07-28</code> <code>subscriptions/listen</code> method).</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpEndpointMixin.html#org.apache.juneau.rest.server.mcp.v20260728">McpEndpointMixin</a></div>
+<div class="col-last even-row-color">
+<div class="block">Mixin interface that exposes an MCP JSON-RPC endpoint at <code>POST /mcp</code> on any Juneau REST resource.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpErrorKind.html#org.apache.juneau.rest.server.mcp.v20260728">McpErrorKind</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral classification of a dispatch failure.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpExchange.html#org.apache.juneau.rest.server.mcp.v20260728">McpExchange</a></div>
+<div class="col-last even-row-color">
+<div class="block">The inbound JSON-RPC envelope plus request-header access, with no servlet or HTTP types attached.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpRevision.html#org.apache.juneau.rest.server.mcp.v20260728">McpRevision</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Service-provider interface implemented once per MCP protocol revision.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/McpServerConfig.html#org.apache.juneau.rest.server.mcp.v20260728">McpServerConfig</a></div>
+<div class="col-last even-row-color">
+<div class="block">Aggregate configuration consumed by the bound <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpRevision</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/McpSubscriptionBroker.html#org.apache.juneau.rest.server.mcp.v20260728">McpSubscriptionBroker</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral registry + filtered fan-out publisher for MCP <code>subscriptions/listen</code>.</div>
 </div>
 </div>
 </section>

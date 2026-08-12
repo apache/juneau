@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-61">IdTokenValidatorAdapter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-63">IdTokenValidatorAdapter</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Wraps Nimbus's <code>IDTokenValidator</code> to validate an OpenID Connect ID token's signature and claims
  and project the verified claims onto a Juneau <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.
@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.oidc.rp.IdTokenValidatorAdapter.Builder)">
 <h3>IdTokenValidatorAdapter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-207">IdTokenValidatorAdapter</a></span><wbr><span class="parameters">(<a href="IdTokenValidatorAdapter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">IdTokenValidatorAdapter.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-214">IdTokenValidatorAdapter</a></span><wbr><span class="parameters">(<a href="IdTokenValidatorAdapter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">IdTokenValidatorAdapter.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IdTokenValidatorAdapter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">IdTokenValidatorAdapter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-71">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IdTokenValidatorAdapter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">IdTokenValidatorAdapter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-73">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -213,7 +213,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validate(java.lang.String,java.lang.String)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-236">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idToken,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth">ClaimsPrincipal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/IdTokenValidatorAdapter.html#line-243">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idToken,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedNonce)</span>
                          throws <span class="exceptions"><a href="../../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block">Validates an ID token and projects the verified claims onto a <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.</div>

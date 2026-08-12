@@ -179,7 +179,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates or replaces a subscriber.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - The subscriber identifier.</dd>
+<dd><code>id</code> - The subscriber identifier. Must not be <jk>null</jk> or empty.</dd>
 <dt>Returns:</dt>
 <dd>A new subscription.</dd>
 </dl>
@@ -192,7 +192,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Publishes an event to all active subscribers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>event</code> - The event to publish.</dd>
+<dd><code>event</code> - The event to publish. Can be <jk>null</jk> (ignored).</dd>
 </dl>
 </section>
 </li>

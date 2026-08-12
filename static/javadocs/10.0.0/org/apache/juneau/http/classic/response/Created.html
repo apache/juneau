@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -74,7 +74,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class Created" class="title">Class Created</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.BasicHttpResponse</a>
+<div class="inheritance"><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response.BasicHttpResponse</a>&lt;<a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a>&gt;
 <div class="inheritance">org.apache.juneau.http.classic.response.Created</div>
 </div>
 </div>
@@ -83,12 +83,16 @@ loadScripts(document, 'script');</script>
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpMessage.html" title="class or interface in org.apache.http" class="external-link">HttpMessage</a></code>, <code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a></code></dd>
 </dl>
+<dl class="notes">
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="Created.Unmodifiable.html" title="class in org.apache.juneau.http.classic.response">Created.Unmodifiable</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../Response.html" title="annotation interface in org.apache.juneau.http">@Response</a>
 <a href="../../StatusCode.html" title="annotation interface in org.apache.juneau.http">@StatusCode</a>(201)
 <a href="../../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../../commons/Schema.html#description()">description</a>="Created")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-41">Created</a></span>
-<span class="extends-implements">extends <a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></span></div>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-37">Created</a></span>
+<span class="extends-implements">extends <a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a>&lt;<a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a>&gt;</span></div>
 <div class="block">Represents an <c>HTTP 201 Created</c> response.
 
  <p>
@@ -100,6 +104,23 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="Created.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.response">Created.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="Created.html" title="class in org.apache.juneau.http.classic.response"><code>Created</code></a> response.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -167,95 +188,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a builder for this class initialized with the contents of this bean.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(java.lang.String)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the body on this response.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(org.apache.http.HttpEntity)" class="member-name-link">setContent</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the body on this response.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeader2(java.lang.String,java.lang.String)" class="member-name-link">setHeader2</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the specified header to the end of the headers in this builder.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeader2(org.apache.http.Header)" class="member-name-link">setHeader2</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the specified header to the end of the headers in this builder.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeaders(java.util.List)" class="member-name-link">setHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the specified headers to the end of the headers in this builder.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeaders(org.apache.juneau.http.classic.header.HeaderList)" class="member-name-link">setHeaders</a><wbr>(<a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the specified headers on this response.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeaders2(org.apache.http.Header...)" class="member-name-link">setHeaders2</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the specified headers to the end of the headers in this builder.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocale2(java.util.Locale)" class="member-name-link">setLocale2</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the locale used to retrieve reason phrases.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocation(java.lang.String)" class="member-name-link">setLocation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies the value for the <c>Location</c> header.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocation(java.net.URI)" class="member-name-link">setLocation</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies the value for the <c>Location</c> header.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setProtocolVersion(org.apache.http.ProtocolVersion)" class="member-name-link">setProtocolVersion</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the protocol version on the status line.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setReasonPhrase2(java.lang.String)" class="member-name-link">setReasonPhrase2</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the reason phrase on the status line.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)" class="member-name-link">setReasonPhraseCatalog</a><wbr>(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ReasonPhraseCatalog.html" title="class or interface in org.apache.http" class="external-link">ReasonPhraseCatalog</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the reason phrase catalog used to retrieve reason phrases.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setStatusCode2(int)" class="member-name-link">setStatusCode2</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the status code on the status line.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the protocol version on the status line.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies whether this bean should be unmodifiable.</div>
+<div class="block">Returns an unmodifiable snapshot of this bean.</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.http.classic.response.BasicHttpResponse">Methods inherited from class&nbsp;org.apache.juneau.http.classic.response.<a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></h3>
-<code><a href="BasicHttpResponse.html#addHeader(java.lang.String,java.lang.String)">addHeader</a>, <a href="BasicHttpResponse.html#addHeader(org.apache.http.Header)">addHeader</a>, <a href="BasicHttpResponse.html#assertModifiable()">assertModifiable</a>, <a href="BasicHttpResponse.html#assertStatusCode(org.apache.http.HttpResponse)">assertStatusCode</a>, <a href="BasicHttpResponse.html#containsHeader(java.lang.String)">containsHeader</a>, <a href="BasicHttpResponse.html#getAllHeaders()">getAllHeaders</a>, <a href="BasicHttpResponse.html#getEntity()">getEntity</a>, <a href="BasicHttpResponse.html#getFirstHeader(java.lang.String)">getFirstHeader</a>, <a href="BasicHttpResponse.html#getHeaders()">getHeaders</a>, <a href="BasicHttpResponse.html#getHeaders(java.lang.String)">getHeaders</a>, <a href="BasicHttpResponse.html#getLastHeader(java.lang.String)">getLastHeader</a>, <a href="BasicHttpResponse.html#getLocale()">getLocale</a>, <a href="BasicHttpResponse.html#getParams()">getParams</a>, <a href="BasicHttpResponse.html#getProtocolVersion()">getProtocolVersion</a>, <a href="BasicHttpResponse.html#getStatusLine()">getStatusLine</a>, <a href="BasicHttpResponse.html#headerIterator()">headerIterator</a>, <a href="BasicHttpResponse.html#headerIterator(java.lang.String)">headerIterator</a>, <a href="BasicHttpResponse.html#isUnmodifiable()">isUnmodifiable</a>, <a href="BasicHttpResponse.html#removeHeader(org.apache.http.Header)">removeHeader</a>, <a href="BasicHttpResponse.html#removeHeaders(java.lang.String)">removeHeaders</a>, <a href="BasicHttpResponse.html#setEntity(org.apache.http.HttpEntity)">setEntity</a>, <a href="BasicHttpResponse.html#setHeader(java.lang.String,java.lang.String)">setHeader</a>, <a href="BasicHttpResponse.html#setHeader(org.apache.http.Header)">setHeader</a>, <a href="BasicHttpResponse.html#setHeaders(org.apache.http.Header%5B%5D)">setHeaders</a>, <a href="BasicHttpResponse.html#setLocale(java.util.Locale)">setLocale</a>, <a href="BasicHttpResponse.html#setParams(org.apache.http.params.HttpParams)">setParams</a>, <a href="BasicHttpResponse.html#setReasonPhrase(java.lang.String)">setReasonPhrase</a>, <a href="BasicHttpResponse.html#setStatusCode(int)">setStatusCode</a>, <a href="BasicHttpResponse.html#setStatusLine(org.apache.http.ProtocolVersion,int)">setStatusLine</a>, <a href="BasicHttpResponse.html#setStatusLine(org.apache.http.ProtocolVersion,int,java.lang.String)">setStatusLine</a>, <a href="BasicHttpResponse.html#setStatusLine(org.apache.http.StatusLine)">setStatusLine</a>, <a href="BasicHttpResponse.html#toString()">toString</a></code></div>
+<code><a href="BasicHttpResponse.html#addHeader(java.lang.String,java.lang.String)">addHeader</a>, <a href="BasicHttpResponse.html#addHeader(org.apache.http.Header)">addHeader</a>, <a href="BasicHttpResponse.html#assertStatusCode(org.apache.http.HttpResponse)">assertStatusCode</a>, <a href="BasicHttpResponse.html#containsHeader(java.lang.String)">containsHeader</a>, <a href="BasicHttpResponse.html#equals(java.lang.Object)">equals</a>, <a href="BasicHttpResponse.html#freeze()">freeze</a>, <a href="BasicHttpResponse.html#getAllHeaders()">getAllHeaders</a>, <a href="BasicHttpResponse.html#getEntity()">getEntity</a>, <a href="BasicHttpResponse.html#getFirstHeader(java.lang.String)">getFirstHeader</a>, <a href="BasicHttpResponse.html#getHeaders()">getHeaders</a>, <a href="BasicHttpResponse.html#getHeaders(java.lang.String)">getHeaders</a>, <a href="BasicHttpResponse.html#getLastHeader(java.lang.String)">getLastHeader</a>, <a href="BasicHttpResponse.html#getLocale()">getLocale</a>, <a href="BasicHttpResponse.html#getParams()">getParams</a>, <a href="BasicHttpResponse.html#getProtocolVersion()">getProtocolVersion</a>, <a href="BasicHttpResponse.html#getStatusLine()">getStatusLine</a>, <a href="BasicHttpResponse.html#hashCode()">hashCode</a>, <a href="BasicHttpResponse.html#headerIterator()">headerIterator</a>, <a href="BasicHttpResponse.html#headerIterator(java.lang.String)">headerIterator</a>, <a href="BasicHttpResponse.html#isUnmodifiable()">isUnmodifiable</a>, <a href="BasicHttpResponse.html#modify(java.lang.Runnable)">modify</a>, <a href="BasicHttpResponse.html#removeHeader(org.apache.http.Header)">removeHeader</a>, <a href="BasicHttpResponse.html#removeHeaders(java.lang.String)">removeHeaders</a>, <a href="BasicHttpResponse.html#self()">self</a>, <a href="BasicHttpResponse.html#setContent(java.lang.String)">setContent</a>, <a href="BasicHttpResponse.html#setContent(org.apache.http.HttpEntity)">setContent</a>, <a href="BasicHttpResponse.html#setEntity(org.apache.http.HttpEntity)">setEntity</a>, <a href="BasicHttpResponse.html#setHeader(java.lang.String,java.lang.String)">setHeader</a>, <a href="BasicHttpResponse.html#setHeader(org.apache.http.Header)">setHeader</a>, <a href="BasicHttpResponse.html#setHeader2(java.lang.String,java.lang.String)">setHeader2</a>, <a href="BasicHttpResponse.html#setHeader2(org.apache.http.Header)">setHeader2</a>, <a href="BasicHttpResponse.html#setHeaders(java.util.List)">setHeaders</a>, <a href="BasicHttpResponse.html#setHeaders(org.apache.http.Header%5B%5D)">setHeaders</a>, <a href="BasicHttpResponse.html#setHeaders(org.apache.juneau.http.classic.header.HeaderList)">setHeaders</a>, <a href="BasicHttpResponse.html#setHeaders2(org.apache.http.Header...)">setHeaders2</a>, <a href="BasicHttpResponse.html#setLocale(java.util.Locale)">setLocale</a>, <a href="BasicHttpResponse.html#setLocale2(java.util.Locale)">setLocale2</a>, <a href="BasicHttpResponse.html#setLocation(java.lang.String)">setLocation</a>, <a href="BasicHttpResponse.html#setLocation(java.net.URI)">setLocation</a>, <a href="BasicHttpResponse.html#setParams(org.apache.http.params.HttpParams)">setParams</a>, <a href="BasicHttpResponse.html#setProtocolVersion(org.apache.http.ProtocolVersion)">setProtocolVersion</a>, <a href="BasicHttpResponse.html#setReasonPhrase(java.lang.String)">setReasonPhrase</a>, <a href="BasicHttpResponse.html#setReasonPhrase2(java.lang.String)">setReasonPhrase2</a>, <a href="BasicHttpResponse.html#setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)">setReasonPhraseCatalog</a>, <a href="BasicHttpResponse.html#setStatusCode(int)">setStatusCode</a>, <a href="BasicHttpResponse.html#setStatusCode2(int)">setStatusCode2</a>, <a href="BasicHttpResponse.html#setStatusLine(org.apache.http.ProtocolVersion,int)">setStatusLine</a>, <a href="BasicHttpResponse.html#setStatusLine(org.apache.http.ProtocolVersion,int,java.lang.String)">setStatusLine</a>, <a href="BasicHttpResponse.html#setStatusLine(org.apache.http.StatusLine)">setStatusLine</a>, <a href="BasicHttpResponse.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)">setStatusLine</a>, <a href="BasicHttpResponse.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -270,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="STATUS_CODE">
 <h3>STATUS_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-47">STATUS_CODE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-43">STATUS_CODE</a></span></div>
 <div class="block">HTTP status code</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -285,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="REASON_PHRASE">
 <h3>REASON_PHRASE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-50">REASON_PHRASE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-46">REASON_PHRASE</a></span></div>
 <div class="block">Reason phrase</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -300,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="INSTANCE">
 <h3>INSTANCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-56">INSTANCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-52">INSTANCE</a></span></div>
 <div class="block">Default unmodifiable instance</div>
 </section>
 </li>
@@ -315,25 +260,25 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Created</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-61">Created</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-57">Created</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.response.Created)">
 <h3>Created</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-70">Created</a></span><wbr><span class="parameters">(<a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-66">Created</a></span><wbr><span class="parameters">(<a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The bean to copy from.</dd>
+<dd><code>copyFrom</code> - The bean to copy from.  Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.http.HttpResponse)">
 <h3>Created</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-83">Created</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-79">Created</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span></div>
 <div class="block">Constructor.
 
  <p>
@@ -357,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-93">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-89">copy</a></span>()</div>
 <div class="block">Creates a builder for this class initialized with the contents of this bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -366,279 +311,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setContent(org.apache.http.HttpEntity)">
-<h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-97">setContent</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setContent(org.apache.http.HttpEntity)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the body on this response.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setContent(org.apache.http.HttpEntity)">setContent</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The body on this response.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setContent(java.lang.String)">
-<h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-103">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setContent(java.lang.String)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the body on this response.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setContent(java.lang.String)">setContent</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The body on this response.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setHeader2(org.apache.http.Header)">
-<h3>setHeader2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-109">setHeader2</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setHeader2(org.apache.http.Header)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the specified header to the end of the headers in this builder.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setHeader2(org.apache.http.Header)">setHeader2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The header to add.  <jk>null</jk> values are ignored.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setHeader2(java.lang.String,java.lang.String)">
-<h3>setHeader2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-115">setHeader2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setHeader2(java.lang.String,java.lang.String)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the specified header to the end of the headers in this builder.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setHeader2(java.lang.String,java.lang.String)">setHeader2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>name</code> - The header name.</dd>
-<dd><code>value</code> - The header value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setHeaders(org.apache.juneau.http.classic.header.HeaderList)">
-<h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-121">setHeaders</a></span><wbr><span class="parameters">(<a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setHeaders(org.apache.juneau.http.classic.header.HeaderList)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the specified headers on this response.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setHeaders(org.apache.juneau.http.classic.header.HeaderList)">setHeaders</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setHeaders(java.util.List)">
-<h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-127">setHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setHeaders(java.util.List)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the specified headers to the end of the headers in this builder.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setHeaders(java.util.List)">setHeaders</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>values</code> - The headers to add.  <jk>null</jk> values are ignored.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setHeaders2(org.apache.http.Header...)">
-<h3>setHeaders2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-133">setHeaders2</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setHeaders2(org.apache.http.Header...)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the specified headers to the end of the headers in this builder.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setHeaders2(org.apache.http.Header...)">setHeaders2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>values</code> - The headers to add.  <jk>null</jk> values are ignored.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setLocale2(java.util.Locale)">
-<h3>setLocale2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-139">setLocale2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setLocale2(java.util.Locale)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the locale used to retrieve reason phrases.
+<section class="detail" id="unmodifiable()">
+<h3>unmodifiable</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-93">unmodifiable</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#unmodifiable()">BasicHttpResponse</a></code></span></div>
+<div class="block">Returns an unmodifiable snapshot of this bean.
 
  <p>
- If not specified, uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html#getDefault()" title="class or interface in java.util" class="external-link"><code>Locale.getDefault()</code></a>.</div>
+ The returned instance is a point-in-time copy of the leaf's nested <code>Unmodifiable</code> type; any attempt to set a
+ property on it throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.  This method is idempotent: if this bean is already
+ unmodifiable it returns itself rather than taking another snapshot.  The receiver is left unchanged (and still
+ modifiable unless it was already unmodifiable).</div>
 <dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setLocale2(java.util.Locale)">setLocale2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
+<dt>Specified by:</dt>
+<dd><code><a href="BasicHttpResponse.html#unmodifiable()">unmodifiable</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a>&lt;<a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a>&gt;</code></dd>
 <dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setLocation(java.lang.String)">
-<h3>setLocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-145">setLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setLocation(java.lang.String)">BasicHttpResponse</a></code></span></div>
-<div class="block">Specifies the value for the <c>Location</c> header.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setLocation(java.lang.String)">setLocation</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new header location.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setLocation(java.net.URI)">
-<h3>setLocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-151">setLocation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setLocation(java.net.URI)">BasicHttpResponse</a></code></span></div>
-<div class="block">Specifies the value for the <c>Location</c> header.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setLocation(java.net.URI)">setLocation</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new header location.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setProtocolVersion(org.apache.http.ProtocolVersion)">
-<h3>setProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-157">setProtocolVersion</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setProtocolVersion(org.apache.http.ProtocolVersion)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the protocol version on the status line.
-
- <p>
- If not specified, <js>"HTTP/1.1"</js> will be used.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setProtocolVersion(org.apache.http.ProtocolVersion)">setProtocolVersion</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setReasonPhrase2(java.lang.String)">
-<h3>setReasonPhrase2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-163">setReasonPhrase2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setReasonPhrase2(java.lang.String)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the reason phrase on the status line.
-
- <p>
- If not specified, the reason phrase will be retrieved from the reason phrase catalog
- using the locale on this builder.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setReasonPhrase2(java.lang.String)">setReasonPhrase2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)">
-<h3>setReasonPhraseCatalog</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-169">setReasonPhraseCatalog</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ReasonPhraseCatalog.html" title="class or interface in org.apache.http" class="external-link">ReasonPhraseCatalog</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the reason phrase catalog used to retrieve reason phrases.
-
- <p>
- If not specified, uses <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/impl/EnglishReasonPhraseCatalog.html" title="class or interface in org.apache.http.impl" class="external-link"><code>EnglishReasonPhraseCatalog</code></a>.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)">setReasonPhraseCatalog</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setStatusCode2(int)">
-<h3>setStatusCode2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-175">setStatusCode2</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setStatusCode2(int)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the status code on the status line.
-
- <p>
- If not specified, <c>0</c> will be used.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setStatusCode2(int)">setStatusCode2</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)">
-<h3>setStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-181">setStatusLine</a></span><wbr><span class="parameters">(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)">BasicHttpResponse</a></code></span></div>
-<div class="block">Sets the protocol version on the status line.
-
- <p>
- If not specified, <js>"HTTP/1.1"</js> will be used.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)">setStatusLine</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value.</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setUnmodifiable()">
-<h3>setUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/Created.html#line-187">setUnmodifiable</a></span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#setUnmodifiable()">BasicHttpResponse</a></code></span></div>
-<div class="block">Specifies whether this bean should be unmodifiable.
- <p>
- When enabled, attempting to set any properties on this bean will cause an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="BasicHttpResponse.html#setUnmodifiable()">setUnmodifiable</a></code>&nbsp;in class&nbsp;<code><a href="BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
+<dd>An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.</dd>
 </dl>
 </section>
 </li>

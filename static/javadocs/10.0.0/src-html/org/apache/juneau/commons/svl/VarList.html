@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73">   /**</span>
 <span class="source-line-no">074</span><span id="line-74">    * Copy constructor.</span>
 <span class="source-line-no">075</span><span id="line-75">    *</span>
-<span class="source-line-no">076</span><span id="line-76">    * @param copyFrom The list to copy.</span>
+<span class="source-line-no">076</span><span id="line-76">    * @param copyFrom The list to copy.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">077</span><span id="line-77">    */</span>
 <span class="source-line-no">078</span><span id="line-78">   protected VarList(VarList copyFrom) {</span>
 <span class="source-line-no">079</span><span id="line-79">      super(copyFrom);</span>
@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">   /**</span>
 <span class="source-line-no">146</span><span id="line-146">    * Adds a list of variables to this list.</span>
 <span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * @param vars The variables to append to this list.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @param vars The variables to append to this list.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">149</span><span id="line-149">    * @return This object.</span>
 <span class="source-line-no">150</span><span id="line-150">    */</span>
 <span class="source-line-no">151</span><span id="line-151">   public VarList append(VarList vars) {</span>

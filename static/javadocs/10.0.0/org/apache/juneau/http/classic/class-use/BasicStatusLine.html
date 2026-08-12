@@ -70,6 +70,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.http.classic">
 <h2>Uses of <a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a> in <a href="../package-summary.html">org.apache.juneau.http.classic</a></h2>
+<div class="caption"><span>Subclasses of <a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a> in <a href="../package-summary.html">org.apache.juneau.http.classic</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../BasicStatusLine.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic">BasicStatusLine.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">An unmodifiable point-in-time snapshot of a <a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic"><code>BasicStatusLine</code></a>.</div>
+</div>
+</div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.http.classic</a> that return <a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -91,6 +102,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Instantiates a new instance of this bean.</div>
 </div>
+<div class="col-first odd-row-color"><code>protected <a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BasicStatusLine.</span><code><a href="../BasicStatusLine.html#modify(java.lang.Runnable)" class="member-name-link">modify</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Single mutation funnel — the only choke-point through which all state changes on this bean flow.</div>
+</div>
+<div class="col-first even-row-color"><code>protected <a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicStatusLine.Unmodifiable.</span><code><a href="../BasicStatusLine.Unmodifiable.html#modify(java.lang.Runnable)" class="member-name-link">modify</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">BasicStatusLine.</span><code><a href="../BasicStatusLine.html#setLocale(java.util.Locale)" class="member-name-link">setLocale</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
@@ -117,9 +136,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the status code on the status line.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicStatusLine.</span><code><a href="../BasicStatusLine.html#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicStatusLine.</span><code><a href="../BasicStatusLine.html#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Specifies whether this bean should be unmodifiable.</div>
+<div class="block">Returns an unmodifiable snapshot of this bean.</div>
 </div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.http.classic</a> with parameters of type <a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></span></div>
@@ -132,6 +151,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor.</div>
 </div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-second odd-row-color"><code><a href="../BasicStatusLine.Unmodifiable.html#%3Cinit%3E(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">Unmodifiable</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;copyFrom)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -143,12 +167,6 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../response/Accepted.html" title="class in org.apache.juneau.http.classic.response">Accepted</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Accepted.</span><code><a href="../response/Accepted.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/AlreadyReported.html" title="class in org.apache.juneau.http.classic.response">AlreadyReported</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AlreadyReported.</span><code><a href="../response/AlreadyReported.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../response/BadRequest.html" title="class in org.apache.juneau.http.classic.response">BadRequest</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">BadRequest.</span><code><a href="../response/BadRequest.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -157,7 +175,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Sets the protocol version on the status line.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../response/BasicHttpResponse.html" title="class in org.apache.juneau.http.classic.response">BasicHttpResponse</a></code></div>
+<div class="col-first even-row-color"><code><a href="../response/BasicHttpResponse.html" title="type parameter in BasicHttpResponse">SELF</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">BasicHttpResponse.</span><code><a href="../response/BasicHttpResponse.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the protocol version on the status line.</div>
@@ -165,26 +183,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../response/Conflict.html" title="class in org.apache.juneau.http.classic.response">Conflict</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Conflict.</span><code><a href="../response/Conflict.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/Continue.html" title="class in org.apache.juneau.http.classic.response">Continue</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Continue.</span><code><a href="../response/Continue.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/ExpectationFailed.html" title="class in org.apache.juneau.http.classic.response">ExpectationFailed</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ExpectationFailed.</span><code><a href="../response/ExpectationFailed.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/Created.html" title="class in org.apache.juneau.http.classic.response">Created</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Created.</span><code><a href="../response/Created.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/FailedDependency.html" title="class in org.apache.juneau.http.classic.response">FailedDependency</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">FailedDependency.</span><code><a href="../response/FailedDependency.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/EarlyHints.html" title="class in org.apache.juneau.http.classic.response">EarlyHints</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">EarlyHints.</span><code><a href="../response/EarlyHints.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/ExpectationFailed.html" title="class in org.apache.juneau.http.classic.response">ExpectationFailed</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ExpectationFailed.</span><code><a href="../response/ExpectationFailed.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/FailedDependency.html" title="class in org.apache.juneau.http.classic.response">FailedDependency</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">FailedDependency.</span><code><a href="../response/FailedDependency.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/Forbidden.html" title="class in org.apache.juneau.http.classic.response">Forbidden</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Forbidden.</span><code><a href="../response/Forbidden.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/Found.html" title="class in org.apache.juneau.http.classic.response">Found</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Found.</span><code><a href="../response/Found.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/Forbidden.html" title="class in org.apache.juneau.http.classic.response">Forbidden</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Forbidden.</span><code><a href="../response/Forbidden.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../response/Gone.html" title="class in org.apache.juneau.http.classic.response">Gone</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">Gone.</span><code><a href="../response/Gone.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
@@ -192,47 +198,29 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../response/HttpVersionNotSupported.html" title="class in org.apache.juneau.http.classic.response">HttpVersionNotSupported</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">HttpVersionNotSupported.</span><code><a href="../response/HttpVersionNotSupported.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/IMUsed.html" title="class in org.apache.juneau.http.classic.response">IMUsed</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">IMUsed.</span><code><a href="../response/IMUsed.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/InsufficientStorage.html" title="class in org.apache.juneau.http.classic.response">InsufficientStorage</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">InsufficientStorage.</span><code><a href="../response/InsufficientStorage.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/InsufficientStorage.html" title="class in org.apache.juneau.http.classic.response">InsufficientStorage</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">InsufficientStorage.</span><code><a href="../response/InsufficientStorage.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">InternalServerError.</span><code><a href="../response/InternalServerError.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/InternalServerError.html" title="class in org.apache.juneau.http.classic.response">InternalServerError</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">InternalServerError.</span><code><a href="../response/InternalServerError.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/LengthRequired.html" title="class in org.apache.juneau.http.classic.response">LengthRequired</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">LengthRequired.</span><code><a href="../response/LengthRequired.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/LengthRequired.html" title="class in org.apache.juneau.http.classic.response">LengthRequired</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">LengthRequired.</span><code><a href="../response/LengthRequired.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/Locked.html" title="class in org.apache.juneau.http.classic.response">Locked</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Locked.</span><code><a href="../response/Locked.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/Locked.html" title="class in org.apache.juneau.http.classic.response">Locked</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Locked.</span><code><a href="../response/Locked.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/LoopDetected.html" title="class in org.apache.juneau.http.classic.response">LoopDetected</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">LoopDetected.</span><code><a href="../response/LoopDetected.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/LoopDetected.html" title="class in org.apache.juneau.http.classic.response">LoopDetected</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">LoopDetected.</span><code><a href="../response/LoopDetected.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MethodNotAllowed.</span><code><a href="../response/MethodNotAllowed.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MethodNotAllowed.</span><code><a href="../response/MethodNotAllowed.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/MisdirectedRequest.html" title="class in org.apache.juneau.http.classic.response">MisdirectedRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MisdirectedRequest.</span><code><a href="../response/MisdirectedRequest.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/MovedPermanently.html" title="class in org.apache.juneau.http.classic.response">MovedPermanently</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MovedPermanently.</span><code><a href="../response/MovedPermanently.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/MultipleChoices.html" title="class in org.apache.juneau.http.classic.response">MultipleChoices</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MultipleChoices.</span><code><a href="../response/MultipleChoices.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/MultiStatus.html" title="class in org.apache.juneau.http.classic.response">MultiStatus</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MultiStatus.</span><code><a href="../response/MultiStatus.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/MisdirectedRequest.html" title="class in org.apache.juneau.http.classic.response">MisdirectedRequest</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MisdirectedRequest.</span><code><a href="../response/MisdirectedRequest.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../response/NetworkAuthenticationRequired.html" title="class in org.apache.juneau.http.classic.response">NetworkAuthenticationRequired</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">NetworkAuthenticationRequired.</span><code><a href="../response/NetworkAuthenticationRequired.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/NoContent.html" title="class in org.apache.juneau.http.classic.response">NoContent</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">NoContent.</span><code><a href="../response/NoContent.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/NonAuthoritiveInformation.html" title="class in org.apache.juneau.http.classic.response">NonAuthoritiveInformation</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">NonAuthoritiveInformation.</span><code><a href="../response/NonAuthoritiveInformation.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../response/NotAcceptable.html" title="class in org.apache.juneau.http.classic.response">NotAcceptable</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">NotAcceptable.</span><code><a href="../response/NotAcceptable.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
@@ -246,20 +234,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../response/NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">NotImplemented.</span><code><a href="../response/NotImplemented.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/NotModified.html" title="class in org.apache.juneau.http.classic.response">NotModified</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">NotModified.</span><code><a href="../response/NotModified.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/Ok.html" title="class in org.apache.juneau.http.classic.response">Ok</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Ok.</span><code><a href="../response/Ok.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/PartialContent.html" title="class in org.apache.juneau.http.classic.response">PartialContent</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PartialContent.</span><code><a href="../response/PartialContent.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/PayloadTooLarge.html" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PayloadTooLarge.</span><code><a href="../response/PayloadTooLarge.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/PermanentRedirect.html" title="class in org.apache.juneau.http.classic.response">PermanentRedirect</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PermanentRedirect.</span><code><a href="../response/PermanentRedirect.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/PayloadTooLarge.html" title="class in org.apache.juneau.http.classic.response">PayloadTooLarge</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PayloadTooLarge.</span><code><a href="../response/PayloadTooLarge.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../response/PreconditionFailed.html" title="class in org.apache.juneau.http.classic.response">PreconditionFailed</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">PreconditionFailed.</span><code><a href="../response/PreconditionFailed.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
@@ -267,53 +243,35 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../response/PreconditionRequired.html" title="class in org.apache.juneau.http.classic.response">PreconditionRequired</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">PreconditionRequired.</span><code><a href="../response/PreconditionRequired.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/Processing.html" title="class in org.apache.juneau.http.classic.response">Processing</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Processing.</span><code><a href="../response/Processing.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/RangeNotSatisfiable.html" title="class in org.apache.juneau.http.classic.response">RangeNotSatisfiable</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RangeNotSatisfiable.</span><code><a href="../response/RangeNotSatisfiable.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/RangeNotSatisfiable.html" title="class in org.apache.juneau.http.classic.response">RangeNotSatisfiable</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RangeNotSatisfiable.</span><code><a href="../response/RangeNotSatisfiable.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/RequestHeaderFieldsTooLarge.html" title="class in org.apache.juneau.http.classic.response">RequestHeaderFieldsTooLarge</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RequestHeaderFieldsTooLarge.</span><code><a href="../response/RequestHeaderFieldsTooLarge.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/RequestHeaderFieldsTooLarge.html" title="class in org.apache.juneau.http.classic.response">RequestHeaderFieldsTooLarge</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RequestHeaderFieldsTooLarge.</span><code><a href="../response/RequestHeaderFieldsTooLarge.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/ServiceUnavailable.html" title="class in org.apache.juneau.http.classic.response">ServiceUnavailable</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ServiceUnavailable.</span><code><a href="../response/ServiceUnavailable.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/ResetContent.html" title="class in org.apache.juneau.http.classic.response">ResetContent</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ResetContent.</span><code><a href="../response/ResetContent.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/TooManyRequests.html" title="class in org.apache.juneau.http.classic.response">TooManyRequests</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TooManyRequests.</span><code><a href="../response/TooManyRequests.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/SeeOther.html" title="class in org.apache.juneau.http.classic.response">SeeOther</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SeeOther.</span><code><a href="../response/SeeOther.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/Unauthorized.html" title="class in org.apache.juneau.http.classic.response">Unauthorized</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Unauthorized.</span><code><a href="../response/Unauthorized.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/ServiceUnavailable.html" title="class in org.apache.juneau.http.classic.response">ServiceUnavailable</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ServiceUnavailable.</span><code><a href="../response/ServiceUnavailable.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/UnavailableForLegalReasons.html" title="class in org.apache.juneau.http.classic.response">UnavailableForLegalReasons</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UnavailableForLegalReasons.</span><code><a href="../response/UnavailableForLegalReasons.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/SwitchingProtocols.html" title="class in org.apache.juneau.http.classic.response">SwitchingProtocols</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SwitchingProtocols.</span><code><a href="../response/SwitchingProtocols.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/UnprocessableEntity.html" title="class in org.apache.juneau.http.classic.response">UnprocessableEntity</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UnprocessableEntity.</span><code><a href="../response/UnprocessableEntity.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/TemporaryRedirect.html" title="class in org.apache.juneau.http.classic.response">TemporaryRedirect</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TemporaryRedirect.</span><code><a href="../response/TemporaryRedirect.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/UnsupportedMediaType.html" title="class in org.apache.juneau.http.classic.response">UnsupportedMediaType</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UnsupportedMediaType.</span><code><a href="../response/UnsupportedMediaType.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/TooManyRequests.html" title="class in org.apache.juneau.http.classic.response">TooManyRequests</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TooManyRequests.</span><code><a href="../response/TooManyRequests.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../response/UpgradeRequired.html" title="class in org.apache.juneau.http.classic.response">UpgradeRequired</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UpgradeRequired.</span><code><a href="../response/UpgradeRequired.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/Unauthorized.html" title="class in org.apache.juneau.http.classic.response">Unauthorized</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Unauthorized.</span><code><a href="../response/Unauthorized.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/UnavailableForLegalReasons.html" title="class in org.apache.juneau.http.classic.response">UnavailableForLegalReasons</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UnavailableForLegalReasons.</span><code><a href="../response/UnavailableForLegalReasons.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/UnprocessableEntity.html" title="class in org.apache.juneau.http.classic.response">UnprocessableEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UnprocessableEntity.</span><code><a href="../response/UnprocessableEntity.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/UnsupportedMediaType.html" title="class in org.apache.juneau.http.classic.response">UnsupportedMediaType</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UnsupportedMediaType.</span><code><a href="../response/UnsupportedMediaType.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/UpgradeRequired.html" title="class in org.apache.juneau.http.classic.response">UpgradeRequired</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UpgradeRequired.</span><code><a href="../response/UpgradeRequired.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../response/UriTooLong.html" title="class in org.apache.juneau.http.classic.response">UriTooLong</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UriTooLong.</span><code><a href="../response/UriTooLong.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../response/UseProxy.html" title="class in org.apache.juneau.http.classic.response">UseProxy</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UseProxy.</span><code><a href="../response/UseProxy.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../response/UriTooLong.html" title="class in org.apache.juneau.http.classic.response">UriTooLong</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UriTooLong.</span><code><a href="../response/UriTooLong.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../response/VariantAlsoNegotiates.html" title="class in org.apache.juneau.http.classic.response">VariantAlsoNegotiates</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">VariantAlsoNegotiates.</span><code><a href="../response/VariantAlsoNegotiates.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">setStatusLine</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</code></div>
@@ -324,7 +282,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier</div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
 <div class="col-second even-row-color"><code><a href="../response/BasicHttpResponse.html#%3Cinit%3E(org.apache.juneau.http.classic.BasicStatusLine)" class="member-name-link">BasicHttpResponse</a><wbr>(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;statusLine)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>

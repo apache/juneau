@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.lang.annotation.ElementType.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static java.lang.annotation.RetentionPolicy.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.lang.annotation.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87">      /**</span>
 <span class="source-line-no">088</span><span id="line-88">       * Sets the description property on this annotation.</span>
 <span class="source-line-no">089</span><span id="line-89">       *</span>
-<span class="source-line-no">090</span><span id="line-90">       * @param value The new value for this property.</span>
+<span class="source-line-no">090</span><span id="line-90">       * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case an empty array is used.</span>
 <span class="source-line-no">091</span><span id="line-91">       * @return This object.</span>
 <span class="source-line-no">092</span><span id="line-92">       */</span>
 <span class="source-line-no">093</span><span id="line-93">      public Builder description(String...value) {</span>
@@ -111,7 +111,7 @@
 <span class="source-line-no">098</span><span id="line-98">      /**</span>
 <span class="source-line-no">099</span><span id="line-99">       * Sets the {@link Bean#methodScope()} property on this annotation.</span>
 <span class="source-line-no">100</span><span id="line-100">       *</span>
-<span class="source-line-no">101</span><span id="line-101">       * @param value The new value for this property.</span>
+<span class="source-line-no">101</span><span id="line-101">       * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case an empty array is used.</span>
 <span class="source-line-no">102</span><span id="line-102">       * @return This object.</span>
 <span class="source-line-no">103</span><span id="line-103">       */</span>
 <span class="source-line-no">104</span><span id="line-104">      public Builder methodScope(String...value) {</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109">      /**</span>
 <span class="source-line-no">110</span><span id="line-110">       * Sets the {@link Bean#name()} property on this annotation.</span>
 <span class="source-line-no">111</span><span id="line-111">       *</span>
-<span class="source-line-no">112</span><span id="line-112">       * @param value The new value for this property.</span>
+<span class="source-line-no">112</span><span id="line-112">       * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case an empty string is used.</span>
 <span class="source-line-no">113</span><span id="line-113">       * @return This object.</span>
 <span class="source-line-no">114</span><span id="line-114">       */</span>
 <span class="source-line-no">115</span><span id="line-115">      public Builder name(String value) {</span>
@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120">      /**</span>
 <span class="source-line-no">121</span><span id="line-121">       * Sets the {@link Bean#value()} property on this annotation.</span>
 <span class="source-line-no">122</span><span id="line-122">       *</span>
-<span class="source-line-no">123</span><span id="line-123">       * @param value The new value for this property.</span>
+<span class="source-line-no">123</span><span id="line-123">       * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case an empty string is used.</span>
 <span class="source-line-no">124</span><span id="line-124">       * @return This object.</span>
 <span class="source-line-no">125</span><span id="line-125">       */</span>
 <span class="source-line-no">126</span><span id="line-126">      public Builder value(String value) {</span>
@@ -178,15 +178,15 @@
 <span class="source-line-no">165</span><span id="line-165">         super(b);</span>
 <span class="source-line-no">166</span><span id="line-166">         // Mirror the compile-time defaults declared on @Bean (empty strings / empty arrays) so</span>
 <span class="source-line-no">167</span><span id="line-167">         // callers iterating the runtime instance see annotation-equivalent values instead of nulls.</span>
-<span class="source-line-no">168</span><span id="line-168">         description = b.description != null ? copyOf(b.description) : EMPTY_STRINGS;</span>
+<span class="source-line-no">168</span><span id="line-168">         description = b.description != null ? cp(b.description) : EMPTY_STRINGS;</span>
 <span class="source-line-no">169</span><span id="line-169">         name = b.name != null ? b.name : "";</span>
 <span class="source-line-no">170</span><span id="line-170">         value = b.value != null ? b.value : "";</span>
-<span class="source-line-no">171</span><span id="line-171">         methodScope = b.methodScope != null ? copyOf(b.methodScope) : EMPTY_STRINGS;</span>
+<span class="source-line-no">171</span><span id="line-171">         methodScope = b.methodScope != null ? cp(b.methodScope) : EMPTY_STRINGS;</span>
 <span class="source-line-no">172</span><span id="line-172">      }</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
 <span class="source-line-no">174</span><span id="line-174">      @Override /* Overridden from Bean */</span>
 <span class="source-line-no">175</span><span id="line-175">      public String[] methodScope() {</span>
-<span class="source-line-no">176</span><span id="line-176">         return methodScope;</span>
+<span class="source-line-no">176</span><span id="line-176">         return cp(methodScope);</span>
 <span class="source-line-no">177</span><span id="line-177">      }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
 <span class="source-line-no">179</span><span id="line-179">      @Override /* Overridden from Bean */</span>
@@ -201,7 +201,7 @@
 <span class="source-line-no">188</span><span id="line-188"></span>
 <span class="source-line-no">189</span><span id="line-189">      @Override /* Overridden from annotation */</span>
 <span class="source-line-no">190</span><span id="line-190">      public String[] description() {</span>
-<span class="source-line-no">191</span><span id="line-191">         return description;</span>
+<span class="source-line-no">191</span><span id="line-191">         return cp(description);</span>
 <span class="source-line-no">192</span><span id="line-192">      }</span>
 <span class="source-line-no">193</span><span id="line-193"></span>
 <span class="source-line-no">194</span><span id="line-194">      @Override /* Overridden from Bean */</span>
@@ -225,7 +225,7 @@
 <span class="source-line-no">212</span><span id="line-212">   /**</span>
 <span class="source-line-no">213</span><span id="line-213">    * Pulls the name/value attribute from a {@link Bean} annotation.</span>
 <span class="source-line-no">214</span><span id="line-214">    *</span>
-<span class="source-line-no">215</span><span id="line-215">    * @param a The annotation to check.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">215</span><span id="line-215">    * @param a The annotation to check.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns an empty string).</span>
 <span class="source-line-no">216</span><span id="line-216">    * @return The annotation value, or an empty string if the annotation is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">217</span><span id="line-217">    */</span>
 <span class="source-line-no">218</span><span id="line-218">   public static String name(Bean a) {</span>

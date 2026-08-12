@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-59">PetStoreResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-64">PetStoreResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
 <div class="block">Petstore CRUD REST resource.
 
@@ -106,6 +106,8 @@ loadScripts(document, 'script');</script>
    <li><code>POST   /pets</code>                — create pet
    <li><code>PUT    /pets/{id}</code>           — update pet
    <li><code>DELETE /pets/{id}</code>           — delete pet
+   <li><code>GET    /pets/{id}/photo</code>     — get pet photo
+   <li><code>PUT    /pets/{id}/photo</code>     — upload pet photo
    <li><code>GET    /orders</code>              — list orders
    <li><code>GET    /orders/{id}</code>         — get order
    <li><code>POST   /orders</code>              — create order
@@ -219,20 +221,31 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retrieves a pet by ID.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPets()" class="member-name-link">getPets</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPetPhoto(long)" class="member-name-link">getPetPhoto</a><wbr>(long&nbsp;id)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Retrieves the uploaded photo for a pet.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPets()" class="member-name-link">getPets</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Lists all pets.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUser(java.lang.String)" class="member-name-link">getUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUser(java.lang.String)" class="member-name-link">getUser</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retrieves a user by username.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUsers()" class="member-name-link">getUsers</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUsers()" class="member-name-link">getUsers</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Lists all users.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../http/response/Ok.html" title="class in org.apache.juneau.http.response">Ok</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#putPetPhoto(long,java.awt.image.BufferedImage)" class="member-name-link">putPetPhoto</a><wbr>(long&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a>&nbsp;image)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Uploads a photo for a pet.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateOrder(long,org.apache.juneau.petstore.dto.Order)" class="member-name-link">updateOrder</a><wbr>(long&nbsp;id,
@@ -281,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PetStoreResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-67">PetStoreResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-72">PetStoreResource</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -295,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPets()">
 <h3>getPets</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-83">getPets</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-91">getPets</a></span>()</div>
 <div class="block">Lists all pets.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -306,7 +319,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPet(long)">
 <h3>getPet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-95">getPet</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-103">getPet</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">Retrieves a pet by ID.</div>
 <dl class="notes">
@@ -322,7 +335,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createPet(org.apache.juneau.petstore.dto.Pet)">
 <h3>createPet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-109">createPet</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-117">createPet</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&nbsp;pet)</span></div>
 <div class="block">Creates a new pet.</div>
 <dl class="notes">
@@ -336,7 +349,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="updatePet(long,org.apache.juneau.petstore.dto.Pet)">
 <h3>updatePet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-122">updatePet</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-130">updatePet</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id,
  <a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&nbsp;pet)</span></div>
@@ -355,7 +368,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deletePet(long)">
 <h3>deletePet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-138">deletePet</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-146">deletePet</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">Deletes a pet by ID.</div>
 <dl class="notes">
@@ -367,9 +380,47 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="getPetPhoto(long)">
+<h3>getPetPhoto</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-162">getPetPhoto</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+ long&nbsp;id)</span></div>
+<div class="block">Retrieves the uploaded photo for a pet.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - The pet ID.</dd>
+<dt>Returns:</dt>
+<dd>The photo image.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If no pet with the given ID exists, or no photo has been uploaded for it.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="putPetPhoto(long,java.awt.image.BufferedImage)">
+<h3>putPetPhoto</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/Ok.html" title="class in org.apache.juneau.http.response">Ok</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-183">putPetPhoto</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+ long&nbsp;id,
+ <a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/awt/image/BufferedImage.html" title="class or interface in java.awt.image" class="external-link">BufferedImage</a>&nbsp;image)</span></div>
+<div class="block">Uploads a photo for a pet.
+
+ <p>
+ On success, also updates the pet's <a href="../dto/Pet.html#getPhoto()"><code>photo</code></a> field to point back at this endpoint.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - The pet ID.</dd>
+<dd><code>image</code> - The photo image.</dd>
+<dt>Returns:</dt>
+<dd>OK.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If no pet with the given ID exists.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getOrders()">
 <h3>getOrders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-156">getOrders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-202">getOrders</a></span>()</div>
 <div class="block">Lists all orders.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -380,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOrder(long)">
 <h3>getOrder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-168">getOrder</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-214">getOrder</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">Retrieves an order by ID.</div>
 <dl class="notes">
@@ -396,7 +447,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createOrder(org.apache.juneau.petstore.dto.Order)">
 <h3>createOrder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-182">createOrder</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-228">createOrder</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&nbsp;order)</span></div>
 <div class="block">Creates a new order.</div>
 <dl class="notes">
@@ -410,7 +461,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="updateOrder(long,org.apache.juneau.petstore.dto.Order)">
 <h3>updateOrder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-195">updateOrder</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-241">updateOrder</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id,
  <a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&nbsp;order)</span></div>
@@ -429,7 +480,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deleteOrder(long)">
 <h3>deleteOrder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-211">deleteOrder</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-257">deleteOrder</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">Deletes an order by ID.</div>
 <dl class="notes">
@@ -443,7 +494,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUsers()">
 <h3>getUsers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-229">getUsers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-275">getUsers</a></span>()</div>
 <div class="block">Lists all users.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -454,7 +505,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUser(java.lang.String)">
 <h3>getUser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-241">getUser</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("username")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-287">getUser</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("username")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
 <div class="block">Retrieves a user by username.</div>
 <dl class="notes">
@@ -470,7 +521,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createUser(org.apache.juneau.petstore.dto.User)">
 <h3>createUser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-255">createUser</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-301">createUser</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a>&nbsp;user)</span></div>
 <div class="block">Creates a new user.</div>
 <dl class="notes">
@@ -484,7 +535,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="updateUser(java.lang.String,org.apache.juneau.petstore.dto.User)">
 <h3>updateUser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-268">updateUser</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("username")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-314">updateUser</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("username")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto">User</a>&nbsp;user)</span></div>
@@ -503,7 +554,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deleteUser(java.lang.String)">
 <h3>deleteUser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-284">deleteUser</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("username")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/rest/PetStoreResource.html#line-330">deleteUser</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("username")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
 <div class="block">Deletes a user by username.</div>
 <dl class="notes">

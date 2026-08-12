@@ -179,7 +179,7 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <div class="block">Creates a new builder for this object.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doSerialize</a><wbr>(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)" class="member-name-link">doWrite</a><wbr>(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Serializes a POJO to the specified pipe.</div>
@@ -189,7 +189,7 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getJsonWriter(org.apache.juneau.marshall.serializer.SerializerPipe)" class="member-name-link">getJsonWriter</a><wbr>(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Converts the specified output target object to an <a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonWriter</code></a>.</div>
@@ -209,8 +209,8 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Whether the token writer emits unquoted (simple) attribute names.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeAnything(org.apache.juneau.marshall.json.JsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">serializeAnything</a><wbr>(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeAnything(org.apache.juneau.marshall.json.JsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">writeAnything</a><wbr>(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
@@ -219,27 +219,27 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <div class="block">Workhorse method.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeArrayRecords(java.lang.Object)" class="member-name-link">serializeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeArrayRecords(java.lang.Object)" class="member-name-link">writeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Streaming array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> backed by <a href="JsonTokenWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">serializeBeanMap</a><wbr>(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)" class="member-name-link">writeBeanMap</a><wbr>(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeJson(java.lang.Object)" class="member-name-link">serializeJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeJson(java.lang.Object)" class="member-name-link">writeJson</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Method that can be called from subclasses to serialize an object to JSON.</div>
+<div class="block">Serializes an object to a JSON string using this session's configuration.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">serializeMap</a><wbr>(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">writeMap</a><wbr>(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;m,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serializeTokens(java.lang.Object)" class="member-name-link">serializeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeTokens(java.lang.Object)" class="member-name-link">writeTokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Opens a low-level push generator that emits JSON one structural event at a time, bound to
  this session's live config.</div>
@@ -249,10 +249,10 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.WriterSerializerSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/WriterSerializerSession.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializerSession</a></h3>
-<code><a href="../serializer/WriterSerializerSession.html#create(org.apache.juneau.marshall.serializer.WriterSerializer)">create</a>, <a href="../serializer/WriterSerializerSession.html#createPipe(java.lang.Object)">createPipe</a>, <a href="../serializer/WriterSerializerSession.html#getFileCharset()">getFileCharset</a>, <a href="../serializer/WriterSerializerSession.html#getMaxIndent()">getMaxIndent</a>, <a href="../serializer/WriterSerializerSession.html#getQuoteChar()">getQuoteChar</a>, <a href="../serializer/WriterSerializerSession.html#getStreamCharset()">getStreamCharset</a>, <a href="../serializer/WriterSerializerSession.html#isUseWhitespace()">isUseWhitespace</a>, <a href="../serializer/WriterSerializerSession.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/WriterSerializerSession.html#properties()">properties</a>, <a href="../serializer/WriterSerializerSession.html#serialize(java.lang.Object)">serialize</a>, <a href="../serializer/WriterSerializerSession.html#serializeToString(java.lang.Object)">serializeToString</a></code></div>
+<code><a href="../serializer/WriterSerializerSession.html#create(org.apache.juneau.marshall.serializer.WriterSerializer)">create</a>, <a href="../serializer/WriterSerializerSession.html#createPipe(java.lang.Object)">createPipe</a>, <a href="../serializer/WriterSerializerSession.html#getMaxIndent()">getMaxIndent</a>, <a href="../serializer/WriterSerializerSession.html#getQuoteChar()">getQuoteChar</a>, <a href="../serializer/WriterSerializerSession.html#getStreamCharset()">getStreamCharset</a>, <a href="../serializer/WriterSerializerSession.html#isUseWhitespace()">isUseWhitespace</a>, <a href="../serializer/WriterSerializerSession.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../serializer/WriterSerializerSession.html#properties()">properties</a>, <a href="../serializer/WriterSerializerSession.html#write(java.lang.Object)">write</a>, <a href="../serializer/WriterSerializerSession.html#writeToString(java.lang.Object)">writeToString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.serializer.SerializerSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.serializer.<a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></h3>
-<code><a href="../serializer/SerializerSession.html#addVarBean(java.lang.Class,T)">addVarBean</a>, <a href="../serializer/SerializerSession.html#canIgnoreValue(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="../serializer/SerializerSession.html#canIgnoreValue(org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="../serializer/SerializerSession.html#create(org.apache.juneau.marshall.serializer.Serializer)">create</a>, <a href="../serializer/SerializerSession.html#createBeanTypeNameProperty(org.apache.juneau.commons.bean.BeanMap,java.lang.String)">createBeanTypeNameProperty</a>, <a href="../serializer/SerializerSession.html#createDefaultVarResolverSession()">createDefaultVarResolverSession</a>, <a href="../serializer/SerializerSession.html#forEachEntry(java.util.Collection,java.util.function.Consumer)">forEachEntry</a>, <a href="../serializer/SerializerSession.html#forEachEntry(java.util.Map,java.util.function.Consumer)">forEachEntry</a>, <a href="../serializer/SerializerSession.html#forEachStreamableEntry(java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.util.function.Consumer)">forEachStreamableEntry</a>, <a href="../serializer/SerializerSession.html#generalize(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">generalize</a>, <a href="../serializer/SerializerSession.html#getBeanTypeName(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)">getBeanTypeName</a>, <a href="../serializer/SerializerSession.html#getCalendarFormat()">getCalendarFormat</a>, <a href="../serializer/SerializerSession.html#getDateFormat()">getDateFormat</a>, <a href="../serializer/SerializerSession.html#getDurationFormat()">getDurationFormat</a>, <a href="../serializer/SerializerSession.html#getExpectedRootType(java.lang.Object)">getExpectedRootType</a>, <a href="../serializer/SerializerSession.html#getJavaMethod()">getJavaMethod</a>, <a href="../serializer/SerializerSession.html#getListener()">getListener</a>, <a href="../serializer/SerializerSession.html#getListener(java.lang.Class)">getListener</a>, <a href="../serializer/SerializerSession.html#getLocaleFormat()">getLocaleFormat</a>, <a href="../serializer/SerializerSession.html#getPeriodFormat()">getPeriodFormat</a>, <a href="../serializer/SerializerSession.html#getResponseHeaders()">getResponseHeaders</a>, <a href="../serializer/SerializerSession.html#getSchema()">getSchema</a>, <a href="../serializer/SerializerSession.html#getTemporalFormat()">getTemporalFormat</a>, <a href="../serializer/SerializerSession.html#getTimeZoneFormat()">getTimeZoneFormat</a>, <a href="../serializer/SerializerSession.html#getUriContext()">getUriContext</a>, <a href="../serializer/SerializerSession.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/SerializerSession.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/SerializerSession.html#getUriResolver()">getUriResolver</a>, <a href="../serializer/SerializerSession.html#getVarResolver()">getVarResolver</a>, <a href="../serializer/SerializerSession.html#handleThrown(T)">handleThrown</a>, <a href="../serializer/SerializerSession.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/SerializerSession.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/SerializerSession.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/SerializerSession.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/SerializerSession.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/SerializerSession.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/SerializerSession.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/SerializerSession.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/SerializerSession.html#onBeanGetterException(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.Throwable)">onBeanGetterException</a>, <a href="../serializer/SerializerSession.html#onError(java.lang.Throwable,java.lang.String,java.lang.Object...)">onError</a>, <a href="../serializer/SerializerSession.html#push2(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">push2</a>, <a href="../serializer/SerializerSession.html#relativizeUri(java.lang.Object,java.lang.Object)">relativizeUri</a>, <a href="../serializer/SerializerSession.html#resolve(java.lang.String)">resolve</a>, <a href="../serializer/SerializerSession.html#resolveUri(java.lang.Object)">resolveUri</a>, <a href="../serializer/SerializerSession.html#serialize(java.lang.Object,java.lang.Object)">serialize</a>, <a href="../serializer/SerializerSession.html#serializeCalendar(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">serializeCalendar</a>, <a href="../serializer/SerializerSession.html#serializeDate(java.util.Date,org.apache.juneau.marshall.ClassMeta)">serializeDate</a>, <a href="../serializer/SerializerSession.html#serializeDuration(java.time.Duration)">serializeDuration</a>, <a href="../serializer/SerializerSession.html#serializePeriod(java.time.Period)">serializePeriod</a>, <a href="../serializer/SerializerSession.html#serializeTemporal(java.time.temporal.TemporalAccessor,org.apache.juneau.marshall.ClassMeta)">serializeTemporal</a>, <a href="../serializer/SerializerSession.html#sort(java.util.Collection)">sort</a>, <a href="../serializer/SerializerSession.html#sort(java.util.List)">sort</a>, <a href="../serializer/SerializerSession.html#sort(java.util.Map)">sort</a>, <a href="../serializer/SerializerSession.html#swap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object)">swap</a>, <a href="../serializer/SerializerSession.html#toList(java.lang.Class,java.lang.Object)">toList</a>, <a href="../serializer/SerializerSession.html#toListFromStreamable(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">toListFromStreamable</a>, <a href="../serializer/SerializerSession.html#toString(java.lang.Object)">toString</a>, <a href="../serializer/SerializerSession.html#trim(java.lang.Object)">trim</a>, <a href="../serializer/SerializerSession.html#unwrapSupplier(java.lang.Object,int)">unwrapSupplier</a></code></div>
+<code><a href="../serializer/SerializerSession.html#addVarBean(java.lang.Class,T)">addVarBean</a>, <a href="../serializer/SerializerSession.html#canIgnoreValue(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="../serializer/SerializerSession.html#canIgnoreValue(org.apache.juneau.marshall.ClassMeta,java.lang.String,java.lang.Object)">canIgnoreValue</a>, <a href="../serializer/SerializerSession.html#create(org.apache.juneau.marshall.serializer.Serializer)">create</a>, <a href="../serializer/SerializerSession.html#createBeanTypeNameProperty(org.apache.juneau.commons.bean.BeanMap,java.lang.String)">createBeanTypeNameProperty</a>, <a href="../serializer/SerializerSession.html#createDefaultVarResolverSession()">createDefaultVarResolverSession</a>, <a href="../serializer/SerializerSession.html#forEachEntry(java.util.Collection,java.util.function.Consumer)">forEachEntry</a>, <a href="../serializer/SerializerSession.html#forEachEntry(java.util.Map,java.util.function.Consumer)">forEachEntry</a>, <a href="../serializer/SerializerSession.html#forEachStreamableEntry(java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.util.function.Consumer)">forEachStreamableEntry</a>, <a href="../serializer/SerializerSession.html#generalize(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">generalize</a>, <a href="../serializer/SerializerSession.html#getBeanTypeName(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.commons.bean.BeanPropertyMeta)">getBeanTypeName</a>, <a href="../serializer/SerializerSession.html#getCalendarFormat()">getCalendarFormat</a>, <a href="../serializer/SerializerSession.html#getDateFormat()">getDateFormat</a>, <a href="../serializer/SerializerSession.html#getDurationFormat()">getDurationFormat</a>, <a href="../serializer/SerializerSession.html#getExpectedRootType(java.lang.Object)">getExpectedRootType</a>, <a href="../serializer/SerializerSession.html#getJavaMethod()">getJavaMethod</a>, <a href="../serializer/SerializerSession.html#getListener()">getListener</a>, <a href="../serializer/SerializerSession.html#getListener(java.lang.Class)">getListener</a>, <a href="../serializer/SerializerSession.html#getLocaleFormat()">getLocaleFormat</a>, <a href="../serializer/SerializerSession.html#getPeriodFormat()">getPeriodFormat</a>, <a href="../serializer/SerializerSession.html#getResponseHeaders()">getResponseHeaders</a>, <a href="../serializer/SerializerSession.html#getSchema()">getSchema</a>, <a href="../serializer/SerializerSession.html#getTemporalFormat()">getTemporalFormat</a>, <a href="../serializer/SerializerSession.html#getTimeZoneFormat()">getTimeZoneFormat</a>, <a href="../serializer/SerializerSession.html#getUriContext()">getUriContext</a>, <a href="../serializer/SerializerSession.html#getUriRelativity()">getUriRelativity</a>, <a href="../serializer/SerializerSession.html#getUriResolution()">getUriResolution</a>, <a href="../serializer/SerializerSession.html#getUriResolver()">getUriResolver</a>, <a href="../serializer/SerializerSession.html#getVarResolver()">getVarResolver</a>, <a href="../serializer/SerializerSession.html#handleThrown(T)">handleThrown</a>, <a href="../serializer/SerializerSession.html#isAddRootType()">isAddRootType</a>, <a href="../serializer/SerializerSession.html#isKeepNullProperties()">isKeepNullProperties</a>, <a href="../serializer/SerializerSession.html#isNonDefault()">isNonDefault</a>, <a href="../serializer/SerializerSession.html#isSortCollections()">isSortCollections</a>, <a href="../serializer/SerializerSession.html#isSortMaps()">isSortMaps</a>, <a href="../serializer/SerializerSession.html#isTrimEmptyCollections()">isTrimEmptyCollections</a>, <a href="../serializer/SerializerSession.html#isTrimEmptyMaps()">isTrimEmptyMaps</a>, <a href="../serializer/SerializerSession.html#isTrimStrings()">isTrimStrings</a>, <a href="../serializer/SerializerSession.html#onBeanGetterException(org.apache.juneau.commons.bean.BeanPropertyMeta,java.lang.Throwable)">onBeanGetterException</a>, <a href="../serializer/SerializerSession.html#onError(java.lang.Throwable,java.lang.String,java.lang.Object...)">onError</a>, <a href="../serializer/SerializerSession.html#push2(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">push2</a>, <a href="../serializer/SerializerSession.html#relativizeUri(java.lang.Object,java.lang.Object)">relativizeUri</a>, <a href="../serializer/SerializerSession.html#resolve(java.lang.String)">resolve</a>, <a href="../serializer/SerializerSession.html#resolveUri(java.lang.Object)">resolveUri</a>, <a href="../serializer/SerializerSession.html#sort(java.util.Collection)">sort</a>, <a href="../serializer/SerializerSession.html#sort(java.util.List)">sort</a>, <a href="../serializer/SerializerSession.html#sort(java.util.Map)">sort</a>, <a href="../serializer/SerializerSession.html#swap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object)">swap</a>, <a href="../serializer/SerializerSession.html#toList(java.lang.Class,java.lang.Object)">toList</a>, <a href="../serializer/SerializerSession.html#toListFromStreamable(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">toListFromStreamable</a>, <a href="../serializer/SerializerSession.html#toString(java.lang.Object)">toString</a>, <a href="../serializer/SerializerSession.html#trim(java.lang.Object)">trim</a>, <a href="../serializer/SerializerSession.html#unwrapSupplier(java.lang.Object,int)">unwrapSupplier</a>, <a href="../serializer/SerializerSession.html#write(java.lang.Object,java.lang.Object)">write</a>, <a href="../serializer/SerializerSession.html#writeCalendar(java.lang.Object,org.apache.juneau.marshall.ClassMeta)">writeCalendar</a>, <a href="../serializer/SerializerSession.html#writeDate(java.util.Date,org.apache.juneau.marshall.ClassMeta)">writeDate</a>, <a href="../serializer/SerializerSession.html#writeDuration(java.time.Duration)">writeDuration</a>, <a href="../serializer/SerializerSession.html#writePeriod(java.time.Period)">writePeriod</a>, <a href="../serializer/SerializerSession.html#writeTemporal(java.time.temporal.TemporalAccessor,org.apache.juneau.marshall.ClassMeta)">writeTemporal</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingTraverseSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingTraverseSession.html" title="class in org.apache.juneau.marshall">MarshallingTraverseSession</a></h3>
 <code><a href="../MarshallingTraverseSession.html#getInitialDepth()">getInitialDepth</a>, <a href="../MarshallingTraverseSession.html#getLastLocation()">getLastLocation</a>, <a href="../MarshallingTraverseSession.html#getMaxDepth()">getMaxDepth</a>, <a href="../MarshallingTraverseSession.html#getOptionalType(org.apache.juneau.marshall.ClassMeta)">getOptionalType</a>, <a href="../MarshallingTraverseSession.html#getOptionalValue(java.lang.Object)">getOptionalValue</a>, <a href="../MarshallingTraverseSession.html#getStack(boolean)">getStack</a>, <a href="../MarshallingTraverseSession.html#isDetectRecursions()">isDetectRecursions</a>, <a href="../MarshallingTraverseSession.html#isIgnoreRecursions()">isIgnoreRecursions</a>, <a href="../MarshallingTraverseSession.html#isOptional(org.apache.juneau.marshall.ClassMeta)">isOptional</a>, <a href="../MarshallingTraverseSession.html#isRoot()">isRoot</a>, <a href="../MarshallingTraverseSession.html#pop()">pop</a>, <a href="../MarshallingTraverseSession.html#push(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">push</a>, <a href="../MarshallingTraverseSession.html#setCurrentClass(org.apache.juneau.marshall.ClassMeta)">setCurrentClass</a>, <a href="../MarshallingTraverseSession.html#setCurrentProperty(org.apache.juneau.commons.bean.BeanPropertyMeta)">setCurrentProperty</a>, <a href="../MarshallingTraverseSession.html#willExceedDepth()">willExceedDepth</a>, <a href="../MarshallingTraverseSession.html#willRecurse(java.lang.String,java.lang.Object,org.apache.juneau.marshall.ClassMeta)">willRecurse</a></code></div>
@@ -267,7 +267,7 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.ArrayRecordWritable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></h3>
-<code><a href="../stream/ArrayRecordWritable.html#isArrayRecordStreaming()">isArrayRecordStreaming</a>, <a href="../stream/ArrayRecordWritable.html#serializeArrayRecords(java.lang.Object,int)">serializeArrayRecords</a></code></div>
+<code><a href="../stream/ArrayRecordWritable.html#isArrayRecordStreaming()">isArrayRecordStreaming</a>, <a href="../stream/ArrayRecordWritable.html#writeArrayRecords(java.lang.Object,int)">writeArrayRecords</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.commons.conversion.ConverterSession">Methods inherited from interface&nbsp;org.apache.juneau.commons.conversion.<a href="../../commons/conversion/ConverterSession.html" title="interface in org.apache.juneau.commons.conversion">ConverterSession</a></h3>
 <code><a href="../../commons/conversion/ConverterSession.html#get(java.lang.String,java.lang.Class)">get</a></code></div>
@@ -276,7 +276,7 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <code><a href="../stream/RecordWritable.html#isRecordStreaming()">isRecordStreaming</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.stream.TokenWritable">Methods inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></h3>
-<code><a href="../stream/TokenWritable.html#serializeRecords(java.lang.Object)">serializeRecords</a></code></div>
+<code><a href="../stream/TokenWritable.html#writeRecords(java.lang.Object)">writeRecords</a></code></div>
 </section>
 </li>
 </ul>
@@ -322,12 +322,12 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </section>
 </li>
 <li>
-<section class="detail" id="serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)">
-<h3>serializeBeanMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-153">serializeBeanMap</a></span><wbr><span class="parameters">(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<section class="detail" id="writeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)">
+<h3>writeBeanMap</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-153">writeBeanMap</a></span><wbr><span class="parameters">(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</span>
-                                     throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
+                                    throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code></dd>
@@ -335,12 +335,12 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </section>
 </li>
 <li>
-<section class="detail" id="serializeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)">
-<h3>serializeMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-218">serializeMap</a></span><wbr><span class="parameters">(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<section class="detail" id="writeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)">
+<h3>writeMap</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-221">writeMap</a></span><wbr><span class="parameters">(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;m,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</span>
-                                 throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
+                                throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code></dd>
@@ -348,23 +348,23 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </section>
 </li>
 <li>
-<section class="detail" id="doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">
-<h3>doSerialize</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-240">doSerialize</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<section class="detail" id="doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">
+<h3>doWrite</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-246">doWrite</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
-                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
+                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">SerializerSession</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">SerializerSession</a></code></span></div>
 <div class="block">Serializes a POJO to the specified pipe.
 
  <p>
  This method should NOT close the context object.
 
  <p>
- The default implementation of this method simply calls <a href="../serializer/Serializer.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)"><code>Serializer.doSerialize(SerializerSession,SerializerPipe,Object)</code></a>.</div>
+ The default implementation of this method simply calls <a href="../serializer/Serializer.html#doWrite(org.apache.juneau.marshall.serializer.SerializerSession,org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)"><code>Serializer.doWrite(SerializerSession,SerializerPipe,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../serializer/SerializerSession.html#doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doSerialize</a></code>&nbsp;in class&nbsp;<code><a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></code></dd>
+<dd><code><a href="../serializer/SerializerSession.html#doWrite(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">doWrite</a></code>&nbsp;in class&nbsp;<code><a href="../serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>out</code> - Where to send the output from the serializer.</dd>
 <dd><code>o</code> - The object to serialize.</dd>
@@ -377,7 +377,7 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <li>
 <section class="detail" id="getJsonClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getJsonClassMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="JsonClassMeta.html" title="class in org.apache.juneau.marshall.json">JsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-251">getJsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="JsonClassMeta.html" title="class in org.apache.juneau.marshall.json">JsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-257">getJsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -390,22 +390,21 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <li>
 <section class="detail" id="getJsonWriter(org.apache.juneau.marshall.serializer.SerializerPipe)">
 <h3>getJsonWriter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-262">getJsonWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-268">getJsonWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
 <div class="block">Converts the specified output target object to an <a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonWriter</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>out</code> - The output target object.</dd>
+<dd><code>out</code> - The output target object.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The output target object wrapped in an <a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonWriter</code></a>.</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying stream.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isAddBeanTypes()">
 <h3>isAddBeanTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-271">isAddBeanTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-280">isAddBeanTypes</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../serializer/SerializerSession.html#isAddBeanTypes()">SerializerSession</a></code></span></div>
 <div class="block">Add <js>"_type"</js> properties when needed.</div>
 <dl class="notes">
@@ -426,7 +425,7 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <li>
 <section class="detail" id="isEscapeSolidus()">
 <h3>isEscapeSolidus</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-281">isEscapeSolidus</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-290">isEscapeSolidus</a></span>()</div>
 <div class="block">Prefix solidus <js>'/'</js> characters with escapes.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -443,7 +442,7 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 <li>
 <section class="detail" id="isSimpleAttrs()">
 <h3>isSimpleAttrs</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-288">isSimpleAttrs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-297">isSimpleAttrs</a></span>()</div>
 <div class="block">Whether the token writer emits unquoted (simple) attribute names.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -452,10 +451,10 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </section>
 </li>
 <li>
-<section class="detail" id="serializeTokens(java.lang.Object)">
-<h3>serializeTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-306">serializeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeTokens(java.lang.Object)">
+<h3>writeTokens</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-314">writeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level push generator that emits JSON one structural event at a time, bound to
  this session's live config.
 
@@ -467,10 +466,9 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
  <c>trimEmptyCollections</c>, <c>sortMaps</c>, <c>sortCollections</c>, <c>trimStrings</c>).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/TokenWritable.html#serializeTokens(java.lang.Object)">serializeTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></code></dd>
+<dd><code><a href="../stream/TokenWritable.html#writeTokens(java.lang.Object)">writeTokens</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>output</code> - The output.  Accepts <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>, or
-   <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/StringBuilder.html" title="class or interface in java.lang" class="external-link"><code>StringBuilder</code></a>.</dd>
+<dd><code>output</code> - The output.  Accepts <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link"><code>OutputStream</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="JsonTokenWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter</code></a>.</dd>
 <dt>Throws:</dt>
@@ -479,15 +477,15 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </section>
 </li>
 <li>
-<section class="detail" id="serializeArrayRecords(java.lang.Object)">
-<h3>serializeArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-336">serializeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
-                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<section class="detail" id="writeArrayRecords(java.lang.Object)">
+<h3>writeArrayRecords</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-344">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Streaming array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> backed by <a href="JsonTokenWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter</code></a>.
  Memory is O(1) in the array length &mdash; elements are emitted as they arrive.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../stream/ArrayRecordWritable.html#serializeArrayRecords(java.lang.Object)">serializeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordWritable.html#writeArrayRecords(java.lang.Object)">writeArrayRecords</a></code>&nbsp;in interface&nbsp;<code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>output</code> - The output.</dd>
 <dt>Returns:</dt>
@@ -498,23 +496,27 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </section>
 </li>
 <li>
-<section class="detail" id="serializeAnything(org.apache.juneau.marshall.json.JsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)">
-<h3>serializeAnything</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-354">serializeAnything</a></span><wbr><span class="parameters">(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<section class="detail" id="writeAnything(org.apache.juneau.marshall.json.JsonWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta)">
+<h3>writeAnything</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-366">writeAnything</a></span><wbr><span class="parameters">(<a href="JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&lt;?&gt;&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
  <a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta)</span>
-                                throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
+                               throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <div class="block">Workhorse method.
  Determines the type of object, and then calls the appropriate type-specific serialization method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>out</code> - The output writer.</dd>
-<dd><code>o</code> - The object to serialize.</dd>
-<dd><code>eType</code> - The expected type.</dd>
+<dd><code>out</code> - The output writer.
+   <br>Must not be <jk>null</jk>.</dd>
+<dd><code>o</code> - The object to serialize.
+   <br>Can be <jk>null</jk> (written as the JSON literal <js>"null"</js>).</dd>
+<dd><code>eType</code> - The expected type.
+   <br>Can be <jk>null</jk> (defaults to <code>Object</code>).</dd>
 <dd><code>attrName</code> - The attribute name.</dd>
-<dd><code>pMeta</code> - The bean property currently being parsed.</dd>
+<dd><code>pMeta</code> - The bean property currently being serialized.
+   <br>Can be <jk>null</jk> (the bean-property-level dictionary lookup and URI detection are skipped).</dd>
 <dt>Returns:</dt>
 <dd>The same writer passed in.</dd>
 <dt>Throws:</dt>
@@ -523,14 +525,15 @@ implements <a href="../stream/TokenWritable.html" title="interface in org.apache
 </section>
 </li>
 <li>
-<section class="detail" id="serializeJson(java.lang.Object)">
-<h3>serializeJson</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-469">serializeJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
-                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Method that can be called from subclasses to serialize an object to JSON.
+<section class="detail" id="writeJson(java.lang.Object)">
+<h3>writeJson</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonSerializerSession.html#line-483">writeJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
+                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Serializes an object to a JSON string using this session's configuration.
 
  <p>
- Used by <a href="JsonSchemaSerializerSession.html" title="class in org.apache.juneau.marshall.json"><code>JsonSchemaSerializerSession</code></a> for serializing examples to JSON.</div>
+ Protected extension hook that subclasses can call or override when they need to serialize a
+ value to JSON (e.g. for embedding a nested JSON fragment).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>o</code> - The object to serialize.</dd>

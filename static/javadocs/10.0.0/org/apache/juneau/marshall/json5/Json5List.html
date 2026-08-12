@@ -334,8 +334,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeTo(java.io.Writer)" class="member-name-link">writeTo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Convenience method for serializing this list to the specified Writer using the <a href="Json5Serializer.html#DEFAULT"><code>Json5Serializer.DEFAULT</code></a>
- serializer.</div>
+<div class="block">Convenience method for serializing this list to the specified Writer using the <a href="../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a>
+ marshaller.</div>
 </div>
 </div>
 </div>
@@ -384,7 +384,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="EMPTY_LIST">
 <h3>EMPTY_LIST</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-110">EMPTY_LIST</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-279">EMPTY_LIST</a></span></div>
 <div class="block">An empty read-only Json5List.</div>
 </section>
 </li>
@@ -399,14 +399,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-266">Json5List</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-432">Json5List</a></span>()</div>
 <div class="block">Construct an empty list.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.MarshallingSession)">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-273">Json5List</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-439">Json5List</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
 <div class="block">Construct an empty list with the specified bean context.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -417,7 +417,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.CharSequence)">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-283">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json5)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-449">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json5)</span>
           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified JSON5 text.</div>
 <dl class="notes">
@@ -431,13 +431,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.CharSequence,org.apache.juneau.marshall.parser.Parser)">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-294">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-460">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>in</code> - The input being parsed. Can be <jk>null</jk>.</dd>
+<dd><code>in</code> - The input being parsed. Can be <jk>null</jk> or empty (results in an empty list; no parsing occurs).</dd>
 <dd><code>p</code> - The parser to use. If <jk>null</jk>, uses <a href="Json5Parser.html" title="class in org.apache.juneau.marshall.json5"><code>Json5Parser</code></a>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Malformed input encountered.</dd>
@@ -447,18 +447,18 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.Collection)">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-303">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-469">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;copyFrom)</span></div>
 <div class="block">Construct a list initialized with the specified list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>copyFrom</code> - The list to copy. Can be <jk>null</jk>.</dd>
+<dd><code>copyFrom</code> - The list to copy. Can be <jk>null</jk> (results in an empty list).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Object...)">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-312">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;entries)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-478">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;entries)</span></div>
 <div class="block">Construct a list initialized with the contents.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -469,7 +469,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Reader)">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-322">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json5)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-488">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json5)</span>
           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified reader containing JSON5.</div>
 <dl class="notes">
@@ -483,7 +483,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Reader,org.apache.juneau.marshall.parser.Parser)">
 <h3>Json5List</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-333">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-499">Json5List</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified reader and parser.</div>
@@ -507,7 +507,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-148">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-317">create</a></span>()</div>
 <div class="block">Construct an empty list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -518,11 +518,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.util.Collection)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-158">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-327">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
 <div class="block">Construct a list initialized with the specified list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - The list to copy. Can be <jk>null</jk>.</dd>
+<dd><code>values</code> - The list to copy. Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>A new list or <jk>null</jk> if the list was <jk>null</jk>.</dd>
 </dl>
@@ -531,7 +531,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Object...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-168">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-337">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
 <div class="block">Construct a list initialized with the specified values.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -544,7 +544,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofArrays(java.lang.Object[]...)">
 <h3>ofArrays</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-178">ofArrays</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-347">ofArrays</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]...&nbsp;values)</span></div>
 <div class="block">Convenience method for creating a list of array objects.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -557,7 +557,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofCollections(java.util.Collection...)">
 <h3>ofCollections</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-190">ofCollections</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-359">ofCollections</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;...&nbsp;values)</span></div>
 <div class="block">Convenience method for creating a list of collection objects.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -570,7 +570,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofString(java.lang.CharSequence)">
 <h3>ofString</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-203">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json5)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-372">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;json5)</span>
                           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified JSON5 string.</div>
 <dl class="notes">
@@ -586,7 +586,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofString(java.io.Reader)">
 <h3>ofString</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-214">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json5)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-383">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;json5)</span>
                           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified reader containing JSON5.</div>
 <dl class="notes">
@@ -602,7 +602,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofJson5OrCdl(java.lang.String)">
 <h3>ofJson5OrCdl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-228">ofJson5OrCdl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-397">ofJson5OrCdl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span>
                               throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Parses a string that can consist of either a JSON5 array or comma-delimited list.
 
@@ -621,7 +621,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofString(java.lang.CharSequence,org.apache.juneau.marshall.parser.Parser)">
 <h3>ofString</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-244">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-413">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
                           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified string.</div>
@@ -639,7 +639,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofString(java.io.Reader,org.apache.juneau.marshall.parser.Parser)">
 <h3>ofString</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-256">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-425">ofString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;in,
  <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;p)</span>
                           throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Construct a list initialized with the specified reader.</div>
@@ -657,7 +657,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.util.Collection)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-337">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-503">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;values)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#append(java.util.Collection)">MarshalledList</a></code></span></div>
 <div class="block">Adds all the values in the specified collection to this list.</div>
 <dl class="notes">
@@ -673,7 +673,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Object)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-343">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-509">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#append(java.lang.Object)">MarshalledList</a></code></span></div>
 <div class="block">Adds the value to this list.</div>
 <dl class="notes">
@@ -689,7 +689,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.Object...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-349">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-515">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#append(java.lang.Object...)">MarshalledList</a></code></span></div>
 <div class="block">Adds all the values in the specified array to this list.</div>
 <dl class="notes">
@@ -705,7 +705,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(boolean,java.lang.Object)">
 <h3>appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-355">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-521">appendIf</a></span><wbr><span class="parameters">(boolean&nbsp;flag,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#appendIf(boolean,java.lang.Object)">MarshalledList</a></code></span></div>
 <div class="block">Adds an entry to this list if the boolean flag is <jk>true</jk>.</div>
@@ -723,7 +723,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendIf(java.util.function.Predicate,T)">
 <h3 id="appendIf(java.util.function.Predicate,java.lang.Object)">appendIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-361">appendIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-527">appendIf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;test,
  T&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#appendIf(java.util.function.Predicate,T)">MarshalledList</a></code></span></div>
 <div class="block">Add if predicate matches.</div>
@@ -743,7 +743,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendReverse(java.util.List)">
 <h3>appendReverse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-367">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-533">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&nbsp;values)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#appendReverse(java.util.List)">MarshalledList</a></code></span></div>
 <div class="block">Adds all the entries in the specified collection to this list in reverse order.</div>
 <dl class="notes">
@@ -759,7 +759,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appendReverse(java.lang.Object...)">
 <h3>appendReverse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-373">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-539">appendReverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;values)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#appendReverse(java.lang.Object...)">MarshalledList</a></code></span></div>
 <div class="block">Adds the contents of the array to the list in reverse order.
 
@@ -778,7 +778,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cast(org.apache.juneau.marshall.ClassMeta)">
 <h3>cast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-393">cast</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-559">cast</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block">Converts this object into the specified class type.
 
  <p>
@@ -799,7 +799,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getList(int)">
 <h3>getList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-401">getList</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-567">getList</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#getList(int)">MarshalledList</a></code></span></div>
 <div class="block">Shortcut for calling <code>get(index, MarshalledList.<jk>class</jk>)</code>.</div>
 <dl class="notes">
@@ -815,7 +815,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMap(int)">
 <h3>getMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5Map.html" title="class in org.apache.juneau.marshall.json5">Json5Map</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-406">getMap</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5Map.html" title="class in org.apache.juneau.marshall.json5">Json5Map</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-572">getMap</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#getMap(int)">MarshalledList</a></code></span></div>
 <div class="block">Shortcut for calling <code>get(index, MarshalledMap.<jk>class</jk>)</code>.</div>
 <dl class="notes">
@@ -831,7 +831,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="modifiable()">
 <h3>modifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-411">modifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-577">modifiable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#modifiable()">MarshalledList</a></code></span></div>
 <div class="block">Returns a modifiable copy of this list if it's unmodifiable.</div>
 <dl class="notes">
@@ -845,7 +845,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="session(org.apache.juneau.marshall.MarshallingSession)">
 <h3>session</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-418">session</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-584">session</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#session(org.apache.juneau.marshall.MarshallingSession)">MarshalledList</a></code></span></div>
 <div class="block">Override the default bean session used for converting POJOs.
 
@@ -867,7 +867,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setBeanSession(org.apache.juneau.marshall.MarshallingSession)">
 <h3>setBeanSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-424">setBeanSession</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-590">setBeanSession</a></span><wbr><span class="parameters">(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#setBeanSession(org.apache.juneau.marshall.MarshallingSession)">MarshalledList</a></code></span></div>
 <div class="block">Sets the <a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall"><code>MarshallingSession</code></a> currently associated with this list.</div>
 <dl class="notes">
@@ -883,7 +883,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toJson5()">
 <h3>toJson5</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-438">toJson5</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-604">toJson5</a></span>()</div>
 <div class="block">Serializes this list to a JSON5 string.
 
  <p>
@@ -897,7 +897,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-442">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-608">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html#toString()" title="class or interface in java.util" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html" title="class or interface in java.util" class="external-link">AbstractCollection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
@@ -907,7 +907,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unmodifiable()">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-447">unmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-613">unmodifiable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../collections/MarshalledList.html#unmodifiable()">MarshalledList</a></code></span></div>
 <div class="block">Returns an unmodifiable copy of this list if it's modifiable.</div>
 <dl class="notes">
@@ -921,11 +921,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeTo(java.io.Writer)">
 <h3>writeTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-463">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Json5List.html" title="class in org.apache.juneau.marshall.json5">Json5List</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5List.html#line-629">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w)</span>
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
-<div class="block">Convenience method for serializing this list to the specified Writer using the <a href="Json5Serializer.html#DEFAULT"><code>Json5Serializer.DEFAULT</code></a>
- serializer.</div>
+<div class="block">Convenience method for serializing this list to the specified Writer using the <a href="../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a>
+ marshaller.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>w</code> - The writer to send the serialized contents of this object.</dd>

@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static sealed interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-380">RestContext.ContextKind</a></span>
+<div class="type-signature"><span class="modifiers">public static sealed interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.html#line-439">RestContext.ContextKind</a></span>
 <span class="permits">permits <a href="RestContext.ContextKind.Root.html" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Root</a>, <a href="RestContext.ContextKind.Child.html" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Child</a>, <a href="RestContext.ContextKind.Mixin.html" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Mixin</a></span></div>
 <div class="block">The build-time <i>kind</i> of a <a href="RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> — which of the three construction flavors produced it.
 
@@ -94,12 +94,13 @@ loadScripts(document, 'script');</script>
  parent-linked to the host and <i>inherits</i> the host's <code>@Rest</code> annotation chain
  (<code>RestContext.getRestAnnotationsForProperty(String)</code> walks host&rarr;mixin), so <code>@Mixin</code> overrides
  <i>layer on top of</i> an inherited chain.  A <a href="RestContext.ContextKind.Child.html" title="class in org.apache.juneau.rest.server"><code>RestContext.ContextKind.Child</code></a> is <i>isolated</i> (<code>RestContext.HOST_ONLY_PROPERTIES</code>
- includes <code>children</code>; children retain pre-10.0.0 isolated resolution with no parent walk).  So a future
- <code>@Child</code> would <i>seed</i> settings onto an isolated context rather than <i>override</i> an inherited
- chain, and would have no <code>noInherit</code> analog — it must NOT reuse the mixin override-resolution path.
- The <code>Child</code> variant is intentionally shaped so it can later widen to reference a <code>ResolvedChild</code>
- (mirroring how <code>Mixin</code> references a <code>ResolvedMixin</code>) without re-plumbing this discriminator.
- See <code>MAYBE-182</code> for the parked <code>@Child</code> design.</div>
+ includes <a href="RestServerConstants.html#PROPERTY_children"><code>RestServerConstants.PROPERTY_children</code></a>; children retain pre-10.0.0 isolated resolution with
+ no parent walk).  A <code>@Child</code> seed therefore does not <i>override</i> an inherited chain the way a
+ <code>@Mixin</code> override does — instead, <code>RestContext.computeRawRestAnnotations()</code> injects the seed's synthetic
+ <code>@Rest</code> at the <b>least-derived</b> slot of the child's own (still fully isolated) annotation chain,
+ between the child's real <code>@Rest</code> declarations and the synthesized <a href="config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config"><code>DefaultConfig</code></a> fallback.  This ranks the seed below
+ everything the child itself declares (so the child's own explicit value wins for child-wins scalars, and
+ the child's own <code>noInherit</code> cutoff naturally cuts the seed too) but above the framework defaults.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>
@@ -119,7 +120,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="RestContext.ContextKind.Child.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Child</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">A routed child resource (mounted via <a href="Rest.html#children()"><code>@Rest(children)</code></a>); isolated resolution.</div>
+<div class="block">A routed child resource (mounted via <a href="Rest.html#children()"><code>Rest.children()</code></a>/<a href="Rest.html#childrenDefs()"><code>Rest.childrenDefs()</code></a>); isolated
+ resolution, with an optional host-seeded <code>@Child</code> payload injected at the least-derived slot of
+ its own annotation chain (see the class javadoc above).</div>
 </div>
 <div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="RestContext.ContextKind.Mixin.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestContext.ContextKind.Mixin</a></code></div>
@@ -144,13 +147,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></div>
-<div class="col-second even-row-color"><code><a href="#CHILD" class="member-name-link">CHILD</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ROOT" class="member-name-link">ROOT</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Shared <a href="RestContext.ContextKind.Child.html" title="class in org.apache.juneau.rest.server"><code>RestContext.ContextKind.Child</code></a> singleton (the path override travels in <a href="RestContext.Args.html#path()"><code>RestContext.Args.path()</code></a>, not here).</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#ROOT" class="member-name-link">ROOT</a></code></div>
-<div class="col-last odd-row-color">
 <div class="block">Shared <a href="RestContext.ContextKind.Root.html" title="class in org.apache.juneau.rest.server"><code>RestContext.ContextKind.Root</code></a> singleton (the common case).</div>
 </div>
 </div>
@@ -168,15 +166,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ROOT">
 <h3>ROOT</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.html#line-396">ROOT</a></span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.html#line-461">ROOT</a></span></div>
 <div class="block">Shared <a href="RestContext.ContextKind.Root.html" title="class in org.apache.juneau.rest.server"><code>RestContext.ContextKind.Root</code></a> singleton (the common case).</div>
-</section>
-</li>
-<li>
-<section class="detail" id="CHILD">
-<h3>CHILD</h3>
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="RestContext.ContextKind.html" title="interface in org.apache.juneau.rest.server">RestContext.ContextKind</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestContext.ContextKind.html#line-399">CHILD</a></span></div>
-<div class="block">Shared <a href="RestContext.ContextKind.Child.html" title="class in org.apache.juneau.rest.server"><code>RestContext.ContextKind.Child</code></a> singleton (the path override travels in <a href="RestContext.Args.html#path()"><code>RestContext.Args.path()</code></a>, not here).</div>
 </section>
 </li>
 </ul>

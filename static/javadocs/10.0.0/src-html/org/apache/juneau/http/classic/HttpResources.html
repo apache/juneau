@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46">    * &lt;p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47">    * Assumes no content type.</span>
 <span class="source-line-no">048</span><span id="line-48">    *</span>
-<span class="source-line-no">049</span><span id="line-49">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">049</span><span id="line-49">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty byte array).</span>
 <span class="source-line-no">050</span><span id="line-50">    * @return A new {@link ByteArrayResource} builder.</span>
 <span class="source-line-no">051</span><span id="line-51">    */</span>
 <span class="source-line-no">052</span><span id="line-52">   public static final ByteArrayResource byteArrayResource(byte[] content) {</span>
@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56">   /**</span>
 <span class="source-line-no">057</span><span id="line-57">    * Creates a new {@link ByteArrayResource} builder.</span>
 <span class="source-line-no">058</span><span id="line-58">    *</span>
-<span class="source-line-no">059</span><span id="line-59">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">059</span><span id="line-59">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty byte array).</span>
 <span class="source-line-no">060</span><span id="line-60">    * @param contentType The entity content type, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
 <span class="source-line-no">061</span><span id="line-61">    * @return A new {@link ByteArrayResource} builder.</span>
 <span class="source-line-no">062</span><span id="line-62">    */</span>
@@ -83,7 +83,7 @@
 <span class="source-line-no">070</span><span id="line-70">    * &lt;p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71">    * Assumes no content type.</span>
 <span class="source-line-no">072</span><span id="line-72">    *</span>
-<span class="source-line-no">073</span><span id="line-73">    * @param content The entity content supplier.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param content The entity content supplier.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty byte array).</span>
 <span class="source-line-no">074</span><span id="line-74">    * @return A new {@link ByteArrayResource} builder.</span>
 <span class="source-line-no">075</span><span id="line-75">    */</span>
 <span class="source-line-no">076</span><span id="line-76">   public static final ByteArrayResource byteArrayResource(Supplier&lt;byte[]&gt; content) {</span>
@@ -93,7 +93,7 @@
 <span class="source-line-no">080</span><span id="line-80">   /**</span>
 <span class="source-line-no">081</span><span id="line-81">    * Creates a new {@link ByteArrayResource} builder.</span>
 <span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * @param content The entity content supplier.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param content The entity content supplier.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty byte array).</span>
 <span class="source-line-no">084</span><span id="line-84">    * @param contentType The entity content type, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
 <span class="source-line-no">085</span><span id="line-85">    * @return A new {@link ByteArrayResource} builder.</span>
 <span class="source-line-no">086</span><span id="line-86">    */</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line-94">    * &lt;p&gt;</span>
 <span class="source-line-no">095</span><span id="line-95">    * Assumes no content type.</span>
 <span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case a {@link NullPointerException} is thrown when the resource's content is read.</span>
 <span class="source-line-no">098</span><span id="line-98">    * @return A new {@link FileResource} builder.</span>
 <span class="source-line-no">099</span><span id="line-99">    */</span>
 <span class="source-line-no">100</span><span id="line-100">   public static final FileResource fileResource(File content) {</span>
@@ -117,7 +117,7 @@
 <span class="source-line-no">104</span><span id="line-104">   /**</span>
 <span class="source-line-no">105</span><span id="line-105">    * Creates a new {@link FileResource} builder.</span>
 <span class="source-line-no">106</span><span id="line-106">    *</span>
-<span class="source-line-no">107</span><span id="line-107">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">107</span><span id="line-107">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case a {@link NullPointerException} is thrown when the resource's content is read.</span>
 <span class="source-line-no">108</span><span id="line-108">    * @param contentType The entity content type, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
 <span class="source-line-no">109</span><span id="line-109">    * @return A new {@link FileResource} builder.</span>
 <span class="source-line-no">110</span><span id="line-110">    */</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">   /**</span>
 <span class="source-line-no">116</span><span id="line-116">    * Creates a new {@link ReaderResource} builder.</span>
 <span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">118</span><span id="line-118">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case a {@link NullPointerException} is thrown when the resource's content is read.</span>
 <span class="source-line-no">119</span><span id="line-119">    * @return A new {@link ReaderResource} builder.</span>
 <span class="source-line-no">120</span><span id="line-120">    */</span>
 <span class="source-line-no">121</span><span id="line-121">   public static final ReaderResource readerResource(Reader content) {</span>
@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line-125">   /**</span>
 <span class="source-line-no">126</span><span id="line-126">    * Creates a new {@link ReaderResource} builder.</span>
 <span class="source-line-no">127</span><span id="line-127">    *</span>
-<span class="source-line-no">128</span><span id="line-128">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case a {@link NullPointerException} is thrown when the resource's content is read.</span>
 <span class="source-line-no">129</span><span id="line-129">    * @param contentType The entity content type, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
 <span class="source-line-no">130</span><span id="line-130">    * @return A new {@link ReaderResource} builder.</span>
 <span class="source-line-no">131</span><span id="line-131">    */</span>
@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">    * &lt;p&gt;</span>
 <span class="source-line-no">140</span><span id="line-140">    * Assumes no content type.</span>
 <span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">142</span><span id="line-142">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case a {@link NullPointerException} is thrown when the resource's content is read.</span>
 <span class="source-line-no">143</span><span id="line-143">    * @return A new {@link StreamResource} builder.</span>
 <span class="source-line-no">144</span><span id="line-144">    */</span>
 <span class="source-line-no">145</span><span id="line-145">   public static final StreamResource streamResource(InputStream content) {</span>
@@ -162,7 +162,7 @@
 <span class="source-line-no">149</span><span id="line-149">   /**</span>
 <span class="source-line-no">150</span><span id="line-150">    * Creates a new {@link StreamResource} builder.</span>
 <span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">152</span><span id="line-152">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case a {@link NullPointerException} is thrown when the resource's content is read.</span>
 <span class="source-line-no">153</span><span id="line-153">    * @param contentType The entity content type, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
 <span class="source-line-no">154</span><span id="line-154">    * @param length The content length, or &lt;c&gt;-1&lt;/c&gt; if not known.</span>
 <span class="source-line-no">155</span><span id="line-155">    * @return A new {@link StreamResource} builder.</span>
@@ -174,7 +174,7 @@
 <span class="source-line-no">161</span><span id="line-161">   /**</span>
 <span class="source-line-no">162</span><span id="line-162">    * Creates a new builder for a {@link StringResource} builder.</span>
 <span class="source-line-no">163</span><span id="line-163">    *</span>
-<span class="source-line-no">164</span><span id="line-164">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">164</span><span id="line-164">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty string).</span>
 <span class="source-line-no">165</span><span id="line-165">    * @return A new {@link StringResource} builder.</span>
 <span class="source-line-no">166</span><span id="line-166">    */</span>
 <span class="source-line-no">167</span><span id="line-167">   public static final StringResource stringResource(String content) {</span>
@@ -184,7 +184,7 @@
 <span class="source-line-no">171</span><span id="line-171">   /**</span>
 <span class="source-line-no">172</span><span id="line-172">    * Creates a new builder for a {@link StringResource} builder.</span>
 <span class="source-line-no">173</span><span id="line-173">    *</span>
-<span class="source-line-no">174</span><span id="line-174">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">174</span><span id="line-174">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty string).</span>
 <span class="source-line-no">175</span><span id="line-175">    * @param contentType The entity content type, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
 <span class="source-line-no">176</span><span id="line-176">    * @return A new {@link StringResource} builder.</span>
 <span class="source-line-no">177</span><span id="line-177">    */</span>
@@ -195,7 +195,7 @@
 <span class="source-line-no">182</span><span id="line-182">   /**</span>
 <span class="source-line-no">183</span><span id="line-183">    * Creates a new builder for a {@link StringResource} builder.</span>
 <span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">185</span><span id="line-185">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty string).</span>
 <span class="source-line-no">186</span><span id="line-186">    * @return A new {@link StringResource} builder.</span>
 <span class="source-line-no">187</span><span id="line-187">    */</span>
 <span class="source-line-no">188</span><span id="line-188">   public static final StringResource stringResource(Supplier&lt;String&gt; content) {</span>
@@ -205,7 +205,7 @@
 <span class="source-line-no">192</span><span id="line-192">   /**</span>
 <span class="source-line-no">193</span><span id="line-193">    * Creates a new builder for a {@link StringResource} builder.</span>
 <span class="source-line-no">194</span><span id="line-194">    *</span>
-<span class="source-line-no">195</span><span id="line-195">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">195</span><span id="line-195">    * @param content The entity content.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty string).</span>
 <span class="source-line-no">196</span><span id="line-196">    * @param contentType The entity content type, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</span>
 <span class="source-line-no">197</span><span id="line-197">    * @return A new {@link StringResource} builder.</span>
 <span class="source-line-no">198</span><span id="line-198">    */</span>

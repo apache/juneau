@@ -42,8 +42,8 @@
 <span class="source-line-no">029</span><span id="line-29"> * heap statistics, configurable cache-flush hooks, and rate-limit-bucket inspection.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * Sibling of {@link EchoMixin} ({@code /echo/*} / {@code /debug/echo/*}) and</span>
-<span class="source-line-no">033</span><span id="line-33"> * {@link RouteIndexMixin} ({@code /options} / {@code /routes}). All three classes live in</span>
+<span class="source-line-no">032</span><span id="line-32"> * Sibling of {@link EchoMixin} ({@code /echo/*}) and</span>
+<span class="source-line-no">033</span><span id="line-33"> * {@link RouteIndexMixin} ({@code /options}). All three classes live in</span>
 <span class="source-line-no">034</span><span id="line-34"> * the {@code org.apache.juneau.rest.server.ops} ops/introspection mixin pack.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;Default-deny security posture:&lt;/h5&gt;</span>
@@ -313,7 +313,7 @@
 <span class="source-line-no">300</span><span id="line-300">      /**</span>
 <span class="source-line-no">301</span><span id="line-301">       * Registers multiple cache-flush hooks at once.</span>
 <span class="source-line-no">302</span><span id="line-302">       *</span>
-<span class="source-line-no">303</span><span id="line-303">       * @param hooks The hooks, keyed by registration name.</span>
+<span class="source-line-no">303</span><span id="line-303">       * @param hooks The hooks, keyed by registration name. Can be {@code null} (no-op).</span>
 <span class="source-line-no">304</span><span id="line-304">       * @return This object.</span>
 <span class="source-line-no">305</span><span id="line-305">       */</span>
 <span class="source-line-no">306</span><span id="line-306">      public Builder cacheFlushAll(Map&lt;String,Runnable&gt; hooks) {</span>
@@ -329,24 +329,25 @@
 <span class="source-line-no">316</span><span id="line-316">       * omitted from the {@code /admin/threads} output. Pass an empty array to disable</span>
 <span class="source-line-no">317</span><span id="line-317">       * filtering entirely.</span>
 <span class="source-line-no">318</span><span id="line-318">       *</span>
-<span class="source-line-no">319</span><span id="line-319">       * @param values The thread-name prefixes to exclude. Must not be {@code null}.</span>
-<span class="source-line-no">320</span><span id="line-320">       * @return This object.</span>
-<span class="source-line-no">321</span><span id="line-321">       */</span>
-<span class="source-line-no">322</span><span id="line-322">      public Builder threadNamePrefixExclude(String...values) {</span>
-<span class="source-line-no">323</span><span id="line-323">         worker.threadNamePrefixExclude(values);</span>
-<span class="source-line-no">324</span><span id="line-324">         return this;</span>
-<span class="source-line-no">325</span><span id="line-325">      }</span>
-<span class="source-line-no">326</span><span id="line-326"></span>
-<span class="source-line-no">327</span><span id="line-327">      /**</span>
-<span class="source-line-no">328</span><span id="line-328">       * Builds an {@link AdminMixin} instance.</span>
-<span class="source-line-no">329</span><span id="line-329">       *</span>
-<span class="source-line-no">330</span><span id="line-330">       * @return A configured instance.</span>
-<span class="source-line-no">331</span><span id="line-331">       */</span>
-<span class="source-line-no">332</span><span id="line-332">      public AdminMixin build() {</span>
-<span class="source-line-no">333</span><span id="line-333">         return new AdminMixin(worker.build());</span>
-<span class="source-line-no">334</span><span id="line-334">      }</span>
-<span class="source-line-no">335</span><span id="line-335">   }</span>
-<span class="source-line-no">336</span><span id="line-336">}</span>
+<span class="source-line-no">319</span><span id="line-319">       * @param values The thread-name prefixes to exclude. Can be {@code null} (equivalent to an empty</span>
+<span class="source-line-no">320</span><span id="line-320">       *    array &amp;mdash; disables filtering); {@code null} or empty elements are skipped.</span>
+<span class="source-line-no">321</span><span id="line-321">       * @return This object.</span>
+<span class="source-line-no">322</span><span id="line-322">       */</span>
+<span class="source-line-no">323</span><span id="line-323">      public Builder threadNamePrefixExclude(String...values) {</span>
+<span class="source-line-no">324</span><span id="line-324">         worker.threadNamePrefixExclude(values);</span>
+<span class="source-line-no">325</span><span id="line-325">         return this;</span>
+<span class="source-line-no">326</span><span id="line-326">      }</span>
+<span class="source-line-no">327</span><span id="line-327"></span>
+<span class="source-line-no">328</span><span id="line-328">      /**</span>
+<span class="source-line-no">329</span><span id="line-329">       * Builds an {@link AdminMixin} instance.</span>
+<span class="source-line-no">330</span><span id="line-330">       *</span>
+<span class="source-line-no">331</span><span id="line-331">       * @return A configured instance.</span>
+<span class="source-line-no">332</span><span id="line-332">       */</span>
+<span class="source-line-no">333</span><span id="line-333">      public AdminMixin build() {</span>
+<span class="source-line-no">334</span><span id="line-334">         return new AdminMixin(worker.build());</span>
+<span class="source-line-no">335</span><span id="line-335">      }</span>
+<span class="source-line-no">336</span><span id="line-336">   }</span>
+<span class="source-line-no">337</span><span id="line-337">}</span>
 
 
 

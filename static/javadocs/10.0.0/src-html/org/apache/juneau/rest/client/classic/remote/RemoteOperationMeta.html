@@ -66,17 +66,17 @@
 <span class="source-line-no">053</span><span id="line-53">      String httpMethod;</span>
 <span class="source-line-no">054</span><span id="line-54">      String fullPath;</span>
 <span class="source-line-no">055</span><span id="line-55">      String path;</span>
-<span class="source-line-no">056</span><span id="line-56">      List&lt;RemoteOperationArg&gt; pathArgs = new LinkedList&lt;&gt;();</span>
-<span class="source-line-no">057</span><span id="line-57">      List&lt;RemoteOperationArg&gt; queryArgs = new LinkedList&lt;&gt;();</span>
-<span class="source-line-no">058</span><span id="line-58">      List&lt;RemoteOperationArg&gt; headerArgs = new LinkedList&lt;&gt;();</span>
-<span class="source-line-no">059</span><span id="line-59">      List&lt;RemoteOperationArg&gt; formDataArgs = new LinkedList&lt;&gt;();</span>
-<span class="source-line-no">060</span><span id="line-60">      List&lt;RemoteOperationBeanArg&gt; requestArgs = new LinkedList&lt;&gt;();</span>
+<span class="source-line-no">056</span><span id="line-56">      List&lt;RemoteOperationArg&gt; pathArgs = ll();</span>
+<span class="source-line-no">057</span><span id="line-57">      List&lt;RemoteOperationArg&gt; queryArgs = ll();</span>
+<span class="source-line-no">058</span><span id="line-58">      List&lt;RemoteOperationArg&gt; headerArgs = ll();</span>
+<span class="source-line-no">059</span><span id="line-59">      List&lt;RemoteOperationArg&gt; formDataArgs = ll();</span>
+<span class="source-line-no">060</span><span id="line-60">      List&lt;RemoteOperationBeanArg&gt; requestArgs = ll();</span>
 <span class="source-line-no">061</span><span id="line-61">      RemoteOperationArg bodyArg;</span>
 <span class="source-line-no">062</span><span id="line-62">      RemoteOperationReturn methodReturn;</span>
-<span class="source-line-no">063</span><span id="line-63">      Map&lt;String,String&gt; pathDefaults = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">064</span><span id="line-64">      Map&lt;String,String&gt; queryDefaults = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">065</span><span id="line-65">      Map&lt;String,String&gt; headerDefaults = new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">066</span><span id="line-66">      Map&lt;String,String&gt; formDataDefaults = new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">063</span><span id="line-63">      Map&lt;String,String&gt; pathDefaults = m();</span>
+<span class="source-line-no">064</span><span id="line-64">      Map&lt;String,String&gt; queryDefaults = m();</span>
+<span class="source-line-no">065</span><span id="line-65">      Map&lt;String,String&gt; headerDefaults = m();</span>
+<span class="source-line-no">066</span><span id="line-66">      Map&lt;String,String&gt; formDataDefaults = m();</span>
 <span class="source-line-no">067</span><span id="line-67">      String contentDefault = null;</span>
 <span class="source-line-no">068</span><span id="line-68">      static final AnnotationProvider AP = AnnotationProvider.INSTANCE;</span>
 <span class="source-line-no">069</span><span id="line-69"></span>
@@ -93,8 +93,8 @@
 <span class="source-line-no">080</span><span id="line-80"></span>
 <span class="source-line-no">081</span><span id="line-81">      var httpMethodValue = Holder.&lt;String&gt;empty();</span>
 <span class="source-line-no">082</span><span id="line-82">      var pathValue = Holder.&lt;String&gt;empty();</span>
-<span class="source-line-no">083</span><span id="line-83">      al.stream().map(x -&gt; x.getNameSimple().substring(6).toUpperCase()).filter(x -&gt; ! x.equals("OP")).forEach(httpMethodValue::set);</span>
-<span class="source-line-no">084</span><span id="line-84">      al.forEach(ai -&gt; ai.getValue(String.class, "method").filter(NOT_EMPTY).ifPresent(x -&gt; httpMethodValue.set(x.trim().toUpperCase())));</span>
+<span class="source-line-no">083</span><span id="line-83">      al.stream().map(x -&gt; ucr(x.getNameSimple().substring(6))).filter(x -&gt; ! x.equals("OP")).forEach(httpMethodValue::set);</span>
+<span class="source-line-no">084</span><span id="line-84">      al.forEach(ai -&gt; ai.getValue(String.class, "method").filter(NOT_EMPTY).ifPresent(x -&gt; httpMethodValue.set(ucr(x.trim()))));</span>
 <span class="source-line-no">085</span><span id="line-85">      al.forEach(ai -&gt; ai.getValue(String.class, "path").filter(NOT_EMPTY).ifPresent(x -&gt; pathValue.set(x.trim())));</span>
 <span class="source-line-no">086</span><span id="line-86">      httpMethod = httpMethodValue.orElse("").trim();</span>
 <span class="source-line-no">087</span><span id="line-87">      path = pathValue.orElse("").trim();</span>
@@ -261,10 +261,10 @@
 <span class="source-line-no">248</span><span id="line-248">      contentArg = b.bodyArg;</span>
 <span class="source-line-no">249</span><span id="line-249">      methodReturn = b.methodReturn;</span>
 <span class="source-line-no">250</span><span id="line-250">      exceptions = m.getExceptionTypes();</span>
-<span class="source-line-no">251</span><span id="line-251">      pathDefaults = Collections.unmodifiableMap(b.pathDefaults);</span>
-<span class="source-line-no">252</span><span id="line-252">      queryDefaults = Collections.unmodifiableMap(b.queryDefaults);</span>
-<span class="source-line-no">253</span><span id="line-253">      headerDefaults = Collections.unmodifiableMap(b.headerDefaults);</span>
-<span class="source-line-no">254</span><span id="line-254">      formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);</span>
+<span class="source-line-no">251</span><span id="line-251">      pathDefaults = u(b.pathDefaults);</span>
+<span class="source-line-no">252</span><span id="line-252">      queryDefaults = u(b.queryDefaults);</span>
+<span class="source-line-no">253</span><span id="line-253">      headerDefaults = u(b.headerDefaults);</span>
+<span class="source-line-no">254</span><span id="line-254">      formDataDefaults = u(b.formDataDefaults);</span>
 <span class="source-line-no">255</span><span id="line-255">      contentDefault = b.contentDefault;</span>
 <span class="source-line-no">256</span><span id="line-256">   }</span>
 <span class="source-line-no">257</span><span id="line-257"></span>

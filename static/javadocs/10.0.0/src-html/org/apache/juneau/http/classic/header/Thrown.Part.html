@@ -105,7 +105,7 @@
 <span class="source-line-no">092</span><span id="line-92">       * @param value The throwable to create the header part value from.</span>
 <span class="source-line-no">093</span><span id="line-93">       */</span>
 <span class="source-line-no">094</span><span id="line-94">      public Part(Throwable value) {</span>
-<span class="source-line-no">095</span><span id="line-95">         this.className = cn(value);</span>
+<span class="source-line-no">095</span><span id="line-95">         this.className = UnmodifiableBean.logicalType(value).getName();</span>
 <span class="source-line-no">096</span><span id="line-96">         this.message = value.getMessage();</span>
 <span class="source-line-no">097</span><span id="line-97">         this.value = urlEncode(className) + ';' + urlEncode(value.getMessage());</span>
 <span class="source-line-no">098</span><span id="line-98">      }</span>
@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">    *</span>
 <span class="source-line-no">144</span><span id="line-144">    * @param values</span>
 <span class="source-line-no">145</span><span id="line-145">    *    The header value.</span>
-<span class="source-line-no">146</span><span id="line-146">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">146</span><span id="line-146">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; or empty (treated as no thrown values).</span>
 <span class="source-line-no">147</span><span id="line-147">    * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">148</span><span id="line-148">    */</span>
 <span class="source-line-no">149</span><span id="line-149">   public static Thrown of(Throwable...values) {</span>
@@ -190,9 +190,9 @@
 <span class="source-line-no">177</span><span id="line-177">   }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
 <span class="source-line-no">179</span><span id="line-179">   /**</span>
-<span class="source-line-no">180</span><span id="line-180">    * Returns the class name portion of the header.</span>
+<span class="source-line-no">180</span><span id="line-180">    * Returns the parts in this header.</span>
 <span class="source-line-no">181</span><span id="line-181">    *</span>
-<span class="source-line-no">182</span><span id="line-182">    * @return The class name portion of the header, or &lt;jk&gt;null&lt;/jk&gt; if not there.</span>
+<span class="source-line-no">182</span><span id="line-182">    * @return The parts in this header, or an empty {@link Optional} if the header value was &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">183</span><span id="line-183">    */</span>
 <span class="source-line-no">184</span><span id="line-184">   public Optional&lt;List&lt;Part&gt;&gt; asParts() {</span>
 <span class="source-line-no">185</span><span id="line-185">      return o(value);</span>

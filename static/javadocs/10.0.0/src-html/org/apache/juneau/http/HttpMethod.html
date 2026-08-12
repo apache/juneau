@@ -93,11 +93,11 @@
 <span class="source-line-no">080</span><span id="line-80">    * &lt;p&gt;</span>
 <span class="source-line-no">081</span><span id="line-81">    * By default, anything not in this list can have content:  &lt;c&gt;GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE&lt;/c&gt;.</span>
 <span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * @param name The HTTP method.</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param name The HTTP method. Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty string, which returns &lt;jk&gt;true&lt;/jk&gt;).</span>
 <span class="source-line-no">084</span><span id="line-84">    * @return &lt;jk&gt;true&lt;/jk&gt; if specified http method has content.</span>
 <span class="source-line-no">085</span><span id="line-85">    */</span>
 <span class="source-line-no">086</span><span id="line-86">   public static boolean hasContent(String name) {</span>
-<span class="source-line-no">087</span><span id="line-87">      return ! NO_BODY_METHODS.contains(emptyIfNull(name).toUpperCase());</span>
+<span class="source-line-no">087</span><span id="line-87">      return ! NO_BODY_METHODS.contains(ucr(emptyIfNull(name)));</span>
 <span class="source-line-no">088</span><span id="line-88">   }</span>
 <span class="source-line-no">089</span><span id="line-89">}</span>
 

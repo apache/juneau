@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-45">RestRequest</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-48">RestRequest</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for a single HTTP request.
 
@@ -181,47 +181,53 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if this request's body can be safely re-sent (retry gating).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pathData(java.lang.String,java.lang.Object)" class="member-name-link">pathData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#openEventStream()" class="member-name-link">openEventStream</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Executes this request and opens a closeable, cancellable cursor over the response as a
+ <c>text/event-stream</c>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pathData(java.lang.String,java.lang.Object)" class="member-name-link">pathData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a path variable.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pathData(org.apache.juneau.http.HttpPart...)" class="member-name-link">pathData</a><wbr>(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pathData(org.apache.juneau.http.HttpPart...)" class="member-name-link">pathData</a><wbr>(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds path variable substitutions for URI templates (e.g. replaces <code>{id}</code> in the URL).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queryData(java.lang.String,java.lang.String)" class="member-name-link">queryData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queryData(java.lang.String,java.lang.String)" class="member-name-link">queryData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a query parameter.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queryData(java.lang.String,java.util.function.Supplier)" class="member-name-link">queryData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queryData(java.lang.String,java.util.function.Supplier)" class="member-name-link">queryData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a query parameter with a lazy value.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queryData(org.apache.juneau.http.HttpPart...)" class="member-name-link">queryData</a><wbr>(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#queryData(org.apache.juneau.http.HttpPart...)" class="member-name-link">queryData</a><wbr>(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds query parameters.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run()" class="member-name-link">run</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run()" class="member-name-link">run</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Executes the request and returns the response.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#streamBodyEntity(org.apache.juneau.rest.client.RecordStreamBody)" class="member-name-link">streamBodyEntity</a><wbr>(<a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#streamBodyEntity(org.apache.juneau.rest.client.RecordStreamBody)" class="member-name-link">streamBodyEntity</a><wbr>(<a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the request body to a token/record-streaming cursor body.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#timeout(java.time.Duration)" class="member-name-link">timeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#timeout(java.time.Duration)" class="member-name-link">timeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a per-call response timeout for this request.</div>
 </div>
 </div>
@@ -244,7 +250,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="headers(org.apache.juneau.http.HttpHeader...)">
 <h3>headers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-85">headers</a></span><wbr><span class="parameters">(<a href="../../http/HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-88">headers</a></span><wbr><span class="parameters">(<a href="../../http/HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a>...&nbsp;value)</span></div>
 <div class="block">Adds request headers.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -257,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="header(java.lang.String,java.lang.String)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-97">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-100">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a request header.</div>
 <dl class="notes">
@@ -272,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="header(java.lang.String,java.util.function.Supplier)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-109">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-112">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Adds a request header with a lazy value.</div>
 <dl class="notes">
@@ -287,7 +293,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasHeader(java.lang.String)">
 <h3>hasHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-124">hasHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-127">hasHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns <jk>true</jk> if a header with the given name (case-insensitive) is already set on this request.
 
  <p>
@@ -304,7 +310,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="queryData(org.apache.juneau.http.HttpPart...)">
 <h3>queryData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-138">queryData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-141">queryData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
 <div class="block">Adds query parameters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -317,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="queryData(java.lang.String,java.lang.String)">
 <h3>queryData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-150">queryData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-153">queryData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a query parameter.</div>
 <dl class="notes">
@@ -332,7 +338,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="queryData(java.lang.String,java.util.function.Supplier)">
 <h3>queryData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-162">queryData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-165">queryData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Adds a query parameter with a lazy value.</div>
 <dl class="notes">
@@ -347,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formData(org.apache.juneau.http.HttpPart...)">
 <h3>formData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-177">formData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-180">formData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
 <div class="block">Adds form fields (for <code>application/x-www-form-urlencoded</code> bodies).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -360,7 +366,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formData(java.lang.String,java.lang.String)">
 <h3>formData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-189">formData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-192">formData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a form field.</div>
 <dl class="notes">
@@ -375,7 +381,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pathData(org.apache.juneau.http.HttpPart...)">
 <h3>pathData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-204">pathData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-207">pathData</a></span><wbr><span class="parameters">(<a href="../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</span></div>
 <div class="block">Adds path variable substitutions for URI templates (e.g. replaces <code>{id}</code> in the URL).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -388,7 +394,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pathData(java.lang.String,java.lang.Object)">
 <h3>pathData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-217">pathData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-220">pathData</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds a path variable.</div>
 <dl class="notes">
@@ -403,7 +409,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="body(org.apache.juneau.http.HttpBody)">
 <h3>body</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-232">body</a></span><wbr><span class="parameters">(<a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-235">body</a></span><wbr><span class="parameters">(<a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;value)</span></div>
 <div class="block">Sets the request body directly from an <a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -438,9 +444,6 @@ loadScripts(document, 'script');</script>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If a converter fails or the default serializer fails.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - If no converter matches and no default serializer is configured on the client.</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If the default serializer produces output that is neither text nor <code>byte[]</code>.
-   Binary (<code>byte[]</code>) serializer output is sent as a binary body using the serializer's media type
-   (falling back to <code>application/octet-stream</code> when the media type is <jk>null</jk>).</dd>
 </dl>
 </section>
 </li>
@@ -593,6 +596,40 @@ loadScripts(document, 'script');</script>
 <dt>Throws:</dt>
 <dd><code><a href="TransportException.html" title="class in org.apache.juneau.rest.client">TransportException</a></code> - If a network-level error occurs.</dd>
 <dd><code><a href="RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></code> - If the response could not be processed.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="openEventStream()">
+<h3>openEventStream</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestRequest.html#line-525">openEventStream</a></span>()
+                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Executes this request and opens a closeable, cancellable cursor over the response as a
+ <c>text/event-stream</c>.
+
+ <p>
+ This executes <a href="#run()"><code>run()</code></a>, asserts a 2xx response status, then opens the response body as an event stream.
+ Non-2xx responses throw <a href="RestCallException.html" title="class in org.apache.juneau.rest.client"><code>RestCallException</code></a> before the body is treated as SSE.
+
+ <p>
+ The response content type is not validated. This is intentional so callers can branch on response type
+ (for example <c>application/json</c> vs <c>text/event-stream</c>) when protocols use both.
+
+ <p>
+ Adds an <code>Accept: text/event-stream</code> header only when neither this request nor inherited client default
+ headers already include <code>Accept</code>.
+
+ <p>
+ The caller owns the returned <a href="../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse"><code>SseEventReader</code></a>; closing it also closes the underlying
+ <a href="RestResponse.html" title="class in org.apache.juneau.rest.client"><code>RestResponse</code></a> (see <a href="ResponseBody.html#asEventStream()"><code>ResponseBody.asEventStream()</code></a>). If opening the event stream fails,
+ this method best-effort closes the response before propagating.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A cursor over the live event stream. Never <jk>null</jk>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If a transport-level error occurs (typically <a href="TransportException.html" title="class in org.apache.juneau.rest.client"><code>TransportException</code></a>), if the response
+   could not be processed (typically <a href="RestCallException.html" title="class in org.apache.juneau.rest.client"><code>RestCallException</code></a>), or if the response has no body to open a
+   stream over.</dd>
 </dl>
 </section>
 </li>

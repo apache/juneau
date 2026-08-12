@@ -43,8 +43,8 @@
 <span class="source-line-no">030</span><span id="line-30">   /**</span>
 <span class="source-line-no">031</span><span id="line-31">    * Formats the specified period using this format.</span>
 <span class="source-line-no">032</span><span id="line-32">    *</span>
-<span class="source-line-no">033</span><span id="line-33">    * @param value The value to format.</span>
-<span class="source-line-no">034</span><span id="line-34">    * @return The formatted value.</span>
+<span class="source-line-no">033</span><span id="line-33">    * @param value The value to format.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">034</span><span id="line-34">    * @return The formatted value, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">035</span><span id="line-35">    */</span>
 <span class="source-line-no">036</span><span id="line-36">   public String format(Period value) {</span>
 <span class="source-line-no">037</span><span id="line-37">      if (value == null)</span>
@@ -58,8 +58,8 @@
 <span class="source-line-no">045</span><span id="line-45">   /**</span>
 <span class="source-line-no">046</span><span id="line-46">    * Parses the specified wire value using this format.</span>
 <span class="source-line-no">047</span><span id="line-47">    *</span>
-<span class="source-line-no">048</span><span id="line-48">    * @param value The value to parse.</span>
-<span class="source-line-no">049</span><span id="line-49">    * @return The parsed period.</span>
+<span class="source-line-no">048</span><span id="line-48">    * @param value The value to parse.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">049</span><span id="line-49">    * @return The parsed period, or &lt;jk&gt;null&lt;/jk&gt; if {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">050</span><span id="line-50">    */</span>
 <span class="source-line-no">051</span><span id="line-51">   public Period parse(String value) {</span>
 <span class="source-line-no">052</span><span id="line-52">      if (value == null)</span>

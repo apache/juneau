@@ -73,28 +73,30 @@
 <span class="source-line-no">060</span><span id="line-60">    * @param normalClass The normal class.</span>
 <span class="source-line-no">061</span><span id="line-61">    * @param swappedClass The swapped class.</span>
 <span class="source-line-no">062</span><span id="line-62">    * @param swapFunction The function for converting from normal to swapped.</span>
-<span class="source-line-no">063</span><span id="line-63">    * @param unswapFunction The function for converting swapped to normal.</span>
-<span class="source-line-no">064</span><span id="line-64">    */</span>
-<span class="source-line-no">065</span><span id="line-65">   public FunctionalSwap(Class&lt;T&gt; normalClass, Class&lt;S&gt; swappedClass, ThrowingFunction&lt;T,S&gt; swapFunction, ThrowingFunction&lt;S,T&gt; unswapFunction) {</span>
-<span class="source-line-no">066</span><span id="line-66">      super(normalClass, swappedClass);</span>
-<span class="source-line-no">067</span><span id="line-67">      this.swapFunction = swapFunction;</span>
-<span class="source-line-no">068</span><span id="line-68">      this.unswapFunction = unswapFunction;</span>
-<span class="source-line-no">069</span><span id="line-69">   }</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">   @Override</span>
-<span class="source-line-no">072</span><span id="line-72">   public S swap(MarshallingSession session, T o, String template) throws Exception {</span>
-<span class="source-line-no">073</span><span id="line-73">      if (swapFunction == null)</span>
-<span class="source-line-no">074</span><span id="line-74">         return super.swap(session, o, template);</span>
-<span class="source-line-no">075</span><span id="line-75">      return swapFunction.applyThrows(o);</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   @Override</span>
-<span class="source-line-no">079</span><span id="line-79">   public T unswap(MarshallingSession session, S f, ClassMeta&lt;?&gt; hint, String template) throws Exception {</span>
-<span class="source-line-no">080</span><span id="line-80">      if (unswapFunction == null)</span>
-<span class="source-line-no">081</span><span id="line-81">         return super.unswap(session, f, hint, template);</span>
-<span class="source-line-no">082</span><span id="line-82">      return unswapFunction.applyThrows(f);</span>
-<span class="source-line-no">083</span><span id="line-83">   }</span>
-<span class="source-line-no">084</span><span id="line-84">}</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param unswapFunction</span>
+<span class="source-line-no">064</span><span id="line-64">    *    The function for converting swapped to normal.</span>
+<span class="source-line-no">065</span><span id="line-65">    *    Can be &lt;jk&gt;null&lt;/jk&gt; if this swap is serialize-only (calling {@link #unswap(MarshallingSession, Object, ClassMeta, String)} then throws a {@link org.apache.juneau.marshall.parser.ParseException}).</span>
+<span class="source-line-no">066</span><span id="line-66">    */</span>
+<span class="source-line-no">067</span><span id="line-67">   public FunctionalSwap(Class&lt;T&gt; normalClass, Class&lt;S&gt; swappedClass, ThrowingFunction&lt;T,S&gt; swapFunction, ThrowingFunction&lt;S,T&gt; unswapFunction) {</span>
+<span class="source-line-no">068</span><span id="line-68">      super(normalClass, swappedClass);</span>
+<span class="source-line-no">069</span><span id="line-69">      this.swapFunction = swapFunction;</span>
+<span class="source-line-no">070</span><span id="line-70">      this.unswapFunction = unswapFunction;</span>
+<span class="source-line-no">071</span><span id="line-71">   }</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">   @Override</span>
+<span class="source-line-no">074</span><span id="line-74">   public S swap(MarshallingSession session, T o, String template) throws Exception {</span>
+<span class="source-line-no">075</span><span id="line-75">      if (swapFunction == null)</span>
+<span class="source-line-no">076</span><span id="line-76">         return super.swap(session, o, template);</span>
+<span class="source-line-no">077</span><span id="line-77">      return swapFunction.applyThrows(o);</span>
+<span class="source-line-no">078</span><span id="line-78">   }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   @Override</span>
+<span class="source-line-no">081</span><span id="line-81">   public T unswap(MarshallingSession session, S f, ClassMeta&lt;?&gt; hint, String template) throws Exception {</span>
+<span class="source-line-no">082</span><span id="line-82">      if (unswapFunction == null)</span>
+<span class="source-line-no">083</span><span id="line-83">         return super.unswap(session, f, hint, template);</span>
+<span class="source-line-no">084</span><span id="line-84">      return unswapFunction.applyThrows(f);</span>
+<span class="source-line-no">085</span><span id="line-85">   }</span>
+<span class="source-line-no">086</span><span id="line-86">}</span>
 
 
 

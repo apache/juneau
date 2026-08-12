@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25">import java.util.concurrent.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
 <span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.json5.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.marshaller.*;</span>
 <span class="source-line-no">029</span><span id="line-29"></span>
 <span class="source-line-no">030</span><span id="line-30">/**</span>
 <span class="source-line-no">031</span><span id="line-31"> * A container for retrieving JSON {@link JsonSchema} objects by URI.</span>
@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> * @serial exclude</span>
 <span class="source-line-no">043</span><span id="line-43"> */</span>
-<span class="source-line-no">044</span><span id="line-44">public abstract class JsonSchemaMap extends ConcurrentHashMap&lt;URI,JsonSchema&gt; {</span>
+<span class="source-line-no">044</span><span id="line-44">public abstract class JsonSchemaMap extends ConcurrentHashMap&lt;URI,JsonSchema&lt;?&gt;&gt; {</span>
 <span class="source-line-no">045</span><span id="line-45"></span>
 <span class="source-line-no">046</span><span id="line-46">   private static final long serialVersionUID = 1L;</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58">   @SuppressWarnings({</span>
 <span class="source-line-no">059</span><span id="line-59">      "removal", // Uses deprecated API for compatibility</span>
 <span class="source-line-no">060</span><span id="line-60">   })</span>
-<span class="source-line-no">061</span><span id="line-61">   public JsonSchemaMap add(JsonSchema...schemas) {</span>
+<span class="source-line-no">061</span><span id="line-61">   public JsonSchemaMap add(JsonSchema&lt;?&gt;...schemas) {</span>
 <span class="source-line-no">062</span><span id="line-62">      for (var schema : schemas) {</span>
 <span class="source-line-no">063</span><span id="line-63">         if (schema.getId() == null)</span>
 <span class="source-line-no">064</span><span id="line-64">            throw iaex("Schema with no ID passed to JsonSchemaMap.add(Schema...)");</span>
@@ -94,11 +94,11 @@
 <span class="source-line-no">081</span><span id="line-81">    * &lt;p&gt;</span>
 <span class="source-line-no">082</span><span id="line-82">    * URIs defined by {@link UriResolver} can be used for values.</span>
 <span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param uri The URI of the schema to retrieve.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param uri The URI of the schema to retrieve.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">085</span><span id="line-85">    * @return The JsonSchema, or &lt;jk&gt;null&lt;/jk&gt; if schema was not located and could not be loaded.</span>
 <span class="source-line-no">086</span><span id="line-86">    */</span>
 <span class="source-line-no">087</span><span id="line-87">   @Override /* Overridden from Map */</span>
-<span class="source-line-no">088</span><span id="line-88">   public JsonSchema get(Object uri) {</span>
+<span class="source-line-no">088</span><span id="line-88">   public JsonSchema&lt;?&gt; get(Object uri) {</span>
 <span class="source-line-no">089</span><span id="line-89">      var u = toUri(uri);</span>
 <span class="source-line-no">090</span><span id="line-90">      var s = super.get(u);</span>
 <span class="source-line-no">091</span><span id="line-91">      if (nn(s))</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111">    * The default implementation returns &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">112</span><span id="line-112">    *</span>
 <span class="source-line-no">113</span><span id="line-113">    * @param uri The URI to connect to and retrieve the contents.</span>
-<span class="source-line-no">114</span><span id="line-114">    * @return The reader from reading the specified URI.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @return The reader from reading the specified URI, or &lt;jk&gt;null&lt;/jk&gt; if the document is unreachable (the default implementation always returns &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">115</span><span id="line-115">    */</span>
 <span class="source-line-no">116</span><span id="line-116">   public Reader getReader(URI uri) {</span>
 <span class="source-line-no">117</span><span id="line-117">      return null;</span>
@@ -142,18 +142,21 @@
 <span class="source-line-no">129</span><span id="line-129">    * unreachable document.</span>
 <span class="source-line-no">130</span><span id="line-130">    *</span>
 <span class="source-line-no">131</span><span id="line-131">    * @param uri The URI to load the schema from.</span>
-<span class="source-line-no">132</span><span id="line-132">    * @return The parsed schema.</span>
+<span class="source-line-no">132</span><span id="line-132">    * @return The parsed schema, or &lt;jk&gt;null&lt;/jk&gt; if the document is unreachable.</span>
 <span class="source-line-no">133</span><span id="line-133">    */</span>
-<span class="source-line-no">134</span><span id="line-134">   public JsonSchema load(URI uri) {</span>
-<span class="source-line-no">135</span><span id="line-135">      try (var r = getReader(uri)) {</span>
-<span class="source-line-no">136</span><span id="line-136">         if (r == null)</span>
-<span class="source-line-no">137</span><span id="line-137">            return null;</span>
-<span class="source-line-no">138</span><span id="line-138">         return Json5Parser.DEFAULT.parse(r, JsonSchema.class);</span>
-<span class="source-line-no">139</span><span id="line-139">      } catch (Exception e) { // HTT - compiler-generated branch from try-with-resources null check</span>
-<span class="source-line-no">140</span><span id="line-140">         throw toRex(e);</span>
-<span class="source-line-no">141</span><span id="line-141">      }</span>
-<span class="source-line-no">142</span><span id="line-142">   }</span>
-<span class="source-line-no">143</span><span id="line-143">}</span>
+<span class="source-line-no">134</span><span id="line-134">   @SuppressWarnings({</span>
+<span class="source-line-no">135</span><span id="line-135">      "java:S1452" // Self-bounded (CRTP) generic: the loaded schema's concrete SELF subtype is not known here, so JsonSchema&lt;?&gt; is the only sound return type.</span>
+<span class="source-line-no">136</span><span id="line-136">   })</span>
+<span class="source-line-no">137</span><span id="line-137">   public JsonSchema&lt;?&gt; load(URI uri) {</span>
+<span class="source-line-no">138</span><span id="line-138">      try (var r = getReader(uri)) {</span>
+<span class="source-line-no">139</span><span id="line-139">         if (r == null)</span>
+<span class="source-line-no">140</span><span id="line-140">            return null;</span>
+<span class="source-line-no">141</span><span id="line-141">         return Json5.DEFAULT.read(r, JsonSchema.class);</span>
+<span class="source-line-no">142</span><span id="line-142">      } catch (Exception e) { // HTT - compiler-generated branch from try-with-resources null check</span>
+<span class="source-line-no">143</span><span id="line-143">         throw toRex(e);</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146">}</span>
 
 
 

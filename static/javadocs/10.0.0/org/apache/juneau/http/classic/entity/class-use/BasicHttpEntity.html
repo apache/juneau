@@ -70,6 +70,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.http.classic.entity">
 <h2>Uses of <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a></h2>
+<div class="caption"><span>Classes in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a> with type parameters of type <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../BasicHttpEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;SELF extends <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;SELF&gt;&gt;</code></div>
+<div class="col-last even-row-color">
+<div class="block">A basic <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link"><code>HttpEntity</code></a> implementation with additional features.</div>
+</div>
+</div>
 <div class="caption"><span>Subclasses of <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -80,30 +91,60 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">A repeatable entity that obtains its content from a byte array.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../FileEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">FileEntity</a></code></div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../ByteArrayEntity.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">ByteArrayEntity.Unmodifiable</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../ByteArrayEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>ByteArrayEntity</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../FileEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">FileEntity</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">A repeatable entity that obtains its content from a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../FileEntity.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">FileEntity.Unmodifiable</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../FileEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>FileEntity</code></a>.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../ReaderEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">ReaderEntity</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">A streamed, non-repeatable entity that obtains its content from an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../SerializedEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">SerializedEntity</a></code></div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../ReaderEntity.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">ReaderEntity.Unmodifiable</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../ReaderEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>ReaderEntity</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../SerializedEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">SerializedEntity</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">HttpEntity for serializing POJOs as the body of HTTP requests.</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../SerializedEntity.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">SerializedEntity.Unmodifiable</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../SerializedEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>SerializedEntity</code></a>.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../StreamEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">A streamed, non-repeatable entity that obtains its content from an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../StringEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">StringEntity</a></code></div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../StreamEntity.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">StreamEntity.Unmodifiable</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>StreamEntity</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../StringEntity.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">StringEntity</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">A self contained, repeatable entity that obtains its content from a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../StringEntity.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">StringEntity.Unmodifiable</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../StringEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>StringEntity</code></a>.</div>
 </div>
 </div>
 <div class="caption"><span>Fields in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a> declared as <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></span></div>
@@ -111,87 +152,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;?&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#EMPTY" class="member-name-link">EMPTY</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">An empty HttpEntity.</div>
-</div>
-</div>
-<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a> that return <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#copy()" class="member-name-link">copy</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Creates a builder for this class initialized with the contents of this bean.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setCached()" class="member-name-link">setCached</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Specifies that the contents of this resource should be cached into an internal byte array so that it can
- be read multiple times.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setCharset(java.nio.charset.Charset)" class="member-name-link">setCharset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Specifies the charset to use when converting to and from stream-based resources.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setChunked()" class="member-name-link">setChunked</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the 'chunked' flag value to <jk>true</jk>.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setChunked(boolean)" class="member-name-link">setChunked</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the 'chunked' flag value.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setContent(java.lang.Object)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the content on this entity bean.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setContent(java.util.function.Supplier)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the content on this entity bean from a supplier.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setContentEncoding(java.lang.String)" class="member-name-link">setContentEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the content encoding header on this entity bean.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setContentEncoding(org.apache.juneau.http.classic.header.ContentEncoding)" class="member-name-link">setContentEncoding</a><wbr>(<a href="../../header/ContentEncoding.html" title="class in org.apache.juneau.http.classic.header">ContentEncoding</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the content encoding header on this entity bean.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setContentLength(long)" class="member-name-link">setContentLength</a><wbr>(long&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the content length on this entity bean.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setContentType(java.lang.String)" class="member-name-link">setContentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the content type on this entity bean.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setContentType(org.apache.juneau.http.classic.header.ContentType)" class="member-name-link">setContentType</a><wbr>(<a href="../../header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Sets the content type on this entity bean.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setMaxLength(int)" class="member-name-link">setMaxLength</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Specifies the maximum number of bytes to read or write to and from stream-based resources.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Specifies whether this bean should be unmodifiable.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a> that return types with arguments of type <a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></span></div>
@@ -199,12 +163,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>org.apache.juneau.test.assertions.FluentByteArrayAssertion&lt;<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>org.apache.juneau.test.assertions.FluentByteArrayAssertion&lt;<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#assertBytes()" class="member-name-link">assertBytes</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns an assertion on the contents of this entity.</div>
 </div>
-<div class="col-first odd-row-color"><code>org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">BasicHttpEntity.</span><code><a href="../BasicHttpEntity.html#assertString()" class="member-name-link">assertString</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns an assertion on the contents of this entity.</div>
@@ -215,8 +179,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier</div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../BasicHttpEntity.html#%3Cinit%3E(org.apache.juneau.http.classic.entity.BasicHttpEntity)" class="member-name-link">BasicHttpEntity</a><wbr>(<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&nbsp;copyFrom)</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
+<div class="col-second even-row-color"><code><a href="../BasicHttpEntity.html#%3Cinit%3E(org.apache.juneau.http.classic.entity.BasicHttpEntity)" class="member-name-link">BasicHttpEntity</a><wbr>(<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;?&gt;&nbsp;copyFrom)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor.</div>
 </div>
@@ -231,8 +195,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier</div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../resource/BasicResource.html#%3Cinit%3E(org.apache.juneau.http.classic.entity.BasicHttpEntity)" class="member-name-link">BasicResource</a><wbr>(<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&nbsp;entity)</code></div>
+<div class="col-first even-row-color"><code>protected </code></div>
+<div class="col-second even-row-color"><code><a href="../../resource/BasicResource.html#%3Cinit%3E(org.apache.juneau.http.classic.entity.BasicHttpEntity)" class="member-name-link">BasicResource</a><wbr>(<a href="../BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a>&lt;?&gt;&nbsp;entity)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
 </div>

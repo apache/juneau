@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>,<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD" title="class or interface in java.lang.annotation" class="external-link">FIELD</a>})
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ParentProperty.html#line-87">ParentProperty</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ParentProperty.html#line-128">ParentProperty</a></span></div>
 <div class="block">Identifies a setter method or field for adding a parent reference to a child object.
 
  <p>
@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 
    <jk>public class</jk> Person {
       <ja>@ParentProperty</ja>
-      <jk>public</jk> AddressBook addressBook;  <jc>// Automatically set to containing AddressBook</jc>
+      <jk>public</jk> AddressBook addressBook;  <jc>// Automatically set to the enclosing AddressBook (the intervening List is skipped).</jc>
 
       <jk>public</jk> String name;
       <jk>public</jk> <jk>char</jk> sex;
@@ -129,6 +129,47 @@ loadScripts(document, 'script');</script>
    <li>The parser automatically calls the setter or sets the field with a reference to the parent object
    <li>This allows child objects to navigate back to their parent if needed
  </ul>
+
+ <h5 class='section'>Parent resolution through collections and maps:</h5>
+ <ul class='spaced-list'>
+   <li>A collection/map element's <ja>@ParentProperty</ja> is set to the nearest enclosing bean, skipping any
+      intervening collections, maps, or arrays.  In the example above, each <c>Person</c> lives inside a
+      <c>List&lt;Person&gt;</c>, yet its <c>addressBook</c> back-reference receives the enclosing <c>AddressBook</c>
+      bean, not the <c>List</c>.  The same holds through arbitrarily deep nesting
+      (e.g. <c>List&lt;List&lt;Person&gt;&gt;</c>, <c>Map&lt;String,List&lt;Person&gt;&gt;</c>).
+   <li>A bean at the document root (or directly inside a top-level collection) has no enclosing bean, so its
+      <ja>@ParentProperty</ja> is left <jk>null</jk>.
+ </ul>
+
+ <h5 class='section'>Cyclic graphs and serialization:</h5>
+ <ul class='spaced-list'>
+   <li>When a <ja>@ParentProperty</ja> back-reference is also a normally-visible bean property (e.g. a <jk>public</jk>
+      field or getter, as in the example above), it forms a parent-to-child/child-to-parent <b>cycle</b>.  Unlike
+      Jackson's <c>@JsonBackReference</c>, Juneau does <b>not</b> auto-omit the <ja>@ParentProperty</ja> member on the
+      write (serialize) side — the annotation is a parse-time convenience only.  This is intentional.
+   <li>Under the <b>default</b> serializer configuration (<c>detectRecursions=<jk>false</jk></c>,
+      <c>ignoreRecursions=<jk>false</jk></c>), serializing such a cyclic graph produces <b>finite but
+      semantically-incomplete</b> output: the traversal is silently truncated at
+      <a href="MarshallingTraverseContext.Builder.html#maxDepth(int)"><code>maxDepth</code></a> (default <c>100</c>).  No exception is thrown —
+      <c>maxDepth</c> is a size guard, not a cycle detector.
+   <li>To fail-fast on cycles with a clear error, enable
+      <a href="MarshallingTraverseContext.Builder.html#detectRecursions()"><code>detectRecursions</code></a> — a
+      <a href="MarshallingRecursionException.html" title="class in org.apache.juneau.marshall"><code>MarshallingRecursionException</code></a> (surfaced as a serialize exception) is thrown.
+   <li>To omit the back-reference and round-trip cleanly, enable
+      <a href="MarshallingTraverseContext.Builder.html#ignoreRecursions()"><code>ignoreRecursions</code></a> — the repeated node is emitted as
+      <jk>null</jk>, and parsing re-injects the parent via this annotation.
+ </ul>
+
+ <p>
+ Putting it together, the <c>AddressBook</c>/<c>List&lt;Person&gt;</c> graph above round-trips cleanly when the
+ back-reference is omitted on serialize and re-injected on parse:
+ <p class='bjava'>
+   Serializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().ignoreRecursions().build();
+   String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>addressBook</jv>);
+   AddressBook <jv>parsed</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, AddressBook.<jk>class</jk>);
+   Person <jv>person</jv> = <jv>parsed</jv>.people.get(0);
+   <jsm>assertTrue</jsm>(<jv>person</jv>.addressBook == <jv>parsed</jv>);  <jc>// Parent re-injected through the List.</jc>
+ </p>
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ParentPropertyAnnotation">@ParentProperty Annotation</a>
@@ -166,7 +207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ParentProperty.html#line-98">description</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ParentProperty.html#line-139">description</a></span></div>
 <div class="block">Optional description for the exposed API.</div>
 <dl class="notes">
 <dt>Returns:</dt>

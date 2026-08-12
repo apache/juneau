@@ -124,14 +124,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="needsQuotes(java.lang.String)">
 <h3>needsQuotes</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-49">needsQuotes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-50">needsQuotes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified string needs to be quoted per UON notation.
 
  <p>
  For example, strings that start with '(' or '@' or look like boolean or numeric values need to be quoted.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>s</code> - The string to test.</dd>
+<dd><code>s</code> - The string to test.
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified string needs to be quoted per UON notation.</dd>
 </dl>

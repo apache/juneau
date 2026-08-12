@@ -198,7 +198,7 @@
 <span class="source-line-no">185</span><span id="line-185">      /**</span>
 <span class="source-line-no">186</span><span id="line-186">       * Specifies the default supplier function for computing values when keys are not found.</span>
 <span class="source-line-no">187</span><span id="line-187">       *</span>
-<span class="source-line-no">188</span><span id="line-188">       * @param value The default supplier function. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">188</span><span id="line-188">       * @param value The default supplier function. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case {@link Cache3#get(Object,Object,Object)} will throw a {@link NullPointerException} (use {@link Cache3#get(Object, Object, Object, java.util.function.Supplier)} instead to supply one per call).</span>
 <span class="source-line-no">189</span><span id="line-189">       * @return This object for method chaining.</span>
 <span class="source-line-no">190</span><span id="line-190">       */</span>
 <span class="source-line-no">191</span><span id="line-191">      public Builder&lt;K1,K2,K3,V&gt; supplier(Function3&lt;K1,K2,K3,V&gt; value) {</span>
@@ -352,9 +352,9 @@
 <span class="source-line-no">339</span><span id="line-339">   /**</span>
 <span class="source-line-no">340</span><span id="line-340">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the cache contains a mapping for the specified key triplet.</span>
 <span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * @param key1 The first key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">343</span><span id="line-343">    * @param key2 The second key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">344</span><span id="line-344">    * @param key3 The third key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">342</span><span id="line-342">    * @param key1 The first key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">343</span><span id="line-343">    * @param key2 The second key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">344</span><span id="line-344">    * @param key3 The third key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">345</span><span id="line-345">    * @return &lt;jk&gt;true&lt;/jk&gt; if the cache contains the key triplet.</span>
 <span class="source-line-no">346</span><span id="line-346">    */</span>
 <span class="source-line-no">347</span><span id="line-347">   public boolean containsKey(K1 key1, K2 key2, K3 key3) {</span>
@@ -364,7 +364,7 @@
 <span class="source-line-no">351</span><span id="line-351">   /**</span>
 <span class="source-line-no">352</span><span id="line-352">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the cache contains one or more entries with the specified value.</span>
 <span class="source-line-no">353</span><span id="line-353">    *</span>
-<span class="source-line-no">354</span><span id="line-354">    * @param value The value to check.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @param value The value to check. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns &lt;jk&gt;false&lt;/jk&gt; (the cache never stores &lt;jk&gt;null&lt;/jk&gt; values).</span>
 <span class="source-line-no">355</span><span id="line-355">    * @return &lt;jk&gt;true&lt;/jk&gt; if the cache contains the value.</span>
 <span class="source-line-no">356</span><span id="line-356">    */</span>
 <span class="source-line-no">357</span><span id="line-357">   public boolean containsValue(V value) {</span>
@@ -377,9 +377,9 @@
 <span class="source-line-no">364</span><span id="line-364">   /**</span>
 <span class="source-line-no">365</span><span id="line-365">    * Retrieves a cached value by key triplet using the default supplier.</span>
 <span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * @param key1 First key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">368</span><span id="line-368">    * @param key2 Second key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">369</span><span id="line-369">    * @param key3 Third key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">367</span><span id="line-367">    * @param key1 First key component. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">368</span><span id="line-368">    * @param key2 Second key component. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">369</span><span id="line-369">    * @param key3 Third key component. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">370</span><span id="line-370">    * @return The cached or computed value. May be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">371</span><span id="line-371">    * @throws NullPointerException if no default supplier was configured.</span>
 <span class="source-line-no">372</span><span id="line-372">    */</span>
@@ -390,10 +390,10 @@
 <span class="source-line-no">377</span><span id="line-377">   /**</span>
 <span class="source-line-no">378</span><span id="line-378">    * Retrieves a cached value by key triplet, computing it if necessary using the provided supplier.</span>
 <span class="source-line-no">379</span><span id="line-379">    *</span>
-<span class="source-line-no">380</span><span id="line-380">    * @param key1 First key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">381</span><span id="line-381">    * @param key2 Second key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">382</span><span id="line-382">    * @param key3 Third key component. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">383</span><span id="line-383">    * @param supplier The supplier to compute the value if it's not in the cache. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">380</span><span id="line-380">    * @param key1 First key component. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">381</span><span id="line-381">    * @param key2 Second key component. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">382</span><span id="line-382">    * @param key3 Third key component. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">383</span><span id="line-383">    * @param supplier The supplier to compute the value if it's not in the cache. Must not be &lt;jk&gt;null&lt;/jk&gt; or an {@link IllegalArgumentException} is thrown.</span>
 <span class="source-line-no">384</span><span id="line-384">    * @return The cached or computed value. May be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">385</span><span id="line-385">    */</span>
 <span class="source-line-no">386</span><span id="line-386">   public V get(K1 key1, K2 key2, K3 key3, java.util.function.Supplier&lt;V&gt; supplier) {</span>
@@ -434,9 +434,9 @@
 <span class="source-line-no">421</span><span id="line-421">   /**</span>
 <span class="source-line-no">422</span><span id="line-422">    * Associates the specified value with the specified key triplet.</span>
 <span class="source-line-no">423</span><span id="line-423">    *</span>
-<span class="source-line-no">424</span><span id="line-424">    * @param key1 The first key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">425</span><span id="line-425">    * @param key2 The second key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">426</span><span id="line-426">    * @param key3 The third key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">424</span><span id="line-424">    * @param key1 The first key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">425</span><span id="line-425">    * @param key2 The second key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">426</span><span id="line-426">    * @param key3 The third key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">427</span><span id="line-427">    * @param value The value to associate with the key triplet.</span>
 <span class="source-line-no">428</span><span id="line-428">    * @return The previous value associated with the key triplet, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping.</span>
 <span class="source-line-no">429</span><span id="line-429">    */</span>
@@ -450,9 +450,9 @@
 <span class="source-line-no">437</span><span id="line-437">   /**</span>
 <span class="source-line-no">438</span><span id="line-438">    * Removes the entry for the specified key triplet from the cache.</span>
 <span class="source-line-no">439</span><span id="line-439">    *</span>
-<span class="source-line-no">440</span><span id="line-440">    * @param key1 The first key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">441</span><span id="line-441">    * @param key2 The second key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">442</span><span id="line-442">    * @param key3 The third key. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">440</span><span id="line-440">    * @param key1 The first key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">441</span><span id="line-441">    * @param key2 The second key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
+<span class="source-line-no">442</span><span id="line-442">    * @param key3 The third key. Can be &lt;jk&gt;null&lt;/jk&gt; (null keys are supported like any other key).</span>
 <span class="source-line-no">443</span><span id="line-443">    * @return The previous value associated with the key triplet, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping.</span>
 <span class="source-line-no">444</span><span id="line-444">    */</span>
 <span class="source-line-no">445</span><span id="line-445">   public V remove(K1 key1, K2 key2, K3 key3) {</span>

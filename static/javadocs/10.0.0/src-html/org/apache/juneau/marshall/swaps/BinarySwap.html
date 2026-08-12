@@ -78,9 +78,9 @@
 <span class="source-line-no">065</span><span id="line-65">      // corresponding parser consumes it.  Binary serializers without a native byte-array wire type</span>
 <span class="source-line-no">066</span><span id="line-66">      // (Parquet, binary RDF) report hasNativeBytes()==false and still run this swap to produce /</span>
 <span class="source-line-no">067</span><span id="line-67">      // consume the configured text wire form (HEX / BASE64 / etc.) per OQ 10 (b).</span>
-<span class="source-line-no">068</span><span id="line-68">      if (session instanceof OutputStreamSerializerSession oss &amp;&amp; oss.hasNativeBytes())</span>
+<span class="source-line-no">068</span><span id="line-68">      if (session instanceof OutputStreamSerializerSession session2 &amp;&amp; session2.hasNativeBytes())</span>
 <span class="source-line-no">069</span><span id="line-69">         return 0;</span>
-<span class="source-line-no">070</span><span id="line-70">      if (session instanceof InputStreamParserSession ips &amp;&amp; ips.hasNativeBytes())</span>
+<span class="source-line-no">070</span><span id="line-70">      if (session instanceof InputStreamParserSession session2 &amp;&amp; session2.hasNativeBytes())</span>
 <span class="source-line-no">071</span><span id="line-71">         return 0;</span>
 <span class="source-line-no">072</span><span id="line-72">      // CSV defers byte[] cell formatting to its own CsvByteArrayCellFormat-driven cell serializer/parser.</span>
 <span class="source-line-no">073</span><span id="line-73">      if (session instanceof CsvSerializerSession || session instanceof CsvParserSession)</span>

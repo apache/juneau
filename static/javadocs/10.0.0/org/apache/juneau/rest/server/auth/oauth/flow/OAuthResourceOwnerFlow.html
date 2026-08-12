@@ -80,10 +80,10 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="10.0.0",
             <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=false)
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-49">OAuthResourceOwnerFlow</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-50">OAuthResourceOwnerFlow</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span>
-<div class="deprecation-comment">Use <a href="OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a> (with PKCE) wherever possible.  The
+<div class="deprecation-comment">Use <a href="../../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a> (with PKCE) wherever possible.  The
    resource-owner password-credentials grant was removed from OAuth 2.1.</div>
 </div>
 <div class="block">Resource-owner password-credentials grant (RFC 6749 &sect;4.3) flow helper.
@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
  <b>Discouraged.</b>  This grant type was removed from OAuth 2.1 due to long-standing security concerns
  (the client sees the user's credentials).  Legitimate use is limited to first-party trusted clients that
  already have the user's credentials (e.g. legacy intranet apps mid-migration).  Prefer
- <a href="OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a>.
+ <a href="../../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a>.
 
  <p>
  Filed under <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link"><code>&#64;Deprecated(since = "10.0.0")</code></a> from day-1 to surface the warning at IDE
@@ -149,7 +149,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="../OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="../../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#acquire()" class="member-name-link">acquire</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
 <div class="block"><span class="deprecated-label">Deprecated.</span></div>
@@ -181,7 +181,7 @@ loadScripts(document, 'script');</script>
 <h3>OAuthResourceOwnerFlow</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="10.0.0",
             <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=false)
-</span><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-231">OAuthResourceOwnerFlow</a></span><wbr><span class="parameters">(<a href="OAuthResourceOwnerFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow.Builder</a>&nbsp;b)</span></div>
+</span><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-232">OAuthResourceOwnerFlow</a></span><wbr><span class="parameters">(<a href="OAuthResourceOwnerFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow.Builder</a>&nbsp;b)</span></div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
 <h3>create</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="10.0.0",
             <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=false)
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthResourceOwnerFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-61">create</a></span>()</div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthResourceOwnerFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthResourceOwnerFlow.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-62">create</a></span>()</div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
@@ -217,7 +217,7 @@ loadScripts(document, 'script');</script>
 <h3>acquire</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="10.0.0",
             <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=false)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../OAuthToken.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-247">acquire</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#line-248">acquire</a></span>()</div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Acquires a token from the IdP.</div>
 <dl class="notes">

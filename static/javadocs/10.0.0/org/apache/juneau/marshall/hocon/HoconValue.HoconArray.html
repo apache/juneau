@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.html#line-152">HoconValue.HoconArray</a></span>
+<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.html#line-157">HoconValue.HoconArray</a></span>
 <span class="extends-implements">extends <a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a></span></div>
 <div class="block">HOCON array (maps to List or array).</div>
 </section>
@@ -124,19 +124,29 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#concat(org.apache.juneau.marshall.hocon.HoconValue.HoconArray)" class="member-name-link">concat</a><wbr>(<a href="HoconValue.HoconArray.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconArray</a>&nbsp;other)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.apache.juneau.marshall.hocon.HoconValue)" class="member-name-link">add</a><wbr>(<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;element)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds an element to this array.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#concat(org.apache.juneau.marshall.hocon.HoconValue.HoconArray)" class="member-name-link">concat</a><wbr>(<a href="HoconValue.HoconArray.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconArray</a>&nbsp;other)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Concatenates another array (HOCON array concatenation).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getElements()" class="member-name-link">getElements</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getElements()" class="member-name-link">getElements</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the elements.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="HoconValue.Type.html" title="enum class in org.apache.juneau.marshall.hocon">HoconValue.Type</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getType()" class="member-name-link">getType</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="HoconValue.Type.html" title="enum class in org.apache.juneau.marshall.hocon">HoconValue.Type</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getType()" class="member-name-link">getType</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value type.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setElements(java.util.List)" class="member-name-link">setElements</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Replaces the contents of this array with the specified elements.</div>
 </div>
 </div>
 </div>
@@ -158,7 +168,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>HoconArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-152">HoconArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-157">HoconArray</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -172,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getType()">
 <h3>getType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.Type.html" title="enum class in org.apache.juneau.marshall.hocon">HoconValue.Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-155">getType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HoconValue.Type.html" title="enum class in org.apache.juneau.marshall.hocon">HoconValue.Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-160">getType</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="HoconValue.html#getType()">HoconValue</a></code></span></div>
 <div class="block">Returns the value type.</div>
 <dl class="notes">
@@ -186,22 +196,45 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getElements()">
 <h3>getElements</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-165">getElements</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-170">getElements</a></span>()</div>
 <div class="block">Returns the elements.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The elements list.</dd>
+<dd>An unmodifiable copy of the elements list.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="add(org.apache.juneau.marshall.hocon.HoconValue)">
+<h3>add</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-179">add</a></span><wbr><span class="parameters">(<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&nbsp;element)</span></div>
+<div class="block">Adds an element to this array.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>element</code> - The element to add.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setElements(java.util.List)">
+<h3>setElements</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-188">setElements</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="HoconValue.html" title="class in org.apache.juneau.marshall.hocon">HoconValue</a>&gt;&nbsp;value)</span></div>
+<div class="block">Replaces the contents of this array with the specified elements.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new elements. Can be <jk>null</jk> to clear the array.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="concat(org.apache.juneau.marshall.hocon.HoconValue.HoconArray)">
 <h3>concat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-174">concat</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconArray.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconArray</a>&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.HoconArray.html#line-200">concat</a></span><wbr><span class="parameters">(<a href="HoconValue.HoconArray.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconArray</a>&nbsp;other)</span></div>
 <div class="block">Concatenates another array (HOCON array concatenation).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>other</code> - The other array.</dd>
+<dd><code>other</code> - The other array.
+   <br>Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>

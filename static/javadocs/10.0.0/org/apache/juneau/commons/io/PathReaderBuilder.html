@@ -278,7 +278,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The path to read from.</dd>
+<dd><code>path</code> - The path to read from.  Can be <jk>null</jk> (<a href="#build()"><code>build()</code></a> then throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> unless <a href="#allowNoFile()"><code>allowNoFile()</code></a> is set).</dd>
 <dt>Returns:</dt>
 <dd>A new builder instance initialized with the specified path.</dd>
 </dl>
@@ -415,7 +415,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The path to read from.</dd>
+<dd><code>path</code> - The path to read from.  Can be <jk>null</jk> (<a href="#build()"><code>build()</code></a> then throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> unless <a href="#allowNoFile()"><code>allowNoFile()</code></a> is set).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>

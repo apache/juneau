@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">   /**</span>
 <span class="source-line-no">133</span><span id="line-133">    * Returns the file finder to use for finding files on the file system.</span>
 <span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param req The HTTP request object.</span>
+<span class="source-line-no">135</span><span id="line-135">    * @param req The HTTP request object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">136</span><span id="line-136">    * @return The file finder to used for finding files on the file system.</span>
 <span class="source-line-no">137</span><span id="line-137">    */</span>
 <span class="source-line-no">138</span><span id="line-138">   protected FileFinder getFileFinder(RestRequest req) {</span>
@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
 <span class="source-line-no">146</span><span id="line-146">    * Comment are assumed to be &lt;js&gt;"&amp;lt;!-- --&amp;gt;"&lt;/js&gt; code blocks.</span>
 <span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * @param req The HTTP request object.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @param req The HTTP request object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">149</span><span id="line-149">    * @param name Name of the desired resource.</span>
 <span class="source-line-no">150</span><span id="line-150">    * @return The resource converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the resource could not be found.</span>
 <span class="source-line-no">151</span><span id="line-151">    */</span>
@@ -181,7 +181,7 @@
 <span class="source-line-no">168</span><span id="line-168">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">169</span><span id="line-169">    * &lt;/ul&gt;</span>
 <span class="source-line-no">170</span><span id="line-170">    *</span>
-<span class="source-line-no">171</span><span id="line-171">    * @param req The current HTTP request.</span>
+<span class="source-line-no">171</span><span id="line-171">    * @param req The current HTTP request. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">172</span><span id="line-172">    * @param res The current HTTP response.</span>
 <span class="source-line-no">173</span><span id="line-173">    * @param name Name of the desired resource.</span>
 <span class="source-line-no">174</span><span id="line-174">    * @return The resource converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the resource could not be found.</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">    * &lt;p&gt;</span>
 <span class="source-line-no">185</span><span id="line-185">    * Comments are assumed to be Java-style block comments: &lt;js&gt;"/*"&lt;/js&gt;.</span>
 <span class="source-line-no">186</span><span id="line-186">    *</span>
-<span class="source-line-no">187</span><span id="line-187">    * @param req The HTTP request object.</span>
+<span class="source-line-no">187</span><span id="line-187">    * @param req The HTTP request object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">188</span><span id="line-188">    * @param name Name of the desired resource.</span>
 <span class="source-line-no">189</span><span id="line-189">    * @return The resource converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the resource could not be found.</span>
 <span class="source-line-no">190</span><span id="line-190">    */</span>
@@ -220,7 +220,7 @@
 <span class="source-line-no">207</span><span id="line-207">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">208</span><span id="line-208">    * &lt;/ul&gt;</span>
 <span class="source-line-no">209</span><span id="line-209">    *</span>
-<span class="source-line-no">210</span><span id="line-210">    * @param req The current HTTP request.</span>
+<span class="source-line-no">210</span><span id="line-210">    * @param req The current HTTP request. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">211</span><span id="line-211">    * @param res The current HTTP response.</span>
 <span class="source-line-no">212</span><span id="line-212">    * @param name Name of the desired resource.</span>
 <span class="source-line-no">213</span><span id="line-213">    * @return The resource converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the resource could not be found.</span>
@@ -236,7 +236,7 @@
 <span class="source-line-no">223</span><span id="line-223">    * &lt;p&gt;</span>
 <span class="source-line-no">224</span><span id="line-224">    * Comments are assumed to be Java-style block comments: &lt;js&gt;"/*"&lt;/js&gt;.</span>
 <span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    * @param req The HTTP request object.</span>
+<span class="source-line-no">226</span><span id="line-226">    * @param req The HTTP request object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">227</span><span id="line-227">    * @param name Name of the desired resource.</span>
 <span class="source-line-no">228</span><span id="line-228">    * @return The resource converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the resource could not be found.</span>
 <span class="source-line-no">229</span><span id="line-229">    */</span>
@@ -259,7 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">247</span><span id="line-247">    * &lt;/ul&gt;</span>
 <span class="source-line-no">248</span><span id="line-248">    *</span>
-<span class="source-line-no">249</span><span id="line-249">    * @param req The current HTTP request.</span>
+<span class="source-line-no">249</span><span id="line-249">    * @param req The current HTTP request. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">250</span><span id="line-250">    * @param res The current HTTP response.</span>
 <span class="source-line-no">251</span><span id="line-251">    * @param name Name of the desired resource.</span>
 <span class="source-line-no">252</span><span id="line-252">    * @return The resource converted to a string, or &lt;jk&gt;null&lt;/jk&gt; if the resource could not be found.</span>

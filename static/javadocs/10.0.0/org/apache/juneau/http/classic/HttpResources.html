@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
  Assumes no content type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk> (treated as an empty byte array).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/ByteArrayResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ByteArrayResource</code></a> builder.</dd>
 </dl>
@@ -221,7 +221,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new <a href="resource/ByteArrayResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ByteArrayResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk> (treated as an empty byte array).</dd>
 <dd><code>contentType</code> - The entity content type, or <jk>null</jk> if not specified.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/ByteArrayResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ByteArrayResource</code></a> builder.</dd>
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
  Assumes no content type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content supplier.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content supplier.  Can be <jk>null</jk> (treated as an empty byte array).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/ByteArrayResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ByteArrayResource</code></a> builder.</dd>
 </dl>
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new <a href="resource/ByteArrayResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ByteArrayResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content supplier.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content supplier.  Can be <jk>null</jk> (treated as an empty byte array).</dd>
 <dd><code>contentType</code> - The entity content type, or <jk>null</jk> if not specified.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/ByteArrayResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ByteArrayResource</code></a> builder.</dd>
@@ -269,7 +269,7 @@ loadScripts(document, 'script');</script>
  Assumes no content type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk>, in which case a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown when the resource's content is read.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/FileResource.html" title="class in org.apache.juneau.http.classic.resource"><code>FileResource</code></a> builder.</dd>
 </dl>
@@ -283,7 +283,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new <a href="resource/FileResource.html" title="class in org.apache.juneau.http.classic.resource"><code>FileResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk>, in which case a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown when the resource's content is read.</dd>
 <dd><code>contentType</code> - The entity content type, or <jk>null</jk> if not specified.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/FileResource.html" title="class in org.apache.juneau.http.classic.resource"><code>FileResource</code></a> builder.</dd>
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new <a href="resource/ReaderResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ReaderResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk>, in which case a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown when the resource's content is read.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/ReaderResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ReaderResource</code></a> builder.</dd>
 </dl>
@@ -311,7 +311,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new <a href="resource/ReaderResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ReaderResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk>, in which case a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown when the resource's content is read.</dd>
 <dd><code>contentType</code> - The entity content type, or <jk>null</jk> if not specified.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/ReaderResource.html" title="class in org.apache.juneau.http.classic.resource"><code>ReaderResource</code></a> builder.</dd>
@@ -328,7 +328,7 @@ loadScripts(document, 'script');</script>
  Assumes no content type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk>, in which case a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown when the resource's content is read.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/StreamResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StreamResource</code></a> builder.</dd>
 </dl>
@@ -343,7 +343,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new <a href="resource/StreamResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StreamResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk>, in which case a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a> is thrown when the resource's content is read.</dd>
 <dd><code>contentType</code> - The entity content type, or <jk>null</jk> if not specified.</dd>
 <dd><code>length</code> - The content length, or <c>-1</c> if not known.</dd>
 <dt>Returns:</dt>
@@ -358,7 +358,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new builder for a <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk> (treated as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</dd>
 </dl>
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new builder for a <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk> (treated as an empty string).</dd>
 <dd><code>contentType</code> - The entity content type, or <jk>null</jk> if not specified.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</dd>
@@ -386,7 +386,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new builder for a <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk> (treated as an empty string).</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</dd>
 </dl>
@@ -400,7 +400,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a new builder for a <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - The entity content.  Can be <jk>null</jk>.</dd>
+<dd><code>content</code> - The entity content.  Can be <jk>null</jk> (treated as an empty string).</dd>
 <dd><code>contentType</code> - The entity content type, or <jk>null</jk> if not specified.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="resource/StringResource.html" title="class in org.apache.juneau.http.classic.resource"><code>StringResource</code></a> builder.</dd>

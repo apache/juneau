@@ -40,8 +40,8 @@
 <span class="source-line-no">027</span><span id="line-27"> * &lt;ul&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> *    &lt;li&gt;the convenience {@link org.apache.juneau.marshall.serializer.Serializer Serializer}</span>
 <span class="source-line-no">029</span><span id="line-29"> *       subclass &amp;mdash; a thin delegator that mirrors</span>
-<span class="source-line-no">030</span><span id="line-30"> *       {@link org.apache.juneau.marshall.serializer.Serializer#serialize(Object) serialize(...)} by</span>
-<span class="source-line-no">031</span><span id="line-31"> *       forwarding to {@code getSession().serializeRecords(output)};</span>
+<span class="source-line-no">030</span><span id="line-30"> *       {@link org.apache.juneau.marshall.serializer.Serializer#write(Object) write(...)} by</span>
+<span class="source-line-no">031</span><span id="line-31"> *       forwarding to {@code getSession().writeRecords(output)};</span>
 <span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;the {@link org.apache.juneau.marshall.serializer.SerializerSession SerializerSession}</span>
 <span class="source-line-no">033</span><span id="line-33"> *       subclass (where the live {@code BeanSession}/{@code MarshallingContext} is) &amp;mdash; the real</span>
 <span class="source-line-no">034</span><span id="line-34"> *       cursor creation.</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51">    * &lt;p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52">    * When invoked on a convenience {@link org.apache.juneau.marshall.serializer.Serializer</span>
 <span class="source-line-no">053</span><span id="line-53">    * Serializer} the cursor is opened with &lt;b&gt;default session args&lt;/b&gt; (mirroring</span>
-<span class="source-line-no">054</span><span id="line-54">    * {@link org.apache.juneau.marshall.serializer.Serializer#serialize(Object) serialize(...)}).</span>
+<span class="source-line-no">054</span><span id="line-54">    * {@link org.apache.juneau.marshall.serializer.Serializer#write(Object) write(...)}).</span>
 <span class="source-line-no">055</span><span id="line-55">    * Callers that need request-derived configuration should instead call</span>
 <span class="source-line-no">056</span><span id="line-56">    * {@code createSession(args).build()} and invoke this method on the resulting</span>
 <span class="source-line-no">057</span><span id="line-57">    * {@link org.apache.juneau.marshall.serializer.SerializerSession SerializerSession}.</span>
@@ -74,12 +74,12 @@
 <span class="source-line-no">061</span><span id="line-61">    * @return A new {@link RecordWriter} cursor.</span>
 <span class="source-line-no">062</span><span id="line-62">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">063</span><span id="line-63">    */</span>
-<span class="source-line-no">064</span><span id="line-64">   RecordWriter serializeRecords(Object output) throws IOException;</span>
+<span class="source-line-no">064</span><span id="line-64">   RecordWriter writeRecords(Object output) throws IOException;</span>
 <span class="source-line-no">065</span><span id="line-65"></span>
 <span class="source-line-no">066</span><span id="line-66">   /**</span>
 <span class="source-line-no">067</span><span id="line-67">    * Streaming-quality signal queryable &lt;em&gt;before&lt;/em&gt; opening a cursor.</span>
 <span class="source-line-no">068</span><span id="line-68">    *</span>
-<span class="source-line-no">069</span><span id="line-69">    * @return &lt;jk&gt;true&lt;/jk&gt; if {@link #serializeRecords(Object)} returns an O(1)-memory streaming</span>
+<span class="source-line-no">069</span><span id="line-69">    * @return &lt;jk&gt;true&lt;/jk&gt; if {@link #writeRecords(Object)} returns an O(1)-memory streaming</span>
 <span class="source-line-no">070</span><span id="line-70">    *    cursor; &lt;jk&gt;false&lt;/jk&gt; for buffered (whole-value) formats backed by</span>
 <span class="source-line-no">071</span><span id="line-71">    *    {@link RecordAdapter}.</span>
 <span class="source-line-no">072</span><span id="line-72">    */</span>

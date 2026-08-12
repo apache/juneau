@@ -372,8 +372,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The request creating this bean.</dd>
-<dd><code>query</code> - The query parameters on the request (used for overloaded header values).</dd>
+<dd><code>req</code> - The request creating this bean.  Must not be <jk>null</jk>.</dd>
+<dd><code>query</code> - The query parameters on the request (used for overloaded header values).  Must not be <jk>null</jk>.</dd>
 <dd><code>caseSensitive</code> - Whether case-sensitive name matching is enabled.</dd>
 </dl>
 </section>
@@ -416,7 +416,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The header name.  Must not be <jk>null</jk>.</dd>
-<dd><code>value</code> - The header value.  Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The header value.  Can be <jk>null</jk> (the header is added with a <jk>null</jk> value).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -534,7 +534,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>type</code> - The bean type to create.</dd>
 <dt>Returns:</dt>
-<dd>The bean, never <jk>null</jk>.</dd>
+<dd>The bean, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if the header is not present.</dd>
 </dl>
 </section>
 </li>
@@ -683,7 +683,7 @@ loadScripts(document, 'script');</script>
 <dd><code>name</code> - The header name.  Must not be <jk>null</jk>.</dd>
 <dd><code>value</code> - The header value.
    <br>Converted to a string using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link"><code>Object.toString()</code></a>.
-   <br>Can be <jk>null</jk>.</dd>
+   <br>Can be <jk>null</jk> (the header is set with a <jk>null</jk> value).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

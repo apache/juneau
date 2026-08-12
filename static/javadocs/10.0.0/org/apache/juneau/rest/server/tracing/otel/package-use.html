@@ -74,6 +74,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block"><code>TextMapGetter</code> implementation that reads HTTP request headers from a <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server"><code>RestRequest</code></a>.</div>
 </div>
+<div class="col-first odd-row-color"><a href="class-use/TraceContextCarrierTextMapGetter.html#org.apache.juneau.rest.server.tracing.otel">TraceContextCarrierTextMapGetter</a></div>
+<div class="col-last odd-row-color">
+<div class="block"><code>TextMapGetter</code> implementation that reads W3C trace-context fields from a neutral
+ <a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a> &mdash; for example an MCP request's <code>params._meta</code> object
+ &mdash; instead of HTTP request headers.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/TraceContextCarrierTextMapSetter.html#org.apache.juneau.rest.server.tracing.otel">TraceContextCarrierTextMapSetter</a></div>
+<div class="col-last even-row-color">
+<div class="block"><code>TextMapSetter</code> implementation that writes W3C trace-context fields into a neutral
+ <a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a> instead of an HTTP response.</div>
+</div>
 </div>
 </section>
 </li>

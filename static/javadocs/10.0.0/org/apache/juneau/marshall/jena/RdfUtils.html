@@ -126,7 +126,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findNamespace(java.util.List,java.util.List)">
 <h3>findNamespace</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../xml/Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfUtils.html#line-47">findNamespace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Rdf.html" title="annotation interface in org.apache.juneau.marshall.jena">Rdf</a>&gt;&nbsp;rdfs,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../xml/Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfUtils.html#line-49">findNamespace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Rdf.html" title="annotation interface in org.apache.juneau.marshall.jena">Rdf</a>&gt;&nbsp;rdfs,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RdfSchema.html" title="annotation interface in org.apache.juneau.marshall.jena">RdfSchema</a>&gt;&nbsp;schemas)</span></div>
 <div class="block">Find the namespace given a list of <ja>@Rdf</ja> and <ja>@RdfSchema</ja> annotations.
 
@@ -134,8 +134,10 @@ loadScripts(document, 'script');</script>
  The annotations should be a child-to-parent ordering of annotations found on a class or method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>rdfs</code> - The <c>@Rdf</c> annotations to search.</dd>
-<dd><code>schemas</code> - The list of known RDF schemas.</dd>
+<dd><code>rdfs</code> - The <c>@Rdf</c> annotations to search.
+   Must not be <jk>null</jk>.</dd>
+<dd><code>schemas</code> - The list of known RDF schemas.
+   Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The resolved namespace, or <jk>null</jk> if the namespace could not be resolved.</dd>
 </dl>

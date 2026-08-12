@@ -71,45 +71,48 @@
 <span class="source-line-no">058</span><span id="line-58">       *</span>
 <span class="source-line-no">059</span><span id="line-59">       * @param name The bean property name.</span>
 <span class="source-line-no">060</span><span id="line-60">       * @param type The bean property class type.</span>
-<span class="source-line-no">061</span><span id="line-61">       */</span>
-<span class="source-line-no">062</span><span id="line-62">      public BeanPropertyDescription(String name, ClassMeta&lt;?&gt; type) {</span>
-<span class="source-line-no">063</span><span id="line-63">         this.name = name;</span>
-<span class="source-line-no">064</span><span id="line-64">         this.type = type.getSerializedClassMeta(null).toString();</span>
-<span class="source-line-no">065</span><span id="line-65">      }</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /**</span>
-<span class="source-line-no">069</span><span id="line-69">    * Static creator.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param c The bean being described.</span>
-<span class="source-line-no">072</span><span id="line-72">    * @return A new bean description.</span>
-<span class="source-line-no">073</span><span id="line-73">    */</span>
-<span class="source-line-no">074</span><span id="line-74">   public static BeanDescription of(Class&lt;?&gt; c) {</span>
-<span class="source-line-no">075</span><span id="line-75">      return new BeanDescription(c);</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /** The bean class type. */</span>
-<span class="source-line-no">079</span><span id="line-79">   public String type;</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /** The bean properties. */</span>
-<span class="source-line-no">082</span><span id="line-82">   public BeanPropertyDescription[] properties;</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   /**</span>
-<span class="source-line-no">085</span><span id="line-85">    * Constructor</span>
-<span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * @param c The bean class type.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   public BeanDescription(Class&lt;?&gt; c) {</span>
-<span class="source-line-no">090</span><span id="line-90">      type = c.getName();</span>
-<span class="source-line-no">091</span><span id="line-91">      BeanMeta&lt;?&gt; bm = MarshallingContext.DEFAULT.getBeanMeta(c);</span>
-<span class="source-line-no">092</span><span id="line-92">      if (bm == null)</span>
-<span class="source-line-no">093</span><span id="line-93">         throw rex("Class ''{0}'' is not a valid bean.", cn(c));</span>
-<span class="source-line-no">094</span><span id="line-94">      properties = new BeanPropertyDescription[bm.getProperties().size()];</span>
-<span class="source-line-no">095</span><span id="line-95">      int i = 0;</span>
-<span class="source-line-no">096</span><span id="line-96">      for (var pm : bm.getProperties().values())</span>
-<span class="source-line-no">097</span><span id="line-97">         properties[i++] = new BeanPropertyDescription(pm.getName(), (ClassMeta&lt;?&gt;) pm.getBeanInfo());</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99">}</span>
+<span class="source-line-no">061</span><span id="line-61">       *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">062</span><span id="line-62">       */</span>
+<span class="source-line-no">063</span><span id="line-63">      public BeanPropertyDescription(String name, ClassMeta&lt;?&gt; type) {</span>
+<span class="source-line-no">064</span><span id="line-64">         this.name = name;</span>
+<span class="source-line-no">065</span><span id="line-65">         this.type = type.getSerializedClassMeta(null).toString();</span>
+<span class="source-line-no">066</span><span id="line-66">      }</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Static creator.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param c The bean being described.</span>
+<span class="source-line-no">073</span><span id="line-73">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">074</span><span id="line-74">    * @return A new bean description.</span>
+<span class="source-line-no">075</span><span id="line-75">    */</span>
+<span class="source-line-no">076</span><span id="line-76">   public static BeanDescription of(Class&lt;?&gt; c) {</span>
+<span class="source-line-no">077</span><span id="line-77">      return new BeanDescription(c);</span>
+<span class="source-line-no">078</span><span id="line-78">   }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   /** The bean class type. */</span>
+<span class="source-line-no">081</span><span id="line-81">   public String type;</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /** The bean properties. */</span>
+<span class="source-line-no">084</span><span id="line-84">   public BeanPropertyDescription[] properties;</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /**</span>
+<span class="source-line-no">087</span><span id="line-87">    * Constructor</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param c The bean class type.</span>
+<span class="source-line-no">090</span><span id="line-90">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">091</span><span id="line-91">    */</span>
+<span class="source-line-no">092</span><span id="line-92">   public BeanDescription(Class&lt;?&gt; c) {</span>
+<span class="source-line-no">093</span><span id="line-93">      type = c.getName();</span>
+<span class="source-line-no">094</span><span id="line-94">      BeanMeta&lt;?&gt; bm = MarshallingContext.DEFAULT.getBeanMeta(c);</span>
+<span class="source-line-no">095</span><span id="line-95">      if (bm == null)</span>
+<span class="source-line-no">096</span><span id="line-96">         throw rex("Class '%s' is not a valid bean.", cn(c));</span>
+<span class="source-line-no">097</span><span id="line-97">      properties = new BeanPropertyDescription[bm.getProperties().size()];</span>
+<span class="source-line-no">098</span><span id="line-98">      int i = 0;</span>
+<span class="source-line-no">099</span><span id="line-99">      for (var pm : bm.getProperties().values())</span>
+<span class="source-line-no">100</span><span id="line-100">         properties[i++] = new BeanPropertyDescription(pm.getName(), (ClassMeta&lt;?&gt;) pm.getBeanInfo());</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102">}</span>
 
 
 

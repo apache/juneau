@@ -118,23 +118,23 @@
 <span class="source-line-no">105</span><span id="line-105">      /**</span>
 <span class="source-line-no">106</span><span id="line-106">       * Adds an extension type mapping.</span>
 <span class="source-line-no">107</span><span id="line-107">       *</span>
-<span class="source-line-no">108</span><span id="line-108">       * @param ext The file extension.</span>
-<span class="source-line-no">109</span><span id="line-109">       * @param type The MIME type.</span>
+<span class="source-line-no">108</span><span id="line-108">       * @param ext The file extension.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">109</span><span id="line-109">       * @param type The MIME type.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">110</span><span id="line-110">       * @return This builder.</span>
 <span class="source-line-no">111</span><span id="line-111">       * @throws IllegalArgumentException If ext or type is null or blank.</span>
 <span class="source-line-no">112</span><span id="line-112">       */</span>
 <span class="source-line-no">113</span><span id="line-113">      public Builder addExtensionType(String ext, String type) {</span>
 <span class="source-line-no">114</span><span id="line-114">         assertArgNotNullOrBlank(ARG_ext, ext);</span>
 <span class="source-line-no">115</span><span id="line-115">         assertArgNotNullOrBlank(ARG_type, type);</span>
-<span class="source-line-no">116</span><span id="line-116">         extMap.put(ext.toLowerCase(), type);</span>
+<span class="source-line-no">116</span><span id="line-116">         extMap.put(lcr(ext), type);</span>
 <span class="source-line-no">117</span><span id="line-117">         return this;</span>
 <span class="source-line-no">118</span><span id="line-118">      }</span>
 <span class="source-line-no">119</span><span id="line-119"></span>
 <span class="source-line-no">120</span><span id="line-120">      /**</span>
 <span class="source-line-no">121</span><span id="line-121">       * Adds a file type mapping.</span>
 <span class="source-line-no">122</span><span id="line-122">       *</span>
-<span class="source-line-no">123</span><span id="line-123">       * @param name The file name or path pattern.</span>
-<span class="source-line-no">124</span><span id="line-124">       * @param type The MIME type.</span>
+<span class="source-line-no">123</span><span id="line-123">       * @param name The file name or path pattern.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">124</span><span id="line-124">       * @param type The MIME type.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">125</span><span id="line-125">       * @return This builder.</span>
 <span class="source-line-no">126</span><span id="line-126">       * @throws IllegalArgumentException If name or type is null or blank.</span>
 <span class="source-line-no">127</span><span id="line-127">       */</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">       * This method supports both individual lines as varargs and entire</span>
 <span class="source-line-no">159</span><span id="line-159">       * mime.types file contents as a single string (which will be split on newlines).</span>
 <span class="source-line-no">160</span><span id="line-160">       *</span>
-<span class="source-line-no">161</span><span id="line-161">       * @param mimeTypesLines The MIME types lines or file contents.</span>
+<span class="source-line-no">161</span><span id="line-161">       * @param mimeTypesLines The MIME types lines or file contents.  Null and empty entries are ignored.</span>
 <span class="source-line-no">162</span><span id="line-162">       * @return This builder.</span>
 <span class="source-line-no">163</span><span id="line-163">       */</span>
 <span class="source-line-no">164</span><span id="line-164">      @SuppressWarnings({</span>
@@ -341,7 +341,7 @@
 <span class="source-line-no">328</span><span id="line-328">    * &lt;p&gt;</span>
 <span class="source-line-no">329</span><span id="line-329">    * Results are cached to improve performance for repeated lookups of the same files.</span>
 <span class="source-line-no">330</span><span id="line-330">    *</span>
-<span class="source-line-no">331</span><span id="line-331">    * @param fileName The name or path of the file.</span>
+<span class="source-line-no">331</span><span id="line-331">    * @param fileName The name or path of the file.  Can be &lt;jk&gt;null&lt;/jk&gt; or empty, in which case the default type is returned.</span>
 <span class="source-line-no">332</span><span id="line-332">    * @return The MIME type of the file, or the default type if unknown.</span>
 <span class="source-line-no">333</span><span id="line-333">    */</span>
 <span class="source-line-no">334</span><span id="line-334">   public String getContentType(String fileName) {</span>
@@ -384,7 +384,7 @@
 <span class="source-line-no">371</span><span id="line-371">      // Fall back to extension-based detection</span>
 <span class="source-line-no">372</span><span id="line-372">      var extension = getFileExtension(fileName);</span>
 <span class="source-line-no">373</span><span id="line-373">      if (ine(extension)) {</span>
-<span class="source-line-no">374</span><span id="line-374">         var mimeType = extMap.get(extension.toLowerCase());</span>
+<span class="source-line-no">374</span><span id="line-374">         var mimeType = extMap.get(lcr(extension));</span>
 <span class="source-line-no">375</span><span id="line-375">         if (nn(mimeType)) {</span>
 <span class="source-line-no">376</span><span id="line-376">            return mimeType;</span>
 <span class="source-line-no">377</span><span id="line-377">         }</span>

@@ -492,12 +492,12 @@ implements jakarta.servlet.http.HttpServletRequest</span></div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#role(java.lang.String)" class="member-name-link">role</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;role)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the specified role on this request.</div>
+<div class="block">Sets the specified role on this request.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#roles(java.lang.String...)" class="member-name-link">roles</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;roles)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the specified roles on this request.</div>
+<div class="block">Sets the specified roles on this request.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scheme(java.lang.String)" class="member-name-link">scheme</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -1558,7 +1558,7 @@ jakarta.servlet.ServletException</span></div>
  See <a href="classic/MockRestClient.Builder.html#pathVars(java.util.Map)"><code>MockRestClient.Builder.pathVars(Map)</code></a> for an example.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pathVars</code> - The</dd>
+<dd><code>pathVars</code> - The parent path variables to add. Can be <jk>null</jk> (no-op).</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>See Also:</dt>
@@ -1719,7 +1719,7 @@ jakarta.servlet.ServletException</span></div>
 <section class="detail" id="role(java.lang.String)">
 <h3>role</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockServletRequest.html#line-848">role</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;role)</span></div>
-<div class="block">Adds the specified role on this request.</div>
+<div class="block">Sets the specified role on this request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>role</code> - The role to add to this request (e.g. <js>"ROLE_ADMIN"</js>).</dd>
@@ -1732,7 +1732,7 @@ jakarta.servlet.ServletException</span></div>
 <section class="detail" id="roles(java.lang.String...)">
 <h3>roles</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockServletRequest.html#line-859">roles</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;roles)</span></div>
-<div class="block">Adds the specified roles on this request.</div>
+<div class="block">Sets the specified roles on this request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>roles</code> - The roles to add to this request (e.g. <js>"ROLE_ADMIN"</js>).</dd>

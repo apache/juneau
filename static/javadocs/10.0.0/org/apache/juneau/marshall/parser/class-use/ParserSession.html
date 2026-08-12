@@ -161,6 +161,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">YAML Marshalling Support</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.marshall">org.apache.juneau.petstore.marshall</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore-local marshalling support.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -173,7 +177,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ImageParser.</span><code><a href="../../../examples/parser/ImageParser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">ImageParser.</span><code><a href="../../../examples/parser/ImageParser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
  <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">
@@ -485,7 +489,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Parser.</span><code><a href="../Parser.html#doParse(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doParse</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">Parser.</span><code><a href="../Parser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
  <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">
@@ -594,7 +598,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a single-shot <a href="../../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> that delegates <code>read(...)</code> calls to the
- session's <a href="../ParserSession.html#parse(java.lang.Object,java.lang.Class)"><code>parse(...)</code></a> entry point.</div>
+ session's <a href="../ParserSession.html#read(java.lang.Object,java.lang.Class)"><code>read(...)</code></a> entry point.</div>
 </div>
 </div>
 </section>
@@ -675,6 +679,24 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../../yaml/YamlParserSession.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlParserSession</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Session object that lives for the duration of a single use of <a href="../../yaml/YamlParser.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlParser</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.marshall">
+<h2>Uses of <a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a> in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/marshall/package-summary.html">org.apache.juneau.petstore.marshall</a> with parameters of type <a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetPhotoParser.</span><code><a href="../../../petstore/marshall/PetPhotoParser.html#doRead(org.apache.juneau.marshall.parser.ParserSession,org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a>&nbsp;session,
+ <a href="../ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+ <a href="../../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Workhorse method.</div>
 </div>
 </div>
 </section>

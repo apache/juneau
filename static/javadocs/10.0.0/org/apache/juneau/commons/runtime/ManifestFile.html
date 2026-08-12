@@ -208,7 +208,7 @@ loadScripts(document, 'script');</script>
  instance has no main attributes and no sections.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>c</code> - The anchor class.</dd>
+<dd><code>c</code> - The anchor class.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the manifest could not be read.</dd>
 </dl>
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Loads a manifest from a file on disk.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>f</code> - The manifest file.</dd>
+<dd><code>f</code> - The manifest file.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the manifest could not be read.</dd>
 </dl>
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
  The stream must end in a newline to pick up the last line.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>in</code> - The manifest stream.</dd>
+<dd><code>in</code> - The manifest stream.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the manifest could not be read.</dd>
 </dl>
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Wraps an existing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/jar/Manifest.html" title="class or interface in java.util.jar" class="external-link"><code>Manifest</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>mf</code> - The manifest.</dd>
+<dd><code>mf</code> - The manifest.  Can be <jk>null</jk>, in which case the manifest is treated as having no attributes or sections.</dd>
 </dl>
 </section>
 </li>
@@ -264,7 +264,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Loads a manifest from a path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>path</code> - The manifest path.</dd>
+<dd><code>path</code> - The manifest path.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the manifest could not be read.</dd>
 </dl>
@@ -281,7 +281,7 @@ loadScripts(document, 'script');</script>
  The reader's contents must end in a newline to pick up the last line.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>r</code> - The manifest reader.</dd>
+<dd><code>r</code> - The manifest reader.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the manifest could not be read.</dd>
 </dl>
@@ -302,7 +302,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the value of a main-attribute key.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - The main-attribute key.</dd>
+<dd><code>key</code> - The main-attribute key.  Can be <jk>null</jk>, in which case an empty value is returned.</dd>
 <dt>Returns:</dt>
 <dd>The value, or empty if the key is unset.</dd>
 </dl>
@@ -316,8 +316,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the value of a key inside the named section.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>section</code> - The section name.</dd>
-<dd><code>key</code> - The attribute key.</dd>
+<dd><code>section</code> - The section name.  Can be <jk>null</jk>, in which case an empty value is returned.</dd>
+<dd><code>key</code> - The attribute key.  Can be <jk>null</jk>, in which case an empty value is returned.</dd>
 <dt>Returns:</dt>
 <dd>The value, or empty if the section or key is unset.</dd>
 </dl>
@@ -352,7 +352,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the attributes of the named section as an unmodifiable map.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>section</code> - The section name.</dd>
+<dd><code>section</code> - The section name.  Can be <jk>null</jk>, in which case an empty map is returned.</dd>
 <dt>Returns:</dt>
 <dd>The section's attribute map, or an empty map if the section is unknown.</dd>
 </dl>

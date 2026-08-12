@@ -155,13 +155,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.bean.BeanMeta,org.apache.juneau.marshall.jena.RdfMetaProvider)">
 <h3>RdfBeanMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfBeanMeta.html#line-44">RdfBeanMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;&nbsp;beanMeta,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfBeanMeta.html#line-46">RdfBeanMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;&nbsp;beanMeta,
  <a href="RdfMetaProvider.html" title="interface in org.apache.juneau.marshall.jena">RdfMetaProvider</a>&nbsp;mp)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>beanMeta</code> - The metadata on the bean that this metadata applies to.</dd>
-<dd><code>mp</code> - RDF metadata provider (for finding information about other artifacts).</dd>
+<dd><code>beanMeta</code> - The metadata on the bean that this metadata applies to.
+   Must not be <jk>null</jk>.</dd>
+<dd><code>mp</code> - RDF metadata provider (for finding information about other artifacts).
+   Must not be <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
@@ -176,7 +178,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanUriProperty()">
 <h3>getBeanUriProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfBeanMeta.html#line-54">getBeanUriProperty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfBeanMeta.html#line-56">getBeanUriProperty</a></span>()</div>
 <div class="block">Returns the bean property marked as the URI for the bean (annotated with <a href="Rdf.html#beanUri()"><code>@Rdf(beanUri)</code></a> as <jk>true</jk>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -187,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasBeanUri()">
 <h3>hasBeanUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfBeanMeta.html#line-62">hasBeanUri</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfBeanMeta.html#line-64">hasBeanUri</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if one of the properties on this bean is annotated with <a href="Rdf.html#beanUri()"><code>@Rdf(beanUri)</code></a> as
  <jk>true</jk></div>
 <dl class="notes">

@@ -174,14 +174,15 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserReader,char,char,boolean)">
 <h3>CsvReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-61">CsvReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserReader.html" title="class in org.apache.juneau.marshall.parser">ParserReader</a>&nbsp;r,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-62">CsvReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserReader.html" title="class in org.apache.juneau.marshall.parser">ParserReader</a>&nbsp;r,
  char&nbsp;delimiter,
  char&nbsp;quoteChar,
  boolean&nbsp;trimStrings)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>r</code> - The parser reader to wrap.</dd>
+<dd><code>r</code> - The parser reader to wrap.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>delimiter</code> - The field delimiter character (typically <js>','</js>).</dd>
 <dd><code>quoteChar</code> - The quote character (typically <js>'"'</js>).</dd>
 <dd><code>trimStrings</code> - If <jk>true</jk>, field values are trimmed of surrounding whitespace.</dd>
@@ -199,7 +200,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="from(org.apache.juneau.marshall.parser.ParserPipe,char,char,boolean)">
 <h3>from</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsvReader.html" title="class in org.apache.juneau.marshall.csv">CsvReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-78">from</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsvReader.html" title="class in org.apache.juneau.marshall.csv">CsvReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-80">from</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  char&nbsp;delimiter,
  char&nbsp;quoteChar,
  boolean&nbsp;trimStrings)</span>
@@ -207,7 +208,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Creates a <a href="CsvReader.html" title="class in org.apache.juneau.marshall.csv"><code>CsvReader</code></a> from a <a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser"><code>ParserPipe</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pipe</code> - The parser pipe.</dd>
+<dd><code>pipe</code> - The parser pipe.
+   <br>Must not be <jk>null</jk>.</dd>
 <dd><code>delimiter</code> - The delimiter character.</dd>
 <dd><code>quoteChar</code> - The quote character.</dd>
 <dd><code>trimStrings</code> - Whether to trim strings.</dd>
@@ -221,7 +223,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="readRow()">
 <h3>readRow</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-96">readRow</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-98">readRow</a></span>()
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Reads a single row of CSV data, returning <jk>null</jk> at end of input.
@@ -241,7 +243,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isEof()">
 <h3>isEof</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-221">isEof</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-223">isEof</a></span>()</div>
 <div class="block">Returns whether the end of input has been reached.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -252,7 +254,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-225">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvReader.html#line-227">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>

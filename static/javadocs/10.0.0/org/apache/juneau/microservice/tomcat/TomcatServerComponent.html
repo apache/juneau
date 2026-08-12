@@ -276,7 +276,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="onStop(org.apache.juneau.microservice.Microservice)">
 <h3>onStop</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-281">onStop</a></span><wbr><span class="parameters">(<a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a>&nbsp;ms)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-290">onStop</a></span><wbr><span class="parameters">(<a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a>&nbsp;ms)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../MicroserviceListener.html#onStop(org.apache.juneau.microservice.Microservice)">MicroserviceListener</a></code></span></div>
 <div class="block">Called at the end of the <a href="../Microservice.html#stop()"><code>Microservice.stop()</code></a> call.</div>
 <dl class="notes">
@@ -290,7 +290,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="onConfigChange(org.apache.juneau.microservice.Microservice,org.apache.juneau.config.event.ConfigEvents)">
 <h3>onConfigChange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-360">onConfigChange</a></span><wbr><span class="parameters">(<a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a>&nbsp;ms,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-369">onConfigChange</a></span><wbr><span class="parameters">(<a href="../Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a>&nbsp;ms,
  <a href="../../config/event/ConfigEvents.html" title="class in org.apache.juneau.config.event">ConfigEvents</a>&nbsp;events)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../MicroserviceListener.html#onConfigChange(org.apache.juneau.microservice.Microservice,org.apache.juneau.config.event.ConfigEvents)">MicroserviceListener</a></code></span></div>
 <div class="block">Called if one or more changes occur in the config file.</div>
@@ -306,7 +306,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="addServlet(jakarta.servlet.Servlet,java.lang.String)">
 <h3>addServlet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-372">addServlet</a></span><wbr><span class="parameters">(jakarta.servlet.Servlet&nbsp;servlet,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-381">addServlet</a></span><wbr><span class="parameters">(jakarta.servlet.Servlet&nbsp;servlet,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pathSpec)</span></div>
 <div class="block">Adds an arbitrary servlet to this Tomcat server.</div>
 <dl class="notes">
@@ -321,7 +321,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="addServlet(jakarta.servlet.Servlet,java.lang.String...)">
 <h3>addServlet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-384">addServlet</a></span><wbr><span class="parameters">(jakarta.servlet.Servlet&nbsp;servlet,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-393">addServlet</a></span><wbr><span class="parameters">(jakarta.servlet.Servlet&nbsp;servlet,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pathSpecs)</span></div>
 <div class="block">Adds an arbitrary servlet to this Tomcat server at one or more context paths.</div>
 <dl class="notes">
@@ -336,7 +336,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="addFilter(jakarta.servlet.Filter,java.lang.String)">
 <h3>addFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-400">addFilter</a></span><wbr><span class="parameters">(jakarta.servlet.Filter&nbsp;filter,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-409">addFilter</a></span><wbr><span class="parameters">(jakarta.servlet.Filter&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;urlPattern)</span></div>
 <div class="block">Adds a servlet filter to this Tomcat server at the specified URL pattern.</div>
 <dl class="notes">
@@ -351,7 +351,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="addFilter(jakarta.servlet.Filter,java.lang.String...)">
 <h3>addFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-412">addFilter</a></span><wbr><span class="parameters">(jakarta.servlet.Filter&nbsp;filter,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-421">addFilter</a></span><wbr><span class="parameters">(jakarta.servlet.Filter&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urlPatterns)</span></div>
 <div class="block">Adds a servlet filter to this Tomcat server at one or more URL patterns.</div>
 <dl class="notes">
@@ -366,7 +366,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="addServletAttribute(java.lang.String,java.lang.Object)">
 <h3>addServletAttribute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-436">addServletAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-445">addServletAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds an attribute to the root servlet context of the Tomcat server.</div>
 <dl class="notes">
@@ -381,7 +381,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="getContextPath()">
 <h3>getContextPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-446">getContextPath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-455">getContextPath</a></span>()</div>
 <div class="block">Returns the context path that this server is using.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -392,7 +392,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="getContext()">
 <h3>getContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.catalina.Context</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-455">getContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.catalina.Context</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-464">getContext</a></span>()</div>
 <div class="block">Returns the root <code>Context</code> of the Tomcat server, creating it if necessary.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -403,7 +403,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="getHostName()">
 <h3>getHostName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-467">getHostName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-476">getHostName</a></span>()</div>
 <div class="block">Returns the hostname of this microservice.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -414,7 +414,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="getPort()">
 <h3>getPort</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-482">getPort</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-491">getPort</a></span>()</div>
 <div class="block">Returns the port that this server is listening on.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -425,7 +425,7 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="getProtocol()">
 <h3>getProtocol</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-491">getProtocol</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-500">getProtocol</a></span>()</div>
 <div class="block">Returns whether this server is using <js>"http"</js> or <js>"https"</js>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -436,20 +436,20 @@ implements <a href="../MicroserviceListener.html" title="interface in org.apache
 <li>
 <section class="detail" id="getServer()">
 <h3>getServer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.catalina.startup.Tomcat</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-501">getServer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.catalina.startup.Tomcat</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-510">getServer</a></span>()</div>
 <div class="block">Returns the underlying Tomcat server.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The underlying Tomcat server.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - If the server has not been created yet.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - If the server has not been created yet.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getURI()">
 <h3>getURI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-510">getURI</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/tomcat/TomcatServerComponent.html#line-519">getURI</a></span>()</div>
 <div class="block">Returns the URI where this server is listening.</div>
 <dl class="notes">
 <dt>Returns:</dt>

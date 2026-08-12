@@ -38,10 +38,10 @@
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * This class is typically the parent class of all character-based parsers.</span>
+<span class="source-line-no">028</span><span id="line-28"> * This class is typically the parent class of all byte-based parsers.</span>
 <span class="source-line-no">029</span><span id="line-29"> * It has 1 abstract method to implement on the session object...</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;ul&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;&lt;c&gt;parse(ParserSession, ClassMeta)&lt;/c&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;{@link ParserSession#doRead(ParserPipe, ClassMeta)}</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;/ul&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -141,32 +141,33 @@
 <span class="source-line-no">128</span><span id="line-128">    * Constructor.</span>
 <span class="source-line-no">129</span><span id="line-129">    *</span>
 <span class="source-line-no">130</span><span id="line-130">    * @param builder The builder for this object.</span>
-<span class="source-line-no">131</span><span id="line-131">    */</span>
-<span class="source-line-no">132</span><span id="line-132">   protected InputStreamParser(Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">133</span><span id="line-133">      super(builder);</span>
-<span class="source-line-no">134</span><span id="line-134">   }</span>
-<span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">137</span><span id="line-137">   public InputStreamParserSession.Builder&lt;?&gt; createSession() {</span>
-<span class="source-line-no">138</span><span id="line-138">      return InputStreamParserSession.create(this);</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">142</span><span id="line-142">   public InputStreamParserSession getSession() { return createSession().build(); }</span>
-<span class="source-line-no">143</span><span id="line-143"></span>
-<span class="source-line-no">144</span><span id="line-144">   @Override /* Overridden from Parser */</span>
-<span class="source-line-no">145</span><span id="line-145">   public final boolean isReaderParser() { return false; }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   /**</span>
-<span class="source-line-no">148</span><span id="line-148">    * Binary input format.</span>
-<span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * &lt;p&gt;</span>
-<span class="source-line-no">151</span><span id="line-151">    * Resolves from the configured {@link MarshallingContext#getBinaryFormat()}.</span>
-<span class="source-line-no">152</span><span id="line-152">    *</span>
-<span class="source-line-no">153</span><span id="line-153">    * @return The binary wire format used by this parser.</span>
-<span class="source-line-no">154</span><span id="line-154">    */</span>
-<span class="source-line-no">155</span><span id="line-155">   protected final BinaryFormat getBinaryFormat() { return getMarshallingContext().getBinaryFormat(); }</span>
-<span class="source-line-no">156</span><span id="line-156">}</span>
+<span class="source-line-no">131</span><span id="line-131">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   protected InputStreamParser(Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">134</span><span id="line-134">      super(builder);</span>
+<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">138</span><span id="line-138">   public InputStreamParserSession.Builder&lt;?&gt; createSession() {</span>
+<span class="source-line-no">139</span><span id="line-139">      return InputStreamParserSession.create(this);</span>
+<span class="source-line-no">140</span><span id="line-140">   }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">143</span><span id="line-143">   public InputStreamParserSession getSession() { return createSession().build(); }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   @Override /* Overridden from Parser */</span>
+<span class="source-line-no">146</span><span id="line-146">   public final boolean isReaderParser() { return false; }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   /**</span>
+<span class="source-line-no">149</span><span id="line-149">    * Binary input format.</span>
+<span class="source-line-no">150</span><span id="line-150">    *</span>
+<span class="source-line-no">151</span><span id="line-151">    * &lt;p&gt;</span>
+<span class="source-line-no">152</span><span id="line-152">    * Resolves from the configured {@link MarshallingContext#getBinaryFormat()}.</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * @return The binary wire format used by this parser.</span>
+<span class="source-line-no">155</span><span id="line-155">    */</span>
+<span class="source-line-no">156</span><span id="line-156">   protected final BinaryFormat getBinaryFormat() { return getMarshallingContext().getBinaryFormat(); }</span>
+<span class="source-line-no">157</span><span id="line-157">}</span>
 
 
 

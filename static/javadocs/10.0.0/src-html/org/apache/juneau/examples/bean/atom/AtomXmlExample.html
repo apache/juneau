@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73">       *&lt;/feed&gt;</span>
 <span class="source-line-no">074</span><span id="line-74">       */</span>
 <span class="source-line-no">075</span><span id="line-75">      //Serialize to ATOM/XML</span>
-<span class="source-line-no">076</span><span id="line-76">      var atomXml = s.serialize(feed);</span>
+<span class="source-line-no">076</span><span id="line-76">      var atomXml = s.write(feed);</span>
 <span class="source-line-no">077</span><span id="line-77"></span>
 <span class="source-line-no">078</span><span id="line-78">      /**</span>
 <span class="source-line-no">079</span><span id="line-79">       * Produces</span>
@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108">      var ns = XmlSerializer.create().sq().ws().build();</span>
 <span class="source-line-no">109</span><span id="line-109"></span>
 <span class="source-line-no">110</span><span id="line-110">      // Serialize to ATOM/XML</span>
-<span class="source-line-no">111</span><span id="line-111">      atomXml = ns.serialize(feed);</span>
+<span class="source-line-no">111</span><span id="line-111">      atomXml = ns.write(feed);</span>
 <span class="source-line-no">112</span><span id="line-112">   }</span>
 <span class="source-line-no">113</span><span id="line-113">}</span>
 

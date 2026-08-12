@@ -231,13 +231,13 @@
 <span class="source-line-no">218</span><span id="line-218">   })</span>
 <span class="source-line-no">219</span><span id="line-219">   public SimpleMap(K[] keys, V[] values) {</span>
 <span class="source-line-no">220</span><span id="line-220">      assertArgsNotNull(ARG_keys, keys, ARG_values, values);</span>
-<span class="source-line-no">221</span><span id="line-221">      assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);</span>
+<span class="source-line-no">221</span><span id="line-221">      assertArg(keys.length == values.length, "keys '%s' and values '%s' array lengths differ", keys.length, values.length);</span>
 <span class="source-line-no">222</span><span id="line-222"></span>
 <span class="source-line-no">223</span><span id="line-223">      // Check for duplicate keys</span>
 <span class="source-line-no">224</span><span id="line-224">      for (var i = 0; i &lt; keys.length; i++) {</span>
 <span class="source-line-no">225</span><span id="line-225">         for (var j = i + 1; j &lt; keys.length; j++) {</span>
 <span class="source-line-no">226</span><span id="line-226">            if (Shorts.eq(keys[i], keys[j])) {</span>
-<span class="source-line-no">227</span><span id="line-227">               throw iaex("Duplicate key found: {0}", keys[i]);</span>
+<span class="source-line-no">227</span><span id="line-227">               throw iaex("Duplicate key found: %s", keys[i]);</span>
 <span class="source-line-no">228</span><span id="line-228">            }</span>
 <span class="source-line-no">229</span><span id="line-229">         }</span>
 <span class="source-line-no">230</span><span id="line-230">      }</span>
@@ -272,7 +272,7 @@
 <span class="source-line-no">259</span><span id="line-259">    */</span>
 <span class="source-line-no">260</span><span id="line-260">   @Override /* Map */</span>
 <span class="source-line-no">261</span><span id="line-261">   public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() {</span>
-<span class="source-line-no">262</span><span id="line-262">      return Collections.unmodifiableSet(toSet(entries));</span>
+<span class="source-line-no">262</span><span id="line-262">      return u(toSet(entries));</span>
 <span class="source-line-no">263</span><span id="line-263">   }</span>
 <span class="source-line-no">264</span><span id="line-264"></span>
 <span class="source-line-no">265</span><span id="line-265">   /**</span>
@@ -294,7 +294,7 @@
 <span class="source-line-no">281</span><span id="line-281">    *    Integer &lt;jv&gt;height&lt;/jv&gt; = &lt;jv&gt;map&lt;/jv&gt;.get(&lt;js&gt;"height"&lt;/js&gt;); &lt;jc&gt;// Returns: null (key not found)&lt;/jc&gt;</span>
 <span class="source-line-no">282</span><span id="line-282">    * &lt;/p&gt;</span>
 <span class="source-line-no">283</span><span id="line-283">    *</span>
-<span class="source-line-no">284</span><span id="line-284">    * @param key The key whose associated value is to be returned.</span>
+<span class="source-line-no">284</span><span id="line-284">    * @param key The key whose associated value is to be returned. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">285</span><span id="line-285">    * @return The value associated with the specified key, or &lt;jk&gt;null&lt;/jk&gt; if the key is not found</span>
 <span class="source-line-no">286</span><span id="line-286">    *         (or if the key is mapped to &lt;jk&gt;null&lt;/jk&gt;).</span>
 <span class="source-line-no">287</span><span id="line-287">    */</span>
@@ -326,7 +326,7 @@
 <span class="source-line-no">313</span><span id="line-313">    */</span>
 <span class="source-line-no">314</span><span id="line-314">   @Override /* Map */</span>
 <span class="source-line-no">315</span><span id="line-315">   public Set&lt;K&gt; keySet() {</span>
-<span class="source-line-no">316</span><span id="line-316">      return Collections.unmodifiableSet(toSet(keys));</span>
+<span class="source-line-no">316</span><span id="line-316">      return u(toSet(keys));</span>
 <span class="source-line-no">317</span><span id="line-317">   }</span>
 <span class="source-line-no">318</span><span id="line-318"></span>
 <span class="source-line-no">319</span><span id="line-319">   /**</span>

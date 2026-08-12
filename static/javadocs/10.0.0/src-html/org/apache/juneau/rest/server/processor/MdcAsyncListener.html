@@ -187,11 +187,11 @@
 <span class="source-line-no">174</span><span id="line-174">      "unchecked", // Type erasure on reflective/generic cast; element type is verified at call site</span>
 <span class="source-line-no">175</span><span id="line-175">      "java:S1168" // null is a meaningful lazy-skip sentinel: wrap() treats null as "no MDC to propagate"; an empty map would force unnecessary MDC installation.</span>
 <span class="source-line-no">176</span><span id="line-176">   })</span>
-<span class="source-line-no">177</span><span id="line-177">   public static Map&lt;String, String&gt; snapshot() {</span>
+<span class="source-line-no">177</span><span id="line-177">   public static Map&lt;String,String&gt; snapshot() {</span>
 <span class="source-line-no">178</span><span id="line-178">      if (!AVAILABLE)</span>
 <span class="source-line-no">179</span><span id="line-179">         return null;</span>
 <span class="source-line-no">180</span><span id="line-180">      try {</span>
-<span class="source-line-no">181</span><span id="line-181">         Map&lt;String, String&gt; map = (Map&lt;String, String&gt;) GET_COPY_OF_CONTEXT_MAP.invoke(null);</span>
+<span class="source-line-no">181</span><span id="line-181">         Map&lt;String,String&gt; map = (Map&lt;String,String&gt;) GET_COPY_OF_CONTEXT_MAP.invoke(null);</span>
 <span class="source-line-no">182</span><span id="line-182">         // Enrich the snapshot with the active OTel trace/span id (under the conventional OTel</span>
 <span class="source-line-no">183</span><span id="line-183">         // appender keys) so log correlation survives the async-completion hop even when the</span>
 <span class="source-line-no">184</span><span id="line-184">         // completion thread has lost the OTel context. Only when an OTel span is actually active.</span>
@@ -207,7 +207,7 @@
 <span class="source-line-no">194</span><span id="line-194">      "java:S3011", // Reflective access to the OTel trace API — intentional; OpenTelemetry is not a compile dep.</span>
 <span class="source-line-no">195</span><span id="line-195">      "java:S1168"  // null preserves the lazy-skip contract: a null map with no active trace must stay null (no MDC to propagate).</span>
 <span class="source-line-no">196</span><span id="line-196">   })</span>
-<span class="source-line-no">197</span><span id="line-197">   private static Map&lt;String, String&gt; enrichWithTraceContext(Map&lt;String, String&gt; map) {</span>
+<span class="source-line-no">197</span><span id="line-197">   private static Map&lt;String,String&gt; enrichWithTraceContext(Map&lt;String,String&gt; map) {</span>
 <span class="source-line-no">198</span><span id="line-198">      if (!OTEL_AVAILABLE)</span>
 <span class="source-line-no">199</span><span id="line-199">         return map;</span>
 <span class="source-line-no">200</span><span id="line-200">      try {</span>
@@ -217,7 +217,7 @@
 <span class="source-line-no">204</span><span id="line-204">         Object ctx = SPAN_GET_SPAN_CONTEXT.invoke(span);</span>
 <span class="source-line-no">205</span><span id="line-205">         if (ctx == null || ! ((Boolean) CTX_IS_VALID.invoke(ctx)).booleanValue())</span>
 <span class="source-line-no">206</span><span id="line-206">            return map;</span>
-<span class="source-line-no">207</span><span id="line-207">         var out = (map == null) ? new HashMap&lt;String, String&gt;(4) : new HashMap&lt;&gt;(map);</span>
+<span class="source-line-no">207</span><span id="line-207">         var out = (map == null) ? new HashMap&lt;String,String&gt;(4) : new HashMap&lt;&gt;(map);</span>
 <span class="source-line-no">208</span><span id="line-208">         out.put(MDC_TRACE_ID, String.valueOf(CTX_GET_TRACE_ID.invoke(ctx)));</span>
 <span class="source-line-no">209</span><span id="line-209">         out.put(MDC_SPAN_ID, String.valueOf(CTX_GET_SPAN_ID.invoke(ctx)));</span>
 <span class="source-line-no">210</span><span id="line-210">         return out;</span>
@@ -250,7 +250,7 @@
 <span class="source-line-no">237</span><span id="line-237">    * @param requestMdc The MDC snapshot taken on the dispatch thread (from {@link #snapshot()}), or {@code null}.</span>
 <span class="source-line-no">238</span><span id="line-238">    * @return A wrapped callback, or {@code action} itself when wrapping is not needed.</span>
 <span class="source-line-no">239</span><span id="line-239">    */</span>
-<span class="source-line-no">240</span><span id="line-240">   public static &lt;T&gt; BiConsumer&lt;T, Throwable&gt; wrap(BiConsumer&lt;T, Throwable&gt; action, Map&lt;String, String&gt; requestMdc) {</span>
+<span class="source-line-no">240</span><span id="line-240">   public static &lt;T&gt; BiConsumer&lt;T,Throwable&gt; wrap(BiConsumer&lt;T,Throwable&gt; action, Map&lt;String,String&gt; requestMdc) {</span>
 <span class="source-line-no">241</span><span id="line-241">      if (!AVAILABLE || requestMdc == null)</span>
 <span class="source-line-no">242</span><span id="line-242">         return action;</span>
 <span class="source-line-no">243</span><span id="line-243"></span>
@@ -272,7 +272,7 @@
 <span class="source-line-no">259</span><span id="line-259">   @SuppressWarnings({</span>
 <span class="source-line-no">260</span><span id="line-260">      "java:S3011" // Reflective access to MDC methods — intentional; SLF4J is not a compile dep.</span>
 <span class="source-line-no">261</span><span id="line-261">   })</span>
-<span class="source-line-no">262</span><span id="line-262">   static void setContextMap(Map&lt;String, String&gt; map) {</span>
+<span class="source-line-no">262</span><span id="line-262">   static void setContextMap(Map&lt;String,String&gt; map) {</span>
 <span class="source-line-no">263</span><span id="line-263">      try {</span>
 <span class="source-line-no">264</span><span id="line-264">         SET_CONTEXT_MAP.invoke(null, map);</span>
 <span class="source-line-no">265</span><span id="line-265">      } catch (Exception e) {</span>

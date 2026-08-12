@@ -333,7 +333,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The default supplier function. Can be <jk>null</jk>.</dd>
+<dd><code>value</code> - The default supplier function. Can be <jk>null</jk> (calls to <a href="Cache.html#get(K)"><code>Cache.get(Object)</code></a> will then always return <jk>null</jk>).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>

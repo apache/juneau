@@ -93,6 +93,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.http.classic.entity">
 <h2>Uses of <a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a></h2>
+<div class="caption"><span>Subclasses of <a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a> in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../StreamEntity.Unmodifiable.html" class="type-name-link" title="class in org.apache.juneau.http.classic.entity">StreamEntity.Unmodifiable</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Unmodifiable point-in-time snapshot of the enclosing <a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity"><code>StreamEntity</code></a>.</div>
+</div>
+</div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a> that return <a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -101,45 +112,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#copy()" class="member-name-link">copy</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setCached()" class="member-name-link">setCached</a>()</code></div>
+<div class="col-first odd-row-color"><code>protected <a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.Unmodifiable.</span><code><a href="../StreamEntity.Unmodifiable.html#modify(java.lang.Runnable)" class="member-name-link">modify</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;mutation)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setCharset(java.nio.charset.Charset)" class="member-name-link">setCharset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#unmodifiable()" class="member-name-link">unmodifiable</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setChunked()" class="member-name-link">setChunked</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setChunked(boolean)" class="member-name-link">setChunked</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setContent(java.lang.Object)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setContent(java.util.function.Supplier)" class="member-name-link">setContent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;?&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setContentEncoding(java.lang.String)" class="member-name-link">setContentEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setContentEncoding(org.apache.juneau.http.classic.header.ContentEncoding)" class="member-name-link">setContentEncoding</a><wbr>(<a href="../../header/ContentEncoding.html" title="class in org.apache.juneau.http.classic.header">ContentEncoding</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setContentLength(long)" class="member-name-link">setContentLength</a><wbr>(long&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setContentType(java.lang.String)" class="member-name-link">setContentType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setContentType(org.apache.juneau.http.classic.header.ContentType)" class="member-name-link">setContentType</a><wbr>(<a href="../../header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setMaxLength(int)" class="member-name-link">setMaxLength</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamEntity.</span><code><a href="../StreamEntity.html#setUnmodifiable()" class="member-name-link">setUnmodifiable</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.http.classic.entity</a> with parameters of type <a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a></span></div>
 <div class="summary-table three-column-summary">
@@ -150,6 +128,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../StreamEntity.html#%3Cinit%3E(org.apache.juneau.http.classic.entity.StreamEntity)" class="member-name-link">StreamEntity</a><wbr>(<a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a>&nbsp;copyFrom)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Copy constructor.</div>
+</div>
+<div class="col-first odd-row-color"><code>protected </code></div>
+<div class="col-second odd-row-color"><code><a href="../StreamEntity.Unmodifiable.html#%3Cinit%3E(org.apache.juneau.http.classic.entity.StreamEntity)" class="member-name-link">Unmodifiable</a><wbr>(<a href="../StreamEntity.html" title="class in org.apache.juneau.http.classic.entity">StreamEntity</a>&nbsp;copyFrom)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor.</div>
 </div>
 </div>
 </section>

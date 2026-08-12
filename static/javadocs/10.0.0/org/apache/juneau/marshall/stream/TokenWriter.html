@@ -97,7 +97,7 @@ extends <a href="RecordWriter.html" title="interface in org.apache.juneau.marsha
  <h5 class='section'>Usage:</h5>
  <p class='bjava'>
    StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
-   <jk>try</jk> (TokenWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.serializeTokens(<jv>sb</jv>)) {
+   <jk>try</jk> (TokenWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.writeTokens(<jv>sb</jv>)) {
       <jv>w</jv>.startObject();
       <jv>w</jv>.fieldName(<js>"a"</js>);
       <jv>w</jv>.number(1);
@@ -511,7 +511,7 @@ extends <a href="RecordWriter.html" title="interface in org.apache.juneau.marsha
  <p>
  <b>Swaps and <code>@Schema</code>:</b> this method is purely structural.  Object swaps and
  schema annotations are NOT applied at the token layer &mdash; use the POJO databind path on
- <a href="../serializer/Serializer.html#serialize(java.lang.Object)"><code>Serializer.serialize(Object)</code></a> for those.</div>
+ <a href="../serializer/Serializer.html#write(java.lang.Object)"><code>Serializer.write(Object)</code></a> for those.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The value to emit.  May be <jk>null</jk>.</dd>

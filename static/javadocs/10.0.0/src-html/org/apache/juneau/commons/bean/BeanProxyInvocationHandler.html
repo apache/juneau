@@ -93,7 +93,7 @@
 <span class="source-line-no">080</span><span id="line-80">public class BeanProxyInvocationHandler&lt;T&gt; implements InvocationHandler {</span>
 <span class="source-line-no">081</span><span id="line-81"></span>
 <span class="source-line-no">082</span><span id="line-82">   private final BeanMeta&lt;T&gt; meta;                 // The BeanMeta for this instance</span>
-<span class="source-line-no">083</span><span id="line-83">   private Map&lt;String,Object&gt; beanProps;     // The map of property names to bean property values.</span>
+<span class="source-line-no">083</span><span id="line-83">   private final Map&lt;String,Object&gt; beanProps;     // The map of property names to bean property values.</span>
 <span class="source-line-no">084</span><span id="line-84"></span>
 <span class="source-line-no">085</span><span id="line-85">   /**</span>
 <span class="source-line-no">086</span><span id="line-86">    * Constructor.</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">         return null;</span>
 <span class="source-line-no">159</span><span id="line-159">      }</span>
 <span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">      throw uoex("Unsupported bean method.  method=''{0}''", method);</span>
+<span class="source-line-no">161</span><span id="line-161">      throw uoex("Unsupported bean method.  method='%s'", method);</span>
 <span class="source-line-no">162</span><span id="line-162">   }</span>
 <span class="source-line-no">163</span><span id="line-163">}</span>
 

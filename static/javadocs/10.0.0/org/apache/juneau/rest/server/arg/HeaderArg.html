@@ -214,7 +214,7 @@ implements <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.s
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>pi</code> - The Java method parameter being resolved.</dd>
+<dd><code>pi</code> - The Java method parameter being resolved. Must not be <jk>null</jk>.</dd>
 <dd><code>annotations</code> - The annotations to apply to any new part parsers.</dd>
 </dl>
 </section>
@@ -235,7 +235,7 @@ implements <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.s
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>paramInfo</code> - The Java method parameter being resolved.</dd>
+<dd><code>paramInfo</code> - The Java method parameter being resolved. Must not be <jk>null</jk>.</dd>
 <dd><code>annotations</code> - The annotations to apply to any new part parsers.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="HeaderArg.html" title="class in org.apache.juneau.rest.server.arg"><code>HeaderArg</code></a>, or <jk>null</jk> if the parameter is not annotated with <a href="../../../http/Header.html" title="annotation interface in org.apache.juneau.http"><code>Header</code></a>.</dd>

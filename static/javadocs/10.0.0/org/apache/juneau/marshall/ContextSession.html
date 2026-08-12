@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></code>, <code><a href="../rest/server/RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></code>, <code><a href="../rest/server/RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-43">ContextSession</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-42">ContextSession</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
 
@@ -223,8 +223,8 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>msg</code> - The warning message.
    <br>Cannot be <jk>null</jk>.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>-style arguments.
-   <br>Cannot contain <jk>null</jk> values.</dd>
+<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format</code></a>-style arguments.
+   <br>Cannot be <jk>null</jk> (individual values may be <jk>null</jk>).</dd>
 </dl>
 </section>
 </li>
@@ -264,7 +264,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the warnings that occurred in this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.</dd>
+<dd>The warnings that occurred in this session, or an empty list if no warnings occurred.</dd>
 </dl>
 </section>
 </li>

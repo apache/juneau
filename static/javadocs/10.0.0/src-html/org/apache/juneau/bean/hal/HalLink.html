@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.hal;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.marshall.json.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.marshall.marshaller.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">/**</span>
 <span class="source-line-no">023</span><span id="line-23"> * Represents a HAL Link Object as defined by</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55">   /**</span>
 <span class="source-line-no">056</span><span id="line-56">    * Convenience constructor with the required {@code href} field.</span>
 <span class="source-line-no">057</span><span id="line-57">    *</span>
-<span class="source-line-no">058</span><span id="line-58">    * @param href The link URI or URI template.</span>
+<span class="source-line-no">058</span><span id="line-58">    * @param href The link URI or URI template.  Can be &lt;jk&gt;null&lt;/jk&gt; to leave the property unset.</span>
 <span class="source-line-no">059</span><span id="line-59">    */</span>
 <span class="source-line-no">060</span><span id="line-60">   public HalLink(String href) {</span>
 <span class="source-line-no">061</span><span id="line-61">      this.href = href;</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74">   /**</span>
 <span class="source-line-no">075</span><span id="line-75">    * Bean property setter:  &lt;property&gt;href&lt;/property&gt;.</span>
 <span class="source-line-no">076</span><span id="line-76">    *</span>
-<span class="source-line-no">077</span><span id="line-77">    * @param value The new value for this property.</span>
+<span class="source-line-no">077</span><span id="line-77">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">078</span><span id="line-78">    * @return This object.</span>
 <span class="source-line-no">079</span><span id="line-79">    */</span>
 <span class="source-line-no">080</span><span id="line-80">   public HalLink setHref(String value) {</span>
@@ -108,7 +108,7 @@
 <span class="source-line-no">095</span><span id="line-95">   /**</span>
 <span class="source-line-no">096</span><span id="line-96">    * Bean property setter:  &lt;property&gt;templated&lt;/property&gt;.</span>
 <span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param value The new value for this property.</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">099</span><span id="line-99">    * @return This object.</span>
 <span class="source-line-no">100</span><span id="line-100">    */</span>
 <span class="source-line-no">101</span><span id="line-101">   public HalLink setTemplated(Boolean value) {</span>
@@ -129,7 +129,7 @@
 <span class="source-line-no">116</span><span id="line-116">   /**</span>
 <span class="source-line-no">117</span><span id="line-117">    * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</span>
 <span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * @param value The new value for this property.</span>
+<span class="source-line-no">119</span><span id="line-119">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">120</span><span id="line-120">    * @return This object.</span>
 <span class="source-line-no">121</span><span id="line-121">    */</span>
 <span class="source-line-no">122</span><span id="line-122">   public HalLink setType(String value) {</span>
@@ -150,7 +150,7 @@
 <span class="source-line-no">137</span><span id="line-137">   /**</span>
 <span class="source-line-no">138</span><span id="line-138">    * Bean property setter:  &lt;property&gt;deprecation&lt;/property&gt;.</span>
 <span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * @param value The new value for this property.</span>
+<span class="source-line-no">140</span><span id="line-140">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">141</span><span id="line-141">    * @return This object.</span>
 <span class="source-line-no">142</span><span id="line-142">    */</span>
 <span class="source-line-no">143</span><span id="line-143">   public HalLink setDeprecation(String value) {</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">   /**</span>
 <span class="source-line-no">159</span><span id="line-159">    * Bean property setter:  &lt;property&gt;name&lt;/property&gt;.</span>
 <span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * @param value The new value for this property.</span>
+<span class="source-line-no">161</span><span id="line-161">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">162</span><span id="line-162">    * @return This object.</span>
 <span class="source-line-no">163</span><span id="line-163">    */</span>
 <span class="source-line-no">164</span><span id="line-164">   public HalLink setName(String value) {</span>
@@ -192,7 +192,7 @@
 <span class="source-line-no">179</span><span id="line-179">   /**</span>
 <span class="source-line-no">180</span><span id="line-180">    * Bean property setter:  &lt;property&gt;profile&lt;/property&gt;.</span>
 <span class="source-line-no">181</span><span id="line-181">    *</span>
-<span class="source-line-no">182</span><span id="line-182">    * @param value The new value for this property.</span>
+<span class="source-line-no">182</span><span id="line-182">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">183</span><span id="line-183">    * @return This object.</span>
 <span class="source-line-no">184</span><span id="line-184">    */</span>
 <span class="source-line-no">185</span><span id="line-185">   public HalLink setProfile(String value) {</span>
@@ -213,7 +213,7 @@
 <span class="source-line-no">200</span><span id="line-200">   /**</span>
 <span class="source-line-no">201</span><span id="line-201">    * Bean property setter:  &lt;property&gt;title&lt;/property&gt;.</span>
 <span class="source-line-no">202</span><span id="line-202">    *</span>
-<span class="source-line-no">203</span><span id="line-203">    * @param value The new value for this property.</span>
+<span class="source-line-no">203</span><span id="line-203">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">204</span><span id="line-204">    * @return This object.</span>
 <span class="source-line-no">205</span><span id="line-205">    */</span>
 <span class="source-line-no">206</span><span id="line-206">   public HalLink setTitle(String value) {</span>
@@ -234,7 +234,7 @@
 <span class="source-line-no">221</span><span id="line-221">   /**</span>
 <span class="source-line-no">222</span><span id="line-222">    * Bean property setter:  &lt;property&gt;hreflang&lt;/property&gt;.</span>
 <span class="source-line-no">223</span><span id="line-223">    *</span>
-<span class="source-line-no">224</span><span id="line-224">    * @param value The new value for this property.</span>
+<span class="source-line-no">224</span><span id="line-224">    * @param value The new value for this property.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">225</span><span id="line-225">    * @return This object.</span>
 <span class="source-line-no">226</span><span id="line-226">    */</span>
 <span class="source-line-no">227</span><span id="line-227">   public HalLink setHreflang(String value) {</span>
@@ -244,7 +244,7 @@
 <span class="source-line-no">231</span><span id="line-231"></span>
 <span class="source-line-no">232</span><span id="line-232">   @Override /* Overridden from Object */</span>
 <span class="source-line-no">233</span><span id="line-233">   public String toString() {</span>
-<span class="source-line-no">234</span><span id="line-234">      return JsonSerializer.DEFAULT.toString(this);</span>
+<span class="source-line-no">234</span><span id="line-234">      return Json.of(this);</span>
 <span class="source-line-no">235</span><span id="line-235">   }</span>
 <span class="source-line-no">236</span><span id="line-236">}</span>
 

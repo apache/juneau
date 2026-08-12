@@ -58,8 +58,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
 <div class="col-last even-row-color">
-<div class="block">Stateless Model Context Protocol (MCP) endpoint built on <code>juneau-rest-server</code> using the
- <code>juneau-bean-mcp</code> wire types.</div>
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -76,7 +75,24 @@ loadScripts(document, 'script');</script>
 R&gt;&nbsp;<a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpTypedHandlers.</span><code><a href="../McpTypedHandlers.html#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)" class="member-name-link">adaptTool</a><wbr>(<a href="../McpTypedToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpTypedToolHandler</a>&lt;A,<wbr>R&gt;&nbsp;typed)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Converts a typed tool handler into a raw handler suitable for <a href="../McpServerConfig.html#addTool(org.apache.juneau.rest.server.mcp.McpToolHandler...)"><code>McpServerConfig.addTool(McpToolHandler...)</code></a>.</div>
+<div class="block">Adapts a typed tool handler into a raw <a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpToolHandler.</span><code><a href="../McpToolHandler.html#of(org.apache.juneau.rest.server.mcp.McpToolSpec,java.util.function.BiFunction)" class="member-name-link">of</a><wbr>(<a href="../McpToolSpec.html" title="class in org.apache.juneau.rest.server.mcp">McpToolSpec</a>&nbsp;descriptor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;,<wbr><a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr><a href="../McpToolOutcome.html" title="class in org.apache.juneau.rest.server.mcp">McpToolOutcome</a>&gt;&nbsp;call)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds a handler from a fixed descriptor and a <code>call</code> lambda.</div>
+</div>
+<div class="col-first even-row-color"><code>static &lt;A,<wbr>
+R&gt;&nbsp;<a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpTypedHandlers.</span><code><a href="../McpTypedHandlers.html#tool(java.lang.String,java.lang.String,java.lang.Class,java.lang.Class,java.util.function.BiFunction)" class="member-name-link">tool</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;argumentType,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;R&gt;&nbsp;resultType,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;A,<wbr><a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>,<wbr>R&gt;&nbsp;call)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds a typed tool from a name, description, argument/result types, and a <code>call</code> lambda, then adapts
+ it into a raw <a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp"><code>McpToolHandler</code></a> via <a href="../McpTypedHandlers.html#adaptTool(org.apache.juneau.rest.server.mcp.McpTypedToolHandler)"><code>McpTypedHandlers.adaptTool(McpTypedToolHandler)</code></a>.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server.mcp</a> that return types with arguments of type <a href="../McpToolHandler.html" title="interface in org.apache.juneau.rest.server.mcp">McpToolHandler</a></span></div>

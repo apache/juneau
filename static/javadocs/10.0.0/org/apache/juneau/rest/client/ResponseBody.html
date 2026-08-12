@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-50">ResponseBody</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-52">ResponseBody</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A fluent accessor for an HTTP response body returned by <a href="RestResponse.html" title="class in org.apache.juneau.rest.client"><code>RestResponse</code></a>.
 
@@ -144,24 +144,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Opens a token/record-streaming cursor over the response body using the given parser.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asStream()" class="member-name-link">asStream</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asEventStream()" class="member-name-link">asEventStream</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Opens a closeable, cancellable cursor over a <c>text/event-stream</c> response body.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asStream()" class="member-name-link">asStream</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the raw response body stream.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asString()" class="member-name-link">asString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asString()" class="member-name-link">asString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the response body as a UTF-8 string.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asString(java.nio.charset.Charset)" class="member-name-link">asString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asString(java.nio.charset.Charset)" class="member-name-link">asString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the response body decoded with the given charset.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readAllBytes()" class="member-name-link">readAllBytes</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readAllBytes()" class="member-name-link">readAllBytes</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Reads the response body into a byte array and returns it, or returns <code>null</code> if there is no body.</div>
 </div>
 </div>
@@ -184,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-67">asString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-69">asString</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the response body as a UTF-8 string.</div>
 <dl class="notes">
@@ -198,7 +203,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asString(java.nio.charset.Charset)">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-78">asString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-80">asString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the response body decoded with the given charset.</div>
 <dl class="notes">
@@ -214,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asBytes()">
 <h3>asBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-91">asBytes</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-93">asBytes</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns the response body as a byte array.</div>
 <dl class="notes">
@@ -228,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asStream()">
 <h3>asStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-109">asStream</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-111">asStream</a></span>()</div>
 <div class="block">Returns the raw response body stream.
 
  <p>
@@ -242,7 +247,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readAllBytes()">
 <h3>readAllBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-122">readAllBytes</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-124">readAllBytes</a></span>()
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads the response body into a byte array and returns it, or returns <code>null</code> if there is no body.
 
@@ -259,7 +264,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asCursor(java.lang.Class)">
 <h3>asCursor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-142">asCursor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-144">asCursor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a token/record-streaming cursor over the response body using the parser negotiated from the response
  <code>Content-Type</code>.
@@ -285,7 +290,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="as(java.lang.Class)">
 <h3>as</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-159">as</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-161">as</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Parses the response body to <code>type</code> using the parser negotiated from the response <code>Content-Type</code>.
 
@@ -308,7 +313,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="as(org.apache.juneau.marshall.parser.Parser,java.lang.Class)">
 <h3>as</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-179">as</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-181">as</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Parses the response body to <code>type</code> using the given parser.
@@ -335,7 +340,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asCursor(org.apache.juneau.marshall.parser.Parser,java.lang.Class)">
 <h3>asCursor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-221">asCursor</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-223">asCursor</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a token/record-streaming cursor over the response body using the given parser.
@@ -362,6 +367,41 @@ loadScripts(document, 'script');</script>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the body is missing, the parser does not support the requested cursor surface, or the
    produced cursor is not assignable to <code>type</code>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="asEventStream()">
+<h3>asEventStream</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse">SseEventReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/ResponseBody.html#line-278">asEventStream</a></span>()
+                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Opens a closeable, cancellable cursor over a <c>text/event-stream</c> response body.
+
+ <p>
+ Reads the live response body as UTF-8 and dispatches one <a href="../../marshall/sse/SseEvent.html" title="class in org.apache.juneau.marshall.sse"><code>SseEvent</code></a> at a time via the returned
+ <a href="../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse"><code>SseEventReader</code></a>. The stream is not buffered into memory &mdash; events are parsed incrementally as bytes
+ arrive, which is required for a long-lived Streamable-HTTP channel (see <code>juneau-rest-client-mcp</code>).
+
+ <p>
+ Closing the returned reader first closes the parent <a href="RestResponse.html" title="class in org.apache.juneau.rest.client"><code>RestResponse</code></a> (transport-layer cancel / release),
+ then closes the reader itself.  This ordering is what makes the cursor <i>cancellable</i>: callers can stop
+ consuming an open SSE channel at any time by calling <a href="../../marshall/sse/SseEventReader.html#close()"><code>SseEventReader.close()</code></a>, including from another
+ thread, without waiting for the server to finish sending events.
+
+ <p>
+ Transport-specific release behavior varies: this API guarantees that both the response and reader are closed in
+ the above order, but the exact connection-release mechanism is determined by the active transport.
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li>This cursor is not thread-safe, except for using <a href="../../marshall/sse/SseEventReader.html#close()"><code>SseEventReader.close()</code></a> as a cancellation signal from another thread.
+   <li>Mid-stream read failures are surfaced as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/UncheckedIOException.html" title="class or interface in java.io" class="external-link"><code>UncheckedIOException</code></a> from <a href="../../marshall/sse/SseEventReader.html#hasNext()"><code>SseEventReader.hasNext()</code></a> / <a href="../../marshall/sse/SseEventReader.html#next()"><code>SseEventReader.next()</code></a> (per <a href="../../marshall/sse/SseEventReader.html" title="class in org.apache.juneau.marshall.sse"><code>SseEventReader</code></a> contract).
+   <li>Iterating after close throws.
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A cursor over the live response body. Never <jk>null</jk>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the response has no body to open a stream over.</dd>
 </dl>
 </section>
 </li>

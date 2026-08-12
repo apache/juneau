@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97">    * trailing newline after every top-level value, bound to this live session.</span>
 <span class="source-line-no">098</span><span id="line-98">    *</span>
 <span class="source-line-no">099</span><span id="line-99">    * &lt;p&gt;</span>
-<span class="source-line-no">100</span><span id="line-100">    * Same honored/ignored builder properties as {@link JsonSerializerSession#serializeTokens(Object)}</span>
+<span class="source-line-no">100</span><span id="line-100">    * Same honored/ignored builder properties as {@link JsonSerializerSession#writeTokens(Object)}</span>
 <span class="source-line-no">101</span><span id="line-101">    * except that &lt;c&gt;useWhitespace&lt;/c&gt; is forced to &lt;jk&gt;false&lt;/jk&gt; &amp;mdash; pretty-printed JSONL is</span>
 <span class="source-line-no">102</span><span id="line-102">    * not standard.</span>
 <span class="source-line-no">103</span><span id="line-103">    *</span>
@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line-106">    * @throws IOException If the output type is not supported or could not be opened.</span>
 <span class="source-line-no">107</span><span id="line-107">    */</span>
 <span class="source-line-no">108</span><span id="line-108">   @Override /* JsonSerializerSession */</span>
-<span class="source-line-no">109</span><span id="line-109">   public TokenWriter serializeTokens(Object output) throws IOException {</span>
+<span class="source-line-no">109</span><span id="line-109">   public TokenWriter writeTokens(Object output) throws IOException {</span>
 <span class="source-line-no">110</span><span id="line-110">      var walk = new PojoWalker.Options(</span>
 <span class="source-line-no">111</span><span id="line-111">         isKeepNullProperties(),</span>
 <span class="source-line-no">112</span><span id="line-112">         isTrimEmptyMaps(),</span>
@@ -144,10 +144,10 @@
 <span class="source-line-no">131</span><span id="line-131">    * Streaming array-element {@link RecordWriter} for JSONL.</span>
 <span class="source-line-no">132</span><span id="line-132">    *</span>
 <span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
-<span class="source-line-no">134</span><span id="line-134">    * Unlike the inherited {@link JsonSerializerSession#serializeArrayRecords(Object)} &amp;mdash; which wraps</span>
+<span class="source-line-no">134</span><span id="line-134">    * Unlike the inherited {@link JsonSerializerSession#writeArrayRecords(Object)} &amp;mdash; which wraps</span>
 <span class="source-line-no">135</span><span id="line-135">    * the writes in a bracketed top-level &lt;c&gt;[...]&lt;/c&gt; array and is invalid for line-delimited JSONL &amp;mdash;</span>
 <span class="source-line-no">136</span><span id="line-136">    * this aliases the JSONL line record stream: the {@link JsonlTokenWriter} returned by</span>
-<span class="source-line-no">137</span><span id="line-137">    * {@link #serializeTokens(Object)} is itself a {@link RecordWriter} whose</span>
+<span class="source-line-no">137</span><span id="line-137">    * {@link #writeTokens(Object)} is itself a {@link RecordWriter} whose</span>
 <span class="source-line-no">138</span><span id="line-138">    * {@link RecordWriter#write(Object) write(...)} emits one top-level value per line (no surrounding</span>
 <span class="source-line-no">139</span><span id="line-139">    * brackets).  Memory is O(1) in the number of records.</span>
 <span class="source-line-no">140</span><span id="line-140">    *</span>
@@ -156,12 +156,12 @@
 <span class="source-line-no">143</span><span id="line-143">    * @throws IOException If a problem occurred opening the underlying output.</span>
 <span class="source-line-no">144</span><span id="line-144">    */</span>
 <span class="source-line-no">145</span><span id="line-145">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">146</span><span id="line-146">   public RecordWriter serializeArrayRecords(Object output) throws IOException {</span>
-<span class="source-line-no">147</span><span id="line-147">      return serializeTokens(output);</span>
+<span class="source-line-no">146</span><span id="line-146">   public RecordWriter writeArrayRecords(Object output) throws IOException {</span>
+<span class="source-line-no">147</span><span id="line-147">      return writeTokens(output);</span>
 <span class="source-line-no">148</span><span id="line-148">   }</span>
 <span class="source-line-no">149</span><span id="line-149"></span>
 <span class="source-line-no">150</span><span id="line-150">   @Override /* Overridden from JsonSerializerSession */</span>
-<span class="source-line-no">151</span><span id="line-151">   protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
+<span class="source-line-no">151</span><span id="line-151">   protected void doWrite(SerializerPipe out, Object o) throws IOException, SerializeException {</span>
 <span class="source-line-no">152</span><span id="line-152">      var w = getJsonWriter(out);</span>
 <span class="source-line-no">153</span><span id="line-153">      var cm = getClassMetaForObject(o);</span>
 <span class="source-line-no">154</span><span id="line-154">      var depth = getInitialDepth();</span>
@@ -170,17 +170,17 @@
 <span class="source-line-no">157</span><span id="line-157">         var c = cm.isArray() ? toList(cm.inner(), o) : (Collection&lt;?&gt;) o;</span>
 <span class="source-line-no">158</span><span id="line-158">         var elementType = cm.getElementType();</span>
 <span class="source-line-no">159</span><span id="line-159">         for (Object item : c) {</span>
-<span class="source-line-no">160</span><span id="line-160">            serializeAnything(w.i(depth), item, elementType, "root", null);</span>
+<span class="source-line-no">160</span><span id="line-160">            writeAnything(w.i(depth), item, elementType, "root", null);</span>
 <span class="source-line-no">161</span><span id="line-161">            w.w('\n');</span>
 <span class="source-line-no">162</span><span id="line-162">         }</span>
 <span class="source-line-no">163</span><span id="line-163">      } else if (cm != null &amp;&amp; cm.isStreamable()) {</span>
 <span class="source-line-no">164</span><span id="line-164">         var elementType = cm.getElementType();</span>
 <span class="source-line-no">165</span><span id="line-165">         forEachStreamableEntry(o, cm, item -&gt; {</span>
-<span class="source-line-no">166</span><span id="line-166">            serializeAnything(w.i(depth), item, elementType, "root", null);</span>
+<span class="source-line-no">166</span><span id="line-166">            writeAnything(w.i(depth), item, elementType, "root", null);</span>
 <span class="source-line-no">167</span><span id="line-167">            w.w('\n');</span>
 <span class="source-line-no">168</span><span id="line-168">         });</span>
 <span class="source-line-no">169</span><span id="line-169">      } else {</span>
-<span class="source-line-no">170</span><span id="line-170">         serializeAnything(w.i(depth), o, getExpectedRootType(o), "root", null);</span>
+<span class="source-line-no">170</span><span id="line-170">         writeAnything(w.i(depth), o, getExpectedRootType(o), "root", null);</span>
 <span class="source-line-no">171</span><span id="line-171">         w.w('\n');</span>
 <span class="source-line-no">172</span><span id="line-172">      }</span>
 <span class="source-line-no">173</span><span id="line-173">   }</span>

@@ -81,12 +81,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Petstore REST resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
 <div class="col-last even-row-color">
+<div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Spring Boot Integration</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.server.config">org.apache.juneau.server.config</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.server.config">org.apache.juneau.server.config</a></div>
+<div class="col-last even-row-color">
 <div class="block">Server Configuration Repository</div>
 </div>
 </div>
@@ -205,6 +209,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>jakarta.servlet.Servlet</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HealthProbeConfiguration.</span><code><a href="../../../microservice/tomcat/HealthProbeConfiguration.html#healthProbeServlet()" class="member-name-link">healthProbeServlet</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Probe servlet bean discovered by <a href="../../../microservice/tomcat/TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat"><code>TomcatServerComponent</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../rest/server/health/HealthProbeSettings.html" title="class in org.apache.juneau.rest.server.health">HealthProbeSettings</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HealthProbeConfiguration.</span><code><a href="../../../microservice/tomcat/HealthProbeConfiguration.html#healthProbeSettings()" class="member-name-link">healthProbeSettings</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Default probe settings bean.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="../../../microservice/tomcat/TomcatServerComponent.html" title="class in org.apache.juneau.microservice.tomcat">TomcatServerComponent</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">TomcatConfiguration.</span><code><a href="../../../microservice/tomcat/TomcatConfiguration.html#tomcatServerComponent()" class="member-name-link">tomcatServerComponent</a>()</code></div>
 <div class="col-last even-row-color">
@@ -274,6 +288,42 @@ loadScripts(document, 'script');</script>
 <div class="block">Provides a <a href="../../../rest/server/view/mustache/MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheMixin</code></a> configured to resolve templates under <code>petstore-templates/</code> with
  an implicit <code>.mustache</code> suffix — so <code>MustacheView.of("pet")</code> resolves to the classpath
  resource <code>petstore-templates/pet.mustache</code>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
+<h2>Uses of <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> in <a href="../../../rest/server/mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/server/mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a> with annotations of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>final <a href="../../../rest/server/mcp/v20260728/McpOptions.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpOptions</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpRestServlet.</span><code><a href="../../../rest/server/mcp/v20260728/McpRestServlet.html#getMcpOptions()" class="member-name-link">getMcpOptions</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns this servlet's binding-owned <a href="../../../rest/server/mcp/v20260728/McpOptions.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpOptions</code></a>, built eagerly during initialization.</div>
+</div>
+<div class="col-first odd-row-color"><code>default <a href="../../../rest/server/mcp/v20260728/McpOptions.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpOptions</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpEndpoint.</span><code><a href="../../../rest/server/mcp/v20260728/McpEndpoint.html#mcpOptionsBean()" class="member-name-link">mcpOptionsBean</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Publishes this endpoint's memoized <a href="../../../rest/server/mcp/v20260728/McpOptions.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpOptions</code></a> into this resource's <code>RestContext</code> bean store,
+ the same <code>@Bean</code>-method mechanism already used by <a href="../../../rest/server/mcp/v20260728/McpEndpoint.html#mcpTraceContextExtractor()"><code>McpEndpoint.mcpTraceContextExtractor()</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>default <a href="../../../rest/server/tracing/TraceContextExtractor.html" title="interface in org.apache.juneau.rest.server.tracing">TraceContextExtractor</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">McpEndpoint.</span><code><a href="../../../rest/server/mcp/v20260728/McpEndpoint.html#mcpTraceContextExtractor()" class="member-name-link">mcpTraceContextExtractor</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Publishes this revision's stable <a href="../../../rest/server/tracing/TraceContextExtractor.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TraceContextExtractor</code></a> so an active <code>TracerHook</code>
+ (via <code>RestOpInvoker</code>) recognizes this endpoint's resolved <code>JsonRpcRequest</code> argument
+ and its <code>params._meta</code> carrier before span creation.</div>
+</div>
+<div class="col-first odd-row-color"><code>final <a href="../../../rest/server/tracing/TraceContextExtractor.html" title="interface in org.apache.juneau.rest.server.tracing">TraceContextExtractor</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">McpRestServlet.</span><code><a href="../../../rest/server/mcp/v20260728/McpRestServlet.html#mcpTraceContextExtractor()" class="member-name-link">mcpTraceContextExtractor</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Publishes this revision's stable <a href="../../../rest/server/tracing/TraceContextExtractor.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TraceContextExtractor</code></a> so an active <code>TracerHook</code>
+ (via <code>RestOpInvoker</code>) recognizes this endpoint's resolved <code>JsonRpcRequest</code> argument
+ and its <code>params._meta</code> carrier before span creation.</div>
 </div>
 </div>
 </section>

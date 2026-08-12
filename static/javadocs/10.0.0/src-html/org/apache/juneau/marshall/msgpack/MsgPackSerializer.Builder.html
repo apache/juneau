@@ -136,194 +136,196 @@
 <span class="source-line-no">123</span><span id="line-123">       */</span>
 <span class="source-line-no">124</span><span id="line-124">      protected Builder(Builder copyFrom) {</span>
 <span class="source-line-no">125</span><span id="line-125">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">126</span><span id="line-126">      }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">      /**</span>
-<span class="source-line-no">129</span><span id="line-129">       * Copy constructor.</span>
-<span class="source-line-no">130</span><span id="line-130">       *</span>
-<span class="source-line-no">131</span><span id="line-131">       * @param copyFrom The bean to copy from.</span>
-<span class="source-line-no">132</span><span id="line-132">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">133</span><span id="line-133">       */</span>
-<span class="source-line-no">134</span><span id="line-134">      protected Builder(MsgPackSerializer copyFrom) {</span>
-<span class="source-line-no">135</span><span id="line-135">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">136</span><span id="line-136">      }</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">      /**</span>
-<span class="source-line-no">139</span><span id="line-139">       * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
-<span class="source-line-no">140</span><span id="line-140">       *</span>
-<span class="source-line-no">141</span><span id="line-141">       * &lt;p&gt;</span>
-<span class="source-line-no">142</span><span id="line-142">       * If &lt;jk&gt;true&lt;/jk&gt;, then &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
-<span class="source-line-no">143</span><span id="line-143">       * through reflection.</span>
-<span class="source-line-no">144</span><span id="line-144">       *</span>
-<span class="source-line-no">145</span><span id="line-145">       * &lt;p&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">       * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()} setting and is</span>
-<span class="source-line-no">147</span><span id="line-147">       * provided to customize the behavior of specific serializers in a {@link SerializerSet}.</span>
-<span class="source-line-no">148</span><span id="line-148">       *</span>
-<span class="source-line-no">149</span><span id="line-149">       * @return This object.</span>
-<span class="source-line-no">150</span><span id="line-150">       */</span>
-<span class="source-line-no">151</span><span id="line-151">      public Builder addBeanTypesMsgPack() {</span>
-<span class="source-line-no">152</span><span id="line-152">         return addBeanTypesMsgPack(true);</span>
-<span class="source-line-no">153</span><span id="line-153">      }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">      /**</span>
-<span class="source-line-no">156</span><span id="line-156">       * Same as {@link #addBeanTypesMsgPack()} but allows you to explicitly specify the value.</span>
-<span class="source-line-no">157</span><span id="line-157">       *</span>
-<span class="source-line-no">158</span><span id="line-158">       * @param value The value for this setting.</span>
-<span class="source-line-no">159</span><span id="line-159">       * @return This object.</span>
-<span class="source-line-no">160</span><span id="line-160">       */</span>
-<span class="source-line-no">161</span><span id="line-161">      public Builder addBeanTypesMsgPack(boolean value) {</span>
-<span class="source-line-no">162</span><span id="line-162">         addBeanTypesMsgPack = value;</span>
-<span class="source-line-no">163</span><span id="line-163">         return this;</span>
-<span class="source-line-no">164</span><span id="line-164">      }</span>
-<span class="source-line-no">165</span><span id="line-165"></span>
-<span class="source-line-no">166</span><span id="line-166">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">167</span><span id="line-167">      public MsgPackSerializer build() {</span>
-<span class="source-line-no">168</span><span id="line-168">         return cache(CACHE).build(MsgPackSerializer.class);</span>
-<span class="source-line-no">169</span><span id="line-169">      }</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">172</span><span id="line-172">      public Builder copy() {</span>
-<span class="source-line-no">173</span><span id="line-173">         return new Builder(this);</span>
-<span class="source-line-no">174</span><span id="line-174">      }</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">177</span><span id="line-177">      public HashKey hashKey() {</span>
-<span class="source-line-no">178</span><span id="line-178">         return HashKey.of(super.hashKey(), addBeanTypesMsgPack);</span>
-<span class="source-line-no">179</span><span id="line-179">      }</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
+<span class="source-line-no">126</span><span id="line-126">         addBeanTypesMsgPack = copyFrom.addBeanTypesMsgPack;</span>
+<span class="source-line-no">127</span><span id="line-127">      }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">      /**</span>
+<span class="source-line-no">130</span><span id="line-130">       * Copy constructor.</span>
+<span class="source-line-no">131</span><span id="line-131">       *</span>
+<span class="source-line-no">132</span><span id="line-132">       * @param copyFrom The bean to copy from.</span>
+<span class="source-line-no">133</span><span id="line-133">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">134</span><span id="line-134">       */</span>
+<span class="source-line-no">135</span><span id="line-135">      protected Builder(MsgPackSerializer copyFrom) {</span>
+<span class="source-line-no">136</span><span id="line-136">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">137</span><span id="line-137">         addBeanTypesMsgPack = copyFrom.addBeanTypesMsgPack;</span>
+<span class="source-line-no">138</span><span id="line-138">      }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      /**</span>
+<span class="source-line-no">141</span><span id="line-141">       * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
+<span class="source-line-no">142</span><span id="line-142">       *</span>
+<span class="source-line-no">143</span><span id="line-143">       * &lt;p&gt;</span>
+<span class="source-line-no">144</span><span id="line-144">       * If &lt;jk&gt;true&lt;/jk&gt;, then &lt;js&gt;"_type"&lt;/js&gt; properties will be added to beans if their type cannot be inferred</span>
+<span class="source-line-no">145</span><span id="line-145">       * through reflection.</span>
+<span class="source-line-no">146</span><span id="line-146">       *</span>
+<span class="source-line-no">147</span><span id="line-147">       * &lt;p&gt;</span>
+<span class="source-line-no">148</span><span id="line-148">       * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()} setting and is</span>
+<span class="source-line-no">149</span><span id="line-149">       * provided to customize the behavior of specific serializers in a {@link SerializerSet}.</span>
+<span class="source-line-no">150</span><span id="line-150">       *</span>
+<span class="source-line-no">151</span><span id="line-151">       * @return This object.</span>
+<span class="source-line-no">152</span><span id="line-152">       */</span>
+<span class="source-line-no">153</span><span id="line-153">      public Builder addBeanTypesMsgPack() {</span>
+<span class="source-line-no">154</span><span id="line-154">         return addBeanTypesMsgPack(true);</span>
+<span class="source-line-no">155</span><span id="line-155">      }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">      /**</span>
+<span class="source-line-no">158</span><span id="line-158">       * Same as {@link #addBeanTypesMsgPack()} but allows you to explicitly specify the value.</span>
+<span class="source-line-no">159</span><span id="line-159">       *</span>
+<span class="source-line-no">160</span><span id="line-160">       * @param value The value for this setting.</span>
+<span class="source-line-no">161</span><span id="line-161">       * @return This object.</span>
+<span class="source-line-no">162</span><span id="line-162">       */</span>
+<span class="source-line-no">163</span><span id="line-163">      public Builder addBeanTypesMsgPack(boolean value) {</span>
+<span class="source-line-no">164</span><span id="line-164">         addBeanTypesMsgPack = value;</span>
+<span class="source-line-no">165</span><span id="line-165">         return this;</span>
+<span class="source-line-no">166</span><span id="line-166">      }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">169</span><span id="line-169">      public MsgPackSerializer build() {</span>
+<span class="source-line-no">170</span><span id="line-170">         return cache(CACHE).build(MsgPackSerializer.class);</span>
+<span class="source-line-no">171</span><span id="line-171">      }</span>
+<span class="source-line-no">172</span><span id="line-172"></span>
+<span class="source-line-no">173</span><span id="line-173">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">174</span><span id="line-174">      public Builder copy() {</span>
+<span class="source-line-no">175</span><span id="line-175">         return new Builder(this);</span>
+<span class="source-line-no">176</span><span id="line-176">      }</span>
+<span class="source-line-no">177</span><span id="line-177"></span>
+<span class="source-line-no">178</span><span id="line-178">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">179</span><span id="line-179">      public HashKey hashKey() {</span>
+<span class="source-line-no">180</span><span id="line-180">         return HashKey.of(super.hashKey(), addBeanTypesMsgPack);</span>
+<span class="source-line-no">181</span><span id="line-181">      }</span>
+<span class="source-line-no">182</span><span id="line-182"></span>
 <span class="source-line-no">183</span><span id="line-183"></span>
-<span class="source-line-no">184</span><span id="line-184">   /** Default serializer, spaced-hex string output. */</span>
-<span class="source-line-no">185</span><span id="line-185">   public static class SpacedHex extends MsgPackSerializer {</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">      /**</span>
-<span class="source-line-no">188</span><span id="line-188">       * Constructor.</span>
-<span class="source-line-no">189</span><span id="line-189">       *</span>
-<span class="source-line-no">190</span><span id="line-190">       * @param builder The builder for this object.</span>
-<span class="source-line-no">191</span><span id="line-191">       */</span>
-<span class="source-line-no">192</span><span id="line-192">      public SpacedHex(Builder builder) {</span>
-<span class="source-line-no">193</span><span id="line-193">         super(builder.binaryFormat(BinaryFormat.SPACED_HEX));</span>
-<span class="source-line-no">194</span><span id="line-194">      }</span>
-<span class="source-line-no">195</span><span id="line-195">   }</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">   /** Default serializer, all default settings.*/</span>
-<span class="source-line-no">198</span><span id="line-198">   public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(create());</span>
-<span class="source-line-no">199</span><span id="line-199">   /** Default serializer, all default settings, spaced-hex string output.*/</span>
-<span class="source-line-no">200</span><span id="line-200">   public static final MsgPackSerializer DEFAULT_SPACED_HEX = new SpacedHex(create());</span>
-<span class="source-line-no">201</span><span id="line-201"></span>
-<span class="source-line-no">202</span><span id="line-202">   /** Default serializer, all default settings, spaced-hex string output.*/</span>
-<span class="source-line-no">203</span><span id="line-203">   public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(create());</span>
-<span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">   /**</span>
-<span class="source-line-no">206</span><span id="line-206">    * Creates a new builder for this object.</span>
-<span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    * @return A new builder.</span>
-<span class="source-line-no">209</span><span id="line-209">    */</span>
-<span class="source-line-no">210</span><span id="line-210">   public static Builder create() {</span>
-<span class="source-line-no">211</span><span id="line-211">      return new Builder();</span>
-<span class="source-line-no">212</span><span id="line-212">   }</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   protected final boolean addBeanTypesMsgPack;</span>
+<span class="source-line-no">184</span><span id="line-184">   }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">   /** Default serializer, spaced-hex string output. */</span>
+<span class="source-line-no">187</span><span id="line-187">   public static class SpacedHex extends MsgPackSerializer {</span>
+<span class="source-line-no">188</span><span id="line-188"></span>
+<span class="source-line-no">189</span><span id="line-189">      /**</span>
+<span class="source-line-no">190</span><span id="line-190">       * Constructor.</span>
+<span class="source-line-no">191</span><span id="line-191">       *</span>
+<span class="source-line-no">192</span><span id="line-192">       * @param builder The builder for this object.</span>
+<span class="source-line-no">193</span><span id="line-193">       */</span>
+<span class="source-line-no">194</span><span id="line-194">      public SpacedHex(Builder builder) {</span>
+<span class="source-line-no">195</span><span id="line-195">         super(builder.binaryFormat(BinaryFormat.SPACED_HEX));</span>
+<span class="source-line-no">196</span><span id="line-196">      }</span>
+<span class="source-line-no">197</span><span id="line-197">   }</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">   /** Default serializer, all default settings.*/</span>
+<span class="source-line-no">200</span><span id="line-200">   public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(create());</span>
+<span class="source-line-no">201</span><span id="line-201">   /** Default serializer, all default settings, spaced-hex string output.*/</span>
+<span class="source-line-no">202</span><span id="line-202">   public static final MsgPackSerializer DEFAULT_SPACED_HEX = new SpacedHex(create());</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">   /** Default serializer, all default settings, spaced-hex string output.*/</span>
+<span class="source-line-no">205</span><span id="line-205">   public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(create());</span>
+<span class="source-line-no">206</span><span id="line-206"></span>
+<span class="source-line-no">207</span><span id="line-207">   /**</span>
+<span class="source-line-no">208</span><span id="line-208">    * Creates a new builder for this object.</span>
+<span class="source-line-no">209</span><span id="line-209">    *</span>
+<span class="source-line-no">210</span><span id="line-210">    * @return A new builder.</span>
+<span class="source-line-no">211</span><span id="line-211">    */</span>
+<span class="source-line-no">212</span><span id="line-212">   public static Builder create() {</span>
+<span class="source-line-no">213</span><span id="line-213">      return new Builder();</span>
+<span class="source-line-no">214</span><span id="line-214">   }</span>
 <span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216">   private final Map&lt;BeanPropertyMeta,MsgPackBeanPropertyMeta&gt; msgPackBeanPropertyMetas = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">217</span><span id="line-217">   private final Map&lt;ClassMeta&lt;?&gt;,MsgPackClassMeta&gt; msgPackClassMetas = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">218</span><span id="line-218"></span>
-<span class="source-line-no">219</span><span id="line-219">   /**</span>
-<span class="source-line-no">220</span><span id="line-220">    * Constructor.</span>
-<span class="source-line-no">221</span><span id="line-221">    *</span>
-<span class="source-line-no">222</span><span id="line-222">    * @param builder The builder for this object.</span>
-<span class="source-line-no">223</span><span id="line-223">    */</span>
-<span class="source-line-no">224</span><span id="line-224">   public MsgPackSerializer(Builder builder) {</span>
-<span class="source-line-no">225</span><span id="line-225">      super(builder);</span>
-<span class="source-line-no">226</span><span id="line-226">      this.addBeanTypesMsgPack = builder.addBeanTypesMsgPack;</span>
-<span class="source-line-no">227</span><span id="line-227">   }</span>
-<span class="source-line-no">228</span><span id="line-228"></span>
-<span class="source-line-no">229</span><span id="line-229">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">230</span><span id="line-230">   public Builder copy() {</span>
-<span class="source-line-no">231</span><span id="line-231">      return new Builder(this);</span>
-<span class="source-line-no">232</span><span id="line-232">   }</span>
-<span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">235</span><span id="line-235">   public MsgPackSerializerSession.Builder createSession() {</span>
-<span class="source-line-no">236</span><span id="line-236">      return MsgPackSerializerSession.create(this);</span>
-<span class="source-line-no">237</span><span id="line-237">   }</span>
-<span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">   @Override /* Overridden from MsgPackMetaProvider */</span>
-<span class="source-line-no">240</span><span id="line-240">   public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">241</span><span id="line-241">      if (bpm == null)</span>
-<span class="source-line-no">242</span><span id="line-242">         return MsgPackBeanPropertyMeta.DEFAULT;</span>
-<span class="source-line-no">243</span><span id="line-243">      return msgPackBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new MsgPackBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">244</span><span id="line-244">   }</span>
-<span class="source-line-no">245</span><span id="line-245"></span>
-<span class="source-line-no">246</span><span id="line-246">   @Override /* Overridden from MsgPackMetaProvider */</span>
-<span class="source-line-no">247</span><span id="line-247">   public MsgPackClassMeta getMsgPackClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">248</span><span id="line-248">      return msgPackClassMetas.computeIfAbsent(cm, k -&gt; new MsgPackClassMeta(k, this));</span>
-<span class="source-line-no">249</span><span id="line-249">   }</span>
-<span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">252</span><span id="line-252">   public MsgPackSerializerSession getSession() { return createSession().build(); }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   /**</span>
-<span class="source-line-no">255</span><span id="line-255">    * Convenience delegator that opens a {@link MsgPackTokenWriter} over the output using</span>
-<span class="source-line-no">256</span><span id="line-256">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #serialize(Object)}).</span>
-<span class="source-line-no">257</span><span id="line-257">    *</span>
-<span class="source-line-no">258</span><span id="line-258">    * &lt;p&gt;</span>
-<span class="source-line-no">259</span><span id="line-259">    * The real implementation lives on {@link MsgPackSerializerSession#serializeTokens(Object)}.</span>
-<span class="source-line-no">260</span><span id="line-260">    * Callers that need request-derived configuration (locale, timezone, schema, swaps) should</span>
-<span class="source-line-no">261</span><span id="line-261">    * call {@link #createSession()} and invoke</span>
-<span class="source-line-no">262</span><span id="line-262">    * {@link MsgPackSerializerSession#serializeTokens(Object)} on the built session instead.</span>
-<span class="source-line-no">263</span><span id="line-263">    *</span>
-<span class="source-line-no">264</span><span id="line-264">    * @param output The output.</span>
-<span class="source-line-no">265</span><span id="line-265">    * @return A new {@link MsgPackTokenWriter}.</span>
-<span class="source-line-no">266</span><span id="line-266">    * @throws IOException If the output type is not supported or could not be opened.</span>
-<span class="source-line-no">267</span><span id="line-267">    */</span>
-<span class="source-line-no">268</span><span id="line-268">   @Override /* TokenWritable */</span>
-<span class="source-line-no">269</span><span id="line-269">   public TokenWriter serializeTokens(Object output) throws IOException {</span>
-<span class="source-line-no">270</span><span id="line-270">      return getSession().serializeTokens(output);</span>
-<span class="source-line-no">271</span><span id="line-271">   }</span>
-<span class="source-line-no">272</span><span id="line-272"></span>
-<span class="source-line-no">273</span><span id="line-273">   @Override</span>
-<span class="source-line-no">274</span><span id="line-274">   protected final boolean isAddBeanTypes() { return addBeanTypesMsgPack || super.isAddBeanTypes(); }</span>
-<span class="source-line-no">275</span><span id="line-275"></span>
-<span class="source-line-no">276</span><span id="line-276">   @Override /* Overridden from OutputStreamSerializer */</span>
-<span class="source-line-no">277</span><span id="line-277">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">278</span><span id="line-278">      return super.properties()</span>
-<span class="source-line-no">279</span><span id="line-279">         .a(PROP_addBeanTypesMsgPack, addBeanTypesMsgPack);</span>
-<span class="source-line-no">280</span><span id="line-280">   }</span>
-<span class="source-line-no">281</span><span id="line-281"></span>
-<span class="source-line-no">282</span><span id="line-282">   /**</span>
-<span class="source-line-no">283</span><span id="line-283">    * Convenience delegator for the buffered array-element {@link RecordWriter} (uses default</span>
-<span class="source-line-no">284</span><span id="line-284">    * session args; see {@link #serializeTokens(Object)}).  Real impl on</span>
-<span class="source-line-no">285</span><span id="line-285">    * {@link MsgPackSerializerSession#serializeArrayRecords(Object)}.</span>
-<span class="source-line-no">286</span><span id="line-286">    *</span>
-<span class="source-line-no">287</span><span id="line-287">    * @param output The output.</span>
-<span class="source-line-no">288</span><span id="line-288">    * @return A buffered {@link RecordWriter}.</span>
-<span class="source-line-no">289</span><span id="line-289">    * @throws IOException If a problem occurred opening the underlying output.</span>
-<span class="source-line-no">290</span><span id="line-290">    */</span>
-<span class="source-line-no">291</span><span id="line-291">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">292</span><span id="line-292">   public RecordWriter serializeArrayRecords(Object output) throws IOException {</span>
-<span class="source-line-no">293</span><span id="line-293">      return getSession().serializeArrayRecords(output);</span>
-<span class="source-line-no">294</span><span id="line-294">   }</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">297</span><span id="line-297">   public boolean isArrayRecordStreaming() { return false; }</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">   /**</span>
-<span class="source-line-no">300</span><span id="line-300">    * Convenience delegator for the streaming, count-prefixed array-element {@link RecordWriter}</span>
-<span class="source-line-no">301</span><span id="line-301">    * (uses default session args; see {@link #serializeTokens(Object)}).  Real impl on</span>
-<span class="source-line-no">302</span><span id="line-302">    * {@link MsgPackSerializerSession#serializeArrayRecords(Object, int)}.</span>
-<span class="source-line-no">303</span><span id="line-303">    *</span>
-<span class="source-line-no">304</span><span id="line-304">    * @param output The output (must be an {@link OutputStream}).</span>
-<span class="source-line-no">305</span><span id="line-305">    * @param expectedCount The number of elements that will be written.</span>
-<span class="source-line-no">306</span><span id="line-306">    * @return A streaming {@link RecordWriter}.</span>
-<span class="source-line-no">307</span><span id="line-307">    * @throws IOException If a problem occurred opening the underlying output.</span>
-<span class="source-line-no">308</span><span id="line-308">    */</span>
-<span class="source-line-no">309</span><span id="line-309">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">310</span><span id="line-310">   public RecordWriter serializeArrayRecords(Object output, int expectedCount) throws IOException {</span>
-<span class="source-line-no">311</span><span id="line-311">      return getSession().serializeArrayRecords(output, expectedCount);</span>
-<span class="source-line-no">312</span><span id="line-312">   }</span>
-<span class="source-line-no">313</span><span id="line-313">}</span>
+<span class="source-line-no">216</span><span id="line-216">   protected final boolean addBeanTypesMsgPack;</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">   private final Map&lt;BeanPropertyMeta,MsgPackBeanPropertyMeta&gt; msgPackBeanPropertyMetas = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">219</span><span id="line-219">   private final Map&lt;ClassMeta&lt;?&gt;,MsgPackClassMeta&gt; msgPackClassMetas = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">220</span><span id="line-220"></span>
+<span class="source-line-no">221</span><span id="line-221">   /**</span>
+<span class="source-line-no">222</span><span id="line-222">    * Constructor.</span>
+<span class="source-line-no">223</span><span id="line-223">    *</span>
+<span class="source-line-no">224</span><span id="line-224">    * @param builder The builder for this object.</span>
+<span class="source-line-no">225</span><span id="line-225">    */</span>
+<span class="source-line-no">226</span><span id="line-226">   public MsgPackSerializer(Builder builder) {</span>
+<span class="source-line-no">227</span><span id="line-227">      super(builder);</span>
+<span class="source-line-no">228</span><span id="line-228">      this.addBeanTypesMsgPack = builder.addBeanTypesMsgPack;</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">232</span><span id="line-232">   public Builder copy() {</span>
+<span class="source-line-no">233</span><span id="line-233">      return new Builder(this);</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">237</span><span id="line-237">   public MsgPackSerializerSession.Builder createSession() {</span>
+<span class="source-line-no">238</span><span id="line-238">      return MsgPackSerializerSession.create(this);</span>
+<span class="source-line-no">239</span><span id="line-239">   }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   @Override /* Overridden from MsgPackMetaProvider */</span>
+<span class="source-line-no">242</span><span id="line-242">   public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">243</span><span id="line-243">      if (bpm == null)</span>
+<span class="source-line-no">244</span><span id="line-244">         return MsgPackBeanPropertyMeta.DEFAULT;</span>
+<span class="source-line-no">245</span><span id="line-245">      return msgPackBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new MsgPackBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">246</span><span id="line-246">   }</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">   @Override /* Overridden from MsgPackMetaProvider */</span>
+<span class="source-line-no">249</span><span id="line-249">   public MsgPackClassMeta getMsgPackClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">250</span><span id="line-250">      return msgPackClassMetas.computeIfAbsent(cm, k -&gt; new MsgPackClassMeta(k, this));</span>
+<span class="source-line-no">251</span><span id="line-251">   }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">254</span><span id="line-254">   public MsgPackSerializerSession getSession() { return createSession().build(); }</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">   /**</span>
+<span class="source-line-no">257</span><span id="line-257">    * Convenience delegator that opens a {@link MsgPackTokenWriter} over the output using</span>
+<span class="source-line-no">258</span><span id="line-258">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
+<span class="source-line-no">259</span><span id="line-259">    *</span>
+<span class="source-line-no">260</span><span id="line-260">    * &lt;p&gt;</span>
+<span class="source-line-no">261</span><span id="line-261">    * The real implementation lives on {@link MsgPackSerializerSession#writeTokens(Object)}.</span>
+<span class="source-line-no">262</span><span id="line-262">    * Callers that need request-derived configuration (locale, timezone, schema, swaps) should</span>
+<span class="source-line-no">263</span><span id="line-263">    * call {@link #createSession()} and invoke</span>
+<span class="source-line-no">264</span><span id="line-264">    * {@link MsgPackSerializerSession#writeTokens(Object)} on the built session instead.</span>
+<span class="source-line-no">265</span><span id="line-265">    *</span>
+<span class="source-line-no">266</span><span id="line-266">    * @param output The output.</span>
+<span class="source-line-no">267</span><span id="line-267">    * @return A new {@link MsgPackTokenWriter}.</span>
+<span class="source-line-no">268</span><span id="line-268">    * @throws IOException If the output type is not supported or could not be opened.</span>
+<span class="source-line-no">269</span><span id="line-269">    */</span>
+<span class="source-line-no">270</span><span id="line-270">   @Override /* TokenWritable */</span>
+<span class="source-line-no">271</span><span id="line-271">   public TokenWriter writeTokens(Object output) throws IOException {</span>
+<span class="source-line-no">272</span><span id="line-272">      return getSession().writeTokens(output);</span>
+<span class="source-line-no">273</span><span id="line-273">   }</span>
+<span class="source-line-no">274</span><span id="line-274"></span>
+<span class="source-line-no">275</span><span id="line-275">   @Override</span>
+<span class="source-line-no">276</span><span id="line-276">   protected final boolean isAddBeanTypes() { return addBeanTypesMsgPack || super.isAddBeanTypes(); }</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">   @Override /* Overridden from OutputStreamSerializer */</span>
+<span class="source-line-no">279</span><span id="line-279">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">280</span><span id="line-280">      return super.properties()</span>
+<span class="source-line-no">281</span><span id="line-281">         .a(PROP_addBeanTypesMsgPack, addBeanTypesMsgPack);</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   /**</span>
+<span class="source-line-no">285</span><span id="line-285">    * Convenience delegator for the buffered array-element {@link RecordWriter} (uses default</span>
+<span class="source-line-no">286</span><span id="line-286">    * session args; see {@link #writeTokens(Object)}).  Real impl on</span>
+<span class="source-line-no">287</span><span id="line-287">    * {@link MsgPackSerializerSession#writeArrayRecords(Object)}.</span>
+<span class="source-line-no">288</span><span id="line-288">    *</span>
+<span class="source-line-no">289</span><span id="line-289">    * @param output The output.</span>
+<span class="source-line-no">290</span><span id="line-290">    * @return A buffered {@link RecordWriter}.</span>
+<span class="source-line-no">291</span><span id="line-291">    * @throws IOException If a problem occurred opening the underlying output.</span>
+<span class="source-line-no">292</span><span id="line-292">    */</span>
+<span class="source-line-no">293</span><span id="line-293">   @Override /* ArrayRecordWritable */</span>
+<span class="source-line-no">294</span><span id="line-294">   public RecordWriter writeArrayRecords(Object output) throws IOException {</span>
+<span class="source-line-no">295</span><span id="line-295">      return getSession().writeArrayRecords(output);</span>
+<span class="source-line-no">296</span><span id="line-296">   }</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">   @Override /* ArrayRecordWritable */</span>
+<span class="source-line-no">299</span><span id="line-299">   public boolean isArrayRecordStreaming() { return false; }</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">   /**</span>
+<span class="source-line-no">302</span><span id="line-302">    * Convenience delegator for the streaming, count-prefixed array-element {@link RecordWriter}</span>
+<span class="source-line-no">303</span><span id="line-303">    * (uses default session args; see {@link #writeTokens(Object)}).  Real impl on</span>
+<span class="source-line-no">304</span><span id="line-304">    * {@link MsgPackSerializerSession#writeArrayRecords(Object, int)}.</span>
+<span class="source-line-no">305</span><span id="line-305">    *</span>
+<span class="source-line-no">306</span><span id="line-306">    * @param output The output (must be an {@link OutputStream}).</span>
+<span class="source-line-no">307</span><span id="line-307">    * @param expectedCount The number of elements that will be written.</span>
+<span class="source-line-no">308</span><span id="line-308">    * @return A streaming {@link RecordWriter}.</span>
+<span class="source-line-no">309</span><span id="line-309">    * @throws IOException If a problem occurred opening the underlying output.</span>
+<span class="source-line-no">310</span><span id="line-310">    */</span>
+<span class="source-line-no">311</span><span id="line-311">   @Override /* ArrayRecordWritable */</span>
+<span class="source-line-no">312</span><span id="line-312">   public RecordWriter writeArrayRecords(Object output, int expectedCount) throws IOException {</span>
+<span class="source-line-no">313</span><span id="line-313">      return getSession().writeArrayRecords(output, expectedCount);</span>
+<span class="source-line-no">314</span><span id="line-314">   }</span>
+<span class="source-line-no">315</span><span id="line-315">}</span>
 
 
 

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-46">Iso8601Utils</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-47">Iso8601Utils</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Centralized ISO 8601 formatting and parsing utility for date/time and Duration types.
 
@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="format(java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.util.TimeZone)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-94">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-95">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
 <div class="block">Formats a date/time or Duration value to its ISO 8601 string representation.
@@ -242,18 +242,18 @@ loadScripts(document, 'script');</script>
  <a href="#formatDuration(java.time.Duration,org.apache.juneau.marshall.DurationFormat)"><code>formatDuration(java.time.Duration, org.apache.juneau.marshall.DurationFormat)</code></a>, <a href="#formatPeriod(java.time.Period,org.apache.juneau.marshall.PeriodFormat)"><code>formatPeriod(java.time.Period, org.apache.juneau.marshall.PeriodFormat)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format.</dd>
+<dd><code>value</code> - The value to format.  <jk>null</jk> returns <jk>null</jk> (consistent with the per-type helpers).</dd>
 <dd><code>type</code> - The class metadata for the value (used for selecting the appropriate formatter for Temporal types).</dd>
 <dd><code>timeZone</code> - The session time zone (used when the value lacks zone info).</dd>
 <dt>Returns:</dt>
-<dd>The ISO 8601 string representation.</dd>
+<dd>The ISO 8601 string representation, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="formatDuration(java.time.Duration,org.apache.juneau.marshall.DurationFormat)">
 <h3>formatDuration</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-118">formatDuration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-121">formatDuration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value,
  <a href="../DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link"><code>Duration</code></a> value using the supplied wire format.</div>
 <dl class="notes">
@@ -268,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatPeriod(java.time.Period,org.apache.juneau.marshall.PeriodFormat)">
 <h3>formatPeriod</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-131">formatPeriod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Period.html" title="class or interface in java.time" class="external-link">Period</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-134">formatPeriod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Period.html" title="class or interface in java.time" class="external-link">Period</a>&nbsp;value,
  <a href="../PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Period.html" title="class or interface in java.time" class="external-link"><code>Period</code></a> value using the supplied wire format.</div>
 <dl class="notes">
@@ -283,7 +283,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatDate(java.util.Date,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.DateFormat,java.util.TimeZone)">
 <h3>formatDate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-150">formatDate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-153">formatDate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a>&nbsp;value,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;sourceType,
  <a href="../DateFormat.html" title="enum class in org.apache.juneau.marshall">DateFormat</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
@@ -306,7 +306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatCalendar(java.lang.Object,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.CalendarFormat,java.util.TimeZone)">
 <h3>formatCalendar</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-176">formatCalendar</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-179">formatCalendar</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;sourceType,
  <a href="../CalendarFormat.html" title="enum class in org.apache.juneau.marshall">CalendarFormat</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
@@ -332,7 +332,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatTemporal(java.time.temporal.TemporalAccessor,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.TemporalFormat,java.util.TimeZone)">
 <h3>formatTemporal</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-197">formatTemporal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-200">formatTemporal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link">TemporalAccessor</a>&nbsp;value,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;sourceType,
  <a href="../TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
@@ -351,41 +351,41 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatAsDate(java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.util.TimeZone)">
 <h3>formatAsDate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-215">formatAsDate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-218">formatAsDate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
 <div class="block">Formats a date/time value as an ISO date (date-only, for OpenAPI 'date' format).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format.</dd>
+<dd><code>value</code> - The value to format.  <jk>null</jk> returns <jk>null</jk>.</dd>
 <dd><code>type</code> - The class metadata.</dd>
 <dd><code>timeZone</code> - The session time zone.</dd>
 <dt>Returns:</dt>
-<dd>The ISO date string.</dd>
+<dd>The ISO date string, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="formatAsDateTime(java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.util.TimeZone)">
 <h3>formatAsDateTime</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-239">formatAsDateTime</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-244">formatAsDateTime</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
 <div class="block">Formats a date/time value as an ISO date-time (for OpenAPI 'date-time' format).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to format.</dd>
+<dd><code>value</code> - The value to format.  <jk>null</jk> returns <jk>null</jk>.</dd>
 <dd><code>type</code> - The class metadata.</dd>
 <dd><code>timeZone</code> - The session time zone.</dd>
 <dt>Returns:</dt>
-<dd>The ISO date-time string.</dd>
+<dd>The ISO date-time string, or <jk>null</jk> if <code>value</code> is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="parse(java.lang.String,org.apache.juneau.marshall.ClassMeta,java.util.TimeZone)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-277">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-284">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;targetType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
 <div class="block">Parses an ISO 8601 string into the specified date/time target type.
@@ -411,7 +411,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parseDuration(java.lang.String,org.apache.juneau.marshall.DurationFormat)">
 <h3>parseDuration</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-313">parseDuration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-320">parseDuration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
  <a href="../DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a>&nbsp;formatHint)</span></div>
 <div class="block">Parses an ISO 8601 / numeric wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link"><code>Duration</code></a>.
 
@@ -436,7 +436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parsePeriod(java.lang.String,org.apache.juneau.marshall.PeriodFormat)">
 <h3>parsePeriod</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Period.html" title="class or interface in java.time" class="external-link">Period</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-353">parsePeriod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Period.html" title="class or interface in java.time" class="external-link">Period</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-360">parsePeriod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="../PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a>&nbsp;formatHint)</span></div>
 <div class="block">Parses an ISO 8601 / numeric wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Period.html" title="class or interface in java.time" class="external-link"><code>Period</code></a>.
 
@@ -456,7 +456,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parseCalendar(java.lang.String,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.CalendarFormat,java.util.TimeZone)">
 <h3>parseCalendar</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-383">parseCalendar</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-390">parseCalendar</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;targetType,
  <a href="../CalendarFormat.html" title="enum class in org.apache.juneau.marshall">CalendarFormat</a>&nbsp;formatHint,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
@@ -488,7 +488,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parseDate(java.lang.String,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.DateFormat,java.util.TimeZone)">
 <h3>parseDate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-419">parseDate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-426">parseDate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;targetType,
  <a href="../DateFormat.html" title="enum class in org.apache.juneau.marshall">DateFormat</a>&nbsp;formatHint,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
@@ -518,7 +518,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parseTemporal(java.lang.String,org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.TemporalFormat,java.util.TimeZone)">
 <h3>parseTemporal</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-450">parseTemporal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-457">parseTemporal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iso8601,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;targetType,
  <a href="../TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a>&nbsp;formatHint,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
@@ -546,7 +546,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fromEpochMillis(long,org.apache.juneau.marshall.ClassMeta,java.util.TimeZone)">
 <h3>fromEpochMillis</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-697">fromEpochMillis</a></span><wbr><span class="parameters">(long&nbsp;epochMillis,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/utils/Iso8601Utils.html#line-707">fromEpochMillis</a></span><wbr><span class="parameters">(long&nbsp;epochMillis,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;targetType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a>&nbsp;timeZone)</span></div>
 <div class="block">Converts epoch milliseconds to the target date/time type.</div>
@@ -558,7 +558,7 @@ loadScripts(document, 'script');</script>
 <dd><code>targetType</code> - The target class metadata.</dd>
 <dd><code>timeZone</code> - The session time zone.</dd>
 <dt>Returns:</dt>
-<dd>The converted date/time object.</dd>
+<dd>The converted date/time object, or <jk>null</jk> if the target type is not a recognized date/time type.</dd>
 </dl>
 </section>
 </li>

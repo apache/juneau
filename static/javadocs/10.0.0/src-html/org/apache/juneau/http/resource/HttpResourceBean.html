@@ -174,7 +174,7 @@
 <span class="source-line-no">161</span><span id="line-161">    * Returns the first header with the given name (case-insensitive), or &lt;jk&gt;null&lt;/jk&gt; if absent.</span>
 <span class="source-line-no">162</span><span id="line-162">    *</span>
 <span class="source-line-no">163</span><span id="line-163">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">164</span><span id="line-164">    * @return The first matching header, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">164</span><span id="line-164">    * @return The first matching header, or &lt;jk&gt;null&lt;/jk&gt; if absent.</span>
 <span class="source-line-no">165</span><span id="line-165">    */</span>
 <span class="source-line-no">166</span><span id="line-166">   public HttpHeader getFirstHeader(String name) {</span>
 <span class="source-line-no">167</span><span id="line-167">      assertArgNotNull("name", name);</span>

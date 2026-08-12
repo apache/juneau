@@ -186,19 +186,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Returns the <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> associated with this class.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ExtendedBeanMeta.</span><code><a href="../../../marshall/ExtendedBeanMeta.html#getBeanMeta()" class="member-name-link">getBeanMeta</a>()</code></div>
+<div class="col-first odd-row-color"><code><a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;<a href="../../../marshall/ClassMeta.html" title="type parameter in ClassMeta">T</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ClassMeta.</span><code><a href="../../../marshall/ClassMeta.html#getBeanMeta(org.apache.juneau.commons.bean.PropertyNamer)" class="member-name-link">getBeanMeta</a><wbr>(<a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Same as <a href="../../../marshall/ClassMeta.html#getBeanMeta()"><code>ClassMeta.getBeanMeta()</code></a> but derives property names using the supplied <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> instead of
+ the one configured on the owning context.</div>
+</div>
+<div class="col-first even-row-color"><code>protected <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ExtendedBeanMeta.</span><code><a href="../../../marshall/ExtendedBeanMeta.html#getBeanMeta()" class="member-name-link">getBeanMeta</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Returns the bean metadata that was passed into the constructor.</div>
 </div>
-<div class="col-first even-row-color"><code>final &lt;T&gt;&nbsp;<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../../../marshall/MarshallingContext.html#getBeanMeta(java.lang.Class)" class="member-name-link">getBeanMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>final &lt;T&gt;&nbsp;<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../../../marshall/MarshallingContext.html#getBeanMeta(java.lang.Class)" class="member-name-link">getBeanMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Returns the <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> class for the specified class.</div>
 </div>
-<div class="col-first odd-row-color"><code>final &lt;T&gt;&nbsp;<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarshallingSession.</span><code><a href="../../../marshall/MarshallingSession.html#getBeanMeta(java.lang.Class)" class="member-name-link">getBeanMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>final &lt;T&gt;&nbsp;<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarshallingSession.</span><code><a href="../../../marshall/MarshallingSession.html#getBeanMeta(java.lang.Class)" class="member-name-link">getBeanMeta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Returns the <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> class for the specified class.</div>
 </div>
 </div>

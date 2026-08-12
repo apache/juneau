@@ -538,7 +538,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asList(org.apache.juneau.marshall.parser.Parser)">
 <h3>asList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-342">asList</a></span><wbr><span class="parameters">(<a href="../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-344">asList</a></span><wbr><span class="parameters">(<a href="../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser)</span>
                           throws <span class="exceptions"><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Returns this entry as a parsed list.
 
@@ -546,7 +546,8 @@ loadScripts(document, 'script');</script>
  If the parser is a JSON parser, the starting/trailing <js>"["</js>/<js>"]"</js> in the value are optional.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>parser</code> - The parser to use to parse the value, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> to use the parser defined on the config.</dd>
+<dd><code>parser</code> - The parser to use to parse the value.
+   <br>Can be <jk>null</jk> to use the parser defined on the config.</dd>
 <dt>Returns:</dt>
 <dd>The value, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if the section or key does not exist.</dd>
 <dt>Throws:</dt>
@@ -557,7 +558,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asLong()">
 <h3>asLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-386">asLong</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-388">asLong</a></span>()</div>
 <div class="block">Returns this entry as a long.
 
  <p>
@@ -593,7 +594,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMap()">
 <h3>asMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-402">asMap</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-404">asMap</a></span>()
                         throws <span class="exceptions"><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Returns this entry as a parsed map.
 
@@ -613,7 +614,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMap(org.apache.juneau.marshall.parser.Parser)">
 <h3>asMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-416">asMap</a></span><wbr><span class="parameters">(<a href="../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-420">asMap</a></span><wbr><span class="parameters">(<a href="../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser)</span>
                         throws <span class="exceptions"><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Returns this entry as a parsed map.
 
@@ -621,9 +622,10 @@ loadScripts(document, 'script');</script>
  If the parser is a JSON parser, the starting/trailing <js>"{"</js>/<js>"}"</js> in the value are optional.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>parser</code> - The parser to use to parse the value, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> to use the parser defined on the config.</dd>
+<dd><code>parser</code> - The parser to use to parse the value.
+   <br>Can be <jk>null</jk> to use the parser defined on the config.</dd>
 <dt>Returns:</dt>
-<dd>The value, or <jk>null</jk> if the section or key does not exist.</dd>
+<dd>The value, or an empty <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> if the section or key does not exist.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../marshall/parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - If value could not be parsed.</dd>
 </dl>
@@ -632,7 +634,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-435">asString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-439">asString</a></span>()</div>
 <div class="block">Returns this entry as a string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -643,7 +645,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asStringArray()">
 <h3>asStringArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-447">asStringArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-451">asStringArray</a></span>()</div>
 <div class="block">Returns this entry as a string array.
 
  <p>
@@ -657,11 +659,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get()">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-469">get</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-473">get</a></span>()</div>
 <div class="block">Returns this entry as a string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd><jk>true</jk> if this entry exists in the config and is not empty.</dd>
+<dd>This entry as a string.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - if value was <jk>null</jk>.</dd>
 </dl>
@@ -670,62 +672,62 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getComment()">
 <h3>getComment</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-480">getComment</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-484">getComment</a></span>()</div>
 <div class="block">Returns the same-line comment of this entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The same-line comment of this entry.</dd>
+<dd>The same-line comment of this entry, or <jk>null</jk> if this entry does not exist in the config.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getKey()">
 <h3>getKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-487">getKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-491">getKey</a></span>()</div>
 <div class="block">Returns the name of this entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The name of this entry.</dd>
+<dd>The name of this entry, or <jk>null</jk> if this entry does not exist in the config.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getModifiers()">
 <h3>getModifiers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-494">getModifiers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-498">getModifiers</a></span>()</div>
 <div class="block">Returns the modifiers for this entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The modifiers for this entry, or <jk>null</jk> if it has no modifiers.</dd>
+<dd>The modifiers for this entry, or <jk>null</jk> if it has no modifiers or this entry does not exist in the config.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getPreLines()">
 <h3>getPreLines</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-501">getPreLines</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-505">getPreLines</a></span>()</div>
 <div class="block">Returns the pre-lines of this entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The pre-lines of this entry as an unmodifiable list.</dd>
+<dd>The pre-lines of this entry as an unmodifiable list, or <jk>null</jk> if this entry does not exist in the config.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getValue()">
 <h3>getValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-508">getValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-512">getValue</a></span>()</div>
 <div class="block">Returns the raw value of this entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The raw value of this entry.</dd>
+<dd>The raw value of this entry, or <jk>null</jk> if this entry does not exist in the config.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isNotEmpty()">
 <h3>isNotEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-515">isNotEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-519">isNotEmpty</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this entry exists in the config and is not empty.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -736,7 +738,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isPresent()">
 <h3>isPresent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-522">isPresent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-526">isPresent</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this entry exists in the config.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -747,7 +749,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElse(java.lang.String)">
 <h3>orElse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-534">orElse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;def)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-538">orElse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;def)</span></div>
 <div class="block">Returns this entry converted to the specified type or returns the default value.
 
  <p>
@@ -764,7 +766,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElseGet(java.util.function.Supplier)">
 <h3>orElseGet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-548">orElseGet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;def)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-552">orElseGet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;def)</span></div>
 <div class="block">Returns this entry converted to the specified type or returns the default value.
 
  <p>
@@ -781,7 +783,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-557">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/config/Entry.html#line-561">toString</a></span>()</div>
 <div class="block">Returns this entry as a string.</div>
 <dl class="notes">
 <dt>Overrides:</dt>

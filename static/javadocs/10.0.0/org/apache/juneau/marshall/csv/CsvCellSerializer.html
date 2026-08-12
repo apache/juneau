@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellSerializer.html#line-30">CsvCellSerializer</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellSerializer.html#line-31">CsvCellSerializer</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Serializes nested objects and arrays to CSV cell inline notation:
  <code>{key:val;key2:val2}</code> and <code>[val1;val2;val3]</code>.
@@ -116,7 +116,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serialize(java.lang.Object,org.apache.juneau.marshall.csv.CsvSerializerSession)" class="member-name-link">serialize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.lang.Object,org.apache.juneau.marshall.csv.CsvSerializerSession)" class="member-name-link">write</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="CsvSerializerSession.html" title="class in org.apache.juneau.marshall.csv">CsvSerializerSession</a>&nbsp;session)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Serializes a value to inline notation.</div>
@@ -141,13 +141,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.csv.CsvByteArrayCellFormat,java.lang.String)">
 <h3>CsvCellSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellSerializer.html#line-41">CsvCellSerializer</a></span><wbr><span class="parameters">(<a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a>&nbsp;byteArrayFormat,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellSerializer.html#line-44">CsvCellSerializer</a></span><wbr><span class="parameters">(<a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a>&nbsp;byteArrayFormat,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nullMarker)</span></div>
 <div class="block">Creates a new serializer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>byteArrayFormat</code> - Format for byte[] values.</dd>
-<dd><code>nullMarker</code> - String to use for null values.</dd>
+<dd><code>byteArrayFormat</code> - Format for byte[] values.
+   <br>Can be <jk>null</jk> (defaults to <a href="CsvByteArrayCellFormat.html#BASE64"><code>CsvByteArrayCellFormat.BASE64</code></a>).</dd>
+<dd><code>nullMarker</code> - String to use for null values.
+   <br>Can be <jk>null</jk> (defaults to <code>null</code>).</dd>
 </dl>
 </section>
 </li>
@@ -160,15 +162,17 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="serialize(java.lang.Object,org.apache.juneau.marshall.csv.CsvSerializerSession)">
-<h3>serialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellSerializer.html#line-53">serialize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<section class="detail" id="write(java.lang.Object,org.apache.juneau.marshall.csv.CsvSerializerSession)">
+<h3>write</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvCellSerializer.html#line-58">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="CsvSerializerSession.html" title="class in org.apache.juneau.marshall.csv">CsvSerializerSession</a>&nbsp;session)</span></div>
 <div class="block">Serializes a value to inline notation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The value to serialize.</dd>
-<dd><code>session</code> - The serializer session (for bean conversion, date formatting, etc.).</dd>
+<dd><code>value</code> - The value to serialize.
+   <br>Can be <jk>null</jk> (serialized as the null marker).</dd>
+<dd><code>session</code> - The serializer session (for bean conversion, date formatting, etc.).
+   <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The serialized string.</dd>
 </dl>

@@ -90,9 +90,9 @@
 <span class="source-line-no">077</span><span id="line-77">   @SuppressWarnings({</span>
 <span class="source-line-no">078</span><span id="line-78">      "unchecked" // Type safety guaranteed by ConversionFinder contract</span>
 <span class="source-line-no">079</span><span id="line-79">   })</span>
-<span class="source-line-no">080</span><span id="line-80">   protected &lt;I, O&gt; Conversion&lt;I, O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">080</span><span id="line-80">   protected &lt;I,O&gt; Conversion&lt;I,O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
 <span class="source-line-no">081</span><span id="line-81">      for (var finder : finders) {</span>
-<span class="source-line-no">082</span><span id="line-82">         var fn = (Conversion&lt;I, O&gt;) finder.findConversion(inType, outType);</span>
+<span class="source-line-no">082</span><span id="line-82">         var fn = (Conversion&lt;I,O&gt;) finder.findConversion(inType, outType);</span>
 <span class="source-line-no">083</span><span id="line-83">         if (fn != null)</span>
 <span class="source-line-no">084</span><span id="line-84">            return fn;</span>
 <span class="source-line-no">085</span><span id="line-85">      }</span>

@@ -75,7 +75,7 @@
 <span class="source-line-no">062</span><span id="line-62">      /**</span>
 <span class="source-line-no">063</span><span id="line-63">       * Prepends the specified rest op arg classes to the list.</span>
 <span class="source-line-no">064</span><span id="line-64">       *</span>
-<span class="source-line-no">065</span><span id="line-65">       * @param values The values to add.</span>
+<span class="source-line-no">065</span><span id="line-65">       * @param values The values to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">066</span><span id="line-66">       * @return This object.</span>
 <span class="source-line-no">067</span><span id="line-67">       * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.</span>
 <span class="source-line-no">068</span><span id="line-68">       */</span>
@@ -109,7 +109,7 @@
 <span class="source-line-no">096</span><span id="line-96">   /**</span>
 <span class="source-line-no">097</span><span id="line-97">    * Constructor.</span>
 <span class="source-line-no">098</span><span id="line-98">    *</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param builder The builder containing the contents for this list.</span>
+<span class="source-line-no">099</span><span id="line-99">    * @param builder The builder containing the contents for this list. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">100</span><span id="line-100">    */</span>
 <span class="source-line-no">101</span><span id="line-101">   @SuppressWarnings({</span>
 <span class="source-line-no">102</span><span id="line-102">      "unchecked" // Type erasure requires cast for builder list</span>
