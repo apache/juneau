@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Serializes POJO models to RFC 8259 JSON.

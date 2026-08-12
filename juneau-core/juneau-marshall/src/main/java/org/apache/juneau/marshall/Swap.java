@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Associates {@link ObjectSwap} and {@link Surrogate} classes with POJOs and bean properties.

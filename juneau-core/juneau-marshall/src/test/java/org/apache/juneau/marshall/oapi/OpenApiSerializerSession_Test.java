@@ -65,7 +65,7 @@ class OpenApiSerializerSession_Test extends TestBase {
 		public String x = "hi";
 	}
 
-	public static class A_ObjSwap extends org.apache.juneau.marshall.swap.ObjectSwap<A_ObjSwapBean,Object> {
+	public static class A_ObjSwap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<A_ObjSwapBean,Object> {
 		@Override
 		public Object swap(MarshallingSession session, A_ObjSwapBean o) {
 			return o.x;

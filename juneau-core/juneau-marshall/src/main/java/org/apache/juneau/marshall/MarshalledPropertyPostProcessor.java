@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.csv.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.marshall.swaps.*;
 
 /**

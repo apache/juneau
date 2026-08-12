@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.swaps;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Thin delegating swap for {@link Class} values driven by the context-configured {@link ClassFormat}.

@@ -22,7 +22,7 @@ import static org.apache.juneau.utest.utils.Constants.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 public class SwappedObjectSwap extends ObjectSwap<SwappedObject,String> {
 	@Override

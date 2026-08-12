@@ -80,7 +80,7 @@ public class ConverterUtils {
 	 *
 	 * <p>
 	 * Uses the full {@link MarshallingContextConverter} to support bean-aware conversions such as
-	 * {@link Map} to bean, bean to bean, and {@link org.apache.juneau.marshall.swap.ObjectSwap} transforms.
+	 * {@link Map} to bean, bean to bean, and {@link org.apache.juneau.marshall.swap.spi.ObjectSwap} transforms.
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.

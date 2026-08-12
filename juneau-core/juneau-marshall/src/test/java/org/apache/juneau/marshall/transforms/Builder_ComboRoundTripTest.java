@@ -250,7 +250,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	public static class BBuilder implements org.apache.juneau.marshall.swap.Builder {
+	public static class BBuilder implements org.apache.juneau.marshall.swap.spi.PojoBuilder {
 		public int a;
 	}
 
@@ -274,7 +274,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	public static class CBuilder implements org.apache.juneau.marshall.swap.Builder {
+	public static class CBuilder implements org.apache.juneau.marshall.swap.spi.PojoBuilder {
 		public int a;
 
 		public C build() {

@@ -27,7 +27,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Serializes POJOs to plain text using just the <c>toString()</c> method on the serialized object.

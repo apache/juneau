@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.io.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Transforms <code>InputStreams</code> to {@link String Strings}.

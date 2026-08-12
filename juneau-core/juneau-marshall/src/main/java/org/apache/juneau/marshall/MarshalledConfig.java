@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Annotation for specifying marshalling-only config properties defined in {@link MarshallingContext} and {@link MarshallingTraverseContext}.

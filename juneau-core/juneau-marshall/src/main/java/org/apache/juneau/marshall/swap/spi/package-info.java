@@ -14,18 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.swap;
-
 /**
- * Identifies a class as being a builder for a bean class.
- *
- * <p>
- * This interface has no methods to implement.
- * <br>It's purpose is to identify a class as a builder when it's used on a constructor of the built class.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders">POJO Builders</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
- * </ul>
+ * Swap API
  */
-public interface Builder {}
+package org.apache.juneau.marshall.swap.spi;

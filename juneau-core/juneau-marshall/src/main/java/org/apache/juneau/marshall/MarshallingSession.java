@@ -35,7 +35,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link MarshallingContext}.

@@ -949,7 +949,7 @@ class SerializerSession_Test extends TestBase {
 
 	@Test void q01_swap_nullSwapReturnsObject() throws Exception {
 		var s = JsonSerializer.DEFAULT.createSession().build();
-		var method = SerializerSession.class.getDeclaredMethod("swap", org.apache.juneau.marshall.swap.ObjectSwap.class, Object.class);
+		var method = SerializerSession.class.getDeclaredMethod("swap", org.apache.juneau.marshall.swap.spi.ObjectSwap.class, Object.class);
 		method.setAccessible(true);
 		var result = method.invoke(s, null, "hello");
 		assertEquals("hello", result);

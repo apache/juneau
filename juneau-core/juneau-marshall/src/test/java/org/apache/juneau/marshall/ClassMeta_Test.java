@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Transforms {@link MatchResult MatchResults} to {@code List} objects.

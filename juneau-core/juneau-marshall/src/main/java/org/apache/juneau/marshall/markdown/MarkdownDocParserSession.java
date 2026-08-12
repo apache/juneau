@@ -123,8 +123,8 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 		if (eType == null)
 			eType = (ClassMeta<T>) object();
 
-		var swap = (org.apache.juneau.marshall.swap.ObjectSwap<T,Object>) eType.getSwap(this);
-		var builder = (org.apache.juneau.marshall.swap.BuilderSwap<T,Object>) eType.getBuilderSwap(this);
+		var swap = (org.apache.juneau.marshall.swap.spi.ObjectSwap<T,Object>) eType.getSwap(this);
+		var builder = (org.apache.juneau.marshall.swap.spi.BuilderSwap<T,Object>) eType.getBuilderSwap(this);
 		ClassMeta<?> sType;
 		if (builder != null)
 			sType = builder.getBuilderClassMeta(this);

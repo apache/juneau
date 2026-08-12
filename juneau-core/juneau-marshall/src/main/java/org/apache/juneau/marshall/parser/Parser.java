@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.marshall.stream.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.xml.*;
 

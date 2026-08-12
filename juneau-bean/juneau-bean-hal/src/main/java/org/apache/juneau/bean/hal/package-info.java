@@ -39,7 +39,7 @@
  *     the multi-link branch inside an {@code _links} map.
  *   <li>{@link org.apache.juneau.bean.hal.HalResourceArray} - {@code LinkedList&lt;HalResource&gt;}
  *     used as the multi-resource branch inside an {@code _embedded} map.
- *   <li>{@link org.apache.juneau.bean.hal.HalLinkOrArraySwap} - {@link org.apache.juneau.marshall.swap.ObjectSwap}
+ *   <li>{@link org.apache.juneau.bean.hal.HalLinkOrArraySwap} - {@link org.apache.juneau.marshall.swap.spi.ObjectSwap}
  *     that materializes each {@code _links} value as either a single {@link org.apache.juneau.bean.hal.HalLink}
  *     (JSON object) or a {@link org.apache.juneau.bean.hal.HalLinkArray} (JSON array) per spec.
  *   <li>{@link org.apache.juneau.bean.hal.HalResourceOrArraySwap} - The {@code _embedded} analogue.

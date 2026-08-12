@@ -46,7 +46,7 @@
  *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiVersion} - The {@code jsonapi} member
  *     ({@code version}/{@code meta}).
  *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiLinkOrStringSwap} -
- *     {@link org.apache.juneau.marshall.swap.ObjectSwap} for {@code links} map values; each value can be either a JSON
+ *     {@link org.apache.juneau.marshall.swap.spi.ObjectSwap} for {@code links} map values; each value can be either a JSON
  *     string URL or a {@link org.apache.juneau.bean.jsonapi.JsonApiLink} object per the spec.
  * </ul>
  *

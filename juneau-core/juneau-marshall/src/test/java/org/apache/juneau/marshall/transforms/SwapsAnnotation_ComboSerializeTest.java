@@ -22,7 +22,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Exhaustive serialization tests Swap annotation.

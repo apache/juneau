@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.swap;
+package org.apache.juneau.marshall.swap.spi;
 
 /**
  * Abstract subclass for object swaps that swap objects for strings.

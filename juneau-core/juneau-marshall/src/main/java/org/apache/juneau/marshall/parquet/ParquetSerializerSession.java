@@ -332,7 +332,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	/**
-	 * Applies any class-level swap registered via {@link org.apache.juneau.marshall.swap.DefaultSwaps}
+	 * Applies any class-level swap registered via {@link org.apache.juneau.marshall.swap.spi.DefaultSwaps}
 	 * (or context-registered swaps) to a leaf value just before it is written to a Parquet column.
 	 *
 	 * <p>

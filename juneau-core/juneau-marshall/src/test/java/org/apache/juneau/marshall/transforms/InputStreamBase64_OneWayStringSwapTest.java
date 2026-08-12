@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.transforms;
 import static org.apache.juneau.BasicTestUtils.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.marshall.swaps.*;
 
 class InputStreamBase64_OneWayStringSwapTest extends OneWayStringSwapTest_Base {

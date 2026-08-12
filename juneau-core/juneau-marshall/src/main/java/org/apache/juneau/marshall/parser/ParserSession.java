@@ -40,7 +40,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.objecttools.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.marshall.utils.*;
 
 /**

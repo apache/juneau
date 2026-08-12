@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.html.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Generates an OpenAPI-UI interface from an OpenAPI document.

@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.swaps;
 import java.net.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Transforms {@link URL} objects to and from {@link String Strings}.

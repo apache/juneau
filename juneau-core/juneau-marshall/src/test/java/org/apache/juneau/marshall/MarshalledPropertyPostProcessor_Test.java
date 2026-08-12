@@ -27,7 +27,7 @@ import java.util.*;
 import javax.xml.datatype.*;
 
 import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.swaps;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Transforms beans into {@link String Strings} by simply calling the {@link Object#toString()} method.

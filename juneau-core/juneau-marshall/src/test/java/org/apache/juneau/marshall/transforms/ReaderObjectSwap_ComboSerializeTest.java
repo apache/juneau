@@ -23,7 +23,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Verifies that Reader and InputStream objects are serialized correctly.

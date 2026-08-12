@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.

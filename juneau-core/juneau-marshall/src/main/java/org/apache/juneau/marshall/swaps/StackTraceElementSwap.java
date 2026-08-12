@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.swaps;
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Transforms {@link StackTraceElement StackTraceElements} to {@code String} objects.

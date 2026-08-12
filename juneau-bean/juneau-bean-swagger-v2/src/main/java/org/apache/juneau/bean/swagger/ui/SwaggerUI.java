@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.html.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Generates a Swagger-UI interface from a Swagger document.

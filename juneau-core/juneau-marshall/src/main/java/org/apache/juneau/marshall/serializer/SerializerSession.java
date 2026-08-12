@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.DateFormat;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.soap.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.marshall.utils.*;
 
 /**

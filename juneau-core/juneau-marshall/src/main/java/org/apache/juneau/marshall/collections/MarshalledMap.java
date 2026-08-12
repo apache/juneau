@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Neutral, marshaller-agnostic map of string-to-object entries.

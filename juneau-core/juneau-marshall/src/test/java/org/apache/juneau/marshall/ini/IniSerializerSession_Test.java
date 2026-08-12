@@ -550,7 +550,7 @@ class IniSerializerSession_Test extends TestBase {
 	// where isBean() intercepts before the swap is ever considered (see writeMapAtRoot/writeBean's isBean()
 	// checks, which run ahead of any swap logic).
 
-	public static class L10_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<UUID,Object> {
+	public static class L10_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<UUID,Object> {
 		@Override
 		public Object swap(MarshallingSession session, UUID o) {
 			return o == null ? null : o.toString();
@@ -566,7 +566,7 @@ class IniSerializerSession_Test extends TestBase {
 		assertTrue(ini.contains("00000000-0000-0000-0000-000000000001"), ini);
 	}
 
-	public static class L10b_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<UUID,String> {
+	public static class L10b_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<UUID,String> {
 		@Override
 		public String swap(MarshallingSession session, UUID o) {
 			return o == null ? null : o.toString();
@@ -582,7 +582,7 @@ class IniSerializerSession_Test extends TestBase {
 		assertTrue(ini.contains("00000000-0000-0000-0000-000000000002"), ini);
 	}
 
-	public static class L10c_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<UUID,String> {
+	public static class L10c_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<UUID,String> {
 		@Override
 		public String swap(MarshallingSession session, UUID o) {
 			return null;

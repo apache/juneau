@@ -30,11 +30,11 @@ import org.junit.jupiter.api.*;
 
 /**
  * Verifies that top-level (non-bean-property) values for types covered by the inline anonymous swaps registered in
- * {@link org.apache.juneau.marshall.swap.DefaultSwaps} round-trip cleanly through several wire formats.
+ * {@link org.apache.juneau.marshall.swap.spi.DefaultSwaps} round-trip cleanly through several wire formats.
  *
  * <p>
  * The three thin delegating swaps that previously lived as standalone classes (LocaleSwap, TimeZoneSwap, ZoneIdSwap)
- * were inlined into {@code DefaultSwaps} as anonymous {@link org.apache.juneau.marshall.swap.StringSwap} subclasses; this test
+ * were inlined into {@code DefaultSwaps} as anonymous {@link org.apache.juneau.marshall.swap.spi.StringSwap} subclasses; this test
  * confirms that the inlining did not regress top-level serialization or parsing for any of the three.
  */
 class TopLevelDefaultSwapsRoundTrip_Test extends TestBase {

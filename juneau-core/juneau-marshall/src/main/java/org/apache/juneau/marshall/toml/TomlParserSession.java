@@ -537,7 +537,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 	 *
 	 * <p>Collection-element and top-level dispatch sites don't go through
 	 * {@code MarshalledPropertyPostProcessor}'s per-property swap install, so they fall back to the
-	 * {@link org.apache.juneau.marshall.swap.DefaultSwaps} registry.  Returns {@code null} when the target isn't
+	 * {@link org.apache.juneau.marshall.swap.spi.DefaultSwaps} registry.  Returns {@code null} when the target isn't
 	 * {@code byte[]}, the value isn't a {@link String}, or no swap is matched on the current session
 	 * (e.g. {@link BinaryFormat#NOT_SET} is configured).
 	 */

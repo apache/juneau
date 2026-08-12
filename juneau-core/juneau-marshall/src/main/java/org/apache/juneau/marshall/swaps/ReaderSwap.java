@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import java.io.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Transforms <code>Readers</code> to {@link String Strings}.

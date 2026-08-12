@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 

@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.swaps;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Built-in object swap implementation class for the {@link MarshalledProp#format() @MarshalledProp(format)} annotation.

@@ -27,7 +27,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.junit.jupiter.api.*;
 
 /**

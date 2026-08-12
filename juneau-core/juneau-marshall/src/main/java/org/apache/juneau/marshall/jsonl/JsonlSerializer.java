@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.jsonl;
 
 import org.apache.juneau.marshall.json.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Serializes POJO models to JSONL (JSON Lines).

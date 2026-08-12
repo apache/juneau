@@ -27,7 +27,7 @@ import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.cp.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 
 /**
  * Generates a Redoc-style documentation interface from an OpenAPI 3.1 document.

@@ -62,7 +62,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * The types above are considered "YAML-primitive" object types.
  * Any non-YAML-primitive object types are transformed into YAML-primitive object types through
- * {@link org.apache.juneau.marshall.swap.ObjectSwap ObjectSwaps} associated through the
+ * {@link org.apache.juneau.marshall.swap.spi.ObjectSwap ObjectSwaps} associated through the
  * {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *

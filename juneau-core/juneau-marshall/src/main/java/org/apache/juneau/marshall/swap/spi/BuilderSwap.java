@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.swap;
+package org.apache.juneau.marshall.swap.spi;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
@@ -61,7 +61,7 @@ public class BuilderSwap<T,B> {
 		if (bci.isNotPublic())
 			return null;
 
-		var objectClass = info(builderClass).getParameterType(0, Builder.class);
+		var objectClass = info(builderClass).getParameterType(0, PojoBuilder.class);
 
 		MethodInfo createObjectMethod;
 		MethodInfo createBuilderMethod;
@@ -123,7 +123,7 @@ public class BuilderSwap<T,B> {
 			var cc = pci.getPublicConstructor(
 				x -> x.isVisible(cVis)
 				&& x.hasNumParameters(1)
-				&& x.getParameter(0).getParameterType().isAssignableTo(Builder.class)
+				&& x.getParameter(0).getParameterType().isAssignableTo(PojoBuilder.class)
 			).orElse(null);
 			// @formatter:on
 			if (nn(cc)) {

@@ -465,7 +465,7 @@ class BsonParserSession_Test extends TestBase {
 		public String value;
 	}
 
-	public static class Dd1_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<Dd1_MapType,Dd1_SwapTarget> {
+	public static class Dd1_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<Dd1_MapType,Dd1_SwapTarget> {
 		@Override
 		public Dd1_SwapTarget swap(MarshallingSession session, Dd1_MapType o) {
 			var t = new Dd1_SwapTarget();
@@ -499,7 +499,7 @@ class BsonParserSession_Test extends TestBase {
 		assertEquals("hi", result.get("k"));
 	}
 
-	public static class Dd2_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<Dd2_MapType,Object> {
+	public static class Dd2_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<Dd2_MapType,Object> {
 		@Override
 		public Object swap(MarshallingSession session, Dd2_MapType o) {
 			return String.valueOf(o.get("k"));
@@ -556,7 +556,7 @@ class BsonParserSession_Test extends TestBase {
 		public void setB(String b) { this.b = b; }
 	}
 
-	public static class Dd3_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<Dd3_MapType,Dd3_View> {
+	public static class Dd3_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<Dd3_MapType,Dd3_View> {
 		@Override
 		public Dd3_View swap(MarshallingSession session, Dd3_MapType o) {
 			return new Dd3_ViewImpl(String.valueOf(o.get("a")), String.valueOf(o.get("b")));
@@ -632,7 +632,7 @@ class BsonParserSession_Test extends TestBase {
 		public Map<String,Object> m;
 	}
 
-	public static class G01_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<G01_Bean,Map<String,Object>> {
+	public static class G01_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<G01_Bean,Map<String,Object>> {
 		@Override
 		public Map<String,Object> swap(MarshallingSession session, G01_Bean o) {
 			return Map.of("v", o.v);
@@ -654,7 +654,7 @@ class BsonParserSession_Test extends TestBase {
 		public String v;
 	}
 
-	public static class G00_Swap extends org.apache.juneau.marshall.swap.ObjectSwap<G00_Bean,G00_Impl> {
+	public static class G00_Swap extends org.apache.juneau.marshall.swap.spi.ObjectSwap<G00_Bean,G00_Impl> {
 		@Override
 		public G00_Impl swap(MarshallingSession session, G00_Bean o) {
 			var i = new G00_Impl();

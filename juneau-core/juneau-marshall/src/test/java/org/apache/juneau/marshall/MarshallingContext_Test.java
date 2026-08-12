@@ -30,7 +30,7 @@ import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.swap.spi.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
