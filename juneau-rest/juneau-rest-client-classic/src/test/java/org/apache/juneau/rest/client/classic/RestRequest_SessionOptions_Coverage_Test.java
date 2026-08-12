@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
@@ -39,6 +40,7 @@ import com.sun.net.httpserver.*;
 class RestRequest_SessionOptions_Coverage_Test {
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 	private static volatile String lastHeader;
 	private static volatile String lastQuery;
@@ -47,6 +49,10 @@ class RestRequest_SessionOptions_Coverage_Test {
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);
 		port = server.getAddress().getPort();
+		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
+		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.createContext("/x", exchange -> {
 			lastHeader = exchange.getRequestHeaders().getFirst("x-juneau-serializer-options");
 			if (lastHeader == null)
@@ -62,6 +68,8 @@ class RestRequest_SessionOptions_Coverage_Test {
 	static void stopServer() {
 		if (server != null)
 			server.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	private static RestRequest req() throws RestCallException {

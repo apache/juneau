@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.*;
@@ -45,6 +46,7 @@ import com.sun.net.httpserver.*;
 class RemoteProxyParity_Test {
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 
 	// Captured request state (reset per test).
@@ -67,6 +69,10 @@ class RemoteProxyParity_Test {
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);
 		port = server.getAddress().getPort();
+		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
+		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.createContext("/", exchange -> {
 			var n = ATTEMPTS.incrementAndGet();
 			lastMethod = exchange.getRequestMethod();
@@ -99,6 +105,8 @@ class RemoteProxyParity_Test {
 	static void stopServer() {
 		if (server != null)
 			server.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	@BeforeEach

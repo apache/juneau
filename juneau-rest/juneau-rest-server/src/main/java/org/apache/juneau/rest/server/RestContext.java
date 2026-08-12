@@ -1526,7 +1526,7 @@ public class RestContext extends Context {
 			public DebugResult resolve(RestContext context, HttpServletRequest req) {
 				var enabled = isTrue(cast(Boolean.class, req.getAttribute("Debug")));
 				if (!enabled) {
-					if ("always".equalsIgnoreCase(mode2) || "true".equalsIgnoreCase(mode2))
+					if ("always".equalsIgnoreCase(mode2))
 						enabled = true;
 					else if ("conditional".equalsIgnoreCase(mode2))
 						enabled = "true".equalsIgnoreCase(req.getHeader("Debug"));
@@ -1541,9 +1541,9 @@ public class RestContext extends Context {
 				if (opDebug.isPresent()) {
 					var v = RestContext.this.resolve(opDebug.get().inner().debug().value());
 					if (StringUtils.isNotBlank(v)) {
-						if ("always".equalsIgnoreCase(v) || "true".equalsIgnoreCase(v))
+						if ("always".equalsIgnoreCase(v))
 							return new DebugResult(true, format, level, true);
-						if ("never".equalsIgnoreCase(v) || "false".equalsIgnoreCase(v))
+						if ("never".equalsIgnoreCase(v))
 							return new DebugResult(false, format, level, false);
 						if ("conditional".equalsIgnoreCase(v))
 							return new DebugResult("true".equalsIgnoreCase(req.getHeader("Debug")), format, level, true);

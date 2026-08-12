@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
@@ -48,6 +49,7 @@ import com.sun.net.httpserver.*;
 class RemoteProxyThrowOnError_Test {
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 	private static volatile int status = 404;
 	private static volatile String responseBody = "not found";
@@ -56,6 +58,10 @@ class RemoteProxyThrowOnError_Test {
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);
 		port = server.getAddress().getPort();
+		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
+		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.createContext("/", exchange -> {
 			exchange.getRequestBody().readAllBytes();
 			var resp = responseBody.getBytes(UTF_8);
@@ -72,6 +78,8 @@ class RemoteProxyThrowOnError_Test {
 	static void stopServer() {
 		if (server != null)
 			server.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	@BeforeEach

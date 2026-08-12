@@ -35,8 +35,8 @@ public @interface Debug {
 	 * Debug enablement policy.
 	 *
 	 * <ul class='values'>
-	 * 	<li><js>"always"</js> (or <js>"true"</js>)
-	 * 	<li><js>"never"</js> (or <js>"false"</js>)
+	 * 	<li><js>"always"</js>
+	 * 	<li><js>"never"</js>
 	 * 	<li><js>"conditional"</js>
 	 * 	<li><js>""</js> (inherit)
 	 * </ul>

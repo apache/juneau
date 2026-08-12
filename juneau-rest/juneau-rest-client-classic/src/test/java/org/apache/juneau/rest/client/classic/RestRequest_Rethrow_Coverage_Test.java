@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
+import java.util.concurrent.*;
 
 import org.junit.jupiter.api.*;
 
@@ -76,12 +77,17 @@ class RestRequest_Rethrow_Coverage_Test {
 	}
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 
 	@BeforeAll
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);
 		port = server.getAddress().getPort();
+		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
+		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.createContext("/thrown", exchange -> {
 			var q = exchange.getRequestURI().getQuery();
 			exchange.getResponseHeaders().add("Thrown", q);
@@ -110,6 +116,8 @@ class RestRequest_Rethrow_Coverage_Test {
 	static void stopServer() {
 		if (server != null)
 			server.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	private static String url(String path) {

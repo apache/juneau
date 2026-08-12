@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
+import java.util.concurrent.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.http.classic.response.*;
@@ -45,12 +46,17 @@ import com.sun.net.httpserver.*;
 class FluentResponseBodyAssertion_Test {
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 
 	@BeforeAll
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);
 		port = server.getAddress().getPort();
+		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
+		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.createContext("/ok", exchange -> {
 			var body = "hello".getBytes(StandardCharsets.UTF_8);
 			exchange.getResponseHeaders().add("Content-Type", "text/plain");
@@ -77,6 +83,8 @@ class FluentResponseBodyAssertion_Test {
 	static void stopServer() {
 		if (server != null)
 			server.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	private static RestResponse okResponse() throws Exception {

@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
@@ -47,6 +48,7 @@ import com.sun.net.httpserver.*;
 class RestClient_Builder_Coverage_Test {
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 	private static final AtomicReference<Headers> lastHeaders = new AtomicReference<>();
 	private static final AtomicReference<String> lastQuery = new AtomicReference<>();
@@ -55,6 +57,10 @@ class RestClient_Builder_Coverage_Test {
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);
 		port = server.getAddress().getPort();
+		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
+		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.createContext("/echo", exchange -> {
 			lastHeaders.set(exchange.getRequestHeaders());
 			lastQuery.set(exchange.getRequestURI().getQuery());
@@ -69,6 +75,8 @@ class RestClient_Builder_Coverage_Test {
 	static void stopServer() {
 		if (server != null)
 			server.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	private static String url() {

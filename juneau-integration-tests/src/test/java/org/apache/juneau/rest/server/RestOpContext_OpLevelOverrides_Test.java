@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  *   <li>{@link RestOpContext#getMaxInput()} — exercises the {@code v.isPresent()} branch in
  *       {@code findMaxInput()}.
  *   <li>{@link RestOpContext#createSession} — exercises the explicit-debug branch in
- *       {@code findDebugEnablement()} via {@code @RestGet(debug="true")}.
+ *       {@code findDebugEnablement()} via {@code @RestGet(debug="always")}.
  * </ul>
  *
  * <p>These cases were not covered by {@code NoInherit_Test}, which only exercises class-level
@@ -75,7 +75,7 @@ class RestOpContext_OpLevelOverrides_Test extends TestBase {
 
 	@Rest
 	public static class C {
-		@RestGet(debug="true")
+		@RestGet(debug="always")
 		public void get() { /* intentionally empty */ }
 	}
 

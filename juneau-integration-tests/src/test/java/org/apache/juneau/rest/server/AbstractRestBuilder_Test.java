@@ -276,7 +276,7 @@ class AbstractRestBuilder_Test extends TestBase {
 	}
 
 	@Test void f02_debug() {
-		assertEquals("true", b().debug("true").toRestAnnotation().debug().value());
+		assertEquals("always", b().debug("always").toRestAnnotation().debug().value());
 	}
 
 	@Test void f03_observability() {

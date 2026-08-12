@@ -45,9 +45,7 @@ public enum Enablement {
 	private static final Map<String,Enablement> MAP = m();
 
 	static {
-		MAP.put("TRUE", ALWAYS);
 		MAP.put("ALWAYS", ALWAYS);
-		MAP.put("FALSE", NEVER);
 		MAP.put("NEVER", NEVER);
 		MAP.put("CONDITIONAL", CONDITIONAL);
 	}

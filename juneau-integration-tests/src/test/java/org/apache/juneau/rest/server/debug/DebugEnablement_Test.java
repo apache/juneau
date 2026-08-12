@@ -484,4 +484,31 @@ class DebugEnablement_Test extends TestBase {
 		var de = new TestEnablement(newBuilder());
 		assertNotNull(de.toString());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// h. Enablement.fromString — single-vocabulary pinning (TODO-351 B-restserver-4).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_fromString_canonicalValues_caseInsensitive() {
+		assertEquals(Enablement.ALWAYS, Enablement.fromString("always"));
+		assertEquals(Enablement.ALWAYS, Enablement.fromString("ALWAYS"));
+		assertEquals(Enablement.NEVER, Enablement.fromString("never"));
+		assertEquals(Enablement.NEVER, Enablement.fromString("NEVER"));
+		assertEquals(Enablement.CONDITIONAL, Enablement.fromString("conditional"));
+		assertEquals(Enablement.CONDITIONAL, Enablement.fromString("CONDITIONAL"));
+	}
+
+	@Test void h02_fromString_trueFalseAliases_noLongerAccepted() {
+		// The "true"/"false" aliases for ALWAYS/NEVER were removed; only always/never/conditional remain.
+		assertNull(Enablement.fromString("true"));
+		assertNull(Enablement.fromString("TRUE"));
+		assertNull(Enablement.fromString("false"));
+		assertNull(Enablement.fromString("FALSE"));
+	}
+
+	@Test void h03_fromString_nullAndUnrecognized_returnNull() {
+		assertNull(Enablement.fromString(null));
+		assertNull(Enablement.fromString(""));
+		assertNull(Enablement.fromString("bogus"));
+	}
 }

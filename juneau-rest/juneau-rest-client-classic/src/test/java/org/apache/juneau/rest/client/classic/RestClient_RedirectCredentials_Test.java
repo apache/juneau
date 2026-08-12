@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
+import java.util.concurrent.*;
 
 import org.junit.jupiter.api.*;
 
@@ -38,18 +39,26 @@ class RestClient_RedirectCredentials_Test {
 
 	private static HttpServer serverA;
 	private static HttpServer serverB;
+	private static ExecutorService executor;
 	private static int portA;
 	private static int portB;
 
 	@BeforeAll
 	static void startServers() throws IOException {
+		// Without an explicit executor, exchanges run on each HttpServer's single internal dispatch thread,
+		// which starves under -T1C reactor-level parallel test load and can fail with "server failed to
+		// respond". One shared pool is enough since both servers only ever field short-lived test requests.
+		executor = Executors.newCachedThreadPool();
+
 		serverB = HttpServer.create(new InetSocketAddress(0), 0);
 		portB = serverB.getAddress().getPort();
+		serverB.setExecutor(executor);
 		serverB.createContext("/echo-creds", RestClient_RedirectCredentials_Test::echoCreds);
 		serverB.start();
 
 		serverA = HttpServer.create(new InetSocketAddress(0), 0);
 		portA = serverA.getAddress().getPort();
+		serverA.setExecutor(executor);
 		serverA.createContext("/echo-creds", RestClient_RedirectCredentials_Test::echoCreds);
 		serverA.createContext("/redirect-cross", exchange -> redirect(exchange, "http://localhost:" + portB + "/echo-creds"));
 		serverA.createContext("/redirect-same", exchange -> redirect(exchange, "http://localhost:" + portA + "/echo-creds"));
@@ -62,6 +71,8 @@ class RestClient_RedirectCredentials_Test {
 			serverA.stop(0);
 		if (serverB != null)
 			serverB.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	private static void echoCreds(HttpExchange exchange) throws IOException {

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
@@ -45,6 +46,7 @@ import com.sun.net.httpserver.*;
 class RestClient_FormPost_Coverage_Test {
 
 	private static HttpServer server;
+	private static ExecutorService executor;
 	private static int port;
 	private static final AtomicReference<String> lastBody = new AtomicReference<>();
 	private static final AtomicReference<String> lastContentType = new AtomicReference<>();
@@ -53,6 +55,10 @@ class RestClient_FormPost_Coverage_Test {
 	static void startServer() throws IOException {
 		server = HttpServer.create(new InetSocketAddress(0), 0);
 		port = server.getAddress().getPort();
+		// Without an explicit executor, exchanges run on HttpServer's single internal dispatch thread, which
+		// starves under -T1C reactor-level parallel test load and can fail with "server failed to respond".
+		executor = Executors.newCachedThreadPool();
+		server.setExecutor(executor);
 		server.createContext("/echo", exchange -> {
 			lastBody.set(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
 			lastContentType.set(exchange.getRequestHeaders().getFirst("Content-Type"));
@@ -66,6 +72,8 @@ class RestClient_FormPost_Coverage_Test {
 	static void stopServer() {
 		if (server != null)
 			server.stop(0);
+		if (executor != null)
+			executor.shutdownNow();
 	}
 
 	private static String url() {
