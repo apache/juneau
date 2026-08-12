@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  *  - readIntoMap with non-string key types and duplicate keys (JsonList accumulation)
  *  - readIntoCollection with arrays and varargs
  *  - readAnything error / non-bean fallback / proxy / number / boolean / nil branches
- *  - XmlFormat variants: ATTR, COLLAPSED, TEXT, XMLTEXT, MIXED, ELEMENTS
+ *  - XmlFormat variants: ATTR, COLLAPSED, TEXT, XMLTEXT, MIXED, FREEFORM
  *  - Comments / processing instructions / CDATA inside elements
  *  - Accessors: isPreserveRootElement, isValidating, isWhitespaceElement, getEventAllocator,
  *    getReporter, getResolver, getXmlBeanMeta, getXmlBeanPropertyMeta, getXmlClassMeta
@@ -266,7 +266,7 @@ class XmlParserSession_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// i01 - Beans with @Xml format variants (ATTR / COLLAPSED / TEXT / XMLTEXT / MIXED / ELEMENTS)
+	// i01 - Beans with @Xml format variants (ATTR / COLLAPSED / TEXT / XMLTEXT / MIXED / FREEFORM)
 	// -----------------------------------------------------------------------------------------------------------------
 
 	public static class AttrBean {
@@ -328,7 +328,7 @@ class XmlParserSession_Test extends TestBase {
 	public static class ElementsBean {
 		@Xml(format = XmlFormat.ATTR)
 		public String a;
-		@Xml(format = XmlFormat.ELEMENTS)
+		@Xml(format = XmlFormat.FREEFORM)
 		public Object[] b;
 	}
 

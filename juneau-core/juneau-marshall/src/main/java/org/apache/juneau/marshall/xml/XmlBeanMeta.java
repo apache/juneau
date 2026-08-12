@@ -58,13 +58,13 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 				var xf = x.format();
 				if (xf == ATTRS)
 					defaultFormat.set(XmlFormat.ATTR);
-				else if (xf.isOneOf(ELEMENTS, DEFAULT))
+				else if (xf.isOneOf(FREEFORM, DEFAULT))
 					defaultFormat.set(ELEMENT);
 				else if (xf == VOID) {
 					contentFormat = VOID;
 					defaultFormat.set(VOID);
 				} else
-					throw brex(c, "Invalid format specified in @Xml annotation on bean: %s.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", x.format());
+					throw brex(c, "Invalid format specified in @Xml annotation on bean: %s.  Must be one of the following: DEFAULT,ATTRS,FREEFORM,VOID", x.format());
 			});
 
 			beanMeta.getProperties().values().forEach(p -> {
@@ -87,8 +87,8 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 					if (! pcm.isMapOrBean())
 						throw brex(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
 					attrsProperty = p;
-				} else if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
-					if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
+				} else if (xf.isOneOf(FREEFORM, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
+					if (xf.isOneOf(FREEFORM, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
 						throw brex(c, "Invalid type for %s property.  Only properties of type Collection and array can be used.", xf);
 					if (nn(contentProperty)) {
 						if (xf == contentFormat)
@@ -167,7 +167,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 * <p>
 	 * Can be one of the following:
 	 * <ul>
-	 * 	<li>{@link XmlFormat#ELEMENTS}
+	 * 	<li>{@link XmlFormat#FREEFORM}
 	 * 	<li>{@link XmlFormat#MIXED}
 	 * 	<li>{@link XmlFormat#MIXED_PWS}
 	 * 	<li>{@link XmlFormat#TEXT}

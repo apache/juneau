@@ -126,7 +126,7 @@ public abstract class HtmlElementContainer<SELF extends HtmlElementContainer<SEL
 	 *
 	 * @return The children of this element, or <jk>null</jk> if no children are set.
 	 */
-	@Xml(format = ELEMENTS)
+	@Xml(format = FREEFORM)
 	@BeanProp(name="c") @MarshalledProp(dictionary=HtmlBeanDictionary.class)
 	public List<Object> getChildren() { return u(children); }
 

@@ -265,7 +265,7 @@ class AnnotationInheritance_Test extends TestBase {
 	public static class G1_Parent {
 		private List<Object> children;
 
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		@BeanProp(name="c")
 		public List<Object> getChildren() {
 			return children;
@@ -279,7 +279,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	public static class G1_Child extends G1_Parent {
-		// This override previously caused "ELEMENTS and ELEMENT properties cannot be mixed" error
+		// This override previously caused "FREEFORM and ELEMENT properties cannot be mixed" error
 		// Now it should work because @MarshalledProp("c") is inherited, keeping the same property name
 		@Override
 		public G1_Child setChildren(List<Object> children) {

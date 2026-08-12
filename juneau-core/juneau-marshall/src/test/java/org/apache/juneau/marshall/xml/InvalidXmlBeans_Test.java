@@ -41,22 +41,22 @@ class InvalidXmlBeans_Test extends TestBase {
 		input(
 			"BeanWithAttrFormat",
 			new BeanWithAttrFormat(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithAttrFormat: Invalid format specified in @Xml annotation on bean: ATTR.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID"
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithAttrFormat: Invalid format specified in @Xml annotation on bean: ATTR.  Must be one of the following: DEFAULT,ATTRS,FREEFORM,VOID"
 		),
 		input(
 			"BeanWithElementFormat",
 			new BeanWithElementFormat(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementFormat: Invalid format specified in @Xml annotation on bean: ELEMENT.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID"
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementFormat: Invalid format specified in @Xml annotation on bean: ELEMENT.  Must be one of the following: DEFAULT,ATTRS,FREEFORM,VOID"
 		),
 		input(
 			"BeanWithCollapsedFormat",
 			new BeanWithCollapsedFormat(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithCollapsedFormat: Invalid format specified in @Xml annotation on bean: COLLAPSED.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID"
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithCollapsedFormat: Invalid format specified in @Xml annotation on bean: COLLAPSED.  Must be one of the following: DEFAULT,ATTRS,FREEFORM,VOID"
 		),
 		input(
 			"BeanWithMixedFormat",
 			new BeanWithMixedFormat(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithMixedFormat: Invalid format specified in @Xml annotation on bean: MIXED.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID"
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithMixedFormat: Invalid format specified in @Xml annotation on bean: MIXED.  Must be one of the following: DEFAULT,ATTRS,FREEFORM,VOID"
 		),
 		input(
 			"BeanWithMultipleAttrs",
@@ -71,12 +71,12 @@ class InvalidXmlBeans_Test extends TestBase {
 		input(
 			"BeanWithMulipleElements",
 			new BeanWithMulipleElements(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithMulipleElements: Multiple instances of ELEMENTS properties defined on class.  Only one property can be designated as such."
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithMulipleElements: Multiple instances of FREEFORM properties defined on class.  Only one property can be designated as such."
 		),
 		input(
 			"BeanWithWrongElementsType",
 			new BeanWithWrongElementsType(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithWrongElementsType: Invalid type for ELEMENTS property.  Only properties of type Collection and array can be used."
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithWrongElementsType: Invalid type for FREEFORM property.  Only properties of type Collection and array can be used."
 		),
 		input(
 			"BeanWithMulipleMixed",
@@ -91,22 +91,22 @@ class InvalidXmlBeans_Test extends TestBase {
 		input(
 			"BeanWithElementsAndMixed",
 			new BeanWithElementsAndMixed(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndMixed: ELEMENTS and MIXED properties found on the same bean.  Only one property can be designated as such."
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndMixed: FREEFORM and MIXED properties found on the same bean.  Only one property can be designated as such."
 		),
 		input(
 			"BeanWithElementsAndElement",
 			new BeanWithElementsAndElement(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndElement: ELEMENTS and ELEMENT properties found on the same bean.  These cannot be mixed."
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndElement: FREEFORM and ELEMENT properties found on the same bean.  These cannot be mixed."
 		),
 		input(
 			"BeanWithElementsAndDefault",
 			new BeanWithElementsAndDefault(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndDefault: ELEMENTS and ELEMENT properties found on the same bean.  These cannot be mixed."
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndDefault: FREEFORM and ELEMENT properties found on the same bean.  These cannot be mixed."
 		),
 		input(
 			"BeanWithElementsAndCollapsed",
 			new BeanWithElementsAndCollapsed(),
-			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndCollapsed: ELEMENTS and COLLAPSED properties found on the same bean.  These cannot be mixed."
+			"org.apache.juneau.marshall.xml.InvalidXmlBeansTest$BeanWithElementsAndCollapsed: FREEFORM and COLLAPSED properties found on the same bean.  These cannot be mixed."
 		),
 		input(
 			"BeanWithChildAndPropNameConflict",
@@ -176,14 +176,14 @@ class InvalidXmlBeans_Test extends TestBase {
 	}
 
 	public static class BeanWithMulipleElements {
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public JsonList f1;
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public JsonList f2;
 	}
 
 	public static class BeanWithWrongElementsType {
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public JsonMap f1;
 	}
 
@@ -202,27 +202,27 @@ class InvalidXmlBeans_Test extends TestBase {
 	}
 
 	public static class BeanWithElementsAndMixed {
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public JsonList f1;
 		@Xml(format=XmlFormat.MIXED)
 		public JsonList f2;
 	}
 
 	public static class BeanWithElementsAndElement {
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public JsonList f1;
 		@Xml(format=XmlFormat.ELEMENT)
 		public JsonList f2;
 	}
 
 	public static class BeanWithElementsAndDefault {
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public JsonList f1;
 		public JsonList f2;
 	}
 
 	public static class BeanWithElementsAndCollapsed {
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public JsonList f1;
 		@Xml(format=XmlFormat.COLLAPSED)
 		public JsonList f2;

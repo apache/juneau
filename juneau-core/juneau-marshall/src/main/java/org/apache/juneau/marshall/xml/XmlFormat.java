@@ -30,7 +30,7 @@ public enum XmlFormat {
 	 * Normal formatting (default).
 	 *
 	 * <p>
-	 * On a bean class, implies {@link #ELEMENTS} meaning bean properties will be serialized as child elements by default.
+	 * On a bean class, implies {@link #FREEFORM} meaning bean properties will be serialized as child elements by default.
 	 *
 	 * <p>
 	 * On a bean property, implies {@link #ELEMENT} meaning the bean property will be serialized as a child element.
@@ -87,10 +87,10 @@ public enum XmlFormat {
 	 * On a bean property, implies that the bean property value itself should be serialized as child elements of the
 	 * bean element.
 	 */
-	ELEMENTS,
+	FREEFORM,
 
 	/**
-	 * Same as {@link #ELEMENTS} except primitive types (string/boolean/number/null for example) are not wrapped in elements.
+	 * Same as {@link #FREEFORM} except primitive types (string/boolean/number/null for example) are not wrapped in elements.
 	 *
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.

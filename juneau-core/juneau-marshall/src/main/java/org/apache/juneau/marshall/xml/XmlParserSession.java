@@ -400,7 +400,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 			var event = r.next();
 			String currAttr;
 			// We only care about text in MIXED mode.
-			// Ignore if in ELEMENTS mode.
+			// Ignore if in FREEFORM mode.
 			if (event == CHARACTERS) {
 				if (nn(cp) && cpf.isOneOf(MIXED, MIXED_PWS)) {
 					if (cpcm.isCollectionOrArray()) {
@@ -410,7 +410,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 					} else {
 						cp.set(m, null, getText(r, trim));
 					}
-				} else if (cpf != ELEMENTS) {
+				} else if (cpf != FREEFORM) {
 					var s = getText(r, trim);
 					if (nn(s)) {
 						if (sb == null)
@@ -418,7 +418,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 						sb.append(s);
 					}
 				} else {
-					// Do nothing...we're in ELEMENTS mode.
+					// Do nothing...we're in FREEFORM mode.
 				}
 			} else if (event == START_ELEMENT) {
 				if (nn(cp) && cpf.isOneOf(TEXT, TEXT_PWS)) {
@@ -452,7 +452,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 							cp.set(m, null, readAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));
 						}
 					}
-				} else if (nn(cp) && cpf == ELEMENTS) {
+				} else if (nn(cp) && cpf == FREEFORM) {
 					cp.add(m, null, readAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 				} else {
 					currAttr = getNameProperty(r);

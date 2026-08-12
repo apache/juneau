@@ -270,7 +270,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 
 	/** Bean with list property annotated as XML elements format. */
 	public static class BeanWithListProp {
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public List<String> items = List.of("a", "b", "c");
 	}
 

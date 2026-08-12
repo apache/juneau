@@ -1549,7 +1549,7 @@ class BasicXml_Test extends TestBase {
 	public static class BeanWithXmlFormatElementsPropertyCollection {
 		@Xml(format=XmlFormat.ATTR)
 		public String a;
-		@Xml(format=XmlFormat.ELEMENTS)
+		@Xml(format=XmlFormat.FREEFORM)
 		public Object[] b;
 		BeanWithXmlFormatElementsPropertyCollection init() {
 			a = "foo";
