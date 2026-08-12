@@ -18,34 +18,35 @@
   - `juneau-shaded-rest-server-springboot.jar` - REST server + Spring Boot integration (3.8 MB)
   - `juneau-shaded-all.jar` - Complete framework in one JAR (4.0 MB)
 - **`/lib`** - Individual Jars
+  - `juneau-commons.jar` - Bean metadata framework, SVL string-variable resolution, and shared utilities (SVL now lives here — there is no separate `juneau-svl.jar`)
   - `juneau-marshall.jar` - Marshalling
-  - `juneau-marshall-rdf.jar` - Marshalling RDF extension (requires Apache Jena 2.7.1+)
+  - `juneau-marshall-rdf.jar` - Marshalling RDF extension (requires Apache Jena)
+  - `juneau-config.jar` - Config File
+  - `juneau-test.jar` - Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions
   - `juneau-bean-atom.jar` - ATOM Data Transfer Object Beans
   - `juneau-bean-common.jar` - Common Data Transfer Object Beans
   - `juneau-bean-html5.jar` - HTML5 Data Transfer Object Beans
   - `juneau-bean-jsonschema.jar` - JSON Schema Data Transfer Object Beans
   - `juneau-bean-openapi-v3.jar` - OpenAPI 3 Data Transfer Object Beans
   - `juneau-bean-swagger-v2.jar` - Swagger 2 Data Transfer Object Beans
-  - `juneau-svl.jar` - Simple Variable Language
-  - `juneau-config.jar` - Config File
-  - `juneau-rest-server.jar` - REST Servlet
-  - `juneau-rest-server-jaxrs.jar` - REST Servlet JAX/RS extension
-  - `juneau-rest-client.jar` - REST Client (requires Apache HttpClient 4.5+)
+  - `juneau-rest-server.jar` - REST Servlet (there is no `juneau-rest-server-jaxrs` module)
+  - `juneau-rest-server-springboot.jar` - REST Spring Boot integration
+  - `juneau-rest-client.jar` - Canonical, transport-agnostic REST client
   - `juneau-rest-mock.jar` - REST mock testing API
 
 - **`/osgi`** - OSGi Libraries
+  - `org.apache.juneau.commons.jar` - Bean metadata framework, SVL, and shared utilities
   - `org.apache.juneau.marshall.jar` - Marshalling
   - `org.apache.juneau.marshall.rdf.jar` - Marshalling RDF extension
+  - `org.apache.juneau.config.jar` - Config File
+  - `org.apache.juneau.test.jar` - Fluent assertions and Bean-Centric Testing
   - `org.apache.juneau.bean.atom.jar` - ATOM Data Transfer Object Beans
   - `org.apache.juneau.bean.common.jar` - Common Data Transfer Object Beans
   - `org.apache.juneau.bean.html5.jar` - HTML5 Data Transfer Object Beans
   - `org.apache.juneau.bean.jsonschema.jar` - JSON Schema Data Transfer Object Beans
   - `org.apache.juneau.bean.openapi3.jar` - OpenAPI 3 Data Transfer Object Beans
-  - `org.apache.juneau.svl.jar` - Simple Variable Language
-  - `org.apache.juneau.config.jar` - Config File
   - `org.apache.juneau.rest.server.jar` - REST Servlet
-  - `org.apache.juneau.rest.server.jaxrs.jar` - REST Servlet JAX/RS extension
-  - `org.apache.juneau.rest.server.springboot` - REST Spring Boot integration
+  - `org.apache.juneau.rest.server.springboot.jar` - REST Spring Boot integration
   - `org.apache.juneau.rest.client.jar` - REST Client
   - `org.apache.juneau.rest.mock.jar` - REST mock testing API
 
@@ -66,14 +67,14 @@
 <!-- ...where the artifactId is typically... -->
 <artifactId>juneau-shaded-all</artifactId>
 
-<!-- ...but can also be any of the following... -->
+<!-- ...but can also be any of the following (not exhaustive — see the
+     Ecosystem table on the "About" page for the complete, current module list)... -->
 <!-- Core modules -->
-<artifactId>juneau-test</artifactId>
 <artifactId>juneau-commons</artifactId>
 <artifactId>juneau-config</artifactId>
 <artifactId>juneau-marshall</artifactId>
 <artifactId>juneau-marshall-rdf</artifactId>
-<artifactId>juneau-svl</artifactId>
+<artifactId>juneau-test</artifactId>
 <!-- Bean DTOs -->
 <artifactId>juneau-bean-atom</artifactId>
 <artifactId>juneau-bean-common</artifactId>
@@ -96,6 +97,8 @@
 <artifactId>juneau-shaded-rest-server</artifactId>
 <artifactId>juneau-shaded-rest-server-springboot</artifactId>
 ```
+
+See the [Ecosystem table](/about#ecosystem) on the About page for the complete, current list of publishable modules — this page only calls out the most commonly-used ones.
 
 ## Verifying File Integrity
 
