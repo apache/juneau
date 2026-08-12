@@ -101,7 +101,10 @@ public class ResponseContent implements HttpEntity {
 
 		@Override
 		public void writeTo(OutputStream outstream) throws IOException {
-			// No-op: Mock implementation - full functionality not required
+			// Fail-fast: writeTo() is never legitimately invoked on this sentinel -- pipeTo() and asBytes()/
+			// asInputStream() route through getContent()/getContentLength() instead, so a silent no-op here would
+			// mask a caller bypassing those paths.
+			throw new UnsupportedOperationException("NULL_ENTITY.writeTo() should never be called.");
 		}
 	};
 

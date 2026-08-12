@@ -72,7 +72,7 @@ class JsonSchemaGenerator_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// JDK URI value types (TODO-313)
+	// JDK URI value types
 	//
 	// java.net.URI and java.net.URL are JDK value types that serialize as strings and must produce an
 	// inline {"type":"string","format":"uri"} schema rather than being treated as beans or losing the

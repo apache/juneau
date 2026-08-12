@@ -126,11 +126,12 @@ public class RdfParserSession extends ReaderParserSession {
 			throw isex("Unknown RDF language: %s", langName);
 	}
 
-	private static Lang toLang(String langName) {
+	// Package-private (not private) for white-box testing.
+	static Lang toLang(String langName) {
 		var lang = RDFLanguages.nameToLang(langName);
 		if (lang != null)
 			return lang;
-		if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages
+		if ("RDF/PROTO".equals(langName))
 			return Lang.RDFPROTO;
 		return null;
 	}
@@ -144,7 +145,8 @@ public class RdfParserSession extends ReaderParserSession {
 	 * If {@link RdfParser#RDF_trimWhitespace} is <jk>true</jk>, the resulting string is trimmed before decoding.
 	 * If {@link #isTrimStrings()} is <jk>true</jk>, the resulting string is trimmed after decoding.
 	 */
-	private String decodeString(Object o) {
+	// Package-private (not private) for white-box testing.
+	String decodeString(Object o) {
 		if (o == null)
 			return null;
 		var s = o.toString();
@@ -162,7 +164,8 @@ public class RdfParserSession extends ReaderParserSession {
 	 * Finds the roots in the model using either the "root" property to identify it,
 	 * 	or by resorting to scanning the model for all nodes with no incoming predicates.
 	 */
-	private List<Resource> getRoots(Model m) {
+	// Package-private (not private) for white-box testing.
+	List<Resource> getRoots(Model m) {
 		var l = new LinkedList<Resource>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
@@ -192,10 +195,11 @@ public class RdfParserSession extends ReaderParserSession {
 		return l;
 	}
 
-	private Object getValue(RDFNode n, Object outer) throws ParseException {
+	// Package-private (not private) for white-box testing.
+	Object getValue(RDFNode n, Object outer) throws ParseException {
 		if (n.isLiteral())
 			return n.asLiteral().getValue();
-		if (n.isResource()) {
+		if (n.isResource()) { // HTT: RDFNode has only two concrete kinds (Literal, Resource); this is always true once isLiteral() is false.
 			var st = n.asResource().getProperty(pValue);
 			if (nn(st)) {
 				n = st.getObject();
@@ -207,7 +211,8 @@ public class RdfParserSession extends ReaderParserSession {
 		throw new ParseException(this, "Unknown value type for node '%s'", n);
 	}
 
-	private boolean isBag(RDFNode n) {
+	// Package-private (not private) for white-box testing.
+	boolean isBag(RDFNode n) {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
 			if (nn(st))
@@ -216,7 +221,8 @@ public class RdfParserSession extends ReaderParserSession {
 		return false;
 	}
 
-	private boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
+	// Package-private (not private) for white-box testing.
+	boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
 		var bpRdf = getRdfBeanPropertyMeta(pMeta);
 
 		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
@@ -225,7 +231,8 @@ public class RdfParserSession extends ReaderParserSession {
 		return getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 	}
 
-	private boolean isSeq(RDFNode n) {
+	// Package-private (not private) for white-box testing.
+	boolean isSeq(RDFNode n) {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
 			if (nn(st))
@@ -234,7 +241,8 @@ public class RdfParserSession extends ReaderParserSession {
 		return false;
 	}
 
-	private <T> T readAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws ParseException {
+	// Package-private (not private) for white-box testing.
+	<T> T readAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 
 		if (eType == null)
 			eType = object();
@@ -272,7 +280,7 @@ public class RdfParserSession extends ReaderParserSession {
 				if (o instanceof String o2) {
 					o = decodeString(o2);
 				}
-			} else if (n.isResource()) {
+			} else if (n.isResource()) { // HTT: RDFNode has only two concrete kinds (Literal, Resource); this is always true once isLiteral() (above) is false -- the else below is defensive dead code.
 				var r = n.asResource();
 				if (! urisVisited.add(r))
 					o = r.getURI();
@@ -299,8 +307,8 @@ public class RdfParserSession extends ReaderParserSession {
 						o = cast(m2, pMeta, eType);
 					}
 				}
-			} else {
-				throw new ParseException(this, "Unrecognized node type '%s' for object", n);
+			} else { // HTT: unreachable -- n is always Literal or Resource; see guard above.
+				throw new ParseException(this, "Unrecognized node type '%s' for object", n); // HTT: unreachable -- see guard above.
 			}
 		} else if (nn(builder)) {
 			var r = n.asResource();
@@ -320,8 +328,8 @@ public class RdfParserSession extends ReaderParserSession {
 				return null;
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = readIntoMap(r, m, eType.getKeyType(), eType.getValueType(), pMeta);
-		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
-			if (sType.isArray() || sType.isArgs())
+		} else if (sType.isCollectionOrArray() || sType.isArgs()) { // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API -- always false here.
+			if (sType.isArray() || sType.isArgs()) // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API -- always false here.
 				o = list();
 			else
 				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new JsonList(this));
@@ -337,7 +345,7 @@ public class RdfParserSession extends ReaderParserSession {
 			} else {
 				throw new ParseException(this, "Unrecognized node type '%s' for collection", n);
 			}
-			if (sType.isArray() || sType.isArgs())
+			if (sType.isArray() || sType.isArgs()) // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API -- always false here.
 				o = toArray(sType, (Collection)o);
 		} else if (sType.isCharSequence()) {
 			o = decodeString(getValue(n, outer));
@@ -386,7 +394,8 @@ public class RdfParserSession extends ReaderParserSession {
 		return (T)o;
 	}
 
-	private <T> BeanMap<T> readIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException {
+	// Package-private (not private) for white-box testing.
+	<T> BeanMap<T> readIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException {
 		var bm = m.getMeta();
 		var rbm = getRdfBeanMeta(bm);
 		if (rbm.hasBeanUri() && nn(r2.getURI()))
@@ -430,27 +439,28 @@ public class RdfParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	private <E> Collection<E> readIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
+	// Package-private (not private) for white-box testing.
+	<E> Collection<E> readIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
 		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
-			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
-			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
+			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta); // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			l.add(e);
 		}
 		return l;
 	}
 
-	private <E> Collection<E> readIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
+	// Package-private (not private) for white-box testing.
+	<E> Collection<E> readIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
 		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
-			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
-			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
+			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta); // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			l.add(e);
 		}
 		return l;
 	}
 
-	private <K,V> Map<K,V> readIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws ParseException {
+	// Package-private (not private) for white-box testing.
+	<K,V> Map<K,V> readIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws ParseException {
 		// Add URI as "uri" to generic maps.
 		if (nn(r.getURI())) {
 			var uri = convertAttrToType(m, "uri", keyType);
@@ -461,7 +471,7 @@ public class RdfParserSession extends ReaderParserSession {
 			var st = i.next();
 			var p = st.getPredicate();
 			var key = p.getLocalName();
-			if (! (key.equals("root") && p.getURI().equals(getJuneauNs().getUri()))) {
+			if (! (key.equals("root") && p.getURI().equals(getJuneauNs().getUri()))) { // Bug: p.getURI() is the property's FULL URI, never equal to the bare namespace URI on the right; the inner && is therefore always false and this guard's "skip" branch is permanently unreachable.
 				key = decodeString(key);
 				var o = st.getObject();
 				var key2 = convertAttrToType(m, key, keyType);
@@ -488,19 +498,16 @@ public class RdfParserSession extends ReaderParserSession {
 		// Special case where we're parsing a loose collection of resources.
 		if (isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c;
-			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
-			if (type.isArray() || type.isArgs())
+			if (type.isArray() || type.isArgs()) // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 				c = list();
 			else
 				c = (type.canCreateNewInstance(getOuter()) ? (Collection<?>)type.newInstance(getOuter()) : new JsonList(this));
 
 			var argIndex = new AtomicInteger(0);
 			var c2 = c;
-			// HTT: isArgs() guard — same constraint as above.
-			roots.forEach(x -> c2.add(readAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null)));
+			roots.forEach(x -> c2.add(readAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null))); // HTT: isArgs() guard -- same constraint as above.
 
-			// HTT: isArgs() guard — same constraint as above.
-			if (type.isArray() || type.isArgs())
+			if (type.isArray() || type.isArgs()) // HTT: isArgs() guard -- same constraint as above.
 				return (T)toArray(type, c);
 			return (T)c;
 		}

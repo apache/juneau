@@ -1471,20 +1471,20 @@ public class RestContext extends Context {
 	 * The {@link DebugEnablement} for this resource.
 	 *
 	 * <p>
-	 * Resolved from {@code @Rest(debugDefault)} (most-derived non-blank wins), falling back to
+	 * Resolved from the env/config {@code RestContext.debugDefault} setting (see
+	 * {@link RestContextProperties#getDebugDefault()}) when non-blank, falling back to
 	 * {@code @Rest(debug=true|false)}. The resolved {@link Enablement} is published into the bean store
 	 * so that {@link BasicDebugEnablement} subclasses can pick it up. Defaults to {@link BasicDebugEnablement}.
 	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<DebugEnablement> debugEnablement = memoizer(() -> {
-		// @Rest(debugDefault="ALWAYS|NEVER|CONDITIONAL") — most-derived non-blank value wins, with parent inheritance
-		// gated by @Rest(noInherit={"debugDefault"}). Resolved value is published as an Enablement bean so that
-		// BasicDebugEnablement.init() (and any subclass) can pick it up via beanStore().getBean(Enablement.class).
-		// Annotation value overrides any pre-registered Enablement bean (e.g. mock-client default).
-		// If neither a debugDefault annotation value NOR a pre-registered Enablement bean is present, fall back
-		// to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise.
+		// The env/config RestContext.debugDefault setting ("ALWAYS|NEVER|CONDITIONAL") is resolved first and, when
+		// non-blank, published as an Enablement bean so that BasicDebugEnablement.init() (and any subclass) can pick
+		// it up via beanStore().getBean(Enablement.class). It overrides any pre-registered Enablement bean (e.g. a
+		// mock-client default). If neither a debugDefault value NOR a pre-registered Enablement bean is present,
+		// fall back to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise.
 		var bs = beanStore();
-		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, getRestContextProperties().getDebugDefault());
+		String debugDefaultStr = resolve(getRestContextProperties().getDebugDefault());
 		Enablement resolvedDebugDefault = null;
 		if (nn(debugDefaultStr) && !debugDefaultStr.isBlank())
 			resolvedDebugDefault = Enablement.fromString(debugDefaultStr);
@@ -3481,6 +3481,23 @@ public class RestContext extends Context {
 	);
 
 	/**
+	 * The list-shaped {@code @Rest} contribution properties that {@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}
+	 * folds from an adopted mixin's own {@code @Rest} chain into the <b>host</b> resource's corresponding chain.
+	 *
+	 * <p>
+	 * Mirrors the "List-shaped" override set documented on {@link Mixin}: these are append-semantics properties, so a
+	 * mixin's contributions can be safely concatenated after the host's own chain (with the individual list builders'
+	 * same-class de-duplication).  Replace-shaped properties (e.g. {@code callLogger}, {@code partSerializer}) and the
+	 * {@link #HOST_ONLY_PROPERTIES host-only} properties are deliberately excluded &mdash; merging them would be a
+	 * conflict-resolution / namespace concern, not an append, and is out of scope for this opt-in directive.
+	 */
+	private static final Set<String> MERGEABLE_LIST_PROPERTIES = Set.of(
+		PROPERTY_serializers, PROPERTY_parsers, PROPERTY_encoders, PROPERTY_converters, PROPERTY_guards,
+		PROPERTY_responseProcessors, PROPERTY_restOpArgs, PROPERTY_defaultRequestHeaders,
+		PROPERTY_defaultResponseHeaders, PROPERTY_defaultRequestAttributes, PROPERTY_produces, PROPERTY_consumes
+	);
+
+	/**
 	 * Returns the {@link Rest} annotations on the resource class hierarchy for the specified property,
 	 * in <b>parent-to-child</b> order, with {@code noInherit} cutoff applied.
 	 *
@@ -3529,13 +3546,51 @@ public class RestContext extends Context {
 		// take it as the final (winning) value.  It is added after the noInherit cutoff scan so it is never itself
 		// cut, and HOST_ONLY_PROPERTIES are excluded (path/paths/mixins/children are not @Mixin override slots).
 		var override = HOST_ONLY_PROPERTIES.contains(name) ? null : mixinOverrideAnnotation.get();
-		if (override == null)
-			return rstream(resolved);
-		var withOverride = new ArrayList<AnnotationInfo<Rest>>(resolved.size() + 1);
-		withOverride.add(override);
-		withOverride.addAll(resolved);
-		return rstream(withOverride);
+		Stream<AnnotationInfo<Rest>> hostStream;
+		if (override == null) {
+			hostStream = rstream(resolved);
+		} else {
+			var withOverride = new ArrayList<AnnotationInfo<Rest>>(resolved.size() + 1);
+			withOverride.add(override);
+			withOverride.addAll(resolved);
+			hostStream = rstream(withOverride);
+		}
+		// Opt-in @Mixin(mergeIntoHost=true) directive: for a host context and a list-shaped property, append the
+		// adopted mixin(s)' own @Rest contributions AFTER the host's chain (parent-to-child), so the host's own
+		// endpoints pick up the mixin's list-shaped attributes.  Default behavior (no opted-in mixin) is unchanged.
+		if (! isMixinContextField() && MERGEABLE_LIST_PROPERTIES.contains(name)) {
+			var merged = mergeIntoHostMixinAnnotations.get();
+			if (! merged.isEmpty())
+				return Stream.concat(hostStream, merged.stream());
+		}
+		return hostStream;
 	}
+
+	/**
+	 * The {@code @Rest} annotation chains (parent-to-child, framework {@code DefaultConfig} entries excluded) of any
+	 * mixin the host opted into merging via {@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}, appended by
+	 * {@link #getRestAnnotationsForProperty(String)} for each {@link #MERGEABLE_LIST_PROPERTIES mergeable} list-shaped
+	 * property so the mixin's list-shaped {@code @Rest} attributes fold into the host's own chains.
+	 *
+	 * <p>
+	 * Empty for mixin sub-contexts and for hosts with no opted-in mixins &mdash; keeping the default (drop) behavior
+	 * for every existing resource.  Built once at memoizer-init time (zero per-request cost).
+	 */
+	private final Memoizer<List<AnnotationInfo<Rest>>> mergeIntoHostMixinAnnotations = memoizer(() -> {
+		if (isMixinContextField())
+			return List.of();
+		var out = new ArrayList<AnnotationInfo<Rest>>();
+		for (var rm : getResolvedMixins()) {
+			if (! rm.overrides().mergeIntoHost() || rm.type() == resourceClass())
+				continue;
+			// Fold in the mixin class's OWN @Rest chain (parent-to-child), excluding the framework DefaultConfig
+			// entries — those are already contributed by the host's own chain, so re-adding them would double-count.
+			rstream(getAnnotationProvider().find(Rest.class, ClassInfo.of(rm.type())))
+				.filter(ai -> ! (ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner())))
+				.forEach(out::add);
+		}
+		return u(out);
+	});
 
 	/**
 	 * For a {@linkplain #isMixinContext() mixin sub-context}, returns the <b>host</b> resource class's

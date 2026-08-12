@@ -74,8 +74,13 @@ public class RestContextProperties {
 	private String uriResolution = "";
 
 	/**
-	 * The default {@code @Rest(debugDefault)} debug enablement value ({@code "ALWAYS"} / {@code "NEVER"} /
-	 * {@code "CONDITIONAL"}); blank means unset.
+	 * The env/config {@code RestContext.debugDefault} default debug-enablement value ({@code "ALWAYS"} /
+	 * {@code "NEVER"} / {@code "CONDITIONAL"}); blank means unset.
+	 *
+	 * <p>
+	 * There is no corresponding {@code @Rest} annotation attribute for this setting &mdash; it is an environment/config
+	 * default only. {@link RestContext} reads this value (SVL-resolved) as the starting debug enablement, which is then
+	 * overridden by {@code @Rest(debug=true|false)} and the {@code Debug} request header.
 	 *
 	 * @return The value. Never <jk>null</jk>.
 	 */

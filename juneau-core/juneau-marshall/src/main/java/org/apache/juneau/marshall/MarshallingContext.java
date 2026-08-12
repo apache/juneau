@@ -4368,6 +4368,24 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @param outType The output type class.
 	 * @return A matching {@link Conversion}, or {@code null} if none applies.
 	 */
+	/**
+	 * Fallback for an ObjectSwap-conversion whose swap-class doesn't bridge to the input, but where the input
+	 * is already a {@link Map} matching the target's own Map shape -- copies its entries into a new instance
+	 * of the target type rather than dropping the value as {@code null}.
+	 *
+	 * @param toMeta The target type.
+	 * @param in The input value.
+	 * @return A new map instance of the target type populated with the input's entries, or <jk>null</jk> if
+	 * 	the target isn't Map-shaped or the input isn't a {@link Map}.
+	 */
+	private static Object copyMapEntries(ClassMeta<?> toMeta, Object in) {
+		if (! (toMeta.isMap() && in instanceof Map<?,?> in2))
+			return null;
+		var result = (Map<Object,Object>) (toMeta.canCreateNewInstance() ? toMeta.newInstance() : new LinkedHashMap<>());
+		result.putAll(in2);
+		return result;
+	}
+
 	@Override
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for comprehensive conversion dispatch
@@ -4399,7 +4417,10 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 						// Intermediate Number conversion
 						if (Number.class.isAssignableFrom(swapClass) && in instanceof Number)
 							return activeSwap.unswap(bs, converter.to(in, memberOf, bs, swapClass), toMeta);
-						return null;
+						// The swap's own swap-class is shaped like neither Map nor Number, so it doesn't apply to
+						// this input -- but if the input is already a Map matching toMeta's own Map shape, copy
+						// its entries directly rather than dropping the value.
+						return copyMapEntries(toMeta, in);
 					} catch (Exception e) {
 						throw rex(e);
 					}
@@ -4439,7 +4460,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 							return activeSwap.unswap(bs, converter.to(in, memberOf, bs, swapClass), toMeta);
 						if (Number.class.isAssignableFrom(swapClass) && in instanceof Number)
 							return activeSwap.unswap(bs, converter.to(in, memberOf, bs, swapClass), toMeta);
-						return null;
+						// See the analogous fallback in the objectSwaps loop above.
+						return copyMapEntries(toMeta, in);
 					} catch (Exception e) {
 						throw rex(e);
 					}
@@ -5431,35 +5453,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * 	<jk>true</jk> if fields and methods marked as transient should not be ignored.
 	 */
 	protected final boolean isIgnoreTransientFields() { return ignoreTransientFields; }
-
-	/**
-	 * Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
-	 * specified on this context class.
-	 *
-	 * @param ci The class info being tested.
-	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
-	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for bean exclusion rule checking
-	})
-	protected final boolean isNotABean(ClassInfo ci) {
-		if (ci.isArray() || ci.isPrimitive() || ci.isEnum() || ci.isAnnotation())
-			return true;
-		var p = ci.getPackage();
-		if (nn(p)) {
-			var pn = p.getName();
-			for (var p2 : notBeanPackageNames)
-				if (pn.equals(p2))
-					return true;
-			for (var p2 : notBeanPackagePrefixes)
-				if (pn.startsWith(p2))
-					return true;
-		}
-		for (var exclude : notBeanClasses)
-			if (ci.isAssignableTo(exclude))
-				return true;
-		return false;
-	}
 
 	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.

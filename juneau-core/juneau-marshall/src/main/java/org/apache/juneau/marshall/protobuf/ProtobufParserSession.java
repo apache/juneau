@@ -113,6 +113,8 @@ public class ProtobufParserSession extends InputStreamParserSession {
 		"java:S6541"  // Brain method acceptable for the parse workhorse
 	})
 	private Object readMessage(ClassMeta<?> type, ProtobufReader is, Object outer) throws IOException, ParseException, ExecutableException {
+		if (type.isMap())
+			return readMapMessage(type, is);
 		var pcm = ctx.getProtobufClassMeta(type);
 		var m = newBeanMap(outer, type.inner());
 
@@ -171,6 +173,41 @@ public class ProtobufParserSession extends InputStreamParserSession {
 		});
 
 		return m.getBean();
+	}
+
+	/**
+	 * Reads a length-delimited message as a raw (non-bean) {@link Map} target, decoding key(1)/value(2) tag pairs
+	 * the same way a single map ENTRY sub-message is decoded elsewhere (see {@link #readMapEntry}) -- but here the
+	 * whole message body is itself the map's aggregate contents (used for nested/element Map targets reached via
+	 * {@code TAGGED_REPEATED} list elements, map values, or swap targets, none of which have a bean shape to hand
+	 * {@code newBeanMap} that would otherwise return <jk>null</jk> and NPE downstream).
+	 *
+	 * @param type The Map-shaped target type.
+	 * @param is The protobuf reader positioned at the start of the message body.
+	 * @return The decoded map, converted to the requested target type.
+	 */
+	private Object readMapMessage(ClassMeta<?> type, ProtobufReader is) throws IOException, ParseException, ExecutableException {
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
+		var map = m();
+		Object pendingKey = null;
+		long tag;
+		while ((tag = is.readTag()) != ProtobufReader.EOF) {
+			var fn = ProtobufReader.fieldNumber(tag);
+			var wt = ProtobufReader.wireType(tag);
+			if (fn == 1) {
+				pendingKey = decodeMapComponent(keyType, is);
+			} else if (fn == 2) {
+				var value = decodeMapComponent(valueType, is);
+				if (pendingKey != null) {
+					map.put(convertToType(pendingKey, keyType), convertToType(value, valueType));
+					pendingKey = null;
+				}
+			} else {
+				is.skipField(wt);
+			}
+		}
+		return convertToType(map, type);
 	}
 
 	/**

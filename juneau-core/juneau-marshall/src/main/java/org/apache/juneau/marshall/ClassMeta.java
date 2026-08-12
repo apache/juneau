@@ -154,7 +154,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	private final NullableSupplier<String> example;                            // Example JSON.
 	private final NullableSupplier<FieldInfo> exampleField;                    // The @Example-annotated field (if it has one).
 	private final NullableSupplier<MethodInfo> exampleMethod;                  // The example() or @Example-annotated method (if it has one).
-	private final Supplier<BidiMap<Object,String>> enumValues;
 	private final NullableSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
 	private final NullableSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
 	private final Supplier<KeyValueTypes> keyValueTypes;                        // Key and value types for MAP types.
@@ -257,7 +256,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(this::findUnswap).build();
 		beanDictionaryName = memoize(this::findBeanDictionaryName);
 		elementType = memoize(this::findElementType);
-		enumValues = memoize(this::findEnumValues);
 		example = memoize(this::findExample);
 		exampleField = memoize(this::findExampleField);
 		exampleMethod = memoize(this::findExampleMethod);
@@ -315,7 +313,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		this.builderSwap = memoize(this::findBuilderSwap);
 		this.example = memoize(this::findExample);
 		this.implClass = memoize(this::findImplClass);
-		this.enumValues = memoize(this::findEnumValues);
 		this.beanDictionaryName = memoize(this::findBeanDictionaryName);
 		this.parameters = memoize(this::findParameters);
 	}
@@ -350,7 +347,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		this.builderSwap = mainType.builderSwap;
 		this.example = mainType.example;
 		this.implClass = mainType.implClass;
-		this.enumValues = mainType.enumValues;
 		this.beanDictionaryName = mainType.beanDictionaryName;
 		this.parameters = memoize(this::findParameters);
 	}
@@ -900,8 +896,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		}
 		if (isCollection() || isOptional()) {
 			var et = getElementType();
-			if (et == null)
-				return new Type[0];
 			var etParams = et.getParameters();
 			var result = new Type[1 + etParams.length];
 			result[0] = et.inner();
@@ -1648,18 +1642,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			if (f.getNormalClass().isAssignableTo(innerClass))
 				list.add(f);
 		return u(list);
-	}
-
-	private BidiMap<Object,String> findEnumValues() {
-		if (! isEnum())
-			return BidiMap.<Object,String>create().unmodifiable().build();
-
-		var bc = marshallingContext;
-		var fmt = nn(bc) ? bc.getEnumFormat() : EnumFormat.TO_STRING;
-
-		var m = BidiMap.<Object,String>create().unmodifiable();
-		stream(asEnumClass(inner()).getEnumConstants()).forEach(x -> m.add(x, fmt.format(x)));
-		return m.build();
 	}
 
 	private String findExample() {

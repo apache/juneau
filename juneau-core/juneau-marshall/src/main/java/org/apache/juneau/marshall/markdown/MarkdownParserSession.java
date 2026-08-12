@@ -332,6 +332,21 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			return map;
 		}
 
+		if (!eType.isObject()) {
+			// Scalar/Number/primitive (or any other non-bean, non-map, non-Object) target: a key/value
+			// table has no shape that maps onto a single scalar *value*, but this used to fall through to
+			// the generic "Object or unknown" handling below regardless of eType, unconditionally building
+			// a MarshalledMap and returning that instead of a T -- throwing a ClassCastException back at
+			// the caller. Only the first data row's value cell (if any) is meaningful for a genuine scalar
+			// target, so parse and return it directly instead of wrapping the whole table in a map.
+			for (var line : dataLines) {
+				var cells = splitTableRow(line);
+				if (cells.size() >= 2)
+					return readCellValue(cells.get(1), eType, null);
+			}
+			return null;
+		}
+
 		// Object or unknown: return MarshalledMap, check for _type and cast if possible
 		var resultMap = newGenericMap();
 		for (var line : dataLines) {
@@ -528,6 +543,16 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		} else if (eType.isCollection()) {
 			elementType = eType.getElementType();
 			result = eType.canCreateNewInstance(outer) ? (Collection<Object>) eType.newInstance() : l();
+		} else if (!eType.isMap() && !eType.isBean()) {
+			// Scalar/Number/primitive target: a bullet list has no shape that maps onto a single scalar
+			// *value*, but the code below always wrapped every parsed item into a List and returned that --
+			// even when the caller asked for a bare T -- which threw a ClassCastException back at the
+			// top-level read() cast. Only the first item (if any) is meaningful for a genuine scalar
+			// target, so parse and return it directly instead of wrapping it in a list.
+			if (items.isEmpty())
+				return null;
+			ClassMeta<?> scalarType = eType.isObject() ? object() : eType;
+			return readCellValue(items.get(0), scalarType, null);
 		} else {
 			elementType = eType.isObject() ? object() : eType;
 			result = l();

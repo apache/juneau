@@ -116,8 +116,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		public Set<String> views;  // Named views this property belongs to; null = untagged (in all views when defaultViewInclusion is enabled). Set via MarshalledPropertyPostProcessor.
 		private boolean isConstructorArg;
 		public boolean isUri;  // Package-private so MarshalledPropertyPostProcessor can set @Uri-derived flag.  Mirrors rawTypeMeta.isUri() plus @Uri annotation reads on field/getter/setter.
-		private boolean isDyna;
-		private boolean isDynaGetterMap;
+		boolean isDyna;
+		boolean isDynaGetterMap;
 		public BeanInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;

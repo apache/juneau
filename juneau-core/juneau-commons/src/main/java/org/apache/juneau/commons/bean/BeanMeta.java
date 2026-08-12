@@ -367,7 +367,7 @@ public class BeanMeta<T> {
 	private final Map<Method,String> getterProps;                              // The getter properties on the target class.
 	private final Map<String,BeanPropertyMeta> hiddenProperties;               // The hidden properties on the target class.
 	private final ConstructorInfo implClassConstructor;                        // Optional constructor to use if one cannot be found.
-	private final String notABeanReason;                                       // Readable string explaining why this class wasn't a bean.
+	final String notABeanReason;                                       // Readable string explaining why this class wasn't a bean.
 	private final Map<String,BeanPropertyMeta> properties;                     // The properties on the target class.
 	private final Map<Method,String> setterProps;                              // The setter properties on the target class.
 	private final boolean unsortedProperties;                                  // Whether properties should use natural JVM-dependent order.

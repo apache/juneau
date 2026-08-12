@@ -1287,10 +1287,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * @return The updated accumulator (non-null if any names were added).
 	 */
 	private static Set<String> addViews(Set<String> acc, String[] views) {
-		if (views == null || views.length == 0) // HTT — views==null branch: annotation arrays are never null in Java; defensive guard only.
+		if (views.length == 0)
 			return acc;
 		for (var v : views) {
-			if (v != null && ! v.isEmpty()) { // HTT — v==null branch: annotation String[] elements are never null in Java; defensive guard only.
+			if (! v.isEmpty()) {
 				if (acc == null)
 					acc = new LinkedHashSet<>();
 				acc.add(v);

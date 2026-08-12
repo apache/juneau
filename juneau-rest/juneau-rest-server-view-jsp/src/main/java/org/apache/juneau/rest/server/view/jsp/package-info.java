@@ -22,8 +22,7 @@
  *
  * <ul class='javatreec'>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspMixin} &mdash; mixin that
- * 		serves raw {@code .jsp} resources from the importer's classpath under
- * 		{@code /jsp/*} and auto-registers {@link org.apache.juneau.rest.server.view.jsp.JspViewRenderer}.
+ * 		serves raw {@code .jsp} resources from the importer's classpath under {@code /jsp/*}.
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspView} &mdash; immutable value class
  * 		(implements the core {@link org.apache.juneau.rest.server.view.View View} interface) returned
  * 		from {@code @RestOp} methods to ask the framework to render a JSP.
@@ -34,10 +33,23 @@
  * 		ServletContext.getRequestDispatcher(...).forward(...)}.
  * </ul>
  *
+ * <p>
+ * <b>Note:</b> by default a host's own {@code @RestOp} methods only see the host's own
+ * {@link org.apache.juneau.rest.server.Rest#responseProcessors() @Rest(responseProcessors=...)} chain
+ * &mdash; a mixin's contributed processors apply only to the mixin's own endpoints (e.g.
+ * {@code JspMixin}'s {@code /jsp/*} route), not to the host's. To have the host's own {@code @RestOp}
+ * methods dispatch {@link org.apache.juneau.rest.server.view.jsp.JspView JspView} returns through the JSP
+ * engine, the host <b>opts in</b> via
+ * {@link org.apache.juneau.rest.server.Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)} (recommended &mdash;
+ * folds {@code JspMixin}'s {@code responseProcessors} into the host's own chain, see the example below), or
+ * <b>alternatively</b> lists
+ * {@link org.apache.juneau.rest.server.view.jsp.JspViewRenderer JspViewRenderer.class} explicitly in its own
+ * {@code @Rest(responseProcessors=...)}.
+ *
  * <h5 class='figure'>Composition example (microservice):</h5>
  *
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=JspMixin.<jk>class</jk>)
+ * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixinDefs=<ja>@Mixin</ja>(type=JspMixin.<jk>class</jk>, mergeIntoHost=<jk>true</jk>))
  * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet {
  *
  * 		<ja>@Bean</ja> JspMixin jsp() {

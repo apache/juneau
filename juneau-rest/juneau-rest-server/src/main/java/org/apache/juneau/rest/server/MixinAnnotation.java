@@ -54,6 +54,7 @@ public class MixinAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		Class<?> type = Object.class;
+		boolean mergeIntoHost = false;
 		Class<? extends RestGuard>[] guards = new Class[0];
 		String roleGuard = "";
 		String rolesDeclared = "";
@@ -95,6 +96,14 @@ public class MixinAnnotation {
 		 * @return This object.
 		 */
 		public Builder type(Class<?> value) { type = value; return this; }
+
+		/**
+		 * Sets the {@link Mixin#mergeIntoHost()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder mergeIntoHost(boolean value) { mergeIntoHost = value; return this; }
 
 		/**
 		 * Sets the {@link Mixin#guards()} property on this annotation.
@@ -320,6 +329,7 @@ public class MixinAnnotation {
 	private static class Impl extends AnnotationObject implements Mixin {
 
 		private final Class<?> type;
+		private final boolean mergeIntoHost;
 		private final Class<? extends RestGuard>[] guards;
 		private final String roleGuard;
 		private final String rolesDeclared;
@@ -350,6 +360,7 @@ public class MixinAnnotation {
 		Impl(MixinAnnotation.Builder b) {
 			super(b);
 			type = b.type;
+			mergeIntoHost = b.mergeIntoHost;
 			guards = cp(b.guards);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -379,6 +390,7 @@ public class MixinAnnotation {
 		}
 
 		@Override /* Overridden from Mixin */ public Class<?> type() { return type; }
+		@Override /* Overridden from Mixin */ public boolean mergeIntoHost() { return mergeIntoHost; }
 		@Override /* Overridden from Mixin */ public Class<? extends RestGuard>[] guards() { return cp(guards); }
 		@Override /* Overridden from Mixin */ public String roleGuard() { return roleGuard; }
 		@Override /* Overridden from Mixin */ public String rolesDeclared() { return rolesDeclared; }

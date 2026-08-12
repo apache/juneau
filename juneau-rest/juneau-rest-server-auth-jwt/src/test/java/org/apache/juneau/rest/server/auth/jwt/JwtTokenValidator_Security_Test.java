@@ -136,4 +136,23 @@ class JwtTokenValidator_Security_Test extends TestBase {
 			.build();
 		assertThrows(AuthenticationException.class, () -> validator.validate(""));
 	}
+
+	@Test void e01_tamperedSignature_rejected() throws Exception {
+		// Sign with one RSA key but publish a different key under the same kid: the key selector matches
+		// on kid/alg but signature verification fails, exercising the BadJOSEException catch branch in
+		// validate() (whose sanitize(e.getMessage()) call receives Nimbus's literal, non-null failure message).
+		var signingKey = generateRsa("kid-1");
+		var wrongKey = generateRsa("kid-1");
+		var token = signRsa(signingKey, defaultClaims(CLOCK).build());
+
+		var validator = JwtTokenValidator.create()
+			.issuer(DEFAULT_ISSUER)
+			.audience(DEFAULT_AUDIENCE)
+			.jwkSource(fixed(wrongKey))
+			.clock(CLOCK)
+			.build();
+
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
+		assertTrue(ex.getMessage().toLowerCase().contains("signature"));
+	}
 }

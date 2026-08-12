@@ -872,7 +872,7 @@ public final class McpClient extends AbstractMcpClient {
 		}
 	}
 
-	// C5/C6 duplex return-channel Mcp-Name contract (TODO-327, resolved): Mcp-Name is empty by design on this
+	// C5/C6 duplex return-channel Mcp-Name contract (resolved): Mcp-Name is empty by design on this
 	// channel. Per SEP-2243, Mcp-Name is a body-mirror routing header defined only for the three forward
 	// client->server named methods (tools/call, prompts/get, resources/read); the spec does not define it for
 	// server->client requests or return channels. So McpRoutingNames intentionally has no case for

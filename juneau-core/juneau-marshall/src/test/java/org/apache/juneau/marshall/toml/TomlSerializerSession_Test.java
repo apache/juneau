@@ -634,4 +634,96 @@ class TomlSerializerSession_Test extends TestBase {
 		assertTrue(toml.contains("1 = \"one\""));
 		assertTrue(toml.contains("2 = \"two\""));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// i. writeBean's complex pass: null-valued Map/Collection-of-bean property with keepNullProperties()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class I_Bean {
+		public String name;
+		public Map<String,Object> props;
+		public List<A_Simple> servers;
+	}
+
+	@Test
+	void i01_nullMapPropertyKeptWhenConfigured() throws Exception {
+		// FIXED: writeBean's complex pass classifies "props" into the complex bucket purely from its
+		// declared type (Map), before the value itself is known -- so a null value used to hit the pass's
+		// "if (nn(value))" guard and be dropped entirely, ignoring keepNullProperties() (which only the
+		// simple-value writeKeyValue path honored). Now falls back to a plain key = <NULL> line.
+		var s = TomlSerializer.create().keepNullProperties().build();
+		var x = new I_Bean();
+		x.name = "alpha";
+		var toml = s.write(x);
+		assertTrue(toml.contains("name = \"alpha\""));
+		assertTrue(toml.contains("props = \"<NULL>\""), () -> "Expected null Map property to be kept but got: " + toml);
+	}
+
+	@Test
+	void i02_nullCollectionOfBeanPropertyKeptWhenConfigured() throws Exception {
+		var s = TomlSerializer.create().keepNullProperties().build();
+		var x = new I_Bean();
+		x.name = "alpha";
+		var toml = s.write(x);
+		assertTrue(toml.contains("servers = \"<NULL>\""), () -> "Expected null List<Bean> property to be kept but got: " + toml);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// j. Raw map values that are List<Bean>/Map: must nest as [[array-of-tables]]/[table], not toString()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void j01_rawMapValueListOfBeansNestsAsArrayOfTables() throws Exception {
+		// FIXED: writeMapAsTable/writeMapAtRoot used to hand every entry straight to writeKeyValue, whose
+		// writeValue dispatch has no isMap()/isCollection-of-bean special case (only writeBean's own
+		// complex pass does) -- so a raw map's List<Bean> value fell through to the final "else"
+		// stringValue(toString(value)) arm instead of becoming a nested [[items]] array of tables.
+		var p1 = new A_Simple();
+		p1.name = "a";
+		p1.port = 1;
+		var m = new LinkedHashMap<String,Object>();
+		m.put("items", List.of(p1));
+		var toml = TomlSerializer.DEFAULT.write(m);
+		assertTrue(toml.contains("[[items]]"), () -> "Expected [[items]] array-of-tables header but got: " + toml);
+		assertTrue(toml.contains("name = \"a\""), () -> "Expected nested bean fields but got: " + toml);
+		assertFalse(toml.contains("A_Simple@"), () -> "Value should not have been stringified via toString() but got: " + toml);
+	}
+
+	@Test
+	void j02_rawMapValueListOfMapsNestsAsArrayOfTables() throws Exception {
+		var t1 = new LinkedHashMap<String,Object>();
+		t1.put("k", "v1");
+		var m = new LinkedHashMap<String,Object>();
+		m.put("tables", List.of(t1));
+		var toml = TomlSerializer.DEFAULT.write(m);
+		assertTrue(toml.contains("[[tables]]"), () -> "Expected [[tables]] array-of-tables header but got: " + toml);
+		assertTrue(toml.contains("k = \"v1\""), () -> "Expected nested map fields but got: " + toml);
+	}
+
+	@Test
+	void j03_nestedMapWithinNestedTableNestsRecursively() throws Exception {
+		// Same underlying gap, reached via writeMapAsTable (a nested table, not the root) instead of
+		// writeMapAtRoot: a Map-valued entry inside an already-nested table must itself recurse into a
+		// further-nested [outer.inner] table rather than stringifying.
+		var inner = new LinkedHashMap<String,Object>();
+		inner.put("k", "v");
+		var outer = new LinkedHashMap<String,Object>();
+		outer.put("inner", inner);
+		var m = new LinkedHashMap<String,Object>();
+		m.put("outer", outer);
+		var toml = TomlSerializer.DEFAULT.write(m);
+		assertTrue(toml.contains("[outer.inner]"), () -> "Expected nested [outer.inner] table header but got: " + toml);
+		assertTrue(toml.contains("k = \"v\""));
+	}
+
+	@Test
+	void j04_rawMapValueListOfSimplesStillWritesInlineArray() throws Exception {
+		// Non-regression: a List of plain scalars must still write as a normal inline array, not be
+		// mistaken for a table-worthy collection.
+		var m = new LinkedHashMap<String,Object>();
+		m.put("tags", List.of("red", "green"));
+		var toml = TomlSerializer.DEFAULT.write(m);
+		assertTrue(toml.contains("tags = ["), () -> "Expected inline array but got: " + toml);
+		assertTrue(toml.contains("\"red\""));
+	}
 }

@@ -33,6 +33,12 @@ import org.junit.jupiter.api.*;
  * Phase 2 regression matrix &mdash; verifies that {@code @Rest(responseProcessors=...)} on a mixin class inherits
  * the host's response-processor chain via the {@link RestContext#getRestAnnotationsForProperty(String)
  * annotation-property walk}.
+ *
+ * <p>
+ * Also pins the opt-in {@link org.apache.juneau.rest.server.Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}
+ * directive: by default a mixin's {@code responseProcessors} do NOT fold into the host's own
+ * chain (a02), but a host that adopts the mixin via {@code mixinDefs=@Mixin(type=X, mergeIntoHost=true)} DOES get
+ * the mixin's list-shaped attributes folded into its own chain (a04).
  */
 class MixinInheritance_ResponseProcessors_Test extends TestBase {
 
@@ -73,6 +79,12 @@ class MixinInheritance_ResponseProcessors_Test extends TestBase {
 
 	@Rest(responseProcessors={HostRp1.class}, mixins={M_NoInheritRp.class})
 	public static class HostWithNoInheritMixin extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/h") public String h() { return "h"; }
+	}
+
+	@Rest(responseProcessors={HostRp1.class}, mixinDefs=@Mixin(type=M_AppendsMixinRp.class, mergeIntoHost=true))
+	public static class HostWithMergeMixin extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/h") public String h() { return "h"; }
 	}
@@ -124,5 +136,24 @@ class MixinInheritance_ResponseProcessors_Test extends TestBase {
 			"Host must retain its HostRp1 regardless of mixin's noInherit");
 		assertFalse(classesOf(hostCtx.getResponseProcessors()).contains(MixinRp1.class),
 			"Host must NOT pick up MixinRp1 from a noInherit-isolated mixin");
+	}
+
+	@Test void a04_mergeIntoHost_foldsMixinResponseProcessorIntoHostChain() {
+		MockRestClient.buildLax(HostWithMergeMixin.class);
+		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMergeMixin.class);
+		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinRp.class);
+		assertNotNull(mixinCtx);
+
+		// Opt-in @Mixin(mergeIntoHost=true): the mixin's list-shaped @Rest(responseProcessors=) folds into the HOST's own chain.
+		assertTrue(classesOf(hostCtx.getResponseProcessors()).contains(MixinRp1.class),
+			"Host must fold in the opted-in mixin's MixinRp1 via @Mixin(mergeIntoHost=true)");
+		assertTrue(classesOf(hostCtx.getResponseProcessors()).contains(HostRp1.class),
+			"Host must still register its own HostRp1");
+
+		// The mixin's own endpoint continues to see the host chain plus its own MixinRp1.
+		assertTrue(classesOf(mixinCtx.getResponseProcessors()).contains(MixinRp1.class),
+			"Mixin endpoint must still have MixinRp1");
+		assertTrue(classesOf(mixinCtx.getResponseProcessors()).contains(HostRp1.class),
+			"Mixin endpoint must still inherit the host's HostRp1");
 	}
 }

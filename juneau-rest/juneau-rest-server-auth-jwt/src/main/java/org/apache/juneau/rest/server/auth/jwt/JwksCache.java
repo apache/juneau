@@ -167,9 +167,10 @@ final class JwksCache implements JWKSource<SecurityContext> {
 			return selector.select(refreshed);
 		} catch (KeySourceException | RuntimeException e) {
 			myFuture.completeExceptionally(e);
-			if (slot.get() != null)
-				LOG.log(Level.WARNING, e,
-					() -> "JWKS eager refresh failed; retaining last-known-good set.  Underlying error: " + e.getMessage());
+			// slot is guaranteed non-null here: tryEagerRefresh() is only entered from get()'s fresh-cache
+			// branch, which already required a non-null slot, and slot is never reset to null afterward.
+			LOG.log(Level.WARNING, e,
+				() -> "JWKS eager refresh failed; retaining last-known-good set.  Underlying error: " + e.getMessage());
 			return Collections.emptyList();
 		} finally {
 			// Advance cooldown on every attempt (success, still-missing, or outage) so a burst of

@@ -118,6 +118,22 @@ public class Upgrade extends BasicCsvHeader {
 	}
 
 	/**
+	 * Static creator for two CSV tokens.
+	 *
+	 * <p>
+	 * This distinct fixed-arity overload ensures two literal {@link String} arguments resolve to this class's own
+	 * factory (returning an {@link Upgrade}) rather than the inherited fixed-arity {@link BasicCsvHeader#of(String,String)},
+	 * which Java overload resolution would otherwise prefer.
+	 *
+	 * @param value1 The first CSV token.
+	 * @param value2 The second CSV token.
+	 * @return A new header bean.
+	 */
+	public static Upgrade of(String value1, String value2) {
+		return new Upgrade(value1, value2);
+	}
+
+	/**
 	 * Static creator with delayed value.
 	 *
 	 * <p>

@@ -55,6 +55,12 @@ public class ContentLanguage extends HttpCsvHeader {
 		return new ContentLanguage(values);
 	}
 
+	// Distinct 2-arg factory so two literal String args bind here (returning ContentLanguage) instead of the inherited
+	// fixed-arity HttpCsvHeader.of(String name, String value), which Java overload resolution would otherwise prefer.
+	public static ContentLanguage of(String value1, String value2) {
+		return new ContentLanguage(value1, value2);
+	}
+
 	public static ContentLanguage ofLazyWire(Supplier<String> supplier) {
 		return new ContentLanguage(supplier, LAZY_WIRE_STRING);
 	}

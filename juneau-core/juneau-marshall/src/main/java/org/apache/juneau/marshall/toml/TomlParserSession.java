@@ -269,6 +269,20 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			Number radix = readRadixInteger(s, t);
 			if (radix != null)
 				return radix;
+			// TOML permits a space in place of 'T' between the date and time portions of an
+			// offset/local date-time (e.g. "2024-01-15 10:30:00"). readUntilValueEnd() above hard-stops
+			// at the first space -- a legitimate terminator for every other TOML value shape -- so
+			// without this, the time portion is silently truncated and the bare date string is returned
+			// instead. If what's been read so far is exactly a bare date and it's immediately followed by
+			// " <digit>", that space belongs to *this* value: consume it and keep reading the time part.
+			if (s.length() == 10 && s.charAt(4) == '-' && s.charAt(7) == '-' && t.peek() == ' ') {
+				t.read();
+				if (Character.isDigit(t.peek())) {
+					s = s + " " + readUntilValueEnd(t);
+				} else {
+					t.unread(' ');
+				}
+			}
 			String noUnderscore = s.replace("_", "");
 			if (s.length() >= 10 && s.charAt(4) == '-' && (s.contains("T") || s.contains(":") || s.contains(" ")))
 				return TomlTokenizer.parseDateTimeString(s);

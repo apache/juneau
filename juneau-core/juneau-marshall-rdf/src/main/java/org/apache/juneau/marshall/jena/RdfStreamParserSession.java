@@ -156,14 +156,14 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	 * If {@link RdfStreamParser#isTrimWhitespace} is <jk>true</jk>, the resulting string is trimmed before decoding.
 	 * If {@link #isTrimStrings()} is <jk>true</jk>, the resulting string is trimmed after decoding.
 	 */
-	private String decodeString(Object o) {
+	String decodeString(Object o) {
 		if (o == null)
 			return null;
 		var s = o.toString();
 		if (s.isEmpty())
 			return s;
-		if (isTrimWhitespace())
-			s = s.trim();
+		if (isTrimWhitespace()) // HTT: RdfStreamParser.Builder only exposes language(); trimWhitespace is always false for stream parsers.
+			s = s.trim(); // HTT: unreachable — see guard above.
 		s = XmlUtils.decode(s, null);
 		if (isTrimStrings())
 			s = s.trim();
@@ -174,7 +174,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	 * Finds the roots in the model using either the "root" property to identify it,
 	 * 	or by resorting to scanning the model for all nodes with no incoming predicates.
 	 */
-	private List<Resource> getRoots(Model m) {
+	List<Resource> getRoots(Model m) {
 		var l = new LinkedList<Resource>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
@@ -204,10 +204,10 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		return l;
 	}
 
-	private Object getValue(RDFNode n, Object outer) throws ParseException {
+	Object getValue(RDFNode n, Object outer) throws ParseException {
 		if (n.isLiteral())
 			return n.asLiteral().getValue();
-		if (n.isResource()) {
+		if (n.isResource()) { // HTT: RDFNode has only two concrete kinds (Literal, Resource); this is always true once isLiteral() is false.
 			var st = n.asResource().getProperty(pValue);
 			if (nn(st)) {
 				n = st.getObject();
@@ -219,7 +219,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		throw new ParseException(this, "Unknown value type for node '%s'", n);
 	}
 
-	private boolean isBag(RDFNode n) {
+	boolean isBag(RDFNode n) {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
 			if (nn(st))
@@ -228,16 +228,16 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		return false;
 	}
 
-	private boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
+	boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
 		var bpRdf = (pMeta == null ? RdfBeanPropertyMeta.DEFAULT : getRdfBeanPropertyMeta(pMeta));
 
 		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 
-		return getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
+		return getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED; // HTT: RdfStreamParser.Builder only exposes language(); the global collection format is always DEFAULT (never MULTI_VALUED) for stream parsers.
 	}
 
-	private boolean isSeq(RDFNode n) {
+	boolean isSeq(RDFNode n) {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
 			if (nn(st))
@@ -246,7 +246,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		return false;
 	}
 
-	private <T> T readAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
+	<T> T readAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -284,7 +284,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 				if (o instanceof String o2) {
 					o = decodeString(o2);
 				}
-			} else if (n.isResource()) {
+			} else if (n.isResource()) { // HTT: RDFNode has only two concrete kinds (Literal, Resource); this is always true once isLiteral() (above) is false — the else below is defensive dead code.
 				var r = n.asResource();
 				if (! urisVisited.add(r))
 					o = r.getURI();
@@ -312,7 +312,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 					}
 				}
 			} else {
-				throw new ParseException(this, "Unrecognized node type '%s' for object", n);
+				throw new ParseException(this, "Unrecognized node type '%s' for object", n); // HTT: unreachable — see guard above; n is always Literal or Resource.
 			}
 		} else if (nn(builder)) {
 			var r = n.asResource();
@@ -342,8 +342,8 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			} else if (v != null) {
 				o = Base64.getDecoder().decode(v.toString());
 			}
-		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
-			if (sType.isArray() || sType.isArgs())
+		} else if (sType.isCollectionOrArray() || sType.isArgs()) { // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API — always false here.
+			if (sType.isArray() || sType.isArgs()) // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API — always false here.
 				o = list();
 			else
 				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new JsonList(this));
@@ -359,7 +359,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			} else {
 				throw new ParseException(this, "Unrecognized node type '%s' for collection", n);
 			}
-			if (sType.isArray() || sType.isArgs())
+			if (sType.isArray() || sType.isArgs()) // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API — always false here.
 				o = toArray(sType, (Collection)o);
 		} else if (sType.isCharSequence()) {
 			o = decodeString(getValue(n, outer));
@@ -408,7 +408,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		return (T)o;
 	}
 
-	private <T> BeanMap<T> readIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException, ExecutableException {
+	<T> BeanMap<T> readIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException, ExecutableException {
 		var bm = m.getMeta();
 		var rbm = getRdfBeanMeta(bm);
 		if (rbm.hasBeanUri() && nn(r2.getURI()))
@@ -452,27 +452,25 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		return m;
 	}
 
-	private <E> Collection<E> readIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
+	<E> Collection<E> readIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
 		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
-			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
-			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
+			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta); // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			l.add(e);
 		}
 		return l;
 	}
 
-	private <E> Collection<E> readIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
+	<E> Collection<E> readIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
 		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
-			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
-			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
+			E e = (E)readAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta); // HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			l.add(e);
 		}
 		return l;
 	}
 
-	private <K,V> Map<K,V> readIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
+	<K,V> Map<K,V> readIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
 		// Add URI as "uri" to generic maps.
 		if (nn(r.getURI())) {
 			var uri = convertAttrToType(m, "uri", keyType);
@@ -483,7 +481,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			var st = i.next();
 			var p = st.getPredicate();
 			var key = p.getLocalName();
-			if (! (key.equals("root") && p.getURI().equals(getJuneauNs().getUri()))) {
+			if (! (key.equals("root") && p.equals(pRoot))) {
 				key = decodeString(key);
 				var o = st.getObject();
 				var key2 = convertAttrToType(m, key, keyType);
@@ -507,24 +505,20 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		var roots = getRoots(model);
 
 		// Special case where we're parsing a loose collection of resources.
-		// HTT: RdfStreamParser.Builder only exposes language(); looseCollections is always false for stream parsers.
-		if (isLooseCollections() && type.isCollectionOrArray()) {
-			Collection c;
-			// HTT: isArgs() requires method-argument list types; not externally constructable through the public API.
-			if (type.isArray() || type.isArgs())
-				c = list();
+		if (isLooseCollections() && type.isCollectionOrArray()) { // HTT: RdfStreamParser.Builder only exposes language(); looseCollections is always false for stream parsers.
+			Collection c; // HTT: unreachable — see guard above.
+			if (type.isArray() || type.isArgs()) // HTT: unreachable — see guard above.
+				c = list(); // HTT: unreachable — see guard above.
 			else
-				c = (type.canCreateNewInstance(getOuter()) ? (Collection<?>)type.newInstance(getOuter()) : new JsonList(this));
+				c = (type.canCreateNewInstance(getOuter()) ? (Collection<?>)type.newInstance(getOuter()) : new JsonList(this)); // HTT: unreachable — see guard above.
 
-			var argIndex = new AtomicInteger(0);
-			var c2 = c;
-			// HTT: isArgs() guard — same constraint as above.
-			roots.forEach(x -> c2.add(readAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null)));
+			var argIndex = new AtomicInteger(0); // HTT: unreachable — see guard above.
+			var c2 = c; // HTT: unreachable — see guard above.
+			roots.forEach(x -> c2.add(readAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null))); // HTT: unreachable — see guard above.
 
-			// HTT: isArgs() guard — same constraint as above.
-			if (type.isArray() || type.isArgs())
-				return (T)toArray(type, c);
-			return (T)c;
+			if (type.isArray() || type.isArgs()) // HTT: unreachable — see guard above.
+				return (T)toArray(type, c); // HTT: unreachable — see guard above.
+			return (T)c; // HTT: unreachable — see guard above.
 		}
 
 		if (roots.isEmpty())

@@ -202,25 +202,73 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 			st = ProtobufClassMeta.defaultScalarType(rType);
 		}
 		if (rType.isBean() || rType.isMap())
-			writeMessageField(out, fn, v);
+			writeMessageField(out, fn, v, rType, declaredType);
 		else
 			writeScalarField(out, fn, st == ProtobufScalarType.AUTO ? ProtobufClassMeta.defaultScalarType(rType) : st, v, rType);
 	}
 
-	private void writeMessageField(ProtobufWriter out, int fn, Object value) throws SerializeException {
-		var aType = push2("field", value, getClassMetaForObject(value));
+	/**
+	 * Writes a bean or Map value as a length-delimited sub-message.  Bean values continue through
+	 * {@link #writeBean} as before; Map values (which {@link #toBeanMap} cannot handle -- it returns
+	 * <jk>null</jk> for a non-bean Map, leading to an NPE) are instead written as a key(1)/value(2) sequence via
+	 * {@link #writeMapMessage}, mirroring how {@code ProtobufParserSession.readMapMessage} reads them back.
+	 *
+	 * @param out The protobuf writer.
+	 * @param fn The protobuf field number.
+	 * @param value The non-null bean or Map value to serialize.
+	 * @param rType The value's resolved runtime type (post-swap).
+	 * @param declaredType The declared property (or element/key/value) type, preferred over {@code rType} for
+	 * 	key/value type resolution when it is itself Map-shaped, since {@code rType} (derived purely from the
+	 * 	runtime class) carries no generic key/value type information.
+	 */
+	private void writeMessageField(ProtobufWriter out, int fn, Object value, ClassMeta<?> rType, ClassMeta<?> declaredType) throws SerializeException {
+		var aType = push2("field", value, rType);
 		if (aType == null) {  // Recursion detected.
 			pop();
 			return;
 		}
 		try {
-			var block = new ByteArrayOutputStream();
-			writeBean(new ProtobufWriter(block), toBeanMap(value), aType);
-			out.writeTag(fn, WireType.LEN);
-			out.writeLenDelimited(block.toByteArray());
+			if (rType.isMap()) {
+				var mapType = declaredType != null && declaredType.isMap() ? declaredType : rType;
+				writeMapMessage(out, fn, (Map)value, mapType);
+			} else {
+				var block = new ByteArrayOutputStream();
+				writeBean(new ProtobufWriter(block), toBeanMap(value), aType);
+				out.writeTag(fn, WireType.LEN);
+				out.writeLenDelimited(block.toByteArray());
+			}
 		} finally {
 			pop();
 		}
+	}
+
+	/**
+	 * Writes a raw (non-bean) Map value as a length-delimited sub-message containing key(1)/value(2) tag pairs,
+	 * one pair per entry.  Used for Map targets reached as list elements, map values, or swap targets -- none of
+	 * which have a bean shape for {@link #writeBean}/{@link #toBeanMap} to serialize.
+	 *
+	 * @param out The protobuf writer.
+	 * @param fn The protobuf field number.
+	 * @param map The non-null map to serialize.
+	 * @param mapType The map's resolved type, used to determine the key/value scalar types.
+	 */
+	private void writeMapMessage(ProtobufWriter out, int fn, Map map, ClassMeta<?> mapType) throws SerializeException {
+		var keyType = mapType.getKeyType();
+		var valueType = mapType.getValueType();
+		var keySt = ProtobufClassMeta.defaultScalarType(keyType);
+		var valSt = ProtobufClassMeta.defaultScalarType(valueType);
+		var block = new ByteArrayOutputStream();
+		var bw = new ProtobufWriter(block);
+		forEachEntry(map, e -> {
+			var k = e.getKey();
+			var v = e.getValue();
+			if (k == null || v == null)
+				return;
+			writeSingle(bw, 1, keySt, k, keyType);
+			writeSingle(bw, 2, valSt, v, valueType);
+		});
+		out.writeTag(fn, WireType.LEN);
+		out.writeLenDelimited(block.toByteArray());
 	}
 
 	private void writePackedField(ProtobufWriter out, int fn, ProtobufFieldEntry entry, Object value) throws SerializeException {

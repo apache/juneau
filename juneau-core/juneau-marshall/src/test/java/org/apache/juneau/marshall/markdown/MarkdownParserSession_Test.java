@@ -818,6 +818,53 @@ class MarkdownParserSession_Test extends TestBase {
 		@Override public String toString() { return value; }
 	}
 
+	//====================================================================================================
+	// z - readBulletList: scalar/Number/primitive target types
+	//====================================================================================================
+
+	@Test void z03_bulletListIntoScalarTargetReturnsFirstItem() {
+		// FIXED: readBulletList's non-array, non-collection "else" branch used to unconditionally build a
+		// List and return that, even for a genuinely scalar (non-Map, non-bean) target type -- the caller's
+		// top-level cast to T then threw a ClassCastException (List cannot be cast to Integer). Only the
+		// first bullet item is meaningful for a scalar target, so it's now parsed and returned directly.
+		var r = MarkdownParser.DEFAULT.read("- 42", Integer.class);
+		assertEquals(42, r);
+	}
+
+	@Test void z04_bulletListIntoScalarTarget_multipleItemsUsesFirst() {
+		var r = MarkdownParser.DEFAULT.read("- 42\n- 43", Integer.class);
+		assertEquals(42, r);
+	}
+
+	@Test void z05_bulletListIntoScalarTarget_secondItemIgnored() {
+		// The dispatch that routes to readBulletList in the first place needs a real second bullet ("- b")
+		// to keep this a genuine multi-item list; z04 above already covers the plain "use the first item"
+		// case with two non-empty items, so this covers a String (non-Number) scalar target instead.
+		var r = MarkdownParser.DEFAULT.read("- a\n- b", String.class);
+		assertEquals("a", r);
+	}
+
+	//====================================================================================================
+	// aa - readKeyValueTable: scalar/Number/primitive target types
+	//====================================================================================================
+
+	@Test void aa03_keyValueTableIntoScalarTargetReturnsFirstValueCell() {
+		// FIXED: readKeyValueTable's final "Object or unknown" fallback used to unconditionally build a
+		// MarshalledMap and return that regardless of eType, even for a genuinely scalar (non-Map,
+		// non-bean, non-Object) target type -- the caller's top-level cast to T then threw a
+		// ClassCastException (Map cannot be cast to Integer). Only the first data row's value cell is
+		// meaningful for a scalar target, so it's now parsed and returned directly instead.
+		var md = "| Property | Value |\n|---|---|\n| answer | 42 |";
+		var r = MarkdownParser.DEFAULT.read(md, Integer.class);
+		assertEquals(42, r);
+	}
+
+	@Test void aa04_keyValueTableIntoScalarTarget_noDataRowsReturnsNull() {
+		var md = "| Property | Value |\n|---|---|";
+		var r = MarkdownParser.DEFAULT.read(md, Integer.class);
+		assertNull(r);
+	}
+
 	@Test void v02_keyValueTableToJson5_typeKeyRow() {
 		// Non-bean type with _type row → keyValueTableToJson5 handles _type as quoted string (line 721-722)
 		// May succeed or fail depending on how Json5Parser handles the output; either way, line 721-722 is exercised.

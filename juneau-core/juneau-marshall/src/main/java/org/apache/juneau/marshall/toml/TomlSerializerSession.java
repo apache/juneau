@@ -151,14 +151,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			Object v = e.getValue();
 			if (!checkNull.test(v))
 				return;
-			ClassMeta<?> aType = getClassMetaForObject(v, type);
-			if (aType.isMap() && v instanceof Map<?,?> v2) {
-				w.blankLine();
-				w.tableHeader(k);
-				writeMapAsTable(w, k, v2, aType);
-			} else {
-				writeKeyValue(w, k, v, null);
-			}
+			writeMapEntry(w, k, k, v, type);
 		});
 	}
 
@@ -227,6 +220,14 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 						writeKeyValue(w, key, value, pMeta);
 					}
 				}
+			} else if (isKeepNullProperties()) {
+				// The "complex" bucket is classified purely from the property's declared type (cMeta),
+				// before the value itself is known, so a null-valued Map/Collection-of-bean property lands
+				// here just like a populated one -- but this branch previously only handled the non-null
+				// case, silently dropping the property (regardless of keepNullProperties()) since there's
+				// no sub-structure to write a table header for. Fall back to a plain key = <NULL> line,
+				// same as writeKeyValue already does for a null-valued simple property.
+				writeKeyValue(w, key, null, pMeta);
 			}
 		}
 	}
@@ -392,10 +393,6 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		writeValue(w, value, aType, null);
 	}
 
-	@SuppressWarnings({
-		"unused",       // path and type reserved for future section-header and type-aware serialization
-		"java:S1172"    // Same as above
-	})
 	private void writeMapAsTable(TomlWriter w, String path, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
@@ -403,8 +400,47 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			Object v = e.getValue();
 			if (!checkNull.test(v))
 				return;
-			writeKeyValue(w, k, v, null);
+			writeMapEntry(w, path.isEmpty() ? k : path + "." + k, k, v, type);
 		});
+	}
+
+	/**
+	 * Writes a single raw-map entry, recursing into a nested {@code [table]}/{@code [[array-of-tables]]}
+	 * when the value is itself a {@link Map} or a {@link Collection} of Map/bean elements -- mirroring
+	 * {@link #writeBean}'s complex pass, but for raw Map values, where there's no declared bean-property
+	 * generic type to consult, so table-worthiness is determined from the actual runtime elements
+	 * instead (unlike a bean property, a raw Map value's Collection entries never carry element-type
+	 * info to fall back on).
+	 */
+	private void writeMapEntry(TomlWriter w, String tablePath, String key, Object value, ClassMeta<?> hint) throws SerializeException {
+		if (value instanceof Map<?,?> v2) {
+			w.blankLine();
+			w.tableHeader(tablePath);
+			writeMapAsTable(w, tablePath, v2, getClassMetaForObject(value, hint));
+		} else if (value instanceof Collection<?> c && isTableWorthyCollection(c)) {
+			for (Object item : c) {
+				w.blankLine();
+				w.arrayOfTablesHeader(tablePath);
+				if (item instanceof Map<?,?> im)
+					writeMapAsTable(w, tablePath, im, getClassMetaForObject(item));
+				else
+					writeBean(w, toBeanMap(item), tablePath);
+			}
+		} else {
+			writeKeyValue(w, key, value, null);
+		}
+	}
+
+	private boolean isTableWorthyCollection(Collection<?> c) throws SerializeException {
+		if (c.isEmpty())
+			return false;
+		for (Object el : c) {
+			if (el instanceof Map)
+				continue;
+			if (el == null || !getClassMetaForObject(el).isBean())
+				return false;
+		}
+		return true;
 	}
 
 	private void writeArray(TomlWriter w, Collection<?> c, ClassMeta<?> type) throws SerializeException {

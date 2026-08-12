@@ -834,7 +834,7 @@ public final class RemoteClient {
 				yield sc;
 			}
 			case NONE -> null;
-			case RESPONSE -> throw new IllegalStateException("RESPONSE mode is not a buffered return mode"); // HTT
+			default -> throw new IllegalStateException("Return mode " + returnMode + " is not a buffered return mode"); // HTT: RESPONSE (the only other RemoteReturn value) is filtered out by isRetryableMode()/processReturnOnce() before this method is ever called; unreachable for any current enum value.
 			};
 		}
 

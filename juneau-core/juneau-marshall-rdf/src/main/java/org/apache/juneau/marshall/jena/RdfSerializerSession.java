@@ -152,11 +152,12 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			throw rex("Unknown RDF language encountered: '%s'", langName);
 	}
 
-	private static Lang toLang(String langName) {
+	// Package-private (not private) for white-box testing.
+	static Lang toLang(String langName) {
 		var lang = RDFLanguages.nameToLang(langName);
 		if (lang != null)
 			return lang;
-		if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages
+		if ("RDF/PROTO".equals(langName))
 			return Lang.RDFPROTO;
 		return null;
 	}
@@ -178,8 +179,9 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	/*
 	 * XML-encodes the specified string using the {@link XmlUtils#escapeText(Object)} method.
 	 */
-	private String encodeTextInvalidChars(Object o) {
-		if (o == null) // HTT - callers always pass non-null; defensive guard
+	// Package-private (not private) for white-box testing.
+	String encodeTextInvalidChars(Object o) {
+		if (o == null)
 			return null;
 		var s = toString(o);
 		return XmlUtils.escapeText(s);
@@ -248,9 +250,8 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 		if (o == null || sType.isChar() && ((Character)o).charValue() == 0) {
 			if (nn(bpm)) {
-				if (isKeepNullProperties()) {
+				if (isKeepNullProperties()) // HTT: bpm!=null only reaches this branch via writeBeanMap's checkNull-filtered call site, which only lets a null/NUL value through when isKeepNullProperties() is already true. So whenever this line executes, isKeepNullProperties() is structurally guaranteed true; the false side (leaving n unset) is dead in this call path.
 					n = m.createResource(RDF_NIL);
-				}
 			} else {
 				n = m.createResource(RDF_NIL);
 			}
@@ -273,22 +274,22 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			n = m.createResource(uri2);
 			writeBeanMap(bm, (Resource)n, typeName);
 
-		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
-			if (o instanceof BeanMap o2) {
-				Object uri = null;
-				var rbm = getRdfBeanMeta(o2.getMeta());
-				if (rbm.hasBeanUri())
-					uri = rbm.getBeanUriProperty().get(o2, null);
-				var uri2 = getUri(uri);
-				n = m.createResource(uri2);
-				writeBeanMap(o2, (Resource)n, typeName);
-			} else {
+		} else if (sType.isMap() || (nn(wType) && wType.isMap())) { // HTT: 1 residual branch -- the "wType.isMap()" right-hand sub-check is evaluated only when sType.isMap()==false AND nn(wType)==true, but the only concrete Delegate wrapper reaching this far, DelegateMap (internal.DelegateMap#getBeanInfo()), always returns a MAP-category ClassMeta, so sType.isMap() is already true before wType is even consulted; the sub-check's own "true" outcome is therefore never separately exercised (short-circuited away every time). Same root cause as the isCollectionOrArray() check below.
+			if (o instanceof BeanMap o2) { // HTT: suspected structurally dead. The only way to reach this else-if with wType!=null is via a Delegate: for BeanMap specifically (which IS a Delegate, and IS a java.util.Map), aType gets reassigned to the WRAPPED bean's own BEAN-category ClassMeta, so sType ends up isBean()==true and dispatches through the EARLIER sType.isBean() branch instead -- this else-if is never reached for a real BeanMap. For the OTHER disjunct (sType.isMap() directly true, e.g. an ordinary Map/JsonMap), `o` is never itself a BeanMap. Flagged, not deleted -- see also RdfStreamSerializerSession, which has the identical pattern (and an empirical confirmation via its o10_stream_serialize_rawBeanMap_direct test).
+				Object uri = null; // HTT: unreachable -- see guard above.
+				var rbm = getRdfBeanMeta(o2.getMeta()); // HTT: unreachable -- see guard above.
+				if (rbm.hasBeanUri()) // HTT: unreachable -- see guard above.
+					uri = rbm.getBeanUriProperty().get(o2, null); // HTT: unreachable -- see guard above.
+				var uri2 = getUri(uri); // HTT: unreachable -- see guard above.
+				n = m.createResource(uri2); // HTT: unreachable -- see guard above.
+				writeBeanMap(o2, (Resource)n, typeName); // HTT: unreachable -- see guard above.
+			} else { // HTT: the residual "goto" jump instruction that would exit the if-block above is unreachable -- see guard above; every actual invocation takes this else branch directly.
 				var m2 = (Map)o;
 				n = m.createResource();
 				writeMap(m2, (Resource)n, sType);
 			}
 
-		} else if (sType.isCollectionOrArray() || (nn(wType) && wType.isCollection())) {
+		} else if (sType.isCollectionOrArray() || (nn(wType) && wType.isCollection())) { // HTT: the "nn(wType) && wType.isCollection()" fallback is suspected structurally dead for the same reason as the isMap() fallback above -- the only concrete Delegate collection wrapper in the codebase, DelegateList (internal.DelegateList#getBeanInfo()), always returns a COLLECTION-category ClassMeta from getBeanInfo(), so sType stays isCollectionOrArray()==true and the left disjunct is always what's satisfied; nn(wType)==true is therefore never actually evaluated at this specific check (short-circuited away). Flagged, not deleted.
 
 			var c = sort(sType.isCollection() ? (Collection)o : toList(sType.inner(), o));
 			var f = getCollectionFormat();
@@ -358,7 +359,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			var value = x.getValue();
 			var t = x.getThrown();
 			if (nn(t))
-				onBeanGetterException(bpMeta, t);
+				onBeanGetterException(bpMeta, t); // HTT: onBeanGetterException always throws when reached (isIgnoreInvocationExceptionsOnGetters() is false whenever thrown is actually populated), so JaCoCo cannot register full instruction coverage past a call that never returns; same pattern as CborSerializerSession/HjsonSerializerSession.
 
 			if (canIgnoreValue(bpMeta, key, value))
 				return;
@@ -393,7 +394,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			Namespace ns = getJuneauBpNs();
 			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
 			RDFNode n = writeAnything(value, false, valueType, toString(key), null, r);
-			if (nn(n))
+			if (nn(n)) // HTT: writeMap always passes bpm=null to writeAnything, and writeAnything's null-value branch unconditionally assigns n=RDF_NIL when bpm is null (regardless of keepNullProperties) -- so n is never null here; the false side is only reachable when bpm != null (see writeBeanMap's equivalent check). Flagged as suspected structurally-dead code in this call path, not fixed.
 				r.addProperty(p, n);
 		});
 	}

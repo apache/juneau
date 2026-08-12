@@ -2885,8 +2885,6 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				((Consumer) consumer).accept(w);
 				w.flush();
 			}
-			if (output instanceof Writer output2)
-				output2.flush();
 
 			// Use the serializer's primary produces() media type if no explicit Content-Type set.
 			var ct = serializer.getPrimaryMediaType();

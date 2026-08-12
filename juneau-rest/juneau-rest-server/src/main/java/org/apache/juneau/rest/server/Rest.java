@@ -284,7 +284,7 @@ public @interface Rest {
 	 * 	<li><b>List-shaped properties</b> ({@code serializers}, {@code parsers}, {@code encoders}, {@code converters},
 	 * 		{@code responseProcessors}, {@code restOpArgs}, {@code guards}) — host's chain runs first, then the mixin's
 	 * 		appended.  Host endpoints see only the host's chain.
-	 * 	<li><b>Replace-shaped properties</b> ({@code callLogger}, {@code debugEnablement}, {@code debugDefault},
+	 * 	<li><b>Replace-shaped properties</b> ({@code callLogger}, {@code debugEnablement},
 	 * 		{@code partSerializer}, {@code partParser}) — the mixin's value wins over the host's for mixin endpoints
 	 * 		when declared; otherwise the host's value is inherited.
 	 * 	<li><b>{@code messages}</b> — the mixin's bundle is chained as a child of the host's via
@@ -548,7 +548,7 @@ public @interface Rest {
 	 * host-to-mixin inheritance walk for the named property.  The token set extends to every contribution list
 	 * exposed by {@code @Rest}: {@code "serializers"}, {@code "parsers"}, {@code "encoders"}, {@code "converters"},
 	 * {@code "responseProcessors"}, {@code "restOpArgs"}, {@code "guards"}, {@code "callLogger"},
-	 * {@code "debugEnablement"}, {@code "debugDefault"}, {@code "partSerializer"}, {@code "partParser"}, and
+	 * {@code "debugEnablement"}, {@code "partSerializer"}, {@code "partParser"}, and
 	 * {@code "messages"}.  For example, {@code @Rest(noInherit={"guards"})} on a mixin removes the host's guard
 	 * chain from the mixin's endpoints (typical pattern for deliberately-unguarded probes like
 	 * {@code HealthMixin}).

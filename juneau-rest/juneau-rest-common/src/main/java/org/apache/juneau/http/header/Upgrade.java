@@ -55,6 +55,12 @@ public class Upgrade extends HttpCsvHeader {
 		return new Upgrade(values);
 	}
 
+	// Distinct 2-arg factory so two literal String args bind here (returning Upgrade) instead of the inherited
+	// fixed-arity HttpCsvHeader.of(String name, String value), which Java overload resolution would otherwise prefer.
+	public static Upgrade of(String value1, String value2) {
+		return new Upgrade(value1, value2);
+	}
+
 	public static Upgrade ofLazyWire(Supplier<String> supplier) {
 		return new Upgrade(supplier, LAZY_WIRE_STRING);
 	}

@@ -500,7 +500,7 @@ public class BeanInstantiator<T> {
 	private List<Consumer<Object>> builderInitializers = l();
 	private boolean injectBuilder = false;
 	private boolean autoWireBuilder = false;
-	private boolean autoWireUnwrapSuppliers = true;
+	boolean autoWireUnwrapSuppliers = true;
 	private boolean noBuilder = false;
 
 	private Memoizer<ClassInfo> builderType = memoizer(() -> findBuilderType());

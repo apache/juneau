@@ -280,7 +280,14 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 				out.messageEnd(indent);
 			} else if (aType.isCollection() || aType.isArray()) {
 				var c = aType.isArray() ? toList(aType.inner(), value) : (Collection<?>) value;
-				var elType = aType.getElementType();
+				// getClassMetaForObject(value, cMeta) above always returns the *runtime* class's ClassMeta
+				// once value is non-null (the cMeta hint is only consulted for a null value) -- for a
+				// List<T> property that's the erased ArrayList meta, whose own getElementType() is Object,
+				// unlike an array whose component type is part of the runtime type itself and survives
+				// erasure. Prefer the property's declared cMeta for the element-type check so a
+				// List<ChildBean>/List<Map> bean property still resolves to nested messages instead of
+				// degrading to scalar toString().
+				var elType = cMeta.isCollectionOrArray() ? cMeta.getElementType() : aType.getElementType();
 				if (elType.isBean() || elType.isMap()) {
 					if (ctx.useListSyntaxForBeans) {
 						out.scalarField(key);

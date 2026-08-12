@@ -422,8 +422,14 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void h02_beanWithListOfMaps() throws Exception {
-		// Bean has a List<Map> property — exercises writeBeanMap collection-with-bean-elements
-		// path (lines 270-296 in PrototextSerializerSession).
+		// FIXED: writeBeanMap's inline-collection element-type check used to resolve elType from
+		// getClassMetaForObject(value, cMeta)'s *runtime* result -- for a List<T> property that's always
+		// the erased ArrayList meta (whose own getElementType() is Object) once value is non-null, unlike
+		// an array whose component type survives erasure. elType now falls back to the property's own
+		// declared cMeta.getElementType() for a Collection, so a List<Map> bean property still resolves to
+		// nested "items { ... }" messages instead of degrading to a single scalar-list field whose entries
+		// stringify via Map.toString() (which would still happen to contain "alpha"/"beta" as substrings,
+		// so the old assertion here couldn't tell the two apart).
 		var bean = new BeanWithListOfMaps();
 		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("k", "alpha");
@@ -431,13 +437,13 @@ class PrototextSerializerSession_Test extends TestBase {
 		c2.put("k", "beta");
 		bean.setItems(List.of(c1, c2));
 		var proto = PrototextSerializer.DEFAULT.write(bean);
-		assertNotNull(proto);
-		assertTrue(proto.contains("alpha") && proto.contains("beta"), () -> "Expected alpha+beta in: " + proto);
+		assertTrue(proto.contains("items {"), () -> "Expected nested 'items { ... }' messages but got: " + proto);
+		assertTrue(proto.contains("k: \"alpha\"") || proto.contains("k \"alpha\""), () -> "Expected nested k=alpha field but got: " + proto);
+		assertFalse(proto.contains("{k=alpha}"), () -> "Value should not have been stringified via Map.toString() but got: " + proto);
 	}
 
 	@Test void h03_beanWithListOfMaps_useListSyntax() throws Exception {
-		// Bean with List<Map> + useListSyntaxForBeans — hits the [{...},{...}] writer path inside
-		// writeBeanMap (lines 274-288).
+		// Same underlying fix as h02, reached via the useListSyntaxForBeans=true "[{...},{...}]" branch.
 		var bean = new BeanWithListOfMaps();
 		var c1 = new LinkedHashMap<String,Object>();
 		c1.put("k", "alpha");
@@ -446,9 +452,23 @@ class PrototextSerializerSession_Test extends TestBase {
 		bean.setItems(List.of(c1, c2));
 		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).build();
 		var proto = ser.write(bean);
-		assertNotNull(proto);
-		assertTrue(proto.contains("[") && proto.contains("]"), () -> "Expected list syntax in: " + proto);
-		assertTrue(proto.contains("alpha") && proto.contains("beta"));
+		assertTrue(proto.contains("items: [{"), () -> "Expected list syntax 'items: [{' but got: " + proto);
+		assertTrue(proto.contains("k: \"alpha\"") || proto.contains("k \"alpha\""), () -> "Expected nested k=alpha field but got: " + proto);
+		assertFalse(proto.contains("{k=alpha}"), () -> "Value should not have been stringified via Map.toString() but got: " + proto);
+	}
+
+	@Test void h02b_beanWithListOfBeans() throws Exception {
+		// Same fix as h02, exercised for a bean-element (not map-element) List<T> property, which is the
+		// shape explicitly called out by the bug report (generic erasure on List<ChildBean>).
+		var bean = new BeanWithListOfChildBeans();
+		var c1 = new H02b_ChildBean();
+		c1.name = "alpha";
+		var c2 = new H02b_ChildBean();
+		c2.name = "beta";
+		bean.setItems(List.of(c1, c2));
+		var proto = PrototextSerializer.DEFAULT.write(bean);
+		assertTrue(proto.contains("items {"), () -> "Expected nested 'items { ... }' messages but got: " + proto);
+		assertTrue(proto.contains("name: \"alpha\"") || proto.contains("name \"alpha\""), () -> "Expected nested name=alpha field but got: " + proto);
 	}
 
 	@Test void h04_beanWithMapArray() throws Exception {
@@ -712,6 +732,16 @@ class PrototextSerializerSession_Test extends TestBase {
 		private List<String> tags;
 		public List<String> getTags() { return tags; }
 		public void setTags(List<String> v) { tags = v; }
+	}
+
+	public static class H02b_ChildBean {
+		public String name;
+	}
+
+	public static class BeanWithListOfChildBeans {
+		private List<H02b_ChildBean> items;
+		public List<H02b_ChildBean> getItems() { return items; }
+		public void setItems(List<H02b_ChildBean> v) { items = v; }
 	}
 
 	public static class BeanWithIntArrayProp {

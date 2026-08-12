@@ -536,7 +536,6 @@ public final class Iso8601Utils {
 				case 'H': totalNanos += nanos * 3600; break;
 				case 'M': totalNanos += nanos * 60; break;
 				case 'S': totalNanos += nanos; break;
-				default: break;  // HTT: isDurationUnit guarantees H/M/S
 			}
 			i++;  // Consume the unit.
 		}

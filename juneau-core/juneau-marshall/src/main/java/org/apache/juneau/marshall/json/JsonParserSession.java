@@ -393,12 +393,8 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			}
 			if (state == S1)
 				throw new ParseException(this, "Expected '{' at beginning of JSON object.");
-			else if (state == S2)
-				throw new ParseException(this, "Could not find attribute name on JSON object.");
 			else if (state == S3)
 				throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
-			else if (state == S4)
-				throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
 			else if (state == S5)
 				throw new ParseException(this, "Could not find '}' marking end of JSON object.");
 		} finally {
@@ -551,12 +547,8 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		}
 		if (state == S1)
 			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
-		else if (state == S2)
-			throw new ParseException(this, "Could not find attribute name on JSON object.");
 		else if (state == S3)
 			throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
-		else if (state == S4)
-			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
 		else if (state == S5)
 			throw new ParseException(this, "Could not find '}' marking end of JSON object.");
 		else if (state == S6)
@@ -570,14 +562,10 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * Throws an exception if any of these keywords are not found at the specified position.
 	 */
 	protected void readKeyword(String keyword, ParserReader r) throws IOException, ParseException {
-		try {
-			String s = r.read(keyword.length());
-			if (s.equals(keyword))
-				return;
-			throw new ParseException(this, "Unrecognized syntax.  Expected='%s', Actual='%s'", keyword, s);
-		} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
-			throw new ParseException(this, "Unrecognized syntax.  Expected='%s', found end-of-file.", keyword);
-		}
+		String s = r.read(keyword.length());
+		if (s.equals(keyword))
+			return;
+		throw new ParseException(this, "Unrecognized syntax.  Expected='%s', Actual='%s'", keyword, s);
 	}
 
 	protected Number readNumber(ParserReader r, Class<? extends Number> type) throws IOException, ParseException {
@@ -680,9 +668,6 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				}
 			}
 		}
-		if (s == null)
-			throw new ParseException(this, "Could not find expected end character '%s'.", (char)qc);
-
 		skipCommentsAndSpace(r);
 		if (r.peek() == '+')
 			throw new ParseException(this, "String concatenation detected.");

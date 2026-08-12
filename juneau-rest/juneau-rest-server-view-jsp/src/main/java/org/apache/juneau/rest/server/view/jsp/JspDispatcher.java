@@ -108,6 +108,11 @@ public class JspDispatcher implements RawTemplateDispatcher {
 				throw new InternalServerError("Could not resolve RequestDispatcher for '%s'. %s",
 					target, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);
 			rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());
+		} catch (InternalServerError ex) {
+			// Re-surface the specific NO_ENGINE diagnostic constructed above as-is -- without this
+			// clause, the generic `catch (Exception ex)` below would re-wrap it into a generic
+			// "JSP render failed for '%s'" message, discarding the diagnostic text from the response body.
+			throw ex;
 		} catch (NoClassDefFoundError ex) {
 			throw new InternalServerError(ex, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);
 		} catch (IOException | NotFound ex) {

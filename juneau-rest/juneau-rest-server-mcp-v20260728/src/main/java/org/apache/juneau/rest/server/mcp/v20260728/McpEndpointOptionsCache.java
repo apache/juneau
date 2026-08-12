@@ -98,7 +98,7 @@ final class McpEndpointOptionsCache {
 	 * cleared), and {@code equals()} is reference equality on the referent &mdash; deliberately never
 	 * delegating to the endpoint's own {@code equals()}/{@code hashCode()}, since those may be value-based.
 	 */
-	private static final class IdentityKey extends WeakReference<McpEndpoint> {
+	static final class IdentityKey extends WeakReference<McpEndpoint> {
 		private final int hash;
 
 		IdentityKey(McpEndpoint referent) {

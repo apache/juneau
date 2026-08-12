@@ -4896,7 +4896,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF skipEmptyFormData(boolean value) {
-			skipEmptyFormData = true;
+			skipEmptyFormData = value;
 			return self();
 		}
 
@@ -4932,7 +4932,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF skipEmptyHeaderData(boolean value) {
-			skipEmptyHeaderData = true;
+			skipEmptyHeaderData = value;
 			return self();
 		}
 
@@ -4968,7 +4968,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF skipEmptyQueryData(boolean value) {
-			skipEmptyQueryData = true;
+			skipEmptyQueryData = value;
 			return self();
 		}
 

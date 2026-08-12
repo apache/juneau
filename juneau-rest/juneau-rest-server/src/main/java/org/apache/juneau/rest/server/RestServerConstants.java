@@ -139,9 +139,6 @@ public final class RestServerConstants {
 	/** The {@code "debugEnablement"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the debug enablement bean. */
 	public static final String PROPERTY_debugEnablement = "debugEnablement";
 
-	/** Property name for the {@code debugDefault} setting. */
-	public static final String PROPERTY_debugDefault = "debugDefault";
-
 	/** The {@code "staticFiles"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the static files bean. */
 	public static final String PROPERTY_staticFiles = "staticFiles";
 

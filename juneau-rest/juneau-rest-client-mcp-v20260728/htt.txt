@@ -1,0 +1,4 @@
+# Whole-method HTT waivers for this module. See scripts/coverage.py --help for format/semantics.
+
+org.apache.juneau.rest.client.mcp.v20260728.McpClient$RequestMetaCarrier#get : Implements TraceContextCarrier's inbound-extraction contract, but McpClient#stampMeta only ever uses this private carrier for outbound injection (via set(), through putIfPresent(...)); get() is never invoked anywhere in this codebase, and the class is private so no test can reach it without either reflection into a private nested class or a visibility relaxation.
+org.apache.juneau.rest.client.mcp.v20260728.McpClient$RequestMetaCarrier#keys : Same reasoning as #get above - part of the same never-invoked inbound-extraction half of the TraceContextCarrier contract.

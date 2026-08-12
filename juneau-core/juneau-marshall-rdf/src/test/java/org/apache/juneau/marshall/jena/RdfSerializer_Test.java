@@ -22,7 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.time.*;
 import java.util.*;
+import java.util.function.*;
 
+import org.apache.jena.riot.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
@@ -1529,6 +1531,523 @@ class RdfSerializer_Test extends TestBase {
 			var result = s.write(dl);
 			assertNotNull(result);
 			assertFalse(result.isBlank());
+		}
+	}
+
+	@Nested class N_streamSerializerBuilderCoverage extends TestBase {
+
+		@Test void n01_streamSerializer_builder_overrideMethods() {
+			// RdfStreamSerializer.Builder overrides every OutputStreamSerializerSession.Builder fluent
+			// method purely to preserve the covariant SELF return type; none of these are exercised by
+			// the round-trip tests, which only ever call .language(...).build().
+			var b = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT);
+			assertSame(b, b.produces("application/x-test"));
+			assertSame(b, b.accept("application/x-test"));
+			var s = b.build();
+			var sb = s.createSession();
+			assertSame(sb, sb.apply(String.class, (Consumer<String>)x -> {}));
+			assertSame(sb, sb.debug(true));
+			assertSame(sb, sb.javaMethod(null));
+			assertSame(sb, sb.locale(Locale.US));
+			assertSame(sb, sb.mediaType(org.apache.juneau.commons.http.MediaType.JSON));
+			assertSame(sb, sb.mediaTypeDefault(org.apache.juneau.commons.http.MediaType.JSON));
+			assertSame(sb, sb.properties(Map.of("k", "v")));
+			assertSame(sb, sb.property("k2", "v2"));
+			assertSame(sb, sb.resolver(null));
+			assertSame(sb, sb.schema(null));
+			assertSame(sb, sb.schemaDefault(null));
+			assertSame(sb, sb.timeZone(TimeZone.getTimeZone("UTC")));
+			assertSame(sb, sb.timeZoneDefault(TimeZone.getTimeZone("UTC")));
+			assertSame(sb, sb.unmodifiable());
+			assertSame(sb, sb.uriContext(UriContext.of("http://localhost", "", "", "")));
+			assertNotNull(sb.build());
+		}
+
+		@Test void n02_streamSerializer_invalidLanguage_throwsOnWrite() {
+			// lang==null path in the RdfStreamSerializerSession constructor — throws on first write(),
+			// mirroring j12_invalid_language_throws_on_serialize but for the stream serializer.
+			var s = RdfStreamSerializer.create().language("NOT-A-REAL-LANGUAGE").build();
+			assertThrows(Exception.class, () -> s.write("test"));
+		}
+
+		@Test void n03_streamSerializer_namespaces_always_empty() {
+			// namespaces defaults to an empty (non-null) array since RdfStreamSerializer.Builder never
+			// exposes namespaces(); getNamespaces() on the built serializer reflects that.
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			assertEquals(0, s.getNamespaces().length);
+		}
+
+		@Test void n04_streamSerializer_encodeTextInvalidChars_null() {
+			// encodeTextInvalidChars(null) — o==null branch, unreachable from any writeAnything() call
+			// site (every caller null-checks first), so exercised directly against the session.
+			var session = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().createSession().build();
+			assertNull(session.encodeTextInvalidChars(null));
+		}
+
+		@Test void n05_stream_serialize_reader() throws Exception {
+			// sType.isReader() path in writeAnything, via the stream serializer session (line 375-376)
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bytes = s.write(new StringReader("stream reader content"));
+			assertTrue(bytes.length > 0);
+		}
+
+		@Test void n06_stream_serialize_inputstream() throws Exception {
+			// sType.isInputStream() path in writeAnything, via the stream serializer session (line 377-378)
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bytes = s.write(new ByteArrayInputStream("stream bytes".getBytes()));
+			assertTrue(bytes.length > 0);
+		}
+
+		public static class N07_BeanWithNsProperty {
+			@Rdf(prefix = "n07", namespace = "http://example.org/n07/")
+			public String label = "ns-value";
+		}
+
+		@Test void n07_stream_serialize_bean_with_rdf_namespace_property() throws Exception {
+			// bpRdf.getNamespace() != null on a bean property, via Thrift — covers the ns==null FALSE
+			// short-circuit (line 411) and non-null-ns addModelPrefix path (writeBeanMap) in the stream
+			// serializer session, which the non-stream J24 test only exercises for RdfSerializer.
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bytes = s.write(new N07_BeanWithNsProperty());
+			assertTrue(bytes.length > 0);
+		}
+
+		public static class N08_MultiValuedNsBean {
+			@Rdf(collectionFormat = RdfCollectionFormat.MULTI_VALUED, prefix = "n08", namespace = "http://example.org/n08/")
+			public List<String> tags = new ArrayList<>(List.of("a", "b"));
+		}
+
+		@Test void n08_stream_serialize_multivalue_with_rdf_property_ns() throws Exception {
+			// MULTI_VALUED collection + @Rdf(prefix+namespace) on the property, via Thrift — covers the
+			// non-null-ns branch of writeToMultiProperties (lines 461-466) in the stream serializer session.
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bytes = s.write(new N08_MultiValuedNsBean());
+			assertTrue(bytes.length > 0);
+		}
+
+		public static class N09_BeanWithNullPropNoKeepNull {
+			public String present = "yes";
+			public String absent = null;
+		}
+
+		@Test void n09_stream_serialize_bean_null_prop_no_keepnull() throws Exception {
+			// null bean property value with isKeepNullProperties()==false — covers canIgnoreValue()
+			// TRUE branch (writeBeanMap) in the stream serializer session (line 408).
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bytes = s.write(new N09_BeanWithNullPropNoKeepNull());
+			assertTrue(bytes.length > 0);
+		}
+
+		@Test void n10_stream_serialize_map_with_null_value_ignored() throws Exception {
+			// writeMap() with a null-valued entry — covers the nn(n)==false skip (line 437 area) via
+			// the stream serializer session; writeAnything(null,...) yields a rdf:nil resource so the
+			// property IS still added (bpm==null path always creates the RDF_NIL node), exercising the
+			// non-BeanMap map-value dispatch under Thrift instead of N-Triple.
+			var map = new LinkedHashMap<String,String>();
+			map.put("k1", "v1");
+			map.put("k2", null);
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bytes = s.write(map);
+			assertTrue(bytes.length > 0);
+		}
+	}
+
+	@Nested class O_streamSerializerRemainingCoverage extends TestBase {
+
+		@Test void o01_getXmlBeanPropertyMeta_null() {
+			// bpm==null ternary side (line 251) — never reached through any writeAnything() call site in
+			// this class (every caller passes a non-null bpMeta/bpm), so exercised directly white-box.
+			var session = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().createSession().build();
+			assertSame(XmlBeanPropertyMeta.DEFAULT, session.getXmlBeanPropertyMeta(null));
+		}
+
+		public static class O02_AutoSwapBean {
+			// A public swap() method with declared return type Object (not a specific type) triggers
+			// AutoObjectSwap, whose swapClass is literally Object.class — covers the sType.isObject()
+			// TRUE branch after swap() (line 300), which re-resolves sType from the swap's actual runtime
+			// output via getClassMetaForObject(o) (line 301).
+			public Object swap() { return "swapped-value"; }
+		}
+
+		@Test void o02_swap_toGenericObject_reclassified() throws Exception {
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bytes = s.write(new O02_AutoSwapBean());
+			assertTrue(bytes.length > 0);
+		}
+
+		public static class O03_CharBean {
+			public char c = 'x';
+		}
+
+		@Test void o03_charProperty_nonZero_roundtrip() throws Exception {
+			// sType.isChar()==true with a non-NUL value — covers the charValue()==0 FALSE side of line 310's
+			// short-circuited condition (o is non-null, so the o==null side is skipped and isChar() is
+			// evaluated instead).
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(new O03_CharBean());
+			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build().read(bytes, O03_CharBean.class);
+			assertEquals('x', result.c);
+		}
+
+		public static class O04_NulCharBean {
+			public char c = '\0';
+			public String name = "has-nul-char";
+		}
+
+		@Test void o04_charProperty_nul_treatedAsNull() throws Exception {
+			// sType.isChar()==true AND charValue()==0 — covers the TRUE side of the isChar()&&charValue==0
+			// sub-condition on line 310 (NUL char is treated the same as a null value: emits rdf:nil if
+			// bpm!=null and keepNullProperties(), else silently omitted — either way the branch executes).
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).keepNullProperties().build();
+			var bytes = s.write(new O04_NulCharBean());
+			assertTrue(bytes.length > 0);
+		}
+
+		public static class O05_UriAnnotatedStringBean {
+			@Uri
+			public String absolute = "http://example.org/o05";
+			public String name = "uri-annotated";
+		}
+
+		@Test void o05_uriAnnotatedStringProperty_absolute_asResource() throws Exception {
+			// @Uri on a plain String FIELD sets bpMeta.isUri()==true while the field's own ClassMeta stays
+			// String (sType.isUri()==false) — covers the isURI-TRUE side of line 317's short-circuited
+			// disjunction (only reachable via the annotation, since sType.isUri() alone is false for String),
+			// and, being an absolute URI, the isAbsoluteUri()==true resource-emission side of line 320.
+			// Parse-side support for a URI-as-Resource into a plain String property is a separate concern
+			// (and not symmetric here), so this test only pins the WRITE-side branch coverage.
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(new O05_UriAnnotatedStringBean());
+			assertTrue(bytes.length > 0);
+		}
+
+		public static class O06_UriAnnotatedRelativeBean {
+			@Uri
+			public String relative = "relative/path/o06";
+			public String name = "uri-annotated-relative";
+		}
+
+		@Test void o06_uriAnnotatedStringProperty_relative_asLiteral() throws Exception {
+			// Same @Uri-on-String setup as o05, but with a relative (non-absolute) value — covers the
+			// isAbsoluteUri()==false literal-emission side of line 320.
+			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().write(new O06_UriAnnotatedRelativeBean());
+			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build().read(bytes, O06_UriAnnotatedRelativeBean.class);
+			assertEquals("relative/path/o06", result.relative);
+		}
+
+		@Marshalled(typeName = "O08Impl")
+		public static class O08_Impl {
+			public String name = "impl";
+		}
+
+		@Test void o08_stream_addRootType_typeNameEmitted() throws Exception {
+			// addRootType() is `protected final` on the base Serializer class (cannot be overridden),
+			// so it reaches the session unaffected by the RdfStreamSerializer.Builder#addBeanTypes()
+			// wiring fixed below — covering the nn(typeName) TRUE branch in writeBeanMap (line 389) via
+			// the root-type path: getExpectedRootType() returns the generic Object type as eType, which
+			// differs from aType (the concrete @Marshalled O08_Impl), and session.isRoot()==true
+			// satisfies getBeanTypeName's gate via its addRootType side.
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).addRootType().build();
+			var bytes = s.write(new O08_Impl());
+			assertTrue(bytes.length > 0);
+		}
+
+		public interface O08b_Animal {}
+
+		@Marshalled(typeName = "O08bCat")
+		public static class O08b_Cat implements O08b_Animal {
+			public String name = "Whiskers";
+		}
+
+		public static class O08b_Container {
+			public O08b_Animal pet;
+		}
+
+		@Test void o08b_stream_addBeanTypes_typeNameEmitted() throws Exception {
+			// Regression test for the RdfStreamSerializer.Builder#addBeanTypes() no-op bug: the setting
+			// is now forwarded to the lazily-built companion RdfSerializer (see
+			// RdfStreamSerializer.Builder#getRdfSerializer()), so isAddBeanTypes() is honored by the
+			// stream serializer session for non-root, ambiguously-typed (interface) properties too — not
+			// just via addRootType() on the root object as in o08 above. Verify the "_type" marker is
+			// actually emitted by round-tripping through a parser configured with a matching bean
+			// dictionary and confirming the concrete subtype is recovered.
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).addBeanTypes().build();
+			var container = new O08b_Container();
+			container.pet = new O08b_Cat();
+			var bytes = s.write(container);
+			var p = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).beanDictionary(O08b_Cat.class).build();
+			var result = p.read(bytes, O08b_Container.class);
+			assertInstanceOf(O08b_Cat.class, result.pet);
+		}
+
+		public static class O09_BeanWithEmptyCollection {
+			public List<String> items = new ArrayList<>();
+			public String name = "x";
+		}
+
+		@Test void o09_stream_trimEmptyCollections_skipsEmptyList() throws Exception {
+			// trimEmptyCollections() (also an inherited base Serializer.Builder method) + an empty List
+			// property — canIgnoreValue()'s trim-empty-collections check returns true for a genuinely
+			// non-null value (distinct from the null-value case already covered by n09/k16 elsewhere),
+			// covering the TRUE branch of writeBeanMap's canIgnoreValue() check (line 408) via a path other
+			// than "value is null".
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).trimEmptyCollections().build();
+			var bytes = s.write(new O09_BeanWithEmptyCollection());
+			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build().read(bytes, O09_BeanWithEmptyCollection.class);
+			assertEquals("x", result.name);
+		}
+
+		@Test void o10_stream_serialize_rawBeanMap_direct() throws Exception {
+			// Serializing a raw BeanMap object directly. BeanMap implements Delegate<T> AND is itself a
+			// java.util.Map, so aType.isDelegate()==true and aType gets reassigned to
+			// ((Delegate)o).getBeanInfo() == the WRAPPED bean's own ClassMeta (BEAN category). sType ends
+			// up BEAN-categorized, not MAP-categorized, so this write dispatches through the sType.isBean()
+			// branch instead of the sType.isMap() branch -- this test exercises the Delegate-unwrap itself.
+			// (The dead "o instanceof BeanMap" fallback that used to live inside the isMap() branch for
+			// this exact never-reached scenario was removed.)
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var session = s.createSession().build();
+			var bm = session.toBeanMap(new O09_BeanWithEmptyCollection());
+			var bytes = s.write(bm);
+			assertTrue(bytes.length > 0);
+		}
+
+		public static class O11_ThrowingReader extends Reader {
+			@Override public int read(char[] cbuf, int off, int len) throws IOException { throw new IOException("boom-reader"); }
+			@Override public void close() { /* no-op */ }
+		}
+
+		@Test void o11_stream_serialize_reader_ioException_wrapped() {
+			// A Reader that throws mid-read — covers the catch(IOException) -> onException.accept(e) ->
+			// handleThrown(e) path inside IoUtils.read(Reader, Consumer) (line 376's residual instructions,
+			// never exercised by n05's happy-path StringReader).
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			assertThrows(Exception.class, () -> s.write(new O11_ThrowingReader()));
+		}
+
+		public static class O12_ThrowingInputStream extends InputStream {
+			@Override public int read() throws IOException { throw new IOException("boom-stream"); }
+		}
+
+		@Test void o12_stream_serialize_inputstream_ioException_wrapped() {
+			// Same as o11, but for InputStream — covers the equivalent catch-block instructions on line 378,
+			// never exercised by n06's happy-path ByteArrayInputStream.
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			assertThrows(Exception.class, () -> s.write(new O12_ThrowingInputStream()));
+		}
+
+		public static class O13_ThrowingGetterBean {
+			public String name = "ok";
+			public String getBad() { throw new RuntimeException("boom-getter"); }
+			public void setBad(@SuppressWarnings("unused") String s) { /* no-op */ }
+		}
+
+		@Test void o13_stream_beanGetterException_surfaces_onBeanGetterException() {
+			// Counter-intuitively, ignoreInvocationExceptionsOnGetters() must be LEFT OFF (default) to reach
+			// line 407, not turned on: MarshallingContextable.Builder#ignoreInvocationExceptionsOnGetters()
+			// delegates straight to the underlying BeanContext config (bcBuilder), and when THAT flag is set,
+			// BeanPropertyMeta.getRaw() itself silently swallows the getter's exception and returns null —
+			// so BeanMap.forEachValue's own try/catch never sees an exception to capture, and its callback
+			// always receives thrown=null (confirmed via a temporary System.err probe on `t` during triage:
+			// it printed "t=null" even with a genuinely-throwing getter, once ignoreInvocationExceptionsOnGetters
+			// was enabled — see SerializerSession_Test#i01_listener_beanGetterException_ignored_doesNotThrow,
+			// which documents this exact BeanContext-level short-circuit for JSON). With the setting left at
+			// its default (false), the getter's exception instead propagates out of bpm.get(...), IS caught by
+			// forEachValue's catch(Exception), and IS surfaced as a non-null BeanPropertyValue.getThrown() —
+			// which reaches line 407's onBeanGetterException(bpMeta, t) call, and since
+			// isIgnoreInvocationExceptionsOnGetters() is false there too, it rethrows as a SerializeException.
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			assertThrows(Exception.class, () -> s.write(new O13_ThrowingGetterBean()));
+		}
+	}
+
+	@Nested class P_properties extends TestBase {
+
+		@Test void p01_toString_includes_language() {
+			var x = RdfSerializer.create().language("TURTLE").build();
+			var str = x.toString();
+			assertNotNull(str);
+			assertTrue(str.contains("TURTLE"));
+		}
+
+		@Test void p02_getJenaSettings_empty_by_default() {
+			var x = RdfSerializer.create().build();
+			assertNotNull(x.getJenaSettings());
+		}
+	}
+
+	@Nested class Q_serializerSessionRemainingCoverage extends TestBase {
+
+		public static class Q01_AutoSwapBean {
+			// A public swap() method with declared return type Object (not a specific type) triggers
+			// AutoObjectSwap, whose swapClass is literally Object.class -- covers the sType.isObject()
+			// TRUE branch after swap() in writeAnything, which re-resolves sType from the swap's actual
+			// runtime output via getClassMetaForObject(o). Mirrors O_streamSerializerRemainingCoverage#o02
+			// for the non-stream session.
+			public Object swap() { return "swapped-value"; }
+		}
+
+		@Test void q01_swap_toGenericObject_reclassified() throws Exception {
+			var s = RdfSerializer.create().ntriple().build();
+			var result = s.write(new Q01_AutoSwapBean());
+			assertNotNull(result);
+			assertFalse(result.isBlank());
+		}
+
+		public static class Q02_ThrowingGetterBean {
+			public String name = "ok";
+			public String getBad() { throw new RuntimeException("boom-getter"); }
+			public void setBad(@SuppressWarnings("unused") String s) { /* no-op */ }
+		}
+
+		@Test void q02_beanGetterException_surfaces_onBeanGetterException() {
+			// Mirrors O_streamSerializerRemainingCoverage#o13 for the non-stream session: getter exception
+			// propagates out of bpm.get(...), is captured by BeanMap.forEachValue's own try/catch, and
+			// surfaces as a non-null BeanPropertyValue.getThrown() -- reaching writeBeanMap's
+			// onBeanGetterException(bpMeta, t) call.
+			var s = RdfSerializer.create().ntriple().build();
+			assertThrows(Exception.class, () -> s.write(new Q02_ThrowingGetterBean()));
+		}
+
+		public static class Q03_BeanWithEmptyCollection {
+			public List<String> items = new ArrayList<>();
+			public String name = "x";
+		}
+
+		@Test void q03_trimEmptyCollections_skipsEmptyList() throws Exception {
+			// trimEmptyCollections() + an empty List property -- canIgnoreValue()'s trim-empty-collections
+			// check returns true for a genuinely non-null value, covering the TRUE branch of writeBeanMap's
+			// canIgnoreValue() check via a path other than "value is null". Mirrors
+			// O_streamSerializerRemainingCoverage#o09 for the non-stream session.
+			var s = RdfSerializer.create().ntriple().trimEmptyCollections().build();
+			var result = s.write(new Q03_BeanWithEmptyCollection());
+			var parsed = RdfParser.create().ntriple().build().read(result, Q03_BeanWithEmptyCollection.class);
+			assertEquals("x", parsed.name);
+		}
+
+		public static class Q04_PlainBean {
+			public String label = "no-ns-annotations";
+		}
+
+		@Test void q04_serialize_disableUseXmlNamespaces_skipsXmlNsFallback() throws Exception {
+			// Property has NO @Rdf namespace (bpRdf.getNamespace()==null) AND isUseXmlNamespaces() is
+			// explicitly disabled -- covers the isUseXmlNamespaces()==FALSE side of the short-circuited
+			// "ns == null && isUseXmlNamespaces()" condition in writeBeanMap (the TRUE side is already
+			// exercised by every other unannotated-property test, which all leave useXmlNamespaces at its
+			// default of true).
+			var s = RdfSerializer.create().ntriple().disableUseXmlNamespaces().build();
+			var result = s.write(new Q04_PlainBean());
+			assertNotNull(result);
+			assertFalse(result.isBlank());
+		}
+
+		public static class Q05_BeanWithMultiValuedProperty {
+			@Rdf(collectionFormat = RdfCollectionFormat.MULTI_VALUED)
+			public List<String> tags = new ArrayList<>(List.of("a", "b"));
+		}
+
+		@Test void q05_serialize_multiValued_disableUseXmlNamespaces_skipsXmlNsFallback() throws Exception {
+			// Same isUseXmlNamespaces()==FALSE side as q04, but in writeToMultiProperties for a
+			// MULTI_VALUED collection property (distinct code path from writeBeanMap's own copy of this
+			// same namespace-resolution logic).
+			var s = RdfSerializer.create().ntriple().disableUseXmlNamespaces().build();
+			var result = s.write(new Q05_BeanWithMultiValuedProperty());
+			assertNotNull(result);
+			assertFalse(result.isBlank());
+		}
+
+		public static class Q06_BeanWithMultiValuedNsProperty {
+			@Rdf(collectionFormat = RdfCollectionFormat.MULTI_VALUED, prefix = "q06", namespace = "http://example.org/q06/")
+			public List<String> tags = new ArrayList<>(List.of("a", "b"));
+		}
+
+		@Test void q06_serialize_multiValued_disableAutoDetectNamespaces_skipsAddModelPrefix() throws Exception {
+			// ns != null (from the property's own @Rdf namespace) AND isAutoDetectNamespaces()==FALSE --
+			// covers the FALSE side of writeToMultiProperties' own "else if (isAutoDetectNamespaces())"
+			// check (distinct from writeBeanMap's identical-shaped check, already covered for the FALSE
+			// side by m11).
+			var s = RdfSerializer.create().ntriple().disableAutoDetectNamespaces().build();
+			var result = s.write(new Q06_BeanWithMultiValuedNsProperty());
+			assertNotNull(result);
+			assertFalse(result.isBlank());
+		}
+
+		@Test void q07_doWrite_looseCollections_null() throws Exception {
+			// isLooseCollections()==true with a null root object -- getClassMetaForObject(null) returns
+			// null (its single-arg overload defaults to null, unlike the two-arg overload used elsewhere
+			// in this class), so nn(cm)==false short-circuits the "cm.isCollectionOrArray()" sub-check,
+			// covering the remaining branch combination that m14 (a non-null, non-collection bean) cannot
+			// reach.
+			var s = RdfSerializer.create().ntriple().looseCollections().build();
+			var result = s.write(null);
+			assertNotNull(result);
+		}
+
+		@Test void q08_getJenaSettings_session_delegatesToCtx() {
+			// Direct coverage of the trivial protected getter that delegates to ctx -- never exercised via
+			// the public write() API since it isn't on any hot serialization path. (RdfSerializer's own
+			// public getJenaSettings() delegates straight to ctx and does not exercise the session's copy.)
+			var session = RdfSerializer.create().build().createSession().build();
+			assertNotNull(session.getJenaSettings());
+		}
+
+		@Test void q09_getXmlBeanPropertyMeta_null() {
+			// bpm==null ternary side -- never reached through any writeAnything()/writeBeanMap() call site
+			// in this class (every caller passes a non-null bpMeta/bpm), so exercised directly white-box.
+			// Mirrors O_streamSerializerRemainingCoverage#o01 for the non-stream session.
+			var session = RdfSerializer.create().build().createSession().build();
+			assertSame(XmlBeanPropertyMeta.DEFAULT, session.getXmlBeanPropertyMeta(null));
+		}
+
+		public static class Q10_ThrowingReader extends Reader {
+			@Override public int read(char[] cbuf, int off, int len) throws IOException { throw new IOException("boom-reader"); }
+			@Override public void close() { /* no-op */ }
+		}
+
+		@Test void q10_serialize_reader_ioException_wrapped() {
+			// A Reader that throws mid-read -- covers the catch(IOException) -> onException.accept(e) ->
+			// handleThrown(e) path inside IoUtils.read(Reader, Consumer), never exercised by j03's
+			// happy-path StringReader. Mirrors O_streamSerializerRemainingCoverage#o11 for the non-stream
+			// session.
+			var s = RdfSerializer.create().ntriple().build();
+			assertThrows(Exception.class, () -> s.write(new Q10_ThrowingReader()));
+		}
+
+		public static class Q11_ThrowingInputStream extends InputStream {
+			@Override public int read() throws IOException { throw new IOException("boom-stream"); }
+		}
+
+		@Test void q11_serialize_inputstream_ioException_wrapped() {
+			// Same as q10, but for InputStream -- covers the equivalent catch-block instructions, never
+			// exercised by j04's happy-path ByteArrayInputStream. Mirrors
+			// O_streamSerializerRemainingCoverage#o12 for the non-stream session.
+			var s = RdfSerializer.create().ntriple().build();
+			assertThrows(Exception.class, () -> s.write(new Q11_ThrowingInputStream()));
+		}
+
+		@Test void q12_toLang_rdfProto_fallback() {
+			// "RDF/PROTO" isn't registered in Jena's RDFLanguages.nameToLang(), so toLang() falls back to
+			// the hardcoded literal check -- never exercised via the public build() API since RDF/PROTO is
+			// a binary format that only round-trips meaningfully through the streaming RdfProto marshaller.
+			// Mirrors RdfParser_Test#M_sessionWhiteBox.m01 for the serializer session.
+			assertEquals(Lang.RDFPROTO, RdfSerializerSession.toLang("RDF/PROTO"));
+		}
+
+		@Test void q13_encodeTextInvalidChars_null() {
+			// encodeTextInvalidChars(null) -- o==null branch, unreachable from any writeAnything() call
+			// site (every caller null-checks first), so exercised directly against the session.
+			var session = RdfSerializer.create().build().createSession().build();
+			assertNull(session.encodeTextInvalidChars(null));
+		}
+
+		@Test void q14_streamSerializer_getXmlBeanMeta_getXmlClassMeta_delegateToRdfSerializer() {
+			// RdfStreamSerializer.getXmlBeanMeta()/getXmlClassMeta() delegate straight to the lazily-built
+			// companion RdfSerializer -- never exercised via the public write() API since they aren't on
+			// any hot serialization path (mirrors G_streamClasses' getXmlBeanMeta/getXmlClassMeta test for
+			// the non-stream serializer).
+			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
+			var bc = s.getMarshallingContext();
+			var bm = bc.getBeanMeta(NamedBean.class);
+			assertNotNull(s.getXmlBeanMeta(bm));
+			assertNotNull(s.getXmlClassMeta(bc.getClassMeta(NamedBean.class)));
 		}
 	}
 }

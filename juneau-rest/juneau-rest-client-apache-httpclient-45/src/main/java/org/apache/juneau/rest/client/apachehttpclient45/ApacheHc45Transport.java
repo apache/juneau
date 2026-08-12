@@ -209,8 +209,11 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 	/**
 	 * Bridges a {@link TransportBody} to Apache HttpClient's {@link AbstractHttpEntity}.
+	 *
+	 * <p>Package-protected (rather than {@code private}) so {@code ApacheHc45Transport_TransportBodyEntity_Test}
+	 * (same package) can construct it directly and assert its {@code getContent()} contract.
 	 */
-	private static final class TransportBodyEntity extends AbstractHttpEntity {
+	static final class TransportBodyEntity extends AbstractHttpEntity {
 
 		private final TransportBody body;
 

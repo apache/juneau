@@ -58,6 +58,53 @@ class RdfApplyAnnotation_Test extends TestBase {
 		assertNotNull(a);
 	}
 
+	public static class A06_Target {
+		public String field1;
+		public void method1() {}
+	}
+
+	@Test void a06_builder_on_method_setsTargets() throws Exception {
+		var m = A06_Target.class.getMethod("method1");
+		var a = RdfApplyAnnotation.create().on(m).build();
+		assertEquals(1, a.on().length);
+		// getNameFull() includes the parameter list, e.g. "...A06_Target.method1()".
+		assertTrue(a.on()[0].endsWith("A06_Target.method1()"));
+	}
+
+	@Test void a07_builder_on_field_setsTargets() throws Exception {
+		var f = A06_Target.class.getField("field1");
+		var a = RdfApplyAnnotation.create().on(f).build();
+		assertEquals(1, a.on().length);
+		assertTrue(a.on()[0].endsWith("A06_Target.field1"));
+	}
+
+	@Test void a08_builder_on_classInfo_setsTargets() {
+		var a = RdfApplyAnnotation.create().on(ClassInfo.of(A06_Target.class)).build();
+		assertEquals(1, a.on().length);
+		assertTrue(a.on()[0].endsWith("A06_Target"));
+	}
+
+	@Test void a09_builder_onClass_classInfo_setsOnClass() {
+		var a = RdfApplyAnnotation.create().onClass(ClassInfo.of(A06_Target.class)).build();
+		assertEquals(1, a.onClass().length);
+		assertEquals(A06_Target.class, a.onClass()[0]);
+	}
+
+	@Test void a10_builder_on_fieldInfo_setsTargets() throws Exception {
+		var fi = FieldInfo.of(A06_Target.class.getField("field1"));
+		var a = RdfApplyAnnotation.create().on(fi).build();
+		assertEquals(1, a.on().length);
+		assertTrue(a.on()[0].endsWith("A06_Target.field1"));
+	}
+
+	@Test void a11_builder_on_methodInfo_setsTargets() throws Exception {
+		var mi = MethodInfo.of(A06_Target.class.getMethod("method1"));
+		var a = RdfApplyAnnotation.create().on(mi).build();
+		assertEquals(1, a.on().length);
+		// getNameFull() includes the parameter list, e.g. "...A06_Target.method1()".
+		assertTrue(a.on()[0].endsWith("A06_Target.method1()"));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// b - Applier
 	//------------------------------------------------------------------------------------------------------------------

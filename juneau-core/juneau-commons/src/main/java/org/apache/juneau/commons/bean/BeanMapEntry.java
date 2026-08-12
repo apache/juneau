@@ -79,7 +79,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	public BeanMap<?> getBeanMap() { return this.beanMap; }
 
 	@Override /* Overridden from Map.Entry */
-	public String getKey() { return meta.getName(); }
+	public String getKey() { return pName != null ? pName : meta.getName(); }
 
 	/**
 	 * Returns the metadata about this bean property.

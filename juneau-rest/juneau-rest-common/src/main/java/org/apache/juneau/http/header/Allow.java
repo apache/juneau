@@ -55,6 +55,12 @@ public class Allow extends HttpCsvHeader {
 		return new Allow(values);
 	}
 
+	// Distinct 2-arg factory so two literal String args bind here (returning Allow) instead of the inherited
+	// fixed-arity HttpCsvHeader.of(String name, String value), which Java overload resolution would otherwise prefer.
+	public static Allow of(String value1, String value2) {
+		return new Allow(value1, value2);
+	}
+
 	public static Allow ofLazyWire(Supplier<String> supplier) {
 		return new Allow(supplier, LAZY_WIRE_STRING);
 	}

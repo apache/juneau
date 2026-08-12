@@ -190,8 +190,6 @@ public final class ParquetSchemaBuilder {
 	})
 	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var et = cm.getElementType();
-		if (et == null) // HTT: ClassMeta always resolves Optional's type parameter to Object at minimum
-			et = marshallingContext.getClassMeta(Object.class);
 		Object innerSample = sampleBean instanceof Optional<?> sampleBean2 ? sampleBean2.orElse(null) : sampleBean;
 		var optPath = parentPath != null ? parentPath + "." + name : name;
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, null, null, null, null, optPath));
@@ -203,8 +201,6 @@ public final class ParquetSchemaBuilder {
 	})
 	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var bm = cm.getBeanMeta();
-		if (bm == null) // HTT: addBeanSchema is only called after isBean() check; getBeanMeta() is non-null
-			throw iaex("Class '%s' is not a bean", cm.getName());
 		var beanClass = cm.inner();
 		// Recursion reached here indirectly (e.g. through Optional/collection of the same type) at the depth
 		// limit: keep the legacy String back-reference placeholder so the enclosing group's child count stays
@@ -212,7 +208,7 @@ public final class ParquetSchemaBuilder {
 		// by omission, which round-trips as null).
 		if (typesInProgress.getOrDefault(beanClass, 0) >= maxRecursionDepth) {
 			if (cycleHandling == ParquetCycleHandling.THROW) {
-				var path = parentPath != null ? parentPath + "." + name : name; // HTT: parentPath is always non-null when recursion limit is reached at depth ≥ 2
+				var path = parentPath + "." + name;
 				throw new SerializeException("Cyclic type reference at '%s' (type '%s'). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());
 			}
 			addLeafSchema(elements, marshallingContext.getClassMeta(String.class), name, parentPath, isRoot);
@@ -311,8 +307,6 @@ public final class ParquetSchemaBuilder {
 
 	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>,Integer> typesInProgress) {
 		var et = cm.getElementType();
-		if (et == null) // HTT: ClassMeta always provides an element type (at least Object) for list types
-			throw iaex("List element type cannot be determined for '%s'", cm.getName());
 		// Resolve element type from sample when generics are erased (et is Object) for proper list-of-bean
 		// expansion into leaf columns (e.g. members.list.element.name, members.list.element.age)
 		var sampleCollection = extractSampleCollection(sampleBean);
@@ -339,7 +333,9 @@ public final class ParquetSchemaBuilder {
 	private void addMapSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Map<Class<?>,Integer> typesInProgress) {
 		var vt = cm.getValueType();
 		// Parquet MAP stores keys as STRING; non-String keys (e.g. Enum) are serialized via toString/name()
-		if (vt == null) // HTT: ClassMeta always provides a value type (at least Object) for map types
+		// vt is null for BeanMap-category classes (cat has both MAP and BEANMAP set, which suppresses the
+		// key/value type resolution in ClassMeta.findKeyValueTypes()) -- genuinely reachable, not dead code.
+		if (vt == null)
 			vt = marshallingContext.getClassMeta(Object.class);
 		var mapPath = parentPath != null ? parentPath + "." + name : name;
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, CONVERTED_MAP, null, null, null, null));

@@ -58,6 +58,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		private static final Cache<HashKey,RdfStreamSerializer> CACHE = Cache.of(HashKey.class, RdfStreamSerializer.class).build();
 
 		private String language;
+		private boolean addBeanTypes;
 		private RdfSerializer rdfSerializer;
 
 		/**
@@ -76,6 +77,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			language = copyFrom.language;
+			addBeanTypes = copyFrom.addBeanTypes;
 			rdfSerializer = copyFrom.rdfSerializer;
 		}
 
@@ -88,6 +90,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		protected Builder(RdfStreamSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			language = copyFrom.language;
+			addBeanTypes = copyFrom.isAddBeanTypes();
 			rdfSerializer = copyFrom.rdfSerializer;
 		}
 
@@ -116,6 +119,14 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		}
 
 		@Override
+		public SELF addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			addBeanTypes = value;
+			rdfSerializer = null; // Rebuild on next get
+			return self();
+		}
+
+		@Override
 		public RdfStreamSerializer build() {
 			return cache(CACHE).build(RdfStreamSerializer.class);
 		}
@@ -130,7 +141,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 
 		RdfSerializer getRdfSerializer() {
 			if (rdfSerializer == null)
-				rdfSerializer = RdfSerializer.create().language(language).build();
+				rdfSerializer = RdfSerializer.create().language(language).addBeanTypesRdf(addBeanTypes).build();
 			return rdfSerializer;
 		}
 	}

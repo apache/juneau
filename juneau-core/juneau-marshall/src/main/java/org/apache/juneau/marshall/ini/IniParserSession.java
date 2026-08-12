@@ -107,8 +107,6 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			if (r == null)
 				return null;
 			var sections = readIniContent(r);
-			if (sections.isEmpty())
-				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			if (!type.isBean() && !type.isMap())
 				throw new ParseException(this, "INI format requires bean or Map<String,?> target. Got: %s", type.inner().getName());
 			if (type.isMap()) {
@@ -237,6 +235,14 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 				for (Entry<String,String> e : sub.entrySet())
 					map.put(e.getKey(), readValue(e.getValue(), valueType));
 				bm.put(childName, convertMapToTarget(map, cMeta));
+			} else if (cMeta.isMap()) {
+				// sub == null: no literal header line for this section, only reachable via nested paths.
+			} else {
+				// The section header matched a real (known) bean property, but its declared type is neither
+				// a bean nor a map shape that a section's key/value content can be poured into (e.g. a plain
+				// scalar). Unlike an unmatched section name (see above), this is a genuine type mismatch on a
+				// property we DO know about, so surface it instead of silently dropping the section's data.
+				throw new ParseException(this, "Cannot populate property '%s' of type '%s' from INI section '%s'; expected a bean or map type.", childName, cMeta, sectionName);
 			}
 		}
 	}
@@ -253,11 +259,14 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			var childSection = entry.getValue();
 			if (sectionName.equals(sectionPath))
 				continue;
-			var isChild = sectionPath.isEmpty() ? !sectionName.contains(SECTION_PATH_DELIMITER)
-				: sectionName.startsWith(sectionPath + SECTION_PATH_DELIMITER);
+			// Every non-root section is nested under "" by definition, so at the root level a
+			// grandchild-only section (e.g. "employment/company" with no literal "[employment]" header)
+			// must still be recognized as belonging to the "employment" subtree -- restricting root-level
+			// children to sections with no delimiter at all silently dropped that whole subtree.
+			var isChild = sectionPath.isEmpty() || sectionName.startsWith(sectionPath + SECTION_PATH_DELIMITER);
 			if (!isChild)
 				continue;
-			var childName = sectionPath.isEmpty() ? sectionName
+			var childName = sectionPath.isEmpty() ? sectionName.split(Pattern.quote(SECTION_PATH_DELIMITER))[0]
 				: sectionName.substring(sectionPath.length() + SECTION_PATH_DELIMITER.length()).split(Pattern.quote(SECTION_PATH_DELIMITER))[0];
 			if (result.containsKey(childName))
 				continue;

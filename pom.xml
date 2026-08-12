@@ -189,6 +189,9 @@
 						<exclude>**/docs.txt</exclude>
 						<exclude>**/toc.txt</exclude>
 
+						<!-- Coverage-waiver manifest - plain text, no comment syntax for license headers -->
+						<exclude>**/htt.txt</exclude>
+
 						<!-- Files needed by Heroku as-is -->
 						<exclude>**/app.json</exclude>
 						<exclude>**/Procfile</exclude>

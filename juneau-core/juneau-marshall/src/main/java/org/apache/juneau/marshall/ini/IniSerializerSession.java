@@ -190,6 +190,15 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 					if (ctx.useComments && ine(iniMeta.getComment()))
 						w.comment(iniMeta.getComment());
 					writeKeyValue(w, pMeta.getName(), value, pMeta);
+				} else {
+					// Neither bean, map, collection, nor array: e.g. a streamable-but-not-collection value
+					// (a Stream). isCollectionOrArrayOrOptional() only classifies actual
+					// collections/arrays/Optionals as "simple" at classification time, so this falls through
+					// to the "sections" pass here -- write it as an inline key-value rather than silently
+					// dropping it.
+					if (ctx.useComments && ine(iniMeta.getComment()))
+						w.comment(iniMeta.getComment());
+					writeKeyValue(w, pMeta.getName(), value, pMeta);
 				}
 			} else if (isKeepNullProperties()) {
 				if (ctx.useComments && ine(iniMeta.getComment()))

@@ -80,7 +80,7 @@ public class BasicTestCallLogger extends CallLogger {
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.
 				CallLoggerRule.create(beanStore)  // Log 500+ errors with status-line and header information.
-					.statusFilter(x -> x >= 400)
+					.statusFilter(x -> x >= 500)
 					.level(SEVERE)
 					.requestDetail(HEADER)
 					.responseDetail(HEADER)

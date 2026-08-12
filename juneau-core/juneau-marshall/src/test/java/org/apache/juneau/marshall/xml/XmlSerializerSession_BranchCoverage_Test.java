@@ -313,6 +313,31 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
+	// k - Default namespace resolution against registered namespaces (constructor field-init ordering)
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/** Name-only default namespace resolves its URI from a registered namespace with a matching name. */
+	@Test void k01_defaultNamespaceNameOnlyResolvesAgainstRegisteredNamespaces() {
+		// FIXED: the session constructor used to call findDefaultNamespace(...) BEFORE the namespaces field
+		// was populated from ctx, so findDefaultNamespace's "n.uri == null" search loop (which resolves a
+		// name-only default namespace by matching a registered namespace's name) always saw the field
+		// initializer's empty list and iterated zero times -- the default namespace was returned unresolved,
+		// missing its URI. namespaces is now populated first, so the loop actually finds a match.
+		var full = Namespace.of("foo", "http://example.com/foo");
+		var s = XmlSerializer.create().enableNamespaces().namespaces(full).build().createSession().property("defaultNamespace", "foo").build();
+		assertEquals("http://example.com/foo", s.getDefaultNamespace().getUri());
+	}
+
+	/** URI-only default namespace resolves its name from a registered namespace with a matching URI. */
+	@Test void k02_defaultNamespaceUriOnlyResolvesAgainstRegisteredNamespaces() {
+		// Same underlying fix as k01, exercised via findDefaultNamespace's other dead loop body: a
+		// URI-only default namespace resolving its name by matching a registered namespace's URI.
+		var full = Namespace.of("foo", "http://example.com/foo");
+		var s = XmlSerializer.create().enableNamespaces().namespaces(full).build().createSession().property("defaultNamespace", "http://example.com/foo").build();
+		assertEquals("foo", s.getDefaultNamespace().getName());
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------
 	// Helper bean classes
 	// ------------------------------------------------------------------------------------------------------------------
 

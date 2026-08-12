@@ -179,27 +179,9 @@ public class SpringBeanStore extends BasicBeanStore {
 		return false;
 	}
 
-	@Override
-	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType) {
-		// Try local store and parents first
-		var supplier = super.getBeanSupplier(beanType);
-		if (supplier.isPresent())
-			return supplier;
-
-		// Return a supplier that delegates to Spring context
-		if (nn(appContext)) {
-			var providerOpt = safeOpt(() -> appContext.getBeanProvider(beanType));
-			if (providerOpt.isPresent()) {
-				var provider = providerOpt.get();
-				// Only return a supplier if the bean actually exists in Spring
-				if (provider.getIfAvailable() != null) {
-					return o(provider::getIfAvailable);
-				}
-			}
-		}
-
-		return oe();
-	}
+	// No getBeanSupplier(Class) override: BasicBeanStore.getBeanSupplier(Class) delegates via unqualified
+	// this.getBeanSupplier(beanType, null), which polymorphically dispatches to this class's own
+	// getBeanSupplier(Class,String) override below — its name==null branch already performs the Spring lookup.
 
 	@Override
 	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name) {
@@ -210,9 +192,7 @@ public class SpringBeanStore extends BasicBeanStore {
 
 		// Unnamed lookup: also consult Spring by type so beans like Environment are reachable when this
 		// SpringBeanStore is installed in the BasicBeanStore.overridingParent slot (which always passes
-		// name=null through the resolution chain).  Mirrors the unnamed getBeanSupplier(Class) branch
-		// without delegating to it (avoids polymorphic dispatch back into BasicBeanStore.getBeanSupplier
-		// which would loop).
+		// name=null through the resolution chain).
 		if (name == null && nn(appContext)) {
 			var providerOpt = safeOpt(() -> appContext.getBeanProvider(beanType));
 			if (providerOpt.isPresent()) {

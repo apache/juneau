@@ -74,6 +74,14 @@ import org.apache.juneau.rest.server.processor.*;
  * <p>
  * {@link #path()}/{@link #paths()} re-mount the mixin's endpoints under host-chosen prefix(es).
  *
+ * <h5 class='section'>Merging a mixin's list attributes into the host</h5>
+ * <p>
+ * The override slots above apply the <i>host's</i> values to the <i>mixin's</i> endpoints.  The separate opt-in
+ * {@link #mergeIntoHost()} directive does the reverse: it appends the <i>mixin's</i> own list-shaped
+ * {@code @Rest} attributes (e.g. {@code responseProcessors}) into the <i>host's</i> own chains, so the host's own
+ * {@code @RestOp} methods pick them up too.  It defaults to {@code false} (host endpoints see only the host's
+ * chain, as before) and is only settable on a rich {@code @Mixin} &mdash; see {@link #mergeIntoHost()}.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link Rest#mixinDefs()}
  * 	<li class='ja'>{@link Rest#mixins()}
@@ -94,6 +102,45 @@ public @interface Mixin {
 	 * @return The mixin class.
 	 */
 	Class<?> type();
+
+	/**
+	 * Opt-in directive: fold this mixin's <b>list-shaped</b> {@code @Rest} attributes into the <i>host</i>
+	 * resource's own corresponding chains (not just the mixin's own endpoints).
+	 *
+	 * <p>
+	 * By default ({@code false}) a mixin's list-shaped {@code @Rest} contributions apply only to the mixin's own
+	 * endpoints &mdash; a host's own {@code @RestOp} methods see only the host's chain (the standard
+	 * {@link Rest#mixins() mixin} inheritance rule "host's chain runs first, then the mixin's appended; host
+	 * endpoints see only the host's chain"), so a mixin's e.g. {@code responseProcessors} are effectively dropped
+	 * for host endpoints.  Setting this to {@code true} additionally <b>appends</b> the adopted mixin's own
+	 * list-shaped {@code @Rest} attributes to the end of the host's corresponding chains, so the host's own
+	 * endpoints pick them up too.
+	 *
+	 * <p>
+	 * The folded set is the list-shaped contribution attributes: {@code serializers}, {@code parsers},
+	 * {@code encoders}, {@code converters}, {@code guards}, {@code responseProcessors}, {@code restOpArgs},
+	 * {@code defaultRequestHeaders}, {@code defaultResponseHeaders}, {@code defaultRequestAttributes},
+	 * {@code produces}, and {@code consumes}.  Replace-shaped attributes (e.g. {@code callLogger},
+	 * {@code partSerializer}) and host-only attributes ({@code path}/{@code paths}/{@code children}) are never
+	 * folded.  Same-class de-duplication applies, so a class the host already declares is not added twice.
+	 *
+	 * <p>
+	 * This is strictly opt-in: it has no effect on a bare {@link Rest#mixins()} entry (which cannot set it) or a
+	 * {@code @Mixin} that leaves it {@code false}, so existing resources are unaffected.  The mixin still mounts
+	 * its own endpoints as usual &mdash; this directive is purely additive to the host chain.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Auto-wire JspMixin's JspViewRenderer into the host so the host's own @RestOp methods can</jc>
+	 * 	<jc>// return JspView (no need to also list JspViewRenderer in the host's @Rest(responseProcessors)).</jc>
+	 * 	<ja>@Rest</ja>(mixinDefs=<ja>@Mixin</ja>(type=JspMixin.<jk>class</jk>, mergeIntoHost=<jk>true</jk>))
+	 * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet { ... }
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	boolean mergeIntoHost() default false;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Override slots — mirror the corresponding @Rest attribute signatures.

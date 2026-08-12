@@ -518,9 +518,10 @@ public class JwtTokenValidator implements TokenValidator {
 	}
 
 	private static String sanitize(String s) {
-		if (s == null)
-			return "";
 		// Don't echo arbitrary characters into a WWW-Authenticate header value.
+		// Both call sites pass a non-null message: reject(String) always passes a string literal, and the
+		// BadJOSEException branch in validate() only ever catches Nimbus exceptions thrown (for a SignedJWT) with a
+		// literal, non-null message.
 		return s.replaceAll("[\"\\r\\n]", " ");
 	}
 }

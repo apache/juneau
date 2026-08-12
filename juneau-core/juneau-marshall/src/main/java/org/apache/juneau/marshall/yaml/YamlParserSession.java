@@ -249,9 +249,12 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				readFlowMapping(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else if (sType.isArray() || sType.isArgs()) {
-				var m = newGenericMap();
-				readFlowMapping(r, m, string(), object(), pMeta);
-				o = cast(m, pMeta, eType);
+				// Unlike the isCollection() arm above, cast(m, pMeta, eType) has no way to turn a plain Map
+				// into an array -- it only resolves a "_type" bean discriminator key, which a flow mapping
+				// read this way will essentially never carry -- so it used to just hand the caller back the
+				// raw Map unchanged, silently returning the wrong runtime type for the requested array target.
+				// A flow mapping has no sequence shape to convert from, so reject it outright instead.
+				throw new ParseException(this, "Cannot read a YAML flow mapping into array type '%s'.", sType);
 			} else {
 				Map m = newGenericMap();
 				readFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -1075,10 +1078,8 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 
 			r.read(); // consume '-'
 			c = r.peek();
-			if (c != ' ' && c != '\n' && c != '\r') {
-				unreadSpaces(r, lineIndent);
-				break;
-			}
+			if (c != ' ' && c != '\n' && c != '\r' && c != -1)
+				throw new ParseException(this, "Expected space or line terminator after '-' in YAML block sequence, but found '%s'.", (char)c);
 
 			if (c == ' ')
 				r.read(); // consume space after '-'
@@ -1274,9 +1275,11 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			}
 
 			if (c == '\n' || c == '\r') {
-				// Empty line
+				// Empty line.  Only tracked via trailingNewlines here -- the "" placeholder is added to
+				// `lines` once, either by the flush below (once the next content line is reached, for an
+				// interior blank run) or never at all (for a run of blank lines trailing the last content
+				// line, which chomping='+' replays directly from trailingNewlines instead -- see below).
 				trailingNewlines++;
-				lines.add("");
 				if (c == '\r' && r.peek() == '\n')
 					r.read();
 				continue;
@@ -1329,11 +1332,15 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					sb.append('\n');
 				sb.append(line);
 			} else {
-				// Folded: single newlines -> space, multiple newlines preserved
+				// Folded: single newlines -> space, blank-line runs preserved as that many newlines.
+				// Each blank line contributes its own '\n' via the "line.isEmpty()" arm below; a content
+				// line immediately following a blank run needs no additional separator of its own (that
+				// would double-count the boundary), so it's the "line.isEmpty()" check alone -- not an OR
+				// against the *previous* line's emptiness -- that decides whether a newline is due here.
 				if (i > 0) {
-					if (line.isEmpty() || lines.get(i - 1).isEmpty()) {
+					if (line.isEmpty()) {
 						sb.append('\n');
-					} else {
+					} else if (! lines.get(i - 1).isEmpty()) {
 						sb.append(' ');
 					}
 				}

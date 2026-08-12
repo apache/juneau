@@ -364,7 +364,7 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	private record ConstructorEntry<V>(String simpleClassName, String fullClassName, String[] args, V value) {
+	record ConstructorEntry<V>(String simpleClassName, String fullClassName, String[] args, V value) {
 		// Property name constants
 		private static final String PROP_args = "args";
 		private static final String PROP_fullClassName = "fullClassName";
@@ -456,7 +456,7 @@ public class ReflectionMap<V> {
 		}
 	}
 
-	private record MethodEntry<V>(String simpleClassName, String fullClassName, String methodName, String[] args, V value) {
+	record MethodEntry<V>(String simpleClassName, String fullClassName, String methodName, String[] args, V value) {
 		// Property name constants
 		private static final String PROP_args = "args";
 		private static final String PROP_fullClassName = "fullClassName";

@@ -215,4 +215,30 @@ class RdfUtils_Test extends TestBase {
 		);
 		assertEquals(Namespace.of("baz", "http://foo/"), result);
 	}
+
+	@Test void a19_rdf_onlyPrefix_rdfNsExhaustedThenNextSchemaMatches() {
+		// First schema's rdfNs() entries are all non-matching (the for-each loop over rdfNs()
+		// runs to completion without a match), so the outer schema loop must continue on to a
+		// second schema that matches directly via schema.prefix() -- covers the "no match found
+		// anywhere in this schema's rdfNs()" fallthrough that a15 (which matches on its 2nd entry)
+		// doesn't exercise.
+		var result = RdfUtils.findNamespace(
+			List.of(rdfPrefix("foo")),
+			List.of(schema("", "", rdfNs("other1", "http://other1/")), schema("foo", "http://actual/"))
+		);
+		assertEquals(Namespace.of("foo", "http://actual/"), result);
+	}
+
+	@Test void a20_schemaLevel_onlyNamespace_selfMatch_emptyPrefix_viaRdfNs() {
+		// A namespace-only schema (empty prefix) reached via the SCHEMA-level top loop (rdfs=null
+		// for this recursive call) whose own namespace matches the target -- covers the nn(rdfs)
+		// FALSE branch (only reachable from the schema-level loop, never the rdf-level loop) AND the
+		// "namespace matches but prefix IS empty" combination (falls through to the rdfNs() lookup
+		// instead of returning directly, unlike a08 where the matching schema has a non-empty prefix).
+		var result = RdfUtils.findNamespace(
+			emptyList(),
+			List.of(schema("", "http://onlyns/", rdfNs("q", "http://onlyns/")))
+		);
+		assertEquals(Namespace.of("q", "http://onlyns/"), result);
+	}
 }

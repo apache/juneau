@@ -245,6 +245,30 @@ class BeanMap_Coverage_Test extends TestBase {
 	}
 
 	@Test
+	void e0a2_entrySet_dynaBean_keysAreRealPerEntryKeys() {
+		// Regression test: BeanMapEntry.getKey() must return the real per-entry key (pName) for
+		// dyna-property entries, not the dyna-property meta name ("*").  keySet() already got this right;
+		// entrySet() previously collapsed every dyna entry's key to "*".
+		var c = new C_DynaPojo();
+		c.name = "n1";
+		c.extras.put("x1", "v1");
+		c.extras.put("x2", "v2");
+		var bm = BeanMap.of(c);
+		var keys = new HashSet<String>();
+		var values = new HashMap<String,Object>();
+		for (var e : bm.entrySet()) {
+			keys.add(e.getKey());
+			values.put(e.getKey(), e.getValue());
+		}
+		assertFalse(keys.contains("*"), () -> "entrySet() keys should not contain the dyna-property name '*', got: " + keys);
+		assertTrue(keys.containsAll(Set.of("name", "x1", "x2")), () -> "Got: " + keys);
+		assertEquals("v1", values.get("x1"));
+		assertEquals("v2", values.get("x2"));
+		// Matches what keySet() already returns for the same bean.
+		assertEquals(bm.keySet(), keys);
+	}
+
+	@Test
 	void e0b_put_dynaBean_unknownPropertyRoutesToDyna() {
 		// Exercises the "p = getPropertyMeta("*")" branch in put() (BeanMap.java:710-712).
 		var c = new C_DynaPojo();

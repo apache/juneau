@@ -55,6 +55,12 @@ public class Via extends HttpCsvHeader {
 		return new Via(values);
 	}
 
+	// Distinct 2-arg factory so two literal String args bind here (returning Via) instead of the inherited
+	// fixed-arity HttpCsvHeader.of(String name, String value), which Java overload resolution would otherwise prefer.
+	public static Via of(String value1, String value2) {
+		return new Via(value1, value2);
+	}
+
 	public static Via ofLazyWire(Supplier<String> supplier) {
 		return new Via(supplier, LAZY_WIRE_STRING);
 	}

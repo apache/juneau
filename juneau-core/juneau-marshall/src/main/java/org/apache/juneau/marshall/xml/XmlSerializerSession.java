@@ -267,11 +267,14 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		autoDetectNamespaces = builder.autoDetectNamespaces;
 		enableNamespaces = builder.enableNamespaces;
 		textNodeDelimiter = builder.textNodeDelimiter;
+		// namespaces must be populated BEFORE findDefaultNamespace() runs below -- it resolves a name-only
+		// or URI-only default namespace by searching getNamespaces(), which otherwise still sees the
+		// field initializer's empty list here, so both search loops always iterate zero times and the
+		// namespace is returned unresolved (missing whichever of name/uri wasn't supplied).
+		namespaces = new ArrayList<>(ctx.getNamespaces());
 		defaultNamespace = findDefaultNamespace(
 			builder.defaultNamespace != null ? Namespace.create(builder.defaultNamespace) : ctx.getDefaultNamespace()
 		);
-		var ctxNamespaces = ctx.getNamespaces();
-		namespaces = ctxNamespaces == null ? l() : new ArrayList<>(ctxNamespaces);
 	}
 
 	/**
@@ -968,8 +971,6 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 				elementNamespace = getXmlClassMeta(sType).getNamespace();
 			if (elementNamespace == null)
 				elementNamespace = getXmlClassMeta(aType).getNamespace();
-			if (nn(elementNamespace) && elementNamespace.uri == null)
-				elementNamespace = null;
 			if (elementNamespace == null)
 				elementNamespace = defaultNamespace;
 		} else {
