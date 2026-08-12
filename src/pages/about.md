@@ -26,7 +26,7 @@ Not sure if Juneau is right for your project? Check out our detailed [Why Choose
 
 ## Ecosystem
 
-The Juneau ecosystem consists of the following parts:
+The Juneau ecosystem consists of the following parts. A few rows are **grouped families** rather than fully independent modules — a shared, revision- or spec-neutral core plus multiple thin sibling modules built on it (the JSON-RPC/MCP core-plus-adapter rows below are one example, alongside the pre-existing OpenAPI/Swagger spec-version pair); each row's description says how it relates to its siblings, and [Choosing your MCP setup](/docs/topics/JuneauMcpChoosingSetup#module-shape-3-shared-cores-6-per-revision-adapters) has the full MCP family tree.
 
 | Component | Description |
 |-----------|-------------|
@@ -43,10 +43,10 @@ The Juneau ecosystem consists of the following parts:
 | [juneau-bean-html5](/docs/topics/JuneauBeanHtml5) | DTOs for HTML5 elements. |
 | [juneau-bean-jsonapi](/docs/topics/JuneauBeanJsonApi) | DTOs for the JSON:API specification. |
 | [juneau-bean-jsonpatch](/docs/topics/JuneauBeanJsonPatch) | DTOs for JSON Patch (RFC 6902). |
-| [juneau-bean-jsonrpc](/docs/topics/JuneauBeanJsonRpc) | Revision-neutral JSON-RPC 2.0 envelope DTOs (`JsonRpcRequest`/`JsonRpcResponse`/`JsonRpcError`/`McpException`) shared by the MCP bean/client/server modules. |
+| [juneau-bean-jsonrpc](/docs/topics/JuneauBeanJsonRpc) | Revision-neutral JSON-RPC 2.0 envelope DTOs (`JsonRpcRequest`/`JsonRpcResponse`/`JsonRpcError`/`McpException`) — the core the two `juneau-bean-mcp-v2*` adapter rows below are built on. |
 | [juneau-bean-jsonschema](/docs/topics/JuneauBeanJsonSchema) | DTOs for JSON Schema. |
-| [juneau-bean-mcp-v20250618](/docs/topics/JuneauBeanMcp) | DTOs for the MCP `2025-06-18` wire format — tool/prompt/resource descriptors, capability beans, and polymorphic content types. |
-| [juneau-bean-mcp-v20260728](/docs/topics/JuneauBeanMcp#mcp-2026-07-28-cache-hints-resource-templates) | DTOs for the MCP `2026-07-28` wire format — adds cache hints and resource templates on top of the 2025-06-18 baseline. |
+| [juneau-bean-mcp-v20250618](/docs/topics/JuneauBeanMcp) | Adapter on `juneau-bean-jsonrpc` above: DTOs for the MCP `2025-06-18` wire format — tool/prompt/resource descriptors, capability beans, and polymorphic content types. |
+| [juneau-bean-mcp-v20260728](/docs/topics/JuneauBeanMcp#mcp-2026-07-28-cache-hints-resource-templates) | Adapter on `juneau-bean-jsonrpc` above: DTOs for the MCP `2026-07-28` wire format — adds cache hints and resource templates on top of the 2025-06-18 baseline. |
 | [juneau-bean-openapi-v3](/docs/topics/JuneauBeanOpenApi3) | DTOs for the OpenAPI v3 specification. |
 | [juneau-bean-rfc7807](/docs/topics/JuneauBeanRfc7807) | DTOs for RFC 7807 Problem Details. |
 | [juneau-bean-swagger-v2](/docs/topics/JuneauBeanSwagger2) | DTOs for the Swagger/OpenAPI v2 specification. |
@@ -55,9 +55,9 @@ The Juneau ecosystem consists of the following parts:
 | [juneau-rest-common-classic](/docs/topics/JuneauRestCommon) | Apache HttpClient 4.5–compatible HTTP type facades (`org.apache.juneau.http.classic.*`) for the classic REST client/server stack. |
 | [juneau-rest-server](/docs/topics/JuneauRestServer) | Annotation-driven REST server with automatic OpenAPI/Swagger docs and content negotiation. |
 | [juneau-rest-server-springboot](/docs/topics/JuneauRestServerSpringboot) | Spring Boot auto-configuration for juneau-rest-server. |
-| [juneau-rest-server-mcp](/docs/topics/JuneauRestServerMcp) | Model Context Protocol (MCP) server endpoint support. |
-| [juneau-rest-server-mcp-v20250618](/docs/topics/JuneauRestServerMcp#getting-started) | MCP `2025-06-18` protocol adapter for juneau-rest-server-mcp. |
-| [juneau-rest-server-mcp-v20260728](/docs/topics/JuneauRestServerMcp#configuring-the-endpoint-mcpoptions-mcp-2026-07-28) | MCP `2026-07-28` protocol adapter — adds OAuth 2.1 resource-server support, cache hints, and multi-round-trip requests. |
+| [juneau-rest-server-mcp](/docs/topics/JuneauRestServerMcp) | Revision-neutral Model Context Protocol (MCP) server dispatch core — the two rows below are its per-revision adapters. |
+| [juneau-rest-server-mcp-v20250618](/docs/topics/JuneauRestServerMcp#getting-started) | MCP `2025-06-18` protocol adapter for juneau-rest-server-mcp above. |
+| [juneau-rest-server-mcp-v20260728](/docs/topics/JuneauRestServerMcp#configuring-the-endpoint-mcpoptions-mcp-2026-07-28) | MCP `2026-07-28` protocol adapter for juneau-rest-server-mcp above — adds OAuth 2.1 resource-server support, cache hints, and multi-round-trip requests. |
 | [juneau-rest-server-auth-jwt](/docs/topics/AuthFilterFramework) | JWT authentication filter. |
 | [juneau-rest-server-auth-saml](/docs/topics/SamlAuthSupport) | SAML 2.0 authentication filter. |
 | [juneau-rest-server-auth-oauth](/docs/topics/OAuthAuthSupport) | OAuth 2.0 / OIDC authentication and token introspection filter. |
@@ -79,9 +79,9 @@ The Juneau ecosystem consists of the following parts:
 | [juneau-rest-client-apache-httpclient-50](/docs/topics/RestClientApacheHttpClient50) | Adapter for Apache HttpClient 5.x. |
 | [juneau-rest-client-okhttp](/docs/topics/RestClientOkHttp) | Adapter for OkHttp. |
 | [juneau-rest-client-jetty](/docs/topics/RestClientJetty) | Adapter for Jetty HTTP client. |
-| [juneau-rest-client-mcp](/docs/topics/JuneauRestClientMcp) | Model Context Protocol (MCP) client support. |
-| [juneau-rest-client-mcp-v20250618](/docs/topics/JuneauRestClientMcp#revision-binding) | MCP `2025-06-18` protocol adapter for juneau-rest-client-mcp. |
-| [juneau-rest-client-mcp-v20260728](/docs/topics/JuneauRestClientMcp#elicitation-mcp-2026-07-28-sep-2322) | MCP `2026-07-28` protocol adapter — adds elicitation, OAuth 2.1 auth support, and response caching. |
+| [juneau-rest-client-mcp](/docs/topics/JuneauRestClientMcp) | Revision-neutral Model Context Protocol (MCP) client core — the two rows below are its per-revision adapters. |
+| [juneau-rest-client-mcp-v20250618](/docs/topics/JuneauRestClientMcp#revision-binding) | MCP `2025-06-18` protocol adapter for juneau-rest-client-mcp above. |
+| [juneau-rest-client-mcp-v20260728](/docs/topics/JuneauRestClientMcp#elicitation-mcp-2026-07-28-sep-2322) | MCP `2026-07-28` protocol adapter for juneau-rest-client-mcp above — adds elicitation, OAuth 2.1 auth support, and response caching. |
 | [juneau-rest-client-mcp-auth](/docs/topics/JuneauRestClientMcp#oauth-21-authorization-juneau-rest-client-mcp-auth) | OAuth 2.1 client-side authorization support for juneau-rest-client-mcp (DCR, PKCE, protected-resource metadata discovery). |
 | [juneau-rest-mock](/docs/topics/JuneauRestMock) | Serverless REST mock client for unit testing without a servlet container. |
 | **juneau-microservice** | |
