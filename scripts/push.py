@@ -27,6 +27,7 @@ This script automates the build, test, and deployment workflow:
 Usage: python3 push.py "commit message"
        python3 push.py "commit message" --skip-tests
        python3 push.py "commit message" --sonarqube
+       python3 push.py "commit message" --docs-only
 """
 
 # Sound file paths
@@ -269,6 +270,39 @@ def run_sonarqube_gate(juneau_root, step_num):
     return "error"
 
 
+# Identity guard for --docs-only pushes to the juneau-docs ASF repo. Mirrors the
+# same-named constant/function in juneau-docs/scripts/release-docs.py (and
+# release-docs-stage.py) so the two repos enforce this check identically.
+REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
+
+
+def verify_apache_identity(repo_dir):
+    """Refuse to proceed unless git is configured with the ASF committer identity."""
+    try:
+        result = subprocess.run(
+            ["git", "config", "--get", "user.email"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        email = result.stdout.strip()
+    except Exception as e:
+        print(f"❌ ERROR: Could not read git user.email: {e}")
+        return False
+
+    if email != REQUIRED_GIT_EMAIL:
+        print("❌ ERROR: Git identity is not the ASF committer identity.")
+        print(f"   Found:    user.email = '{email or '(unset)'}'")
+        print(f"   Required: user.email = '{REQUIRED_GIT_EMAIL}'")
+        print("")
+        print("   Fix (this script cannot mutate git config):")
+        print(f"     git config user.email {REQUIRED_GIT_EMAIL}")
+        print('     git config user.name "James Bognar"')
+        return False
+    return True
+
+
 def check_git_status(repo_dir):
     """Check if there are any changes to commit."""
     try:
@@ -453,6 +487,142 @@ def verify_starter_repos(step_num):
     return True
 
 
+def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this function
+    """
+    --docs-only mode: operate ONLY on the sibling juneau-docs repo.
+
+    Skips the entire juneau code path (no container-tags/BOM checks, no test run, no
+    mvn build/install, no starter-repo verification, no juneau commit/push). Runs the
+    same Apache-identity gate and docs-verification gate (Docusaurus smoke build via
+    build-docs.py --skip-maven, which runs verify-docs.py internally) that the default
+    flow's Step 6 juneau-docs follow-up already runs, then commits and pushes
+    juneau-docs — as the ONLY step, rather than a follow-up to a juneau push.
+
+    Args:
+        args: Parsed CLI arguments (message, dry_run, etc).
+        juneau_root: The juneau repo root (used only to locate the juneau-docs sibling).
+
+    Returns:
+        Process exit code (0 success, 1 failure).
+    """
+    docs_root = juneau_root.parent / "juneau-docs"
+
+    print("=" * 70)
+    print("🚀 Juneau Docs-Only Push Script")
+    print("=" * 70)
+    print(f"Docs directory: {docs_root}")
+    print(f"Commit message: '{args.message}'")
+    print("📚 DOCS-ONLY MODE (--docs-only) — skipping juneau Java build/test/push entirely.")
+    if args.skip_tests or args.sonarqube:
+        print("⚠ Note: --skip-tests/--sonarqube only apply to the juneau code path, which "
+              "--docs-only skips entirely; ignoring them.")
+    if args.dry_run:
+        print("🔍 DRY RUN MODE - No actual changes will be made")
+    print("=" * 70)
+
+    if not docs_root.exists():
+        print(f"\n❌ ERROR: juneau-docs repo not found at {docs_root}")
+        print("   Expected it as a sibling of the juneau checkout.")
+        play_sound(success=False)
+        return 1
+
+    if args.dry_run:
+        print("\nSteps that would be executed:")
+        print(f"  1. Verify Apache git identity on juneau-docs (user.email == {REQUIRED_GIT_EMAIL})")
+        print("  2. Check for upstream changes on juneau-docs (git fetch + compare to upstream)")
+        print("  3. Check juneau-docs git status (exit 0 with a no-changes message if clean)")
+        print("  4. Run docs verification gate: python3 scripts/build-docs.py --skip-maven (runs verify-docs.py)")
+        print(f"  5. Commit changes: git add . && git commit -m \"{args.message}\"  (in juneau-docs)")
+        print("  6. Push to remote: git push  (in juneau-docs)")
+        print("\nDry run complete. Use without --dry-run to execute.")
+        return 0
+
+    # Step 1: Apache identity gate — must hold before any work begins.
+    print("\n🔐 Step 1: Verifying git identity (apache.org email) on juneau-docs...")
+    if not verify_apache_identity(docs_root):
+        play_sound(success=False)
+        return 1
+    print("✅ Step 1: Git identity verified")
+
+    # Step 2: Check if local juneau-docs branch is behind upstream.
+    print("\n🔍 Checking for upstream changes on juneau-docs...")
+    is_behind, error_msg = check_upstream_changes(docs_root)
+    if error_msg:
+        print(f"\n⚠ Warning: Could not check upstream changes: {error_msg}")
+        print("Continuing anyway...")
+    elif is_behind:
+        print("\n❌ ERROR: juneau-docs local branch is behind upstream/remote branch.")
+        print("Please pull/merge upstream changes before pushing.")
+        print("Run: git -C ../juneau-docs pull")
+        play_sound(success=False)
+        return 1
+
+    # Step 3: No-op check — mirror the default flow's no-changes messaging style.
+    if not check_git_status(docs_root):
+        print("\n⚠ Warning: No docs changes detected. Skipping commit and push.")
+        print("🎉 Docs-only push completed successfully (nothing to commit)!")
+        play_sound(success=True)
+        return 0
+
+    # Step 4: Docs verification gate (Docusaurus smoke build; runs verify-docs.py internally).
+    print("\n📚 Step 4: juneau-docs has changes — running Docusaurus smoke check first...")
+    docs_build_script = docs_root / "scripts" / "build-docs.py"
+    try:
+        result = subprocess.run(
+            [sys.executable, str(docs_build_script), "--skip-maven"],
+            cwd=docs_root,
+            check=False
+        )
+        if result.returncode != 0:
+            print("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
+            play_sound(success=False)
+            return 1
+        print("✅ Step 4: Docs smoke check passed")
+    except Exception as e:
+        print(f"\n❌ Docs smoke check failed: {e}")
+        play_sound(success=False)
+        return 1
+
+    # Step 5: Git add and commit
+    print("\n📝 Step 5: Committing changes to Git (juneau-docs)...")
+    if not run_command(
+        ["git", "add", "."],
+        "  5.1: Staging juneau-docs changes...",
+        docs_root
+    ):
+        print("\n❌ Docs-only push aborted due to juneau-docs git add failure.")
+        play_sound(success=False)
+        return 1
+
+    if not run_command(
+        ["git", "commit", "-m", args.message],
+        "  5.2: Creating commit...",
+        docs_root
+    ):
+        print("\n❌ Docs-only push aborted due to juneau-docs git commit failure.")
+        play_sound(success=False)
+        return 1
+    print("✅ Step 5: Git commit completed.")
+
+    # Step 6: Push to remote
+    if not run_command(
+        ["git", "push"],
+        "🚀 Step 6: Pushing juneau-docs changes to remote repository...",
+        docs_root
+    ):
+        print("\n❌ Docs-only push aborted due to git push failure.")
+        print("⚠ Your juneau-docs changes have been committed locally but not pushed.")
+        play_sound(success=False)
+        return 1
+
+    print("\n" + "=" * 70)
+    print("🎉 Docs-only push completed successfully!")
+    print(f"📦 Commit message: '{args.message}'")
+    print("=" * 70)
+    play_sound(success=True)
+    return 0
+
+
 def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
@@ -463,6 +633,7 @@ Examples:
   python3 push.py "Updated documentation" --skip-tests
   python3 push.py "Quick fix" --skip-tests
   python3 push.py "Fixed bug in RestClient" --sonarqube
+  python3 push.py "Updated topic page" --docs-only
         """
     )
     
@@ -484,6 +655,20 @@ Examples:
     )
 
     parser.add_argument(
+        "--docs-only",
+        action="store_true",
+        help=(
+            "Operate ONLY on the sibling juneau-docs repo: skip the entire juneau code "
+            "path (no container-tags/BOM checks, no tests, no mvn build/install, no "
+            "starter-repo verification, no juneau commit/push). Still enforces the "
+            "Apache identity gate and the docs verification gate (Docusaurus smoke "
+            "build via build-docs.py --skip-maven, which runs verify-docs.py) against "
+            "juneau-docs before committing/pushing it. Exits 0 with a no-op message if "
+            "juneau-docs has no changes."
+        )
+    )
+
+    parser.add_argument(
         "--sonarqube", "--sonar",
         action="store_true",
         dest="sonarqube",
@@ -499,7 +684,12 @@ Examples:
     # Get the Juneau root directory
     script_dir = Path(__file__).parent
     juneau_root = script_dir.parent
-    
+
+    # --docs-only short-circuits into its own self-contained flow (juneau-docs only);
+    # everything below this is the unchanged default (full juneau build+push) flow.
+    if args.docs_only:
+        return run_docs_only(args, juneau_root)
+
     print("=" * 70)
     print("🚀 Juneau Build and Push Script")
     print("=" * 70)
@@ -543,6 +733,16 @@ Examples:
         return 0
 
     step_num = 1
+
+    # Identity gate — must hold before the expensive build/test gate and any commit/push.
+    # Extended (maintainer-approved) from the --docs-only path to the default flow too;
+    # juneau-docs gets its own check further down, right before its Step 6 commit/push,
+    # since the two repos can have independent git config user.email.
+    print("\n🔐 Verifying git identity (apache.org email) on juneau...")
+    if not verify_apache_identity(juneau_root):
+        play_sound(success=False)
+        return 1
+    print("✅ Git identity verified")
 
     # Step 0 (opt-in, --sonarqube/--sonar): SonarQube report gate. Runs first so it
     # aborts cheaply, before the container-tags/BOM checks, tests, and build.
@@ -728,6 +928,12 @@ Examples:
     # Step 6 (optional): juneau-docs follow-up — smoke check + commit + push
     docs_root = juneau_root.parent / "juneau-docs"
     if docs_root.exists() and check_git_status(docs_root):
+        print("\n🔐 Verifying git identity (apache.org email) on juneau-docs...")
+        if not verify_apache_identity(docs_root):
+            play_sound(success=False)
+            return 1
+        print("✅ Git identity verified")
+
         print(f"\n📚 Step {step_num}: juneau-docs has changes — running Docusaurus smoke check first...")
 
         docs_build_script = docs_root / "scripts" / "build-docs.py"
