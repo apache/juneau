@@ -18,7 +18,12 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.net.*;
+import java.time.*;
 import java.util.*;
+
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * A fluent accessor for a named HTTP response header.
@@ -166,6 +171,84 @@ public final class ResponseHeader {
 			.map(String::trim)
 			.filter(s -> !s.isEmpty())
 			.toList();
+	}
+
+	/**
+	 * Returns the first value of this header parsed as a {@link Boolean}.
+	 *
+	 * @return The boolean value, or empty if absent.
+	 */
+	public Optional<Boolean> asBoolean() {
+		var value = getValue();
+		return value == null ? oe() : o(Boolean.parseBoolean(value.trim()));
+	}
+
+	/**
+	 * Returns the first value of this header parsed as an RFC-1123 HTTP date.
+	 *
+	 * @return The parsed date, or empty if absent or not parseable.
+	 */
+	public Optional<ZonedDateTime> asZonedDateTime() {
+		var value = getValue();
+		if (value == null)
+			return oe();
+		try {
+			return HttpDateHeader.of(name, value).asZonedDateTime();
+		} catch (DateTimeException e) {
+			return oe();
+		}
+	}
+
+	/**
+	 * Returns the first value of this header parsed as a {@link URI}.
+	 *
+	 * @return The parsed URI, or empty if absent or not a valid URI.
+	 */
+	public Optional<URI> asUri() {
+		var value = getValue();
+		if (value == null)
+			return oe();
+		try {
+			return o(new URI(value));
+		} catch (URISyntaxException e) {
+			return oe();
+		}
+	}
+
+	/**
+	 * Returns the first value of this header parsed as a single {@link EntityTag} validator (e.g. {@code ETag}).
+	 *
+	 * @return The parsed entity tag, or empty if absent.
+	 */
+	public Optional<EntityTag> asEntityTag() {
+		try {
+			return o(EntityTag.of(getValue()));
+		} catch (IllegalArgumentException e) {
+			return oe();
+		}
+	}
+
+	/**
+	 * Returns the first value of this header parsed as a comma-delimited list of {@link EntityTag} validators
+	 * (e.g. {@code If-Match}).
+	 *
+	 * @return The parsed entity tags, or {@link EntityTags#EMPTY} if absent or not parseable. Never <jk>null</jk>.
+	 */
+	public EntityTags asEntityTags() {
+		try {
+			return EntityTags.of(getValue());
+		} catch (IllegalArgumentException e) {
+			return EntityTags.EMPTY;
+		}
+	}
+
+	/**
+	 * Returns the first value of this header parsed as a q-valued list of string ranges (e.g. {@code Accept-Encoding}).
+	 *
+	 * @return The parsed string ranges. Never <jk>null</jk>, but possibly empty.
+	 */
+	public StringRanges asStringRanges() {
+		return StringRanges.of(getValue());
 	}
 
 	@Override /* Object */

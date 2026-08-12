@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.thymeleaf;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.view.*;
 import org.junit.jupiter.api.*;
 import org.thymeleaf.templatemode.*;
 
@@ -171,5 +172,20 @@ class ThymeleafMixin_Builder_Test extends TestBase {
 	@Test void b07_stripBasePathThrowsWhenResolvedOutsideBase() {
 		assertThrows(IllegalArgumentException.class,
 			() -> ThymeleafDispatcher.stripBasePath("/templates/", "/other/hello"));
+	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section C: ViewMixinBuilder contract conformance
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void c01_builderImplementsViewMixinBuilder() {
+		assertInstanceOf(ViewMixinBuilder.class, ThymeleafMixin.create());
+	}
+
+	@Test void c02_viewMixinBuilderReferenceRoundTripsBasePathAndCacheTemplates() {
+		ViewMixinBuilder<ThymeleafMixin.Builder> b = ThymeleafMixin.create();
+		var r = b.basePath("/templates/").cacheTemplates(false).build();
+		assertEquals("/templates/", r.getBasePath());
+		assertFalse(r.isCacheTemplates());
 	}
 }

@@ -196,6 +196,22 @@ class FileReaderBuilder_Test extends TestBase {
 		reader.close();
 	}
 
+	@Test void f03_filePath() throws IOException {
+		var reader = FileReaderBuilder.create()
+			.file(PATH)
+			.build();
+		assertNotNull(reader);
+		var p = new Properties();
+		p.load(new StringReader(read(reader, Files.size(PATH))));
+		assertEquals("files/Test3.properties", p.get("file"));
+		reader.close();
+	}
+
+	@Test void f04_filePath_null() {
+		var builder = FileReaderBuilder.create().file((Path)null);
+		assertThrows(IllegalArgumentException.class, builder::build);
+	}
+
 	//====================================================================================================
 	// Chaining tests
 	//====================================================================================================
@@ -210,6 +226,22 @@ class FileReaderBuilder_Test extends TestBase {
 		p.load(new StringReader(read(reader, Files.size(PATH))));
 		assertEquals("files/Test3.properties", p.get("file"));
 		reader.close();
+	}
+
+	//====================================================================================================
+	// allowNoFile(boolean) tests
+	//====================================================================================================
+	@Test void h01_allowNoFileBoolean_true() throws IOException {
+		var reader = FileReaderBuilder.create().allowNoFile(true).build();
+		assertNotNull(reader);
+		var content = read(reader, 0);
+		assertEquals("", content);
+		reader.close();
+	}
+
+	@Test void h02_allowNoFileBoolean_false() {
+		var builder = FileReaderBuilder.create().allowNoFile(false);
+		assertThrows(IllegalArgumentException.class, builder::build);
 	}
 }
 

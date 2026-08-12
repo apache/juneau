@@ -70,6 +70,7 @@ import org.apache.juneau.rest.server.debug.format.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.logger.*;
+import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.util.*;
 import org.apache.juneau.test.assertions.*;
 
@@ -1429,6 +1430,18 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var sp = inner.getServletPath();
 		return cp == null || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());
 	}
+
+	/**
+	 * Returns the static files associated with the resource.
+	 *
+	 * <p>
+	 * Shortcut for {@link RestContext#getStaticFiles()}.
+	 *
+	 * @return
+	 * 	The static files for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public StaticFiles getStaticFiles() { return context.getStaticFiles(); }
 
 	/**
 	 * Returns the localized swagger associated with the resource.

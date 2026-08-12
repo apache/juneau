@@ -204,5 +204,35 @@ class LocalFile_Test extends TestBase {
 		var size = file.size();
 		assertEquals(-1, size); // Classpath files return -1
 	}
+
+	//====================================================================================================
+	// exists() tests
+	//====================================================================================================
+	@Test void g01_exists_filesystem_true() {
+		var file = new LocalFile(TEST_FILE);
+		assertTrue(file.exists());
+	}
+
+	@Test void g02_exists_filesystem_false() {
+		var file = new LocalFile(Paths.get("src/test/resources/files/DoesNotExist.properties"));
+		assertFalse(file.exists());
+	}
+
+	@Test void g03_exists_classpath_true() {
+		var file = new LocalFile(LocalFile_Test.class, "/files/Test3.properties");
+		assertTrue(file.exists());
+	}
+
+	@Test void g04_exists_classpath_false() {
+		var file = new LocalFile(LocalFile_Test.class, "/nonexistent.properties");
+		assertFalse(file.exists());
+	}
+
+	@Test void g05_exists_afterCache() throws IOException {
+		var file = new LocalFile(TEST_FILE);
+		assertTrue(file.exists());
+		file.cache();
+		assertTrue(file.exists());
+	}
 }
 

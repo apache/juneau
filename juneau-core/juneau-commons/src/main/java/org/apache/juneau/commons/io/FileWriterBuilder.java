@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.nio.file.*;
 
 /**
  * A fluent builder for creating {@link Writer} instances for writing to files with configurable options.
@@ -168,7 +169,28 @@ public class FileWriterBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileWriterBuilder append() {
-		this.append = true;
+		return append(true);
+	}
+
+	/**
+	 * Enables or disables append mode, which appends to the file instead of overwriting it.
+	 *
+	 * <p>
+	 * Boolean-arg form of {@link #append()}, useful when the setting is conditional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
+	 * 		.file(<js>"app.log"</js>)
+	 * 		.append(<jv>shouldAppend</jv>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value <jk>true</jk> to append to the file instead of overwriting it.
+	 * @return This object for method chaining.
+	 */
+	public FileWriterBuilder append(boolean value) {
+		this.append = value;
 		return this;
 	}
 
@@ -192,7 +214,28 @@ public class FileWriterBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileWriterBuilder buffered() {
-		this.buffered = true;
+		return buffered(true);
+	}
+
+	/**
+	 * Enables or disables buffering for improved write performance.
+	 *
+	 * <p>
+	 * Boolean-arg form of {@link #buffered()}, useful when the setting is conditional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
+	 * 		.file(<js>"output.txt"</js>)
+	 * 		.buffered(<jv>shouldBuffer</jv>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value <jk>true</jk> to buffer writes for improved performance.
+	 * @return This object for method chaining.
+	 */
+	public FileWriterBuilder buffered(boolean value) {
+		this.buffered = value;
 		return this;
 	}
 
@@ -309,6 +352,28 @@ public class FileWriterBuilder {
 	 */
 	public FileWriterBuilder file(String path) {
 		this.file = new File(path);
+		return this;
+	}
+
+	/**
+	 * Sets the file to write to.
+	 *
+	 * <p>
+	 * Convenience overload for callers working with the NIO {@link Path} API, consistent with
+	 * {@link PathReaderBuilder#path(Path)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
+	 * 		.file(Paths.<jsm>get</jsm>(<js>"/path/to/output.txt"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value The file path to write to.  Can be <jk>null</jk>.
+	 * @return This object for method chaining.
+	 */
+	public FileWriterBuilder file(Path value) {
+		this.file = value == null ? null : value.toFile();
 		return this;
 	}
 }

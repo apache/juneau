@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.freemarker;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.view.*;
 import org.junit.jupiter.api.*;
 
 import freemarker.template.*;
@@ -234,5 +235,20 @@ class FreemarkerMixin_Builder_Test extends TestBase {
 	@Test void d07_stripBasePathThrowsWhenResolvedOutsideBase() {
 		assertThrows(IllegalArgumentException.class,
 			() -> FreemarkerDispatcher.stripBasePath("/templates/", "/other/hello"));
+	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section E: ViewMixinBuilder contract conformance
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void e01_builderImplementsViewMixinBuilder() {
+		assertInstanceOf(ViewMixinBuilder.class, FreemarkerMixin.create());
+	}
+
+	@Test void e02_viewMixinBuilderReferenceRoundTripsBasePathAndCacheTemplates() {
+		ViewMixinBuilder<FreemarkerMixin.Builder> b = FreemarkerMixin.create();
+		var r = b.basePath("/templates/").cacheTemplates(false).build();
+		assertEquals("/templates/", r.getBasePath());
+		assertFalse(r.isCacheTemplates());
 	}
 }

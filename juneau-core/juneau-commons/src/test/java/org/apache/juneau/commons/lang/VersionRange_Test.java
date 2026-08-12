@@ -253,4 +253,25 @@ class VersionRange_Test extends TestBase {
 		assertFalse(range.matches("2.0.0"));
 		assertFalse(range.matches("2.0.1"));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// of(String) static factory
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void a14_of_matchesConstructor() {
+		var range1 = VersionRange.of("[1.0,2.0)");
+		var range2 = new VersionRange("[1.0,2.0)");
+		assertEquals(range2.toString(), range1.toString());
+		assertTrue(range1.matches("1.5"));
+		assertFalse(range1.matches("2.0"));
+	}
+
+	@Test
+	void a15_of_singleVersion() {
+		var range = VersionRange.of("2.0");
+		assertTrue(range.matches("2.0"));
+		assertTrue(range.matches("2.1"));
+		assertFalse(range.matches("1.9"));
+	}
 }

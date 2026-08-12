@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.mustache;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.view.*;
 import org.junit.jupiter.api.*;
 
 import com.github.mustachejava.*;
@@ -79,6 +80,7 @@ class MustacheMixin_Builder_Test extends TestBase {
 		var r = new MustacheMixin();
 		assertEquals(MustacheMixin.DEFAULT_BASE_PATH, r.getBasePath());
 		assertEquals(MustacheMixin.DEFAULT_TEMPLATE_SUFFIX, r.getTemplateSuffix());
+		assertEquals(MustacheMixin.DEFAULT_CACHE_TEMPLATES, r.isCacheTemplates());
 	}
 
 	@Test void a07_templateSuffixDefaultsEmpty() {
@@ -102,9 +104,21 @@ class MustacheMixin_Builder_Test extends TestBase {
 	@Test void a10_builderReadersReflectMutations() {
 		var b = MustacheMixin.create()
 			.basePath("/views/")
-			.templateSuffix(".mst");
+			.templateSuffix(".mst")
+			.cacheTemplates(false);
 		assertEquals("/views/", b.getBasePath());
 		assertEquals(".mst", b.getTemplateSuffix());
+		assertFalse(b.isCacheTemplates());
+	}
+
+	@Test void a10b_cacheTemplatesDefaultsTrue() {
+		var r = MustacheMixin.create().build();
+		assertTrue(r.isCacheTemplates(), "Default cacheTemplates must be true (production-safe)");
+	}
+
+	@Test void a10c_cacheTemplatesSetterRoundTrips() {
+		var r = MustacheMixin.create().cacheTemplates(false).build();
+		assertFalse(r.isCacheTemplates());
 	}
 
 	@Test void a11_defaultFactoryIsLazyButReused() {
@@ -218,5 +232,20 @@ class MustacheMixin_Builder_Test extends TestBase {
 	@Test void d07_stripBasePathThrowsWhenResolvedOutsideBase() {
 		assertThrows(IllegalArgumentException.class,
 			() -> MustacheDispatcher.stripBasePath("/templates/", "/other/hello"));
+	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section E: ViewMixinBuilder contract conformance
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void e01_builderImplementsViewMixinBuilder() {
+		assertInstanceOf(ViewMixinBuilder.class, MustacheMixin.create());
+	}
+
+	@Test void e02_viewMixinBuilderReferenceRoundTripsBasePathAndCacheTemplates() {
+		ViewMixinBuilder<MustacheMixin.Builder> b = MustacheMixin.create();
+		var r = b.basePath("/templates/").cacheTemplates(false).build();
+		assertEquals("/templates/", r.getBasePath());
+		assertFalse(r.isCacheTemplates());
 	}
 }

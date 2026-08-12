@@ -97,6 +97,30 @@ class MustacheDispatcher_Test extends TestBase {
 		assertSame(f1, f2);
 	}
 
+	@Test void a03_resolveMustacheFactory_cacheTemplatesFalse_rebuildsEveryCall() {
+		var dispatcher = MustacheDispatcher.create().cacheTemplates(false).build();
+		var req = mockRequest(new BasicBeanStore());
+
+		var f1 = dispatcher.resolveMustacheFactory(req);
+		var f2 = dispatcher.resolveMustacheFactory(req);
+		assertNotNull(f1);
+		assertNotNull(f2);
+		assertNotSame(f1, f2,
+			"cacheTemplates(false) must bypass the lazy singleton and rebuild a fresh factory (with an empty compile-cache) on every call");
+	}
+
+	@Test void a04_resolveMustacheFactory_registeredBeanIgnoresCacheTemplatesFlag() throws Exception {
+		var dispatcher = MustacheDispatcher.create().cacheTemplates(false).build();
+		var beanStore = new BasicBeanStore();
+		var registered = mockFactory(noopMustache());
+		beanStore.addBean(MustacheFactory.class, registered);
+		var req = mockRequest(beanStore);
+
+		assertSame(registered, dispatcher.resolveMustacheFactory(req));
+		assertSame(registered, dispatcher.resolveMustacheFactory(req),
+			"A user-supplied MustacheFactory bean is returned as-is regardless of cacheTemplates");
+	}
+
 	/* ---------------------------------------------------------------------------------------- *
 	 * Section B: render
 	 * ---------------------------------------------------------------------------------------- */

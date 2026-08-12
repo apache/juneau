@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.marshall.httppart.*;
@@ -48,6 +49,11 @@ import org.apache.juneau.rest.common.utils.*;
 public final class RrpcInterfaceMeta {
 
 	private static final Map<Class<?>,RrpcInterfaceMeta> CACHE = new java.util.concurrent.ConcurrentHashMap<>();
+
+	private static final Logger LOG = Logger.getLogger("org.apache.juneau.http.remote");
+
+	/** Interfaces already warned about {@link Remote#headerList()}, to keep the build-time warning one-time. */
+	private static final Set<Class<?>> HEADERLIST_WARNED = java.util.concurrent.ConcurrentHashMap.newKeySet();
 
 	private final Class<?> iface;
 	private final String basePath;
@@ -115,6 +121,7 @@ public final class RrpcInterfaceMeta {
 		this.retries = buildRetries(remote);
 		this.retryNonIdempotent = buildRetryNonIdempotent(remote);
 		this.throwOnError = buildThrowOnError(remote);
+		warnHeaderListUnsupported(iface, remote);
 
 		var metas = new LinkedHashMap<Method,RrpcInterfaceMethodMeta>();
 		for (var m : iface.getMethods()) {
@@ -182,6 +189,30 @@ public final class RrpcInterfaceMeta {
 
 	private static boolean buildThrowOnError(Remote remote) {
 		return remote != null && remote.throwOnError();
+	}
+
+	/**
+	 * Emits a one-time build-time warning when {@link Remote#headerList()} is set on an interface used with the
+	 * next-generation engine.
+	 *
+	 * <p>
+	 * {@code headerList()} is a genuinely engine-specific member: its value type is a classic
+	 * {@code org.apache.juneau.http.classic.header.HeaderList} subclass that is tied to the Apache-HttpClient
+	 * transport, so the transport-agnostic next-generation engine cannot honor it.  Rather than silently ignore it,
+	 * we warn (at most once per interface) and point the caller at the transport-agnostic {@link Remote#headers()}
+	 * member instead.
+	 *
+	 * @param iface The proxy interface.
+	 * @param remote The resolved {@link Remote} annotation (may be <jk>null</jk>).
+	 */
+	private static void warnHeaderListUnsupported(Class<?> iface, Remote remote) {
+		if (remote == null || remote.headerList() == Void.class)
+			return;
+		if (HEADERLIST_WARNED.add(iface))
+			LOG.warning(() -> "@Remote member 'headerList' set on " + iface.getName()
+				+ " is not honored by the next-generation REST-proxy engine: its value type is a classic"
+				+ " Apache-HttpClient HeaderList that is transport-specific."
+				+ "  Use the transport-agnostic headers() member instead.");
 	}
 
 	/**

@@ -200,6 +200,52 @@ public class BctAssertions {
 	private static final String JOINER_comma_space = "\", \"";
 
 	/**
+	 * Sets a custom bean converter for the current thread.
+	 *
+	 * <p>Thin passthrough to {@link BctConfiguration#set(BeanConverter)}, provided here since every
+	 * BCT caller already statically imports {@link BctAssertions}.<jsm>*</jsm> and would otherwise need to
+	 * separately reference {@link BctConfiguration} just to override the converter.</p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@BeforeEach</ja>
+	 * 	<jk>void</jk> <jsm>setUp</jsm>() {
+	 * 		BctAssertions.<jsm>setConverter</jsm>(<jv>customConverter</jv>);
+	 * 	}
+	 * </p>
+	 *
+	 * @param converter The bean converter to use for the current thread. Must not be <jk>null</jk>.
+	 * @throws IllegalArgumentException If converter is <jk>null</jk>.
+	 * @see #resetConverter()
+	 * @see BctConfiguration#set(BeanConverter)
+	 */
+	public static void setConverter(BeanConverter converter) {
+		BctConfiguration.set(converter);
+	}
+
+	/**
+	 * Resets the bean converter for the current thread back to the system default.
+	 *
+	 * <p>Thin passthrough to {@link BctConfiguration#clear()}, provided here since every BCT caller
+	 * already statically imports {@link BctAssertions}.<jsm>*</jsm> and would otherwise need to
+	 * separately reference {@link BctConfiguration} just to reset the converter.</p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@AfterEach</ja>
+	 * 	<jk>void</jk> <jsm>tearDown</jsm>() {
+	 * 		BctAssertions.<jsm>resetConverter</jsm>();
+	 * 	}
+	 * </p>
+	 *
+	 * @see #setConverter(BeanConverter)
+	 * @see BctConfiguration#clear()
+	 */
+	public static void resetConverter() {
+		BctConfiguration.clear();
+	}
+
+	/**
 	 * Asserts that the fields/properties on the specified bean are the specified values after being converted to strings.
 	 *
 	 * <p>Same as {@link #assertBean(Supplier, Object, String, String)} but without a custom message.</p>

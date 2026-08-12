@@ -40,6 +40,50 @@ import org.opentest4j.*;
 class BctAssertions_Test extends TestBase {
 
 	// ====================================================================================================
+	// setConverter() / resetConverter() passthrough tests
+	// ====================================================================================================
+
+	@Nested
+	class A_converterPassthrough extends TestBase {
+
+		@AfterEach
+		void tearDown() {
+			resetConverter();
+		}
+
+		@Test
+		void a01_setConverter_delegatesToBctConfiguration() {
+			var converter = BasicBeanConverter.builder().defaultSettings()
+				.addStringifier(TestPerson.class, (conv,p) -> "custom:" + p.getName())
+				.build();
+
+			setConverter(converter);
+
+			assertSame(converter, BctConfiguration.getConverter());
+			assertString("custom:Alice", new TestPerson("Alice", 25));
+		}
+
+		@Test
+		void a02_resetConverter_delegatesToBctConfiguration() {
+			var converter = BasicBeanConverter.builder().defaultSettings()
+				.addStringifier(TestPerson.class, (conv,p) -> "custom:" + p.getName())
+				.build();
+
+			setConverter(converter);
+			assertSame(converter, BctConfiguration.getConverter());
+
+			resetConverter();
+
+			assertNotSame(converter, BctConfiguration.getConverter());
+		}
+
+		@Test
+		void a03_setConverter_null_throws() {
+			assertThrows(IllegalArgumentException.class, () -> setConverter(null));
+		}
+	}
+
+	// ====================================================================================================
 	// Bean Property Tests
 	// ====================================================================================================
 

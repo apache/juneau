@@ -62,8 +62,12 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	/** Default template suffix &mdash; empty (literal template names, no implicit suffix). */
 	public static final String DEFAULT_TEMPLATE_SUFFIX = "";
 
+	/** Default cache-templates setting &mdash; {@code true} (cache forever; production-safe). */
+	public static final boolean DEFAULT_CACHE_TEMPLATES = true;
+
 	private final String basePath;
 	private final String templateSuffix;
+	private final boolean cacheTemplates;
 
 	// Lazy bridge-default factory. Built on first call to resolveMustacheFactory(...) when no
 	// MustacheFactory bean is registered in the request's BeanStore. Volatile so the
@@ -90,6 +94,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	protected MustacheDispatcher(Builder builder) {
 		basePath = builder.basePath;
 		templateSuffix = builder.templateSuffix;
+		cacheTemplates = builder.cacheTemplates;
 	}
 
 	/**
@@ -108,6 +113,15 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 */
 	public String getTemplateSuffix() {
 		return templateSuffix;
+	}
+
+	/**
+	 * Returns whether the bridge-default {@link MustacheFactory} caches compiled templates.
+	 *
+	 * @return The cache flag. Defaults to {@link #DEFAULT_CACHE_TEMPLATES}.
+	 */
+	public boolean isCacheTemplates() {
+		return cacheTemplates;
 	}
 
 	/**
@@ -132,10 +146,15 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 * <ol class='spaced-list'>
 	 * 	<li>{@code req.getContext().getBeanStore().getBean(MustacheFactory.class)} &mdash; any
 	 * 		user-supplied bean (Spring {@code @Bean}, microservice {@code BasicBeanStore.put},
-	 * 		etc.).
-	 * 	<li>Lazy bridge default &mdash; constructed on first call when no factory bean is
-	 * 		registered. Carries a {@link DefaultMustacheFactory} anchored on a resource root
+	 * 		etc.). Never cached or rebuilt by this bridge &mdash; {@link #isCacheTemplates()} does
+	 * 		not apply to user-supplied factories.
+	 * 	<li>Bridge default &mdash; a {@link DefaultMustacheFactory} anchored on a resource root
 	 * 		derived from {@link #getBasePath() basePath} (leading + trailing slashes trimmed).
+	 * 		When {@link #isCacheTemplates()} is {@code true} (the default), a single instance is
+	 * 		lazily built once and reused (mustache.java's own {@code DefaultMustacheFactory}
+	 * 		compiles-and-caches templates internally, so reuse means "compile once"). When
+	 * 		{@code false}, a fresh factory with an empty compile-cache is built on every call, so
+	 * 		every render recompiles the template from its current classpath contents (hot-reload).
 	 * </ol>
 	 *
 	 * @param req The current REST request.
@@ -145,6 +164,8 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		var bean = req.getContext().getBeanStore().getBean(MustacheFactory.class);
 		if (bean.isPresent())
 			return bean.get();
+		if (! cacheTemplates)
+			return buildDefaultFactory();
 		var local = defaultFactory;
 		if (local == null) {
 			synchronized (this) {
@@ -281,6 +302,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 
 		String basePath = DEFAULT_BASE_PATH;
 		String templateSuffix = DEFAULT_TEMPLATE_SUFFIX;
+		boolean cacheTemplates = DEFAULT_CACHE_TEMPLATES;
 
 		/** Constructor &mdash; package access for {@link MustacheDispatcher#create()}. */
 		protected Builder() {}
@@ -310,6 +332,26 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		}
 
 		/**
+		 * Sets whether the bridge-default {@link MustacheFactory} caches compiled templates.
+		 *
+		 * <p>
+		 * Defaults to {@link MustacheDispatcher#DEFAULT_CACHE_TEMPLATES true} (cache
+		 * forever &mdash; production-safe). Set {@code false} to enable dev hot-reload (every
+		 * render rebuilds the factory from a fresh, empty compile-cache).
+		 *
+		 * <p>
+		 * This flag only affects the bridge-default factory; a user-supplied
+		 * {@code @Bean MustacheFactory} is not modified.
+		 *
+		 * @param value The cache flag.
+		 * @return This object.
+		 */
+		public Builder cacheTemplates(boolean value) {
+			cacheTemplates = value;
+			return this;
+		}
+
+		/**
 		 * Reads the current base path setting (test/inspection helper).
 		 *
 		 * @return The base path. Never {@code null}.
@@ -325,6 +367,15 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		 */
 		public String getTemplateSuffix() {
 			return templateSuffix;
+		}
+
+		/**
+		 * Reads the current cache-templates setting (test/inspection helper).
+		 *
+		 * @return The cache flag.
+		 */
+		public boolean isCacheTemplates() {
+			return cacheTemplates;
 		}
 
 		/**

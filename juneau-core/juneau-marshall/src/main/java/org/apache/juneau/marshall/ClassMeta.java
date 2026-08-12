@@ -1707,13 +1707,28 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	}
 
 	private MethodInfo findFromStringMethod() {
-		// Find static fromString(String) or equivalent method.
+		// @formatter:off
+
+		// Option 1:  Explicit @StringCtor(name) short-circuits the name-based guessing below.
+		// marshallingContext is null for context-less ClassMetas (e.g. the args-array ClassMeta), so there's
+		// no annotation provider to consult in that case.
+		if (marshallingContext != null) {
+			var ap = marshallingContext.getAnnotationProvider();
+			var stringCtor = ap.find(StringCtor.class, this).stream().findFirst();
+			if (stringCtor.isPresent()) {
+				var methodName = stringCtor.get().inner().value();
+				return getPublicMethod(
+					x -> x.isStatic() && x.hasReturnType(this) && x.hasParameterTypes(String.class) && x.hasName(methodName)
+				).orElse(null);
+			}
+		}
+
+		// Option 2:  Find static fromString(String) or equivalent method by conventional name.
 		// fromString() must be checked before valueOf() so that Enum classes can create their own
 		//		specialized fromString() methods to override the behavior of Enum.valueOf(String).
 		// valueOf() is used by enums.
 		// parse() is used by the java logging Level class.
 		// forName() is used by Class and Charset
-		// @formatter:off
 		var names = a("fromString", "fromValue", "valueOf", "parse", "parseString", "forName", "forString");
 		return getPublicMethod(
 			x -> x.isStatic() && x.isNotDeprecated() && x.hasReturnType(this) && x.hasParameterTypes(String.class) && contains(x.getName(), names)

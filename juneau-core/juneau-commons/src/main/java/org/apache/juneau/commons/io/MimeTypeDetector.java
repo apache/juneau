@@ -133,6 +133,19 @@ public class MimeTypeDetector {
 		}
 
 		/**
+		 * Enables NIO content-based detection.
+		 *
+		 * <p>
+		 * Zero-arg form of {@link #addNioContentBasedDetection(boolean)}, consistent with the other
+		 * zero-arg builder toggles in the <c>io</c> package (e.g. {@link FileWriterBuilder#buffered()}).
+		 *
+		 * @return This builder.
+		 */
+		public Builder addNioContentBasedDetection() {
+			return addNioContentBasedDetection(true);
+		}
+
+		/**
 		 * Enables or disables NIO content-based detection.
 		 *
 		 * @param value Whether to enable NIO content-based detection.
@@ -192,6 +205,19 @@ public class MimeTypeDetector {
 		 */
 		public MimeTypeDetector build() {
 			return new MimeTypeDetector(this);
+		}
+
+		/**
+		 * Enables cache logging on exit.
+		 *
+		 * <p>
+		 * Zero-arg form of {@link #setCacheLogOnExit(boolean)}, consistent with the other zero-arg
+		 * builder toggles in the <c>io</c> package (e.g. {@link FileWriterBuilder#buffered()}).
+		 *
+		 * @return This builder.
+		 */
+		public Builder setCacheLogOnExit() {
+			return setCacheLogOnExit(true);
 		}
 
 		/**

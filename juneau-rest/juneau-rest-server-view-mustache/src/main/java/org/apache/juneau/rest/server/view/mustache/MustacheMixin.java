@@ -21,6 +21,7 @@ import java.io.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.view.*;
 
 import com.github.mustachejava.*;
 
@@ -101,9 +102,12 @@ import com.github.mustachejava.*;
  * </ul>
  *
  * <p>
- * mustache.java's {@code DefaultMustacheFactory} caches compiled templates internally; the
- * bridge does not currently expose a cache-disable knob (consumers who want hot-reload in
- * development supply their own {@code @Bean MustacheFactory} configured as needed).
+ * mustache.java's {@code DefaultMustacheFactory} caches compiled templates internally. The
+ * bridge-default factory honors {@link Builder#cacheTemplates(boolean) cacheTemplates(...)}
+ * (default {@code true} &mdash; production-safe): set {@code false} to have the bridge rebuild
+ * the factory from a fresh, empty compile-cache on every render (dev hot-reload). Consumers who
+ * supply their own {@code @Bean MustacheFactory} manage its caching themselves &mdash; the flag
+ * only affects the bridge-default factory.
  *
  * <p>
  * When no Mustache engine is on the classpath, the renderer surfaces
@@ -156,6 +160,9 @@ public class MustacheMixin {
 	/** Default template suffix &mdash; empty (literal template names, no implicit suffix). */
 	public static final String DEFAULT_TEMPLATE_SUFFIX = MustacheDispatcher.DEFAULT_TEMPLATE_SUFFIX;
 
+	/** Default cache-templates setting &mdash; {@code true} (cache forever; production-safe). */
+	public static final boolean DEFAULT_CACHE_TEMPLATES = MustacheDispatcher.DEFAULT_CACHE_TEMPLATES;
+
 	private final MustacheDispatcher worker;
 
 	/**
@@ -205,6 +212,15 @@ public class MustacheMixin {
 	 */
 	public String getTemplateSuffix() {
 		return worker.getTemplateSuffix();
+	}
+
+	/**
+	 * Returns whether the bridge's default factory caches compiled templates.
+	 *
+	 * @return The cache flag. Defaults to {@link #DEFAULT_CACHE_TEMPLATES}.
+	 */
+	public boolean isCacheTemplates() {
+		return worker.isCacheTemplates();
 	}
 
 	/**
@@ -267,9 +283,11 @@ public class MustacheMixin {
 	 * <p>
 	 * Mirrors {@link MustacheDispatcher.Builder}'s configuration methods on its own surface and
 	 * forwards each call into a held {@link MustacheDispatcher.Builder} (§2.3.1 worker-bean
-	 * composition).
+	 * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and
+	 * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Thymeleaf /
+	 * FreeMarker bridge builders.
 	 */
-	public static class Builder {
+	public static class Builder implements ViewMixinBuilder<Builder> {
 
 		private final MustacheDispatcher.Builder worker = MustacheDispatcher.create();
 
@@ -288,6 +306,7 @@ public class MustacheMixin {
 		 * 	{@link MustacheMixin#DEFAULT_BASE_PATH}.
 		 * @return This object.
 		 */
+		@Override /* ViewMixinBuilder */
 		public Builder basePath(String value) {
 			worker.basePath(value);
 			return this;
@@ -311,6 +330,25 @@ public class MustacheMixin {
 		}
 
 		/**
+		 * Sets whether the bridge's default factory caches compiled templates.
+		 *
+		 * <p>
+		 * Defaults to {@link MustacheMixin#DEFAULT_CACHE_TEMPLATES true} (cache forever
+		 * &mdash; production-safe). Set {@code false} to enable dev hot-reload (the bridge rebuilds
+		 * the factory from a fresh, empty compile-cache on every render). This setting only
+		 * applies to the bridge's fallback factory; if a {@link MustacheFactory} bean is
+		 * registered, its own caching behavior is honored.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		@Override /* ViewMixinBuilder */
+		public Builder cacheTemplates(boolean value) {
+			worker.cacheTemplates(value);
+			return this;
+		}
+
+		/**
 		 * Reads the current base path setting (test/inspection helper).
 		 *
 		 * @return The base path. Never {@code null}.
@@ -326,6 +364,15 @@ public class MustacheMixin {
 		 */
 		public String getTemplateSuffix() {
 			return worker.getTemplateSuffix();
+		}
+
+		/**
+		 * Reads the current cache-templates setting (test/inspection helper).
+		 *
+		 * @return The cache flag.
+		 */
+		public boolean isCacheTemplates() {
+			return worker.isCacheTemplates();
 		}
 
 		/**

@@ -282,6 +282,26 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>paths</property>.
+	 *
+	 * <p>
+	 * Adds a single operation for the specified path and HTTP method.
+	 *
+	 * <p>
+	 * Functionally identical to {@link #addPath(String,String,Operation)}, but distinctly named so that this
+	 * "add a single operation" call isn't confused with the OpenAPI 3 <c>OpenApi.addPath(String,PathItem)</c>
+	 * method, which adds an entire <c>PathItem</c> (all methods for a path) at once.
+	 *
+	 * @param path The path template.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param method The HTTP method name.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @param operation The operation that describes the path.  Must not be <jk>null</jk>, or an {@link IllegalArgumentException} is thrown.
+	 * @return This object.
+	 */
+	public Swagger addOperation(String path, String method, Operation operation) {
+		return addPath(path, method, operation);
+	}
+
+	/**
 	 * Bean property appender:  <property>produces</property>.
 	 *
 	 * <p>

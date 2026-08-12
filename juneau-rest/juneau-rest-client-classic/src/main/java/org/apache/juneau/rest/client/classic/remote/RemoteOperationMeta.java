@@ -29,6 +29,7 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
@@ -65,6 +66,18 @@ public class RemoteOperationMeta {
 		Map<String,String> headerDefaults = m();
 		Map<String,String> formDataDefaults = m();
 		String contentDefault = null;
+		// Method-level members honored for classic/NG parity (B-client-1).
+		String baseUrl = "";
+		String accept = "";
+		String contentType = "";
+		List<Map.Entry<String,String>> constantHeaders = ll();
+		List<Map.Entry<String,String>> constantQueryData = ll();
+		List<Map.Entry<String,String>> constantFormData = ll();
+		String timeout = "";
+		int retries = 0;
+		boolean retryNonIdempotent = false;
+		boolean throwOnError = false;
+		int urlParamIndex = -1;
 		static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 		@SuppressWarnings({
@@ -130,6 +143,9 @@ public class RemoteOperationMeta {
 			fullPath = fullPathValue;
 
 			mi.getParameters().forEach(x -> {
+				// @Url parameter (call-time URL override) — captured for URL resolution, not bound as a part/body.
+				if (AP.has(Url.class, x))
+					urlParamIndex = x.getIndex();
 				var rma = RemoteOperationArg.create(x);
 				if (nn(rma)) {
 					var pt = rma.getPartType();
@@ -157,6 +173,29 @@ public class RemoteOperationMeta {
 			processFormDataDefaults(mi, formDataDefaults);
 			processPathDefaults(mi, pathDefaults);
 			processContentDefaults(mi);
+
+			// Method-level parity members (B-client-1) — read generically across the @RemoteOp annotation group
+			// (@RemoteOp/@RemoteGet/@RemotePost/...), mirroring the next-generation RrpcInterfaceMeta parsing.
+			for (var ai : al) {
+				ai.getValue(String.class, "baseUrl").filter(NOT_EMPTY).ifPresent(x -> baseUrl = resolve(x.trim()));
+				ai.getValue(String.class, "accept").filter(NOT_EMPTY).ifPresent(x -> accept = resolve(x.trim()));
+				ai.getValue(String.class, "contentType").filter(NOT_EMPTY).ifPresent(x -> contentType = resolve(x.trim()));
+				ai.getValue(String.class, "timeout").filter(NOT_EMPTY).ifPresent(x -> timeout = x.trim());
+				ai.getValue(int.class, "retries").filter(x -> x > 0).ifPresent(x -> retries = x);
+				ai.getValue(boolean.class, "retryNonIdempotent").ifPresent(x -> retryNonIdempotent |= x);
+				ai.getValue(boolean.class, "throwOnError").ifPresent(x -> throwOnError |= x);
+				ai.getValue(String[].class, "headers").ifPresent(x -> constantHeaders.addAll(RemoteProxyUtils.parseConstantParts(x, ':')));
+				ai.getValue(String[].class, "queryData").ifPresent(x -> constantQueryData.addAll(RemoteProxyUtils.parseConstantParts(x, '=')));
+				ai.getValue(String[].class, "formData").ifPresent(x -> constantFormData.addAll(RemoteProxyUtils.parseConstantParts(x, '=')));
+				// Genuinely engine-specific: classic cannot honor NG interceptors.  Warn once per interface.
+				ai.getValue(Class[].class, "interceptors").filter(x -> x.length > 0).ifPresent(x ->
+					RemoteProxyUtils.warnUnsupportedMember(m.getDeclaringClass(), "interceptors",
+						"classic and next-generation RestCallInterceptor SPI types are nominally incompatible."));
+			}
+		}
+
+		private static String resolve(String s) {
+			return VarResolver.DEFAULT.resolve(s);
 		}
 
 		// Helper methods to process method-level annotations with defaults (9.2.0)
@@ -229,6 +268,19 @@ public class RemoteOperationMeta {
 
 	private final String contentDefault;
 
+	// Method-level members honored for classic/NG parity (B-client-1).
+	private final String baseUrl;
+	private final String accept;
+	private final String contentType;
+	private final List<Map.Entry<String,String>> constantHeaders;
+	private final List<Map.Entry<String,String>> constantQueryData;
+	private final List<Map.Entry<String,String>> constantFormData;
+	private final String timeout;
+	private final int retries;
+	private final boolean retryNonIdempotent;
+	private final boolean throwOnError;
+	private final int urlParamIndex;
+
 	/**
 	 * Constructor.
 	 *
@@ -253,6 +305,17 @@ public class RemoteOperationMeta {
 		headerDefaults = u(b.headerDefaults);
 		formDataDefaults = u(b.formDataDefaults);
 		contentDefault = b.contentDefault;
+		baseUrl = b.baseUrl;
+		accept = b.accept;
+		contentType = b.contentType;
+		constantHeaders = u(b.constantHeaders);
+		constantQueryData = u(b.constantQueryData);
+		constantFormData = u(b.constantFormData);
+		timeout = b.timeout;
+		retries = b.retries;
+		retryNonIdempotent = b.retryNonIdempotent;
+		throwOnError = b.throwOnError;
+		urlParamIndex = b.urlParamIndex;
 	}
 
 	/**
@@ -406,4 +469,81 @@ public class RemoteOperationMeta {
 	 * @return Whether the method returns the HTTP response body or status code.
 	 */
 	public RemoteOperationReturn getReturns() { return methodReturn; }
+
+	/**
+	 * Returns the method-level base/host override from the {@code baseUrl} annotation member.
+	 *
+	 * @return The base/host override. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getBaseUrl() { return baseUrl; }
+
+	/**
+	 * Returns the method-level default {@code Accept} media type from the {@code accept} annotation member.
+	 *
+	 * @return The accept media type. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getAccept() { return accept; }
+
+	/**
+	 * Returns the method-level default {@code Content-Type} media type from the {@code contentType} annotation member.
+	 *
+	 * @return The content-type media type. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getContentType() { return contentType; }
+
+	/**
+	 * Returns the method-level constant headers from the {@code headers} annotation member.
+	 *
+	 * @return An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getConstantHeaders() { return constantHeaders; }
+
+	/**
+	 * Returns the method-level constant query parameters from the {@code queryData} annotation member.
+	 *
+	 * @return An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getConstantQueryData() { return constantQueryData; }
+
+	/**
+	 * Returns the method-level constant form-data parameters from the {@code formData} annotation member.
+	 *
+	 * @return An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getConstantFormData() { return constantFormData; }
+
+	/**
+	 * Returns the method-level per-call timeout duration string from the {@code timeout} annotation member.
+	 *
+	 * @return The timeout duration string. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getTimeout() { return timeout; }
+
+	/**
+	 * Returns the method-level maximum retry attempts from the {@code retries} annotation member.
+	 *
+	 * @return The retry count.
+	 */
+	public int getRetries() { return retries; }
+
+	/**
+	 * Returns whether the method opts non-idempotent verbs into automatic retries ({@code retryNonIdempotent} member).
+	 *
+	 * @return <jk>true</jk> if non-idempotent retries are opted in at the method level.
+	 */
+	public boolean isRetryNonIdempotent() { return retryNonIdempotent; }
+
+	/**
+	 * Returns whether the method throws a generic exception on an unmatched error response ({@code throwOnError} member).
+	 *
+	 * @return <jk>true</jk> if {@code throwOnError} is set at the method level.
+	 */
+	public boolean isThrowOnError() { return throwOnError; }
+
+	/**
+	 * Returns the index of the {@link org.apache.juneau.http.Url @Url} parameter, or {@code -1} if none.
+	 *
+	 * @return The {@code @Url} parameter index, or {@code -1}.
+	 */
+	public int getUrlParamIndex() { return urlParamIndex; }
 }

@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.jsp;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.view.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -70,5 +71,44 @@ class JspMixin_Builder_Test extends TestBase {
 	@Test void a06_noArgConstructorUsesDefaultBasePath() {
 		var r = new JspMixin();
 		assertEquals(JspMixin.DEFAULT_BASE_PATH, r.getBasePath());
+		assertEquals(JspMixin.DEFAULT_CACHE_TEMPLATES, r.isCacheTemplates());
+	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section B: cacheTemplates (accepted for ViewMixinBuilder conformance; no-op for this bridge)
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void b01_cacheTemplatesDefaultsTrue() {
+		var r = JspMixin.create().build();
+		assertTrue(r.isCacheTemplates());
+	}
+
+	@Test void b02_cacheTemplatesSetterRoundTripsButHasNoEffectOnRendering() {
+		// The flag is recorded and reported back (ViewMixinBuilder conformance); JSP
+		// recompilation itself remains entirely the servlet container's concern.
+		var r = JspMixin.create().cacheTemplates(false).build();
+		assertFalse(r.isCacheTemplates());
+	}
+
+	@Test void b03_builderGetCacheTemplatesReadsBeforeBuild() {
+		var b = JspMixin.create();
+		assertTrue(b.isCacheTemplates());
+		b.cacheTemplates(false);
+		assertFalse(b.isCacheTemplates());
+	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section C: ViewMixinBuilder contract conformance
+	 * ---------------------------------------------------------------------------------------- */
+
+	@Test void c01_builderImplementsViewMixinBuilder() {
+		assertInstanceOf(ViewMixinBuilder.class, JspMixin.create());
+	}
+
+	@Test void c02_viewMixinBuilderReferenceRoundTripsBasePathAndCacheTemplates() {
+		ViewMixinBuilder<JspMixin.Builder> b = JspMixin.create();
+		var r = b.basePath("/WEB-INF/views/").cacheTemplates(false).build();
+		assertEquals("/WEB-INF/views/", r.getBasePath());
+		assertFalse(r.isCacheTemplates());
 	}
 }

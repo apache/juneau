@@ -52,6 +52,17 @@ public class RemoteMeta {
 
 	private final HeaderList headers;
 
+	// Interface-level members honored for classic/NG parity (B-client-1).
+	private final String baseUrl;
+	private final String accept;
+	private final String contentType;
+	private final List<Map.Entry<String,String>> queryData;
+	private final List<Map.Entry<String,String>> formData;
+	private final String timeout;
+	private final int retries;
+	private final boolean retryNonIdempotent;
+	private final boolean throwOnError;
+
 	/**
 	 * Constructor.
 	 *
@@ -69,6 +80,16 @@ public class RemoteMeta {
 		var versionHeader = "Client-Version";
 		String clientVersion = null;
 		var headers2 = HeaderList.create().resolving();
+
+		var baseUrl2 = "";
+		var accept2 = "";
+		var contentType2 = "";
+		var queryData2 = new ArrayList<Map.Entry<String,String>>();
+		var formData2 = new ArrayList<Map.Entry<String,String>>();
+		var timeout2 = "";
+		var retries2 = 0;
+		var retryNonIdempotent2 = false;
+		var throwOnError2 = false;
 
 		for (var r : remotes) {
 			if (ine(r.path()))
@@ -88,6 +109,25 @@ public class RemoteMeta {
 					throw rex(e, "Could not instantiate HeaderSupplier class");
 				}
 			}
+			if (ine(r.baseUrl()))
+				baseUrl2 = resolve(r.baseUrl());
+			if (ine(r.accept()))
+				accept2 = resolve(r.accept());
+			if (ine(r.contentType()))
+				contentType2 = resolve(r.contentType());
+			queryData2.addAll(RemoteProxyUtils.parseConstantParts(r.queryData(), '='));
+			formData2.addAll(RemoteProxyUtils.parseConstantParts(r.formData(), '='));
+			if (ine(r.timeout()))
+				timeout2 = r.timeout();
+			if (r.retries() > 0)
+				retries2 = r.retries();
+			retryNonIdempotent2 |= r.retryNonIdempotent();
+			throwOnError2 |= r.throwOnError();
+			// Genuinely engine-specific: classic and NG RestCallInterceptor SPI types are nominally
+			// incompatible, so the classic engine cannot honor interface-level interceptors.  Warn once.
+			if (r.interceptors().length > 0)
+				RemoteProxyUtils.warnUnsupportedMember(c, "interceptors",
+					"classic and next-generation RestCallInterceptor SPI types are nominally incompatible.");
 		}
 
 		if (nn(clientVersion))
@@ -99,6 +139,15 @@ public class RemoteMeta {
 
 		this.operations = u(operations2);
 		this.headers = headers2.unmodifiable();
+		this.baseUrl = baseUrl2;
+		this.accept = accept2;
+		this.contentType = contentType2;
+		this.queryData = u(queryData2);
+		this.formData = u(formData2);
+		this.timeout = timeout2;
+		this.retries = retries2;
+		this.retryNonIdempotent = retryNonIdempotent2;
+		this.throwOnError = throwOnError2;
 	}
 
 	/**
@@ -107,6 +156,69 @@ public class RemoteMeta {
 	 * @return The headers to set on all requests.
 	 */
 	public HeaderList getHeaders() { return headers; }
+
+	/**
+	 * Returns the interface-level base/host override from {@link Remote#baseUrl()}.
+	 *
+	 * @return The base/host override. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getBaseUrl() { return baseUrl; }
+
+	/**
+	 * Returns the interface-level default {@code Accept} media type from {@link Remote#accept()}.
+	 *
+	 * @return The accept media type. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getAccept() { return accept; }
+
+	/**
+	 * Returns the interface-level default {@code Content-Type} media type from {@link Remote#contentType()}.
+	 *
+	 * @return The content-type media type. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getContentType() { return contentType; }
+
+	/**
+	 * Returns the interface-level constant query parameters from {@link Remote#queryData()}.
+	 *
+	 * @return An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getQueryData() { return queryData; }
+
+	/**
+	 * Returns the interface-level constant form-data parameters from {@link Remote#formData()}.
+	 *
+	 * @return An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getFormData() { return formData; }
+
+	/**
+	 * Returns the interface-level default per-call timeout duration string from {@link Remote#timeout()}.
+	 *
+	 * @return The timeout duration string. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getTimeout() { return timeout; }
+
+	/**
+	 * Returns the interface-level default maximum retry attempts from {@link Remote#retries()}.
+	 *
+	 * @return The retry count.
+	 */
+	public int getRetries() { return retries; }
+
+	/**
+	 * Returns whether the interface opts non-idempotent verbs into automatic retries ({@link Remote#retryNonIdempotent()}).
+	 *
+	 * @return <jk>true</jk> if non-idempotent retries are opted in at the interface level.
+	 */
+	public boolean isRetryNonIdempotent() { return retryNonIdempotent; }
+
+	/**
+	 * Returns whether the interface throws a generic exception on an unmatched error response ({@link Remote#throwOnError()}).
+	 *
+	 * @return <jk>true</jk> if {@code throwOnError} is set at the interface level.
+	 */
+	public boolean isThrowOnError() { return throwOnError; }
 
 	/**
 	 * Returns the metadata about the specified operation on this resource proxy.

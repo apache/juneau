@@ -131,6 +131,53 @@ class RrpcInterfaceMeta_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// headerList() -- genuinely engine-specific member: one-time build-time warning on the NG engine
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_headerList_set_emitsOneTimeWarning() {
+		var records = new java.util.concurrent.CopyOnWriteArrayList<java.util.logging.LogRecord>();
+		var handler = new java.util.logging.Handler() {
+			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
+			@Override public void flush() {}
+			@Override public void close() {}
+		};
+		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");
+		log.addHandler(handler);
+		try {
+			// First resolution warns; subsequent resolutions are de-duplicated (one-time).
+			RrpcInterfaceMeta.of(HeaderListIface.class);
+			RrpcInterfaceMeta.of(HeaderListIface.class);
+		} finally {
+			log.removeHandler(handler);
+		}
+		var matches = records.stream().filter(r -> r.getMessage().contains("headerList")).count();
+		assertEquals(1L, matches);
+		var msg = records.stream().filter(r -> r.getMessage().contains("headerList")).findFirst().get().getMessage();
+		assertTrue(msg.contains(HeaderListIface.class.getName()));
+		assertTrue(msg.contains("not honored by the next-generation"));
+	}
+
+	@Test void f02_headerList_unset_noWarning() {
+		var records = new java.util.concurrent.CopyOnWriteArrayList<java.util.logging.LogRecord>();
+		var handler = new java.util.logging.Handler() {
+			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
+			@Override public void flush() {}
+			@Override public void close() {}
+		};
+		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");
+		log.addHandler(handler);
+		try {
+			RrpcInterfaceMeta.of(NoHeaderListIface.class);
+		} finally {
+			log.removeHandler(handler);
+		}
+		assertEquals(0L, records.stream().filter(r -> r.getMessage().contains("headerList")).count());
+	}
+
+	/** Stub supplier type used only to give {@code headerList()} a non-default value. */
+	public static class HeaderListStub {}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// toString()
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -181,5 +228,15 @@ class RrpcInterfaceMeta_Test extends TestBase {
 	@Remote
 	public interface InvalidMethodIface {
 		@RemoteOp(method = "BOGUS", path = "/x") String bogus();
+	}
+
+	@Remote(headerList = HeaderListStub.class)
+	public interface HeaderListIface {
+		@RemoteGet String get();
+	}
+
+	@Remote
+	public interface NoHeaderListIface {
+		@RemoteGet String get();
 	}
 }

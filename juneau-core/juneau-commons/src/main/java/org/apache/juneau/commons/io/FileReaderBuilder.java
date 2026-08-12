@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.nio.file.*;
 
 /**
  * A fluent builder for creating {@link Reader} instances from files with configurable character encoding.
@@ -152,7 +153,28 @@ public class FileReaderBuilder {
 	 * @return This object for method chaining.
 	 */
 	public FileReaderBuilder allowNoFile() {
-		this.allowNoFile = true;
+		return allowNoFile(true);
+	}
+
+	/**
+	 * Enables or disables handling of missing files by returning an empty reader instead of throwing an exception.
+	 *
+	 * <p>
+	 * Boolean-arg form of {@link #allowNoFile()}, useful when the setting is conditional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
+	 * 		.file(<js>"optional.txt"</js>)
+	 * 		.allowNoFile(<jv>isOptional</jv>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value <jk>true</jk> to return an empty reader when the file is missing.
+	 * @return This object for method chaining.
+	 */
+	public FileReaderBuilder allowNoFile(boolean value) {
+		this.allowNoFile = value;
 		return this;
 	}
 
@@ -270,6 +292,28 @@ public class FileReaderBuilder {
 	 */
 	public FileReaderBuilder file(String path) {
 		this.file = new File(path);
+		return this;
+	}
+
+	/**
+	 * Sets the file to read from.
+	 *
+	 * <p>
+	 * Convenience overload for callers working with the NIO {@link Path} API, consistent with
+	 * {@link PathReaderBuilder#path(Path)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
+	 * 		.file(Paths.<jsm>get</jsm>(<js>"/path/to/file.txt"</js>))
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value The file path to read from.  Can be <jk>null</jk> ({@link #build()} then throws an {@link IllegalArgumentException} unless {@link #allowNoFile()} is set).
+	 * @return This object for method chaining.
+	 */
+	public FileReaderBuilder file(Path value) {
+		this.file = value == null ? null : value.toFile();
 		return this;
 	}
 }

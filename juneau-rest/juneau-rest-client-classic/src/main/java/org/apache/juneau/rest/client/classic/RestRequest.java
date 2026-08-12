@@ -2789,6 +2789,27 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 
 	boolean isLoggingSuppressed() { return suppressLogging; }
 
+	/**
+	 * Returns <jk>true</jk> if the request body can be safely re-sent (required for a gated automatic retry).
+	 *
+	 * <p>
+	 * A missing body is trivially repeatable; a streaming body ({@link InputStream}/{@link Reader}/record-stream) is
+	 * not; an {@link HttpEntity} body defers to {@link HttpEntity#isRepeatable()}; any other (buffered POJO/String)
+	 * body is repeatable.
+	 *
+	 * @return <jk>true</jk> if the body can be safely re-sent.
+	 */
+	boolean isBodyRepeatable() {
+		var c = content;
+		if (c == null || c == NO_BODY)
+			return true;
+		if (c instanceof InputStream || c instanceof Reader || c instanceof RecordStreamBody)
+			return false;
+		if (c instanceof HttpEntity e)
+			return e.isRepeatable();
+		return true;
+	}
+
 	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 

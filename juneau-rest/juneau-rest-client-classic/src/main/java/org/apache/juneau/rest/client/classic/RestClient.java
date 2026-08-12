@@ -6842,139 +6842,23 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				var rom = rm.getOperationMeta(method);
 
-				var uri = rom.getFullPath();
-				if (uri.indexOf("://") == -1)
-					uri = restUrl2 + '/' + uri;
-				if (uri.indexOf("://") == -1)
-					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
-
-				// SSRF guardrail (parity with juneau-rest-client RemoteClient.requireHttpScheme): the resolved
-				// absolute URL must use the http or https scheme; anything else (file, jar, ftp, ...) is rejected.
-				var scheme = uri.substring(0, uri.indexOf("://"));
-				if (! (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
-					throw new RemoteMetadataException(interfaceClass, "Unsupported URL scheme '" + scheme + "'; only http/https are allowed: " + uri);
-
-				var httpMethod = rom.getHttpMethod();
-				var rc = request(httpMethod, uri, hasContent(httpMethod));
-
-				if (serializer != null) rc.serializer(serializer);
-				if (parser != null) rc.parser(parser);
-
-				rm.getHeaders().forEach(rc::header);
-
-				// Apply method-level defaults if parameter values are not provided (9.2.0)
-				rom.forEachPathArg(a -> {
-					var val = args[a.getIndex()];
-					if (val == null) {
-						// Check parameter-level default first (9.2.0)
-						var def = a.getSchema().getDefault();
-						// Fall back to method-level default if parameter-level not set
-						if (def == null)
-							def = rom.getPathDefault(a.getName());
-						if (nn(def))
-							val = def;
-					}
-					rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
-				});
-				rom.forEachQueryArg(a -> {
-					var val = args[a.getIndex()];
-					if (val == null) {
-						// Check parameter-level default first (9.2.0)
-						var def = a.getSchema().getDefault();
-						// Fall back to method-level default if parameter-level not set
-						if (def == null)
-							def = rom.getQueryDefault(a.getName());
-						if (nn(def))
-							val = def;
-					}
-					rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-				});
-				rom.forEachFormDataArg(a -> {
-					var val = args[a.getIndex()];
-					if (val == null) {
-						// Check parameter-level default first (9.2.0)
-						var def = a.getSchema().getDefault();
-						// Fall back to method-level default if parameter-level not set
-						if (def == null)
-							def = rom.getFormDataDefault(a.getName());
-						if (nn(def))
-							val = def;
-					}
-					rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-				});
-				rom.forEachHeaderArg(a -> {
-					var val = args[a.getIndex()];
-					if (val == null) {
-						// Check parameter-level default first (9.2.0)
-						var def = a.getSchema().getDefault();
-						// Fall back to method-level default if parameter-level not set
-						if (def == null)
-							def = rom.getHeaderDefault(a.getName());
-						if (nn(def))
-							val = def;
-					}
-					rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-				});
-
-				var ba = rom.getContentArg();
-				if (nn(ba)) {
-					var val = args[ba.getIndex()];
-					if (val == null) {
-						// Check parameter-level default first (9.2.0)
-						var def = ba.getSchema().getDefault();
-						// Fall back to method-level default if parameter-level not set
-						if (def == null)
-							def = rom.getContentDefault();
-						if (nn(def))
-							val = def;
-					}
-					rc.content(val, ba.getSchema());
-				} else {
-					// Apply Content default if no parameter is present
-					var contentDef = rom.getContentDefault();
-					if (nn(contentDef))
-						rc.content(contentDef);
-				}
-
-				rom.forEachRequestArg(rmba -> {
-					var rbm = rmba.getMeta();
-					var bean = args[rmba.getIndex()];
-					if (nn(bean)) {
-						for (var p : rbm.getProperties()) {
-							var val = safeSupplier(() -> p.getGetter().invoke(bean));
-							var pt = p.getPartType();
-							var pn = p.getPartName();
-							var schema = p.getSchema();
-							if (pt == PATH)
-								rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
-							else if (nn(val)) {
-								if (pt == QUERY)
-									rc.queryArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
-								else if (pt == FORMDATA)
-									rc.formDataArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
-								else if (pt == HEADER)
-									rc.headerArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
-								else /* (pt == HttpPartType.BODY) */
-									rc.content(val, schema);
-							}
-						}
-					}
-				});
+				// Resolve the effective request URL (interface/method baseUrl + @Url overrides, with the SSRF guard).
+				var uri = resolveRemoteUri(interfaceClass, restUrl2, method, rom, rm, args);
 
 				var ror = rom.getReturns();
 				if (ror.isFuture()) {
-				return getExecutorService().submit(() -> {
-					try {
-						return executeRemote(interfaceClass, rc, method, rom);
-					} catch (Exception e) {
-						throw toRex(e);
-					}
-				});
+					return getExecutorService().submit(() -> {
+						try {
+							return executeRemoteWithRetry(uri, serializer, parser, method, rom, rm, args);
+						} catch (Exception e) {
+							throw toRex(e);
+						}
+					});
 				} else if (ror.isCompletableFuture()) {
 					var cf = new CompletableFuture<>();
 					getExecutorService().submit(() -> {
 						try {
-							cf.complete(executeRemote(interfaceClass, rc, method, rom));
+							cf.complete(executeRemoteWithRetry(uri, serializer, parser, method, rom, rm, args));
 						} catch (Exception e) {
 							cf.completeExceptionally(e);
 						}
@@ -6984,7 +6868,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				}
 
 				try {
-					return executeRemote(interfaceClass, rc, method, rom);
+					return executeRemoteWithRetry(uri, serializer, parser, method, rom, rm, args);
 				} catch (Exception e) {
 					// Check if this is a RuntimeException wrapping a RestCallException with an Error cause
 					if (e instanceof RuntimeException e2 && e2.getCause() instanceof RestCallException rce) {
@@ -7931,61 +7815,405 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		return callHandler.run(target, request, context);
 	}
 
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for remote execution logic
-		"java:S112",  // throws Exception intentional - callback/lifecycle method
-		"unused"      // interfaceClass unused in this implementation but part of the remote execution contract
-	})
-	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Exception {
-		RemoteOperationReturn ror = rom.getReturns();
+	/**
+	 * Resolves the effective request URL for a remote-proxy call, applying the dynamic-URL overrides
+	 * ({@code @Url} parameter, then method-level {@code baseUrl}, then interface-level {@code baseUrl}) over the
+	 * statically-computed interface-base + method path, with the http/https SSRF guardrail.
+	 *
+	 * <p>
+	 * Ported from the next-generation engine's {@code RemoteInvocationHandler.resolveEffectiveUrl(...)}.
+	 */
+	String resolveRemoteUri(Class<?> interfaceClass, String restUrl2, Method method, RemoteOperationMeta rom, RemoteMeta rm, Object[] args) {
+		var fullPath = rom.getFullPath();
+		String uri;
 
-		try {
-			Object ret = null;
-				RestResponse res;
+		// Option A: a call-time @Url parameter wins over everything (endpoint replacement).
+		var urlIdx = rom.getUrlParamIndex();
+		if (urlIdx >= 0) {
+			var arg = (args == null || urlIdx >= args.length) ? null : args[urlIdx];
+			var v = arg == null ? null : arg.toString();
+			if (v == null || v.trim().isEmpty())
+				throw new RemoteMetadataException(interfaceClass, "@Url parameter on " + method.getDeclaringClass().getName() + "." + method.getName() + " must not be null or blank.");
+			uri = RemoteProxyUtils.requireHttpScheme(v.trim());
+			// A scheme-less @Url value is relative and resolved against the client root URL only.
+			if (uri.indexOf("://") == -1)
+				uri = restUrl2 + '/' + trimSlashes(uri);
+		} else {
+			// Option B: a declarative base/host override (method-level wins over interface-level).
+			var baseUrl = firstNonEmpty(rom.getBaseUrl(), rm.getBaseUrl());
+			if (ine(baseUrl)) {
+				uri = RemoteProxyUtils.requireHttpScheme(RemoteProxyUtils.combinePaths(baseUrl, fullPath));
+			} else {
+				uri = fullPath;
+				if (uri.indexOf("://") == -1)
+					uri = restUrl2 + '/' + uri;
+			}
+		}
+
+		if (uri.indexOf("://") == -1)
+			throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
+
+		// SSRF guardrail (parity with juneau-rest-client RemoteClient.requireHttpScheme): the resolved
+		// absolute URL must use the http or https scheme; anything else (file, jar, ftp, ...) is rejected.
+		var scheme = uri.substring(0, uri.indexOf("://"));
+		if (! (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
+			throw new RemoteMetadataException(interfaceClass, "Unsupported URL scheme '" + scheme + "'; only http/https are allowed: " + uri);
+
+		return uri;
+	}
+
+	/**
+	 * Builds a fresh {@link RestRequest} for a remote-proxy call, binding constant parts (interface + method level),
+	 * content-negotiation overrides ({@code accept}/{@code contentType}), the method-argument parts, and the per-call
+	 * timeout.  Re-invoked per retry attempt so a (gated) retry resends a freshly-bound request.
+	 *
+	 * <p>
+	 * Ported from the next-generation engine's {@code RemoteInvocationHandler.buildRequest(...)}.  Unlike the NG
+	 * version, argument binding here is driven entirely by the pre-resolved {@link RemoteOperationMeta} (<c>rom</c>)
+	 * rather than live reflection over the interface {@link Method}, and any misconfiguration that needs to identify
+	 * the offending interface/method is already reported earlier by {@link #resolveRemoteUri}; neither the interface
+	 * class nor the {@link Method} is needed here.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for the remote-proxy request builder (constants + parts + content negotiation + policy)
+	})
+	RestRequest buildRemoteRequest(String uri, Serializer serializer, Parser parser, RemoteOperationMeta rom, RemoteMeta rm, Object[] args) throws RestCallException {
+		var httpMethod = rom.getHttpMethod();
+		var rc = request(httpMethod, uri, hasContent(httpMethod));
+
+		if (serializer != null) rc.serializer(serializer);
+		if (parser != null) rc.parser(parser);
+
+		// contentType override: select the matching registered serializer (else the client default) and send the
+		// overridden media type as the Content-Type label (mirrors NG resolveBodyFormat()).
+		var effContentType = firstNonEmpty(rom.getContentType(), rm.getContentType());
+		if (ine(effContentType)) {
+			var s = getMatchingSerializer(effContentType);
+			if (s == null) {
+				var all = serializers.getSerializers();
+				if (! all.isEmpty())
+					s = all.get(0);
+			}
+			if (nn(s))
+				rc.serializer(s);
+			rc.contentType(effContentType);
+		}
+
+		var effAccept = firstNonEmpty(rom.getAccept(), rm.getAccept());
+
+		// Constant headers (interface-level then method-level, method-level wins on name collisions).  A constant
+		// Content-Type/Accept is dropped when the dedicated contentType/accept attribute is in effect.
+		var methodHeaderNames = new HashSet<String>();
+		rom.getConstantHeaders().forEach(e -> methodHeaderNames.add(e.getKey()));
+		var skipContentType = ine(effContentType);
+		var skipAccept = ine(effAccept);
+		rm.getHeaders().forEach(h -> {
+			var n = h.getName();
+			if (methodHeaderNames.contains(n))
+				return;
+			if (skipContentType && "Content-Type".equalsIgnoreCase(n))
+				return;
+			if (skipAccept && "Accept".equalsIgnoreCase(n))
+				return;
+			rc.header(h);
+		});
+		rom.getConstantHeaders().forEach(e -> {
+			if (skipContentType && "Content-Type".equalsIgnoreCase(e.getKey()))
+				return;
+			if (skipAccept && "Accept".equalsIgnoreCase(e.getKey()))
+				return;
+			rc.header(e.getKey(), e.getValue());
+		});
+
+		// Constant query/form-data (interface-level then method-level, method-level wins on name collisions).
+		RemoteProxyUtils.mergeConstants(rm.getQueryData(), rom.getConstantQueryData()).forEach(rc::queryData);
+		RemoteProxyUtils.mergeConstants(rm.getFormData(), rom.getConstantFormData()).forEach(rc::formData);
+
+		// Apply method-level defaults if parameter values are not provided (9.2.0)
+		rom.forEachPathArg(a -> {
+			var val = args[a.getIndex()];
+			if (val == null) {
+				var def = a.getSchema().getDefault();
+				if (def == null)
+					def = rom.getPathDefault(a.getName());
+				if (nn(def))
+					val = def;
+			}
+			rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
+		});
+		rom.forEachQueryArg(a -> {
+			var val = args[a.getIndex()];
+			if (val == null) {
+				var def = a.getSchema().getDefault();
+				if (def == null)
+					def = rom.getQueryDefault(a.getName());
+				if (nn(def))
+					val = def;
+			}
+			rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+		});
+		rom.forEachFormDataArg(a -> {
+			var val = args[a.getIndex()];
+			if (val == null) {
+				var def = a.getSchema().getDefault();
+				if (def == null)
+					def = rom.getFormDataDefault(a.getName());
+				if (nn(def))
+					val = def;
+			}
+			rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+		});
+		rom.forEachHeaderArg(a -> {
+			var val = args[a.getIndex()];
+			if (val == null) {
+				var def = a.getSchema().getDefault();
+				if (def == null)
+					def = rom.getHeaderDefault(a.getName());
+				if (nn(def))
+					val = def;
+			}
+			rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+		});
+
+		var ba = rom.getContentArg();
+		if (nn(ba)) {
+			var val = args[ba.getIndex()];
+			if (val == null) {
+				var def = ba.getSchema().getDefault();
+				if (def == null)
+					def = rom.getContentDefault();
+				if (nn(def))
+					val = def;
+			}
+			rc.content(val, ba.getSchema());
+		} else {
+			var contentDef = rom.getContentDefault();
+			if (nn(contentDef))
+				rc.content(contentDef);
+		}
+
+		rom.forEachRequestArg(rmba -> {
+			var rbm = rmba.getMeta();
+			var bean = args[rmba.getIndex()];
+			if (nn(bean)) {
+				for (var p : rbm.getProperties()) {
+					var val = safeSupplier(() -> p.getGetter().invoke(bean));
+					var pt = p.getPartType();
+					var pn = p.getPartName();
+					var schema = p.getSchema();
+					if (pt == PATH)
+						rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
+					else if (nn(val)) {
+						if (pt == QUERY)
+							rc.queryArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
+						else if (pt == FORMDATA)
+							rc.formDataArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
+						else if (pt == HEADER)
+							rc.headerArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
+						else /* (pt == HttpPartType.BODY) */
+							rc.content(val, schema);
+					}
+				}
+			}
+		});
+
+		// Set the Accept header from the dedicated attribute unless a caller-supplied @Header param already provided one.
+		if (ine(effAccept) && ! rc.containsHeader("Accept"))
+			rc.accept(effAccept);
+
+		// Per-call response/read timeout (method-level overrides interface-level) via a per-call RequestConfig.
+		var effTimeout = firstNonEmpty(rom.getTimeout(), rm.getTimeout());
+		if (ine(effTimeout)) {
+			var ms = getDuration(effTimeout);
+			if (ms > 0) {
+				var base = rc.getConfig();
+				var cb = base != null ? RequestConfig.copy(base) : RequestConfig.custom();
+				rc.config(cb.setSocketTimeout((int)ms).build());
+			}
+		}
+
+		return rc;
+	}
+
+	/**
+	 * Executes a remote-proxy call and processes the return value, applying safe automatic retries when the method
+	 * opts in and all safety gates pass (idempotent verb or {@code retryNonIdempotent}, buffered return mode, and a
+	 * repeatable body).  Mirrors the next-generation engine's {@code RemoteInvocationHandler.processReturn(...)}.
+	 */
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for the gated retry loop (verb/body/status safety gates + backoff)
+		"java:S112"   // throws Exception intentional - reflective remote-proxy dispatch propagates arbitrary declared exceptions
+	})
+	Object executeRemoteWithRetry(String uri, Serializer serializer, Parser parser, Method method, RemoteOperationMeta rom, RemoteMeta rm, Object[] args) throws Exception {
+		var throwOnError = rm.isThrowOnError() || rom.isThrowOnError();
+		var ror = rom.getReturns();
+		var maxRetries = (isRetryableMode(ror, method.getReturnType()) && isRetryableVerb(rom, rm)) ? effectiveRetries(rom, rm) : 0;
+
+		var attempt = 0;
+		while (true) {
+			var rc = buildRemoteRequest(uri, serializer, parser, rom, rm, args);
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(rc::rethrow);
-			if (ror.getReturnValue() == RemoteReturn.NONE) {
-				rc.complete();
-			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {
-				res = rc.complete();
-				int returnCode = res.getStatusCode();
-				var rt = method.getReturnType();
-				if (rt == Integer.class || rt == int.class)
-					ret = returnCode;
-				else if (rt == Boolean.class || rt == boolean.class)
-					ret = returnCode < 400;
-				else
-					throw new RestCallException(res, null, "Invalid return type on method annotated with @RemoteOp(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.");
-			} else if (ror.getReturnValue() == RemoteReturn.BEAN) {
-				rc.ignoreErrors();
+			// The classic run() throws by default on >=400; the proxy replicates NG's throwIfError() instead, so it
+			// always suppresses that generic throw and applies the typed/conditional mapping itself.
+			rc.ignoreErrors();
+
+			// Non-repeatable body: never retry (resending a consumed stream would corrupt the call).
+			var canRetry = maxRetries > 0 && (attempt > 0 || rc.isBodyRepeatable());
+
+			RestResponse res;
+			try {
 				res = rc.run();
-				ret = res.as(ror.getResponseBeanMeta());
-			} else if (ror.getReturnValue() == RemoteReturn.RESPONSE) {
-				res = rc.run();
-				ret = res;
-			} else {
-				var rt = method.getReturnType();
-				if (Throwable.class.isAssignableFrom(rt))
-					rc.ignoreErrors();
-				res = rc.run();
-				Object v = res.getContent().as(ror.getReturnType());
-				if (v == null && rt.isPrimitive())
-					v = ClassInfo.of(rt).getPrimitiveDefault();
-				ret = v;
+			} catch (RestCallException e) {
+				// A transport failure (IOException cause) is retryable; a reconstructed server exception is not
+				// caught here (it is not a RestCallException).
+				if (canRetry && attempt < maxRetries && e.getCause() instanceof IOException) {
+					attempt++;
+					backoff(attempt);
+					continue;
+				}
+				Throwable t = e.getCause();
+				if (t instanceof RuntimeException t2)
+					throw t2;
+				if (t instanceof Exception t2) {
+					for (var t3 : method.getExceptionTypes())
+						if (t3.isInstance(t2))
+							throw t2;
+				}
+				throw toRex(e);
 			}
-			return ret;
-		} catch (RestCallException e) {
-			Throwable t = e.getCause();
-			if (t instanceof RuntimeException t2)
-				throw t2;
-			if (t instanceof Exception t2) {
-				for (var t3 : method.getExceptionTypes())
-					if (t3.isInstance(t2))
-						throw t2;
+
+			if (canRetry && attempt < maxRetries && isRetryableStatus(res.getStatusCode())) {
+				res.close();
+				attempt++;
+				backoff(attempt);
+				continue;
 			}
-			// If cause is an Error that matches method's exception types, preserve it in RestCallException
-			// The InvocationHandler will unwrap it and rethrow the original Error
-			throw toRex(e);
+
+			return materializeRemote(res, method, rom, throwOnError);
+		}
+	}
+
+	/**
+	 * Materializes the terminal return value from an already-run response, applying the typed-exception /
+	 * conditional-throw error mapping (mirrors the next-generation engine's {@code throwIfError} +
+	 * {@code materializeResponse}).
+	 */
+	@SuppressWarnings({
+		"java:S112" // throws Exception intentional - reflective remote-proxy dispatch propagates arbitrary declared exceptions
+	})
+	Object materializeRemote(RestResponse res, Method method, RemoteOperationMeta rom, boolean throwOnError) throws Exception {
+		var ror = rom.getReturns();
+		var rv = ror.getReturnValue();
+
+		if (rv == RemoteReturn.NONE) {
+			res.close();
+			return null;
+		}
+		if (rv == RemoteReturn.STATUS) {
+			var sc = res.getStatusCode();
+			var rt = method.getReturnType();
+			res.close();
+			if (rt == Integer.class || rt == int.class)
+				return sc;
+			if (rt == Boolean.class || rt == boolean.class)
+				return sc < 400;
+			throw new RestCallException(res, null, "Invalid return type on method annotated with @RemoteOp(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.");
+		}
+		if (rv == RemoteReturn.RESPONSE)
+			return res;
+		if (rv == RemoteReturn.BEAN) {
+			throwRemoteError(res, method, throwOnError);
+			return res.as(ror.getResponseBeanMeta());
+		}
+		// BODY (default)
+		throwRemoteError(res, method, throwOnError);
+		var rt = method.getReturnType();
+		Object v = res.getContent().as(ror.getReturnType());
+		if (v == null && rt.isPrimitive())
+			v = ClassInfo.of(rt).getPrimitiveDefault();
+		return v;
+	}
+
+	/**
+	 * Maps an error HTTP status (&ge;400) to a typed exception declared in the method's {@code throws} clause (a
+	 * {@link org.apache.juneau.http.response.BasicHttpException} subtype whose {@code STATUS_CODE} matches), else
+	 * conditionally throws a generic exception when {@code throwOnError} is set, else lets the error body flow through
+	 * as the return value.  Mirrors the next-generation engine's {@code throwIfError(...)}.
+	 */
+	void throwRemoteError(RestResponse res, Method method, boolean throwOnError) throws Exception {
+		var sc = res.getStatusCode();
+		if (sc < 400)
+			return;
+		for (var et : method.getExceptionTypes()) {
+			if (org.apache.juneau.http.response.BasicHttpException.class.isAssignableFrom(et) && httpStatusCode(et) == sc) {
+				var body = res.getContent().asString();
+				res.close();
+				throw (org.apache.juneau.http.response.BasicHttpException) instantiateHttpType(et, body);
+			}
+		}
+		if (throwOnError) {
+			var body = res.getContent().asString();
+			res.close();
+			throw new org.apache.juneau.http.response.BasicHttpException(sc, body);
+		}
+		// else: let the error body flow through as the return value (parity with NG throwOnError=false).
+	}
+
+	/** Returns the static {@code STATUS_CODE} field of an HTTP response/exception type, or {@code -1} if absent. */
+	private static int httpStatusCode(Class<?> c) {
+		try {
+			return c.getField("STATUS_CODE").getInt(null);
+		} catch (ReflectiveOperationException e) {
+			return -1;
+		}
+	}
+
+	/** Instantiates an HTTP response/exception bean, preferring a {@code (String body)} constructor. */
+	private static Object instantiateHttpType(Class<?> c, String body) {
+		try {
+			try {
+				return c.getConstructor(String.class).newInstance(body);
+			} catch (NoSuchMethodException e) {
+				return c.getConstructor().newInstance();
+			}
+		} catch (ReflectiveOperationException e) {
+			throw rex(e, "Could not instantiate HTTP response/exception type %s", c.getName());
+		}
+	}
+
+	/** Returns <jk>true</jk> if the return mode/type is a buffered (retryable) shape, not a streaming/wrapper one. */
+	private static boolean isRetryableMode(RemoteOperationReturn ror, Class<?> returnType) {
+		if (ror.getReturnValue() == RemoteReturn.RESPONSE)
+			return false;
+		if (ror.isFuture() || ror.isCompletableFuture())
+			return false;
+		return ! (returnType == InputStream.class || returnType == Reader.class || returnType == Optional.class);
+	}
+
+	/** Returns <jk>true</jk> if the verb may auto-retry: idempotent verbs always, POST/PATCH only when opted in. */
+	private static boolean isRetryableVerb(RemoteOperationMeta rom, RemoteMeta rm) {
+		if (isOneOf(rom.getHttpMethod(), "GET", "PUT", "DELETE", "HEAD"))
+			return true;
+		return rom.isRetryNonIdempotent() || rm.isRetryNonIdempotent();
+	}
+
+	/** Returns the effective retry count: a positive method-level value overrides the interface-level default. */
+	private static int effectiveRetries(RemoteOperationMeta rom, RemoteMeta rm) {
+		return rom.getRetries() > 0 ? rom.getRetries() : rm.getRetries();
+	}
+
+	/** Retryable HTTP statuses: {@code 429} (Too Many Requests) and all {@code 5xx} server errors. */
+	private static boolean isRetryableStatus(int statusCode) {
+		return statusCode == 429 || statusCode >= 500;
+	}
+
+	/** Sleeps a short exponential backoff ({@code 50ms * 2^(attempt-1)}, capped at {@code 1s}) before a retry. */
+	private static void backoff(int attempt) {
+		try {
+			Thread.sleep(Math.min(50L << (attempt - 1), 1000L));
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		}
 	}
 

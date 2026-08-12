@@ -18,9 +18,12 @@ package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -158,6 +161,92 @@ class ResponseHeader_Test extends TestBase {
 		try (var resp = response(TransportResponse.builder().header("X-Foo", "bar"))) {
 			assertEquals("X-Foo: bar", resp.header("X-Foo").toString());
 			assertEquals("X-Missing: <absent>", resp.header("X-Missing").toString());
+		}
+	}
+
+	// ==========================================================================
+	// f — typed-wrapper convenience accessors (mirror classic asXxxHeader() family)
+	// ==========================================================================
+
+	@Test void f01_asBoolean_valid() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("X-Flag", " true "))) {
+			assertEquals(Optional.of(true), resp.header("X-Flag").asBoolean());
+		}
+	}
+
+	@Test void f02_asBoolean_absentIsFalseValued() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("X-Flag", "not-a-boolean"))) {
+			// Boolean.parseBoolean() treats any non-"true" value as false rather than throwing.
+			assertEquals(Optional.of(false), resp.header("X-Flag").asBoolean());
+			assertEquals(Optional.empty(), resp.header("X-Missing").asBoolean());
+		}
+	}
+
+	@Test void f03_asZonedDateTime_valid() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("Last-Modified", "Sun, 06 Nov 1994 08:49:37 GMT"))) {
+			var zdt = resp.header("Last-Modified").asZonedDateTime();
+			assertTrue(zdt.isPresent());
+			assertEquals(1994, zdt.get().getYear());
+		}
+	}
+
+	@Test void f04_asZonedDateTime_absentOrUnparseable() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("Last-Modified", "not-a-date"))) {
+			assertEquals(Optional.empty(), resp.header("Last-Modified").asZonedDateTime());
+			assertEquals(Optional.empty(), resp.header("X-Missing").asZonedDateTime());
+		}
+	}
+
+	@Test void f05_asUri_valid() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("Location", "http://example.com/foo"))) {
+			assertEquals(Optional.of(URI.create("http://example.com/foo")), resp.header("Location").asUri());
+		}
+	}
+
+	@Test void f06_asUri_absentOrUnparseable() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("Location", "http://[bad"))) {
+			assertEquals(Optional.empty(), resp.header("Location").asUri());
+			assertEquals(Optional.empty(), resp.header("X-Missing").asUri());
+		}
+	}
+
+	@Test void f07_asEntityTag_valid() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("ETag", "\"abc123\""))) {
+			var et = resp.header("ETag").asEntityTag();
+			assertTrue(et.isPresent());
+			assertEquals("abc123", et.get().getEntityValue());
+		}
+	}
+
+	@Test void f08_asEntityTag_absentOrUnparseable() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("ETag", "unquoted"))) {
+			assertEquals(Optional.empty(), resp.header("ETag").asEntityTag());
+			assertEquals(Optional.empty(), resp.header("X-Missing").asEntityTag());
+		}
+	}
+
+	@Test void f09_asEntityTags_valid() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("If-Match", "\"a\", \"b\""))) {
+			assertEquals(2, resp.header("If-Match").asEntityTags().toList().size());
+		}
+	}
+
+	@Test void f10_asEntityTags_absentIsEmpty() throws Exception {
+		try (var resp = response(TransportResponse.builder())) {
+			assertSame(EntityTags.EMPTY, resp.header("X-Missing").asEntityTags());
+		}
+	}
+
+	@Test void f11_asStringRanges_valid() throws Exception {
+		try (var resp = response(TransportResponse.builder().header("Accept-Encoding", "gzip;q=1.0, identity;q=0.5"))) {
+			var ranges = resp.header("Accept-Encoding").asStringRanges();
+			assertEquals(2, ranges.toList().size());
+		}
+	}
+
+	@Test void f12_asStringRanges_absentIsEmpty() throws Exception {
+		try (var resp = response(TransportResponse.builder())) {
+			assertSame(StringRanges.EMPTY, resp.header("X-Missing").asStringRanges());
 		}
 	}
 }

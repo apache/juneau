@@ -163,7 +163,28 @@ public class PathReaderBuilder {
 	 * @return This object for method chaining.
 	 */
 	public PathReaderBuilder allowNoFile() {
-		this.allowNoFile = true;
+		return allowNoFile(true);
+	}
+
+	/**
+	 * Enables or disables handling of missing files by returning an empty reader instead of throwing an exception.
+	 *
+	 * <p>
+	 * Boolean-arg form of {@link #allowNoFile()}, useful when the setting is conditional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
+	 * 		.path(Paths.get(<js>"optional.txt"</js>))
+	 * 		.allowNoFile(<jv>isOptional</jv>)
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param value <jk>true</jk> to return an empty reader when the file is missing.
+	 * @return This object for method chaining.
+	 */
+	public PathReaderBuilder allowNoFile(boolean value) {
+		this.allowNoFile = value;
 		return this;
 	}
 

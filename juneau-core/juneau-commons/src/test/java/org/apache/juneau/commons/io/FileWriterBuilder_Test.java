@@ -214,6 +214,21 @@ class FileWriterBuilder_Test extends TestBase {
 		assertEquals("test", content);
 	}
 
+	@Test void g03_filePath() throws IOException {
+		try (var writer = FileWriterBuilder.create()
+			.file(TEST_FILE)
+			.build()) {
+			writer.write("test");
+		}
+		var content = Files.readString(TEST_FILE);
+		assertEquals("test", content);
+	}
+
+	@Test void g04_filePath_null() {
+		var builder = FileWriterBuilder.create().file((Path)null);
+		assertThrows(IllegalArgumentException.class, builder::build);
+	}
+
 	//====================================================================================================
 	// Chaining tests
 	//====================================================================================================
@@ -228,6 +243,51 @@ class FileWriterBuilder_Test extends TestBase {
 			writer.write("test");
 		}
 		var content = Files.readString(TEST_FILE, StandardCharsets.UTF_8);
+		assertEquals("test", content);
+	}
+
+	//====================================================================================================
+	// append(boolean) / buffered(boolean) tests
+	//====================================================================================================
+	@Test void i01_appendBoolean_true() throws IOException {
+		var file = TEST_FILE.toFile();
+		try (var writer = FileWriterBuilder.create(file).build()) {
+			writer.write("initial");
+		}
+		try (var writer = FileWriterBuilder.create(file).append(true).build()) {
+			writer.write("appended");
+		}
+		var content = Files.readString(TEST_FILE);
+		assertEquals("initialappended", content);
+	}
+
+	@Test void i02_appendBoolean_false() throws IOException {
+		var file = TEST_FILE.toFile();
+		try (var writer = FileWriterBuilder.create(file).build()) {
+			writer.write("initial");
+		}
+		try (var writer = FileWriterBuilder.create(file).append(false).build()) {
+			writer.write("overwritten");
+		}
+		var content = Files.readString(TEST_FILE);
+		assertEquals("overwritten", content);
+	}
+
+	@Test void i03_bufferedBoolean_true() throws IOException {
+		var file = TEST_FILE.toFile();
+		try (var writer = FileWriterBuilder.create(file).buffered(true).build()) {
+			writer.write("test");
+		}
+		var content = Files.readString(TEST_FILE);
+		assertEquals("test", content);
+	}
+
+	@Test void i04_bufferedBoolean_false() throws IOException {
+		var file = TEST_FILE.toFile();
+		try (var writer = FileWriterBuilder.create(file).buffered(false).build()) {
+			writer.write("test");
+		}
+		var content = Files.readString(TEST_FILE);
 		assertEquals("test", content);
 	}
 }

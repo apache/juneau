@@ -112,4 +112,16 @@ class PathReaderBuilder_Test extends TestBase {
 		}
 		assertEquals("files/Test3.properties", p.get("file"));
 	}
+
+	@Test void a08_allowNoFileBoolean_true() throws IOException {
+		final var p = new Properties();
+		try (Reader r = PathReaderBuilder.create().allowNoFile(true).build()) {
+			p.load(new StringReader(read(r, Files.size(PATH))));
+		}
+		assertNull(p.get("file"));
+	}
+
+	@Test void a09_allowNoFileBoolean_false() {
+		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().allowNoFile(false).build());
+	}
 }

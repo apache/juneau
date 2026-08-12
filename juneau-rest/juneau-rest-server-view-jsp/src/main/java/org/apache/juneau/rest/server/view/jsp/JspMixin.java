@@ -21,6 +21,7 @@ import java.io.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.view.*;
 
 /**
  * Mixin that wires JSP view-rendering onto any Juneau REST resource.
@@ -168,7 +169,14 @@ public class JspMixin {
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
 	public static final String DEFAULT_BASE_PATH = JspDispatcher.DEFAULT_BASE_PATH;
 
+	/**
+	 * Default cache-templates setting &mdash; {@code true}. Reported for
+	 * {@link ViewMixinBuilder} conformance only; see {@link Builder#cacheTemplates(boolean)}.
+	 */
+	public static final boolean DEFAULT_CACHE_TEMPLATES = true;
+
 	private final JspDispatcher worker;
+	private final boolean cacheTemplates;
 
 	/**
 	 * Creates a new builder.
@@ -197,6 +205,7 @@ public class JspMixin {
 	 */
 	protected JspMixin(Builder builder) {
 		worker = builder.worker.build();
+		cacheTemplates = builder.cacheTemplates;
 	}
 
 	/**
@@ -211,6 +220,20 @@ public class JspMixin {
 	 */
 	public String getBasePath() {
 		return worker.getBasePath();
+	}
+
+	/**
+	 * Returns the configured cache-templates flag.
+	 *
+	 * <p>
+	 * Reported for {@link ViewMixinBuilder} conformance only &mdash; JSP recompilation is
+	 * delegated entirely to the servlet container (see {@link Builder#cacheTemplates(boolean)}
+	 * for the full caveat).
+	 *
+	 * @return The cache flag. Defaults to {@link #DEFAULT_CACHE_TEMPLATES}.
+	 */
+	public boolean isCacheTemplates() {
+		return cacheTemplates;
 	}
 
 	/**
@@ -250,10 +273,14 @@ public class JspMixin {
 	 * <p>
 	 * Mirrors {@link JspDispatcher.Builder}'s configuration methods on its own surface and forwards
 	 * each call into a held {@link JspDispatcher.Builder} (§2.3.1 worker-bean composition).
+	 * Implements {@link ViewMixinBuilder} so {@link #basePath(String)} is guaranteed to transfer
+	 * to the sibling Thymeleaf / Mustache / FreeMarker bridge builders; see
+	 * {@link #cacheTemplates(boolean)} for this bridge's no-op conformance caveat.
 	 */
-	public static class Builder {
+	public static class Builder implements ViewMixinBuilder<Builder> {
 
 		private final JspDispatcher.Builder worker = JspDispatcher.create();
+		private boolean cacheTemplates = DEFAULT_CACHE_TEMPLATES;
 
 		/** Constructor &mdash; package access for {@link JspMixin#create()}. */
 		protected Builder() {}
@@ -270,8 +297,32 @@ public class JspMixin {
 		 * 	{@link JspMixin#DEFAULT_BASE_PATH}.
 		 * @return This object.
 		 */
+		@Override /* ViewMixinBuilder */
 		public Builder basePath(String value) {
 			worker.basePath(value);
+			return this;
+		}
+
+		/**
+		 * Accepted for {@link ViewMixinBuilder} conformance; has <b>no effect</b> on the JSP
+		 * bridge.
+		 *
+		 * <p>
+		 * JSP recompilation is delegated entirely to the servlet container via
+		 * {@code RequestDispatcher.forward(...)} &mdash; there is no bridge-owned template
+		 * cache to disable. Containers manage their own JSP recompilation policy (e.g. Tomcat's
+		 * Jasper {@code development} / {@code modificationTestInterval} servlet-init-params,
+		 * or Jetty's equivalent) outside this bridge's control. The value is stored and
+		 * reported back by {@link #isCacheTemplates()} / {@link JspMixin#isCacheTemplates()}
+		 * purely so callers coding against the shared {@link ViewMixinBuilder} contract get a
+		 * consistent round-trip, not because it changes rendering behavior.
+		 *
+		 * @param value The cache flag (recorded only; see above).
+		 * @return This object.
+		 */
+		@Override /* ViewMixinBuilder */
+		public Builder cacheTemplates(boolean value) {
+			cacheTemplates = value;
 			return this;
 		}
 
@@ -282,6 +333,19 @@ public class JspMixin {
 		 */
 		public String getBasePath() {
 			return worker.getBasePath();
+		}
+
+		/**
+		 * Reads the current cache-templates setting (test/inspection helper).
+		 *
+		 * <p>
+		 * See {@link #cacheTemplates(boolean)} &mdash; this bridge has no template cache to
+		 * report on; the value is whatever was last recorded.
+		 *
+		 * @return The cache flag.
+		 */
+		public boolean isCacheTemplates() {
+			return cacheTemplates;
 		}
 
 		/**

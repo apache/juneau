@@ -331,6 +331,27 @@ class Swagger_Test extends TestBase {
 			assertDoesNotThrow(() -> x.setResponses((Map<String,ResponseInfo>)null));
 			assertDoesNotThrow(() -> x.setSecurityDefinitions((Map<String,SecurityScheme>)null));
 		}
+
+		@Test void a23_addOperation() {
+			// addOperation() is a distinctly-named convenience that behaves identically to addPath(path,method,Operation).
+			var x = bean()
+				.addOperation("/pets", "get", operation().setSummary("list pets"))
+				.addOperation("/pets", "post", operation().setSummary("create pet"));
+
+			assertBean(x.getOperation("/pets", "get"), "summary", "list pets");
+			assertBean(x.getOperation("/pets", "post"), "summary", "create pet");
+
+			var expected = bean().addPath("/pets", "get", operation().setSummary("list pets")).addPath("/pets", "post", operation().setSummary("create pet"));
+			assertEquals(expected.toString(), x.toString());
+		}
+
+		@Test void a24_addOperation_nullParameters() {
+			var x = bean();
+			var operation = operation();
+			assertThrows(IllegalArgumentException.class, ()->x.addOperation(null, "get", operation));
+			assertThrows(IllegalArgumentException.class, ()->x.addOperation("a", null, operation));
+			assertThrows(IllegalArgumentException.class, ()->x.addOperation("a", "get", null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

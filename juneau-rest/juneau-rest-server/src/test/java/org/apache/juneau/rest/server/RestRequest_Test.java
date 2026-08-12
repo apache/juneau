@@ -17,12 +17,17 @@
 package org.apache.juneau.rest.server;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.lang.reflect.*;
+
+import org.apache.juneau.rest.server.staticfile.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Tests for the {@code content} URL-parameter body-override method restriction in {@link RestRequest}, exercised
- * via the package-private {@link RestRequest#isContentParamMethod(String)} helper.
+ * via the package-private {@link RestRequest#isContentParamMethod(String)} helper, and for small
+ * {@code getContext().getXxx()}-style convenience delegates on {@link RestRequest}.
  *
  * @since 10.0.0
  */
@@ -51,5 +56,23 @@ class RestRequest_Test {
 
 	@Test void a05_null_isRejected() {
 		assertFalse(RestRequest.isContentParamMethod(null));
+	}
+
+	// -----------------------------------------------------------------------------------------
+	// b — getStaticFiles() (delegate to RestContext#getStaticFiles())
+	// -----------------------------------------------------------------------------------------
+
+	@SuppressWarnings("resource") // Mockito mocks; nothing to close.
+	@Test void b01_getStaticFiles_delegatesToContext() throws Exception {
+		var context = mock(RestContext.class);
+		var staticFiles = mock(StaticFiles.class);
+		when(context.getStaticFiles()).thenReturn(staticFiles);
+
+		var req = mock(RestRequest.class, CALLS_REAL_METHODS);
+		Field f = RestRequest.class.getDeclaredField("context");
+		f.setAccessible(true);
+		f.set(req, context);
+
+		assertSame(staticFiles, req.getStaticFiles());
 	}
 }

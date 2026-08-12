@@ -60,6 +60,6 @@ public class HtdocMixin extends RestMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getHtdoc(RestRequest req, @Path("/*") String path, Locale locale) throws NotFound {
-		return req.getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
+		return req.getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 }

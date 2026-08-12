@@ -263,6 +263,41 @@ public class LocalFile {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this file exists, without throwing an exception.
+	 *
+	 * <p>
+	 * For classpath files, existence is checked via {@link Class#getResource(String)}.
+	 * For file system files, existence is checked via {@link Files#exists(Path, LinkOption...)}.
+	 * A previously {@link #cache() cached} file is always considered to exist.
+	 *
+	 * <p>
+	 * This is a convenience method for the common classpath-or-file-system fallback pattern, where
+	 * callers need to check for existence before deciding whether to call {@link #read()} (which
+	 * throws an {@link IOException} if the file is missing).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	LocalFile <jv>file</jv> = <jk>new</jk> LocalFile(MyClass.<jk>class</jk>, <js>"optional.properties"</js>);
+	 * 	<jk>if</jk> (<jv>file</jv>.exists()) {
+	 * 		<jk>try</jk> (InputStream <jv>is</jv> = <jv>file</jv>.read()) {
+	 * 			<jc>// Process stream</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this file exists.
+	 */
+	public boolean exists() {
+		synchronized (this) {
+			if (nn(cache))
+				return true;
+		}
+		if (nn(clazz))
+			return clazz.getResource(clazzPath) != null;
+		return Files.exists(path);
+	}
+
+	/**
 	 * Returns the size of this file in bytes.
 	 *
 	 * <p>

@@ -32,6 +32,16 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  */
 public class VersionRange {
 
+	/**
+	 * Static creator.
+	 *
+	 * @param range The range string to parse (e.g. <js>"1.2"</js> or <js>"[1.0,2.0)"</js>).  Must not be <jk>null</jk>.
+	 * @return A new {@link VersionRange} object.
+	 */
+	public static VersionRange of(String range) {
+		return new VersionRange(range);
+	}
+
 	private final Version minVersion;
 	private final Version maxVersion;
 	private final boolean minExclusive;

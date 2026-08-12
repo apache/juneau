@@ -81,7 +81,7 @@ import org.apache.juneau.rest.server.*;
  *
  * <ul class='spaced-list'>
  * 	<li>GET hits the active {@link StaticFiles} bean (resolved via
- * 		{@link RestContext#getStaticFiles()}); missing paths surface as
+ * 		{@link RestRequest#getStaticFiles()}); missing paths surface as
  * 		{@link NotFound} thrown from the handler.
  * 	<li>{@code HEAD} requests are accepted via the standard servlet
  * 		{@code HEAD}-via-{@code GET} contract: the response carries identical headers to the
@@ -137,7 +137,7 @@ public class StaticFilesMixin {
 	 * {@link StaticFiles#resolve(String,Locale) StaticFiles.resolve(...)} so localized lookups
 	 * (e.g. {@code styles_fr.css}) work out of the box.
 	 *
-	 * @param req The current REST request &mdash; supplies {@link RestContext#getStaticFiles()}.
+	 * @param req The current REST request &mdash; supplies {@link RestRequest#getStaticFiles()}.
 	 * @param path The trailing remainder after the mount prefix (the file path within the
 	 * 	{@code static/} or {@code htdocs/} classpath / filesystem search roots).
 	 * @param locale The request locale (used for localized resource lookups).
@@ -151,7 +151,7 @@ public class StaticFilesMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getStaticFile(RestRequest req, @Path("/*") String path, Locale locale) {
-		return req.getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
+		return req.getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class StaticFilesMixin {
 	 * at the response-processor layer based on {@link RestRequest#getMethod()}, so this handler can
 	 * delegate to {@link #getStaticFile} verbatim.
 	 *
-	 * @param req The current REST request &mdash; supplies {@link RestContext#getStaticFiles()}.
+	 * @param req The current REST request &mdash; supplies {@link RestRequest#getStaticFiles()}.
 	 * @param path The trailing remainder after the mount prefix.
 	 * @param locale The request locale (used for localized resource lookups).
 	 * @return The matching {@link HttpResource} (with headers; body suppressed by the processor).

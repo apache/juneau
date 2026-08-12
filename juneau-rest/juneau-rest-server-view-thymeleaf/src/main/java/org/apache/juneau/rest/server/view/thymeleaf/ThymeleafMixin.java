@@ -21,6 +21,7 @@ import java.io.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.view.*;
 import org.thymeleaf.*;
 import org.thymeleaf.templatemode.*;
 
@@ -258,9 +259,11 @@ public class ThymeleafMixin {
 	 * <p>
 	 * Mirrors {@link ThymeleafDispatcher.Builder}'s configuration methods on its own surface and
 	 * forwards each call into a held {@link ThymeleafDispatcher.Builder} (§2.3.1 worker-bean
-	 * composition).
+	 * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and
+	 * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Mustache /
+	 * FreeMarker bridge builders.
 	 */
-	public static class Builder {
+	public static class Builder implements ViewMixinBuilder<Builder> {
 
 		private final ThymeleafDispatcher.Builder worker = ThymeleafDispatcher.create();
 
@@ -278,6 +281,7 @@ public class ThymeleafMixin {
 		 * 	{@link ThymeleafMixin#DEFAULT_BASE_PATH}.
 		 * @return This object.
 		 */
+		@Override /* ViewMixinBuilder */
 		public Builder basePath(String value) {
 			worker.basePath(value);
 			return this;
@@ -295,6 +299,7 @@ public class ThymeleafMixin {
 		 * @param value The new value.
 		 * @return This object.
 		 */
+		@Override /* ViewMixinBuilder */
 		public Builder cacheTemplates(boolean value) {
 			worker.cacheTemplates(value);
 			return this;

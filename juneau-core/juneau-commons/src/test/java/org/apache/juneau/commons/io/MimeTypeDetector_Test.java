@@ -485,4 +485,28 @@ class MimeTypeDetector_Test {
 		assertEquals("image/png", detector.getContentType("test.png"));
 		assertEquals("application/json", detector.getContentType("test.json"));
 	}
+
+	@Test
+	void a32_addNioContentBasedDetection_zeroArg() throws IOException {
+		Path testFile = tempDir.resolve("test.txt");
+		Files.write(testFile, "Hello World".getBytes());
+
+		var detector = MimeTypeDetector.builder()
+			.addNioContentBasedDetection()
+			.build();
+
+		String mimeType = detector.getContentType(testFile.toString());
+		assertNotNull(mimeType);
+		assertTrue(mimeType.startsWith("text/"));
+	}
+
+	@Test
+	void a33_setCacheLogOnExit_zeroArg() {
+		var detector = MimeTypeDetector.builder()
+			.setCacheLogOnExit()
+			.build();
+
+		// This should not throw an exception
+		assertNotNull(detector);
+	}
 }
