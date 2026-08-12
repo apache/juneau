@@ -63,6 +63,7 @@
     "60": 1,
     "61": 1,
     "62": 1,
+    "63": 1,
     "JuneauExamples": 1,
     "JuneauMicroserviceTomcat": 1,
     "JuneauPetstore": 1,
@@ -77,6 +78,6 @@
   "source_types": {
     "api-metadata": 16,
     "release-note": 85,
-    "topic": 406
+    "topic": 407
   }
 }
