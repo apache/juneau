@@ -90,7 +90,6 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-microservice-tomcat](/docs/topics/JuneauMicroserviceTomcat) | Tomcat-embedded microservice launcher. |
 | **juneau-sc** | |
 | [juneau-sc-server](/docs/topics/ScServerOverview) | Centralized configuration server exposing juneau-config files over REST. |
-| [juneau-sc-client](/docs/topics/ScClientOverview) | Client for fetching configuration from a juneau-sc-server instance. |
 | **juneau-shaded** | |
 | [juneau-shaded-core](/docs/topics/JuneauShadedCore) | Shaded uber-jar of the juneau-core modules for zero-conflict dependency management. |
 | [juneau-shaded-rest-client](/docs/topics/JuneauShadedRestClient) | Shaded uber-jar of juneau-rest-client and its dependencies. |

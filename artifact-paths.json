@@ -74,7 +74,6 @@
   "juneau-rest-server-view-mustache": "juneau-rest/juneau-rest-server-view-mustache",
   "juneau-rest-server-view-thymeleaf": "juneau-rest/juneau-rest-server-view-thymeleaf",
   "juneau-sc": "juneau-sc",
-  "juneau-sc-client": "juneau-sc/juneau-sc-client",
   "juneau-sc-server": "juneau-sc/juneau-sc-server",
   "juneau-shaded": "juneau-shaded",
   "juneau-shaded-all": "juneau-shaded/juneau-shaded-all",

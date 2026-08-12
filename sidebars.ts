@@ -2180,11 +2180,6 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/18.01.ScServerOverview',
 							label: '18.1. juneau-sc-server',
 						},
-						{
-							type: 'doc',
-							id: 'topics/18.02.ScClientOverview',
-							label: '18.2. juneau-sc-client',
-						},
 					],
 					link: {
 						type: 'doc',
