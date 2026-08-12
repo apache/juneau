@@ -32,7 +32,6 @@
 
 	<modules>
 		<module>juneau-sc-server</module>
-		<module>juneau-sc-client</module>
 	</modules>
 
 	<build>
