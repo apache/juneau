@@ -52,16 +52,24 @@ Arguments:
             Paths can be absolute or relative to the repo root.
 
 Options:
-    --run, -r       Re-run the owning module's tests before reporting
-                    (refreshes that module's .exec; other modules' existing
-                    execs are still merged in).
-    --branches, -b  Show only lines with missed branches (default: show all uncovered).
-    --help, -h      Show this help message.
+    --run, -r         Re-run the owning module's tests before reporting
+                      (refreshes that module's .exec; other modules' existing
+                      execs are still merged in).
+    --branches, -b    Show only lines with missed branches (default: show all uncovered).
+    --by-module       Print a per-module HTT-adjusted summary table (module, file
+                      count, branch %, missed branches, instruction %, missed
+                      instructions, HTT-excluded line count) sorted by branch %
+                      ascending, with a TOTAL row -- instead of reporting a single
+                      path. Uses whichever module target/jacoco.exec files already
+                      exist on disk; run the test suite first (e.g.
+                      `mvn clean test -Drat.skip=true`) if none are found.
+    --help, -h        Show this help message.
 
 Examples:
     ./scripts/coverage.py juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/conversion/
     ./scripts/coverage.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/marshall/BitSetFormat.java
     ./scripts/coverage.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/marshall/BitSetFormat.java --run
+    ./scripts/coverage.py --by-module
 """
 
 from __future__ import annotations
@@ -486,6 +494,124 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
         print()
 
 
+def index_module_sources(modules: list[Path]) -> dict[str, Path]:
+    """
+    Build a {"pkg/name/File.java": owning module Path} index across every given module's
+    src/main/java tree, used by by_module_report to attribute a JaCoCo package+sourcefile
+    entry (which carries no module identity of its own) back to its owning module.
+    """
+    index: dict[str, Path] = {}
+    for m in modules:
+        src = m / "src" / "main" / "java"
+        if not src.is_dir():
+            continue
+        for f in src.rglob("*.java"):
+            index[f.relative_to(src).as_posix()] = m
+    return index
+
+
+def by_module_report(xml_path: Path):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for XML report parsing and output formatting
+    """
+    Parse xml_path and print one HTT-adjusted coverage row per reactor module (module, file
+    count, branch %, missed branches, instruction %, missed instructions, HTT-excluded line
+    count), sorted by branch % ascending, followed by a TOTAL row. Reuses the same per-line
+    HTT exclusion (find_htt_lines) as the single-path report().
+    """
+    if not xml_path.exists():
+        die(f"JaCoCo report not found at {xml_path}. Run with --run to generate it.")
+
+    modules = discover_modules()
+    module_srcdirs = {m: m / "src" / "main" / "java" for m in modules if (m / "src" / "main" / "java").is_dir()}
+    owner_index = index_module_sources(list(module_srcdirs.keys()))
+
+    tree = ET.parse(xml_path)
+    root = tree.getroot()
+
+    # module -> [file count, mb, cb, mi, ci, htt-excluded line count]
+    stats: dict[Path, list[int]] = {}
+
+    for pkg in root.findall("package"):
+        pkg_name = pkg.get("name", "")
+        for sf in pkg.findall("sourcefile"):
+            fname = sf.get("name", "")
+            owner = owner_index.get(f"{pkg_name}/{fname}")
+            if owner is None:
+                continue  # not attributable to any in-scope module (e.g. excluded module)
+
+            mb = cb = mi = ci = 0
+            for ctr in sf.findall("counter"):
+                t = ctr.get("type")
+                m = int(ctr.get("missed", 0))
+                c = int(ctr.get("covered", 0))
+                if t == "BRANCH":
+                    mb, cb = m, c
+                elif t == "INSTRUCTION":
+                    mi, ci = m, c
+
+            htt_lines = find_htt_lines(pkg_name, fname, [module_srcdirs[owner]])
+            excluded = 0
+            for line in sf.findall("line"):
+                lmb = int(line.get("mb", 0))
+                lcb = int(line.get("cb", 0))
+                lmi = int(line.get("mi", 0))
+                lci = int(line.get("ci", 0))
+                if int(line.get("nr", 0)) in htt_lines and (lmb or lcb or lmi or lci):
+                    mb -= lmb
+                    cb -= lcb
+                    mi -= lmi
+                    ci -= lci
+                    excluded += 1
+
+            row = stats.setdefault(owner, [0, 0, 0, 0, 0, 0])
+            row[0] += 1
+            row[1] += mb
+            row[2] += cb
+            row[3] += mi
+            row[4] += ci
+            row[5] += excluded
+
+    if not stats:
+        print("No JaCoCo data found for any module.")
+        return
+
+    def branch_frac(row):
+        total = row[1] + row[2]
+        return row[2] / total if total else 1.0
+
+    def instr_frac(row):
+        total = row[3] + row[4]
+        return row[4] / total if total else 1.0
+
+    rows = sorted(
+        stats.items(),
+        key=lambda kv: (branch_frac(kv[1]), instr_frac(kv[1]), str(kv[0].relative_to(REPO_ROOT))),
+    )
+
+    names = [str(m.relative_to(REPO_ROOT)) for m, _ in rows] + ["TOTAL"]
+    name_w = max(len(n) for n in names)
+
+    header = f"{'Module':<{name_w}}  {'Files':>6}  {'Branch%':>7}  {'BrMiss':>7}  {'Instr%':>7}  {'InstrMiss':>9}  {'HTT':>5}"
+    print(f"\nPer-module coverage (HTT-adjusted, sorted by branch % ascending):\n")
+    print(header)
+    print("-" * len(header))
+
+    total_files = total_mb = total_cb = total_mi = total_ci = total_htt = 0
+    for module, (files, mb, cb, mi, ci, htt) in rows:
+        name = str(module.relative_to(REPO_ROOT))
+        print(f"{name:<{name_w}}  {files:>6}  {pct(cb, mb + cb):>7}  {mb:>7}  {pct(ci, mi + ci):>7}  {mi:>9}  {htt:>5}")
+        total_files += files
+        total_mb += mb
+        total_cb += cb
+        total_mi += mi
+        total_ci += ci
+        total_htt += htt
+
+    print("-" * len(header))
+    print(f"{'TOTAL':<{name_w}}  {total_files:>6}  {pct(total_cb, total_mb + total_cb):>7}  {total_mb:>7}  "
+          f"{pct(total_ci, total_mi + total_ci):>7}  {total_mi:>9}  {total_htt:>5}")
+    print()
+
+
 def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code for success
     args = sys.argv[1:]
     if not args or "--help" in args or "-h" in args:
@@ -495,16 +621,28 @@ def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code 
     path_arg = None
     do_run = False
     branches_only = False
+    by_module = False
 
     for arg in args:
         if arg in ("--run", "-r"):
             do_run = True
         elif arg in ("--branches", "-b"):
             branches_only = True
+        elif arg == "--by-module":
+            by_module = True
         elif arg.startswith("-"):
             die(f"Unknown option: {arg}")
         else:
             path_arg = arg
+
+    if by_module:
+        if do_run:
+            print("Note: --run has no effect with --by-module (it only refreshes a single module's "
+                  "tests). Run the full reactor test suite yourself first if needed, e.g. "
+                  "`mvn clean test -Drat.skip=true`.")
+        xml_path = generate_combined_report()
+        by_module_report(xml_path)
+        return 0
 
     if not path_arg:
         die("No path specified.")

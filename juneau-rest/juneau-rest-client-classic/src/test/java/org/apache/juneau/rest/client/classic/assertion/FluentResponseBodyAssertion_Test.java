@@ -61,9 +61,13 @@ class FluentResponseBodyAssertion_Test {
 		server.createContext("/broken", exchange -> {
 			// Declares far more bytes than are actually written, then closes the connection early so the
 			// client's read of the entity content fails with a connection-closed IOException mid-stream.
+			// The explicit flush() forces the partial body onto the wire before close() (which itself throws
+			// because the declared length wasn't fully written); without it, some JDKs (e.g. 25) tear the
+			// connection down before anything is sent, producing NoHttpResponseException instead.
 			exchange.getResponseHeaders().add("Content-Type", "text/plain");
 			exchange.sendResponseHeaders(200, 10_000);
 			exchange.getResponseBody().write("short".getBytes(StandardCharsets.UTF_8));
+			exchange.getResponseBody().flush();
 			exchange.close();
 		});
 		server.start();

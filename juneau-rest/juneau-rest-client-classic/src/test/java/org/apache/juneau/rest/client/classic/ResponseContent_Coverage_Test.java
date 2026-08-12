@@ -61,8 +61,12 @@ class ResponseContent_Coverage_Test {
 			exchange.getResponseHeaders().add("Content-Type", "text/plain");
 			// Declares a larger Content-Length than the bytes actually written, so reading the full declared length
 			// triggers an IOException partway through -- exercises asString()/toString()'s catch(IOException) branch.
+			// The explicit flush() forces the partial body onto the wire before close() (which itself throws
+			// because the declared length wasn't fully written); without it, some JDKs (e.g. 25) tear the
+			// connection down before anything is sent, producing NoHttpResponseException instead.
 			exchange.sendResponseHeaders(200, body.length + 1000);
 			exchange.getResponseBody().write(body);
+			exchange.getResponseBody().flush();
 			exchange.close();
 		});
 		server.start();
