@@ -23,8 +23,7 @@ package org.apache.juneau.http.header;
  * Request precondition on entity tags.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  *
  * @since 9.2.1
  */

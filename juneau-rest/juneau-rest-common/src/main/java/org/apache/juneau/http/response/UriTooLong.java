@@ -27,8 +27,7 @@ import org.apache.juneau.http.*;
  * The URI provided was too long for the server to process.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *

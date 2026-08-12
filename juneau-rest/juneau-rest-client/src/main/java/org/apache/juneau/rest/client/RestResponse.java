@@ -30,8 +30,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * Callers <b>must</b> close this response (it implements {@link Closeable}) to release transport resources.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *
@@ -54,8 +53,7 @@ public final class RestResponse implements Closeable {
 	 * Returns the client that produced this response.
 	 *
 	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
-	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
 	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
 	 * (and possibly earlier).
 	 *

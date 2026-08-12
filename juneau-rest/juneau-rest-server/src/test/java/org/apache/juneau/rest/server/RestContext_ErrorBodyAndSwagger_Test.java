@@ -62,7 +62,6 @@ class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 		}
 	}
 
-	@SuppressWarnings("resource") // The mocked ServletOutputStream is a test double with a no-op close(); the code under test (getResponseWriter) owns wrapping/using it, not this test.
 	@Test void a02_getResponseWriter_illegalStateException_fallsBackToOutputStream() throws Exception {
 		var m = RestContext.class.getDeclaredMethod("getResponseWriter", HttpServletResponse.class);
 		m.setAccessible(true);
@@ -77,7 +76,6 @@ class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 	// b - writeProblemDetailsBody(HttpServletResponse, BasicHttpException, int): success + IOException fallback
 	//-----------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("resource") // The mocked ServletOutputStream is a test double with a no-op close(); the code under test owns writing to it, not this test.
 	@Test void b01_writeProblemDetailsBody_success_returnsTrueAndWritesHeaders() throws Exception {
 		var m = RestContext.class.getDeclaredMethod("writeProblemDetailsBody", HttpServletResponse.class, BasicHttpException.class, int.class);
 		m.setAccessible(true);
@@ -110,7 +108,6 @@ class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 		return new ValidationException(List.of(new ValidationViolation("name", "must not be null", "NotNull")));
 	}
 
-	@SuppressWarnings("resource") // The mocked ServletOutputStream is a test double with a no-op close(); the code under test owns writing to it, not this test.
 	@Test void c01_writeValidationErrorBody_problemDetailsOn_writesProblemJson() throws Exception {
 		var m = RestContext.class.getDeclaredMethod("writeValidationErrorBody", HttpServletResponse.class, ValidationException.class, int.class, boolean.class);
 		m.setAccessible(true);
@@ -121,7 +118,6 @@ class RestContext_ErrorBodyAndSwagger_Test extends org.apache.juneau.TestBase {
 		verify(res).setContentType("application/problem+json");
 	}
 
-	@SuppressWarnings("resource") // The mocked ServletOutputStream is a test double with a no-op close(); the code under test owns writing to it, not this test.
 	@Test void c02_writeValidationErrorBody_problemDetailsOff_writesSimpleEnvelope() throws Exception {
 		var m = RestContext.class.getDeclaredMethod("writeValidationErrorBody", HttpServletResponse.class, ValidationException.class, int.class, boolean.class);
 		m.setAccessible(true);

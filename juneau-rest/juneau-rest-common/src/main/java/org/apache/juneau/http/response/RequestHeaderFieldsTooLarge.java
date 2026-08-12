@@ -27,8 +27,7 @@ import org.apache.juneau.http.*;
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *

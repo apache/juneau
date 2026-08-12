@@ -150,6 +150,34 @@ public class Thrown extends BasicCsvHeader {
 		return new Thrown(l(values).stream().map(Part::new).toList());
 	}
 
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk> or empty to create a header with no value.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Thrown of(String...value) {
+		return value == null ? null : new Thrown(value);
+	}
+
+	/**
+	 * Static creator for two CSV tokens.
+	 *
+	 * <p>
+	 * This distinct fixed-arity overload ensures two literal {@link String} arguments resolve to this class's own
+	 * factory (returning a {@link Thrown}) rather than the inherited fixed-arity {@link BasicCsvHeader#of(String,String)},
+	 * which Java overload resolution would otherwise prefer.
+	 *
+	 * @param value1 The first CSV token.
+	 * @param value2 The second CSV token.
+	 * @return A new header bean.
+	 */
+	public static Thrown of(String value1, String value2) {
+		return new Thrown(value1, value2);
+	}
+
 	private final transient List<Part> value;
 
 	/**
@@ -174,6 +202,17 @@ public class Thrown extends BasicCsvHeader {
 		List<Part> l = list();
 		StringUtils.split(value, x -> l.add(new Part(x)));
 		this.value = value == null ? null : u(l);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk> or empty to create a header with no value.
+	 */
+	public Thrown(String...value) {
+		this(value == null ? null : join(value, ", "));
 	}
 
 	/**

@@ -27,8 +27,7 @@ import java.util.function.*;
  * The date/time after which the response is considered stale.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  *
  * @since 9.2.1
  */

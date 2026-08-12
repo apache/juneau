@@ -29,8 +29,7 @@ import org.apache.juneau.http.*;
  * Serialized exception information.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  *
  * @since 9.2.1
  */
@@ -56,6 +55,12 @@ public class Thrown extends HttpCsvHeader {
 
 	public static Thrown of(String... values) {
 		return new Thrown(values);
+	}
+
+	// Distinct 2-arg factory so two literal String args bind here (returning Thrown) instead of the inherited
+	// fixed-arity HttpCsvHeader.of(String name, String value), which Java overload resolution would otherwise prefer.
+	public static Thrown of(String value1, String value2) {
+		return new Thrown(value1, value2);
 	}
 
 	/**

@@ -26,8 +26,7 @@ import java.util.function.*;
  * Remaining number of times a request may be forwarded.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  *
  * @since 9.2.1
  */

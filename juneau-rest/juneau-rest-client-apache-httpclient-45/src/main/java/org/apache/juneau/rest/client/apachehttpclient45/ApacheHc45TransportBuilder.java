@@ -27,8 +27,7 @@ import org.apache.http.impl.client.*;
  * Obtain an instance via {@link ApacheHc45Transport#builder()}.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *

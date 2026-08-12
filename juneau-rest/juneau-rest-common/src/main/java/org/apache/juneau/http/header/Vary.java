@@ -26,8 +26,7 @@ import java.util.function.*;
  * Response fields that determine cache matching.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  *
  * @since 9.2.1
  */
@@ -53,6 +52,12 @@ public class Vary extends HttpCsvHeader {
 
 	public static Vary of(String... values) {
 		return new Vary(values);
+	}
+
+	// Distinct 2-arg factory so two literal String args bind here (returning Vary) instead of the inherited
+	// fixed-arity HttpCsvHeader.of(String name, String value), which Java overload resolution would otherwise prefer.
+	public static Vary of(String value1, String value2) {
+		return new Vary(value1, value2);
 	}
 
 	public static Vary ofLazyWire(Supplier<String> supplier) {

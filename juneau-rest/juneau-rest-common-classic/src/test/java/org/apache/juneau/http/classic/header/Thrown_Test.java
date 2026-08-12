@@ -106,7 +106,7 @@ class Thrown_Test extends TestBase {
 	}
 
 	@Test void b04_of_throwable_emptyArray() {
-		var x = Thrown.of();
+		var x = Thrown.of(new Throwable[0]);
 		assertEquals("", x.getValue());
 		assertTrue(x.asParts().get().isEmpty());
 	}

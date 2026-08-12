@@ -189,7 +189,6 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 		@Bean(name = "startCallMethods") public MethodList myStartCallMethods() { return MethodList.of(List.of()); }
 	}
 
-	@SuppressWarnings("resource") // ctx.getBeanStore() returns ctx's own (already-owned) BeanStore; the test doesn't own it and shouldn't close it.
 	@Test void d01_beanMethodListOverrides_allSevenNamedSlots_resolveToOverride() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_MethodListBeans.class, Fix_MethodListBeans::new));
 		assertNotNull(ctx.getDestroyMethods());

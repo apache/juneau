@@ -44,9 +44,6 @@ class Thrown_Test extends TestBase {
 		assertEquals("Thrown", x.getName());
 		assertEquals("RuntimeException;boom, IllegalArgumentException;bad", x.getValue());
 
-		// To reach Thrown.of(String...) the array must be passed explicitly — otherwise
-		// the 2-arg call resolves to the inherited HttpCsvHeader.of(String, String) static
-		// method (see a05 below for that footgun).
 		var y = Thrown.of(new String[]{"RuntimeException;boom", "IllegalArgumentException;bad"});
 		assertEquals("Thrown", y.getName());
 		assertEquals("RuntimeException;boom, IllegalArgumentException;bad", y.getValue());
@@ -72,18 +69,16 @@ class Thrown_Test extends TestBase {
 	}
 
 	/**
-	 * Documents production footgun: {@code Thrown.of("a","b")} with two String literals
-	 * resolves to the inherited {@link HttpCsvHeader#of(String, String)} static method, not to
-	 * {@link Thrown#of(String...)}. The result is an {@link HttpCsvHeader} (not a {@link Thrown})
-	 * where the first argument becomes the header name. Callers that want a {@code Thrown}
-	 * varargs invocation must pass an explicit {@code String[]}.
+	 * {@code Thrown.of("a","b")} with two String literals binds to {@link Thrown}'s own
+	 * distinct 2-arg {@code of(String,String)} overload rather than the inherited
+	 * {@link HttpCsvHeader#of(String, String)} static method, so the result is a {@link Thrown}
+	 * (not the base {@link HttpCsvHeader}) with both tokens joined into its CSV value.
 	 */
-	@Test void a05_documentedFootgun_inheritedOfStringStringShadowsVarargs() {
+	@Test void a05_twoArgFactory_bindsToOwnOverloadNotInheritedOne() {
 		var x = Thrown.of("RuntimeException;boom", "IllegalArgumentException;bad");
-		// Returns base HttpCsvHeader, not Thrown.
-		assertFalse(x instanceof Thrown);
-		assertEquals("RuntimeException;boom", x.getName());
-		assertEquals("IllegalArgumentException;bad", x.getValue());
+		assertTrue(x instanceof Thrown);
+		assertEquals("Thrown", x.getName());
+		assertEquals("RuntimeException;boom, IllegalArgumentException;bad", x.getValue());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

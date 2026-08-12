@@ -233,8 +233,7 @@ public final class RestClient implements Closeable {
 	 * JSON fallback and no lone-registered-entry fallback.  A fully-unconfigured client returns {@link Optional#empty()}.
 	 *
 	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
-	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
 	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
 	 * (and possibly earlier).
 	 *
@@ -254,8 +253,7 @@ public final class RestClient implements Closeable {
 	 * so a fully-unconfigured client resolves to empty (callers throw <c>415 Unsupported Media Type</c>).
 	 *
 	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
-	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
 	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
 	 * (and possibly earlier).
 	 *
@@ -282,8 +280,7 @@ public final class RestClient implements Closeable {
 	 * serializer is also consulted when no set is registered.
 	 *
 	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
-	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
 	 *
 	 * @param mediaType The desired request media type. May be <jk>null</jk>/empty.
 	 * @return The matching serializer, or {@link Optional#empty()} if no registered serializer matches.
@@ -303,8 +300,7 @@ public final class RestClient implements Closeable {
 	 * {@link Optional#empty()} on no match so the caller can fall back to the default parser.
 	 *
 	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
-	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
 	 *
 	 * @param mediaType The desired parse media type. May be <jk>null</jk>/empty.
 	 * @return The matching parser, or {@link Optional#empty()} if no registered parser matches.
@@ -319,8 +315,7 @@ public final class RestClient implements Closeable {
 	 * Returns the default {@code Accept} header value advertising what this client can read.
 	 *
 	 * <p>
-	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
-	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
 	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
 	 * (and possibly earlier).
 	 *

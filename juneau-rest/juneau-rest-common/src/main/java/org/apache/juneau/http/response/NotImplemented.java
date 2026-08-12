@@ -27,8 +27,7 @@ import org.apache.juneau.http.*;
  * The server either does not recognize the request method, or it lacks the ability to fulfil the request.
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.marshall.ng.*}).
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *
