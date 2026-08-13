@@ -209,6 +209,84 @@ class Config_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	//	public EntryBuilder entry(String key) - fluent alternative to the 6-arg set(...)
+	//====================================================================================================
+	@Test void b05b_entryBuilder_parityWith6ArgSet() throws Exception {
+		var c = init("a1=1", "[S]", "b1=1");
+
+		var b = new ABean().init();
+
+		// Equivalent 6-arg call.
+		c.set("a1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1", "#c2"));
+		// Fluent equivalent - each facet expressed explicitly.
+		c.entry("a2").serializer(UonSerializer.DEFAULT).modifiers("*").comment("comment").preLines(l("#c1", "#c2")).set(b);
+
+		// Both paths produce an identical stored result.
+		var e1 = c.get("a1");
+		var e2 = c.get("a2");
+		assertEquals(e1.getValue(), e2.getValue());
+		assertEquals(e1.getModifiers(), e2.getModifiers());
+		assertEquals(e1.getComment(), e2.getComment());
+		assertEquals(e1.getPreLines(), e2.getPreLines());
+		assertEquals("(foo=bar)", e2.get());
+	}
+
+	@Test void b05c_entryBuilder_leaveUntouchedVsClear() throws Exception {
+		var c = init("a0=0");
+
+		// Seed an entry with a comment and pre-lines.
+		c.entry("a1").comment("orig").preLines(l("#p1")).set("v1");
+		assertEquals("v1", c.get("a1").getValue());
+		assertEquals("orig", c.get("a1").getComment());
+		assertEquals(l("#p1"), c.get("a1").getPreLines());
+
+		// Leave untouched: facet methods not called, so comment + pre-lines are preserved.
+		c.entry("a1").set("v2");
+		assertEquals("v2", c.get("a1").getValue());
+		assertEquals("orig", c.get("a1").getComment());
+		assertEquals(l("#p1"), c.get("a1").getPreLines());
+
+		// Explicit clear: comment + pre-lines are removed (distinct from leave-untouched).
+		c.entry("a1").clearComment().clearPreLines().set("v3");
+		assertEquals("v3", c.get("a1").getValue());
+		assertEquals("", c.get("a1").getComment());
+		assertTrue(c.get("a1").getPreLines().isEmpty());
+	}
+
+	@Test void b05d_entryBuilder_roundTrip() throws Exception {
+		var c = init("a1=1", "[S]", "b1=1");
+
+		var b = new ABean().init();
+		c.entry("a1").serializer(UonSerializer.DEFAULT).modifiers("*").comment("comment").preLines(l("#c1", "#c2")).set(b);
+		c.entry("S/b1").serializer(UonSerializer.DEFAULT).comment("comment2").set(b);
+
+		var before = pipedLines(c);
+		c.commit();
+		assertEquals(before, pipedLines(c));
+		c = cb.build();
+		assertEquals(before, pipedLines(c));
+
+		assertEquals("(foo=bar)", c.get("a1").get());
+		assertEquals("comment", c.get("a1").getComment());
+		assertEquals(l("#c1", "#c2"), c.get("a1").getPreLines());
+		assertEquals("(foo=bar)", c.get("S/b1").get());
+		assertEquals("comment2", c.get("S/b1").getComment());
+	}
+
+	@Test void b05e_entryBuilder_valueFormsAndValidation() throws Exception {
+		var c = init("a0=0");
+
+		// The .value(x).set() and .set(x) forms are equivalent.
+		c.entry("a1").value("v").set();
+		c.entry("a2").set("v");
+		assertEquals(c.get("a1").getValue(), c.get("a2").getValue());
+
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'key' cannot be null.", ()->c.entry(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'value' cannot be null.", ()->c.entry("a3").comment(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'value' cannot be null.", ()->c.entry("a3").preLines(null));
+	}
+
+	//====================================================================================================
 	//	public Config remove(String key)
 	//====================================================================================================
 	@Test void b06_remove() throws Exception {

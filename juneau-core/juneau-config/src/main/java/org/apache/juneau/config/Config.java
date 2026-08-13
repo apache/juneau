@@ -998,6 +998,37 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	/**
+	 * Returns a fluent builder for adding or updating the entry with the specified key.
+	 *
+	 * <p>
+	 * This is an ergonomic, self-documenting alternative to the
+	 * {@link #set(String, Object, Serializer, String, String, List)} overload.  Rather than overloading a single call
+	 * with several "leave-unchanged versus clear" sentinel conventions, each facet is expressed explicitly:
+	 * <ul>
+	 * 	<li><b>Not calling</b> a facet method leaves that facet untouched.
+	 * 	<li>An explicit setter ({@link EntryBuilder#comment(String)}, {@link EntryBuilder#preLines(List)},
+	 * 		{@link EntryBuilder#serializer(Serializer)}, {@link EntryBuilder#modifiers(String)}) sets that facet.
+	 * 	<li>An explicit clear ({@link EntryBuilder#clearComment()}, {@link EntryBuilder#clearPreLines()}) clears that facet.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jv>config</jv>.entry(<js>"MySection/myKey"</js>)
+	 * 		.comment(<js>"My comment"</js>)
+	 * 		.preLines(List.<jsm>of</jsm>(<js>"# A pre-line"</js>))
+	 * 		.set(<js>"My value"</js>);
+	 * </p>
+	 *
+	 * @param key
+	 * 	The key.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return A new fluent entry builder, never <jk>null</jk>.
+	 */
+	public EntryBuilder entry(String key) {
+		return new EntryBuilder(this, key);
+	}
+
+	/**
 	 * Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered
 	 * serializer.
 	 *
