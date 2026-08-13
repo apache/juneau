@@ -118,6 +118,8 @@ import org.apache.juneau.rest.server.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link BasicStaticFiles}
  * 	<li class='jc'>{@link StaticFiles}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.HtdocMixin} &mdash; legacy fixed {@code /htdocs/*} mount;
+ * 		shares this mixin's {@link #resolveStaticFile} resolution logic
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
  * </ul>
@@ -151,7 +153,7 @@ public class StaticFilesMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getStaticFile(RestRequest req, @Path("/*") String path, Locale locale) {
-		return req.getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
+		return resolveStaticFile(req, path, locale);
 	}
 
 	/**
@@ -179,5 +181,24 @@ public class StaticFilesMixin {
 	)
 	public HttpResource headStaticFile(RestRequest req, @Path("/*") String path, Locale locale) {
 		return getStaticFile(req, path, locale);
+	}
+
+	/**
+	 * Shared static-file resolution chokepoint &mdash; resolves the requested path against the request's active
+	 * {@link StaticFiles} bean.
+	 *
+	 * <p>
+	 * Used by both this mixin's {@link #getStaticFile} / {@link #headStaticFile} handlers and by
+	 * {@link org.apache.juneau.rest.server.ops.HtdocMixin}'s legacy {@code /htdocs/*} endpoint, so there is a
+	 * single implementation of the resolution logic even though the two mixins expose different mounts.
+	 *
+	 * @param req The current REST request &mdash; supplies {@link RestRequest#getStaticFiles()}.
+	 * @param path The path to resolve (the trailing remainder after whichever mount prefix the caller uses).
+	 * @param locale The request locale (used for localized resource lookups).
+	 * @return The matching {@link HttpResource} (with content type + cache headers).
+	 * @throws NotFound If no resource matches the requested path.
+	 */
+	public static HttpResource resolveStaticFile(RestRequest req, String path, Locale locale) throws NotFound {
+		return req.getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 }

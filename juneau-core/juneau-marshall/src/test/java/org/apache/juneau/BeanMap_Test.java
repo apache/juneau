@@ -545,7 +545,7 @@ class BeanMap_Test extends TestBase {
 		var t5 = new F();
 		var p = Json5Parser.DEFAULT;
 		var m = bc.toBeanMap(t5);
-		ObjectIntrospector.create(t5, p).invokeMethod("doSetAProperty(java.lang.String)", "['baz']");
+		ObjectIntrospector.create(t5, p).allow(F.class, "doSetAProperty(java.lang.String)").invokeMethod("doSetAProperty(java.lang.String)", "['baz']");
 		assertEquals("baz", m.get("prop"));
 	}
 

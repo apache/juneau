@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.converter;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.config.*;
@@ -140,14 +141,64 @@ class RestConverter_Test extends TestBase {
 		c.get("/").run().assertContent().isContains("foo","42");
 	}
 
-	@Test void c02_introspectableInvokeMethod() throws Exception {
-		var c = MockRestClient.buildJson(C.class);
-		c.get("/?invokeMethod=getName").run().assertContent("\"foo\"");
+	// As of 10.0, ObjectIntrospector is secure-by-default (denies reflective dispatch unless the caller has
+	// explicitly allow-listed the target method(s)). Introspectable has no allow-list configuration mechanism
+	// of its own, so invokeMethod requests are now refused with a 500 rather than dispatched. This closes the
+	// REST-exposed "reflective-invoke-over-the-wire" hole that this converter previously opened by default.
+	// See TODO-351 B-marshall-6 for the tracked follow-up decision on whether/how to add allow-list
+	// configuration to this converter.
+	@Test void c02_introspectableInvokeMethod_deniedByDefault() throws Exception {
+		var c = MockRestClient.create(C.class).json().ignoreErrors().build();
+		c.get("/?invokeMethod=getName").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
 	}
 
-	@Test void c03_introspectableInvokeToString() throws Exception {
-		var c = MockRestClient.buildJson(C.class);
-		c.get("/?invokeMethod=toString").run().assertContent("\"MyBean\"");
+	@Test void c03_introspectableInvokeToString_deniedByDefault() throws Exception {
+		var c = MockRestClient.create(C.class).json().ignoreErrors().build();
+		c.get("/?invokeMethod=toString").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
+	}
+
+	// Real per-resource allow-list configuration (TODO-351 B-marshall-6 follow-up): a resource opts specific
+	// methods in by registering an IntrospectableSettings bean in its bean store.  Default (no bean) remains
+	// deny-all, covered by c02/c03 above.
+
+	@Rest(converters=Introspectable.class)
+	public static class C2 implements BasicUniversalConfig {
+		@RestOp(path="/")
+		public MyBean c2() {
+			return new MyBean();
+		}
+		@Bean public IntrospectableSettings introspectableSettings() {
+			return IntrospectableSettings.create().allow(MyBean.class, "getName", "getAge").build();
+		}
+	}
+
+	@Test void c04_introspectableAllowListedMethod_dispatches() throws Exception {
+		var c = MockRestClient.buildJson(C2.class);
+		c.get("/?invokeMethod=getName").run().assertStatus(200).assertContent("\"foo\"");
+		c.get("/?invokeMethod=getAge").run().assertStatus(200).assertContent("42");
+	}
+
+	@Test void c05_introspectableNonAllowListedMethod_refused() throws Exception {
+		// toString() was not allow-listed on C2 (only getName/getAge were), so it's still refused.
+		var c = MockRestClient.create(C2.class).json().ignoreErrors().build();
+		c.get("/?invokeMethod=toString").run().assertStatus(500).assertContent().isContains("has not been allow-listed");
+	}
+
+	@Rest(converters=Introspectable.class)
+	public static class C3 implements BasicUniversalConfig {
+		@RestOp(path="/")
+		public MyBean c3() {
+			return new MyBean();
+		}
+		@Bean public IntrospectableSettings introspectableSettings() {
+			return IntrospectableSettings.create().allowAll().build();
+		}
+	}
+
+	@Test void c06_introspectableAllowAll_dispatchesAnyPublicMethod() throws Exception {
+		var c = MockRestClient.buildJson(C3.class);
+		c.get("/?invokeMethod=getName").run().assertStatus(200).assertContent("\"foo\"");
+		c.get("/?invokeMethod=toString").run().assertStatus(200).assertContent("\"MyBean\"");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

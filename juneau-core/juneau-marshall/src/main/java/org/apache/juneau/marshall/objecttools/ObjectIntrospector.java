@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.json5.*;
@@ -32,11 +34,36 @@ import org.apache.juneau.marshall.parser.*;
  * 	This class is used to invoke methods on {@code Objects} using arguments in serialized form.
  * </p>
  *
+ * <h5 class='section'>Security - secure by default:</h5>
+ * <p>
+ * 	As of Juneau 10.0, reflective method dispatch is <b>denied by default</b>.  Before calling
+ * 	{@link #invokeMethod(String, String) invokeMethod(...)} (in any of its overloaded forms), the caller must
+ * 	explicitly allow-list the method(s) that may be invoked via {@link #allow(Class, String...) allow(...)} or
+ * 	{@link #allow(Predicate) allow(Predicate)}.  Invoking a method that isn't allow-listed throws
+ * 	{@link MethodNotAllowlistedException}.
+ * </p>
+ * <p>
+ * 	For trusted, in-process callers that need the pre-10.0 behavior of dispatching to any public,
+ * 	non-deprecated method, call {@link #allowAll()} as a one-line migration.  <b>Never</b> call
+ * 	{@link #allowAll()} on an introspector whose method name/arguments are derived from an untrusted
+ * 	source (e.g. a REST request parameter) &mdash; allow-list the specific methods instead.
+ * </p>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	String <jv>string1</jv> = <js>"foobar"</js>;
  * 	String <jv>string2</jv> = ObjectIntrospector
  * 		.create(<jv>string1</jv>)
+ * 		.allow(String.<jk>class</jk>, <js>"substring(int,int)"</js>)  <jc>// Explicit allow-list.</jc>
+ * 		.invokeMethod(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
+ * </p>
+ * <p>
+ * 	For trusted, in-process-only use, {@link #allowAll()} can be used instead of an explicit allow-list:
+ * </p>
+ * <p class='bjava'>
+ * 	String <jv>string2</jv> = ObjectIntrospector
+ * 		.create(<jv>string1</jv>)
+ * 		.allowAll()
  * 		.invokeMethod(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
  * </p>
  * <p>
@@ -72,6 +99,9 @@ public class ObjectIntrospector {
 	private final Object object;
 	private final ReaderParser parser;
 
+	/** Allow-list filter.  <jk>null</jk> means no methods are allow-listed (secure default = deny-all). */
+	private Predicate<Method> allowed;
+
 	/**
 	 * Shortcut for calling <code><jk>new</jk> ObjectIntrospector(o, <jk>null</jk>);</code>
 	 *
@@ -93,6 +123,57 @@ public class ObjectIntrospector {
 			parser = Json5Parser.DEFAULT;
 		this.object = object;
 		this.parser = parser;
+	}
+
+	/**
+	 * Allow-lists methods matching the specified filter for invocation via {@link #invokeMethod}.
+	 *
+	 * <p>
+	 * Can be called multiple times; the filters are OR'ed together, so a method is allowed if it matches
+	 * <b>any</b> filter that was added.
+	 *
+	 * @param filter Filter that returns <jk>true</jk> for methods that may be invoked.
+	 * @return This object.
+	 */
+	public ObjectIntrospector allow(Predicate<Method> filter) {
+		if (filter != null)
+			allowed = (allowed == null) ? filter : allowed.or(filter);
+		return this;
+	}
+
+	/**
+	 * Allow-lists specific method signatures declared on (or inherited by) the specified class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ObjectIntrospector.<jsm>create</jsm>(<jv>myBean</jv>).allow(MyBean.<jk>class</jk>, <js>"getName"</js>, <js>"getAge"</js>);
+	 * </p>
+	 *
+	 * @param declaringClass The class the allow-listed methods must be declared on (or a subtype thereof).
+	 * @param signatures
+	 * 	One or more method signatures as returned by {@link MethodInfo#getSignature()} (e.g. <js>"getName"</js>,
+	 * 	<js>"substring(int,int)"</js>).
+	 * @return This object.
+	 */
+	public ObjectIntrospector allow(Class<?> declaringClass, String...signatures) {
+		var sigs = Set.of(signatures);
+		return allow(m -> declaringClass.isAssignableFrom(m.getDeclaringClass()) && sigs.contains(MethodInfo.of(m).getSignature()));
+	}
+
+	/**
+	 * Disables allow-list enforcement, restoring the pre-10.0 behavior of allowing any public, non-deprecated
+	 * method to be invoked.
+	 *
+	 * <p>
+	 * <b>Use only for trusted, in-process callers.</b>  Never call this method on an introspector whose method
+	 * name and/or arguments are sourced from an untrusted caller (e.g. parsed from an HTTP request) &mdash;
+	 * allow-list the specific methods instead via {@link #allow(Class, String...) allow(...)}.
+	 *
+	 * @return This object.
+	 */
+	public ObjectIntrospector allowAll() {
+		allowed = m -> true;
+		return this;
 	}
 
 	/**
@@ -128,6 +209,7 @@ public class ObjectIntrospector {
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
+	 * @throws MethodNotAllowlistedException If the method has not been allow-listed via {@link #allow(Class, String...) allow(...)} or {@link #allowAll()}.
 	 */
 	public <T> T invokeMethod(Class<T> returnType, Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
 		return returnType.cast(invokeMethod(method, args));
@@ -164,6 +246,7 @@ public class ObjectIntrospector {
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
+	 * @throws MethodNotAllowlistedException If the method has not been allow-listed via {@link #allow(Class, String...) allow(...)} or {@link #allowAll()}.
 	 */
 	public <T> T invokeMethod(Class<T> returnType, String method, String args)
 		throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
@@ -175,6 +258,11 @@ public class ObjectIntrospector {
 	 *
 	 * <p>
 	 * Invokes the specified method on this bean.
+	 *
+	 * <p>
+	 * The method must have been allow-listed via {@link #allow(Class, String...) allow(...)} (or
+	 * {@link #allow(Predicate) allow(Predicate)}) or {@link #allowAll()} prior to calling this method, otherwise
+	 * a {@link MethodNotAllowlistedException} is thrown.  See the class-level javadoc for details.
 	 *
 	 * @param method The method being invoked.
 	 * @param args
@@ -201,10 +289,17 @@ public class ObjectIntrospector {
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
+	 * @throws MethodNotAllowlistedException If the method has not been allow-listed via {@link #allow(Class, String...) allow(...)} or {@link #allowAll()}.
 	 */
 	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
 		if (object == null)
 			return null;
+		if (allowed == null || !allowed.test(method))
+			throw new MethodNotAllowlistedException(
+				"Method '%s' on class '%s' has not been allow-listed for reflective invocation via ObjectIntrospector. "
+				+ "Call allow(declaringClass, signatures) to allow-list specific methods, or allowAll() to permit any public, "
+				+ "non-deprecated method (trusted in-process callers only).",
+				method.getName(), method.getDeclaringClass().getName());
 		Object[] params = args == null ? null : parser.readArgs(args, method.getGenericParameterTypes());
 		return method.invoke(object, params);
 	}
@@ -238,6 +333,7 @@ public class ObjectIntrospector {
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
+	 * @throws MethodNotAllowlistedException If the method has not been allow-listed via {@link #allow(Class, String...) allow(...)} or {@link #allowAll()}.
 	 */
 	public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		if (object == null)

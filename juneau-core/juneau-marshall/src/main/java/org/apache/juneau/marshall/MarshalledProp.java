@@ -42,6 +42,12 @@ import org.apache.juneau.commons.bean.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledPropApply @MarshalledPropApply}.
  * </ul>
  *
+ * <p>
+ * This annotation does <b>not</b> support renaming a property, nor the read-only/write-only, concrete-type,
+ * generic-params, element-type, or bean-factory attributes &mdash; those are bean-modeling concerns that live on
+ * {@link BeanProp @BeanProp} instead. To rename a property, use {@link BeanProp @BeanProp}
+ * (e.g. <c>@BeanProp("newName")</c>), not this annotation.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link BeanProp}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledPropAnnotation">@MarshalledProp Annotation</a>

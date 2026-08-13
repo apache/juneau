@@ -22,21 +22,24 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.staticfile.*;
 
 /**
  * Mixin providing the residual {@code [GET /htdocs/*]} static-file endpoint.
  *
  * <p>
- * Single-responsibility op-mixin carved out of the former {@code BasicRestOperations} interface. Resolves
- * the requested path against the active {@link org.apache.juneau.rest.server.staticfile.StaticFiles} bean via
- * {@link RestContext#getStaticFiles()}.
+ * Single-responsibility op-mixin carved out of the former {@code BasicRestOperations} interface. Delegates the
+ * requested path to {@link StaticFilesMixin#resolveStaticFile(RestRequest,String,Locale)} &mdash; the same
+ * resolution chokepoint used by the newer {@link StaticFilesMixin}'s configurable-mount handlers &mdash; so
+ * there is a single implementation of the static-file lookup logic even though this mixin keeps its own fixed,
+ * {@code GET}-only {@code /htdocs/*} mount for backward compatibility.
  *
  * <p>
  * The greedy {@code /htdocs/*} blob handler is not API-meaningful and is excluded from the published
  * Swagger/OpenAPI specification via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.staticfile.StaticFilesMixin}
+ * 	<li class='jc'>{@link StaticFilesMixin}
  * </ul>
  *
  * @since 10.0.0
@@ -60,6 +63,6 @@ public class HtdocMixin extends RestMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getHtdoc(RestRequest req, @Path("/*") String path, Locale locale) throws NotFound {
-		return req.getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
+		return StaticFilesMixin.resolveStaticFile(req, path, locale);
 	}
 }
