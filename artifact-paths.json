@@ -59,6 +59,7 @@
   "juneau-rest-server-auth-oauth": "juneau-rest/juneau-rest-server-auth-oauth",
   "juneau-rest-server-auth-oidc-rp": "juneau-rest/juneau-rest-server-auth-oidc-rp",
   "juneau-rest-server-auth-saml": "juneau-rest/juneau-rest-server-auth-saml",
+  "juneau-rest-server-datatables": "juneau-rest/juneau-rest-server-datatables",
   "juneau-rest-server-management-logging": "juneau-rest/juneau-rest-server-management-logging",
   "juneau-rest-server-mcp": "juneau-rest/juneau-rest-server-mcp",
   "juneau-rest-server-mcp-v20250618": "juneau-rest/juneau-rest-server-mcp-v20250618",

@@ -66,6 +66,7 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-rest-server-metrics-micrometer](/docs/topics/RestServerMicrometerMetrics) | Micrometer integration for REST server metrics. |
 | [juneau-rest-server-tracing-otel](/docs/topics/RestServerOtelTracing) | OpenTelemetry tracing integration for REST server. |
 | [juneau-rest-server-management-logging](/docs/topics/RestServerManagementLogging) | Management and logging surface — dynamic log-level control, log tail, and audit logging. |
+| [juneau-rest-server-datatables](/docs/topics/Converters#query-protocols) | DataTables server-side-processing query protocol adapter (opt-in). |
 | [juneau-rest-server-rdf](/docs/topics/RestServerRdf) | Predefined REST resource config adding RDF (Jena) marshalling support. |
 | [juneau-rest-server-reactive](/docs/topics/RestServerReactive) | Reactive (Project Reactor / RxJava) endpoint support. |
 | [juneau-rest-server-reactive-reactor](/docs/topics/RestServerReactive) | Project Reactor / RxJava 3 / Reactive-Streams `Publisher` adapters layered on juneau-rest-server-reactive. |
