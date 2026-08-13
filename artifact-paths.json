@@ -76,6 +76,7 @@
   "juneau-rest-server-view-thymeleaf": "juneau-rest/juneau-rest-server-view-thymeleaf",
   "juneau-sc": "juneau-sc",
   "juneau-sc-server": "juneau-sc/juneau-sc-server",
+  "juneau-secret-keychain": "juneau-secret-keychain",
   "juneau-shaded": "juneau-shaded",
   "juneau-shaded-all": "juneau-shaded/juneau-shaded-all",
   "juneau-shaded-core": "juneau-shaded/juneau-shaded-core",
