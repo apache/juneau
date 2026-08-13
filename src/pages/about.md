@@ -32,8 +32,8 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 |-----------|-------------|
 | **juneau-core** | |
 | [juneau-commons](/docs/topics/JuneauCommons) | Bean metadata framework, SVL string-variable resolution, and shared utilities (I/O, reflection, HTTP, collections) used across Juneau modules. |
-| [juneau-marshall](/docs/topics/JuneauMarshall) | POJO marshalling for 25+ wire formats — JSON/JSON5/JSONL/JCS, XML/SOAP, HTML, YAML/TOML/HOCON/HJSON/INI, CBOR/BSON/MessagePack, Protobuf/Prototext, UON/URL-encoding, CSV, Parquet, Markdown, SSE, OpenAPI, and PlainText — plus a token-streaming API; no external dependencies required. |
-| [juneau-marshall-rdf](/docs/topics/JuneauMarshallRdf) | Extended marshalling support for RDF/XML, N3, N-Triple, N-Quads, Turtle, TriG, TriX, JSON-LD, RDF/JSON, RDF/Proto, and RDF/Thrift (requires Apache Jena). |
+| [juneau-marshall](/docs/topics/JuneauMarshall) | POJO marshalling for 26+ wire formats — JSON/JSON5/JSONL/JSON5L/JCS, XML/SOAP, HTML, YAML/TOML/HOCON/HJSON/INI, CBOR/BSON/MessagePack, Protobuf/Prototext, UON/URL-encoding, CSV, Parquet, Markdown, SSE, OpenAPI, and PlainText — plus a token-streaming API; no external dependencies required. |
+| [juneau-marshall-rdf](/docs/topics/JuneauMarshallRdf) | Extended marshalling support for 12 RDF variants — RDF/XML, RDF/XML-Abbrev, N3, N-Triple, N-Quads, Turtle, TriG, TriX, JSON-LD, RDF/JSON, RDF/Proto, and RDF/Thrift (requires Apache Jena). |
 | [juneau-config](/docs/topics/JuneauConfig) | Multi-format (INI and YAML) configuration file API with POJO support, variable resolution, and real-time file watching. |
 | [juneau-test](/docs/topics/JuneauTest) | Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions for readable, expressive unit tests. |
 | **juneau-bean** | |
