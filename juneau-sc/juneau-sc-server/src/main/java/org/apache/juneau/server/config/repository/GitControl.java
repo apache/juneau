@@ -18,7 +18,9 @@ package org.apache.juneau.server.config.repository;
 
 import java.io.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.logging.*;
+import org.apache.juneau.commons.secret.*;
 import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.*;
@@ -34,8 +36,20 @@ import org.eclipse.jgit.transport.*;
  * Used to fetch configuration files from a remote Git repository.
  *
  * <p>
+ * Credentials are never hardcoded in this class.  They are either supplied directly by the caller (via the 5-arg
+ * constructor) or, preferably, resolved at construction time from a pluggable {@link SecretStore} (via the
+ * {@link #GitControl(String, String, String, String, BeanStore, boolean) BeanStore/SecretStore} constructor) so the
+ * password/token can be sourced from an environment variable, an OS keychain, or another secret backend rather than a
+ * literal string.
+ *
+ * <p>
  * The underlying JGit {@link Repository} and {@link Git} handles are opened in the constructor and released by
  * {@link #close()}, so instances must be used with try-with-resources to avoid leaking file/native handles.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link SecretStore}
+ * 	<li class='jc'>{@link SecretStores}
+ * </ul>
  */
 public class GitControl implements AutoCloseable {
 
@@ -79,7 +93,7 @@ public class GitControl implements AutoCloseable {
 	 * @throws IOException If the repository cannot be opened.
 	 */
 	@SuppressWarnings({
-		"resource" // localRepo (FileRepository) and git (Git) are long-lived fields closed in close(); Git wraps the externally-created Repository without closing it, so both are released there. Warnings surface at the constructor assignments (lines 84/87).
+		"resource" // localRepo (FileRepository) and git (Git) are long-lived fields closed in close(); Git wraps the externally-created Repository without closing it, so both are released there.
 	})
 	public GitControl(String localPath, String remotePath, String username, String password, boolean forcePush) throws IOException {
 		this.localPath = localPath;
@@ -91,16 +105,73 @@ public class GitControl implements AutoCloseable {
 	}
 
 	/**
+	 * Constructor that resolves the Git password/token from a pluggable {@link SecretStore}.
+	 *
+	 * <p>
+	 * The active store is resolved from the supplied {@link BeanStore} via {@link SecretStores#resolve(BeanStore)},
+	 * defaulting to an {@link InMemorySecretStore} when the bean store is <jk>null</jk> or contributes none.  The
+	 * password/token is looked up under <jv>secretKey</jv> as a {@code char[]} so it is never materialized as a
+	 * {@link String}, and the credentials are zeroed by {@link #close()}.  Pass <jk>null</jk> for <jv>username</jv> to
+	 * use anonymous transport (the secret store is not consulted in that case).
+	 *
+	 * @param localPath Local directory path for the repository.
+	 * @param remotePath Remote Git repository URI.
+	 * @param username Git username, or <jk>null</jk> for anonymous transport.
+	 * @param secretKey The key under which the password/token is stored in the resolved {@link SecretStore}.
+	 * 	<br>Ignored when <jv>username</jv> is <jk>null</jk>.
+	 * @param beanStore The bean store to resolve the {@link SecretStore} from.  Can be <jk>null</jk> to use the
+	 * 	default {@link InMemorySecretStore}.
+	 * @param forcePush Whether {@link #pushToRepo()} performs a force-push (destructive remote history rewrite).
+	 * 	<br>Force-push is opt-in; defaults to <jk>false</jk> in the other constructors.
+	 * @throws IOException If the repository cannot be opened.
+	 */
+	@SuppressWarnings({
+		"resource" // localRepo (FileRepository) and git (Git) are long-lived fields closed in close(); Git wraps the externally-created Repository without closing it, so both are released there.
+	})
+	public GitControl(String localPath, String remotePath, String username, String secretKey, BeanStore beanStore, boolean forcePush) throws IOException {
+		this.localPath = localPath;
+		this.remotePath = remotePath;
+		this.localRepo = new FileRepository(localPath + "/.git");
+		this.cp = findCredentialsProvider(username, secretKey, beanStore);
+		this.forcePush = forcePush;
+		git = new Git(localRepo);
+	}
+
+	/**
+	 * Builds the credentials provider by resolving the password/token from the {@link SecretStore} contributed to the
+	 * supplied bean store.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> (anonymous transport) when <jv>username</jv> is <jk>null</jk>.  When the secret is absent
+	 * from the resolved store an empty password is used, so a caller cannot accidentally send a stale literal.  The
+	 * retrieved {@code char[]} is handed to the provider and zeroed by {@link #close()}.
+	 *
+	 * @param username Git username, or <jk>null</jk> for anonymous transport.
+	 * @param secretKey The key under which the password/token is stored.
+	 * @param beanStore The bean store to resolve the {@link SecretStore} from.  Can be <jk>null</jk>.
+	 * @return The credentials provider, or <jk>null</jk> for anonymous transport.
+	 */
+	static CredentialsProvider findCredentialsProvider(String username, String secretKey, BeanStore beanStore) {
+		if (username == null)
+			return null;
+		var secret = SecretStores.resolve(beanStore).find(secretKey).orElseGet(() -> new char[0]);
+		return new UsernamePasswordCredentialsProvider(username, secret);
+	}
+
+	/**
 	 * Closes the underlying JGit {@link Git} and {@link Repository} handles.
 	 *
 	 * <p>
 	 * The {@link Git} instance wraps an externally-supplied {@link Repository} (it does not close it on
-	 * {@link Git#close()}), so both are released explicitly here.
+	 * {@link Git#close()}), so both are released explicitly here.  Any credentials held by the provider are zeroed so
+	 * a resolved secret does not linger in memory beyond the life of this instance.
 	 */
 	@Override
 	public void close() {
 		git.close();
 		localRepo.close();
+		if (cp instanceof UsernamePasswordCredentialsProvider cp2)
+			cp2.clear();
 	}
 
 	/**

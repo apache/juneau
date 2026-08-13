@@ -202,8 +202,14 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 				out.writeChildDocument(child);
 			}
 		} else if (sType.isByteArray()) {
-			out.writeElement(BINARY.value, name);
-			out.writeBinary((byte[])o);
+			var binaryFormat = getBinaryFormat();
+			if (binaryFormat == BinaryFormat.NOT_SET) {
+				out.writeElement(BINARY.value, name);
+				out.writeBinary((byte[])o);
+			} else {
+				out.writeElement(STRING.value, name);
+				out.writeString(binaryFormat.format((byte[])o));
+			}
 		} else if (sType.isCollection() || sType.isArray()) {
 			out.writeElement(ARRAY.value, name);
 			var child = out.createChild();

@@ -21,6 +21,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -252,6 +254,41 @@ class CborSerializer_Test extends TestBase {
 	void c20_base64Output() throws Exception {
 		assertEquals(1, CborParser.DEFAULT_BASE64.read(
 			CborSerializer.DEFAULT_BASE64.write(JsonMap.of("a", 1)), JsonMap.class).getInt("a"));
+	}
+
+	@Test
+	void c21_spacedHexByteArrayPropertyHonorsBinaryFormat() throws Exception {
+		var bean = new BeanWithBytes();
+		var defaultOut = CborSerializer.DEFAULT.write(bean);
+		var spacedHexOut = CborSerializer.DEFAULT_SPACED_HEX.write(bean);
+		assertFalse(Arrays.equals(defaultOut, spacedHexOut), "SpacedHex output should differ from the native binary output");
+		var parsed = CborParser.DEFAULT_SPACED_HEX.read(spacedHexOut, BeanWithBytes.class);
+		assertArrayEquals(bean.data, parsed.data);
+	}
+
+	@Test
+	void c22_base64ByteArrayPropertyHonorsBinaryFormat() throws Exception {
+		var bean = new BeanWithBytes();
+		var defaultOut = CborSerializer.DEFAULT.write(bean);
+		var base64Out = CborSerializer.DEFAULT_BASE64.write(bean);
+		assertFalse(Arrays.equals(defaultOut, base64Out), "Base64 output should differ from the native binary output");
+		var parsed = CborParser.DEFAULT_BASE64.read(base64Out, BeanWithBytes.class);
+		assertArrayEquals(bean.data, parsed.data);
+	}
+
+	@Test
+	void c23_spacedHexTopLevelByteArrayHonorsBinaryFormat() throws Exception {
+		var data = new byte[] { 1, 2, 3 };
+		var defaultOut = CborSerializer.DEFAULT.write(data);
+		var spacedHexOut = CborSerializer.DEFAULT_SPACED_HEX.write(data);
+		assertFalse(Arrays.equals(defaultOut, spacedHexOut), "SpacedHex output should differ from the native binary output");
+		var parsed = CborParser.DEFAULT_SPACED_HEX.read(spacedHexOut, byte[].class);
+		assertArrayEquals(data, parsed);
+	}
+
+	/** Bean with a single byte[] property, used to exercise the MarshalledPropertyPostProcessor bean-property path. */
+	public static class BeanWithBytes {
+		public byte[] data = { 1, 2, 3 };
 	}
 
 	public static class Bean1 {

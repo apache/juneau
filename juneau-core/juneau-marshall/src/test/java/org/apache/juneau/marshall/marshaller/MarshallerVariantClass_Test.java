@@ -327,43 +327,54 @@ class MarshallerVariantClass_Test extends TestBase {
 		assertBean(m, "a", "1");
 	}
 
-	// NOTE: BsonSerializer/CborSerializer/MsgPackSerializer currently always write byte[] values using
-	// each format's native binary wire type regardless of the configured BinaryFormat (SPACED_HEX /
-	// BASE64 only affects other conversion paths) -- so for a POJO with a byte[] field, the SpacedHex/
-	// Base64 variant serializers produce byte-identical output to DEFAULT. These tests therefore verify
-	// wiring (equality to the authoritative *Serializer.DEFAULT_* constant) + round-trip rather than a
-	// visibly distinct serialized form.
+	// NOTE (TODO-353): BsonSerializer/CborSerializer/MsgPackSerializer now honor the configured
+	// BinaryFormat for byte[] output -- SPACED_HEX/BASE64 switch the byte[] wire representation from
+	// each format's native binary opcode to that format's native string type containing the
+	// spaced-hex/base64 text, so the SpacedHex/Base64 variant serializers produce visibly distinct
+	// output from DEFAULT for a POJO with a byte[] field. These tests verify both the distinct wire
+	// form and the round-trip back to the original bytes.
+	//
+	// The round-trip parse is done with an explicit Map<String,byte[]> type hint rather than the bare
+	// Map.class used elsewhere in this file: once byte[] is on the wire as a string (SPACED_HEX/BASE64),
+	// the string is indistinguishable from a genuine text value without a type hint telling the parser
+	// the target is byte[] -- this is expected, since the encoding trades the format's native
+	// self-describing binary tag for a text representation that needs the same external typing a text
+	// serializer (e.g. JSON) would need to recover byte[] from a string.
 
 	@Test void b23_bsonSpacedHexRoundTrip() throws Exception {
 		var bean = Map.of("a", new byte[]{1, 2, 3});
 		var out = BsonSpacedHex.of(bean);
 		assertArrayEquals(BsonSerializer.DEFAULT_SPACED_HEX.write(bean), out);
-		var m = BsonSpacedHex.to(out, Map.class);
-		assertArrayEquals(new byte[]{1, 2, 3}, (byte[]) m.get("a"));
+		assertFalse(Arrays.equals(Bson.of(bean), out), "SpacedHex output should differ from the native binary output");
+		Map<String,byte[]> m = BsonSpacedHex.to(out, Map.class, String.class, byte[].class);
+		assertArrayEquals(new byte[]{1, 2, 3}, m.get("a"));
 	}
 
 	@Test void b24_bsonBase64RoundTrip() throws Exception {
 		var bean = Map.of("a", new byte[]{1, 2, 3});
 		var out = BsonBase64.of(bean);
 		assertArrayEquals(BsonSerializer.DEFAULT_BASE64.write(bean), out);
-		var m = BsonBase64.to(out, Map.class);
-		assertArrayEquals(new byte[]{1, 2, 3}, (byte[]) m.get("a"));
+		assertFalse(Arrays.equals(Bson.of(bean), out), "Base64 output should differ from the native binary output");
+		Map<String,byte[]> m = BsonBase64.to(out, Map.class, String.class, byte[].class);
+		assertArrayEquals(new byte[]{1, 2, 3}, m.get("a"));
 	}
 
 	@Test void b25_cborSpacedHexRoundTrip() throws Exception {
 		var bean = Map.of("a", new byte[]{1, 2, 3});
 		var out = CborSpacedHex.of(bean);
 		assertArrayEquals(CborSerializer.DEFAULT_SPACED_HEX.write(bean), out);
-		var m = CborSpacedHex.to(out, Map.class);
-		assertArrayEquals(new byte[]{1, 2, 3}, (byte[]) m.get("a"));
+		assertFalse(Arrays.equals(Cbor.of(bean), out), "SpacedHex output should differ from the native binary output");
+		Map<String,byte[]> m = CborSpacedHex.to(out, Map.class, String.class, byte[].class);
+		assertArrayEquals(new byte[]{1, 2, 3}, m.get("a"));
 	}
 
 	@Test void b26_cborBase64RoundTrip() throws Exception {
 		var bean = Map.of("a", new byte[]{1, 2, 3});
 		var out = CborBase64.of(bean);
 		assertArrayEquals(CborSerializer.DEFAULT_BASE64.write(bean), out);
-		var m = CborBase64.to(out, Map.class);
-		assertArrayEquals(new byte[]{1, 2, 3}, (byte[]) m.get("a"));
+		assertFalse(Arrays.equals(Cbor.of(bean), out), "Base64 output should differ from the native binary output");
+		Map<String,byte[]> m = CborBase64.to(out, Map.class, String.class, byte[].class);
+		assertArrayEquals(new byte[]{1, 2, 3}, m.get("a"));
 	}
 
 	@Test void b27_cborNativeRoundTrip() throws Exception {
@@ -381,16 +392,18 @@ class MarshallerVariantClass_Test extends TestBase {
 		var bean = Map.of("a", new byte[]{1, 2, 3});
 		var out = MsgPackSpacedHex.of(bean);
 		assertArrayEquals(MsgPackSerializer.DEFAULT_SPACED_HEX.write(bean), out);
-		var m = MsgPackSpacedHex.to(out, Map.class);
-		assertArrayEquals(new byte[]{1, 2, 3}, (byte[]) m.get("a"));
+		assertFalse(Arrays.equals(MsgPack.of(bean), out), "SpacedHex output should differ from the native binary output");
+		Map<String,byte[]> m = MsgPackSpacedHex.to(out, Map.class, String.class, byte[].class);
+		assertArrayEquals(new byte[]{1, 2, 3}, m.get("a"));
 	}
 
 	@Test void b29_msgPackBase64RoundTrip() throws Exception {
 		var bean = Map.of("a", new byte[]{1, 2, 3});
 		var out = MsgPackBase64.of(bean);
 		assertArrayEquals(MsgPackSerializer.DEFAULT_BASE64.write(bean), out);
-		var m = MsgPackBase64.to(out, Map.class);
-		assertArrayEquals(new byte[]{1, 2, 3}, (byte[]) m.get("a"));
+		assertFalse(Arrays.equals(MsgPack.of(bean), out), "Base64 output should differ from the native binary output");
+		Map<String,byte[]> m = MsgPackBase64.to(out, Map.class, String.class, byte[].class);
+		assertArrayEquals(new byte[]{1, 2, 3}, m.get("a"));
 	}
 
 	@Test void b30_msgPackNativeRoundTrip() throws Exception {

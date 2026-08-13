@@ -21,6 +21,8 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
@@ -215,6 +217,48 @@ class MsgPackSerializerTest extends TestBase {
 	public static class Person {
 		public String name = "John Smith";
 		public int age = 21;
+	}
+
+	/** Bean with a single byte[] property, used to exercise the MarshalledPropertyPostProcessor bean-property path. */
+	public static class BeanWithBytes {
+		public byte[] data = { 1, 2, 3 };
+	}
+
+	//====================================================================================================
+	// BinaryFormat honored for byte[] output (TODO-353)
+	//====================================================================================================
+	@Test void b01_spacedHexByteArrayPropertyHonorsBinaryFormat() throws Exception {
+		var bean = new BeanWithBytes();
+		var defaultOut = MsgPackSerializer.DEFAULT.write(bean);
+		var spacedHexOut = MsgPackSerializer.DEFAULT_SPACED_HEX.write(bean);
+		assertFalse(Arrays.equals(defaultOut, spacedHexOut), "SpacedHex output should differ from the native binary output");
+		var parsed = MsgPackParser.DEFAULT_SPACED_HEX.read(spacedHexOut, BeanWithBytes.class);
+		assertArrayEquals(bean.data, parsed.data);
+	}
+
+	@Test void b02_base64ByteArrayPropertyHonorsBinaryFormat() throws Exception {
+		var bean = new BeanWithBytes();
+		var defaultOut = MsgPackSerializer.DEFAULT.write(bean);
+		var base64Out = MsgPackSerializer.DEFAULT_BASE64.write(bean);
+		assertFalse(Arrays.equals(defaultOut, base64Out), "Base64 output should differ from the native binary output");
+		var parsed = MsgPackParser.DEFAULT_BASE64.read(base64Out, BeanWithBytes.class);
+		assertArrayEquals(bean.data, parsed.data);
+	}
+
+	@Test void b03_spacedHexTopLevelByteArrayHonorsBinaryFormat() throws Exception {
+		var data = new byte[] { 1, 2, 3 };
+		var defaultOut = MsgPackSerializer.DEFAULT.write(data);
+		var spacedHexOut = MsgPackSerializer.DEFAULT_SPACED_HEX.write(data);
+		assertFalse(Arrays.equals(defaultOut, spacedHexOut), "SpacedHex output should differ from the native binary output");
+		var parsed = MsgPackParser.DEFAULT_SPACED_HEX.read(spacedHexOut, byte[].class);
+		assertArrayEquals(data, parsed);
+	}
+
+	@Test void b04_notSetKeepsNativeBinary() throws Exception {
+		// NOT_SET (the default on MsgPackSerializer.DEFAULT) is unaffected by the SpacedHex/Base64 fix --
+		// byte[] values still use MsgPack's native bin family rather than a string encoding.
+		var data = new byte[] { 1, 2, 3 };
+		test(data, "C4 03 01 02 03");
 	}
 
 	private static void test(Object input, String expected) throws Exception {

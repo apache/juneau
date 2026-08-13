@@ -218,7 +218,11 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 		} else if (sType.isCollection()) {
 			writeCollection(out, (Collection)o, eType);
 		} else if (sType.isByteArray()) {
-			out.appendBinary((byte[])o);
+			var binaryFormat = getBinaryFormat();
+			if (binaryFormat == BinaryFormat.NOT_SET)
+				out.appendBinary((byte[])o);
+			else
+				out.appendString(binaryFormat.format((byte[])o));
 		} else if (sType.isArray()) {
 			writeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isBoolean()) {

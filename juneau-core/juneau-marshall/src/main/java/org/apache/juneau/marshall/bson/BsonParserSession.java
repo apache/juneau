@@ -125,6 +125,13 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 				yield null;
 			}
 		};
+		// A byte[]-targeted string element is a BinaryFormat-encoded payload (TODO-353 write-side fix
+		// counterpart) rather than a literal string value - decode it back to bytes.
+		if (elementType == 0x02 && nn(targetType) && targetType.isByteArray()) {
+			var binaryFormat = getBinaryFormat();
+			if (binaryFormat != BinaryFormat.NOT_SET)
+				o = binaryFormat.parse((String)o);
+		}
 		if (nn(parentBean()) && nn(o))
 			setParent(targetType, o, parentBean());
 		return o;

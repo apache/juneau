@@ -310,7 +310,14 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
 				// Merged scalar tier: one wire-type (BOOLEAN/INT/LONG/FLOAT/DOUBLE/STRING/BIN) covers
 				// many scalar Java types — the read already happened above and convertToType narrows.
-				o = convertToType(o, sType);
+				// A byte[]-targeted string element is a BinaryFormat-encoded payload (TODO-353 write-side
+				// fix counterpart) rather than a literal string - decode it back to bytes directly, since
+				// the generic String-to-byte[] conversion doesn't know about BinaryFormat.
+				var binaryFormat = getBinaryFormat();
+				if (dt == STRING && sType.isByteArray() && binaryFormat != BinaryFormat.NOT_SET)
+					o = binaryFormat.parse((String)o);
+				else
+					o = convertToType(o, sType);
 			} else if (sType.isDate()) {
 				o = readDate(String.valueOf(o), sType);
 			} else if (sType.isCalendar()) {

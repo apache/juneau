@@ -24,6 +24,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
@@ -107,6 +108,43 @@ class BsonSerializer_Test extends TestBase {
 		var p = BsonParser.create().build();
 		var parsed = p.read(bytes, JsonMap.class);
 		assertEquals("LARGE", parsed.get("size"));
+	}
+
+	@Test
+	void a09_writeByteArraySpacedHexHonorsBinaryFormat() throws Exception {
+		var bean = new BeanWithBytes();
+		var defaultOut = BsonSerializer.DEFAULT.write(bean);
+		var spacedHexOut = BsonSerializer.DEFAULT_SPACED_HEX.write(bean);
+		assertFalse(Arrays.equals(defaultOut, spacedHexOut), "SpacedHex output should differ from the native binary output");
+		var parsed = BsonParser.DEFAULT_SPACED_HEX.read(spacedHexOut, BeanWithBytes.class);
+		assertArrayEquals(bean.data, parsed.data);
+	}
+
+	@Test
+	void a10_writeByteArrayBase64HonorsBinaryFormat() throws Exception {
+		var bean = new BeanWithBytes();
+		var defaultOut = BsonSerializer.DEFAULT.write(bean);
+		var base64Out = BsonSerializer.DEFAULT_BASE64.write(bean);
+		assertFalse(Arrays.equals(defaultOut, base64Out), "Base64 output should differ from the native binary output");
+		var parsed = BsonParser.DEFAULT_BASE64.read(base64Out, BeanWithBytes.class);
+		assertArrayEquals(bean.data, parsed.data);
+	}
+
+	@Test
+	void a11_writeByteArrayNotSetKeepsNativeBinary() throws Exception {
+		// NOT_SET (the default on BsonSerializer.DEFAULT) is unaffected by the SpacedHex/Base64 fix -- byte[]
+		// values still use BSON's native binary element (subtype 0x05) rather than a string encoding.
+		var bean = new BeanWithBytes();
+		var s = BsonSerializer.create().keepNullProperties().binaryFormat(BinaryFormat.NOT_SET).build();
+		var bytes = s.write(bean);
+		var p = BsonParser.create().build();
+		var parsed = p.read(bytes, JsonMap.class);
+		assertArrayEquals(bean.data, (byte[])parsed.get("data"));
+	}
+
+	/** Bean with a single byte[] property, used to exercise the MarshalledPropertyPostProcessor bean-property path. */
+	public static class BeanWithBytes {
+		public byte[] data = { 0x01, 0x02, 0x03 };
 	}
 
 	enum Size { SMALL, MEDIUM, LARGE }
