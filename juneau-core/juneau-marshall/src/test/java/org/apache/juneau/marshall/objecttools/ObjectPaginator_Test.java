@@ -101,4 +101,20 @@ class ObjectPaginator_Test extends TestBase {
 		assertList(op.run(in2, 4, 1));
 		assertList(op.run(in2, 0, 0));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Position with no limit
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_positionOnly_noLimit_collection() {
+		var in = l(1,2,3,4,5);
+		assertList(op.run(bs, in, PageArgs.create(2, null)), 3,4,5);
+		assertList(op.run(bs, in, PageArgs.create(0, null)), 1,2,3,4,5);
+		assertList(op.run(bs, in, PageArgs.create(5, null)));
+	}
+
+	@Test void d02_positionOnly_noLimit_array() {
+		var in = ints(1,2,3,4,5);
+		assertList(op.run(bs, in, PageArgs.create(2, null)), 3,4,5);
+	}
 }

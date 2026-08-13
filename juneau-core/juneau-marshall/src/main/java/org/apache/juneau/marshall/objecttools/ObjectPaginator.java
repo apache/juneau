@@ -85,7 +85,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 
 		if (type.isArray()) {
 			var size = Array.getLength(input);
-			var end = (limit + pos >= size) ? size : limit + pos;
+			var end = (limit < 0 || limit + pos >= size) ? size : limit + pos;
 			pos = Math.min(pos, size);
 			var et = type.getElementType();
 			if (! et.isPrimitive())
@@ -108,7 +108,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		}
 
 		var l = type.isList() ? (List)input : new ArrayList((Collection)input);
-		var end = (limit + pos >= l.size()) ? l.size() : limit + pos;
+		var end = (limit < 0 || limit + pos >= l.size()) ? l.size() : limit + pos;
 		pos = Math.min(pos, l.size());
 		return l.subList(pos, end);
 	}
