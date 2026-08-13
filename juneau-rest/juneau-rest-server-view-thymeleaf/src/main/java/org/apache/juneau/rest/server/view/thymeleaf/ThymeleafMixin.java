@@ -37,10 +37,12 @@ import org.thymeleaf.templatemode.*;
  * 		the importer's classpath by asking the configured
  * 		{@link org.thymeleaf.TemplateEngine TemplateEngine} to render them with the current
  * 		request's locale and attributes available to the template.
- * 	<li>Picks up {@link ThymeleafViewRenderer} automatically via the mixin's
- * 		{@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration, so
- * 		{@code @RestOp}-method return values of type {@link ThymeleafView} render through the
- * 		Thymeleaf engine without any additional wiring.
+ * 	<li>Routes the host's own {@code @RestOp}-method return values of type {@link ThymeleafView} through the
+ * 		Thymeleaf engine automatically. {@code ThymeleafMixin} declares
+ * 		{@link Rest#mergeResponseProcessorsIntoHost() @Rest(mergeResponseProcessorsIntoHost=true)}, so a plain
+ * 		{@code @Rest(mixins=ThymeleafMixin.class)} folds its {@link ThymeleafViewRenderer} into the host's own
+ * 		response-processor chain &mdash; no {@code mergeIntoHost} or explicit {@code responseProcessors=} on the
+ * 		host needed.
  * </ol>
  *
  * <h5 class='figure'>Composition example (microservice):</h5>
@@ -134,7 +136,8 @@ import org.thymeleaf.templatemode.*;
  */
 // @formatter:off
 @Rest(
-	responseProcessors={ThymeleafViewRenderer.class}
+	responseProcessors={ThymeleafViewRenderer.class},
+	mergeResponseProcessorsIntoHost=true
 )
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are Thymeleaf MIME type strings and template attribute keys; intentional

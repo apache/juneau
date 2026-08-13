@@ -66,9 +66,14 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	/** Default template-cache flag &mdash; {@code true} (production-safe). */
 	public static final boolean DEFAULT_CACHE_TEMPLATES = true;
 
+	/** Default field-exposure flag &mdash; {@code true} (public-field DTOs render out of the box). */
+	public static final boolean DEFAULT_EXPOSE_FIELDS = true;
+
 	private final String basePath;
 	private final String templateSuffix;
 	private final boolean cacheTemplates;
+	private final boolean exposeFields;
+	private final ObjectWrapper objectWrapper;
 
 	// Lazy bridge-default configuration. Built on first call to resolveConfiguration(...) when
 	// no Configuration bean is registered in the request's BeanStore. Volatile so the
@@ -96,6 +101,8 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		basePath = builder.basePath;
 		templateSuffix = builder.templateSuffix;
 		cacheTemplates = builder.cacheTemplates;
+		exposeFields = builder.exposeFields;
+		objectWrapper = builder.objectWrapper;
 	}
 
 	/**
@@ -123,6 +130,25 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 */
 	public boolean isCacheTemplates() {
 		return cacheTemplates;
+	}
+
+	/**
+	 * Returns the field-exposure flag applied to the bridge-default object wrapper.
+	 *
+	 * @return The field-exposure flag. Ignored once {@link #getObjectWrapper()} returns non-{@code null}.
+	 */
+	public boolean isExposeFields() {
+		return exposeFields;
+	}
+
+	/**
+	 * Returns the user-supplied {@link ObjectWrapper} override, if any.
+	 *
+	 * @return The object wrapper override, or {@code null} if the bridge builds its own default
+	 * 	(a {@link DefaultObjectWrapper} configured per {@link #isExposeFields() isExposeFields()}).
+	 */
+	public ObjectWrapper getObjectWrapper() {
+		return objectWrapper;
 	}
 
 	/**
@@ -183,9 +209,16 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 * pins {@code IncompatibleImprovements} to {@link Configuration#VERSION_2_3_34} so behavior is
 	 * stable across consumer upgrades of {@code org.freemarker:freemarker}; sets
 	 * {@code DefaultEncoding} to {@code UTF-8} and {@code OutputFormat} to
-	 * {@link HTMLOutputFormat#INSTANCE} so HTML escaping is the natural target; and applies
+	 * {@link HTMLOutputFormat#INSTANCE} so HTML escaping is the natural target; applies
 	 * {@code TemplateUpdateDelayMilliseconds} per the configured
-	 * {@link #isCacheTemplates() cacheTemplates} flag.
+	 * {@link #isCacheTemplates() cacheTemplates} flag; and sets an {@code ObjectWrapper} &mdash;
+	 * either the user-supplied {@link #getObjectWrapper() objectWrapper} override, or (by default)
+	 * a {@link DefaultObjectWrapper} built with {@code exposeFields} set to
+	 * {@link #isExposeFields() isExposeFields()}. Field exposure defaults to {@code true} (unlike
+	 * FreeMarker's own version-default wrapper, which is getter-only): Juneau's own marshalling is
+	 * comfortable with public-field beans elsewhere, so a view-model DTO written with public fields
+	 * and no getters renders its field values here too, instead of silently resolving to
+	 * {@code null}/missing.
 	 *
 	 * <p>
 	 * Subclasses may override to plug in custom loaders / encodings / output formats without
@@ -199,7 +232,21 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setOutputFormat(HTMLOutputFormat.INSTANCE);
 		cfg.setTemplateUpdateDelayMilliseconds(cacheTemplates ? Long.MAX_VALUE : 0L);
+		cfg.setObjectWrapper(objectWrapper != null ? objectWrapper : buildDefaultObjectWrapper());
 		return cfg;
+	}
+
+	/**
+	 * Builds the bridge-default {@link ObjectWrapper} &mdash; a {@link DefaultObjectWrapper} with
+	 * {@code exposeFields} set per {@link #isExposeFields() isExposeFields()}. Only called when no
+	 * {@link #getObjectWrapper() objectWrapper} override has been supplied.
+	 *
+	 * @return A new {@link DefaultObjectWrapper} instance.
+	 */
+	private ObjectWrapper buildDefaultObjectWrapper() {
+		var b = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_34);
+		b.setExposeFields(exposeFields);
+		return b.build();
 	}
 
 	/**
@@ -314,6 +361,8 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		String basePath = DEFAULT_BASE_PATH;
 		String templateSuffix = DEFAULT_TEMPLATE_SUFFIX;
 		boolean cacheTemplates = DEFAULT_CACHE_TEMPLATES;
+		boolean exposeFields = DEFAULT_EXPOSE_FIELDS;
+		ObjectWrapper objectWrapper;
 
 		/** Constructor &mdash; package access for {@link FreemarkerDispatcher#create()}. */
 		protected Builder() {}
@@ -355,6 +404,42 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		}
 
 		/**
+		 * Sets whether the bridge-default {@code ObjectWrapper} exposes public fields (not just
+		 * JavaBean getters) to templates.
+		 *
+		 * <p>
+		 * Defaults to {@link FreemarkerDispatcher#DEFAULT_EXPOSE_FIELDS true} so simple view-model
+		 * DTOs written with public fields and no getters render their field values instead of
+		 * silently resolving to {@code null}/missing. Has no effect once {@link #objectWrapper}
+		 * has been called with a non-{@code null} value &mdash; the explicit wrapper always wins.
+		 *
+		 * @param value The field-exposure flag.
+		 * @return This object.
+		 */
+		public Builder exposeFields(boolean value) {
+			exposeFields = value;
+			return this;
+		}
+
+		/**
+		 * Sets a fully custom {@code ObjectWrapper} for the bridge-default configuration,
+		 * overriding {@link #exposeFields(boolean)} entirely.
+		 *
+		 * <p>
+		 * Escape hatch for consumers who need full control (e.g. a {@code BeansWrapper} with
+		 * custom method/property exposure, or a third-party wrapper) without hand-rolling and
+		 * registering a whole replacement {@code Configuration} bean.
+		 *
+		 * @param value The object wrapper. {@code null} reverts to the bridge-built
+		 * 	{@link DefaultObjectWrapper} (per {@link #exposeFields(boolean)}).
+		 * @return This object.
+		 */
+		public Builder objectWrapper(ObjectWrapper value) {
+			objectWrapper = value;
+			return this;
+		}
+
+		/**
 		 * Reads the current base path setting (test/inspection helper).
 		 *
 		 * @return The base path. Never {@code null}.
@@ -379,6 +464,24 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		 */
 		public boolean isCacheTemplates() {
 			return cacheTemplates;
+		}
+
+		/**
+		 * Reads the current field-exposure setting (test/inspection helper).
+		 *
+		 * @return The field-exposure flag.
+		 */
+		public boolean isExposeFields() {
+			return exposeFields;
+		}
+
+		/**
+		 * Reads the current object-wrapper override (test/inspection helper).
+		 *
+		 * @return The object wrapper override, or {@code null} if none has been set.
+		 */
+		public ObjectWrapper getObjectWrapper() {
+			return objectWrapper;
 		}
 
 		/**

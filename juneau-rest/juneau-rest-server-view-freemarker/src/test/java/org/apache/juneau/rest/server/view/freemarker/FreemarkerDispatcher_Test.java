@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.*;
 
 import freemarker.cache.*;
 import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapperBuilder;
 
 /**
  * Unit tests for {@link FreemarkerDispatcher#render(String, RestRequest, RestResponse) render(...)} and
@@ -177,5 +179,56 @@ class FreemarkerDispatcher_Test extends TestBase {
 		var dispatcher = FreemarkerDispatcher.create().cacheTemplates(true).build();
 		var cfg = dispatcher.buildDefaultConfiguration();
 		assertEquals(Long.MAX_VALUE, cfg.getTemplateUpdateDelayMilliseconds());
+	}
+
+	/* ---------------------------------------------------------------------------------------- *
+	 * Section D: buildDefaultConfiguration object-wrapper / exposeFields behavior
+	 * ---------------------------------------------------------------------------------------- */
+
+	/** View-model DTO with a public field and no getter — the shape that bit the dogfooded consumer. */
+	public static class D_FieldOnlyBean {
+		public String name = "Alice";
+	}
+
+	private static String renderToString(Configuration cfg, String template, Object bean) throws Exception {
+		var loader = new StringTemplateLoader();
+		loader.putTemplate("t", template);
+		cfg.setTemplateLoader(loader);
+		var sw = new StringWriter();
+		cfg.getTemplate("t").process(Map.of("bean", bean), sw);
+		return sw.toString();
+	}
+
+	@Test void d01_buildDefaultConfiguration_exposeFieldsDefaultTrue_rendersPublicFieldValue() throws Exception {
+		var dispatcher = FreemarkerDispatcher.create().build();
+		var cfg = dispatcher.buildDefaultConfiguration();
+
+		assertEquals("Alice", renderToString(cfg, "${bean.name}", new D_FieldOnlyBean()));
+	}
+
+	@Test void d02_exposeFieldsFalse_publicFieldIsInvisibleToTemplates() throws Exception {
+		var dispatcher = FreemarkerDispatcher.create().exposeFields(false).build();
+		var cfg = dispatcher.buildDefaultConfiguration();
+
+		// With exposeFields=false (FreeMarker's own version-default behavior), the public field
+		// isn't visible as a bean property, so a defaulted reference falls through silently.
+		assertEquals("MISSING", renderToString(cfg, "${bean.name!'MISSING'}", new D_FieldOnlyBean()));
+	}
+
+	@Test void d03_objectWrapperOverride_takesPrecedenceOverExposeFields() {
+		var b = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_34);
+		b.setExposeFields(false);
+		var custom = b.build();
+		var dispatcher = FreemarkerDispatcher.create().exposeFields(true).objectWrapper(custom).build();
+
+		var cfg = dispatcher.buildDefaultConfiguration();
+
+		assertSame(custom, cfg.getObjectWrapper());
+	}
+
+	@Test void d04_exposeFieldsAndObjectWrapperDefaultToTrueAndNull() {
+		var dispatcher = FreemarkerDispatcher.create().build();
+		assertTrue(dispatcher.isExposeFields());
+		assertNull(dispatcher.getObjectWrapper());
 	}
 }

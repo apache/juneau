@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static java.util.concurrent.TimeUnit.*;
 
+import java.lang.management.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -49,12 +50,28 @@ import org.apache.juneau.rest.server.mcp.McpSchema;
  * <p>
  * Validation itself runs on a fixed-size pool of daemon threads and is bounded by the same overall budget: if
  * a pathological schema (for example a catastrophically-backtracking {@code pattern}) fails to complete in
- * time, the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread. That
- * compute budget is measured from the moment the task actually starts running, not from the moment it is
- * submitted: time spent waiting for a free thread in {@link #VALIDATION_POOL} (for example under heavy
- * concurrent build/test load) is scheduling latency, not validation cost, so it is never charged against
- * {@link #MAX_VALIDATION_MILLIS}. A separate, much more generous {@link #MAX_SCHEDULING_MILLIS} backstop still
- * bounds the scheduling wait itself, purely so a wedged or saturated pool cannot block the caller forever.
+ * time, the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread.
+ *
+ * <p>
+ * <b>The compute budget is charged against the validating thread's actual CPU time, not wall-clock time.</b>
+ * The DoS threat being defended against is a schema that burns CPU (catastrophic backtracking, quadratic
+ * blowups); the amount of CPU a validation consumes is exactly what that budget should cap. Measuring
+ * wall-clock instead would wrongly count time the validating thread was <i>not</i> running - time it spent
+ * preempted by the OS scheduler, or queued behind sibling work - as if it were validation cost. Under heavy
+ * concurrent load (for example {@code juneau-integration-tests} running Surefire with {@code forkCount=8}) that
+ * false accounting can trip the budget on trivial input, and the same false-positive can bite a saturated
+ * production deployment. Sampling {@link ThreadMXBean#getThreadCpuTime(long) thread CPU time} on the thread
+ * that actually does the work means only real compute counts: preemption and scheduling latency no longer
+ * shrink the budget, while a genuinely expensive validation still trips it and returns the same {@code -32602}
+ * error. On a JVM where per-thread CPU timing is unavailable, {@link #awaitBounded} transparently falls back to
+ * the original wall-clock measurement so the guard still functions everywhere.
+ *
+ * <p>
+ * Independently of the compute budget, time spent waiting for a free thread in {@link #VALIDATION_POOL} is
+ * scheduling latency, not validation cost, so it is never charged against {@link #MAX_VALIDATION_MILLIS}: the
+ * budget clock (CPU or wall-clock) only starts once the task is actually running. A separate, much more
+ * generous {@link #MAX_SCHEDULING_MILLIS} backstop bounds the scheduling wait itself, purely so a wedged or
+ * saturated pool cannot block the caller forever.
  */
 final class McpSchemaSafety {
 
@@ -65,10 +82,10 @@ final class McpSchemaSafety {
 	static final int MAX_NODES = 10_000;
 
 	/**
-	 * Maximum compute time permitted for a single schema validation, in milliseconds, measured from the
-	 * moment the validation task actually starts running on {@link #VALIDATION_POOL} (not from submission).
+	 * Maximum compute time permitted for a single schema validation, in milliseconds, measured as the
+	 * validating thread's actual CPU time (see class-level notes) - not from submission, and not as wall-clock.
 	 * This is the DoS bound: it caps how much CPU a pathological schema can burn, and is deliberately
-	 * unaffected by how long the task had to wait for a free thread.
+	 * unaffected both by how long the task had to wait for a free thread and by any OS preemption while it runs.
 	 */
 	static final long MAX_VALIDATION_MILLIS = 100;
 
@@ -79,6 +96,36 @@ final class McpSchemaSafety {
 	 * validations under heavy concurrent load) never gets mistaken for an expensive schema.
 	 */
 	static final long MAX_SCHEDULING_MILLIS = 2_000;
+
+	private static final ThreadMXBean THREAD_MX = ManagementFactory.getThreadMXBean();
+
+	/**
+	 * Whether per-thread CPU-time measurement is available (and enabled) on this JVM. When <jk>true</jk>, the
+	 * compute budget is charged against the validating thread's actual CPU time; when <jk>false</jk> (a JVM that
+	 * cannot report per-thread CPU time), {@link #awaitBounded} falls back to the original wall-clock measurement
+	 * so the DoS guard still functions everywhere.
+	 */
+	private static final boolean CPU_TIME_SUPPORTED = initCpuTimeSupport();
+
+	/**
+	 * How often the waiting thread re-samples the validating thread's accumulated CPU time while a validation is
+	 * still running. Small enough that a runaway validation is stopped promptly once it burns past the budget,
+	 * large enough that the sampling overhead is negligible.
+	 */
+	private static final long CPU_POLL_INTERVAL_NANOS = MILLISECONDS.toNanos(5);
+
+	private static boolean initCpuTimeSupport() {
+		if (! THREAD_MX.isThreadCpuTimeSupported())
+			return false;  // HTT: CI JVMs support per-thread CPU time; this fallback path isn't reachable there.
+		if (! THREAD_MX.isThreadCpuTimeEnabled()) {
+			try {
+				THREAD_MX.setThreadCpuTimeEnabled(true);  // HTT: HotSpot enables thread CPU time by default; not reachable in CI.
+			} catch (@SuppressWarnings("unused") SecurityException | UnsupportedOperationException e) {
+				return false;  // HTT: enabling is rejected only under a restrictive SecurityManager; not reachable in CI.
+			}
+		}
+		return true;
+	}
 
 	private static final ExecutorService VALIDATION_POOL = newValidationPool();
 
@@ -125,56 +172,79 @@ final class McpSchemaSafety {
 
 	/**
 	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces the remaining share of the shared
-	 * {@link JsonValueSafety} deadline against the task's own compute time - never against however long it
-	 * had to wait in {@link #VALIDATION_POOL} for a free thread.
+	 * {@link JsonValueSafety} deadline against the task's own compute time - never against however long it had
+	 * to wait in {@link #VALIDATION_POOL} for a free thread, and (when CPU timing is available) never against
+	 * wall-clock time it spent preempted rather than running.
 	 */
 	private static void validateBounded(JsonSchema<?> schema, Object value, long deadlineNanos) {
 		var remaining = JsonValueSafety.remainingNanos(deadlineNanos);
 		if (remaining == 0)
 			throw validationTimeoutException();
 		var started = new CountDownLatch(1);
-		var startedAtNanos = new AtomicLong();
+		var taskStart = new AtomicReference<TaskStart>();
 		var future = VALIDATION_POOL.submit(() -> {
-			startedAtNanos.set(System.nanoTime());
+			taskStart.set(TaskStart.capture());
 			started.countDown();
 			JsonSchemaValidator.of(schema).validate(value);
 			return null;
 		});
-		awaitBounded(future, started, startedAtNanos, remaining);
+		awaitBounded(future, started, taskStart, remaining);
 	}
 
 	/**
-	 * Waits for a submitted validation task to complete, charging only its own compute time - measured from
-	 * {@code startedAtNanos}, which the task sets as its first instruction - against {@code remaining}, the
-	 * caller's share of the shared {@link JsonValueSafety} deadline.
+	 * Snapshot of when a validation task actually began running, captured on the validating thread itself as its
+	 * first instruction.
+	 *
+	 * @param threadId The validating thread's id, so the waiting thread can sample that same thread's CPU time.
+	 * @param wallNanos The {@link System#nanoTime()} baseline, used by the wall-clock fallback.
+	 * @param cpuNanos The validating thread's CPU-time baseline in nanoseconds ({@link ThreadMXBean#getThreadCpuTime(long)}),
+	 * 	or {@code -1} if per-thread CPU timing is unavailable on this JVM.
+	 */
+	record TaskStart(long threadId, long wallNanos, long cpuNanos) {
+
+		/** Captures the current thread's start snapshot; must be called on the thread that runs the validation. */
+		static TaskStart capture() {
+			var id = Thread.currentThread().getId();
+			return new TaskStart(id, System.nanoTime(), CPU_TIME_SUPPORTED ? THREAD_MX.getThreadCpuTime(id) : -1L);
+		}
+	}
+
+	/**
+	 * Waits for a submitted validation task to complete, charging only its own compute time against
+	 * {@code remaining} (the caller's share of the shared {@link JsonValueSafety} deadline) - never however long
+	 * it had to wait in {@link #VALIDATION_POOL} for a free thread.
 	 *
 	 * <p>
-	 * This waits in two phases. First, {@code started} is awaited so the calling thread learns exactly when
-	 * the task begins running; this wait is bounded only by the generous {@link #MAX_SCHEDULING_MILLIS}
-	 * backstop, since scheduling delay under load (queueing behind other work in {@link #VALIDATION_POOL})
-	 * is not the thing being defended against. Second, once running, the task is given the full
-	 * {@code remaining} share of the deadline as its own fresh compute window - anchored to its actual start
-	 * time rather than to submission time - so a busy pool cannot eat into the budget that is meant to cap
-	 * the validator's own work.
+	 * This waits in two phases. First, {@code started} is awaited so the calling thread learns exactly when the
+	 * task begins running; this wait is bounded only by the generous {@link #MAX_SCHEDULING_MILLIS} backstop,
+	 * since scheduling delay under load (queueing behind other work in {@link #VALIDATION_POOL}) is not the thing
+	 * being defended against. Second, once the task is running, its compute is bounded: when per-thread CPU
+	 * timing is available (the normal case) the waiting thread polls the validating thread's accumulated
+	 * <i>CPU</i> time and trips only if that exceeds {@code remaining}, so preemption and scheduling latency
+	 * never shrink the budget - only real CPU work does. When CPU timing is unavailable, it falls back to the
+	 * original wall-clock window anchored to the task's actual start time.
 	 *
 	 * <p>
 	 * Package-private (rather than private) purely so this can be exercised directly against a test-local
-	 * {@link Future}/latch pair - deterministically simulating scheduling delay - without needing to saturate
-	 * the shared {@link #VALIDATION_POOL}.
+	 * {@link Future}/latch pair - deterministically simulating scheduling delay, a CPU burn, or a sleep that
+	 * elapses wall-clock without consuming CPU - without needing to saturate the shared {@link #VALIDATION_POOL}.
 	 *
 	 * @param future The in-flight (or already-complete) validation task.
 	 * @param started Counted down by the task as its first instruction, once it actually begins running.
-	 * @param startedAtNanos Set by the task (before counting down {@code started}) to {@link System#nanoTime()}.
+	 * @param taskStart Set by the task (before counting down {@code started}) to its {@link TaskStart} snapshot.
 	 * @param remaining The caller's remaining share of the shared deadline, in nanoseconds, captured before submission.
 	 */
-	static void awaitBounded(Future<?> future, CountDownLatch started, AtomicLong startedAtNanos, long remaining) {
+	static void awaitBounded(Future<?> future, CountDownLatch started, AtomicReference<TaskStart> taskStart, long remaining) {
 		try {
 			if (! started.await(MAX_SCHEDULING_MILLIS, MILLISECONDS)) {
 				future.cancel(true);
 				throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation could not be scheduled within " + MAX_SCHEDULING_MILLIS + " ms");
 			}
-			var computeRemainingNanos = remaining - (System.nanoTime() - startedAtNanos.get());
-			future.get(Math.max(0, computeRemainingNanos), NANOSECONDS);
+			var start = taskStart.get();
+			if (CPU_TIME_SUPPORTED && start.cpuNanos() >= 0)
+				awaitByCpuTime(future, start.threadId(), start.cpuNanos(), remaining);
+			else
+				future.get(Math.max(0, remaining - (System.nanoTime() - start.wallNanos())), NANOSECONDS);  // HTT: wall-clock fallback; CI JVMs use the CPU-time path.
 		} catch (TimeoutException e) {
 			future.cancel(true);
 			throw validationTimeoutException();
@@ -188,6 +258,45 @@ final class McpSchemaSafety {
 			Thread.currentThread().interrupt();
 			throw new McpException(McpRevision.CODE_INVALID_PARAMS, "Tool input schema validation was interrupted");
 		}
+	}
+
+	/**
+	 * Bounds a running validation by the validating thread's actual CPU time.
+	 *
+	 * <p>
+	 * The waiting thread polls at {@link #CPU_POLL_INTERVAL_NANOS} intervals: each time the task hasn't finished
+	 * yet, it re-samples thread CPU time and keeps waiting as long as the CPU consumed since {@code baseCpuNanos}
+	 * is within {@code budgetNanos}. Wall-clock elapsed while the thread was preempted (or deliberately sleeping)
+	 * accrues no CPU, so it never trips the budget; a schema that genuinely burns CPU does. Validation is pure
+	 * in-memory work with no I/O or blocking, so CPU accrual is a sufficient bound and no wall-clock ceiling is
+	 * needed here - a task that never returns would necessarily be burning CPU and will trip the budget.
+	 *
+	 * @param future The running validation task.
+	 * @param threadId The validating thread's id.
+	 * @param baseCpuNanos The validating thread's CPU-time baseline captured at task start.
+	 * @param budgetNanos The maximum CPU time, in nanoseconds, the validation may consume.
+	 * @throws TimeoutException If the CPU budget is exceeded while the task is still running.
+	 */
+	private static void awaitByCpuTime(Future<?> future, long threadId, long baseCpuNanos, long budgetNanos)
+			throws InterruptedException, ExecutionException, TimeoutException {
+		while (true) {
+			try {
+				future.get(CPU_POLL_INTERVAL_NANOS, NANOSECONDS);
+				return;
+			} catch (TimeoutException poll) {
+				var cpuNow = THREAD_MX.getThreadCpuTime(threadId);
+				if (cpuNow >= 0 && cpuNow - baseCpuNanos <= budgetNanos)
+					continue;  // real CPU work still within budget; preemption/scheduling doesn't count against it
+				if (future.isDone())
+					continue;  // finished inside the sampling race window; the next get() harvests its result/exception
+				throw poll;  // CPU work exceeded the DoS budget (or CPU timing was lost) while the task is still running
+			}
+		}
+	}
+
+	/** Whether the compute budget is charged against thread CPU time (vs. the wall-clock fallback); for tests. */
+	static boolean cpuTimeBudgetEnabled() {
+		return CPU_TIME_SUPPORTED;
 	}
 
 	private static McpException validationTimeoutException() {

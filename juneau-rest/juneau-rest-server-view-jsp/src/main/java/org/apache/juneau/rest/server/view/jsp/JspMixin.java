@@ -42,35 +42,41 @@ import org.apache.juneau.rest.server.view.*;
  * <h5 class='section'>Auto-wiring the renderer into the host's own endpoints:</h5>
  *
  * <p>
- * By default a mixin's {@code responseProcessors} apply only to the mixin's own endpoints &mdash; a host's own
- * {@code @RestOp} methods see only the host's chain (the {@link Rest#mixins() @Rest(mixins=...)} rule "host's
- * chain runs first, then the mixin's appended; host endpoints see only the host's chain").  So with a bare
- * {@code @Rest(mixins=JspMixin.class)}, a host whose own {@code @RestOp} returns {@link JspView} would have the
- * framework's default {@code SerializedPojoProcessor} bean-serialize it instead of dispatching it to the JSP
- * engine.  Two ways to make the host's own {@code JspView} returns reach {@link JspViewRenderer}:
+ * A bare {@code @Rest(mixins=JspMixin.class)} is enough &mdash; a host whose own {@code @RestOp} method returns
+ * {@link JspView} renders it through the JSP engine with no extra wiring.  That works because {@code JspMixin}
+ * declares {@link Rest#mergeResponseProcessorsIntoHost() @Rest(mergeResponseProcessorsIntoHost=true)} on its own
+ * class, so the framework folds {@code JspMixin}'s {@link JspViewRenderer} into the host's own response-processor
+ * chain automatically.
+ *
+ * <p>
+ * This fold is per-mixin, opt-in, and response-processor-scoped: it happens only because {@code JspMixin}
+ * declares the opt-in (a mixin that does not is still scoped to its own endpoints, the standard
+ * {@link Rest#mixins() @Rest(mixins=...)} rule), and it folds only the renderer &mdash; never {@code guards},
+ * {@code serializers}, or any other list-shaped attribute.
+ *
+ * <p>
+ * Two explicit wirings remain supported &mdash; useful when you want to be explicit, or to fold more than the
+ * renderer:
  *
  * <ol class='spaced-list'>
- * 	<li><b>Opt in via {@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}</b> (recommended) &mdash; the
- * 		host declares the mixin through the rich {@link Rest#mixinDefs() mixinDefs} form with
- * 		{@code mergeIntoHost=true}, which folds {@code JspMixin}'s {@code @Rest(responseProcessors=...)} (and any
- * 		other list-shaped attributes) into the host's own chain.  No need to repeat
- * 		{@link JspViewRenderer JspViewRenderer.class} on the host.
+ * 	<li><b>{@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}</b> via the rich {@link Rest#mixinDefs()
+ * 		mixinDefs} form &mdash; folds <b>all</b> of {@code JspMixin}'s list-shaped {@code @Rest} attributes into
+ * 		the host's own chain, not just the renderer.
  * 	<li><b>List {@link JspViewRenderer JspViewRenderer.class} explicitly</b> in the host's own
- * 		{@code @Rest(responseProcessors=...)} &mdash; the manual equivalent, useful when the host does not
- * 		declare the mixin via {@code mixinDefs}.
+ * 		{@code @Rest(responseProcessors=...)} &mdash; the fully manual equivalent.
  * </ol>
  *
  * <p>
  * The {@link org.apache.juneau.rest.server.processor.ResponseProcessorList} partition pass repositions
  * {@link JspViewRenderer} (a
  * {@link org.apache.juneau.rest.server.view.ViewRenderer ViewRenderer}) ahead of
- * {@code SerializedPojoProcessor} in either case, so the {@link JspView} bean is dispatched to the JSP engine
+ * {@code SerializedPojoProcessor} in every case, so the {@link JspView} bean is dispatched to the JSP engine
  * rather than bean-serialized.
  *
  * <h5 class='figure'>Composition example (microservice):</h5>
  *
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixinDefs=<ja>@Mixin</ja>(type=JspMixin.<jk>class</jk>, mergeIntoHost=<jk>true</jk>))
+ * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=JspMixin.<jk>class</jk>)
  * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet {
  *
  * 		<ja>@Bean</ja> JspMixin jsp() {
@@ -162,7 +168,8 @@ import org.apache.juneau.rest.server.view.*;
  */
 // @formatter:off
 @Rest(
-	responseProcessors={JspViewRenderer.class}
+	responseProcessors={JspViewRenderer.class},
+	mergeResponseProcessorsIntoHost=true
 )
 public class JspMixin {
 

@@ -3558,10 +3558,19 @@ public class RestContext extends Context {
 		// Opt-in @Mixin(mergeIntoHost=true) directive: for a host context and a list-shaped property, append the
 		// adopted mixin(s)' own @Rest contributions AFTER the host's chain (parent-to-child), so the host's own
 		// endpoints pick up the mixin's list-shaped attributes.  Default behavior (no opted-in mixin) is unchanged.
-		if (! isMixinContextField() && MERGEABLE_LIST_PROPERTIES.contains(name)) {
-			var merged = mergeIntoHostMixinAnnotations.get();
-			if (! merged.isEmpty())
-				return Stream.concat(hostStream, merged.stream());
+		if (! isMixinContextField()) {
+			if (MERGEABLE_LIST_PROPERTIES.contains(name)) {
+				var merged = mergeIntoHostMixinAnnotations.get();
+				if (! merged.isEmpty())
+					hostStream = Stream.concat(hostStream, merged.stream());
+			}
+			// Mixin-declared @Rest(mergeResponseProcessorsIntoHost=true) opt-in: fold the opted-in mixin's OWN response
+			// processors into the host's chain — response-processor-scoped only (never other list-shaped attributes).
+			if (PROPERTY_responseProcessors.equals(name)) {
+				var mergedRp = mergeResponseProcessorsIntoHostMixinAnnotations.get();
+				if (! mergedRp.isEmpty())
+					hostStream = Stream.concat(hostStream, mergedRp.stream());
+			}
 		}
 		return hostStream;
 	}
@@ -3588,6 +3597,40 @@ public class RestContext extends Context {
 			rstream(getAnnotationProvider().find(Rest.class, ClassInfo.of(rm.type())))
 				.filter(ai -> ! (ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner())))
 				.forEach(out::add);
+		}
+		return u(out);
+	});
+
+	/**
+	 * The OWN {@code @Rest} annotation chains (parent-to-child, framework {@code DefaultConfig} entries excluded) of any
+	 * mixin that opts into folding its response processors into the host via
+	 * {@link Rest#mergeResponseProcessorsIntoHost() @Rest(mergeResponseProcessorsIntoHost=true)} on its own class,
+	 * appended by {@link #getRestAnnotationsForProperty(String)} for the {@code responseProcessors} property only so the
+	 * mixin's {@code responseProcessors} fold into the host's own chain under a plain {@link Rest#mixins() mixins=}
+	 * reference.
+	 *
+	 * <p>
+	 * This is the mixin-declared, response-processor-scoped counterpart to the host-declared
+	 * {@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)} directive handled by
+	 * {@link #mergeIntoHostMixinAnnotations}: it folds <b>only</b> {@code responseProcessors}, never other list-shaped
+	 * attributes.  Empty for mixin sub-contexts and for hosts with no opted-in mixins &mdash; keeping the default (drop)
+	 * behavior for every mixin that does not declare the opt-in.  Built once at memoizer-init time (zero per-request
+	 * cost).
+	 */
+	private final Memoizer<List<AnnotationInfo<Rest>>> mergeResponseProcessorsIntoHostMixinAnnotations = memoizer(() -> {
+		if (isMixinContextField())
+			return List.of();
+		var out = new ArrayList<AnnotationInfo<Rest>>();
+		for (var rm : getResolvedMixins()) {
+			if (rm.type() == resourceClass())
+				continue;
+			// Fold in the mixin class's OWN @Rest chain (parent-to-child), excluding the framework DefaultConfig
+			// entries, but only when the mixin's own @Rest declares the mergeResponseProcessorsIntoHost opt-in.
+			var mixinRest = rstream(getAnnotationProvider().find(Rest.class, ClassInfo.of(rm.type())))
+				.filter(ai -> ! (ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner())))
+				.toList();
+			if (mixinRest.stream().anyMatch(ai -> ai.inner().mergeResponseProcessorsIntoHost()))
+				out.addAll(mixinRest);
 		}
 		return u(out);
 	});

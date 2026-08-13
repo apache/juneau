@@ -37,10 +37,12 @@ import com.github.mustachejava.*;
  * 		importer's classpath by asking the configured {@link MustacheFactory} to compile and
  * 		render them with no scope (raw render path; callers who want attributes use
  * 		{@link MustacheView} from a typed handler instead).
- * 	<li>Picks up {@link MustacheViewRenderer} automatically via the mixin's
- * 		{@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration, so
- * 		{@code @RestOp}-method return values of type {@link MustacheView} render through the
- * 		Mustache engine without any additional wiring.
+ * 	<li>Routes the host's own {@code @RestOp}-method return values of type {@link MustacheView} through the
+ * 		Mustache engine automatically. {@code MustacheMixin} declares
+ * 		{@link Rest#mergeResponseProcessorsIntoHost() @Rest(mergeResponseProcessorsIntoHost=true)}, so a plain
+ * 		{@code @Rest(mixins=MustacheMixin.class)} folds its {@link MustacheViewRenderer} into the host's own
+ * 		response-processor chain &mdash; no {@code mergeIntoHost} or explicit {@code responseProcessors=} on the
+ * 		host needed.
  * </ol>
  *
  * <h5 class='figure'>Composition example (microservice):</h5>
@@ -150,7 +152,8 @@ import com.github.mustachejava.*;
  */
 // @formatter:off
 @Rest(
-	responseProcessors={MustacheViewRenderer.class}
+	responseProcessors={MustacheViewRenderer.class},
+	mergeResponseProcessorsIntoHost=true
 )
 public class MustacheMixin {
 

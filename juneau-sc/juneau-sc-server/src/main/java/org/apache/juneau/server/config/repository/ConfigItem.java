@@ -46,6 +46,7 @@ public class ConfigItem {
 	 * Sets the configuration value.
 	 *
 	 * @param value The value to set.
+	 * @return This object.
 	 */
-	public void setValue(String value) { this.value = value; }
+	public ConfigItem setValue(String value) { this.value = value; return this; }
 }

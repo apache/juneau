@@ -40,8 +40,10 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Fixture {@code A} declares {@code @Rest(responseProcessors=JspViewRenderer.class)} directly
- * (the pattern proven to work by {@code JspView_TypedHandler_Test} in {@code juneau-integration-tests}),
- * rather than relying on {@code @Rest(mixins=JspMixin.class)} alone — see {@code z01} below for why.
+ * (the pattern proven to work by {@code JspView_TypedHandler_Test} in {@code juneau-integration-tests}).
+ * A bare {@code @Rest(mixins=JspMixin.class)} now reaches the same code path too, because {@code JspMixin}
+ * declares {@link Rest#mergeResponseProcessorsIntoHost() @Rest(mergeResponseProcessorsIntoHost=true)} on its
+ * own class, folding {@link JspViewRenderer} into the host's own chain — see {@code z01} below.
  *
  * @since 10.0.0
  */
@@ -71,19 +73,13 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
-	// A BARE @Rest(mixins=JspMixin.class) does NOT route a HOST-defined @RestGet method's
-	// JspView return value through JspViewRenderer -- this is the default, deliberately-isolated behavior.
-	// RestContext#getRestAnnotationsForProperty resolves a HOST context's own responseProcessors chain from the
-	// host's OWN @Rest annotation chain (ancestor classes); a mixin class's @Rest(responseProcessors=...) is a
-	// property of the MIXIN's own sub-context (consulted only for ops declared directly on the mixin class
-	// itself, e.g. JspMixin#render), and is NOT folded into the host's list unless the host opts in. See
-	// Rest#mixins() javadoc ("host's chain runs first, then the mixin's appended. Host endpoints see only the
-	// host's chain") and MixinInheritance_ResponseProcessors_Test#a02 in juneau-integration-tests, which pins
-	// this default isolation. To have a host's own JspView returns reach JspViewRenderer, the host opts in via
-	// @Mixin(mergeIntoHost=true) (see MergeIntoHost fixture + z02 below), which folds the mixin's list-shaped
-	// @Rest attributes (including responseProcessors) into the host's own chain; the manual equivalent is
-	// listing JspViewRenderer.class directly in the host's own @Rest(responseProcessors=...) -- exactly like
-	// this class's own fixture A above.
+	// A bare @Rest(mixins=JspMixin.class) DOES route a HOST-defined @RestGet method's JspView return value
+	// through JspViewRenderer, because JspMixin declares @Rest(mergeResponseProcessorsIntoHost=true) on its own
+	// class. That opt-in folds JspMixin's own @Rest(responseProcessors=JspViewRenderer.class) into the host's
+	// own response-processor chain (response-processor-scoped only), so a host op returning a JspView reaches
+	// the renderer with no extra wiring. See z01 below, JspMixin's class javadoc, and
+	// MixinResponseProcessorFold_Test (rest-server) / MixinInheritance_ResponseProcessors_Test
+	// (juneau-integration-tests), which pin the fold at the RestContext and mock-client levels respectively.
 	@Rest(mixins=JspMixin.class)
 	public static class MixinOnly extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
@@ -94,6 +90,29 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 	}
 
 	private static final MockRestClient cMixinOnly = MockRestClient.buildLax(MixinOnly.class);
+
+	// Non-silent regression guard: a mixin that registers JspViewRenderer but does NOT declare the
+	// mergeResponseProcessorsIntoHost opt-in stays scoped to its own endpoints -- its responseProcessors are
+	// NOT folded into the host's chain, so a host op returning a JspView falls back to bean-serialization.
+	// This is the deliberately-isolated default that JspMixin overrides by opting in (see z03 vs z01).
+	@Rest(responseProcessors=JspViewRenderer.class)
+	public static class NoFoldMixin {
+		@RestGet(path="/mixin-only-endpoint")
+		public String noop() {
+			return "noop";
+		}
+	}
+
+	@Rest(mixins=NoFoldMixin.class)
+	public static class HostWithNoFoldMixin extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/view")
+		public View view() {
+			return JspView.of("hello.jsp");
+		}
+	}
+
+	private static final MockRestClient cNoFoldMixin = MockRestClient.buildLax(HostWithNoFoldMixin.class);
 
 	// Opt-in host: adopts JspMixin via the rich mixinDefs form with mergeIntoHost=true, so the mixin's
 	// @Rest(responseProcessors=JspViewRenderer.class) folds into THIS host's own chain.
@@ -108,10 +127,30 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 
 	private static final MockRestClient cMergeIntoHost = MockRestClient.buildLax(MergeIntoHost.class);
 
-	@Test void z01_mixinAlone_doesNotRouteHostViewReturnThroughRenderer() throws Exception {
-		// Bean-serialized fallback (SerializedPojoProcessor won), NOT JSP-dispatched -- the body contains the
-		// JspView bean's own "templateName" field, which JspViewRenderer's actual dispatch path never produces.
-		var res = cMixinOnly.get("/view").accept("application/json").run();
+	@Test void z01_mixinAlone_routesHostViewReturnThroughRenderer() throws Exception {
+		// JspMixin declares @Rest(mergeResponseProcessorsIntoHost=true), so a bare @Rest(mixins=JspMixin.class)
+		// folds JspViewRenderer into the host's own chain: a host @RestGet returning a JspView is CLAIMED by the
+		// renderer (not bean-serialized). With a well-behaved dispatcher that commits the response, the render
+		// succeeds end-to-end (200) -- deterministic proof the fold routes AND renders, not merely that it was
+		// intercepted. The companion null-dispatcher assertion below pins that it reached the renderer rather than
+		// the default SerializedPojoProcessor (which would have produced a 200 "templateName" body, as in z03).
+		var okCtx = fakeServletContext(new FakeDispatcher(() -> { /* well-behaved engine committed the response */ }));
+		cMixinOnly.get("/view").servletContext(okCtx).run().assertStatus(200);
+
+		var noEngineCtx = fakeServletContext(null);
+		var res = cMixinOnly.get("/view").servletContext(noEngineCtx).run();
+		res.assertStatus(500);
+		res.assertContent().asString().isContains("Could not resolve RequestDispatcher");
+		res.assertContent().asString().isContains("No JSP engine is available on the classpath");
+	}
+
+	@Test void z03_nonOptedInMixin_doesNotRouteHostViewReturnThroughRenderer() throws Exception {
+		// Regression guard for the non-silent contract: NoFoldMixin registers JspViewRenderer but does NOT opt in
+		// via mergeResponseProcessorsIntoHost, so the renderer stays scoped to the mixin's own endpoints and is
+		// NOT folded into the host's chain. The host's JspView return therefore falls back to bean-serialization
+		// (SerializedPojoProcessor won) -- a 200 whose body contains the JspView bean's own "templateName" field,
+		// which JspViewRenderer's dispatch path never produces. Contrast with z01 (opted-in JspMixin routes).
+		var res = cNoFoldMixin.get("/view").accept("application/json").run();
 		res.assertStatus(200);
 		res.assertContent().asString().isContains("templateName");
 	}
@@ -121,7 +160,7 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 		// into the HOST's own chain, so a host @RestGet returning a JspView is now CLAIMED by JspViewRenderer
 		// (not bean-serialized). With a ServletContext that resolves no dispatcher, the renderer surfaces its
 		// NO_ENGINE_DIAGNOSTIC 500 -- deterministic proof the JspView reached JspViewRenderer rather than the
-		// default SerializedPojoProcessor (which would have produced a 200 "templateName" body as in z01).
+		// default SerializedPojoProcessor (which would have produced a 200 "templateName" body as in z03).
 		var ctx = fakeServletContext(null);
 		var res = cMergeIntoHost.get("/view").servletContext(ctx).run();
 		res.assertStatus(500);

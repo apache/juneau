@@ -37,11 +37,45 @@ import freemarker.template.*;
  * 		the importer's classpath by asking the configured {@link Configuration} for the named
  * 		template and rendering it with an empty data model (raw render path; callers who want
  * 		attributes use {@link FreemarkerView} from a typed handler instead).
- * 	<li>Picks up {@link FreemarkerViewRenderer} automatically via the mixin's
- * 		{@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration, so
- * 		{@code @RestOp}-method return values of type {@link FreemarkerView} render through the
- * 		FreeMarker engine without any additional wiring.
+ * 	<li>Registers {@link FreemarkerViewRenderer} for the mixin's <b>own</b> endpoints (e.g. the
+ * 		{@code /freemarker/*} route above) via the mixin's own
+ * 		{@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration.
  * </ol>
+ *
+ * <h5 class='section'>Auto-wiring the renderer into the host's own endpoints:</h5>
+ *
+ * <p>
+ * A bare {@code @Rest(mixins=FreemarkerMixin.class)} is enough &mdash; a host whose own {@code @RestOp} method
+ * returns {@link FreemarkerView} renders it through the FreeMarker engine with no extra wiring. That works
+ * because {@code FreemarkerMixin} declares
+ * {@link Rest#mergeResponseProcessorsIntoHost() @Rest(mergeResponseProcessorsIntoHost=true)} on its own class,
+ * so the framework folds {@code FreemarkerMixin}'s {@link FreemarkerViewRenderer} into the host's own
+ * response-processor chain automatically.
+ *
+ * <p>
+ * This fold is per-mixin, opt-in, and response-processor-scoped: it happens only because
+ * {@code FreemarkerMixin} declares the opt-in (a mixin that does not is still scoped to its own endpoints, the
+ * standard {@link Rest#mixins() @Rest(mixins=...)} rule), and it folds only the renderer &mdash; never
+ * {@code guards}, {@code serializers}, or any other list-shaped attribute.
+ *
+ * <p>
+ * Two explicit wirings remain supported &mdash; useful when you want to be explicit, or to fold more than the
+ * renderer:
+ *
+ * <ol class='spaced-list'>
+ * 	<li><b>{@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}</b> via the rich {@link Rest#mixinDefs()
+ * 		mixinDefs} form &mdash; folds <b>all</b> of {@code FreemarkerMixin}'s list-shaped {@code @Rest}
+ * 		attributes into the host's own chain, not just the renderer.
+ * 	<li><b>List {@link FreemarkerViewRenderer FreemarkerViewRenderer.class} explicitly</b> in the host's own
+ * 		{@code @Rest(responseProcessors=...)} &mdash; the fully manual equivalent.
+ * </ol>
+ *
+ * <p>
+ * The {@link org.apache.juneau.rest.server.processor.ResponseProcessorList} partition pass repositions
+ * {@link FreemarkerViewRenderer} (a
+ * {@link org.apache.juneau.rest.server.view.ViewRenderer ViewRenderer}) ahead of
+ * {@code SerializedPojoProcessor} in every case, so the {@link FreemarkerView} bean is dispatched to the
+ * FreeMarker engine rather than bean-serialized.
  *
  * <h5 class='figure'>Composition example (microservice):</h5>
  *
@@ -102,15 +136,32 @@ import freemarker.template.*;
  * 		{@code ClassLoaderTemplateResolver}-equivalent prefix {@code "/templates"}). The default
  * 		pins {@code IncompatibleImprovements} to the bridge-tested minor version
  * 		({@code Configuration.VERSION_2_3_34}), sets {@code DefaultEncoding} to {@code UTF-8},
- * 		uses {@code HTMLOutputFormat} so HTML escaping is the natural target, and applies
+ * 		uses {@code HTMLOutputFormat} so HTML escaping is the natural target, applies
  * 		{@code TemplateUpdateDelayMilliseconds} per the {@link #isCacheTemplates() cacheTemplates}
  * 		flag (production-safe by default; users opt into hot-reload via
- * 		{@link Builder#cacheTemplates(boolean) cacheTemplates(false)}).
+ * 		{@link Builder#cacheTemplates(boolean) cacheTemplates(false)}), and sets an
+ * 		{@code ObjectWrapper} with {@code exposeFields=true} (see below) unless overridden.
  * </ul>
  *
  * <p>
  * When no FreeMarker engine is on the classpath, the renderer surfaces
  * {@link FreemarkerViewRenderer#NO_ENGINE_DIAGNOSTIC} naming the missing dependency.
+ *
+ * <h5 class='section'>Public-field DTOs (getter-only default trap):</h5>
+ *
+ * <p>
+ * FreeMarker's own version-default {@code ObjectWrapper} exposes only JavaBean getters &mdash; a
+ * view-model bean written as a simple DTO with public fields and no getters resolves every
+ * {@code ${bean.field}} reference to {@code null}/missing, <b>silently</b> (a template using
+ * {@code !'default'} fallbacks renders the default with no error at all; a bare {@code ${bean.field}}
+ * with no fallback throws at render time). This bridge avoids that trap by default: the bridge-built
+ * {@link Configuration} sets a {@link DefaultObjectWrapper} with {@code exposeFields=true}
+ * ({@link #DEFAULT_EXPOSE_FIELDS}), so public-field DTOs render their field values out of the
+ * box &mdash; matching how Juneau's own marshalling is comfortable with public-field beans elsewhere.
+ * Use {@link Builder#exposeFields(boolean) exposeFields(false)} to restore FreeMarker's getter-only
+ * behavior, or {@link Builder#objectWrapper(ObjectWrapper) objectWrapper(...)} for full control
+ * (e.g. a {@code BeansWrapper} with custom exposure rules). Both knobs only affect the
+ * bridge-default {@link Configuration}; a user-supplied {@code @Bean Configuration} is used as-is.
  *
  * <h5 class='section'>Template suffix:</h5>
  *
@@ -155,7 +206,8 @@ import freemarker.template.*;
  */
 // @formatter:off
 @Rest(
-	responseProcessors={FreemarkerViewRenderer.class}
+	responseProcessors={FreemarkerViewRenderer.class},
+	mergeResponseProcessorsIntoHost=true
 )
 public class FreemarkerMixin {
 
@@ -167,6 +219,9 @@ public class FreemarkerMixin {
 
 	/** Default template-cache flag &mdash; {@code true} (production-safe). */
 	public static final boolean DEFAULT_CACHE_TEMPLATES = FreemarkerDispatcher.DEFAULT_CACHE_TEMPLATES;
+
+	/** Default field-exposure flag &mdash; {@code true} (public-field DTOs render out of the box). */
+	public static final boolean DEFAULT_EXPOSE_FIELDS = FreemarkerDispatcher.DEFAULT_EXPOSE_FIELDS;
 
 	private final FreemarkerDispatcher worker;
 
@@ -227,6 +282,24 @@ public class FreemarkerMixin {
 	 */
 	public boolean isCacheTemplates() {
 		return worker.isCacheTemplates();
+	}
+
+	/**
+	 * Returns the field-exposure flag applied to the bridge-default object wrapper.
+	 *
+	 * @return The field-exposure flag. Ignored once {@link #getObjectWrapper()} returns non-{@code null}.
+	 */
+	public boolean isExposeFields() {
+		return worker.isExposeFields();
+	}
+
+	/**
+	 * Returns the user-supplied {@link ObjectWrapper} override, if any.
+	 *
+	 * @return The object wrapper override, or {@code null} if the bridge builds its own default.
+	 */
+	public ObjectWrapper getObjectWrapper() {
+		return worker.getObjectWrapper();
 	}
 
 	/**
@@ -358,6 +431,43 @@ public class FreemarkerMixin {
 		}
 
 		/**
+		 * Sets whether the bridge-default {@code ObjectWrapper} exposes public fields (not just
+		 * JavaBean getters) to templates.
+		 *
+		 * <p>
+		 * Defaults to {@link FreemarkerMixin#DEFAULT_EXPOSE_FIELDS true} so simple view-model
+		 * DTOs written with public fields and no getters render their field values instead of
+		 * silently resolving to {@code null}/missing (see the class-level
+		 * "Public-field DTOs" section). Has no effect once {@link #objectWrapper(ObjectWrapper)}
+		 * has been called with a non-{@code null} value &mdash; the explicit wrapper always wins.
+		 *
+		 * @param value The field-exposure flag.
+		 * @return This object.
+		 */
+		public Builder exposeFields(boolean value) {
+			worker.exposeFields(value);
+			return this;
+		}
+
+		/**
+		 * Sets a fully custom {@code ObjectWrapper} for the bridge-default configuration,
+		 * overriding {@link #exposeFields(boolean)} entirely.
+		 *
+		 * <p>
+		 * Escape hatch for consumers who need full control (e.g. a {@code BeansWrapper} with
+		 * custom method/property exposure, or a third-party wrapper) without hand-rolling and
+		 * registering a whole replacement {@code Configuration} bean.
+		 *
+		 * @param value The object wrapper. {@code null} reverts to the bridge-built
+		 * 	{@link DefaultObjectWrapper} (per {@link #exposeFields(boolean)}).
+		 * @return This object.
+		 */
+		public Builder objectWrapper(ObjectWrapper value) {
+			worker.objectWrapper(value);
+			return this;
+		}
+
+		/**
 		 * Reads the current base path setting (test/inspection helper).
 		 *
 		 * @return The base path. Never {@code null}.
@@ -382,6 +492,24 @@ public class FreemarkerMixin {
 		 */
 		public boolean isCacheTemplates() {
 			return worker.isCacheTemplates();
+		}
+
+		/**
+		 * Reads the current field-exposure setting (test/inspection helper).
+		 *
+		 * @return The field-exposure flag.
+		 */
+		public boolean isExposeFields() {
+			return worker.isExposeFields();
+		}
+
+		/**
+		 * Reads the current object-wrapper override (test/inspection helper).
+		 *
+		 * @return The object wrapper override, or {@code null} if none has been set.
+		 */
+		public ObjectWrapper getObjectWrapper() {
+			return worker.getObjectWrapper();
 		}
 
 		/**

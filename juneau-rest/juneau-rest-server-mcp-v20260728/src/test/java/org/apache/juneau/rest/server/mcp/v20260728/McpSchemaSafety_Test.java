@@ -41,7 +41,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Coverage for {@link McpSchemaSafety}: no-fetch handling of external {@code $ref}s and bounded
- * (depth / node / wall-clock) schema validation (Resolution B2).
+ * (depth / node / CPU-time) schema validation (Resolution B2).
  */
 class McpSchemaSafety_Test {
 
@@ -159,7 +159,7 @@ class McpSchemaSafety_Test {
 		assertContains("node count", e.getMessage());
 	}
 
-	// -------- bounded wall-clock ---------
+	// -------- bounded compute (thread CPU time, with wall-clock fallback) ---------
 
 	@Test
 	void d01_adversarialValidation_terminatesWithinDeadline() {
@@ -190,23 +190,107 @@ class McpSchemaSafety_Test {
 		// deliberately delays counting down `started` well past MAX_VALIDATION_MILLIS before doing its
 		// (instantaneous) "work". If scheduling latency were - the regression this guards against - counted
 		// against the compute budget, awaitBounded() would throw a timeout error despite the task's own
-		// work costing nothing; with the root-cause fix, only compute time (measured from `started`) counts.
+		// work costing nothing; with the root-cause fix, only compute time (measured from the task's start
+		// snapshot) counts.
 		var schedulingDelayMillis = 3 * McpSchemaSafety.MAX_VALIDATION_MILLIS;
 		assertTrue(schedulingDelayMillis < McpSchemaSafety.MAX_SCHEDULING_MILLIS, "test fixture assumption");
 
 		var started = new CountDownLatch(1);
-		var startedAtNanos = new AtomicLong();
+		var taskStart = new AtomicReference<McpSchemaSafety.TaskStart>();
 		var executor = Executors.newSingleThreadExecutor();
 		try {
 			var future = executor.submit(() -> {
 				Thread.sleep(schedulingDelayMillis);  // simulates thread-pool queueing/scheduling delay
-				startedAtNanos.set(System.nanoTime());
+				taskStart.set(McpSchemaSafety.TaskStart.capture());
 				started.countDown();
 				return null;  // the "validation" work itself is instantaneous
 			});
 
 			assertDoesNotThrow(() -> McpSchemaSafety.awaitBounded(
-				future, started, startedAtNanos, TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
+				future, started, taskStart, TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
+		} finally {
+			executor.shutdownNow();
+		}
+	}
+
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep here deterministically models a validation that elapses wall-clock without consuming CPU, not a wait-and-hope delay.
+	})
+	@Test
+	void d03_sleepingValidation_doesNotTripCpuBudget() {
+		// The core of the wall-clock->CPU-time fix: a "validation" that lets a lot of wall-clock elapse but
+		// consumes ~no CPU (here, by sleeping *after* its start snapshot) must NOT trip the compute budget,
+		// because only real CPU work is the DoS threat. Under the old wall-clock measurement this would have
+		// tripped MAX_VALIDATION_MILLIS. Only meaningful when CPU timing is active (otherwise awaitBounded
+		// legitimately falls back to wall-clock, under which a sleep does count).
+		Assumptions.assumeTrue(McpSchemaSafety.cpuTimeBudgetEnabled(), "per-thread CPU timing unavailable on this JVM");
+		var sleepMillis = 4 * McpSchemaSafety.MAX_VALIDATION_MILLIS;  // far past the budget in wall-clock terms
+		assertTrue(sleepMillis < McpSchemaSafety.MAX_SCHEDULING_MILLIS, "test fixture assumption");
+
+		var started = new CountDownLatch(1);
+		var taskStart = new AtomicReference<McpSchemaSafety.TaskStart>();
+		var executor = Executors.newSingleThreadExecutor();
+		try {
+			var future = executor.submit(() -> {
+				taskStart.set(McpSchemaSafety.TaskStart.capture());
+				started.countDown();
+				Thread.sleep(sleepMillis);  // wall-clock elapses well past the budget, but burns ~no CPU
+				return null;
+			});
+
+			assertDoesNotThrow(() -> McpSchemaSafety.awaitBounded(
+				future, started, taskStart, TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
+		} finally {
+			executor.shutdownNow();
+		}
+	}
+
+	@Test
+	void d04_cpuBurningValidation_tripsBudget() {
+		// The complement of d03: a "validation" that actually burns CPU past the budget MUST still trip it and
+		// raise the same -32602 error. A generous CPU-burn margin (many multiples of the budget) keeps this
+		// robust rather than racing a tight wall-clock bound.
+		var started = new CountDownLatch(1);
+		var taskStart = new AtomicReference<McpSchemaSafety.TaskStart>();
+		var executor = Executors.newSingleThreadExecutor();
+		try {
+			var future = executor.submit(() -> {
+				taskStart.set(McpSchemaSafety.TaskStart.capture());
+				started.countDown();
+				var sink = 0L;
+				while (! Thread.currentThread().isInterrupted())  // spins until awaitBounded trips the budget and cancels us
+					for (var i = 1; i < 5_000_000; i++)
+						sink += (long) Math.sqrt(i) * i;
+				return sink;  // returned only so the JIT can't elide the loop
+			});
+
+			var e = assertThrows(McpException.class, () -> McpSchemaSafety.awaitBounded(
+				future, started, taskStart, TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
+			assertEquals(-32602, e.getCode());
+			assertContains("exceeded " + McpSchemaSafety.MAX_VALIDATION_MILLIS + " ms", e.getMessage());
+		} finally {
+			executor.shutdownNow();
+		}
+	}
+
+	@Test
+	void d05_cpuTimeUnavailable_fallsBackToWallClock() {
+		// When per-thread CPU timing is unavailable (cpuNanos == -1 in the start snapshot), awaitBounded must
+		// fall back to the original wall-clock budget so the guard still functions on such JVMs. Simulated here
+		// by handing awaitBounded a snapshot with cpuNanos == -1; the instantaneous task completes well within
+		// the wall-clock window.
+		var started = new CountDownLatch(1);
+		var taskStart = new AtomicReference<McpSchemaSafety.TaskStart>();
+		var executor = Executors.newSingleThreadExecutor();
+		try {
+			var future = executor.submit(() -> {
+				taskStart.set(new McpSchemaSafety.TaskStart(Thread.currentThread().getId(), System.nanoTime(), -1L));
+				started.countDown();
+				return null;  // instantaneous work, well within the wall-clock window
+			});
+
+			assertDoesNotThrow(() -> McpSchemaSafety.awaitBounded(
+				future, started, taskStart, TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
 		} finally {
 			executor.shutdownNow();
 		}

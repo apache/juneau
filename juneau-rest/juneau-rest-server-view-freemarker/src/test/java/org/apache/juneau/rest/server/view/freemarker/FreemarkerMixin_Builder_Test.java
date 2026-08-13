@@ -138,6 +138,36 @@ class FreemarkerMixin_Builder_Test extends TestBase {
 		assertNotNull(c1.getTemplateLoader());
 	}
 
+	@Test void a14_exposeFieldsDefaultsTrue() {
+		var r = FreemarkerMixin.create().build();
+		assertTrue(r.isExposeFields());
+	}
+
+	@Test void a15_exposeFieldsSetterRoundTrips() {
+		var r = FreemarkerMixin.create().exposeFields(false).build();
+		assertFalse(r.isExposeFields());
+	}
+
+	@Test void a16_objectWrapperDefaultsNull() {
+		var r = FreemarkerMixin.create().build();
+		assertNull(r.getObjectWrapper());
+	}
+
+	@Test void a17_objectWrapperSetterRoundTrips() {
+		var wrapper = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_34).build();
+		var r = FreemarkerMixin.create().objectWrapper(wrapper).build();
+		assertSame(wrapper, r.getObjectWrapper());
+	}
+
+	@Test void a18_builderReadersReflectExposeFieldsAndObjectWrapperMutations() {
+		var wrapper = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_34).build();
+		var b = FreemarkerMixin.create()
+			.exposeFields(false)
+			.objectWrapper(wrapper);
+		assertFalse(b.isExposeFields());
+		assertSame(wrapper, b.getObjectWrapper());
+	}
+
 	/* ---------------------------------------------------------------------------------------- *
 	 * Section B: applyTemplateSuffix helper (idempotent appender)
 	 * ---------------------------------------------------------------------------------------- */

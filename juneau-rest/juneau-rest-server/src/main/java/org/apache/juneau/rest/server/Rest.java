@@ -364,6 +364,37 @@ public @interface Rest {
 	Mixin[] mixinDefs() default {};
 
 	/**
+	 * Mixin-declared opt-in: fold this class's own {@link #responseProcessors() responseProcessors} into the
+	 * <b>host</b> resource's chain whenever this class is composed as a mixin via a plain
+	 * {@link #mixins() @Rest(mixins=...)} reference.
+	 *
+	 * <p>
+	 * By default ({@code false}) a mixin's {@code responseProcessors} apply only to the mixin's own endpoints
+	 * &mdash; a host's own {@code @RestOp} methods see only the host's chain (the standard {@link #mixins() mixin}
+	 * inheritance rule "host's chain runs first, then the mixin's appended; host endpoints see only the host's
+	 * chain").  Setting this to {@code true} <b>on the mixin class itself</b> makes a plain
+	 * {@code @Rest(mixins=ThisClass.class)} reference additionally append this class's own
+	 * {@code responseProcessors} to the end of the host's own chain, so the host's own endpoints pick them up too.
+	 *
+	 * <p>
+	 * This is the mixin-declared, response-processor-scoped counterpart to
+	 * {@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)} (which is host-declared and folds <i>all</i>
+	 * list-shaped attributes).  Unlike {@code mergeIntoHost}, this directive lives with the mixin and folds
+	 * <b>only</b> {@code responseProcessors} &mdash; never {@code guards}, {@code serializers}, or any other
+	 * list-shaped attribute.  It is intended for view-renderer mixins (e.g. {@code FreemarkerMixin}) so that
+	 * declaring the mixin is enough to route the host's own {@code View} returns through the renderer.
+	 *
+	 * <p>
+	 * Strictly opt-in and non-silent: it has no effect for a mixin that leaves it {@code false}, so existing
+	 * mixins keep today's scoping exactly.  Same-class de-duplication applies, so a response processor the host
+	 * already declares is not added twice.
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	boolean mergeResponseProcessorsIntoHost() default false;
+
+	/**
 	 * Client version header.
 	 *
 	 * <p>

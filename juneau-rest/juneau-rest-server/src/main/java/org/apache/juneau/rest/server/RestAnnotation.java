@@ -80,6 +80,7 @@ public class RestAnnotation {
 		private Child[] childrenDefs = {};
 		private Class<?>[] mixins = {};
 		private Mixin[] mixinDefs = {};
+		private boolean mergeResponseProcessorsIntoHost;
 		private Class<?>[] parsers = {};
 		private Swagger swagger = SwaggerAnnotation.DEFAULT;
 		private String disableContentParam = "";
@@ -247,6 +248,17 @@ public class RestAnnotation {
 		 */
 		public Builder mixinDefs(Mixin...value) {
 			mixinDefs = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#mergeResponseProcessorsIntoHost()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder mergeResponseProcessorsIntoHost(boolean value) {
+			mergeResponseProcessorsIntoHost = value;
 			return this;
 		}
 
@@ -821,6 +833,7 @@ public class RestAnnotation {
 		private final Child[] childrenDefs;
 		private final Class<?>[] mixins;
 		private final Mixin[] mixinDefs;
+		private final boolean mergeResponseProcessorsIntoHost;
 		private final Class<?>[] parsers;
 		private final Swagger swagger;
 		private final String disableContentParam;
@@ -878,6 +891,7 @@ public class RestAnnotation {
 			childrenDefs = cp(b.childrenDefs);
 			mixins = cp(b.mixins);
 			mixinDefs = cp(b.mixinDefs);
+			mergeResponseProcessorsIntoHost = b.mergeResponseProcessorsIntoHost;
 			clientVersionHeader = b.clientVersionHeader;
 			config = b.config;
 			eagerInit = b.eagerInit;
@@ -974,6 +988,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Mixin[] mixinDefs() {
 			return mixinDefs;
+		}
+
+		@Override /* Overridden from Rest */
+		public boolean mergeResponseProcessorsIntoHost() {
+			return mergeResponseProcessorsIntoHost;
 		}
 
 		@Override /* Overridden from Rest */
