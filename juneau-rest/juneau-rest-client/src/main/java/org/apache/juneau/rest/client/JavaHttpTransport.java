@@ -41,6 +41,15 @@ import java.net.http.HttpResponse.*;
  * 		.build();
  * </p>
  *
+ * <p>
+ * When a pooled keep-alive connection is torn down by the server before any response bytes are received (an
+ * immediate {@code EOF} surfaced by the JDK client as an {@code IOException} whose message is
+ * {@code "HTTP/1.1 header parser received no bytes"}), this transport replays the request exactly once on a fresh
+ * connection &mdash; but only when {@link TransportRequest#isSafeToReplay()} proves it is safe (an idempotent method
+ * with an absent or repeatable body).  The JDK client already retries body-less {@code GET} requests itself, but not
+ * other idempotent methods (e.g. {@code PUT}/{@code DELETE}); this backstop closes that gap while never replaying a
+ * {@code POST} or any other non-idempotent request.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
@@ -78,11 +87,33 @@ public final class JavaHttpTransport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		try {
+			return sendOnce(request);
+		} catch (StaleConnectionException e) {
+			// A pooled keep-alive connection was torn down by the server before any response was received.
+			// Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).
+			if (! request.isSafeToReplay())
+				throw e.asTransportException();
+			try {
+				return sendOnce(request);
+			} catch (StaleConnectionException e2) {
+				throw e2.asTransportException();
+			}
+		}
+	}
+
+	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
+	// pre-response stale-connection failure; throws TransportException for every other failure.
+	private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {
 		var jdkRequest = buildJdkRequest(request);
 		HttpResponse<InputStream> jdkResponse;
 		try {
 			jdkResponse = httpClient.send(jdkRequest, BodyHandlers.ofInputStream());
 		} catch (IOException e) {
+			// httpClient.send() only returns once the response headers have been read, so any IOException here
+			// occurred before any response bytes were received.
+			if (TransportException.isStaleConnectionFailure(e))
+				throw new StaleConnectionException(e);
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
@@ -149,5 +180,20 @@ public final class JavaHttpTransport implements HttpTransport {
 		jdkResponse.headers().map().forEach((name, values) ->
 			values.forEach(value -> builder.header(name, value)));
 		return builder.build();
+	}
+
+	// Internal signal that a pre-response stale-connection failure occurred and may be retried once.  Carries the
+	// original cause so the caller can build the user-visible TransportException if the retry is not attempted or
+	// also fails.
+	private static final class StaleConnectionException extends Exception {
+		private static final long serialVersionUID = 1L;
+
+		StaleConnectionException(Throwable cause) {
+			super(cause);
+		}
+
+		TransportException asTransportException() {
+			return new TransportException("HTTP transport error: " + getCause().getMessage(), getCause());
+		}
 	}
 }

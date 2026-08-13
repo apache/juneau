@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.marshall.json.*;
@@ -62,6 +63,22 @@ public abstract class AbstractMcpClient implements Closeable {
 	private static final String ARG_ENDPOINT = "endpoint";
 	private static final String ARG_INTERCEPTOR = "interceptor";
 	private static final String ARG_REQUEST = "request";
+
+	// JSON-RPC methods that are side-effect-free (pure queries), so a pre-response stale-connection failure can be
+	// safely replayed once.  Kept as revision-neutral protocol literals rather than a dependency on any dated
+	// McpMethods class.  Any method NOT listed here — notably tools/call, subscriptions/listen, sampling/createMessage,
+	// notifications/*, and any unknown method — is never replayed, so a mutating operation can never double-execute.
+	private static final Set<String> RETRYABLE_METHODS = Set.of(
+		"initialize",
+		"server/discover",
+		"ping",
+		"tools/list",
+		"prompts/list",
+		"prompts/get",
+		"resources/list",
+		"resources/read",
+		"resources/templates/list",
+		"completion/complete");
 
 	@SuppressWarnings("resource") // closed by this.close() (Closeable); Eclipse can't trace field-scoped ownership across construction and close().
 	private final RestClient restClient;
@@ -151,12 +168,7 @@ public abstract class AbstractMcpClient implements Closeable {
 	 */
 	public JsonRpcResponse send(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
 		assertArgNotNull(ARG_REQUEST, request);
-		var req = restClient.post(endpoint).body(request);
-		if (httpHeaders != null) {
-			for (var e : httpHeaders.entrySet())
-				req.header(e.getKey(), e.getValue());
-		}
-		try (var res = req.run()) {
+		try (var res = run(request, httpHeaders)) {
 			if (JsonRpcResponse.notification(request.getId()))
 				return null;
 			var sc = res.getStatusCode();
@@ -172,6 +184,45 @@ public abstract class AbstractMcpClient implements Closeable {
 				throw ioex("No response body received for JSON-RPC request id '%s' (HTTP %s).", request.getId(), sc);
 			return parsed;
 		}
+	}
+
+	/**
+	 * Runs the request, transparently retrying exactly once on a pre-response stale-connection failure when the
+	 * JSON-RPC method is side-effect-free.
+	 *
+	 * <p>
+	 * Every MCP call is transported as an HTTP {@code POST}, which a transport can never safely replay (a {@code POST}
+	 * may have already executed server-side before the connection dropped).  A pooled keep-alive connection can,
+	 * however, be torn down by the server between requests, causing the very next reuse to fail with an immediate
+	 * {@code EOF} before any response is received.  Keying the replay decision on JSON-RPC method idempotency here —
+	 * rather than on the HTTP method — lets such a failure be recovered for a read-only call (e.g.
+	 * {@code resources/read}) without risking a duplicate side effect.  Mutating methods (e.g. {@code tools/call}) and
+	 * any method not in {@link #RETRYABLE_METHODS} are never replayed.
+	 */
+	@SuppressWarnings("resource") // the returned RestResponse is closed by the caller's try-with-resources.
+	private RestResponse run(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
+		try {
+			return runOnce(request, httpHeaders);
+		} catch (IOException e) {
+			// req.run() only returns once response headers have been read, so any IOException here is pre-response.
+			if (! (isRetryableMethod(request.getMethod()) && TransportException.isStaleConnectionFailure(e)))
+				throw e;
+			return runOnce(request, httpHeaders);
+		}
+	}
+
+	@SuppressWarnings("resource") // the returned RestResponse is closed by the caller's try-with-resources.
+	private RestResponse runOnce(JsonRpcRequest request, Map<String,String> httpHeaders) throws IOException {
+		var req = restClient.post(endpoint).body(request);
+		if (httpHeaders != null) {
+			for (var e : httpHeaders.entrySet())
+				req.header(e.getKey(), e.getValue());
+		}
+		return req.run();
+	}
+
+	private static boolean isRetryableMethod(String method) {
+		return method != null && RETRYABLE_METHODS.contains(method);
 	}
 
 	/**

@@ -33,7 +33,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpPart;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.marshall.httppart.*;
-import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.rest.server.*;
 
 /**
@@ -83,10 +82,6 @@ import org.apache.juneau.rest.server.*;
  * 			<li class='jm'>{@link RequestQueryParamList#getAll(String) getAll(String)}
  * 			<li class='jm'>{@link RequestQueryParamList#getFirst(String) getFirst(String)}
  * 			<li class='jm'>{@link RequestQueryParamList#getLast(String) getLast(String)}
- * 			<li class='jm'>{@link RequestQueryParamList#getSearchArgs() getSearchArgs()}
- * 			<li class='jm'>{@link RequestQueryParamList#getViewArgs() getViewArgs()}
- * 			<li class='jm'>{@link RequestQueryParamList#getSortArgs() getSortArgs()}
- * 			<li class='jm'>{@link RequestQueryParamList#getPageArgs() getPageArgs()}
  * 		</ul>
  * 		<li>Methods overridding query parameters:
  * 		<ul class='javatreec'>
@@ -433,30 +428,6 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	public List<String> getNames() { return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : lcr(x)).distinct().toList(); }
 
 	/**
-	 * Locates the position/limit query arguments ({@code &amp;p=}, {@code &amp;l=}) in the query string and returns them as a {@link PageArgs} object.
-	 *
-	 * @return
-	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<PageArgs> getPageArgs() { return o(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }
-
-	/**
-	 * Locates the search query argument ({@code &amp;s=}) in the query string and returns them as a {@link SearchArgs} object.
-	 *
-	 * @return
-	 * 	A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<SearchArgs> getSearchArgs() { return o(SearchArgs.create(get("s").asString().orElse(null))); }
-
-	/**
-	 * Locates the sort query argument ({@code &amp;o=}) in the query string and returns them as a {@link SortArgs} object.
-	 *
-	 * @return
-	 * 	A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<SortArgs> getSortArgs() { return o(SortArgs.create(get("o").asString().orElse(null))); }
-
-	/**
 	 * Returns all headers in sorted order.
 	 *
 	 * @return The stream of all headers in sorted order.
@@ -469,14 +440,6 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 			x = (x1, x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);
 	}
-
-	/**
-	 * Locates the view query argument ({@code &amp;v=}) in the query string and returns them as a {@link ViewArgs} object.
-	 *
-	 * @return
-	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<ViewArgs> getViewArgs() { return o(ViewArgs.create(get("v").asString().orElse(null))); }
 
 	/**
 	 * Sets the parser to use for part values.

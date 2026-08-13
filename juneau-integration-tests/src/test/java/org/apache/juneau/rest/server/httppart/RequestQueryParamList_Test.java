@@ -21,6 +21,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.converter.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -212,13 +213,15 @@ class RequestQueryParamList_Test extends TestBase {
 				+ ",k2=" + q.get("k2").asString().orElse("?");
 		}
 
-		// Exercises getPageArgs / getSearchArgs / getSortArgs / getViewArgs.
+		// Exercises native s/v/o/p/l parsing, which moved behind NativeQueryProtocol in 10.0 (was
+		// RequestQueryParamList.getPageArgs/getSearchArgs/getSortArgs/getViewArgs).
 		@RestGet(path="/searchArgs")
-		public String searchArgs(RequestQueryParamList q) {
-			return "page=" + q.getPageArgs().isPresent()
-				+ ",search=" + q.getSearchArgs().isPresent()
-				+ ",sort=" + q.getSortArgs().isPresent()
-				+ ",view=" + q.getViewArgs().isPresent();
+		public String searchArgs(RestRequest req) {
+			var a = NativeQueryProtocol.INSTANCE.parse(req);
+			return "page=" + a.getPage().isPresent()
+				+ ",search=" + a.getSearch().isPresent()
+				+ ",sort=" + a.getSort().isPresent()
+				+ ",view=" + a.getView().isPresent();
 		}
 	}
 

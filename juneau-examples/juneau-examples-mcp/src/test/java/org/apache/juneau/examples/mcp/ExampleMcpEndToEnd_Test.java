@@ -39,25 +39,37 @@ import org.junit.jupiter.api.*;
  * other tests), so tests remain independent even though the server/client pair is shared across the class.
  */
 @SuppressWarnings({
-	"resource" // server/client are opened in setUp() and closed in tearDown(); lifecycle spans the whole test class.
+	"resource" // server is opened in @BeforeAll/closed in @AfterAll; a fresh client is opened per test in @BeforeEach and closed in @AfterEach.
 })
 class ExampleMcpEndToEnd_Test extends TestBase {
 
 	private static ExampleServer server;
-	private static McpClient client;
+	private McpClient client;
 
 	@BeforeAll
-	static void setUp() throws Exception {
+	static void startServer() throws Exception {
 		server = ExampleServer.start(0);
-		client = ExampleClient.connect(server.getRootUrl().toString());
 	}
 
 	@AfterAll
-	static void tearDown() throws Exception {
-		if (client != null)
-			client.close();
+	static void stopServer() throws Exception {
 		if (server != null)
 			server.close();
+	}
+
+	// A fresh client per test avoids reusing a pooled keep-alive connection that the server may have closed while
+	// idle between tests.  Such a stale reuse fails with an immediate EOF before any response is received; since MCP
+	// calls travel as HTTP POSTs, a transport can never safely replay them, so isolating each test's connection pool
+	// keeps even the non-idempotent steps (e.g. the deleteNote elicitation) deterministic in CI.
+	@BeforeEach
+	void connectClient() throws Exception {
+		client = ExampleClient.connect(server.getRootUrl().toString());
+	}
+
+	@AfterEach
+	void closeClient() throws Exception {
+		if (client != null)
+			client.close();
 	}
 
 	// -------- server/discover --------

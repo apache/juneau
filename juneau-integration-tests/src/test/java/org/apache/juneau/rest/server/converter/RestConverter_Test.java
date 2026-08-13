@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.converter;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -257,5 +259,39 @@ class RestConverter_Test extends TestBase {
 	@Test void e02_methodWithoutConverter() throws Exception {
 		var c = MockRestClient.buildJson(E.class);
 		c.get("/plain").run().assertContent("\"hello\"");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// F - ProtocolQueryable (default native protocol) is byte-equivalent to Queryable
+	//------------------------------------------------------------------------------------------------------------------
+
+	// ProtocolQueryable with no QueryableSettings bean resolves to the native protocol, so it must produce the exact
+	// same bytes as the legacy Queryable converter for every native (s/v/o/p/l) parameter.  This nails down the
+	// back-compat claim that OQ2's reshape is behavior-preserving.
+	@Rest(converters=ProtocolQueryable.class)
+	public static class F implements BasicUniversalConfig {
+		@RestOp(path="/")
+		public List<Map<String,Object>> f() {
+			return List.of(
+				Map.of("name", "Alice", "age", 30),
+				Map.of("name", "Bob", "age", 25),
+				Map.of("name", "Charlie", "age", 35)
+			);
+		}
+	}
+
+	// Every native param (s/v/o/p/l) plus combinations.  Position (p) is always paired with a limit (l): a bare
+	// "?p=N" (position without limit) trips a pre-existing ObjectPaginator edge case (limit defaults to -1, yielding
+	// a subList(pos, pos-1) IllegalArgumentException -> 500) that predates and is orthogonal to the OQ2 reshape -
+	// both Queryable and ProtocolQueryable route through the same untouched ObjectPaginator, so it's not a
+	// divergence.  See TODO-355b for the tracked latent-bug note.
+	@Test void f01_protocolQueryableNativeByteEquivalence() throws Exception {
+		var native1 = MockRestClient.buildJson(B.class);
+		var generic = MockRestClient.buildJson(F.class);
+		for (var q : List.of("", "?s=name=Bill*", "?s=age>28", "?v=name", "?o=name-", "?o=age", "?l=2", "?p=1&l=1", "?p=1&l=5", "?s=age>20&v=name&o=name-&p=0&l=2")) {
+			var a = native1.get("/" + q).run().cacheContent().assertStatus(200).getContent().asString();
+			var b = generic.get("/" + q).run().cacheContent().assertStatus(200).getContent().asString();
+			assertEquals(a, b, () -> "Divergence for query: " + q);
+		}
 	}
 }

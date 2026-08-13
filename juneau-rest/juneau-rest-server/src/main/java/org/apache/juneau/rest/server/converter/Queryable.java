@@ -16,11 +16,8 @@
  */
 package org.apache.juneau.rest.server.converter;
 
-import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.httppart.*;
 
 /**
  * Converter for enabling of search/view/sort/page support on response objects returned by a <c>@RestOp</c>-annotated method.
@@ -28,6 +25,12 @@ import org.apache.juneau.rest.server.httppart.*;
  * <p>
  * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link ObjectSearcher},
  * {@link ObjectViewer}, {@link ObjectSorter}, and {@link ObjectPaginator} classes.
+ *
+ * <p>
+ * As of 10.0, this converter is the <b>native query-protocol adapter</b>: it always drives {@link NativeQueryProtocol}
+ * (the historical {@code s/v/o/p/l} parameters with a bare filtered result), preserving the pre-10.0 behavior exactly.
+ * To drive the same engine from a different wire protocol (e.g. DataTables server-side processing), use
+ * {@link ProtocolQueryable} plus a {@link QueryableSettings} bean instead.
  *
  * <p>
  * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps},
@@ -57,9 +60,6 @@ import org.apache.juneau.rest.server.httppart.*;
  * 	&amp;o=name,birthDate-
  * 		</p>
  * 	<li>
- * 		<c>&amp;i=</c> Case-insensitive parameter.
- * 		<br>Boolean flag for case-insensitive matching on the search parameters.
- * 	<li>
  * 		<c>&amp;p=</c> - Position parameter.
  * 		<br>Only return rows starting at the specified index position (zero-indexed).
  * 		<br>Default is {@code 0}.
@@ -74,11 +74,23 @@ import org.apache.juneau.rest.server.httppart.*;
  * 	<li class='jc'>{@link ObjectViewer} - Additional information on filtering POJO models.
  * 	<li class='jc'>{@link ObjectSorter} - Additional information on sorting POJO models.
  * 	<li class='jc'>{@link ObjectPaginator} - Additional information on paginating POJO models.
+ * 	<li class='jc'>{@link ProtocolQueryable} - Protocol-agnostic converter for non-native query protocols.
  * 	<li class='ja'>{@link RestOp#converters()} - Registering converters with REST resources.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  */
-public class Queryable implements RestConverter {
+public class Queryable extends ProtocolQueryable {
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Hard-wires this converter to {@link NativeQueryProtocol} via {@link ProtocolQueryable#ProtocolQueryable(QueryProtocol)},
+	 * so it always drives the native {@code s/v/o/p/l} protocol regardless of any {@link QueryableSettings} bean.
+	 */
+	public Queryable() {
+		super(NativeQueryProtocol.INSTANCE);
+	}
 
 	/**
 	 * Swagger parameters for this converter.
@@ -130,20 +142,4 @@ public class Queryable implements RestConverter {
 \t\t\ttype:'integer',
 \t\t\texamples:{example:'?l=100'}
 \t\t}""";
-
-	@Override /* Overridden from RestConverter */
-	public Object convert(RestRequest req, Object o) {
-		if (o == null)
-			return null;
-
-		Holder<Object> v = Holder.of(o);
-		RequestQueryParamList params = req.getQueryParams();
-		MarshallingSession bs = req.getMarshallingSession();
-
-		params.getSearchArgs().ifPresent(x -> v.set(ObjectSearcher.create().run(bs, v.get(), x)));
-		params.getSortArgs().ifPresent(x -> v.set(ObjectSorter.create().run(bs, v.get(), x)));
-		params.getViewArgs().ifPresent(x -> v.set(ObjectViewer.create().run(bs, v.get(), x)));
-		params.getPageArgs().ifPresent(x -> v.set(ObjectPaginator.create().run(bs, v.get(), x)));
-		return v.get();
-	}
 }
