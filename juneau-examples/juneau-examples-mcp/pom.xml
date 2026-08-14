@@ -37,7 +37,7 @@
 		<!-- Pins mirror juneau-rest-server-auth-jwt / juneau-rest-client-mcp-auth's own <properties> exactly -
 			both declare their Nimbus dependency 'provided' (non-transitive), so a consumer that actually runs
 			JWT validation or the OAuth client flows (as the secured example does) must re-declare them itself. -->
-		<nimbus-jose-jwt.version>10.3</nimbus-jose-jwt.version>
+		<nimbus-jose-jwt.version>10.9.1</nimbus-jose-jwt.version>
 		<nimbus-oauth2-oidc-sdk.version>11.37.2</nimbus-oauth2-oidc-sdk.version>
 	</properties>
 
