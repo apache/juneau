@@ -99,6 +99,17 @@ import org.apache.juneau.marshall.marshaller.*;
  * Instances are immutable and safe to share across threads.  The compiled {@link Pattern} for the {@code pattern}
  * keyword is cached on construction.
  *
+ * <h5 class='section'>Interruptible {@code pattern} matching:</h5>
+ * <p>
+ * A {@code pattern} keyword can encode a catastrophically-backtracking regular expression that a hostile input can
+ * drive into effectively-unbounded work. {@link java.util.regex.Matcher} never checks {@link Thread#isInterrupted()},
+ * so such a match cannot be stopped by interrupting the matching thread - it runs to completion, pinning a core even
+ * after the caller has given up. To make a runaway match abortable, the string is fed to the matcher through an
+ * {@link InterruptibleCharSequence}: because the matcher reads its input exclusively via {@link CharSequence#charAt(int)},
+ * every character read periodically samples the thread's interrupt status and, once set, throws to unwind the match
+ * promptly. A caller that bounds validation on a worker thread (for example an MCP {@code tools/call} DoS guard) can
+ * therefore reclaim the thread by interrupting it, rather than leaking a core to a match that ignores cancellation.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema 2020-12 Validation</a>
  * </ul>
@@ -295,7 +306,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		var pattern = patternOverride;
 		if (pattern == null && nn(s.getPattern()))
 			pattern = Pattern.compile(s.getPattern());
-		if (pattern != null && ! pattern.matcher(value).find())
+		if (pattern != null && ! pattern.matcher(new InterruptibleCharSequence(value)).find())
 			throw new SchemaValidationException("Value '%s' does not match pattern '%s'.", value, s.getPattern());
 	}
 
@@ -453,6 +464,84 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			return new BigDecimal(s);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
 			return null;
+		}
+	}
+
+	// =================================================================================================================
+	// Interruptible pattern matching
+	// =================================================================================================================
+
+	/**
+	 * A read-only {@link CharSequence} view over the string being matched that lets a runaway {@link Matcher} be
+	 * aborted by interrupting the matching thread.
+	 *
+	 * <p>
+	 * {@link Matcher} reads its input exclusively through {@link #charAt(int)} and never observes the thread's
+	 * interrupt status, so a catastrophically-backtracking pattern cannot be stopped by {@link Thread#interrupt()}
+	 * alone. Interposing this sequence makes every {@link #CHECK_INTERVAL}-th character read sample
+	 * {@link Thread#isInterrupted()} and throw {@link InterruptedMatchException} once it is set, unwinding the match
+	 * promptly. The interrupt status is checked without clearing it, so an outer caller can still observe it.
+	 *
+	 * <p>
+	 * Instances are single-use and not thread-safe: a {@link Matcher} drives its input from one thread, which is the
+	 * same thread whose interrupt status is being sampled.
+	 */
+	private static final class InterruptibleCharSequence implements CharSequence {
+
+		/**
+		 * Number of character reads between interrupt checks. Large enough that the sampling overhead is negligible
+		 * against the matcher's per-character work, small enough that an interrupt aborts a runaway match within
+		 * microseconds (catastrophic backtracking re-reads characters an enormous number of times).
+		 */
+		private static final int CHECK_INTERVAL = 1 << 12;
+
+		private final CharSequence delegate;
+		private int readsUntilCheck = CHECK_INTERVAL;
+
+		InterruptibleCharSequence(CharSequence delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public char charAt(int index) {
+			if (--readsUntilCheck <= 0) {
+				readsUntilCheck = CHECK_INTERVAL;
+				if (Thread.currentThread().isInterrupted())
+					throw new InterruptedMatchException();
+			}
+			return delegate.charAt(index);
+		}
+
+		@Override
+		public int length() {
+			return delegate.length();
+		}
+
+		@Override
+		public CharSequence subSequence(int start, int end) {
+			return delegate.subSequence(start, end);
+		}
+
+		@Override
+		public String toString() {
+			return delegate.toString();
+		}
+	}
+
+	/**
+	 * Thrown by {@link InterruptibleCharSequence} to abort a {@code pattern} match whose thread has been interrupted.
+	 *
+	 * <p>
+	 * This is control flow rather than a reportable error: the stack trace is suppressed since the abort point (deep
+	 * inside {@link Matcher}) carries no useful diagnostic, and the only thing that interrupts a validating thread is
+	 * a caller cancelling the work.
+	 */
+	private static final class InterruptedMatchException extends RuntimeException {
+
+		private static final long serialVersionUID = 1L;
+
+		InterruptedMatchException() {
+			super(null, null, false, false);
 		}
 	}
 }

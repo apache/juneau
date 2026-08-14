@@ -53,6 +53,17 @@ import org.apache.juneau.rest.server.mcp.McpSchema;
  * time, the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread.
  *
  * <p>
+ * <b>Cancellation actually reclaims the worker thread.</b> When the budget trips, {@link #awaitBounded} calls
+ * {@link Future#cancel(boolean) future.cancel(true)}, which interrupts the validating thread. A
+ * {@link java.util.regex.Matcher} does not observe {@link Thread#interrupt()} on its own, so historically a runaway
+ * regex kept burning a core in the background even though the client already had its fast {@code -32602} - a mild DoS
+ * residual where a flood of such requests could pin a core each. {@link JsonSchemaValidator} now feeds the matched
+ * string through an interruptible {@link CharSequence} (see its class notes), so an interrupt aborts a
+ * catastrophically-backtracking match promptly and the pool thread returns to idle rather than spinning. The external
+ * contract is unchanged: a genuine overrun still returns the same {@code -32602}, and the CPU-time budget with its
+ * wall-clock fallback is untouched.
+ *
+ * <p>
  * <b>The compute budget is charged against the validating thread's actual CPU time, not wall-clock time.</b>
  * The DoS threat being defended against is a schema that burns CPU (catastrophic backtracking, quadratic
  * blowups); the amount of CPU a validation consumes is exactly what that budget should cap. Measuring

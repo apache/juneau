@@ -20,6 +20,7 @@ import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.lang.management.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -185,8 +186,7 @@ class McpSchemaSafety_Test {
 	@Test
 	void d02_schedulingLatency_notCountedAgainstComputeBudget() {
 		// Exercises McpSchemaSafety.awaitBounded() directly (rather than saturating the shared
-		// VALIDATION_POOL, which other tests in this class can leave with a permanently-stuck thread since a
-		// catastrophically-backtracking regex match is not interruptible) with a task-local executor that
+		// VALIDATION_POOL) with a task-local executor that
 		// deliberately delays counting down `started` well past MAX_VALIDATION_MILLIS before doing its
 		// (instantaneous) "work". If scheduling latency were - the regression this guards against - counted
 		// against the compute budget, awaitBounded() would throw a timeout error despite the task's own
@@ -294,6 +294,79 @@ class McpSchemaSafety_Test {
 		} finally {
 			executor.shutdownNow();
 		}
+	}
+
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep here lets the match descend into backtracking before the interrupt, not a wait-and-hope synchronization delay.
+	})
+	@Test
+	void d06_interruptAbortsCatastrophicMatch() throws Exception {
+		// Root-cause proof for the DoS-residual fix. A catastrophically-backtracking pattern applied to a
+		// non-matching input runs effectively forever, and java.util.regex.Matcher ignores Thread.interrupt().
+		// With JsonSchemaValidator now feeding the matched string through an interruptible CharSequence,
+		// interrupting the matching thread aborts the match promptly; without the fix, worker.join(...) below
+		// would time out with the thread still pinning a core.
+		var validator = JsonSchemaValidator.of(JsonMap.of("type", "string", "pattern", "^(.*a){25}$"));
+		var input = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!";  // 40 'a's then a non-matching char
+
+		var worker = new Thread(() -> {
+			try {
+				validator.validate(input);
+			} catch (@SuppressWarnings("unused") RuntimeException ignored) {
+				// aborted (interrupt) or a legitimate validation failure - either way the thread unwinds
+			}
+		}, "d06-interruptible-match");
+		worker.setDaemon(true);
+		worker.start();
+
+		Thread.sleep(200);  // let the matcher get well into backtracking
+		worker.interrupt();
+		worker.join(5000);
+
+		assertFalse(worker.isAlive(), "interrupt did not abort the catastrophically-backtracking match");
+	}
+
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep here samples the pool threads' CPU over a fixed window; it is the measurement window, not a wait-and-hope delay.
+	})
+	@Test
+	void d07_poolWorkerStopsBurningAfterBudgetTrip() throws Exception {
+		// End-to-end proof through the real DoS guard: after validateInput trips the compute budget and cancels
+		// the worker, the pool thread must stop burning CPU rather than keep spinning on the runaway regex. We
+		// sample the validation-pool threads' aggregate CPU time across a window after the trip; a still-running
+		// match would accrue ~a full core of CPU over that window, while the fix drives it to ~0. Gated on
+		// per-thread CPU timing (as d03) since the measurement relies on it; the margin is generous to stay robust.
+		Assumptions.assumeTrue(McpSchemaSafety.cpuTimeBudgetEnabled(), "per-thread CPU timing unavailable on this JVM");
+
+		var schema = McpSchema.of(JsonMap.of(
+			"type", "object",
+			"properties", JsonMap.of("s", JsonMap.of("type", "string", "pattern", "^(.*a){25}$"))));
+		var args = new LinkedHashMap<String,Object>();
+		args.put("s", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!");
+
+		var e = assertThrows(McpException.class, () -> McpSchemaSafety.validateInput(schema, args));
+		assertEquals(-32602, e.getCode());
+
+		var threadMx = ManagementFactory.getThreadMXBean();
+		var before = poolCpuNanos(threadMx);
+		Thread.sleep(500);  // measurement window
+		var after = poolCpuNanos(threadMx);
+		var burnedMs = (after - before) / 1_000_000;
+
+		assertTrue(burnedMs < 200, () -> "validation-pool worker kept burning CPU after budget trip: " + burnedMs + "ms");
+	}
+
+	private static long poolCpuNanos(ThreadMXBean threadMx) {
+		var total = 0L;
+		for (var id : threadMx.getAllThreadIds()) {
+			var info = threadMx.getThreadInfo(id);
+			if (info != null && info.getThreadName().startsWith("mcp-2026-07-28-schema-validation")) {
+				var cpu = threadMx.getThreadCpuTime(id);
+				if (cpu > 0)
+					total += cpu;
+			}
+		}
+		return total;
 	}
 
 	// -------- shared JsonValueSafety delegation now supports arrays ---------
