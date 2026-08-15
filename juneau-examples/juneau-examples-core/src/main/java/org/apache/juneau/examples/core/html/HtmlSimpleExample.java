@@ -46,7 +46,7 @@ public class HtmlSimpleExample {
 		var flat = htmlSerializer.write(pojo);
 
 		// Print out the created POJO in JSON format.
-		Logger.getLogger(HtmlSimpleExample.class).info(flat);
+		RichLogger.getLogger(HtmlSimpleExample.class).info(flat);
 
 		var parse = htmlParser.read(flat, Pojo.class);
 
@@ -60,7 +60,7 @@ public class HtmlSimpleExample {
 		 *  </table></div></div></article></section></body></html>
 		 */
 		var docSerialized = HtmlDocSerializer.DEFAULT.write(pojo);
-		Logger.getLogger(HtmlSimpleExample.class).info(docSerialized);
+		RichLogger.getLogger(HtmlSimpleExample.class).info(docSerialized);
 
 		// The object above can be parsed thanks to the @BeanCtor(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.

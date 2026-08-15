@@ -19,28 +19,30 @@ package org.apache.juneau.commons.logging;
 import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.ref.*;
+import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link Logger}.
+ * Tests for {@link RichLogger}.
  */
 @SuppressWarnings({
 	"java:S117", // Local variable name intentional for test readability.
 	"resource" // g01 only asserts the returned capture's initial state; the listener is a test fixture, not a held resource
 })
-class Logger_Test extends TestBase {
+class RichLogger_Test extends TestBase {
 
-	private static Logger getLogger(String name) {
-		var l = Logger.getLogger(name);
+	private static RichLogger getLogger(String name) {
+		var l = RichLogger.getLogger(name);
 		l.setLevel(Level.OFF);
 		return l;
 	}
 
-	private static Logger getLogger(Class<?> class_) {
-		var l = Logger.getLogger(class_);
+	private static RichLogger getLogger(Class<?> class_) {
+		var l = RichLogger.getLogger(class_);
 		l.setLevel(Level.OFF);
 		return l;
 	}
@@ -59,12 +61,12 @@ class Logger_Test extends TestBase {
 	}
 
 	@Test void a02_getLogger_byClass() {
-		var logger1 = getLogger(Logger_Test.class);
-		var logger2 = getLogger(Logger_Test.class);
+		var logger1 = getLogger(RichLogger_Test.class);
+		var logger2 = getLogger(RichLogger_Test.class);
 
 		assertNotNull(logger1);
 		assertSame(logger1, logger2); // Should return same instance
-		assertEquals(Logger_Test.class.getName(), logger1.getName());
+		assertEquals(RichLogger_Test.class.getName(), logger1.getName());
 	}
 
 	@Test void a03_differentNames_returnDifferentInstances() {
@@ -576,15 +578,15 @@ class Logger_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Logger delegation
+	// RichLogger delegation
 	//====================================================================================================
 
-	@Test void f01_delegatesToUnderlyingLogger() {
+	@Test void f01_delegatesToUnderlyingRichLogger() {
 		var logger = getLogger("f01");
-		var underlyingLogger = java.util.logging.Logger.getLogger("f01");
+		var underlyingRichLogger = java.util.logging.Logger.getLogger("f01");
 
-		assertEquals(underlyingLogger.getName(), logger.getName());
-		assertEquals(underlyingLogger.getLevel(), logger.getLevel());
+		assertEquals(underlyingRichLogger.getName(), logger.getName());
+		assertEquals(underlyingRichLogger.getLevel(), logger.getLevel());
 	}
 
 	@Test void f02_setLevel_delegates() {
@@ -595,7 +597,7 @@ class Logger_Test extends TestBase {
 	}
 
 	@Test void f03_isLoggable_delegates() {
-		var logger = Logger.getLogger("f03");
+		var logger = RichLogger.getLogger("f03");
 		logger.setLevel(Level.INFO);
 		assertTrue(logger.isLoggable(Level.INFO));
 		assertTrue(logger.isLoggable(Level.SEVERE));
@@ -629,21 +631,287 @@ class Logger_Test extends TestBase {
 
 	//====================================================================================================
 	// Registry stability under high logger-name volume
-	// Regression for the Java-25 Q_logging failure: a Cache-backed registry cleared itself once
-	// 1000+ distinct names existed, causing getLogger(X) to return a new instance for a name
-	// whose class had pinned the old instance in a static final field.
+	// Regression guard for weak-valued registry behavior: a strongly-referenced logger
+	// must remain identity-stable despite high distinct-name volume.
 	//====================================================================================================
 
 	@Test void h01_registryStable_afterManyDistinctNames() {
 		// Pin the instance before flooding the registry.
-		var pinned = Logger.getLogger("h01.pinned");
+		var pinned = RichLogger.getLogger("h01.pinned");
 
 		// Create enough distinct logger names to exceed the old Cache maxSize threshold (1000).
 		for (int i = 0; i < 1500; i++)
-			Logger.getLogger("h01.flood." + i);
+			RichLogger.getLogger("h01.flood." + i);
 
 		// The registry must still return the exact same object for the original name.
-		assertSame(pinned, Logger.getLogger("h01.pinned"),
-			"Logger registry must be stable: getLogger(name) must always return the same instance");
+		assertSame(pinned, RichLogger.getLogger("h01.pinned"),
+			"RichLogger registry must be stable: getLogger(name) must always return the same instance");
+	}
+
+	//====================================================================================================
+	// Builder views and canonical identity
+	//====================================================================================================
+
+	@Test void i01_builderBuild_returnsDistinctViews() {
+		var a = RichLogger.builder("i01").build();
+		var b = RichLogger.builder("i01").build();
+		var c = RichLogger.getLogger("i01");
+
+		assertNotSame(a, b);
+		assertNotSame(a, c);
+		assertNotSame(b, c);
+	}
+
+	@Test void i02_builderAndCanonical_shareCapture() {
+		var canonical = RichLogger.getLogger("i02");
+		var view = RichLogger.builder("i02").messageFormat().build();
+		try (var capture = canonical.captureEvents()) {
+			view.info("{0}", "value");
+
+			var records = capture.getRecords();
+			assertSize(1, records);
+			assertEquals("value", records.get(0).getMessage());
+		}
+	}
+
+	@Test void i03_builderDefault_usesPrintf() {
+		var view = RichLogger.builder("i03").build();
+		try (var capture = RichLogger.getLogger("i03").captureEvents()) {
+			view.info("%s + %s = %s", 1, 2, 3);
+
+			var records = capture.getRecords();
+			assertSize(1, records);
+			assertEquals("1 + 2 = 3", records.get(0).getMessage());
+		}
+	}
+
+	@Test void i04_builderViews_useIndependentGenerators() {
+		var printfView = RichLogger.builder("i04").printf().build();
+		var messageFormatView = RichLogger.builder("i04").messageFormat().build();
+		var customView = RichLogger.builder("i04").generator((pattern, args) -> "custom").build();
+		try (var capture = RichLogger.getLogger("i04").captureEvents()) {
+			printfView.info("printf %s", "x");
+			messageFormatView.info("message {0}", "x");
+			customView.info("ignored %s", "x");
+
+			var records = capture.getRecords();
+			assertSize(3, records);
+			assertEquals("printf x", records.get(0).getMessage());
+			assertEquals("message x", records.get(1).getMessage());
+			assertEquals("custom", records.get(2).getMessage());
+		}
+	}
+
+	@Test void j01_findLogger_nonCreatingLookup() {
+		var name = "j01.noncreating." + System.nanoTime();
+		assertNull(RichLogger.findLogger(name));
+		var logger = RichLogger.getLogger(name);
+		assertSame(logger, RichLogger.findLogger(name));
+	}
+
+	@Test void j02_capturePinsAncestors_whileOpen() {
+		var ancestor = RichLogger.getLogger("j02");
+		var parent = RichLogger.getLogger("j02.child");
+		var child = RichLogger.getLogger("j02.child.grandchild");
+		var ancestorRef = new WeakReference<>(ancestor);
+		var parentRef = new WeakReference<>(parent);
+		ancestor = null;
+		parent = null;
+
+		try (var capture = child.captureEvents()) {
+			assertNotNull(ancestorRef.get());
+			assertNotNull(parentRef.get());
+		}
+	}
+
+	@Test void j03_unreferencedCanonical_eventuallyCollectable() throws Exception {
+		var name = "j03.collectable." + System.nanoTime();
+		var logger = RichLogger.getLogger(name);
+		var ref = new WeakReference<>(logger);
+		logger = null;
+
+		assertTrue(awaitCollected(ref), "Expected unreferenced canonical to become collectable");
+	}
+
+	@Test void k01_logOverride_capturesAndPublishesOnce() {
+		var logger = RichLogger.getLogger("k01");
+		var delegate = java.util.logging.Logger.getLogger("k01");
+		var published = new AtomicInteger();
+		var h = new Handler() {
+			@Override
+			public void publish(java.util.logging.LogRecord record) {
+				published.incrementAndGet();
+			}
+			@Override public void flush() {}
+			@Override public void close() {}
+		};
+		delegate.addHandler(h);
+		try (var capture = logger.captureEvents()) {
+			var rec = new java.util.logging.LogRecord(Level.INFO, "plain");
+			rec.setLoggerName("k01");
+			logger.log(rec);
+			logger.info("wrapped");
+
+			var records = capture.getRecords();
+			assertSize(2, records);
+			assertEquals("plain", records.get(0).getMessage());
+			assertEquals("wrapped", records.get(1).getMessage());
+			assertEquals(2, published.get());
+		} finally {
+			delegate.removeHandler(h);
+		}
+	}
+
+	@Test void l01_parentCapture_observesDescendantLogs() {
+		var parent = RichLogger.getLogger("l01");
+		var child = RichLogger.getLogger("l01.child.leaf");
+		child.setLevel(Level.OFF);
+		try (var capture = parent.captureEvents()) {
+			child.info("from-child");
+			assertSize(1, capture.getRecords());
+			assertEquals("from-child", capture.getRecords().get(0).getMessage());
+		}
+	}
+
+	@Test void l02_unrelatedAncestors_notNotified() {
+		var a = RichLogger.getLogger("l02.a");
+		var b = RichLogger.getLogger("l02.b.child");
+		try (var capture = a.captureEvents()) {
+			b.info("unrelated");
+			assertTrue(capture.isEmpty());
+		}
+	}
+
+	@Test void l03_emitterCanDisableParentPropagation() {
+		var parent = RichLogger.getLogger("l03");
+		var child = RichLogger.getLogger("l03.child");
+		child.setUseParentListeners(false);
+		try (var capture = parent.captureEvents()) {
+			child.info("blocked");
+			assertTrue(capture.isEmpty());
+		} finally {
+			child.setUseParentListeners(true);
+		}
+	}
+
+	@Test void l04_intermediateDisable_stopsNotifyAndGuardWalk() {
+		var far = RichLogger.getLogger("l04");
+		var mid = RichLogger.getLogger("l04.mid");
+		var leaf = RichLogger.getLogger("l04.mid.leaf");
+		mid.setUseParentListeners(false);
+		leaf.setLevel(Level.OFF);
+		try (var capture = far.captureEvents()) {
+			leaf.info("should-not-arrive");
+			assertTrue(capture.isEmpty());
+		} finally {
+			mid.setUseParentListeners(true);
+		}
+	}
+
+	@Test void l05_propagation_doesNotCreateAncestorCanonicals() {
+		var name = "l05.root." + System.nanoTime();
+		var leaf = RichLogger.getLogger(name + ".leaf");
+		assertNull(RichLogger.findLogger(name));
+		leaf.info("no-listeners");
+		assertNull(RichLogger.findLogger(name));
+	}
+
+	@Test void m01_supplierNotEvaluated_whenNoLoggingOrListeners() {
+		var logger = RichLogger.getLogger("m01");
+		logger.setLevel(Level.OFF);
+		var calls = new AtomicInteger();
+
+		logger.info(() -> {
+			calls.incrementAndGet();
+			return "value";
+		});
+
+		assertEquals(0, calls.get());
+	}
+
+	@Test void m02_supplierEvaluated_whenAncestorCaptureExists() {
+		var parent = RichLogger.getLogger("m02");
+		var child = RichLogger.getLogger("m02.child");
+		child.setLevel(Level.OFF);
+		var calls = new AtomicInteger();
+
+		try (var capture = parent.captureEvents()) {
+			child.info(() -> {
+				calls.incrementAndGet();
+				return "value";
+			});
+
+			assertEquals(1, calls.get());
+			assertSize(1, capture.getRecords());
+			assertEquals("value", capture.getRecords().get(0).getMessage());
+		}
+	}
+
+	@Test void m03_inheritedThrowableSupplier_remainsLevelGated() {
+		var logger = RichLogger.getLogger("m03");
+		logger.setLevel(Level.OFF);
+		var calls = new AtomicInteger();
+
+		try (var capture = logger.captureEvents()) {
+			logger.log(Level.INFO, new RuntimeException("ignored"), () -> {
+				calls.incrementAndGet();
+				return "value";
+			});
+
+			assertEquals(0, calls.get());
+			assertTrue(capture.isEmpty());
+		}
+	}
+
+	@Test void m04_delegateAccessorsStillForwardToDelegate() {
+		var logger = RichLogger.getLogger("m04");
+		var delegate = java.util.logging.Logger.getLogger("m04");
+
+		logger.setLevel(Level.WARNING);
+		assertEquals(Level.WARNING, logger.getLevel());
+		assertEquals(Level.WARNING, delegate.getLevel());
+		assertFalse(logger.isLoggable(Level.INFO));
+		assertTrue(logger.isLoggable(Level.SEVERE));
+	}
+
+	@Test void n01_delegatePublication_reachesRootParentHandler() {
+		var name = "n01." + System.nanoTime();
+		var logger = RichLogger.getLogger(name);
+		var root = LogManager.getLogManager().getLogger("");
+		var published = new AtomicInteger();
+		var h = new Handler() {
+			@Override
+			public void publish(java.util.logging.LogRecord record) {
+				if (name.equals(record.getLoggerName()))
+					published.incrementAndGet();
+			}
+			@Override public void flush() {}
+			@Override public void close() {}
+		};
+		// Before delegate.log(record) interception existed, wrapper publication ended on the
+		// unregistered wrapper and never reached root handlers.
+		root.addHandler(h);
+		try (var capture = logger.captureEvents()) {
+			var rec = new java.util.logging.LogRecord(Level.WARNING, "raw");
+			rec.setLoggerName(name);
+			logger.log(rec);
+			logger.info("commons");
+			logger.log(Level.WARNING, new RuntimeException("ignored"), () -> "supplier");
+
+			assertSize(3, capture.getRecords());
+			assertEquals(3, published.get());
+		} finally {
+			root.removeHandler(h);
+		}
+	}
+
+	private static boolean awaitCollected(WeakReference<?> ref) throws Exception {
+		for (int i = 0; i < 20; i++) {
+			System.gc();
+			Thread.sleep(20);
+			if (ref.get() == null)
+				return true;
+		}
+		return false;
 	}
 }

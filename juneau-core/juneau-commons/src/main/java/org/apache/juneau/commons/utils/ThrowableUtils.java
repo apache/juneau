@@ -58,7 +58,7 @@ import org.apache.juneau.commons.settings.*;
  */
 public class ThrowableUtils {
 
-	private static final Logger LOG = Logger.getLogger(ThrowableUtils.class);
+	private static final RichLogger LOG = RichLogger.getLogger(ThrowableUtils.class);
 
 	static final Setting<Boolean> VERBOSE = Settings.get().get("juneau.enableVerboseExceptions").asBoolean();
 

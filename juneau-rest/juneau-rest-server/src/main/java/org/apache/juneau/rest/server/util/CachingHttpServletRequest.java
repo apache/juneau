@@ -30,6 +30,9 @@ import jakarta.servlet.http.*;
  * be rendered. Memory stays bounded even for large uploads.
  *
  */
+@SuppressWarnings({
+	"resource" // The tee'd request stream is owned by the underlying request/servlet container, which closes it when the request completes; closing it here would break body-caching. Eclipse JDT @Owning warning is by design.
+})
 public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 
 	/** Default body capture cap, in bytes (8&nbsp;KB). */

@@ -1031,7 +1031,7 @@ public class IoUtils {
 	 * @param lines The lines to print.  Must not be <jk>null</jk> (individual <jk>null</jk> entries render as <js>"null"</js>).
 	 */
 	public static final void printLines(String[] lines) {
-		Logger log = Logger.getLogger(IoUtils.class);
+		RichLogger log = RichLogger.getLogger(IoUtils.class);
 		for (var i = 0; i < lines.length; i++)
 			log.info(String.format("%4s:%s", i + 1, lines[i]));
 	}

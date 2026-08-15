@@ -49,7 +49,7 @@ public class JsonConfigurationExample {
 		 */
 		var withWhitespace = JsonSerializer.create().ws().build().write(aPojo);
 		// the output will be padded with spaces after format characters
-		Logger.getLogger(JsonConfigurationExample.class).info(withWhitespace);
+		RichLogger.getLogger(JsonConfigurationExample.class).info(withWhitespace);
 
 		/**
 		 * Produces
@@ -57,7 +57,7 @@ public class JsonConfigurationExample {
 		 */
 		var escaped = JsonSerializer.create().escapeSolidus().build().write(aPojo);
 		// the output will have escaped /
-		Logger.getLogger(JsonConfigurationExample.class).info(escaped);
+		RichLogger.getLogger(JsonConfigurationExample.class).info(escaped);
 
 		/**
 		 * Produces
@@ -73,7 +73,7 @@ public class JsonConfigurationExample {
 			.build()
 			.write(aPojo);  // Create a Json5Serializer
 
-		Logger.getLogger(JsonConfigurationExample.class).info(configurableJson);
+		RichLogger.getLogger(JsonConfigurationExample.class).info(configurableJson);
 
 	}
 }

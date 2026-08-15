@@ -231,6 +231,6 @@ public class AtomHtmlExample {
 		 *     </tr>
 		 *  </table>
 		 */
-		Logger.getLogger(AtomHtmlExample.class).info(s.write(feed));
+		RichLogger.getLogger(AtomHtmlExample.class).info(s.write(feed));
 	}
 }

@@ -46,7 +46,7 @@ public class XmlSimpleExample {
 		 * </object>
 		 */
 		var serial = XmlSerializer.DEFAULT_SQ_READABLE.write(pojo);
-		Logger.getLogger(XmlSimpleExample.class).info(serial);
+		RichLogger.getLogger(XmlSimpleExample.class).info(serial);
 
 		// Deserialize back to Pojo instance
 		var obj = XmlParser.DEFAULT.read(serial, Pojo.class);

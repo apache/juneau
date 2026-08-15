@@ -58,7 +58,7 @@ public class UonComplexExample {
 		 */
 		var uonSerializer = UonSerializer.DEFAULT;
 		// This will show the final output from the bean
-		Logger.getLogger(UonComplexExample.class).info(uonSerializer.write(pojoc));
+		RichLogger.getLogger(UonComplexExample.class).info(uonSerializer.write(pojoc));
 
 		var obj = UonParser.DEFAULT.read(uonSerializer.write(pojoc), PojoComplex.class);
 

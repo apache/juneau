@@ -28,7 +28,7 @@ import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.RichLogger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
@@ -366,7 +366,7 @@ public abstract class RestServlet extends HttpServlet {
 		var c = context.get();
 		var logger = c == null ? null : c.getLogger();
 		if (logger == null)
-			logger = Logger.getLogger(cn(this));
+			logger = RichLogger.getLogger(cn(this));
 		logger.log(level, cause, msg);
 	}
 

@@ -25,9 +25,8 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
-import java.util.logging.*;
-
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.*;
 
@@ -69,7 +68,7 @@ import org.apache.juneau.commons.settings.*;
 	"resource" // BeanStore is a fluent AutoCloseable; self-returns and owned/sentinel stores are not new resources to close.
 })
 public class BasicBeanStore implements WritableBeanStore {
-	private static final Logger LOGGER = Logger.getLogger(BasicBeanStore.class.getName());
+	private static final RichLogger LOGGER = RichLogger.getLogger(BasicBeanStore.class.getName());
 
 	/**
 	 * Static reusable empty instance.

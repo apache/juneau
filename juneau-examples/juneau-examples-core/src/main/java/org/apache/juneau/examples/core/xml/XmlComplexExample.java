@@ -53,7 +53,7 @@ public class XmlComplexExample {
 
 		// Serialize to human readable XML and print
 		var serial = XmlSerializer.DEFAULT_SQ_READABLE.write(pojoc);
-		Logger.getLogger(XmlComplexExample.class).info(serial);
+		RichLogger.getLogger(XmlComplexExample.class).info(serial);
 
 		// Deserialize back to PojoComplex instance
 		var obj = XmlParser.DEFAULT.read(serial, PojoComplex.class);

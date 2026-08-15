@@ -69,7 +69,7 @@ public class HtmlComplexExample {
 		var flat = htmlSerializer.write(pojoc);
 
 		// Print out the created POJO in JSON format.
-		Logger.getLogger(HtmlComplexExample.class).info(flat);
+		RichLogger.getLogger(HtmlComplexExample.class).info(flat);
 
 		var parse = htmlParser.read(flat, PojoComplex.class);
 

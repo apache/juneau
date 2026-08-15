@@ -19,6 +19,7 @@ package org.apache.juneau.commons.logging;
 import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.*;
@@ -29,8 +30,8 @@ import org.junit.jupiter.api.*;
  */
 class LogRecordCapture_Test extends TestBase {
 
-	private static Logger getLogger(String name) {
-		var l = Logger.getLogger(name);
+	private static RichLogger getLogger(String name) {
+		var l = RichLogger.getLogger(name);
 		l.setLevel(Level.OFF);
 		return l;
 	}
@@ -273,7 +274,7 @@ class LogRecordCapture_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Integration with Logger
+	// Integration with RichLogger
 	//====================================================================================================
 
 	@Test void h01_capturesAllLevels() {
@@ -321,6 +322,93 @@ class LogRecordCapture_Test extends TestBase {
 			var records = capture.getRecords();
 			assertSize(1, records);
 			assertSame(exception, records.get(0).getThrown());
+		}
+	}
+
+	@Test void i01_capture_acceptsPlainJulRecords() {
+		var logger = RichLogger.getLogger("i01");
+		try (var capture = logger.captureEvents()) {
+			var rec = new java.util.logging.LogRecord(Level.INFO, "plain");
+			rec.setLoggerName("i01");
+			logger.log(rec);
+
+			var records = capture.getRecords();
+			assertSize(1, records);
+			assertEquals("plain", records.get(0).getMessage());
+			assertFalse(records.get(0) instanceof LogRecord);
+		}
+	}
+
+	@Test void i02_getRecordsFormatted_handlesPlainJulRecords() {
+		var logger = RichLogger.getLogger("i02");
+		try (var capture = logger.captureEvents()) {
+			var rec = new java.util.logging.LogRecord(Level.WARNING, "plain-format");
+			rec.setLoggerName("i02");
+			logger.log(rec);
+
+			var formatted = capture.getRecords("{level}:{msg}");
+			assertSize(1, formatted);
+			assertEquals("WARNING:plain-format", formatted.get(0));
+		}
+	}
+
+	@Test void j01_captureEvents_levelThreshold_usesJulDirection() {
+		var logger = RichLogger.getLogger("j01");
+		try (var capture = logger.captureEvents(Level.FINE)) {
+			logger.finer("finer");
+			logger.fine("fine");
+			logger.info("info");
+			logger.severe("severe");
+
+			var messages = capture.messages();
+			assertEquals(List.of("fine", "info", "severe"), messages);
+		}
+	}
+
+	@Test void j02_captureEvents_predicate_filtersAtCaptureTime() {
+		var logger = RichLogger.getLogger("j02");
+		try (var capture = logger.captureEvents(x -> x.getMessage().contains("keep"))) {
+			logger.info("keep-1");
+			logger.info("drop");
+			logger.info("keep-2");
+
+			assertEquals(List.of("keep-1", "keep-2"), capture.messages());
+			assertEquals(2, capture.size());
+		}
+	}
+
+	@Test void j03_lastAndAssertHelpers_returnRawValues() {
+		var logger = RichLogger.getLogger("j03");
+		var ex = new RuntimeException("x");
+		try (var capture = logger.captureEvents()) {
+			logger.info("a");
+			logger.warning(ex, "b");
+
+			assertEquals("b", capture.assertMessage());
+			assertEquals(Level.WARNING, capture.assertLevel());
+			assertSame(ex, capture.assertThrown());
+		}
+	}
+
+	@Test void j04_last_returnsNullWhenEmpty() {
+		var logger = RichLogger.getLogger("j04");
+		try (var capture = logger.captureEvents()) {
+			assertNull(capture.last());
+			assertNull(capture.assertMessage());
+			assertNull(capture.assertLevel());
+			assertNull(capture.assertThrown());
+		}
+	}
+
+	@Test void j05_byLevelAndMatching_areQueryTimeFilters() {
+		var logger = RichLogger.getLogger("j05");
+		try (var capture = logger.captureEvents()) {
+			logger.info("abc-1");
+			logger.warning("abc-2");
+			logger.warning("xyz");
+
+			assertEquals(2, capture.byLevel(Level.WARNING).size());
+			assertEquals(2, capture.matching("abc").size());
 		}
 	}
 }

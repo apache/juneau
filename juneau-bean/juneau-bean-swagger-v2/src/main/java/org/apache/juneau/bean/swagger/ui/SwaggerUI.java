@@ -73,7 +73,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options");
 
-	private static final Logger LOG = Logger.getLogger(SwaggerUI.class);
+	private static final RichLogger LOG = RichLogger.getLogger(SwaggerUI.class);
 
 	private static Div examples(Session s, ParameterInfo pi) {
 		// @formatter:off

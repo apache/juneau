@@ -19,8 +19,10 @@ package org.apache.juneau.commons.logging;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.lang.ref.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
 import java.util.logging.*;
 
 /**
@@ -31,7 +33,7 @@ import java.util.logging.*;
  * an underlying {@link java.util.logging.Logger} instance. This design provides:
  * </p>
  * <ul>
- * 	<li>Type compatibility - extends Logger for use anywhere a Logger is expected
+ * 	<li>Type compatibility - extends RichLogger for use anywhere a RichLogger is expected
  * 	<li>Flexibility - can wrap existing logger instances
  * 	<li>Convenience methods for formatted logging using {@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...)}
  * </ul>
@@ -55,7 +57,7 @@ import java.util.logging.*;
  * </ul>
  *
  * <p>
- * Juneau {@link Logger} patterns are printf-style. Because {@link LogRecord#getMessage()} returns the
+ * Juneau {@link RichLogger} patterns are printf-style. Because {@link LogRecord#getMessage()} returns the
  * already-substituted message, the {@link java.text.MessageFormat} parameter contract of the underlying
  * {@link java.util.logging.LogRecord} only surfaces if a record is serialized and consumed as a plain
  * {@link java.util.logging.LogRecord} by a non-Juneau handler.
@@ -63,7 +65,7 @@ import java.util.logging.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	Logger <jv>logger</jv> = Logger.getLogger(MyClass.<jk>class</jk>.getName());
+ * 	RichLogger <jv>logger</jv> = RichLogger.getLogger(MyClass.<jk>class</jk>.getName());
  *
  * 	<jc>// Formatted logging at different levels (printf-style placeholders)</jc>
  * 	<jv>logger</jv>.severe(<js>"Error processing user %s: %s"</js>, userId, error);
@@ -83,56 +85,91 @@ import java.util.logging.*;
 	"java:S1192", // String literals intentionally duplicated for clarity
 	"java:S2176"  // Class name intentionally matches java.util.logging.Logger; extends it to provide Juneau-specific logging enhancements
 })
-public class Logger extends java.util.logging.Logger {
+public class RichLogger extends java.util.logging.Logger {
 
 	/**
 	 * Permanent registry of logger instances by name.
 	 *
 	 * <p>
 	 * Uses an unbounded {@link ConcurrentHashMap} so every name maps to exactly one
-	 * {@link Logger} instance for the JVM lifetime.  An evictable cache (e.g. one with a
+	 * {@link RichLogger} instance for the JVM lifetime.  An evictable cache (e.g. one with a
 	 * {@code maxSize} that clears the whole map) would cause a class-loaded
-	 * {@code static final Logger} field to refer to an instance that is no longer in the
+	 * {@code static final RichLogger} field to refer to an instance that is no longer in the
 	 * registry; a subsequent call to {@link #getLogger(String)} would then return a new,
 	 * different instance, breaking {@link LogRecordCapture} and any other code that
 	 * assumes one name == one identity.
 	 */
-	private static final ConcurrentHashMap<String,Logger> loggers = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<String,LoggerRef> loggers = new ConcurrentHashMap<>();
+	private static final ReferenceQueue<RichLogger> loggerQueue = new ReferenceQueue<>();
+
+	private static final class LoggerRef extends WeakReference<RichLogger> {
+		final String name;
+
+		LoggerRef(String name, RichLogger referent, ReferenceQueue<RichLogger> q) {
+			super(referent, q);
+			this.name = name;
+		}
+	}
 
 	/**
 	 * The underlying logger instance that we delegate to.
 	 */
 	private final java.util.logging.Logger delegate;
 
+	private final MessageGenerator generator;
+	private final RichLogger canonical;
+
 	/**
 	 * List of log record listeners.
 	 */
-	private final List<LogRecordListener> listeners = Collections.synchronizedList(new ArrayList<>());
+	private final List<LogRecordListener> listeners;
+	private volatile boolean useParentListeners = true;
 
 	/**
 	 * Protected constructor - wraps an existing logger instance.
 	 *
 	 * @param delegate The underlying logger to delegate to.  Must not be <jk>null</jk>.
 	 */
-	protected Logger(java.util.logging.Logger delegate) {
+	protected RichLogger(java.util.logging.Logger delegate) {
+		this(delegate, MessageGenerator.PRINTF, null);
+	}
+
+	private RichLogger(java.util.logging.Logger delegate, MessageGenerator generator, RichLogger canonical) {
 		super(delegate.getName(), null);
 		this.delegate = delegate;
+		this.generator = generator == null ? MessageGenerator.PRINTF : generator;
+		this.canonical = canonical == null ? this : canonical;
+		this.listeners = canonical == null ? Collections.synchronizedList(new ArrayList<>()) : null;
 	}
 
 	/**
 	 * Creates a logger for the specified name.
 	 *
 	 * <p>
-	 * This method returns the same Logger instance for a given name, ensuring that
+	 * This method returns the same RichLogger instance for a given name, ensuring that
 	 * listeners attached to a logger persist across multiple calls to {@link #getLogger(String)}.
-	 * Logger instances are cached and automatically created using the underlying
+	 * RichLogger instances are cached and automatically created using the underlying
 	 * {@link java.util.logging.Logger#getLogger(String)}.
 	 *
 	 * @param name The logger name.  Must not be <jk>null</jk>.
 	 * @return A logger instance (cached and reused for the same name).
 	 */
-	public static Logger getLogger(String name) {
-		return loggers.computeIfAbsent(name, k -> new Logger(java.util.logging.Logger.getLogger(k)));
+	public static RichLogger getLogger(String name) {
+		drainCollectedLoggers();
+		while (true) {
+			var currentRef = loggers.get(name);
+			var current = currentRef == null ? null : currentRef.get();
+			if (current != null)
+				return current;
+			var created = new RichLogger(java.util.logging.Logger.getLogger(name));
+			var createdRef = new LoggerRef(name, created, loggerQueue);
+			if (currentRef == null) {
+				if (loggers.putIfAbsent(name, createdRef) == null)
+					return created;
+			} else if (loggers.replace(name, currentRef, createdRef))
+				return created;
+			drainCollectedLoggers();
+		}
 	}
 
 	/**
@@ -141,8 +178,94 @@ public class Logger extends java.util.logging.Logger {
 	 * @param clazz The class.  Must not be <jk>null</jk>.
 	 * @return A logger instance.
 	 */
-	public static Logger getLogger(Class<?> clazz) {
+	public static RichLogger getLogger(Class<?> clazz) {
 		return getLogger(cn(clazz));
+	}
+
+	static RichLogger findLogger(String name) {
+		drainCollectedLoggers();
+		var ref = loggers.get(name);
+		if (ref == null)
+			return null;
+		var logger = ref.get();
+		if (logger == null)
+			loggers.remove(name, ref);
+		return logger;
+	}
+
+	static void forEachLiveAncestor(String name, Consumer<RichLogger> action) {
+		var ancestorName = parentName(name);
+		while (ancestorName != null) {
+			var ancestor = findLogger(ancestorName);
+			if (ancestor != null)
+				action.accept(ancestor);
+			ancestorName = parentName(ancestorName);
+		}
+	}
+
+	private static String parentName(String name) {
+		if (name == null || name.isEmpty())
+			return null;
+		var i = name.lastIndexOf('.');
+		return i == -1 ? "" : name.substring(0, i);
+	}
+
+	private static void drainCollectedLoggers() {
+		LoggerRef ref;
+		while ((ref = (LoggerRef)loggerQueue.poll()) != null)
+			loggers.remove(ref.name, ref);
+	}
+
+	/**
+	 * Creates a builder for the specified logger name.
+	 *
+	 * @param name The logger name.
+	 * @return A new builder.
+	 */
+	public static Builder builder(String name) {
+		return new Builder(name);
+	}
+
+	/**
+	 * Creates a builder for the specified class logger name.
+	 *
+	 * @param clazz The class.
+	 * @return A new builder.
+	 */
+	public static Builder builder(Class<?> clazz) {
+		return builder(cn(clazz));
+	}
+
+	/**
+	 * Builder for creating configured {@link RichLogger} views.
+	 */
+	public static class Builder {
+		private final String name;
+		private MessageGenerator generator = MessageGenerator.PRINTF;
+
+		Builder(String name) {
+			this.name = name;
+		}
+
+		public Builder printf() {
+			generator = MessageGenerator.PRINTF;
+			return this;
+		}
+
+		public Builder messageFormat() {
+			generator = MessageGenerator.MESSAGE_FORMAT;
+			return this;
+		}
+
+		public Builder generator(MessageGenerator value) {
+			generator = value == null ? MessageGenerator.PRINTF : value;
+			return this;
+		}
+
+		public RichLogger build() {
+			var canonical = getLogger(name);
+			return new RichLogger(canonical.delegate, generator, canonical);
+		}
 	}
 
 	/**
@@ -158,7 +281,21 @@ public class Logger extends java.util.logging.Logger {
 		"resource" // Caller takes ownership of the returned LogRecordCapture
 	})
 	public LogRecordCapture captureEvents() {
-		return new LogRecordCapture(this);
+		return new LogRecordCapture(canonical);
+	}
+
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned LogRecordCapture
+	})
+	public LogRecordCapture captureEvents(Level min) {
+		return new LogRecordCapture(canonical, x -> x.getLevel().intValue() >= min.intValue());
+	}
+
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned LogRecordCapture
+	})
+	public LogRecordCapture captureEvents(Predicate<java.util.logging.LogRecord> filter) {
+		return new LogRecordCapture(canonical, filter);
 	}
 
 	/**
@@ -167,7 +304,7 @@ public class Logger extends java.util.logging.Logger {
 	 * @param listener The listener to add.
 	 */
 	void addLogRecordListener(LogRecordListener listener) {
-		listeners.add(listener);
+		canonical.listeners.add(listener);
 	}
 
 	/**
@@ -176,7 +313,46 @@ public class Logger extends java.util.logging.Logger {
 	 * @param listener The listener to remove.
 	 */
 	void removeLogRecordListener(LogRecordListener listener) {
-		listeners.remove(listener);
+		canonical.listeners.remove(listener);
+	}
+
+	public void setUseParentListeners(boolean useParentListeners) {
+		canonical.useParentListeners = useParentListeners;
+	}
+
+	public boolean isUseParentListeners() {
+		return canonical.useParentListeners;
+	}
+
+	@Override
+	public void log(java.util.logging.LogRecord record) {
+		canonical.listeners.forEach(x -> x.onLogRecord(record));
+		if (canonical.useParentListeners) {
+			var ancestors = new ArrayList<RichLogger>();
+			forEachLiveAncestor(canonical.getName(), ancestors::add);
+			for (var ancestor : ancestors) {
+				ancestor.listeners.forEach(x -> x.onLogRecord(record));
+				if (!ancestor.useParentListeners)
+					break;
+			}
+		}
+		delegate.log(record);
+	}
+
+	private static boolean hasAnyListenerInChain(RichLogger logger) {
+		if (!logger.listeners.isEmpty())
+			return true;
+		if (!logger.useParentListeners)
+			return false;
+		var ancestors = new ArrayList<RichLogger>();
+		forEachLiveAncestor(logger.getName(), ancestors::add);
+		for (var ancestor : ancestors) {
+			if (!ancestor.listeners.isEmpty())
+				return true;
+			if (!ancestor.useParentListeners)
+				break;
+		}
+		return false;
 	}
 
 	/**
@@ -196,25 +372,33 @@ public class Logger extends java.util.logging.Logger {
 	 * @param thrown The throwable, or <jk>null</jk> if none.
 	 */
 	private void doLog(Level level, String msg, Object[] args, Throwable thrown) {
-		if (!isLoggable(level) && listeners.isEmpty())
+		if (!isLoggable(level) && !hasAnyListenerInChain(canonical))
 			return;
 
 		// Create LogRecord with lazy formatting support
-		var rec = new LogRecord(getName(), level, msg, args, thrown);
+		var rec = new LogRecord(getName(), level, msg, args, thrown, generator);
+		this.log(rec);
+	}
 
-		// Notify all listeners
-		listeners.forEach(x -> x.onLogRecord(rec));
-
-		// Delegate to underlying logger (LogRecord extends java.util.logging.LogRecord)
-		delegate.log(rec);
+	private void logSupplier(Level level, Supplier<String> msgSupplier, Throwable thrown) {
+		if (!isLoggable(level) && !hasAnyListenerInChain(canonical))
+			return;
+		var msg = msgSupplier == null ? null : msgSupplier.get();
+		var rec = new LogRecord(getName(), level, msg, null, thrown, generator);
+		this.log(rec);
 	}
 
 	// Convenience methods with formatted strings
 
-	// Standard Logger methods - feed through central doLog method
+	// Standard RichLogger methods - feed through central doLog method
 	@Override
 	public void severe(String msg) {
 		doLog(SEVERE, msg, null, null);
+	}
+
+	@Override
+	public void severe(Supplier<String> msgSupplier) {
+		logSupplier(SEVERE, msgSupplier, null);
 	}
 
 	@Override
@@ -223,8 +407,18 @@ public class Logger extends java.util.logging.Logger {
 	}
 
 	@Override
+	public void warning(Supplier<String> msgSupplier) {
+		logSupplier(WARNING, msgSupplier, null);
+	}
+
+	@Override
 	public void info(String msg) {
 		doLog(INFO, msg, null, null);
+	}
+
+	@Override
+	public void info(Supplier<String> msgSupplier) {
+		logSupplier(INFO, msgSupplier, null);
 	}
 
 	@Override
@@ -233,8 +427,18 @@ public class Logger extends java.util.logging.Logger {
 	}
 
 	@Override
+	public void config(Supplier<String> msgSupplier) {
+		logSupplier(CONFIG, msgSupplier, null);
+	}
+
+	@Override
 	public void fine(String msg) {
 		doLog(FINE, msg, null, null);
+	}
+
+	@Override
+	public void fine(Supplier<String> msgSupplier) {
+		logSupplier(FINE, msgSupplier, null);
 	}
 
 	@Override
@@ -243,13 +447,28 @@ public class Logger extends java.util.logging.Logger {
 	}
 
 	@Override
+	public void finer(Supplier<String> msgSupplier) {
+		logSupplier(FINER, msgSupplier, null);
+	}
+
+	@Override
 	public void finest(String msg) {
 		doLog(FINEST, msg, null, null);
 	}
 
 	@Override
+	public void finest(Supplier<String> msgSupplier) {
+		logSupplier(FINEST, msgSupplier, null);
+	}
+
+	@Override
 	public void log(Level level, String msg) {
 		doLog(level, msg, null, null);
+	}
+
+	@Override
+	public void log(Level level, Supplier<String> msgSupplier) {
+		logSupplier(level, msgSupplier, null);
 	}
 
 	@Override

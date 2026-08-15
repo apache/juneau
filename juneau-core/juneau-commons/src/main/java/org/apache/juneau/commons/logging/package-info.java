@@ -19,7 +19,7 @@
  * Lightweight logging utilities built on top of {@code java.util.logging}.
  *
  * <p>
- * Provides an extended {@link org.apache.juneau.commons.logging.Logger} with formatted-message
+ * Provides an extended {@link org.apache.juneau.commons.logging.RichLogger} with formatted-message
  * convenience methods, a lazy-formatting {@link org.apache.juneau.commons.logging.LogRecord}, and
  * facilities for {@link org.apache.juneau.commons.logging.LogRecordCapture capturing} and
  * {@link org.apache.juneau.commons.logging.LogRecordListener listening to} log records.

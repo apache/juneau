@@ -57,7 +57,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.RichLogger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.ParameterInfo;
 import org.apache.juneau.commons.settings.*;
@@ -153,7 +153,7 @@ import jakarta.servlet.http.*;
 })
 public class RestContext extends Context {
 
-	private static final Logger LOG = Logger.getLogger(RestContext.class);
+	private static final RichLogger LOG = RichLogger.getLogger(RestContext.class);
 
 	// Property name constants
 	private static final String PROP_allowContentParam = "allowContentParam";
@@ -1043,7 +1043,7 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(EncoderSet.class, encoders::get);
 		bs.addDefaultSupplier(SerializerSet.class, serializers::get);
 		bs.addDefaultSupplier(ParserSet.class, parsers::get);
-		bs.addDefaultSupplier(Logger.class, logger::get);
+		bs.addDefaultSupplier(RichLogger.class, logger::get);
 		bs.addDefaultSupplier(java.util.logging.Logger.class, logger::get);
 		bs.addDefaultSupplier(ThrownStore.class, thrownStore::get);
 		bs.addDefaultSupplier(MethodExecStore.class, methodExecStore::get);
@@ -1573,15 +1573,15 @@ public class RestContext extends Context {
 	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() -> jsonSchemaGeneratorBuilder.get().build());
 
 	/**
-	 * The {@link Logger} for this resource.
+	 * The {@link RichLogger} for this resource.
 	 *
 	 * <p>
-	 * Defaults to {@code Logger.getLogger(resourceClass.getName())}. A bean-store override or
+	 * Defaults to {@code RichLogger.getLogger(resourceClass.getName())}. A bean-store override or
 	 * {@code @Bean} factory method REPLACES the default.
 	 */
-	private final Memoizer<Logger> logger = memoizer(() -> {
-		var v = Holder.of(Logger.getLogger(cn(resourceClass())));
-		beanStore().createBeanFromMethod(Logger.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(v::set);
+	private final Memoizer<RichLogger> logger = memoizer(() -> {
+		var v = Holder.of(RichLogger.getLogger(cn(resourceClass())));
+		beanStore().createBeanFromMethod(RichLogger.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -3252,7 +3252,7 @@ public class RestContext extends Context {
 	});
 
 	/** Logger for async / virtual-thread setup events. Used at memoizer init before {@link #getLogger()} may be wired up. */
-	private static final Logger ASYNC_LOG = Logger.getLogger(RestContext.class.getName() + ".async");
+	private static final RichLogger ASYNC_LOG = RichLogger.getLogger(RestContext.class.getName() + ".async");
 
 	/**
 	 * Whether framework memoizers and operation/child contexts should be force-initialized during constructor execution;
@@ -4079,7 +4079,7 @@ public class RestContext extends Context {
 	 * 	The logger for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Logger getLogger() { return beanStore.getBean(Logger.class).orElse(null); }
+	public RichLogger getLogger() { return beanStore.getBean(RichLogger.class).orElse(null); }
 
 	/**
 	 * Returns the resource bundle used by this resource.

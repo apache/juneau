@@ -72,7 +72,7 @@ import jakarta.servlet.*;
 })
 public class BasicSwaggerProviderSession {
 
-	private static final Logger LOG = Logger.getLogger(BasicSwaggerProviderSession.class);
+	private static final RichLogger LOG = RichLogger.getLogger(BasicSwaggerProviderSession.class);
 
 	// Swagger JSON property name constants
 	private static final String SWAGGER_allOf = "allOf";

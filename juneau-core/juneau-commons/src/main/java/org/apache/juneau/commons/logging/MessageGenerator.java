@@ -17,23 +17,27 @@
 package org.apache.juneau.commons.logging;
 
 /**
- * Interface for listening to log records.
- *
- * <p>
- * Implementations of this interface can be registered with a {@link RichLogger} to receive
- * notifications when log records are logged.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link LogRecordCapture}
- * 	<li class='jc'>{@link RichLogger}
- * </ul>
+ * Strategy interface for rendering log message patterns.
  */
-public interface LogRecordListener {
+@FunctionalInterface
+public interface MessageGenerator {
 
 	/**
-	 * Called when a log record is logged.
-	 *
-	 * @param rec The log record that was logged.
+	 * Printf-style message generator backed by {@link #format(String, Object...)}.
 	 */
-	void onLogRecord(java.util.logging.LogRecord rec);
+	MessageGenerator PRINTF = (pattern, args) -> org.apache.juneau.commons.utils.StringUtils.format(pattern, args);
+
+	/**
+	 * MessageFormat-style message generator backed by {@link org.apache.juneau.commons.utils.StringUtils#mformat(String, Object...)}.
+	 */
+	MessageGenerator MESSAGE_FORMAT = (pattern, args) -> org.apache.juneau.commons.utils.StringUtils.mformat(pattern, args);
+
+	/**
+	 * Renders a message pattern with arguments.
+	 *
+	 * @param pattern The message pattern.
+	 * @param args The message arguments.
+	 * @return The rendered message.
+	 */
+	String format(String pattern, Object...args);
 }

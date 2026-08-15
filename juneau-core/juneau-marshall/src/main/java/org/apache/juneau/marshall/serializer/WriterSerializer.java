@@ -446,7 +446,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	 * @return This object.
 	 */
 	public final WriterSerializer println(Object o) {
-		Logger.getLogger(WriterSerializer.class).info(toString(o));  // NOT DEBUG
+		RichLogger.getLogger(WriterSerializer.class).info(toString(o));  // NOT DEBUG
 		return this;
 	}
 

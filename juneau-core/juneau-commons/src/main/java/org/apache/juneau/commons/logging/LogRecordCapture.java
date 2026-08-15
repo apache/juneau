@@ -18,6 +18,8 @@ package org.apache.juneau.commons.logging;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
+import java.util.regex.*;
 
 /**
  * Captures log records for testing purposes.
@@ -30,7 +32,7 @@ import java.util.*;
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	<jc>// Capture records using try-with-resources</jc>
- * 	<jk>try</jk> (LogRecordCapture <jv>capture</jv> = Logger.getLogger(MyClass.<jk>class</jk>).captureEvents()) {
+ * 	<jk>try</jk> (LogRecordCapture <jv>capture</jv> = RichLogger.getLogger(MyClass.<jk>class</jk>).captureEvents()) {
  * 		<jv>logger</jv>.info(<js>"Test message"</js>);
  * 		<jv>logger</jv>.warning(<js>"Warning message"</js>);
  *
@@ -50,22 +52,31 @@ import java.util.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link Logger#captureEvents()}
+ * 	<li class='jc'>{@link RichLogger#captureEvents()}
  * 	<li class='jc'>{@link LogRecord#formatted(String)}
  * </ul>
  */
 public class LogRecordCapture implements LogRecordListener, Closeable {
 
-	private final Logger logger;
-	private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
+	private final RichLogger logger;
+	private final List<RichLogger> pinnedLoggers = new ArrayList<>();
+	private final List<java.util.logging.LogRecord> records = Collections.synchronizedList(new ArrayList<>());
+	private final Predicate<java.util.logging.LogRecord> filter;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param logger The logger to capture records from.
 	 */
-	LogRecordCapture(Logger logger) {
+	LogRecordCapture(RichLogger logger) {
+		this(logger, x -> true);
+	}
+
+	LogRecordCapture(RichLogger logger, Predicate<java.util.logging.LogRecord> filter) {
 		this.logger = logger;
+		this.filter = filter == null ? x -> true : filter;
+		pinnedLoggers.add(logger);
+		RichLogger.forEachLiveAncestor(logger.getName(), pinnedLoggers::add);
 		logger.addLogRecordListener(this);
 	}
 
@@ -75,8 +86,9 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	 * @param rec The log record that was logged.
 	 */
 	@Override
-	public void onLogRecord(LogRecord rec) {
-		records.add(rec);
+	public void onLogRecord(java.util.logging.LogRecord rec) {
+		if (filter.test(rec))
+			records.add(rec);
 	}
 
 	/**
@@ -84,7 +96,7 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	 *
 	 * @return An unmodifiable list of captured LogRecords.
 	 */
-	public List<LogRecord> getRecords() {
+	public List<java.util.logging.LogRecord> getRecords() {
 		synchronized (records) {
 			return List.copyOf(records);
 		}
@@ -102,8 +114,7 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	public List<String> getRecords(String format) {
 		synchronized (records) {
 			return records.stream()
-				.map(LogRecord.class::cast)
-				.map(x -> x.formatted(format))
+				.map(x -> LogRecord.formatted(x, format))
 				.toList();
 		}
 	}
@@ -133,11 +144,52 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 		return records.isEmpty();
 	}
 
+	public List<String> messages() {
+		synchronized (records) {
+			return records.stream().map(java.util.logging.LogRecord::getMessage).toList();
+		}
+	}
+
+	public java.util.logging.LogRecord last() {
+		synchronized (records) {
+			return records.isEmpty() ? null : records.get(records.size() - 1);
+		}
+	}
+
+	public List<java.util.logging.LogRecord> byLevel(java.util.logging.Level level) {
+		synchronized (records) {
+			return records.stream().filter(x -> x.getLevel().equals(level)).toList();
+		}
+	}
+
+	public List<java.util.logging.LogRecord> matching(String regex) {
+		var p = Pattern.compile(regex);
+		synchronized (records) {
+			return records.stream().filter(x -> p.matcher(x.getMessage()).find()).toList();
+		}
+	}
+
+	public String assertMessage() {
+		var r = last();
+		return r == null ? null : r.getMessage();
+	}
+
+	public java.util.logging.Level assertLevel() {
+		var r = last();
+		return r == null ? null : r.getLevel();
+	}
+
+	public Throwable assertThrown() {
+		var r = last();
+		return r == null ? null : r.getThrown();
+	}
+
 	/**
 	 * Closes this capture and removes it from the logger's listeners.
 	 */
 	@Override
 	public void close() {
 		logger.removeLogRecordListener(this);
+		pinnedLoggers.clear();
 	}
 }

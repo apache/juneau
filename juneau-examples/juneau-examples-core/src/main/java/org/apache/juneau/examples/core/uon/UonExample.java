@@ -43,7 +43,7 @@ public class UonExample {
 		 * (name=name,id=id)
 		 */
 		var serial = UonSerializer.DEFAULT.write(pojo);
-		Logger.getLogger(UonExample.class).info(serial);
+		RichLogger.getLogger(UonExample.class).info(serial);
 
 		// Deserialize back to Pojo instance
 		var obj = UonParser.DEFAULT.read(serial, Pojo.class);

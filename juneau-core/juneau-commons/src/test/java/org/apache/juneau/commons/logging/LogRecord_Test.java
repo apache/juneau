@@ -18,6 +18,7 @@ package org.apache.juneau.commons.logging;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.logging.*;
 import java.util.stream.*;
 
@@ -100,6 +101,45 @@ class LogRecord_Test extends TestBase {
 
 		assertEquals("Message", rec.getMessage());
 		assertNull(rec.getParameters());
+	}
+
+	@Test void c01_getMessage_defaultGenerator_usesPrintf() {
+		var rec = new LogRecord("test.logger", Level.INFO, "%s + %s = %s", new Object[]{1, 2, 3}, null);
+
+		assertEquals("1 + 2 = 3", rec.getMessage());
+	}
+
+	@Test void c02_getMessage_messageFormatGenerator() {
+		var rec = new LogRecord("test.logger", Level.INFO, "{0} + {1} = {2}", new Object[]{1, 2, 3}, null, MessageGenerator.MESSAGE_FORMAT);
+
+		assertEquals("1 + 2 = 3", rec.getMessage());
+	}
+
+	@Test void c03_getMessage_customGenerator() {
+		var rec = new LogRecord("test.logger", Level.INFO, "ignored", new Object[]{"a", "b"}, null, (pattern, args) -> "custom:" + args.length);
+
+		assertEquals("custom:2", rec.getMessage());
+	}
+
+	@Test void c04_getMessage_generatorFailureFallsBackToPattern() {
+		var rec = new LogRecord("test.logger", Level.INFO, null, new Object[]{"a"}, null, MessageGenerator.MESSAGE_FORMAT);
+
+		assertNull(rec.getMessage());
+	}
+
+	@Test void c05_constructorCompatibility_usesPrintfGenerator() {
+		var rec1 = new LogRecord("test.logger", Level.INFO, "Value: %s", new Object[]{42}, null);
+		var rec2 = new LogRecord("test.logger", Level.INFO, "Value: %s", new Object[]{42}, null, MessageGenerator.PRINTF);
+
+		assertEquals(rec1.getMessage(), rec2.getMessage());
+	}
+
+	@Test void c06_deserializedRecordFallsBackToPrintfGenerator() throws Exception {
+		var rec = new LogRecord("test.logger", Level.INFO, "{0}", new Object[]{"value"}, null, MessageGenerator.MESSAGE_FORMAT);
+		assertEquals("value", rec.getMessage());
+
+		var rec2 = roundTrip(rec);
+		assertEquals("{0}", rec2.getMessage());
 	}
 
 	//====================================================================================================
@@ -256,5 +296,25 @@ class LogRecord_Test extends TestBase {
 		assertTrue(formatted.contains("Failed: operation"));
 		assertTrue(formatted.contains("Error"));
 		assertTrue(formatted.contains("\n"));
+	}
+
+	@Test void f03_formatted_static_handlesPlainJulRecord() {
+		var rec = new java.util.logging.LogRecord(Level.INFO, "plain-jul");
+		rec.setLoggerName("test.logger");
+
+		var formatted = LogRecord.formatted(rec, "{logger}:{level}:{msg}");
+		assertEquals("test.logger:INFO:plain-jul", formatted);
+	}
+
+	private static LogRecord roundTrip(LogRecord record) throws Exception {
+		byte[] data;
+		try (var baos = new ByteArrayOutputStream(); var oos = new ObjectOutputStream(baos)) {
+			oos.writeObject(record);
+			oos.flush();
+			data = baos.toByteArray();
+		}
+		try (var bais = new ByteArrayInputStream(data); var ois = new ObjectInputStream(bais)) {
+			return (LogRecord)ois.readObject();
+		}
 	}
 }

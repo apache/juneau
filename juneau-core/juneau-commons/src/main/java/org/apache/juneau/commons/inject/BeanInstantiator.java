@@ -214,7 +214,7 @@ public class BeanInstantiator<T> {
 	/** Default builder class names for auto-detection. */
 	protected static final Set<String> DEFAULT_BUILDER_CLASS_NAMES = u(set("Builder"));
 
-	private static final Logger logger = Logger.getLogger(BeanInstantiator.class);
+	private static final RichLogger logger = RichLogger.getLogger(BeanInstantiator.class);
 
 	/**
 	 * Lifecycle scope for the bean being created.

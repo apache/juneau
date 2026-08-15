@@ -75,7 +75,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options", "head", "patch", "trace");
 
-	private static final Logger LOG = Logger.getLogger(OpenApiUI.class);
+	private static final RichLogger LOG = RichLogger.getLogger(OpenApiUI.class);
 
 	@SuppressWarnings({
 		"null" // Null analysis not applicable for optional values

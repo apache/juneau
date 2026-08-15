@@ -47,17 +47,23 @@ class GitControl_Test {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_nullUsernameYieldsAnonymousTransport() {
-		assertNull(GitControl.findCredentialsProvider(null, "GIT_TOKEN", new BasicBeanStore()));
+		try (var beanStore = new BasicBeanStore()) {
+			assertNull(GitControl.findCredentialsProvider(null, "GIT_TOKEN", beanStore));
+		}
 	}
 
+	@SuppressWarnings({
+		"resource" // new BasicBeanStore().addBean(...) is a fluent self-return; the try-with-resources on 'beanStore' already closes the same instance the constructor produced.
+	})
 	@Test void a02_contributedStoreResolvesSecret() throws Exception {
 		var store = new InMemorySecretStore();
 		store.store("GIT_TOKEN", "hunter2".toCharArray());
-		var beanStore = new BasicBeanStore().addBean(SecretStore.class, store);
 
-		var cp = GitControl.findCredentialsProvider("svc-account", "GIT_TOKEN", beanStore);
-		assertInstanceOf(UsernamePasswordCredentialsProvider.class, cp);
-		assertArrayEquals("hunter2".toCharArray(), passwordOf(cp));
+		try (var beanStore = new BasicBeanStore().addBean(SecretStore.class, store)) {
+			var cp = GitControl.findCredentialsProvider("svc-account", "GIT_TOKEN", beanStore);
+			assertInstanceOf(UsernamePasswordCredentialsProvider.class, cp);
+			assertArrayEquals("hunter2".toCharArray(), passwordOf(cp));
+		}
 	}
 
 	@Test void a03_absentSecretYieldsEmptyPassword() throws Exception {
@@ -68,20 +74,25 @@ class GitControl_Test {
 	}
 
 	@Test void a04_emptyBeanStoreFallsBackToInMemoryDefault() throws Exception {
-		var cp = GitControl.findCredentialsProvider("svc-account", "GIT_TOKEN", new BasicBeanStore());
-		assertArrayEquals(new char[0], passwordOf(cp));
+		try (var beanStore = new BasicBeanStore()) {
+			var cp = GitControl.findCredentialsProvider("svc-account", "GIT_TOKEN", beanStore);
+			assertArrayEquals(new char[0], passwordOf(cp));
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// Constructor integration.
 	// -----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"resource" // new BasicBeanStore().addBean(...) is a fluent self-return; the try-with-resources on 'beanStore' already closes the same instance the constructor produced.
+	})
 	@Test void b01_secretStoreConstructorWiresCredentialsAndClosesCleanly(@TempDir File dir) throws IOException {
 		var store = new InMemorySecretStore();
 		store.store("GIT_TOKEN", "hunter2".toCharArray());
-		var beanStore = new BasicBeanStore().addBean(SecretStore.class, store);
 
-		try (var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git", "svc-account", "GIT_TOKEN", beanStore, false)) {
+		try (var beanStore = new BasicBeanStore().addBean(SecretStore.class, store);
+				var gitControl = new GitControl(dir.getAbsolutePath(), "https://example.com/repo.git", "svc-account", "GIT_TOKEN", beanStore, false)) {
 			assertNotNull(gitControl);
 		}
 	}

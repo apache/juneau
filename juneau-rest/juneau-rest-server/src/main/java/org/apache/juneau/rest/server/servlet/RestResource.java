@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.RichLogger;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 
@@ -150,7 +150,7 @@ public abstract class RestResource {
 		var c = context.get();
 		var logger = c == null ? null : c.getLogger();
 		if (logger == null)
-			logger = Logger.getLogger(cn(this));
+			logger = RichLogger.getLogger(cn(this));
 		logger.log(level, cause, msg);
 	}
 

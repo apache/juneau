@@ -30,7 +30,7 @@ import org.apache.juneau.commons.settings.*;
  */
 public class SystemUtils {
 
-	private static final Logger LOG = Logger.getLogger(SystemUtils.class);
+	private static final RichLogger LOG = RichLogger.getLogger(SystemUtils.class);
 
 	/**
 	 * Prevents instantiation.

@@ -53,7 +53,7 @@ public class JsonSimpleExample {
 
 		var flat = jsonSerializer.write(pojo);
 		// Print out the created POJO in JSON format.
-		Logger.getLogger(JsonSimpleExample.class).info(flat);
+		RichLogger.getLogger(JsonSimpleExample.class).info(flat);
 
 		var parse = jsonParser.read(flat, Pojo.class);
 
@@ -61,7 +61,7 @@ public class JsonSimpleExample {
 		assert parse.getName().equals(pojo.getName());
 
 		var json5 = Json5Serializer.DEFAULT.write(pojo);
-		Logger.getLogger(JsonSimpleExample.class).info(json5);
+		RichLogger.getLogger(JsonSimpleExample.class).info(json5);
 
 		// Parse a JSON object (creates a generic JsonMap).
 		var json = "{name:'John Smith',age:21}";

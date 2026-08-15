@@ -26,7 +26,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.RichLogger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
@@ -3842,7 +3842,7 @@ class BeanInstantiator_Test extends TestBase {
 		void q01_loggingOnSimpleBeanCreation() {
 			// Get the logger instance using the same method as BeanInstantiator static field
 			// This ensures we get the same cached instance
-			var logger = Logger.getLogger(BeanInstantiator.class);
+			var logger = RichLogger.getLogger(BeanInstantiator.class);
 			logger.setLevel(Level.FINE); // Enable FINE level logging
 
 			try (var capture = logger.captureEvents()) {
@@ -3871,7 +3871,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void q02_loggingOnBuilderBeanCreation() {
-			var logger = Logger.getLogger(BeanInstantiator.class);
+			var logger = RichLogger.getLogger(BeanInstantiator.class);
 			logger.setLevel(Level.FINE); // Enable FINE level logging
 			try (var capture = logger.captureEvents()) {
 				var bean = bc(Q02_BeanWithBuilder.class).run();
@@ -3893,7 +3893,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void q03_logMessagesIncludeBeanTypePrefix() {
-			var logger = Logger.getLogger(BeanInstantiator.class);
+			var logger = RichLogger.getLogger(BeanInstantiator.class);
 			logger.setLevel(Level.FINE); // Enable FINE level logging
 			try (var capture = logger.captureEvents()) {
 				var bean = bc(SimpleBean.class).run();
@@ -3918,7 +3918,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void q04_logMessagesWithFormatArguments() {
-			var logger = Logger.getLogger(BeanInstantiator.class);
+			var logger = RichLogger.getLogger(BeanInstantiator.class);
 			try (var capture = logger.captureEvents()) {
 				// Create a bean that will trigger logging with format arguments
 				var bean = bc(Q02_BeanWithBuilder.class).run();

@@ -37,14 +37,14 @@ import java.util.logging.*;
  *
  * <h5 class='section'>Usage:</h5>
  * <p>
- * This class is used internally by {@link Logger} when logging formatted messages.
+ * This class is used internally by {@link RichLogger} when logging formatted messages.
  * The formatted message is only computed when the LogRecord's message is actually
  * accessed (e.g., by a Handler or Formatter).
  * </p>
  *
  * <h5 class='section'>Formatting contract:</h5>
  * <p>
- * Juneau {@link Logger} patterns are <b>printf-style</b> (rendered here via {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}).
+ * Juneau {@link RichLogger} patterns are <b>printf-style</b> (rendered here via {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}).
  * Because this override returns the already-substituted message, downstream {@link java.util.logging.Handler Handlers} and
  * {@link java.util.logging.Formatter Formatters} that call {@link #getMessage()} see fully-rendered text and never re-apply
  * formatting — so the printf-vs-MessageFormat choice is purely internal. The JDK's {@link java.text.MessageFormat}
@@ -54,7 +54,7 @@ import java.util.logging.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link Logger}
+ * 	<li class='jc'>{@link RichLogger}
  * 	<li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}
  * 	<li class='jc'>{@link java.util.logging.LogRecord}
  * </ul>
@@ -69,6 +69,7 @@ import java.util.logging.*;
 public class LogRecord extends java.util.logging.LogRecord {
 
 	private static final long serialVersionUID = 1L;
+	private transient MessageGenerator generator;
 
 	// Key constants for format placeholders
 	private static final String KEY_date = "date";
@@ -91,10 +92,25 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * @param throwable The throwable, or <jk>null</jk> if none.
 	 */
 	public LogRecord(String loggerName, Level level, String msg, Object[] parameters, Throwable throwable) {
+		this(loggerName, level, msg, parameters, throwable, MessageGenerator.PRINTF);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param loggerName The logger name.  Can be <jk>null</jk>.
+	 * @param level The log level.  Must not be <jk>null</jk>.
+	 * @param msg The message pattern (will be used as-is if args is null or empty).
+	 * @param parameters The format arguments, or <jk>null</jk> if none.
+	 * @param throwable The throwable, or <jk>null</jk> if none.
+	 * @param generator The message generator.
+	 */
+	public LogRecord(String loggerName, Level level, String msg, Object[] parameters, Throwable throwable, MessageGenerator generator) {
 		super(level, msg);
 		setLoggerName(loggerName);
 		setParameters(isNotEmptyArray(parameters) ? parameters : null);
 		setThrown(throwable);
+		this.generator = generator == null ? MessageGenerator.PRINTF : generator;
 	}
 
 	/**
@@ -110,7 +126,10 @@ public class LogRecord extends java.util.logging.LogRecord {
 	public String getMessage() {
 		var m = super.getMessage();
 		var p = getParameters();
-		return isEmptyArray(p) ? m : f(m, p);
+		if (isEmptyArray(p))
+			return m;
+		var messageGenerator = generator == null ? MessageGenerator.PRINTF : generator;
+		return safeOptCatch(() -> messageGenerator.format(m, p), x -> m).orElse(m);
 	}
 
 	/**
@@ -202,11 +221,22 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * @see SimpleFormatter
 	 * @see Formatter
 	 */
+	public String formatted(String format) {
+		return formatted(this, format);
+	}
+
+	/**
+	 * Formats a JUL log record with the same placeholders as {@link #formatted(String)}.
+	 *
+	 * @param record The record to format.
+	 * @param format The format string.
+	 * @return The formatted string.
+	 */
 	@SuppressWarnings({
 		"deprecation" // Date constructor is deprecated but needed for compatibility
 	})
-	public String formatted(String format) {
-		var date = new Date(getMillis());
+	public static String formatted(java.util.logging.LogRecord record, String format) {
+		var date = new Date(record.getMillis());
 
 		Function<String,Object> resolver = key -> switch (key) {
 			case KEY_date -> "%1$s";
@@ -215,11 +245,11 @@ public class LogRecord extends java.util.logging.LogRecord {
 			case KEY_msg -> "%4$s";
 			case KEY_thrown -> "%5$s";
 			case KEY_timestamp -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);
-			case KEY_thread, KEY_threadid -> s(getThreadID());
-			case KEY_exception -> o(getThrown()).map(x -> x.getMessage()).orElse("");
+			case KEY_thread, KEY_threadid -> s(record.getThreadID());
+			case KEY_exception -> o(record.getThrown()).map(x -> x.getMessage()).orElse("");
 			default -> "";
 		};
 
-		return safeOptCatch(()->f(formatNamed(format, resolver), date, getLoggerName(), getLevel(), getMessage(), getThrown()), x -> x.getLocalizedMessage()).orElse(null);
+		return safeOptCatch(() -> f(formatNamed(format, resolver), date, record.getLoggerName(), record.getLevel(), record.getMessage(), record.getThrown()), x -> x.getLocalizedMessage()).orElse(null);
 	}
 }

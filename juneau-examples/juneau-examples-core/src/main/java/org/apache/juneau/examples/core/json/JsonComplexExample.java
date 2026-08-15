@@ -65,7 +65,7 @@ public class JsonComplexExample {
 		var flat = jsonSerializer.write(pojoc);
 
 		// Print out the created POJO in JSON format.
-		Logger.getLogger(JsonComplexExample.class).info(flat);
+		RichLogger.getLogger(JsonComplexExample.class).info(flat);
 
 		var parse = jsonParser.read(flat, PojoComplex.class);
 

@@ -74,7 +74,7 @@ public class OapiExample {
 		// Convert POJO to BASE64-encoded string.
 		var s = OpenApiSerializer.DEFAULT;
 		var httpPart = s.getPartSession().write(HEADER, schemab, pojo);
-		Logger.getLogger(OapiExample.class).info(httpPart);
+		RichLogger.getLogger(OapiExample.class).info(httpPart);
 
 		// Convert BASE64-encoded string back into a POJO.
 		var p = OpenApiParser.DEFAULT;
