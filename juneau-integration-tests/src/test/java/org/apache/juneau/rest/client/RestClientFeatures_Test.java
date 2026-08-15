@@ -31,8 +31,8 @@ import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for RestCallInterceptor, RestLogger, RestLogEntry, RestLogLevelResolver,
- * BasicRestLogger, BodyConverter, and related RestClient features.
+ * Tests for RestCallInterceptor, client debug logging, BodyConverter,
+ * and related RestClient features.
  */
 @SuppressWarnings({
 	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
@@ -191,461 +191,132 @@ class RestClientFeatures_Test {
 	}
 
 	// =================================================================================================================
-	// B — RestLogger
+	// B — Client debug logging (RichLogger + formatter tiers)
 	// =================================================================================================================
 
 	@Test
-	void b01_logger_called_on_success() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/api").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertEquals(1, entries.size());
-		var entry = entries.get(0);
-		assertNotNull(entry.getRequest());
-		assertNotNull(entry.getResponse());
-		assertNull(entry.getError());
-		assertEquals("GET", entry.getRequest().getMethod());
-		assertEquals(200, entry.getStatusCode());
-		assertFalse(entry.isError());
-		assertFalse(entry.isDebug());
-		assertEquals(System.Logger.Level.INFO, entry.getLevel());
-	}
-
-	@Test
-	void b02_logger_called_on_transport_error() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> { throw new TransportException("simulated failure"); })
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			assertThrows(TransportException.class, () -> client.get("/api").run());
-		}
-		assertEquals(1, entries.size());
-		var entry = entries.get(0);
-		assertNotNull(entry.getError());
-		assertNull(entry.getResponse());
-		assertEquals(0, entry.getStatusCode());
-		assertTrue(entry.isError());
-		assertEquals(System.Logger.Level.ERROR, entry.getLevel());
-	}
-
-	@Test
-	void b03_logger_status400_is_warning() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.of(404, "Not Found");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/missing").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertEquals(1, entries.size());
-		assertEquals(System.Logger.Level.WARNING, entries.get(0).getLevel());
-		assertTrue(entries.get(0).isError());
-	}
-
-	@Test
-	void b04_logger_status500_is_error() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.of(500, "Internal Server Error");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/crash").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertEquals(1, entries.size());
-		assertEquals(System.Logger.Level.ERROR, entries.get(0).getLevel());
-	}
-
-	@Test
-	void b05_debug_flag_set_on_entry() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/").debug().run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertTrue(entries.get(0).isDebug());
-	}
-
-	@Test
-	void b06_logger_null_no_logging() throws Exception {
-		// Without logger, run() should complete normally
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.build()) {
-			try (var r = client.get("/").run()) {
-				assertEquals(200, r.getStatusCode());
+	void b01_infoTier_emitsBasicOnly() throws Exception {
+		var loggerName = getClass().getName() + ".b01";
+		var logger = org.apache.juneau.commons.logging.RichLogger.getLogger(loggerName);
+		var previous = logger.getLevel();
+		logger.setLevel(java.util.logging.Level.INFO);
+		try (var capture = logger.captureEvents(java.util.logging.Level.INFO)) {
+			try (var client = RestClient.builder()
+					.transport(MockHttpTransport.of(200, "ok"))
+					.rootUrl("http://x.com")
+					.debugLoggerName(loggerName)
+					.build();
+				var response = client.get("/info").run()) {
+				assertEquals(200, response.getStatusCode());
 			}
+			assertNotNull(capture.last());
+			assertEquals(java.util.logging.Level.INFO, capture.last().getLevel());
+			var msg = capture.last().getMessage();
+			assertTrue(msg.contains("HTTP GET"), "Basic message should include request line");
+			assertFalse(msg.contains("---Request Headers---"), "INFO should not include headers");
+			assertFalse(msg.contains("---Response Content UTF-8---"), "INFO should not include bodies");
+		} finally {
+			logger.setLevel(previous);
 		}
 	}
 
-	// =================================================================================================================
-	// C — RestLogEntry.format()
-	// =================================================================================================================
-
 	@Test
-	void c01_format_default_success() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> TransportResponse.builder().statusCode(200).reasonPhrase("OK").build())
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/users").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		var fmt = entries.get(0).format();
-		assertTrue(fmt.contains("GET"), "format should contain method: " + fmt);
-		assertTrue(fmt.contains("200"), "format should contain status: " + fmt);
-		assertTrue(fmt.contains("ms"), "format should contain elapsed: " + fmt);
-	}
-
-	@Test
-	void c02_format_with_template() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.of(200, "OK");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://example.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/items").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		var entry = entries.get(0);
-		assertEquals("GET", entry.format("{method}"));
-		assertTrue(entry.format("{uri}").contains("/items"));
-		assertEquals("200", entry.format("{status}"));
-		assertTrue(entry.format("{elapsed}").endsWith("ms"));
-		assertEquals("", entry.format("{error}"));
-	}
-
-	@Test
-	void c03_format_error_template() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> { throw new TransportException("connection refused"); })
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			assertThrows(TransportException.class, () -> client.get("/").run());
-		}
-		var entry = entries.get(0);
-		assertTrue(entry.format("{error}").contains("connection refused"));
-	}
-
-	@Test
-	void c04_hasResponseHeader() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> TransportResponse.builder()
-				.statusCode(200)
-				.header("X-Custom", "value")
-				.build())
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		var entry = entries.get(0);
-		assertTrue(entry.hasResponseHeader("X-Custom"));
-		assertFalse(entry.hasResponseHeader("X-Missing"));
-	}
-
-	@Test
-	void c05_hasResponseHeader_noResponse() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> { throw new TransportException("fail"); })
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			assertThrows(TransportException.class, () -> client.get("/").run());
-		}
-		assertFalse(entries.get(0).hasResponseHeader("Anything"));
-	}
-
-	@Test
-	void c06_getUri_set_after_run() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/path").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		var uri = entries.get(0).getRequest().getUri();
-		assertNotNull(uri);
-		assertTrue(uri.toString().contains("/path"));
-	}
-
-	// =================================================================================================================
-	// D — RestLogLevelResolver
-	// =================================================================================================================
-
-	@Test
-	void d01_default_resolver_info_for_2xx() {
-		var entry = stubEntry(200, null);
-		assertEquals(System.Logger.Level.INFO, RestLogLevelResolver.DEFAULT.resolve(entry));
-	}
-
-	@Test
-	void d02_default_resolver_warning_for_4xx() {
-		var entry = stubEntry(404, null);
-		assertEquals(System.Logger.Level.WARNING, RestLogLevelResolver.DEFAULT.resolve(entry));
-	}
-
-	@Test
-	void d03_default_resolver_error_for_5xx() {
-		var entry = stubEntry(500, null);
-		assertEquals(System.Logger.Level.ERROR, RestLogLevelResolver.DEFAULT.resolve(entry));
-	}
-
-	@Test
-	void d04_default_resolver_error_for_transport_error() {
-		var entry = stubEntry(0, new TransportException("fail"));
-		assertEquals(System.Logger.Level.ERROR, RestLogLevelResolver.DEFAULT.resolve(entry));
-	}
-
-	@Test
-	void d05_custom_resolver_via_rules() {
-		var resolver = RestLogLevelResolver.rules()
-			.rule(System.Logger.Level.ERROR, e -> e.getStatusCode() >= 500)
-			.rule(System.Logger.Level.WARNING, e -> e.getStatusCode() >= 400)
-			.defaultLevel(System.Logger.Level.DEBUG)
-			.build();
-		assertEquals(System.Logger.Level.DEBUG, resolver.resolve(stubEntry(200, null)));
-		assertEquals(System.Logger.Level.WARNING, resolver.resolve(stubEntry(400, null)));
-		assertEquals(System.Logger.Level.ERROR, resolver.resolve(stubEntry(503, null)));
-	}
-
-	@Test
-	void d06_default_resolver_warning_for_thrown_header() throws Exception {
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> TransportResponse.builder()
-				.statusCode(200)
-				.header("Thrown", "com.example.MyException;message")
-				.build())
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		// Thrown header present with 200 → WARNING
-		assertEquals(System.Logger.Level.WARNING, entries.get(0).getLevel());
-	}
-
-	// =================================================================================================================
-	// E — BasicRestLogger
-	// =================================================================================================================
-
-	@Test
-	void e01_basicRestLogger_of_logs_info() throws Exception {
-		var messages = new ArrayList<String>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) { messages.add(level + ":" + msg); }
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(level + ":" + format); }
-		};
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> TransportResponse.builder().statusCode(200).reasonPhrase("OK").build())
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.of(jdkLogger))
-				.build()) {
-			try (var r = client.get("/test").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertEquals(1, messages.size());
-		assertTrue(messages.get(0).startsWith("INFO:"), "Should log at INFO level: " + messages.get(0));
-		assertTrue(messages.get(0).contains("200"), "Message should contain status: " + messages.get(0));
-	}
-
-	@Test
-	void e02_basicRestLogger_logs_error_with_exception() throws Exception {
-		var messages = new ArrayList<String>();
-		var throwables = new ArrayList<Throwable>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) {
-				messages.add(level + ":" + msg);
-				throwables.add(thrown);
+	void b02_fineTier_includesHeadersAndRedacts() throws Exception {
+		var loggerName = getClass().getName() + ".b02";
+		var logger = org.apache.juneau.commons.logging.RichLogger.getLogger(loggerName);
+		var previous = logger.getLevel();
+		logger.setLevel(java.util.logging.Level.FINE);
+		try (var capture = logger.captureEvents(java.util.logging.Level.FINE)) {
+			try (var client = RestClient.builder()
+					.transport(MockHttpTransport.builder()
+						.fallback(req -> TransportResponse.builder()
+							.statusCode(200)
+							.header("Authorization", "Bearer response-secret")
+							.build())
+						.build())
+					.rootUrl("http://x.com")
+					.debugLoggerName(loggerName)
+					.build();
+				var response = client.get("/headers").header("Authorization", "Bearer request-secret").run()) {
+				assertEquals(200, response.getStatusCode());
 			}
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(level + ":" + format); }
-		};
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> { throw new TransportException("network error"); })
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.of(jdkLogger))
-				.build()) {
-			assertThrows(TransportException.class, () -> client.get("/fail").run());
+			assertNotNull(capture.last());
+			assertEquals(java.util.logging.Level.FINE, capture.last().getLevel());
+			var msg = capture.last().getMessage();
+			assertTrue(msg.contains("---Request Headers---"), "FINE should include request headers");
+			assertTrue(msg.contains("---Response Headers---"), "FINE should include response headers");
+			assertTrue(msg.contains("Authorization:"), "Authorization header should be present");
+			assertFalse(msg.contains("request-secret"), "Raw request secret should not leak");
+			assertFalse(msg.contains("response-secret"), "Raw response secret should not leak");
+		} finally {
+			logger.setLevel(previous);
 		}
-		assertEquals(1, messages.size());
-		assertTrue(messages.get(0).startsWith("ERROR:"), "Should log at ERROR level: " + messages.get(0));
-		assertNotNull(throwables.get(0), "Throwable should be included on ERROR");
 	}
 
 	@Test
-	void e03_basicRestLogger_filter_suppresses_entry() throws Exception {
-		var messages = new ArrayList<String>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) { messages.add(msg); }
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(format); }
-		};
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.create()
-					.logger(jdkLogger)
-					.filter(e -> false) // filter all
-					.build())
-				.build()) {
-			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
+	void b03_finestTier_includesBodies() throws Exception {
+		var loggerName = getClass().getName() + ".b03";
+		var logger = org.apache.juneau.commons.logging.RichLogger.getLogger(loggerName);
+		var previous = logger.getLevel();
+		logger.setLevel(java.util.logging.Level.FINEST);
+		try (var capture = logger.captureEvents(java.util.logging.Level.FINEST)) {
+			try (var client = RestClient.builder()
+					.transport(MockHttpTransport.builder()
+						.fallback(req -> {
+							if (req.getBody() != null) {
+								try {
+									req.getBody().writeTo(new ByteArrayOutputStream());
+								} catch (IOException e) {
+									throw new RuntimeException(e);
+								}
+							}
+							return TransportResponse.builder()
+								.statusCode(200)
+								.body(new ByteArrayInputStream("uvwxyz".getBytes(StandardCharsets.UTF_8)))
+								.build();
+						})
+						.build())
+					.rootUrl("http://x.com")
+					.debugLoggerName(loggerName)
+					.debugFormatter(new BasicRestClientDebugFormatter().bodyCap(4))
+					.build();
+				var response = client.post("/body").bodyString("abcdef").run()) {
+				assertEquals("uvwxyz", response.body().asString());
+			}
+			assertNotNull(capture.last());
+			assertEquals(java.util.logging.Level.FINEST, capture.last().getLevel());
+			var msg = capture.last().getMessage();
+			assertTrue(msg.contains("---Request Content UTF-8---"));
+			assertTrue(msg.contains("abcd"));
+			assertTrue(msg.contains("---Response Content UTF-8---"));
+			assertTrue(msg.contains("uvwx"));
+		} finally {
+			logger.setLevel(previous);
 		}
-		assertTrue(messages.isEmpty(), "Filtered logger should log nothing");
 	}
 
 	@Test
-	void e04_basicRestLogger_customTemplates() throws Exception {
-		var messages = new ArrayList<String>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) { messages.add(msg); }
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(format); }
-		};
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.create()
-					.logger(jdkLogger)
-					.infoTemplate("CUSTOM:{method}:{status}")
-					.build())
-				.build()) {
-			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
+	void b04_transportError_emitsThrown() throws Exception {
+		var loggerName = getClass().getName() + ".b04";
+		var logger = org.apache.juneau.commons.logging.RichLogger.getLogger(loggerName);
+		var previous = logger.getLevel();
+		logger.setLevel(java.util.logging.Level.INFO);
+		try (var capture = logger.captureEvents(java.util.logging.Level.INFO)) {
+			try (var client = RestClient.builder()
+					.transport(MockHttpTransport.builder()
+						.fallback(req -> { throw new TransportException("simulated failure"); })
+						.build())
+					.rootUrl("http://x.com")
+					.debugLoggerName(loggerName)
+					.build()) {
+				assertThrows(TransportException.class, () -> client.get("/fail").run());
+			}
+			assertNotNull(capture.last());
+			assertNotNull(capture.last().getThrown());
+			assertTrue(capture.last().getThrown().getMessage().contains("simulated failure"));
+		} finally {
+			logger.setLevel(previous);
 		}
-		assertEquals(1, messages.size());
-		assertTrue(messages.get(0).startsWith("CUSTOM:GET:200"), "Expected custom template: " + messages.get(0));
-	}
-
-	@Test
-	void e05_basicRestLogger_debug_entry_uses_debugTemplate() throws Exception {
-		var messages = new ArrayList<String>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) { messages.add(level + ":" + msg); }
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(level + ":" + format); }
-		};
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.create()
-					.logger(jdkLogger)
-					.debugTemplate("DBG:{method}")
-					.build())
-				.build()) {
-			try (var r = client.get("/").debug().run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertEquals(1, messages.size());
-		assertTrue(messages.get(0).startsWith("DEBUG:DBG:GET"), "Expected debug template: " + messages.get(0));
-	}
-
-	@Test
-	void e06_basicRestLogger_warning_level() throws Exception {
-		var messages = new ArrayList<String>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) { messages.add(level + ":" + msg); }
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(level + ":" + format); }
-		};
-		var transport = MockHttpTransport.of(404, "Not Found");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.create()
-					.logger(jdkLogger)
-					.warningTemplate("WARN:{status}")
-					.build())
-				.build()) {
-			try (var r = client.get("/missing").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertEquals(1, messages.size());
-		assertTrue(messages.get(0).startsWith("WARNING:WARN:404"), "Expected warning template: " + messages.get(0));
-	}
-
-	@Test
-	void e07_basicRestLogger_customLevelResolver() throws Exception {
-		var messages = new ArrayList<String>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) { messages.add(level + ":" + msg); }
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(level + ":" + format); }
-		};
-		var transport = MockHttpTransport.of(200, "ok");
-		var alwaysError = RestLogLevelResolver.rules()
-			.defaultLevel(System.Logger.Level.ERROR)
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.create()
-					.logger(jdkLogger)
-					.levelResolver(alwaysError)
-					.build())
-				.build()) {
-			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		assertEquals(1, messages.size());
-		assertTrue(messages.get(0).startsWith("ERROR:"), "Should log at ERROR even for 200: " + messages.get(0));
 	}
 
 	// =================================================================================================================
@@ -951,51 +622,6 @@ class RestClientFeatures_Test {
 	// =================================================================================================================
 	// K — Additional coverage tests
 	// =================================================================================================================
-
-	@Test
-	void k01_basicRestLogger_filter_allows_entry() throws Exception {
-		// When filter is non-null and returns TRUE, the entry IS logged
-		var messages = new ArrayList<String>();
-		var jdkLogger = new System.Logger() {
-			@Override public String getName() { return "test"; }
-			@Override public boolean isLoggable(Level level) { return true; }
-			@Override public void log(Level level, ResourceBundle bundle, String msg, Throwable thrown) { messages.add(msg); }
-			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(format); }
-		};
-		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(BasicRestLogger.create()
-					.logger(jdkLogger)
-					.filter(e -> true) // filter allows all entries
-					.build())
-				.build()) {
-			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-		}
-		// With filter returning true, entry IS logged
-		assertEquals(1, messages.size(), "Entry should be logged when filter returns true");
-	}
-
-	@Test
-	void k02_restLogEntry_error_with_null_message() throws Exception {
-		// Error with null message falls back to class simple name
-		var entries = new ArrayList<RestLogEntry>();
-		var transport = MockHttpTransport.builder()
-			.fallback(req -> { throw new TransportException((String)null); })
-			.build();
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			assertThrows(TransportException.class, () -> client.get("/").run());
-		}
-		var entry = entries.get(0);
-		// {error} should use class simple name when getMessage() is null
-		var errorText = entry.format("{error}");
-		assertTrue(errorText.contains("TransportException"), "Error text should contain class name when message is null: " + errorText);
-	}
 
 	@Test
 	void k03_ngRestResponse_getHeaders() throws Exception {
@@ -1594,34 +1220,4 @@ class RestClientFeatures_Test {
 		}
 	}
 
-	// =================================================================================================================
-	// Helpers
-	// =================================================================================================================
-
-	/** Creates a stub RestLogEntry by making a real mock call and capturing the logger entry. */
-	private static RestLogEntry stubEntry(int status, Throwable error) {
-		var entries = new ArrayList<RestLogEntry>();
-		MockHttpTransport transport;
-		if (error != null) {
-			transport = MockHttpTransport.builder()
-				.fallback(req -> { throw new TransportException(error.getMessage()); })
-				.build();
-		} else {
-			transport = MockHttpTransport.builder()
-				.fallback(req -> TransportResponse.builder().statusCode(status).build())
-				.build();
-		}
-		try (var client = RestClient.builder()
-				.transport(transport)
-				.rootUrl("http://x.com")
-				.logger(entries::add)
-				.build()) {
-			try {
-				try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
-			} catch (Exception ignored) { /* Intentionally empty: the request may fail in error/exception scenarios; the test only inspects the captured log entries. */ }
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return entries.get(0);
-	}
 }

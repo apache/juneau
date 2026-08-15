@@ -18,7 +18,9 @@ package org.apache.juneau.rest.client;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.time.*;
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.juneau.rest.client.assertion.*;
 
@@ -43,10 +45,42 @@ public final class RestResponse implements Closeable {
 
 	private final TransportResponse response;
 	private final RestClient client;
+	private final RestRequest request;
+	private final Level debugLevel;
+	private final int debugBodyCap;
+	private final InputStream body;
+	private byte[] cachedContent;
+	private long cachedContentLength = -1;
+	private boolean debugEmitted;
+	private Duration execTime;
 
 	RestResponse(TransportResponse response, RestClient client) {
+		this(response, client, null, null, 0);
+	}
+
+	RestResponse(TransportResponse response, RestClient client, RestRequest request, Level debugLevel, int debugBodyCap) {
 		this.response = response;
 		this.client = client;
+		this.request = request;
+		this.debugLevel = debugLevel;
+		this.debugBodyCap = debugBodyCap;
+		var originalBody = response.getBody();
+		if (debugLevel == Level.FINEST && originalBody != null)
+			this.body = new BoundedCaptureInputStream(originalBody, debugBodyCap);
+		else
+			this.body = originalBody;
+		if (originalBody == null) {
+			cachedContentLength = 0;
+		} else {
+			var h = response.getFirstHeader("Content-Length");
+			if (h != null) {
+				try {
+					cachedContentLength = Long.parseLong(h.value());
+				} catch (NumberFormatException e) {
+					cachedContentLength = -1;
+				}
+			}
+		}
 	}
 
 	/**
@@ -107,7 +141,7 @@ public final class RestResponse implements Closeable {
 	 * @throws IOException If an I/O error occurs reading the body.
 	 */
 	public String getBodyAsString() throws IOException {
-		var body = response.getBody();
+		var body = this.body;
 		if (body == null)
 			return null;
 		return new String(body.readAllBytes(), StandardCharsets.UTF_8);
@@ -122,7 +156,7 @@ public final class RestResponse implements Closeable {
 	 * @return The body stream, possibly <jk>null</jk>.
 	 */
 	public InputStream getBodyStream() {
-		return response.getBody();
+		return body;
 	}
 
 	/**
@@ -190,6 +224,90 @@ public final class RestResponse implements Closeable {
 
 	@Override /* Closeable */
 	public void close() throws IOException {
+		if (body instanceof BoundedCaptureInputStream bcis) {
+			bcis.drain();
+			cachedContent = bcis.getCapturedBytes();
+			cachedContentLength = bcis.getTotalBytesRead();
+		}
+		if (!debugEmitted && client != null && debugLevel != null) {
+			var thrown = request != null ? request.getException() : null;
+			RestClientDebugPipeline.emit(client.debugLogger, client.debugFormatter, debugLevel, request, this, thrown);
+			debugEmitted = true;
+		}
 		response.close();
+	}
+
+	void setExecTime(Duration value) {
+		execTime = value;
+	}
+
+	/**
+	 * Returns response body bytes captured for debug logging (up to the configured body cap).
+	 *
+	 * @return Captured response bytes, or <jk>null</jk> if not captured.
+	 */
+	public byte[] getCachedContent() {
+		return cachedContent;
+	}
+
+	/**
+	 * Returns the total response body length observed while reading/draining, or {@code -1} if unknown.
+	 *
+	 * @return The total body length.
+	 */
+	public long getCachedContentLength() {
+		return cachedContentLength;
+	}
+
+	Duration getExecTime() {
+		return execTime;
+	}
+
+	private static final class BoundedCaptureInputStream extends FilterInputStream {
+		private final ByteArrayOutputStream capture = new ByteArrayOutputStream();
+		private final int cap;
+		private long totalBytesRead;
+
+		BoundedCaptureInputStream(InputStream in, int cap) {
+			super(in);
+			this.cap = cap;
+		}
+
+		byte[] getCapturedBytes() {
+			return capture.toByteArray();
+		}
+
+		long getTotalBytesRead() {
+			return totalBytesRead;
+		}
+
+		void drain() throws IOException {
+			while (read() != -1) {
+				// consume
+			}
+		}
+
+		@Override
+		public int read() throws IOException {
+			var b = super.read();
+			if (b == -1)
+				return -1;
+			totalBytesRead++;
+			if (capture.size() < cap)
+				capture.write(b);
+			return b;
+		}
+
+		@Override
+		public int read(byte[] b, int off, int len) throws IOException {
+			var count = super.read(b, off, len);
+			if (count <= 0)
+				return count;
+			totalBytesRead += count;
+			var remaining = cap - capture.size();
+			if (remaining > 0)
+				capture.write(b, off, Math.min(count, remaining));
+			return count;
+		}
 	}
 }

@@ -24,6 +24,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.logging.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
@@ -59,11 +60,15 @@ public final class RestRequest {
 	private final Map<String,Object> pathData = m();
 	private HttpBody body;
 	private TransportBody convertedBody;
-	private boolean debug;
 	private URI resolvedUri;
 	private Duration timeout;
 	// Per-request interceptors, unioned with the client-level interceptors at run() time.
 	private final List<RestCallInterceptor> requestInterceptors = l();
+	private List<TransportHeader> resolvedHeaders = List.of();
+	private byte[] cachedContent;
+	private long cachedContentLength = -1;
+	private Throwable exception;
+	private Duration execTime;
 
 	RestRequest(RestClient client, String method, String url) {
 		this.client = client;
@@ -327,24 +332,6 @@ public final class RestRequest {
 	}
 
 	// --------------------------------------------------
-	// Debug
-	// --------------------------------------------------
-
-	/**
-	 * Flags this request for verbose debug logging.
-	 *
-	 * <p>
-	 * When set, the configured {@link RestLogger} will receive an entry with {@link RestLogEntry#isDebug()} {@code true},
-	 * enabling full request/response header and body logging for this call only.
-	 *
-	 * @return This object.
-	 */
-	public RestRequest debug() {
-		debug = true;
-		return this;
-	}
-
-	// --------------------------------------------------
 	// Timeout / interceptors
 	// --------------------------------------------------
 
@@ -420,6 +407,51 @@ public final class RestRequest {
 		return resolvedUri;
 	}
 
+	/**
+	 * Returns the headers resolved onto the transport request.
+	 *
+	 * @return The resolved headers in wire order.
+	 */
+	public List<TransportHeader> getResolvedHeaders() {
+		return resolvedHeaders;
+	}
+
+	/**
+	 * Returns request body bytes captured for debug logging (up to the configured body cap).
+	 *
+	 * @return Captured request bytes, or <jk>null</jk> if not captured.
+	 */
+	public byte[] getCachedContent() {
+		return cachedContent;
+	}
+
+	/**
+	 * Returns the total request body length observed during write, or {@code -1} if unknown.
+	 *
+	 * @return The total body length.
+	 */
+	public long getCachedContentLength() {
+		return cachedContentLength;
+	}
+
+	/**
+	 * Returns the terminal request exception, if any.
+	 *
+	 * @return The terminal exception, or <jk>null</jk>.
+	 */
+	public Throwable getException() {
+		return exception;
+	}
+
+	/**
+	 * Returns the measured request execution time.
+	 *
+	 * @return The request execution time, or <jk>null</jk> if unset.
+	 */
+	public Duration getExecTime() {
+		return execTime;
+	}
+
 	// --------------------------------------------------
 	// Execute
 	// --------------------------------------------------
@@ -441,6 +473,8 @@ public final class RestRequest {
 		var start = Instant.now();
 		RestResponse response = null;
 		Throwable error = null;
+		var debugLevel = RestClientDebugPipeline.resolveTier(client.debugLogger);
+		var debugCap = client.debugFormatter.bodyCap();
 		// Union the client-level (builder) interceptors with any per-request (interface- then
 		// method-level) interceptors, preserving the order builder → interface → method.
 		var effectiveInterceptors = effectiveInterceptors();
@@ -449,12 +483,22 @@ public final class RestRequest {
 				interceptor.onInit(this);
 
 			var transportRequest = buildTransportRequest();
+			resolvedHeaders = transportRequest.getHeaders();
+			if (transportRequest.getBody() == null) {
+				cachedContentLength = 0;
+			} else {
+				cachedContentLength = transportRequest.getBody().getContentLength();
+			}
+			if (debugLevel == Level.FINEST)
+				transportRequest = captureRequestBody(transportRequest, debugCap);
 			var transportResponse = client.transport.execute(transportRequest);
-			response = new RestResponse(transportResponse, client);
+			response = new RestResponse(transportResponse, client, this, debugLevel, debugCap);
 
 			for (var interceptor : effectiveInterceptors)
 				interceptor.onConnect(this, response);
 
+			execTime = Duration.between(start, Instant.now());
+			response.setExecTime(execTime);
 			return response;
 		} catch (TransportException | RestCallException e) {
 			error = e;
@@ -464,12 +508,15 @@ public final class RestRequest {
 			throw new TransportException("Request failed: " + e.getMessage(), e);
 		} finally {
 			var elapsed = Duration.between(start, Instant.now());
+			execTime = elapsed;
+			exception = error;
 			RestResponse finalResponse = response;
 			if (error != null && finalResponse != null) {
 				// The response was assigned but an error after that point (e.g. a throwing onConnect
 				// interceptor) means it is never returned to the caller, so the caller can never close it
 				// themselves — close it here to avoid leaking the underlying connection/body.
 				try {
+					finalResponse.setExecTime(elapsed);
 					finalResponse.close();
 				} catch (IOException closeError) { // HTT: close() failing on an already-broken response is not reliably reproducible
 					// suppress — best effort, and the original error is what propagates
@@ -482,15 +529,10 @@ public final class RestRequest {
 					// suppress interceptor close errors — best effort
 				}
 			}
-			if (client.logger != null) {
-				var entry = RestLogEntry.builder()
-					.request(this)
-					.response(finalResponse)
-					.error(error)
-					.elapsed(elapsed)
-					.debug(debug)
-					.build();
-				client.logger.log(entry);
+			if (error != null && finalResponse == null) {
+				var syntheticResponse = new RestResponse(TransportResponse.builder().statusCode(0).build(), client, this, debugLevel, debugCap);
+				syntheticResponse.setExecTime(elapsed);
+				RestClientDebugPipeline.emit(client.debugLogger, client.debugFormatter, debugLevel, this, syntheticResponse, error);
 			}
 		}
 	}
@@ -598,6 +640,51 @@ public final class RestRequest {
 		return builder.build();
 	}
 
+	private TransportRequest captureRequestBody(TransportRequest request, int cap) {
+		var originalBody = request.getBody();
+		if (originalBody == null) {
+			cachedContent = null;
+			cachedContentLength = 0;
+			return request;
+		}
+
+		var wrappedBody = new HttpBody() {
+			@Override
+			public String getContentType() {
+				return originalBody.getContentType();
+			}
+
+			@Override
+			public long getContentLength() {
+				return originalBody.getContentLength();
+			}
+
+			@Override
+			public void writeTo(OutputStream out) throws IOException {
+				var tee = new BoundedCaptureOutputStream(out, cap);
+				try {
+					originalBody.writeTo(tee);
+				} finally {
+					cachedContent = tee.getCapturedBytes();
+					cachedContentLength = tee.getTotalBytesWritten();
+				}
+			}
+
+			@Override
+			public boolean isRepeatable() {
+				return originalBody.isRepeatable();
+			}
+		};
+
+		var builder = TransportRequest.builder()
+			.method(request.getMethod())
+			.uri(request.getUri())
+			.headers(request.getHeaders())
+			.body(TransportBody.of(wrappedBody))
+			.timeout(request.getTimeout());
+		return builder.build();
+	}
+
 	private String applyPathSubstitutions(String template) {
 		var result = template;
 		Object remainder = null;
@@ -682,5 +769,42 @@ public final class RestRequest {
 
 	private static String urlEncode(String value) {
 		return URLEncoder.encode(value, StandardCharsets.UTF_8);
+	}
+
+	private static final class BoundedCaptureOutputStream extends OutputStream {
+		private final OutputStream delegate;
+		private final ByteArrayOutputStream capture = new ByteArrayOutputStream();
+		private final int cap;
+		private long totalBytesWritten;
+
+		BoundedCaptureOutputStream(OutputStream delegate, int cap) {
+			this.delegate = delegate;
+			this.cap = cap;
+		}
+
+		byte[] getCapturedBytes() {
+			return capture.toByteArray();
+		}
+
+		long getTotalBytesWritten() {
+			return totalBytesWritten;
+		}
+
+		@Override
+		public void write(int b) throws IOException {
+			delegate.write(b);
+			totalBytesWritten++;
+			if (capture.size() < cap)
+				capture.write(b);
+		}
+
+		@Override
+		public void write(byte[] b, int off, int len) throws IOException {
+			delegate.write(b, off, len);
+			totalBytesWritten += len;
+			var remaining = cap - capture.size();
+			if (remaining > 0)
+				capture.write(b, off, Math.min(len, remaining));
+		}
 	}
 }

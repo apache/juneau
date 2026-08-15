@@ -24,7 +24,9 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
+import java.util.logging.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
@@ -94,7 +96,8 @@ public final class RestClient implements Closeable {
 	final List<HttpPart> defaultQueryData;
 	final String rootUrl;
 	final List<RestCallInterceptor> interceptors;
-	final RestLogger logger;
+	final RichLogger debugLogger;
+	final RestClientDebugFormatter debugFormatter;
 	final List<BodyConverter<?>> bodyConverters;
 	final SerializerSet serializers;
 	final ParserSet parsers;
@@ -108,7 +111,8 @@ public final class RestClient implements Closeable {
 		this.defaultQueryData = List.copyOf(builder.defaultQueryData);
 		this.rootUrl = builder.rootUrl;
 		this.interceptors = List.copyOf(builder.interceptors);
-		this.logger = builder.logger;
+		this.debugLogger = RichLogger.getLogger(builder.debugLoggerName != null ? builder.debugLoggerName : RestClient.class.getName());
+		this.debugFormatter = builder.debugFormatter != null ? builder.debugFormatter : new BasicRestClientDebugFormatter();
 		this.bodyConverters = List.copyOf(builder.bodyConverters);
 		this.serializers = builder.serializers;
 		this.parsers = builder.parsers;
@@ -380,7 +384,8 @@ public final class RestClient implements Closeable {
 		final List<HttpPart> defaultQueryData = l();
 		String rootUrl;
 		final List<RestCallInterceptor> interceptors = l();
-		RestLogger logger;
+		RestClientDebugFormatter debugFormatter;
+		String debugLoggerName;
 		List<BodyConverter<?>> bodyConverters = new ArrayList<>(DEFAULT_BODY_CONVERTERS);
 		SerializerSet serializers;
 		ParserSet parsers;
@@ -488,15 +493,38 @@ public final class RestClient implements Closeable {
 		}
 
 		/**
-		 * Sets the logger called at the end of every request (success or failure).
+		 * Sets the formatter used for level-driven REST debug logging.
 		 *
-		 * @param value The logger. May be <jk>null</jk> to disable logging.
+		 * <p>
+		 * The formatter renders cumulative content based on the resolved debug logger level:
+		 * <ul>
+		 * 	<li>{@link Level#INFO INFO} - basic line ({@link RestClientDebugFormatter#formatBasic(RestRequest, RestResponse)}).
+		 * 	<li>{@link Level#FINE FINE} - basic + headers.
+		 * 	<li>{@link Level#FINEST FINEST} - basic + headers + body.
+		 * </ul>
+		 *
+		 * @param value The formatter. Can be <jk>null</jk> to restore the default formatter.
 		 * @return This object.
 		 */
-		public Builder logger(RestLogger value) {
-			logger = value;
+		public Builder debugFormatter(RestClientDebugFormatter value) {
+			debugFormatter = value;
 			return this;
 		}
+
+		/**
+		 * Sets the logger name used for REST debug records.
+		 *
+		 * <p>
+		 * If not set, defaults to {@code RestClient.class.getName()}.
+		 *
+		 * @param value The logger name. Can be <jk>null</jk> to use the default logger name.
+		 * @return This object.
+		 */
+		public Builder debugLoggerName(String value) {
+			debugLoggerName = value;
+			return this;
+		}
+
 
 		/**
 		 * Prepends custom body converters to the default converter list.
