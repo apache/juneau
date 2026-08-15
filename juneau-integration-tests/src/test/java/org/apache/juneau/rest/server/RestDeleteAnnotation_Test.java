@@ -41,7 +41,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 		.allowedSerializerOptions("p2")
 		.noInherit("p3")
 		.clientVersion("a")
-		.debug("b")
 		.defaultAccept("c")
 		.defaultCharset("d")
 		.defaultRequestQueryData("e")
@@ -65,7 +64,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 		.allowedSerializerOptions("p2")
 		.noInherit("p3")
 		.clientVersion("a")
-		.debug("b")
 		.defaultAccept("c")
 		.defaultCharset("d")
 		.defaultRequestQueryData("e")
@@ -86,8 +84,8 @@ class RestDeleteAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedParserOptions,allowedSerializerOptions,clientVersion,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,path,roleGuard,rolesDeclared,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[p1],[p2],a,b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[p3],[k],l,m,n,{[],,[],{[],},,[],[],[],[],[],[],[]},o");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,path,roleGuard,rolesDeclared,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[p1],[p2],a,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[p3],[k],l,m,n,{[],,[],{[],},,[],[],[],[],[],[],[]},o");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -117,7 +115,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 			allowedSerializerOptions="p2",
 			noInherit="p3",
 			clientVersion="a",
-			debug="b",
 			defaultAccept="c",
 			defaultCharset="d",
 			defaultRequestQueryData="e",
@@ -142,7 +139,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 			allowedSerializerOptions="p2",
 			noInherit="p3",
 			clientVersion="a",
-			debug="b",
 			defaultAccept="c",
 			defaultCharset="d",
 			defaultRequestQueryData="e",

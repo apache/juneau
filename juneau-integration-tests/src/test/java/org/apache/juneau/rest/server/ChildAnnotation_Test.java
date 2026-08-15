@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.converter.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -44,10 +43,8 @@ class ChildAnnotation_Test extends TestBase {
 			.roleGuard("admin")
 			.rolesDeclared("admin,user")
 			.converters(Traversable.class)
-			.callLogger(BasicCallLogger.class)
 			.partSerializer(UonSerializer.class)
 			.partParser(UonParser.class)
-			.debug(null)  // null coalesces to DebugAnnotation.DEFAULT
 			.defaultCharset("utf-8")
 			.maxInput("1M");
 	}
@@ -66,11 +63,8 @@ class ChildAnnotation_Test extends TestBase {
 	@Test void a01b_classAndAnnotationAccessors() {
 		assertEquals(BearerTokenGuard.class, a1.guards()[0]);
 		assertEquals(Traversable.class, a1.converters()[0]);
-		assertEquals(BasicCallLogger.class, a1.callLogger());
 		assertEquals(UonSerializer.class, a1.partSerializer());
 		assertEquals(UonParser.class, a1.partParser());
-		// debug(null) coalesced to the default @Debug.
-		assertEquals(DebugAnnotation.DEFAULT, a1.debug());
 	}
 
 	@Test void a02_testEquivalency() {
@@ -85,14 +79,6 @@ class ChildAnnotation_Test extends TestBase {
 		assertEquals(0, d.guards().length);
 	}
 
-	@Test void a04_debugNonNullValueKept() {
-		// The non-null branch of debug(Debug): a supplied @Debug is kept as-is (not coalesced to DEFAULT).
-		var dbg = DebugAnnotation.create().value("always").build();
-		var m = ChildAnnotation.create().type(FooChild.class).debug(dbg).build();
-		assertEquals(dbg, m.debug());
-		assertEquals("always", m.debug().value());
-	}
-
 	// Comparison with the declarative @Child form.
 
 	@Rest(childrenDefs=@Child(
@@ -101,7 +87,6 @@ class ChildAnnotation_Test extends TestBase {
 		roleGuard="admin",
 		rolesDeclared="admin,user",
 		converters=Traversable.class,
-		callLogger=BasicCallLogger.class,
 		partSerializer=UonSerializer.class,
 		partParser=UonParser.class,
 		defaultCharset="utf-8",

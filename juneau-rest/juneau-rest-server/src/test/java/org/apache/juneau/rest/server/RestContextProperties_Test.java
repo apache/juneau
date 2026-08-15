@@ -40,7 +40,6 @@ class RestContextProperties_Test extends TestBase {
 	@Test void a01_defaultsMatchOriginalValueAnnotationLiterals() {
 		var settings = Settings.create().build();
 		var p = ConfigPropertiesBinder.of(new RestContextProperties(), "RestContext").settings(settings).run();
-		assertEquals("", p.getDebugDefault());
 		assertEquals("Accept,Content-Type", p.getAllowedHeaderParams());
 		assertEquals("", p.getAllowedMethodHeaders());
 		assertEquals("HEAD,OPTIONS", p.getAllowedMethodParams());
@@ -59,13 +58,11 @@ class RestContextProperties_Test extends TestBase {
 
 	@Test void a02_bindsStringAndBooleanPropertiesFromSource() {
 		var settings = Settings.create().addSource(source(Map.of(
-			"RestContext.debugDefault", "ALWAYS",
 			"RestContext.allowedHeaderParams", "Accept",
 			"RestContext.renderResponseStackTraces", "true",
 			"RestContext.clientVersionHeader", "X-Client-Version"
 		))).build();
 		var p = ConfigPropertiesBinder.of(new RestContextProperties(), "RestContext").settings(settings).run();
-		assertEquals("ALWAYS", p.getDebugDefault());
 		assertEquals("Accept", p.getAllowedHeaderParams());
 		assertEquals("true", p.getRenderResponseStackTracesRaw());
 		assertEquals("X-Client-Version", p.getClientVersionHeader());

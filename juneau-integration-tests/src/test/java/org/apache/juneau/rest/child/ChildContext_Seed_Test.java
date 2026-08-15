@@ -19,30 +19,29 @@ package org.apache.juneau.rest.child;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 canary &mdash; proves the {@code @Child} seed-injection mechanism end-to-end using {@code callLogger}
- * (a single child-wins scalar) as a witness, mirroring {@code MixinInheritance_CallLogger_Test}.
+ * Phase 2 canary &mdash; proves the {@code @Child} seed-injection mechanism end-to-end using {@code partSerializer}
+ * (a single child-wins scalar) as a witness.
  *
  * <p>
- * {@code callLogger} is chosen because {@link RestContext#getCallLogger()} is a direct, public, class-level
+ * {@code partSerializer} is chosen because {@link RestContext#getPartSerializer()} is a direct, public, class-level
  * getter with no request/op machinery needed to observe it.
  */
 class ChildContext_Seed_Test extends TestBase {
 
-	public static class SeedLogger extends CallLogger {
-		public SeedLogger(BeanStore bs) { super(bs); }
+	public static class SeedPS extends FakeWriterSerializer {
+		public SeedPS(FakeWriterSerializer.Builder b) { super(b); }
 	}
 
-	public static class ChildLogger extends CallLogger {
-		public ChildLogger(BeanStore bs) { super(bs); }
+	public static class ChildPS extends FakeWriterSerializer {
+		public ChildPS(FakeWriterSerializer.Builder b) { super(b); }
 	}
 
 	public static class BlockAllGuard extends RestGuard {
@@ -50,54 +49,54 @@ class ChildContext_Seed_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------
-	// a01: child declares no callLogger -> host's @Child(callLogger=...) seed takes effect.
+	// a01: child declares no partSerializer -> host's @Child(partSerializer=...) seed takes effect.
 	//------------------------------------------------------------------------------------------------------------
 
-	@Rest(path="/nologger")
-	public static class ChildNoLoggerDeclared {
+	@Rest(path="/nops")
+	public static class ChildNoPSDeclared {
 		@RestGet(path="/me") public String me() { return "me"; }
 	}
 
-	@Rest(childrenDefs=@Child(type=ChildNoLoggerDeclared.class, callLogger=SeedLogger.class))
-	public static class HostSeedsLogger extends BasicRestServletGroup {
+	@Rest(childrenDefs=@Child(type=ChildNoPSDeclared.class, partSerializer=SeedPS.class))
+	public static class HostSeedsPS extends BasicRestServletGroup {
 		private static final long serialVersionUID = 1L;
 	}
 
 	@Test void a01_childWithNoDeclarationReceivesSeed() {
-		MockRestClient.buildLax(HostSeedsLogger.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostSeedsLogger.class);
-		var childCtx = hostCtx.getRestChildren().asMap().get("nologger");
+		MockRestClient.buildLax(HostSeedsPS.class);
+		var hostCtx = RestContext.getGlobalRegistry().get(HostSeedsPS.class);
+		var childCtx = hostCtx.getRestChildren().asMap().get("nops");
 		assertNotNull(childCtx);
-		assertInstanceOf(SeedLogger.class, childCtx.getCallLogger(),
-			"Child with no callLogger declaration must receive the host's seeded SeedLogger");
+		assertInstanceOf(SeedPS.class, childCtx.getPartSerializer(),
+			"Child with no partSerializer declaration must receive the host's seeded SeedPS");
 	}
 
 	//------------------------------------------------------------------------------------------------------------
-	// a02: child's own explicit callLogger declaration wins over the host's seed.
+	// a02: child's own explicit partSerializer declaration wins over the host's seed.
 	//------------------------------------------------------------------------------------------------------------
 
-	@Rest(path="/ownlogger", callLogger=ChildLogger.class)
-	public static class ChildWithOwnLogger {
+	@Rest(path="/ownps", partSerializer=ChildPS.class)
+	public static class ChildWithOwnPS {
 		@RestGet(path="/me") public String me() { return "me"; }
 	}
 
-	@Rest(childrenDefs=@Child(type=ChildWithOwnLogger.class, callLogger=SeedLogger.class))
-	public static class HostSeedsLoggerButChildWins extends BasicRestServletGroup {
+	@Rest(childrenDefs=@Child(type=ChildWithOwnPS.class, partSerializer=SeedPS.class))
+	public static class HostSeedsPSButChildWins extends BasicRestServletGroup {
 		private static final long serialVersionUID = 1L;
 	}
 
 	@Test void a02_childsOwnDeclarationWins() {
-		MockRestClient.buildLax(HostSeedsLoggerButChildWins.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostSeedsLoggerButChildWins.class);
-		var childCtx = hostCtx.getRestChildren().asMap().get("ownlogger");
+		MockRestClient.buildLax(HostSeedsPSButChildWins.class);
+		var hostCtx = RestContext.getGlobalRegistry().get(HostSeedsPSButChildWins.class);
+		var childCtx = hostCtx.getRestChildren().asMap().get("ownps");
 		assertNotNull(childCtx);
-		assertInstanceOf(ChildLogger.class, childCtx.getCallLogger(),
-			"Child's own explicit callLogger must win over the host's seeded SeedLogger");
+		assertInstanceOf(ChildPS.class, childCtx.getPartSerializer(),
+			"Child's own explicit partSerializer must win over the host's seeded SeedPS");
 	}
 
 	//------------------------------------------------------------------------------------------------------------
 	// a03: isolation preserved -- host's OWN (non-seeded) @Rest(guards=...) must not leak to the child, even
-	// though the child receives a callLogger seed.  If guards leaked, the child endpoint would 403.
+	// though the child receives a partSerializer seed.  If guards leaked, the child endpoint would 403.
 	//------------------------------------------------------------------------------------------------------------
 
 	@Rest(path="/isocheck")
@@ -105,7 +104,7 @@ class ChildContext_Seed_Test extends TestBase {
 		@RestGet(path="/me") public String me() { return "me"; }
 	}
 
-	@Rest(guards=BlockAllGuard.class, childrenDefs=@Child(type=ChildForIsolation.class, callLogger=SeedLogger.class))
+	@Rest(guards=BlockAllGuard.class, childrenDefs=@Child(type=ChildForIsolation.class, partSerializer=SeedPS.class))
 	public static class HostWithGuardsAndSeed extends BasicRestServletGroup {
 		private static final long serialVersionUID = 1L;
 	}
@@ -116,8 +115,8 @@ class ChildContext_Seed_Test extends TestBase {
 		c.get("/isocheck/me").accept("text/plain").run().assertStatus(200).assertContent("me");
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithGuardsAndSeed.class);
 		var childCtx = hostCtx.getRestChildren().asMap().get("isocheck");
-		assertInstanceOf(SeedLogger.class, childCtx.getCallLogger(),
-			"The seeded callLogger must still apply alongside isolation from the host's own guards");
+		assertInstanceOf(SeedPS.class, childCtx.getPartSerializer(),
+			"The seeded partSerializer must still apply alongside isolation from the host's own guards");
 	}
 
 	//------------------------------------------------------------------------------------------------------------

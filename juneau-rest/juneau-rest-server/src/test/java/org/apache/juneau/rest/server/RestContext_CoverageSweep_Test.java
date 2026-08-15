@@ -464,21 +464,6 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
-	// n - debugEnablement: pre-registered-Enablement-bean short-circuit.
-	// NOTE: the "debugDefaultStr non-blank" branch is fed solely by the env/config `RestContext.debugDefault`
-	// setting (`RestContextProperties.getDebugDefault()`). The former structurally-dead `@Rest`-annotation-chain
-	// walk for a non-existent `debugDefault()` attribute has been removed, so the only living contributor is the
-	// env/config property. Exercising the non-blank branch here would require injecting a `PropertySource` bean or
-	// mutating a global system property, both of which risk polluting other tests running in the same JVM, so that
-	// path is covered in isolation by `RestContextProperties_Test` instead. Left uncovered here.
-	//-----------------------------------------------------------------------------------------------------------
-
-	@Test void n02_debugEnablement_preRegisteredEnablementBean_shortCircuitsDefaultAssignment() throws Exception {
-		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new, bs -> bs.addBean(org.apache.juneau.marshall.Enablement.class, org.apache.juneau.marshall.Enablement.ALWAYS)));
-		assertNotNull(ctx.getDebugEnablement());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------
 	// o - postInit()/postInitChildFirst(): already-initialized early-return, and the childFirst invoker's
 	//     exception-wrapping catch (the non-childFirst sibling is already covered elsewhere).
 	//-----------------------------------------------------------------------------------------------------------

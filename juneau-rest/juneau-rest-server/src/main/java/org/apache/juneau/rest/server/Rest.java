@@ -33,7 +33,6 @@ import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.openapi.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -139,35 +138,6 @@ public @interface Rest {
 	String allowedMethodParams() default "";
 
 	/**
-	 * Specifies the logger to use for logging of HTTP requests and responses.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		The default call logger if not specified is {@link CallLogger}.
-	 * 	<li class='note'>
-	 * 		The resource class itself will be used if it implements the {@link CallLogger} interface and not
-	 * 		explicitly overridden via this annotation.
-	 * 	<li class='note'>
-	 * 		The implementation must have one of the following constructors:
-	 * 		<ul>
-	 * 			<li><code><jk>public</jk> T(RestContext)</code>
-	 * 			<li><code><jk>public</jk> T()</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
-	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
-	 * 		</ul>
-	 * 	<li class='note'>
-	 * 		Inner classes of the REST resource class are allowed.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends CallLogger> callLogger() default CallLogger.Void.class;
-
-	/**
 	 * Resource-level authenticator.
 	 *
 	 * <p>
@@ -202,7 +172,7 @@ public @interface Rest {
 	 * <h5 class='section'>Children vs. mixins (resolution semantics)</h5>
 	 * <p>
 	 * Children are <b>isolated from the parent's resolution chain</b> by design — a child's serializers, parsers,
-	 * guards, hooks, call-logger, etc. are all resolved against the child's own {@link RestContext} only, NOT walked
+	 * guards, hooks, etc. are all resolved against the child's own {@link RestContext} only, NOT walked
 	 * through the parent.  This is the opposite of how {@link #mixins() mixins} resolve.  See the
 	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin Sub-Contexts &mdash; Mixin-vs-child divergence</a>
 	 * topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers
@@ -229,7 +199,7 @@ public @interface Rest {
 	 * <p>
 	 * Each {@link Child @Child} entry names a child class (via {@link Child#type()}) <b>and</b> lets the host
 	 * seed a curated set of {@code @Rest}-level settings onto that child's otherwise-isolated
-	 * {@link RestContext} &mdash; guards, role guards, a call logger, part serializer/parser, debug, and a
+	 * {@link RestContext} &mdash; guards, role guards, part serializer/parser, and a
 	 * handful of default-scalar settings &mdash; without editing the child class.
 	 *
 	 * <p>
@@ -242,7 +212,7 @@ public @interface Rest {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
-	 * 		childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, callLogger=SeedLogger.<jk>class</jk>)
+	 * 		childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, maxInput=<js>"10M"</js>)
 	 * 	)
 	 * 	<jk>public class</jk> MyResource { ... }
 	 * </p>
@@ -284,9 +254,8 @@ public @interface Rest {
 	 * 	<li><b>List-shaped properties</b> ({@code serializers}, {@code parsers}, {@code encoders}, {@code converters},
 	 * 		{@code responseProcessors}, {@code restOpArgs}, {@code guards}) — host's chain runs first, then the mixin's
 	 * 		appended.  Host endpoints see only the host's chain.
-	 * 	<li><b>Replace-shaped properties</b> ({@code callLogger}, {@code debugEnablement},
-	 * 		{@code partSerializer}, {@code partParser}) — the mixin's value wins over the host's for mixin endpoints
-	 * 		when declared; otherwise the host's value is inherited.
+	 * 	<li><b>Replace-shaped properties</b> ({@code partSerializer}, {@code partParser}) — the mixin's value wins
+	 * 		over the host's for mixin endpoints when declared; otherwise the host's value is inherited.
 	 * 	<li><b>{@code messages}</b> — the mixin's bundle is chained as a child of the host's via
 	 * 		{@link org.apache.juneau.marshall.cp.Messages#chain Messages.chain(child, parent)} so mixin keys win and missing
 	 * 		keys fall through to the host.
@@ -578,8 +547,8 @@ public @interface Rest {
 	 * On a class declared via {@link #mixins() @Rest(mixins=...)} on a host, {@code noInherit} also blocks the
 	 * host-to-mixin inheritance walk for the named property.  The token set extends to every contribution list
 	 * exposed by {@code @Rest}: {@code "serializers"}, {@code "parsers"}, {@code "encoders"}, {@code "converters"},
-	 * {@code "responseProcessors"}, {@code "restOpArgs"}, {@code "guards"}, {@code "callLogger"},
-	 * {@code "debugEnablement"}, {@code "partSerializer"}, {@code "partParser"}, and
+	 * {@code "responseProcessors"}, {@code "restOpArgs"}, {@code "guards"},
+	 * {@code "partSerializer"}, {@code "partParser"}, and
 	 * {@code "messages"}.  For example, {@code @Rest(noInherit={"guards"})} on a mixin removes the host's guard
 	 * chain from the mixin's endpoints (typical pattern for deliberately-unguarded probes like
 	 * {@code HealthMixin}).
@@ -609,41 +578,6 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
-
-	/**
-	 * Enable debug mode.
-	 *
-	 * <p>
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		HTTP requests/responses are logged to the registered {@link CallLogger}.
-	 * </ul>
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
-	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
-	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li class='note'>
-	 * 		These debug settings can be overridden by the {@link Rest#debug()} annotation or at runtime by directly
-	 * 		calling {@link RestRequest#setDebug()}.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link RestContext#getDebugEnablement()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Debug debug() default @Debug;
 
 	/**
 	 * Default <c>Accept</c> header.

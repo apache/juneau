@@ -60,8 +60,6 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 		assertNotNull(c.getThrownStore());
 		assertNotNull(c.getMethodExecStore());
 		assertNotNull(c.getJsonSchemaGenerator());
-		assertNotNull(c.getDebugEnablement());
-		assertNotNull(c.getDebugConfig());
 		assertNotNull(c.getDefaultRequestAttributes());
 		assertNotNull(c.getDefaultRequestHeaders());
 		assertNotNull(c.getDefaultResponseHeaders());
@@ -76,7 +74,6 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 		assertNotNull(c.getRestOpArgs());
 		assertNotNull(c.getRestOperations());
 		assertNotNull(c.getRestChildren());
-		assertNotNull(c.getCallLogger());
 		assertNotNull(c.getMarshallingContext());
 	}
 
@@ -309,20 +306,6 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 			var resource = new X();
 			return new RestContext(new RestContext.Args(X.class, null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT))
 				.postInit().postInitChildFirst();
-		}
-
-		@Test void x01_debugDefault() throws Exception {
-			System.setProperty("RestContext.debugDefault", "ALWAYS");
-			try {
-				var c = build();
-				assertEquals("ALWAYS", c.getRestContextProperties().getDebugDefault());
-				// debugDefault must actually reach the debugEnablement memoizer: forcing it publishes the resolved
-				// Enablement (ALWAYS) into the bean store, so a broken seam would leave NEVER (the @Rest(debug) fallback).
-				assertNotNull(c.getDebugEnablement());
-				assertEquals(Enablement.ALWAYS, c.getBeanStore().getBean(Enablement.class).orElse(null));
-			} finally {
-				System.clearProperty("RestContext.debugDefault");
-			}
 		}
 
 		@Test void x02_virtualThreads() throws Exception {

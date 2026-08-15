@@ -20,19 +20,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.server.logger.*;
+import org.apache.juneau.rest.server.swagger.*;
 import org.apache.juneau.test.junit.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Validates the {@code overridingParent} component on
  * {@link RestContext.Args} threads through to the {@code overridingParent} slot of the
- * freshly-constructed {@link BasicBeanStore} so test-time overrides win over the resource's
+ * freshly-constructed {@code BasicBeanStore} so test-time overrides win over the resource's
  * local {@code @Bean} factory methods.
  *
  * <p>
  * Modeled after {@code RestContext_Precedence_Test}'s {@code B_BeanBeatsSpring}: a
- * resource declares a local {@code @Bean CallLogger callLogger()} factory, the test installs
+ * resource declares a local {@code @Bean SwaggerProvider swaggerProvider()} factory, the test installs
  * a {@link TestBeanStore} as the overlay, and the overlay's binding wins.
  */
 class RestContext_Args_OverridingParent_Test extends TestBase {
@@ -41,46 +41,46 @@ class RestContext_Args_OverridingParent_Test extends TestBase {
 	// Marker beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static final CallLogger BEAN_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
-	private static final CallLogger OVERRIDE_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
+	private static final SwaggerProvider BEAN_SW = (ctx, loc) -> null;
+	private static final SwaggerProvider OVERRIDE_SW = (ctx, loc) -> null;
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// a — Args.overridingParent shadows the resource's @Bean factory entry (CallLogger)
+	// a — Args.overridingParent shadows the resource's @Bean factory entry (SwaggerProvider)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class A_OverlayWinsOverBean {
-		@Bean static CallLogger callLoggerCapture;
-		@Bean public CallLogger callLogger() { return BEAN_LOGGER; }
+		@Bean static SwaggerProvider swaggerProviderCapture;
+		@Bean public SwaggerProvider swaggerProvider() { return BEAN_SW; }
 	}
 
 	@Test
 	void a01_overlay_shadows_atBeanFactory_forFrameworkType() throws Exception {
-		var overlay = new TestBeanStore().override(CallLogger.class, OVERRIDE_LOGGER);
+		var overlay = new TestBeanStore().override(SwaggerProvider.class, OVERRIDE_SW);
 
 		var args = new RestContext.Args(A_OverlayWinsOverBean.class, null, null, A_OverlayWinsOverBean::new, "", null, overlay, null, RestContext.ContextKind.ROOT);
 		new RestContext(args).postInit().postInitChildFirst();
 
-		assertSame(OVERRIDE_LOGGER, A_OverlayWinsOverBean.callLoggerCapture,
-			"Args.overridingParent should win over the resource's @Bean callLogger() factory");
+		assertSame(OVERRIDE_SW, A_OverlayWinsOverBean.swaggerProviderCapture,
+			"Args.overridingParent should win over the resource's @Bean swaggerProvider() factory");
 	}
 
 	@Test
 	void a02_noOverlay_beanFactoryWins() throws Exception {
 		// Reset capture from previous tests.
-		A_NoOverlay.callLoggerCapture = null;
+		A_NoOverlay.swaggerProviderCapture = null;
 
 		var args = new RestContext.Args(A_NoOverlay.class, null, null, A_NoOverlay::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		new RestContext(args).postInit().postInitChildFirst();
 
-		assertSame(BEAN_LOGGER, A_NoOverlay.callLoggerCapture,
+		assertSame(BEAN_SW, A_NoOverlay.swaggerProviderCapture,
 			"Without an overlay, the @Bean factory is the only binding");
 	}
 
 	@Rest
 	public static class A_NoOverlay {
-		@Bean static CallLogger callLoggerCapture;
-		@Bean public CallLogger callLogger() { return BEAN_LOGGER; }
+		@Bean static SwaggerProvider swaggerProviderCapture;
+		@Bean public SwaggerProvider swaggerProvider() { return BEAN_SW; }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

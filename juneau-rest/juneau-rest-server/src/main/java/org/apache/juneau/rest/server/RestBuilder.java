@@ -22,7 +22,6 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.openapi.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.staticfile.*;
@@ -436,22 +435,6 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Observability / logging / errors
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Specifies the {@link Rest#callLogger() callLogger} for this resource.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	SELF callLogger(Class<? extends CallLogger> value);
-
-	/**
-	 * Specifies the {@link Rest#debug() debug} mode for this resource.
-	 *
-	 * @param value The new value for this property (e.g. {@code "true"}, {@code "conditional"}).
-	 * @return This object.
-	 */
-	SELF debug(String value);
 
 	/**
 	 * Specifies the {@link Rest#observability() observability} flag for this resource.

@@ -292,24 +292,11 @@ class RestRequest_Coverage_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Debug scope (enable/disable/isEnabled), setDebug, setNoTrace, setException
+	// setNoTrace, setException, setCharset
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class F {
-		@RestGet("/debugFmt")
-		public String debugFmt(RestRequest req) throws java.io.IOException {
-			req.debug().enable(null);
-			req.debug().enable(org.apache.juneau.rest.server.debug.format.BasicTextFormat.class);
-			req.debug().disable();
-			return Boolean.toString(req.debug().isEnabled());
-		}
-		@RestGet("/setDebug")
-		public String setDebug(RestRequest req) throws java.io.IOException {
-			req.setDebug();
-			req.setDebug(false);
-			return "ok";
-		}
 		@RestGet("/noTrace")
 		public String noTrace(RestRequest req) {
 			req.setNoTrace();
@@ -326,16 +313,6 @@ class RestRequest_Coverage_Test extends TestBase {
 			req.setCharset(java.nio.charset.StandardCharsets.UTF_16);
 			return req.getCharset().name();
 		}
-	}
-
-	@Test void f01_debugScope_enableWithFormat_andDisable() throws Exception {
-		var c = MockRestClient.create(F.class).plainText().build();
-		c.get("/debugFmt").run().assertContent("false");
-	}
-
-	@Test void f02_setDebug_overloads() throws Exception {
-		var c = MockRestClient.create(F.class).plainText().build();
-		c.get("/setDebug").run().assertContent("ok");
 	}
 
 	@Test void f03_setNoTrace_overloads() throws Exception {

@@ -28,7 +28,6 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.openapi.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.staticfile.*;
@@ -298,12 +297,6 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	//-----------------------------------------------------------------------------------------------------------------
 	// Observability / logging / errors
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* RestBuilder<?> */
-	public SELF callLogger(Class<? extends CallLogger> value) { anno.callLogger(value); return self(); }
-
-	@Override /* RestBuilder<?> */
-	public SELF debug(String value) { anno.debug(value); return self(); }
 
 	@Override /* RestBuilder<?> */
 	public SELF observability(String value) { anno.observability(value); return self(); }

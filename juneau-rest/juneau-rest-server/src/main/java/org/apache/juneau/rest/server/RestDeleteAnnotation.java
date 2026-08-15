@@ -59,7 +59,6 @@ public class RestDeleteAnnotation {
 		private Class<? extends Encoder>[] encoders = new Class[0];
 		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		private String clientVersion = "";
-		private String debug = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
 		private String observability = "";
@@ -115,17 +114,6 @@ public class RestDeleteAnnotation {
 		 */
 		public Builder clientVersion(String value) {
 			clientVersion = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestDelete#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(String value) {
-			debug = value;
 			return this;
 		}
 
@@ -398,7 +386,6 @@ public class RestDeleteAnnotation {
 		private final Class<? extends Encoder>[] encoders;
 		private final OpSwagger swagger;
 		private final String clientVersion;
-		private final String debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
 		private final String observability;
@@ -423,7 +410,6 @@ public class RestDeleteAnnotation {
 			super(b);
 			description = cp(b.description);
 			clientVersion = b.clientVersion;
-			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultRequestQueryData = cp(b.defaultRequestQueryData);
@@ -452,11 +438,6 @@ public class RestDeleteAnnotation {
 		@Override /* Overridden from RestDelete */
 		public String clientVersion() {
 			return clientVersion;
-		}
-
-		@Override /* Overridden from RestDelete */
-		public String debug() {
-			return debug;
 		}
 
 		@Override /* Overridden from RestDelete */

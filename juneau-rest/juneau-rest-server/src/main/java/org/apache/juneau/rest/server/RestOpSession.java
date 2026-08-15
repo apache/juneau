@@ -18,14 +18,11 @@ package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.io.*;
-
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.processor.*;
 
 /**
@@ -81,30 +78,6 @@ public class RestOpSession extends ContextSession {
 		@Override /* Overridden from Session.Builder */
 		public RestOpSession build() {
 			return new RestOpSession(this);
-		}
-
-		/**
-		 * Enables or disabled debug mode on this call.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 * @throws IOException Occurs if request content could not be cached into memory.
-		 */
-		public Builder debug(boolean value) throws IOException {
-			session.debug(value);
-			return this;
-		}
-
-		/**
-		 * Sets the logger to use when logging this call.
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Can be <jk>null</jk> (will use the default logger from the context if available).
-		 * @return This object.
-		 */
-		public Builder logger(CallLogger value) {
-			session.logger(value);
-			return this;
 		}
 	}
 

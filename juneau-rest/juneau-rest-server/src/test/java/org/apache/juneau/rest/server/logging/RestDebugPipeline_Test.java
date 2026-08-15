@@ -14,24 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.logger;
+package org.apache.juneau.rest.server.logging;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.marshall.*;
+import java.util.logging.*;
+
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link CallLoggerRule.Builder#disabled()}, a shortcut for {@code enabled(Enablement.NEVER)}.
+ * Unit tests for {@link RestDebugPipeline#resolveTier(Logger)} — cumulative tier derivation from a JUL level.
  *
  * @since 10.0.0
  */
-class CallLoggerRule_Test extends TestBase {
+class RestDebugPipeline_Test {
 
-	@Test void a01_disabled_setsEnabledToNever() {
-		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE).disabled().build();
-		assertEquals(Enablement.NEVER, rule.getEnabled());
+	private Logger newLogger(Level level) {
+		var l = Logger.getAnonymousLogger();
+		l.setLevel(level);
+		return l;
+	}
+
+	@Test void a01_finest_resolvesFinest() {
+		assertEquals(Level.FINEST, RestDebugPipeline.resolveTier(newLogger(Level.FINEST)));
+	}
+
+	@Test void a02_fine_resolvesFine() {
+		assertEquals(Level.FINE, RestDebugPipeline.resolveTier(newLogger(Level.FINE)));
+	}
+
+	@Test void a03_info_resolvesInfo() {
+		assertEquals(Level.INFO, RestDebugPipeline.resolveTier(newLogger(Level.INFO)));
+	}
+
+	@Test void a04_warning_resolvesNull() {
+		assertNull(RestDebugPipeline.resolveTier(newLogger(Level.WARNING)));
 	}
 }

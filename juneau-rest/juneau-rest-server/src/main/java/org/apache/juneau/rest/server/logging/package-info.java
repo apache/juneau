@@ -14,23 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.debug.format;
-
-import org.apache.juneau.rest.server.debug.*;
 
 /**
- * Basic text formatter.
+ * JUL-level-driven REST debug logging API.
+ *
+ * <p>
+ * A resource's own {@link java.util.logging.Logger} level is the sole control for request/response debug capture.
+ * Verbosity tiers are cumulative: {@code INFO} = basic status line, {@code FINE} = + headers, {@code FINEST} = + bodies.
+ * The single public extension point is the {@link org.apache.juneau.rest.server.logging.RestDebugFormatter} interface.
  */
-public class BasicTextFormat implements DebugFormat {
-
-	@Override
-	public String format(DebugFormatContext context) {
-		var req = context.request();
-		var res = context.response();
-		return new StringBuilder()
-			.append('[').append(res.getStatus()).append("] ")
-			.append("HTTP ").append(req.getMethod()).append(' ')
-			.append(req.getRequestURI())
-			.toString();
-	}
-}
+package org.apache.juneau.rest.server.logging;

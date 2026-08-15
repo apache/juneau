@@ -20,14 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.server.debug.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.swagger.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Coverage tests for the BeanCreator-based annotation overrides on `@Rest(...)`:
- * `debugEnablement`, `staticFiles`, and `swaggerProvider`.
+ * `staticFiles` and `swaggerProvider`.
  *
  * <p>
  * Each of these settings was refactored to use the {@code findXxx()} memoizer pattern that
@@ -40,34 +39,6 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	private static RestContext build(Class<?> resourceClass) throws Exception {
 		var resource = resourceClass.getDeclaredConstructor().newInstance();
 		return new RestContext(new RestContext.Args(resourceClass, null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT));
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debug=@Debug(config=X.class))
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class CustomDebugConfig extends DebugConfig {
-		public CustomDebugConfig(BeanStore beanStore) {
-			super(beanStore);
-		}
-	}
-
-	@Rest(debug=@Debug(config=CustomDebugConfig.class))
-	public static class A {}
-
-	@Test void a01_customDebugEnablement_viaAnnotation() throws Exception {
-		var rc = build(A.class);
-		assertNotNull(rc.getDebugConfig(),
-			"@Rest(debug=@Debug(config=...)) should resolve a DebugConfig.");
-	}
-
-	@Rest
-	public static class A_Default {}
-
-	@Test void a02_defaultDebugEnablement() throws Exception {
-		var rc = build(A_Default.class);
-		assertNotNull(rc.getDebugConfig(),
-			"No @Rest(debug=@Debug(config=...)) should still resolve a default DebugConfig.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -130,21 +101,21 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	// Inheritance — child class @Rest(...) overrides parent's setting (most-derived wins).
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class CustomDebugConfig2 extends DebugConfig {
-		public CustomDebugConfig2(BeanStore beanStore) {
+	public static class CustomSwaggerProvider2 extends BasicSwaggerProvider {
+		public CustomSwaggerProvider2(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}
 
-	@Rest(debug=@Debug(config=CustomDebugConfig.class))
+	@Rest(swaggerProvider=CustomSwaggerProvider.class)
 	public static class D_Parent {}
 
-	@Rest(debug=@Debug(config=CustomDebugConfig2.class))
+	@Rest(swaggerProvider=CustomSwaggerProvider2.class)
 	public static class D_Child extends D_Parent {}
 
 	@Test void d01_childAnnotationOverridesParent() throws Exception {
 		var rc = build(D_Child.class);
-		assertNotNull(rc.getDebugConfig(),
-			"Most-derived @Rest(debug=@Debug(config=...)) on subclass should resolve DebugConfig.");
+		assertInstanceOf(CustomSwaggerProvider2.class, rc.getSwaggerProvider(),
+			"Most-derived @Rest(swaggerProvider=...) on subclass should win.");
 	}
 }

@@ -66,10 +66,8 @@ import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.server.assertions.*;
 import org.apache.juneau.rest.server.auth.*;
-import org.apache.juneau.rest.server.debug.format.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.util.*;
 import org.apache.juneau.test.assertions.*;
@@ -176,7 +174,6 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestRequest#isUserInRole(String) isUserInRole(String)}
  * 			<li class='jm'>{@link RestRequest#setAttribute(String,Object) setAttribute(String,Object)}
  * 			<li class='jm'>{@link RestRequest#setCharset(Charset) setCharset(Charset)}
- * 			<li class='jm'>{@link RestRequest#setDebug() setDebug()}
  * 			<li class='jm'>{@link RestRequest#setException(Throwable) setException(Throwable)}
  * 			<li class='jm'>{@link RestRequest#setNoTrace() setNoTrace()}
  * 		</ul>
@@ -323,8 +320,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 			.addDefault(context.getDefaultRequestAttributes());
 		// @formatter:on
 
-		if (isDebug())
-			inner = CachingHttpServletRequest.wrap(inner);
+		// Body-caching wrappers are installed by the two-phase debug pipeline (Phase A) before this object is
+		// constructed, based on the resolved logger's level. Nothing to wrap here.
 	}
 
 	/**
@@ -1614,77 +1611,56 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if debug mode is enabled.
+	 * Returns <jk>true</jk> if debug mode is enabled for this request.
 	 *
-	 * Debug mode is enabled by simply adding <js>"?debug=true"</js> to the query string or adding a <c>Debug: true</c> header on the request.
+	 * <p>
+	 * Debug is now derived solely from the resolved (per-operation) JUL logger level: it is enabled when that logger is
+	 * loggable at {@link java.util.logging.Level#FINE FINE}-or-finer. This is read-only; there is no request attribute or
+	 * setter driving it.
 	 *
-	 * @return <jk>true</jk> if debug mode is enabled.
+	 * @return <jk>true</jk> if the resolved logger is loggable at {@code FINE}-or-finer.
 	 */
-	public boolean isDebug() { return getAttribute("Debug").as(Boolean.class).orElse(false); }
+	public boolean isDebug() { return opContext.getLogger().isLoggable(java.util.logging.Level.FINE); }
 
 	/**
-	 * Returns a fluent debug scope for this request.
+	 * Returns the captured (bounded) request body bytes for debug logging.
 	 *
-	 * @return A debug scope.
+	 * <p>
+	 * Populated by the two-phase debug pipeline (Phase A) only when the resolved logger is loggable at
+	 * {@link java.util.logging.Level#FINEST FINEST}; otherwise returns <jk>null</jk>. The captured copy is capped at the
+	 * formatter's body cap (default 8&nbsp;KB); use {@link #getCachedContentLength()} for the full byte count.
+	 *
+	 * @return The captured request body bytes, or <jk>null</jk> if body caching was not installed.
 	 */
-	public DebugScope debug() {
-		return new DebugScope(this);
+	public byte[] getCachedContent() {
+		return inner instanceof CachingHttpServletRequest c ? c.getContent() : null;
 	}
 
 	/**
-	 * Request-scoped debug controls.
+	 * Returns the total number of request body bytes read, including any beyond the capture cap.
+	 *
+	 * @return The total request body length in bytes, or {@code -1} if body caching was not installed.
 	 */
-	public static class DebugScope {
-		private final RestRequest req;
+	public long getCachedContentLength() {
+		return inner instanceof CachingHttpServletRequest c ? c.getTotalLength() : -1;
+	}
 
-		DebugScope(RestRequest req) {
-			this.req = req;
-		}
+	/**
+	 * Returns the exception thrown while processing this request, if any.
+	 *
+	 * @return The thrown exception, or <jk>null</jk> if none occurred.
+	 */
+	public Throwable getException() {
+		return session.getException();
+	}
 
-		/**
-		 * Enables debug.
-		 *
-		 * @return This object.
-		 * @throws IOException If debug could not be enabled.
-		 */
-		public DebugScope enable() throws IOException {
-			req.setDebug(true);
-			return this;
-		}
-
-		/**
-		 * Enables debug with a capturing format marker.
-		 *
-		 * @param formatType The format type.
-		 * 	<br>Can be <jk>null</jk> (defaults to {@link BasicTextFormat}).
-		 * @return This object.
-		 * @throws IOException If debug could not be enabled.
-		 */
-		public DebugScope enable(Class<?> formatType) throws IOException {
-			req.setDebug(true);
-			req.setAttribute("DebugFormatType", formatType == null ? BasicTextFormat.class : formatType);
-			return this;
-		}
-
-		/**
-		 * Disables debug.
-		 *
-		 * @return This object.
-		 * @throws IOException If debug could not be disabled.
-		 */
-		public DebugScope disable() throws IOException {
-			req.setDebug(false);
-			return this;
-		}
-
-		/**
-		 * Returns whether debug is enabled.
-		 *
-		 * @return Whether debug is enabled.
-		 */
-		public boolean isEnabled() {
-			return req.isDebug();
-		}
+	/**
+	 * Returns the total request execution time in milliseconds, if it has been recorded.
+	 *
+	 * @return The execution time in milliseconds, or <jk>null</jk> if not yet recorded.
+	 */
+	public Long getExecTime() {
+		return getAttribute("ExecTime").as(Long.class).orElse(null);
 	}
 
 	/**
@@ -1956,38 +1932,10 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public void setCharset(Charset value) { this.charset = value; }
 
 	/**
-	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
-	 *
-	 * @return This object.
-	 * @throws IOException If content could not be cached.
-	 */
-	public RestRequest setDebug() throws IOException {
-		debug().enable();
-		return this;
-	}
-
-	/**
-	 * Sets the <js>"Debug"</js> attribute to the specified boolean.
-	 *
-	 * <p>
-	 * This flag is used by {@link CallLogger} to help determine how a request should be logged.
-	 *
-	 * @param b The attribute value.
-	 * @return This object.
-	 * @throws IOException If content could not be cached.
-	 */
-	public RestRequest setDebug(Boolean b) throws IOException {
-		setAttribute("Debug", b);
-		if (isTrue(b))
-			inner = CachingHttpServletRequest.wrap(inner);
-		return this;
-	}
-
-	/**
 	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
 	 *
 	 * <p>
-	 * This exception is used by {@link CallLogger} for logging purposes.
+	 * This exception is surfaced by the debug pipeline as the {@code thrown} of the emitted log record.
 	 *
 	 * @param t The attribute value.
 	 * @return This object.
@@ -2010,7 +1958,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link CallLogger} and tells it not to log the current request.
+	 * This flag tells the framework not to trace the current request.
 	 *
 	 * @param b The attribute value.
 	 * @return This object.

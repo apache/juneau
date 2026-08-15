@@ -22,7 +22,6 @@ import org.apache.juneau.commons.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 
 /**
  * Utility classes and methods for the {@link Child @Child} annotation.
@@ -54,10 +53,8 @@ public class ChildAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		String roleGuard = "";
 		String rolesDeclared = "";
-		Class<? extends CallLogger> callLogger = CallLogger.Void.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
-		Debug debug = DebugAnnotation.DEFAULT;
 		String defaultCharset = "";
 		String maxInput = "";
 
@@ -109,14 +106,6 @@ public class ChildAnnotation {
 		public Builder rolesDeclared(String value) { rolesDeclared = value; return this; }
 
 		/**
-		 * Sets the {@link Child#callLogger()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder callLogger(Class<? extends CallLogger> value) { callLogger = value; return this; }
-
-		/**
 		 * Sets the {@link Child#partSerializer()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -131,14 +120,6 @@ public class ChildAnnotation {
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) { partParser = value; return this; }
-
-		/**
-		 * Sets the {@link Child#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(Debug value) { debug = value == null ? DebugAnnotation.DEFAULT : value; return this; }
 
 		/**
 		 * Sets the {@link Child#defaultCharset()} property on this annotation.
@@ -176,10 +157,8 @@ public class ChildAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final String roleGuard;
 		private final String rolesDeclared;
-		private final Class<? extends CallLogger> callLogger;
 		private final Class<? extends HttpPartSerializer> partSerializer;
 		private final Class<? extends HttpPartParser> partParser;
-		private final Debug debug;
 		private final String defaultCharset;
 		private final String maxInput;
 
@@ -190,10 +169,8 @@ public class ChildAnnotation {
 			converters = cp(b.converters);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
-			callLogger = b.callLogger;
 			partSerializer = b.partSerializer;
 			partParser = b.partParser;
-			debug = b.debug;
 			defaultCharset = b.defaultCharset;
 			maxInput = b.maxInput;
 		}
@@ -203,10 +180,8 @@ public class ChildAnnotation {
 		@Override /* Overridden from Child */ public Class<? extends RestConverter>[] converters() { return cp(converters); }
 		@Override /* Overridden from Child */ public String roleGuard() { return roleGuard; }
 		@Override /* Overridden from Child */ public String rolesDeclared() { return rolesDeclared; }
-		@Override /* Overridden from Child */ public Class<? extends CallLogger> callLogger() { return callLogger; }
 		@Override /* Overridden from Child */ public Class<? extends HttpPartSerializer> partSerializer() { return partSerializer; }
 		@Override /* Overridden from Child */ public Class<? extends HttpPartParser> partParser() { return partParser; }
-		@Override /* Overridden from Child */ public Debug debug() { return debug; }
 		@Override /* Overridden from Child */ public String defaultCharset() { return defaultCharset; }
 		@Override /* Overridden from Child */ public String maxInput() { return maxInput; }
 	}

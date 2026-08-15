@@ -130,14 +130,8 @@ public final class RestServerConstants {
 	/** The {@code "messages"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving message bundle locations. */
 	public static final String PROPERTY_messages = "messages";
 
-	/** The {@code "callLogger"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the call logger. */
-	public static final String PROPERTY_callLogger = "callLogger";
-
 	/** The {@code "authenticator"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the child-resource inheritance walk when resolving the {@link org.apache.juneau.rest.server.auth.RestAuthenticator}. */
 	public static final String PROPERTY_authenticator = "authenticator";
-
-	/** The {@code "debugEnablement"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the debug enablement bean. */
-	public static final String PROPERTY_debugEnablement = "debugEnablement";
 
 	/** The {@code "staticFiles"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the static files bean. */
 	public static final String PROPERTY_staticFiles = "staticFiles";
@@ -147,9 +141,6 @@ public final class RestServerConstants {
 
 	/** The {@code "openApiProvider"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the OpenAPI 3.1 provider bean. */
 	public static final String PROPERTY_openApiProvider = "openApiProvider";
-
-	/** The {@code "debug"} annotation attribute name — used in {@code noInherit} matching on {@code @RestOp} / verb annotations. */
-	public static final String PROPERTY_debug = "debug";
 
 	/** The {@code "consumes"} annotation attribute name — used in {@code noInherit} matching to block class-level {@code @Rest(consumes)} from contributing to an op, and as the property name for the {@code @Rest(consumes)} chain walk in {@link RestContext#getConsumes()}. */
 	public static final String PROPERTY_consumes = "consumes";

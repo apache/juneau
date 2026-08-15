@@ -22,7 +22,11 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**
- * Wraps an {@link HttpServletResponse} and caches the output stream in a separate buffer for debugging purposes.
+ * Wraps an {@link HttpServletResponse} and tees a <b>bounded</b> copy of the output stream into memory for debug logging.
+ *
+ * <p>
+ * At most a configured cap (default 8&nbsp;KB) of the response body is captured while all bytes are still written through
+ * to the real client. The total number of bytes written is tracked so a truncation marker can be rendered.
  *
  */
 @SuppressWarnings({
@@ -30,40 +34,71 @@ import jakarta.servlet.http.*;
 })
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 
+	/** Default body capture cap, in bytes (8&nbsp;KB). */
+	public static final int DEFAULT_CAP = 8 * 1024;
+
 	/**
-	 * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already.
+	 * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already, using the default cap.
 	 *
 	 * @param res The response to wrap. Must not be <jk>null</jk>.
 	 * @return The wrapped response.
 	 * @throws IOException Thrown by underlying content stream.
 	 */
 	public static CachingHttpServletResponse wrap(HttpServletResponse res) throws IOException {
-		if (res instanceof CachingHttpServletResponse res2)
-			return res2;
-		return new CachingHttpServletResponse(res);
+		return wrap(res, DEFAULT_CAP);
 	}
 
-	final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	/**
+	 * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already.
+	 *
+	 * @param res The response to wrap. Must not be <jk>null</jk>.
+	 * @param cap The maximum number of body bytes to capture.
+	 * @return The wrapped response.
+	 * @throws IOException Thrown by underlying content stream.
+	 */
+	public static CachingHttpServletResponse wrap(HttpServletResponse res, int cap) throws IOException {
+		if (res instanceof CachingHttpServletResponse res2)
+			return res2;
+		return new CachingHttpServletResponse(res, cap);
+	}
 
-	final ServletOutputStream os;
+	private final int cap;
+	private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	private long totalLength = 0;
+	private final ServletOutputStream os;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param res The wrapped servlet response. Must not be <jk>null</jk>.
+	 * @param cap The maximum number of body bytes to capture.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected CachingHttpServletResponse(HttpServletResponse res) throws IOException {
+	protected CachingHttpServletResponse(HttpServletResponse res, int cap) throws IOException {
 		super(res);
+		this.cap = cap;
 		os = res.getOutputStream();
 	}
 
 	/**
-	 * Returns the content of the servlet response without consuming the stream.
+	 * Returns the captured (possibly truncated) response body bytes.
 	 *
-	 * @return The content of the response.
+	 * @return The captured body bytes (at most the configured cap). Never <jk>null</jk>.
 	 */
-	public byte[] getContent() { return baos.toByteArray(); }
+	public byte[] getContent() { return buffer.toByteArray(); }
+
+	/**
+	 * Returns the total number of body bytes written so far, including any bytes beyond the capture cap.
+	 *
+	 * @return The total body length in bytes.
+	 */
+	public long getTotalLength() { return totalLength; }
+
+	private void capture(int b) {
+		totalLength++;
+		if (buffer.size() < cap)
+			buffer.write(b);
+	}
 
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
@@ -89,7 +124,7 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 
 			@Override
 			public void write(int b) throws IOException {
-				baos.write(b);
+				capture(b);
 				os.write(b);
 			}
 		};

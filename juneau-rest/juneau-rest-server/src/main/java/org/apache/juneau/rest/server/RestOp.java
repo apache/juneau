@@ -145,39 +145,6 @@ public @interface RestOp {
 	Class<? extends RestConverter>[] converters() default {};
 
 	/**
-	 * Enable debug mode.
-	 *
-	 * <p>
-	 * Enables the following:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		HTTP request/response bodies are cached in memory for logging purposes.
-	 * 	<li>
-	 * 		Request/response messages are automatically logged.
-	 * </ul>
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
-	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
-	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
-	 * 	<li><js>""</js> (or anything else) - Debug mode is inherited from class.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link RestContext#getDebugEnablement()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Debug debug() default @Debug;
-
-	/**
 	 * Default <c>Accept</c> header.
 	 *
 	 * <p>

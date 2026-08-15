@@ -21,15 +21,14 @@
  *
  * <p>
  * Three sibling mixins compose into the host {@code @Rest}-annotated resource. Each mixin owns
- * its default mount paths, ships secure-by-default (debug-gated for echo, deny-all-guard for
+ * its default mount paths, ships secure-by-default (guarded for echo, deny-all-guard for
  * admin), and is independently mountable; the three together drop in as a pack via
  * {@code @Rest(mixins={EchoMixin.class, AdminMixin.class, RouteIndexMixin.class})}.
  * </p>
  *
  * <ul class='javatreec'>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.EchoMixin} —
- * 		{@code /echo/*} request echo (SVL-configurable mount), gated behind the host's
- * 		{@link org.apache.juneau.rest.server.debug.DebugEnablement DebugEnablement}; sensitive headers
+ * 		{@code /echo/*} request echo (SVL-configurable mount); sensitive headers
  * 		({@code Authorization}, {@code Cookie}, etc.) are redacted by default.
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.AdminMixin} —
  * 		{@code /admin/threads}, {@code /admin/heap}, {@code /admin/cache/flush} (POST), and
@@ -51,8 +50,7 @@
  * 			EchoMixin.<jk>class</jk>,
  * 			AdminMixin.<jk>class</jk>,
  * 			RouteIndexMixin.<jk>class</jk>
- * 		},
- * 		debug=<js>"conditional"</js>            <jc>// gates EchoMixin per-request</jc>
+ * 		}
  * 	)
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet {
  *

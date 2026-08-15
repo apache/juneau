@@ -44,7 +44,6 @@ class RestGetAnnotation_Test extends TestBase {
 		.noInherit("q3")
 		.clientVersion("a")
 		.converters(RestConverter.class)
-		.debug("b")
 		.defaultAccept("c")
 		.defaultCharset("d")
 		.defaultRequestQueryData("e")
@@ -71,7 +70,6 @@ class RestGetAnnotation_Test extends TestBase {
 		.noInherit("q3")
 		.clientVersion("a")
 		.converters(RestConverter.class)
-		.debug("b")
 		.defaultAccept("c")
 		.defaultCharset("d")
 		.defaultRequestQueryData("e")
@@ -94,8 +92,8 @@ class RestGetAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedParserOptions,allowedSerializerOptions,clientVersion,converters,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[q1],[q2],a,[RestConverter],b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[q3],[k],[l],m,n,[Serializer],o,{[],,[],{[],},,[],[],[],[],[],[],[]},p");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,converters,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[q1],[q2],a,[RestConverter],c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[q3],[k],[l],m,n,[Serializer],o,{[],,[],{[],},,[],[],[],[],[],[],[]},p");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -126,7 +124,6 @@ class RestGetAnnotation_Test extends TestBase {
 			noInherit="q3",
 			clientVersion="a",
 			converters=RestConverter.class,
-			debug="b",
 			defaultAccept="c",
 			defaultCharset="d",
 			defaultRequestQueryData="e",
@@ -154,7 +151,6 @@ class RestGetAnnotation_Test extends TestBase {
 			noInherit="q3",
 			clientVersion="a",
 			converters=RestConverter.class,
-			debug="b",
 			defaultAccept="c",
 			defaultCharset="d",
 			defaultRequestQueryData="e",

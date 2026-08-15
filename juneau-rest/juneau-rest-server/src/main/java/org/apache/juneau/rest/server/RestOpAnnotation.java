@@ -66,7 +66,6 @@ public class RestOpAnnotation {
 		private Class<?>[] parsers = {};
 		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		private String clientVersion = "";
-		private Debug debug = DebugAnnotation.DEFAULT;
 		private String defaultAccept = "";
 		private String defaultCharset = "";
 		private String defaultContentType = "";
@@ -153,28 +152,6 @@ public class RestOpAnnotation {
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
 			converters = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestOp#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(String value) {
-			debug = DebugAnnotation.create().value(value).build();
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestOp#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(Debug value) {
-			debug = value == null ? DebugAnnotation.DEFAULT : value;
 			return this;
 		}
 
@@ -549,7 +526,6 @@ public class RestOpAnnotation {
 		private final Class<?>[] parsers;
 		private final OpSwagger swagger;
 		private final String clientVersion;
-		private final Debug debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
 		private final String defaultContentType;
@@ -584,7 +560,6 @@ public class RestOpAnnotation {
 			clientVersion = b.clientVersion;
 			consumes = cp(b.consumes);
 			converters = cp(b.converters);
-			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultContentType = b.defaultContentType;
@@ -632,11 +607,6 @@ public class RestOpAnnotation {
 		@Override /* Overridden from RestOp */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
-		}
-
-		@Override /* Overridden from RestOp */
-		public Debug debug() {
-			return debug;
 		}
 
 		@Override /* Overridden from RestOp */

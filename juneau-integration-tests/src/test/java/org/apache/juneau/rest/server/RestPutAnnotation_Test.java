@@ -46,7 +46,6 @@ class RestPutAnnotation_Test extends TestBase {
 		.clientVersion("a")
 		.consumes("b")
 		.converters(RestConverter.class)
-		.debug("c")
 		.defaultAccept("d")
 		.defaultCharset("e")
 		.defaultContentType("f")
@@ -78,7 +77,6 @@ class RestPutAnnotation_Test extends TestBase {
 		.clientVersion("a")
 		.consumes("b")
 		.converters(RestConverter.class)
-		.debug("c")
 		.defaultAccept("d")
 		.defaultCharset("e")
 		.defaultContentType("f")
@@ -105,8 +103,8 @@ class RestPutAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,debug,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,noInherit,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[u1],[u2],a,[b],[RestConverter],c,d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,[u3],[Parser],[o],[p],q,r,[Serializer],s,{[],,[],{[],},,[],[],[],[],[],[],[]},t");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,noInherit,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[u1],[u2],a,[b],[RestConverter],d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,[u3],[Parser],[o],[p],q,r,[Serializer],s,{[],,[],{[],},,[],[],[],[],[],[],[]},t");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -138,7 +136,6 @@ class RestPutAnnotation_Test extends TestBase {
 			clientVersion="a",
 			consumes="b",
 			converters=RestConverter.class,
-			debug="c",
 			defaultAccept="d",
 			defaultCharset="e",
 			defaultContentType="f",
@@ -171,7 +168,6 @@ class RestPutAnnotation_Test extends TestBase {
 			clientVersion="a",
 			consumes="b",
 			converters=RestConverter.class,
-			debug="c",
 			defaultAccept="d",
 			defaultCharset="e",
 			defaultContentType="f",

@@ -31,8 +31,6 @@ import org.junit.jupiter.api.*;
  *       {@code findDefaultCharset()}.
  *   <li>{@link RestOpContext#getMaxInput()} — exercises the {@code v.isPresent()} branch in
  *       {@code findMaxInput()}.
- *   <li>{@link RestOpContext#createSession} — exercises the explicit-debug branch in
- *       {@code findDebugEnablement()} via {@code @RestGet(debug="always")}.
  * </ul>
  *
  * <p>These cases were not covered by {@code NoInherit_Test}, which only exercises class-level
@@ -71,18 +69,5 @@ class RestOpContext_OpLevelOverrides_Test extends TestBase {
 		var ctx = build(B.class);
 		assertEquals(parseLongWithSuffix("9M"), op(ctx).getMaxInput(),
 			"@RestOp(maxInput=...) should override class-level @Rest(maxInput=...)");
-	}
-
-	@Rest
-	public static class C {
-		@RestGet(debug="always")
-		public void get() { /* intentionally empty */ }
-	}
-
-	@Test void c01_opLevelDebug_buildsSuccessfully() throws Exception {
-		// Building the context invokes findDebugEnablement() in the constructor; a non-empty
-		// debug attribute exercises the "v.isPresent()" branch in that finder.
-		var ctx = build(C.class);
-		assertNotNull(op(ctx));
 	}
 }

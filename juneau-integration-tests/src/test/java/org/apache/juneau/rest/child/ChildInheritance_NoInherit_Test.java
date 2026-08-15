@@ -22,8 +22,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * (&sect;6.6), the existing generic {@code noInherit} cutoff scan in {@code getRestAnnotationsForProperty}
  * naturally truncates it too, with no seed-aware special-casing required. Verified uniformly across BOTH
  * seedable-property buckets: an additive-security member ({@code guards}) and a child-wins scalar
- * ({@code callLogger}).
+ * ({@code partSerializer}).
  */
 class ChildInheritance_NoInherit_Test extends TestBase {
 
@@ -41,8 +41,8 @@ class ChildInheritance_NoInherit_Test extends TestBase {
 		@Override public boolean isRequestAllowed(RestRequest req) { return false; }
 	}
 
-	public static class SeedLogger extends CallLogger {
-		public SeedLogger(org.apache.juneau.commons.inject.BeanStore bs) { super(bs); }
+	public static class SeedPS extends FakeWriterSerializer {
+		public SeedPS(FakeWriterSerializer.Builder b) { super(b); }
 	}
 
 	//------------------------------------------------------------------------------------------------------------
@@ -69,27 +69,27 @@ class ChildInheritance_NoInherit_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------
-	// a02: child-wins scalar (callLogger) -- child declares noInherit="callLogger" -> receives NONE of the
-	// host's seeded callLogger (falls back to the framework default, not the seed).
+	// a02: child-wins scalar (partSerializer) -- child declares noInherit="partSerializer" -> receives NONE of
+	// the host's seeded partSerializer (falls back to the framework default, not the seed).
 	//------------------------------------------------------------------------------------------------------------
 
-	@Rest(path="/noinheritlogger", noInherit="callLogger")
-	public static class ChildNoInheritLogger {
+	@Rest(path="/noinheritps", noInherit="partSerializer")
+	public static class ChildNoInheritPS {
 		@RestGet(path="/me") public String me() { return "me"; }
 	}
 
-	@Rest(childrenDefs=@Child(type=ChildNoInheritLogger.class, callLogger=SeedLogger.class))
-	public static class HostSeedsLoggerButChildOptsOut extends BasicRestServletGroup {
+	@Rest(childrenDefs=@Child(type=ChildNoInheritPS.class, partSerializer=SeedPS.class))
+	public static class HostSeedsPSButChildOptsOut extends BasicRestServletGroup {
 		private static final long serialVersionUID = 1L;
 	}
 
-	@Test void a02_noInheritCutsSeededCallLogger() {
-		MockRestClient.buildLax(HostSeedsLoggerButChildOptsOut.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostSeedsLoggerButChildOptsOut.class);
-		var childCtx = hostCtx.getRestChildren().asMap().get("noinheritlogger");
+	@Test void a02_noInheritCutsSeededPartSerializer() {
+		MockRestClient.buildLax(HostSeedsPSButChildOptsOut.class);
+		var hostCtx = RestContext.getGlobalRegistry().get(HostSeedsPSButChildOptsOut.class);
+		var childCtx = hostCtx.getRestChildren().asMap().get("noinheritps");
 		assertNotNull(childCtx);
-		assertFalse(childCtx.getCallLogger() instanceof SeedLogger,
-			"Child's own noInherit=\"callLogger\" must cut the host's seeded SeedLogger entirely, "
+		assertFalse(childCtx.getPartSerializer() instanceof SeedPS,
+			"Child's own noInherit=\"partSerializer\" must cut the host's seeded SeedPS entirely, "
 			+ "falling back to the framework default rather than the seed");
 	}
 }

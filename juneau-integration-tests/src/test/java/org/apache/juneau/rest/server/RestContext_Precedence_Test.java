@@ -25,8 +25,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.server.logger.*;
-import org.apache.juneau.rest.server.stats.*;
+import org.apache.juneau.rest.server.swagger.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -36,8 +35,8 @@ import org.junit.jupiter.api.*;
  * Resolution order, top-to-bottom:
  * <ol>
  * 	<li>{@code @Bean} factory methods on the resource.  For non-framework types these are
- * 		registered as local entries directly; for framework types (e.g. {@link CallLogger},
- * 		{@link ThrownStore}) the per-bean memoizer captures the {@code @Bean} value, and
+ * 		registered as local entries directly; for framework types (e.g. {@link SwaggerProvider})
+ * 		the per-bean memoizer captures the {@code @Bean} value, and
  * 		{@code RestContext} promotes the memoizer-backed supplier into a local entry so that
  * 		{@code @Bean} uniformly wins.
  * 	<li>User-supplied bean store from
@@ -45,7 +44,7 @@ import org.junit.jupiter.api.*;
  * 		{@link org.apache.juneau.rest.server.server.springboot.SpringBeanStore}-style fallback to a backing
  * 		{@code ApplicationContext}.  Consulted only when no {@code @Bean} factory method
  * 		exists for the type.
- * 	<li>Memoizer-backed framework defaults (e.g. {@link BasicCallLogger}).  Fire only when neither
+ * 	<li>Memoizer-backed framework defaults.  Fire only when neither
  * 		a per-resource {@code @Bean} method nor a user-supplied bean-store binding exists.
  * </ol>
  *
@@ -61,8 +60,8 @@ class RestContext_Precedence_Test extends TestBase {
 	// Marker beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static final CallLogger SPRING_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
-	private static final CallLogger BEAN_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
+	private static final SwaggerProvider SPRING_SW = (ctx, loc) -> null;
+	private static final SwaggerProvider BEAN_SW = (ctx, loc) -> null;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Spring-substitute bean store
@@ -125,7 +124,7 @@ class RestContext_Precedence_Test extends TestBase {
 	}
 
 	private static SpringLikeBeanStore springLikeBeanStore() {
-		return new SpringLikeBeanStore(null).bindSpring(CallLogger.class, SPRING_LOGGER);
+		return new SpringLikeBeanStore(null).bindSpring(SwaggerProvider.class, SPRING_SW);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -134,14 +133,14 @@ class RestContext_Precedence_Test extends TestBase {
 
 	@Rest
 	public static class A_BeanBeatsDefault {
-		@Bean static CallLogger callLoggerCapture;
-		@Bean public CallLogger callLogger() { return BEAN_LOGGER; }
+		@Bean static SwaggerProvider swaggerProviderCapture;
+		@Bean public SwaggerProvider swaggerProvider() { return BEAN_SW; }
 	}
 
 	@Test
 	void a01_restInject_beatsDefault() {
 		MockRestClient.buildLax(A_BeanBeatsDefault.class);
-		assertSame(BEAN_LOGGER, A_BeanBeatsDefault.callLoggerCapture);
+		assertSame(BEAN_SW, A_BeanBeatsDefault.swaggerProviderCapture);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -150,36 +149,36 @@ class RestContext_Precedence_Test extends TestBase {
 
 	@Rest
 	public static class B_BeanBeatsSpring {
-		@Bean static CallLogger callLoggerCapture;
+		@Bean static SwaggerProvider swaggerProviderCapture;
 		@Bean public WritableBeanStore createBeanStore() { return springLikeBeanStore(); }
-		@Bean public CallLogger callLogger() { return BEAN_LOGGER; }
+		@Bean public SwaggerProvider swaggerProvider() { return BEAN_SW; }
 	}
 
 	@Test
 	void b01_restInject_beatsSpring() {
 		MockRestClient.buildLax(B_BeanBeatsSpring.class);
-		assertSame(BEAN_LOGGER, B_BeanBeatsSpring.callLoggerCapture, "@Bean method should win over Spring fallback");
+		assertSame(BEAN_SW, B_BeanBeatsSpring.swaggerProviderCapture, "@Bean method should win over Spring fallback");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// 3. Spring beats the framework default for framework bean types (when no @Bean method exists).
 	//
-	// Without an @Bean CallLogger method, the framework's memoizer-backed default supplier sits
+	// Without an @Bean SwaggerProvider method, the framework's memoizer-backed default supplier sits
 	// at level 4 of resolve(), below the user-supplied bean store (parent at level 3).  So Spring
-	// overrides the framework default.  This is intentional: if the user wired a CallLogger into Spring,
-	// they meant it to be used in preference to the auto-configured BasicCallLogger.
+	// overrides the framework default.  This is intentional: if the user wired a SwaggerProvider into Spring,
+	// they meant it to be used in preference to the auto-configured default.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class C_SpringBeatsDefault {
-		@Bean static CallLogger callLoggerCapture;
+		@Bean static SwaggerProvider swaggerProviderCapture;
 		@Bean public WritableBeanStore createBeanStore() { return springLikeBeanStore(); }
 	}
 
 	@Test
 	void c01_spring_beatsDefault_forFrameworkBean() {
 		MockRestClient.buildLax(C_SpringBeatsDefault.class);
-		assertSame(SPRING_LOGGER, C_SpringBeatsDefault.callLoggerCapture, "User-supplied bean store binding should win over framework default when no @Bean is declared for the type");
+		assertSame(SPRING_SW, C_SpringBeatsDefault.swaggerProviderCapture, "User-supplied bean store binding should win over framework default when no @Bean is declared for the type");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -195,7 +194,7 @@ class RestContext_Precedence_Test extends TestBase {
 
 	private static SpringLikeBeanStore springLikeBeanStoreWithCustomBean() {
 		return new SpringLikeBeanStore(null)
-			.bindSpring(CallLogger.class, SPRING_LOGGER)
+			.bindSpring(SwaggerProvider.class, SPRING_SW)
 			.bindSpring(CustomBean.class, SPRING_CUSTOM);
 	}
 

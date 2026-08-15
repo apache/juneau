@@ -29,7 +29,6 @@ import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.openapi.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.staticfile.*;
@@ -67,14 +66,12 @@ public class RestAnnotation {
 		private Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
 		private Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
 		private Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
-		private Class<? extends CallLogger> callLogger = CallLogger.Void.class;
 		private Class<? extends RestAuthenticator> authenticator = RestAuthenticator.Null.class;
 		private Class<? extends RestConverter>[] converters = new Class[0];
 		private Class<? extends RestGuard>[] guards = new Class[0];
 		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
 		private Class<? extends OpenApiProvider> openApiProvider = OpenApiProvider.Void.class;
 		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
-		private Debug debug = DebugAnnotation.DEFAULT;
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {};
 		private Child[] childrenDefs = {};
@@ -182,17 +179,6 @@ public class RestAnnotation {
 		 */
 		public Builder description(String...value) {
 			description = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#callLogger()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder callLogger(Class<? extends CallLogger> value) {
-			callLogger = value;
 			return this;
 		}
 
@@ -359,28 +345,6 @@ public class RestAnnotation {
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
 			converters = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(String value) {
-			debug = DebugAnnotation.create().value(value).build();
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(Debug value) {
-			debug = value == null ? DebugAnnotation.DEFAULT : value;
 			return this;
 		}
 
@@ -820,14 +784,12 @@ public class RestAnnotation {
 		private final Class<? extends HttpPartSerializer> partSerializer;
 		private final Class<? extends StaticFiles> staticFiles;
 		private final Class<? extends ResponseProcessor>[] responseProcessors;
-		private final Class<? extends CallLogger> callLogger;
 		private final Class<? extends RestAuthenticator> authenticator;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends OpenApiProvider> openApiProvider;
 		private final Class<? extends RestOpArg>[] restOpArgs;
-		private final Debug debug;
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children;
 		private final Child[] childrenDefs;
@@ -885,7 +847,6 @@ public class RestAnnotation {
 			allowedHeaderParams = b.allowedHeaderParams;
 			allowedMethodHeaders = b.allowedMethodHeaders;
 			allowedMethodParams = b.allowedMethodParams;
-			callLogger = b.callLogger;
 			authenticator = b.authenticator;
 			children = cp(b.children);
 			childrenDefs = cp(b.childrenDefs);
@@ -901,7 +862,6 @@ public class RestAnnotation {
 			noInherit = cp(b.noInherit);
 			consumes = cp(b.consumes);
 			converters = cp(b.converters);
-			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultContentType = b.defaultContentType;
@@ -958,11 +918,6 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String allowedMethodParams() {
 			return allowedMethodParams;
-		}
-
-		@Override /* Overridden from Rest */
-		public Class<? extends CallLogger> callLogger() {
-			return callLogger;
 		}
 
 		@Override /* Overridden from Rest */
@@ -1038,11 +993,6 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
-		}
-
-		@Override /* Overridden from Rest */
-		public Debug debug() {
-			return debug;
 		}
 
 		@Override /* Overridden from Rest */

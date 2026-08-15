@@ -23,7 +23,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 
 /**
  * Host-side setting seed for the {@link Rest#childrenDefs() @Rest(childrenDefs=...)} attribute.
@@ -37,7 +36,7 @@ import org.apache.juneau.rest.server.logger.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
- * 		childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, callLogger=SeedLogger.<jk>class</jk>)
+ * 		childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, maxInput=<js>"10M"</js>)
  * 	)
  * 	<jk>public class</jk> MyResource { ... }
  * </p>
@@ -51,7 +50,7 @@ import org.apache.juneau.rest.server.logger.*;
  * 	<li><b>Additive-security</b> ({@code guards}, {@code converters}, {@code roleGuard}, {@code rolesDeclared})
  * 		&mdash; the host contributes, the child can't remove or weaken it (list-shaped members prepend; the two
  * 		role-based members AND-stack alongside the child's own value).
- * 	<li><b>Child-wins scalars</b> ({@code callLogger}, {@code partSerializer}, {@code partParser}, {@code debug},
+ * 	<li><b>Child-wins scalars</b> ({@code partSerializer}, {@code partParser},
  * 		{@code defaultCharset}, {@code maxInput}) &mdash; the seed is a default/fallback; the child's own explicit
  * 		{@code @Rest} declaration wins when present.
  * </ul>
@@ -122,13 +121,6 @@ public @interface Child {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Host-seeded {@link Rest#callLogger() callLogger} default for this child's endpoints.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends CallLogger> callLogger() default CallLogger.Void.class;
-
-	/**
 	 * Host-seeded {@link Rest#partSerializer() partSerializer} default for this child's endpoints.
 	 *
 	 * @return The annotation value.
@@ -141,13 +133,6 @@ public @interface Child {
 	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> partParser() default HttpPartParser.Void.class;
-
-	/**
-	 * Host-seeded {@link Rest#debug() debug} default for this child's endpoints (each sub-field independently seeded).
-	 *
-	 * @return The annotation value.
-	 */
-	Debug debug() default @Debug;
 
 	/**
 	 * Host-seeded {@link Rest#defaultCharset() defaultCharset} default for this child's endpoints.

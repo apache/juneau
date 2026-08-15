@@ -44,7 +44,6 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.sse.*;
 import org.apache.juneau.rest.server.util.*;
 
@@ -117,7 +116,6 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestResponse#getContext() getContext()}
  * 			<li class='jm'>{@link RestResponse#getOpContext() getOpContext()}
  * 			<li class='jm'>{@link RestResponse#setAttribute(String,Object) setAttribute(String,Object)}
- * 			<li class='jm'>{@link RestResponse#setDebug() setDebug()}
  * 			<li class='jm'>{@link RestResponse#setNoTrace() setNoTrace()}
  * 			<li class='jm'>{@link RestResponse#setStatus(int) setStatus(int)}
  * 		</ul>
@@ -730,37 +728,33 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
+	 * Returns the captured (bounded) response body bytes for debug logging.
 	 *
-	 * @return This object.
-	 * @throws IOException If bodies could not be cached.
+	 * <p>
+	 * Populated by the two-phase debug pipeline (Phase A) only when the resolved logger is loggable at
+	 * {@link java.util.logging.Level#FINEST FINEST}; otherwise returns <jk>null</jk>. The captured copy is capped at the
+	 * formatter's body cap (default 8&nbsp;KB); use {@link #getCachedContentLength()} for the full byte count.
+	 *
+	 * @return The captured response body bytes, or <jk>null</jk> if body caching was not installed.
 	 */
-	public RestResponse setDebug() throws IOException {
-		return setDebug(true);
+	public byte[] getCachedContent() {
+		return inner instanceof CachingHttpServletResponse c ? c.getContent() : null;
 	}
 
 	/**
-	 * Sets the <js>"Debug"</js> attribute to the specified boolean.
+	 * Returns the total number of response body bytes written, including any beyond the capture cap.
 	 *
-	 * <p>
-	 * This flag is used by {@link CallLogger} to help determine how a request should be logged.
-	 *
-	 * @param b The attribute value.
-	 * @return This object.
-	 * @throws IOException If bodies could not be cached.
+	 * @return The total response body length in bytes, or {@code -1} if body caching was not installed.
 	 */
-	public RestResponse setDebug(Boolean b) throws IOException {
-		request.setDebug(b);
-		if (isTrue(b))
-			inner = CachingHttpServletResponse.wrap(inner);
-		return this;
+	public long getCachedContentLength() {
+		return inner instanceof CachingHttpServletResponse c ? c.getTotalLength() : -1;
 	}
 
 	/**
 	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
 	 *
 	 * <p>
-	 * This exception is used by {@link CallLogger} for logging purposes.
+	 * This exception is surfaced by the debug pipeline as the {@code thrown} of the emitted log record.
 	 *
 	 * @param t The attribute value.
 	 * @return This object.
@@ -1029,7 +1023,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link CallLogger} and tells it not to log the current request.
+	 * This flag tells the framework not to trace the current request.
 	 *
 	 * @param b The attribute value.
 	 * @return This object.

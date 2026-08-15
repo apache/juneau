@@ -63,7 +63,6 @@ public class RestOptionsAnnotation {
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		private String clientVersion = "";
-		private String debug = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
 		private String observability = "";
@@ -132,17 +131,6 @@ public class RestOptionsAnnotation {
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
 			converters = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestOptions#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(String value) {
-			debug = value;
 			return this;
 		}
 
@@ -439,7 +427,6 @@ public class RestOptionsAnnotation {
 		private final Class<? extends Serializer>[] serializers;
 		private final OpSwagger swagger;
 		private final String clientVersion;
-		private final String debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
 		private final String observability;
@@ -466,7 +453,6 @@ public class RestOptionsAnnotation {
 			description = cp(b.description);
 			clientVersion = b.clientVersion;
 			converters = cp(b.converters);
-			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultRequestQueryData = cp(b.defaultRequestQueryData);
@@ -502,11 +488,6 @@ public class RestOptionsAnnotation {
 		@Override /* Overridden from RestOptions */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
-		}
-
-		@Override /* Overridden from RestOptions */
-		public String debug() {
-			return debug;
 		}
 
 		@Override /* Overridden from RestOptions */

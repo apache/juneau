@@ -568,7 +568,7 @@ class RestResponse_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// J: Misc — getMediaType, getCharset null path, hasContent / setContent / getContent, attribute pass-through,
-	//    setNoTrace / setDebug / setException — these touch the small accessor branches.
+	//    setNoTrace / setException — these touch the small accessor branches.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -602,11 +602,6 @@ class RestResponse_Test extends TestBase {
 		@RestGet("/noTraceFluent") public String noTraceFluent(RestResponse res) {
 			res.setNoTrace();
 			res.setNoTrace(Boolean.TRUE);
-			return "ok";
-		}
-		@RestGet("/debugFluent") public String debugFluent(RestResponse res) throws Exception {
-			res.setDebug();
-			res.setDebug(Boolean.FALSE);
 			return "ok";
 		}
 		@RestGet("/setExceptionFluent") public String setExceptionFluent(RestResponse res) {
@@ -663,10 +658,6 @@ class RestResponse_Test extends TestBase {
 
 	@Test void j05_setNoTraceFluent() throws Exception {
 		CJ.get("/noTraceFluent").run().assertStatus(200);
-	}
-
-	@Test void j06_setDebugFluent() throws Exception {
-		CJ.get("/debugFluent").run().assertStatus(200);
 	}
 
 	@Test void j07_setExceptionFluent() throws Exception {

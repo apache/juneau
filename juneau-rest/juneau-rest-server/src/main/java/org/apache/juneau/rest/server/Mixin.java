@@ -26,7 +26,6 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.processor.*;
 
 /**
@@ -59,7 +58,7 @@ import org.apache.juneau.rest.server.processor.*;
  * 	<li><b>List-shaped</b> ({@code guards}, {@code converters}, {@code encoders}, {@code serializers},
  * 		{@code parsers}, {@code responseProcessors}, {@code restOpArgs}, default headers/attributes,
  * 		{@code produces}/{@code consumes}) &mdash; appended after the host chain that the mixin inherits.
- * 	<li><b>Replace-shaped</b> ({@code callLogger}, {@code partSerializer}, {@code partParser}, {@code debug},
+ * 	<li><b>Replace-shaped</b> ({@code partSerializer}, {@code partParser},
  * 		{@code defaultAccept}/{@code defaultContentType}/{@code defaultCharset}, {@code maxInput},
  * 		{@code roleGuard}/{@code rolesDeclared}, {@code messages}) &mdash; the host override wins when set.
  * </ul>
@@ -120,8 +119,8 @@ public @interface Mixin {
 	 * The folded set is the list-shaped contribution attributes: {@code serializers}, {@code parsers},
 	 * {@code encoders}, {@code converters}, {@code guards}, {@code responseProcessors}, {@code restOpArgs},
 	 * {@code defaultRequestHeaders}, {@code defaultResponseHeaders}, {@code defaultRequestAttributes},
-	 * {@code produces}, and {@code consumes}.  Replace-shaped attributes (e.g. {@code callLogger},
-	 * {@code partSerializer}) and host-only attributes ({@code path}/{@code paths}/{@code children}) are never
+	 * {@code produces}, and {@code consumes}.  Replace-shaped attributes (e.g. {@code partSerializer},
+	 * {@code partParser}) and host-only attributes ({@code path}/{@code paths}/{@code children}) are never
 	 * folded.  Same-class de-duplication applies, so a class the host already declares is not added twice.
 	 *
 	 * <p>
@@ -210,13 +209,6 @@ public @interface Mixin {
 	Class<? extends RestOpArg>[] restOpArgs() default {};
 
 	/**
-	 * Host-declared {@link Rest#callLogger() callLogger} override for this mixin's endpoints.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends CallLogger> callLogger() default CallLogger.Void.class;
-
-	/**
 	 * Host-declared {@link Rest#partSerializer() partSerializer} override for this mixin's endpoints.
 	 *
 	 * @return The annotation value.
@@ -229,13 +221,6 @@ public @interface Mixin {
 	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> partParser() default HttpPartParser.Void.class;
-
-	/**
-	 * Host-declared {@link Rest#debug() debug} override for this mixin's endpoints.
-	 *
-	 * @return The annotation value.
-	 */
-	Debug debug() default @Debug;
 
 	/**
 	 * Host-declared {@link Rest#messages() messages} override for this mixin's endpoints.

@@ -22,6 +22,7 @@ import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -46,8 +47,8 @@ import jakarta.servlet.*;
  * Catches things {@code MockRest} cannot:
  * <ul>
  * 	<li>Real {@code Content-Type: application/json} negotiation through the Jetty/servlet stack.
- * 	<li>{@code @Rest(debug=@Debug("always"))} resolving end-to-end and unlocking the echo through the
- * 		mixin sub-context's {@link org.apache.juneau.rest.server.server.debug.DebugEnablement DebugEnablement}.
+ * 	<li>The host resource's JUL logger raised to {@link java.util.logging.Level#FINE FINE} unlocking the
+ * 		echo through the mixin sub-context end-to-end (mixin-served ops resolve their logger from the host class).
  * 	<li>Sensitive-header redaction surviving the network stack &mdash; an {@code Authorization}
  * 		header sent over real HTTP must NEVER be reflected back in the response body.
  * </ul>
@@ -57,7 +58,7 @@ import jakarta.servlet.*;
 @org.apache.juneau.testing.JettyMicroserviceTest
 class EchoMixin_JettyMicroservice_Test extends TestBase {
 
-	@Rest(mixins=EchoMixin.class, debug=@Debug("always"))
+	@Rest(mixins=EchoMixin.class)
 	public static class Host extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
@@ -65,6 +66,18 @@ class EchoMixin_JettyMicroservice_Test extends TestBase {
 				.bodyLimit(1024L)
 				.build();
 		}
+	}
+
+	private static Level prevLevel;
+
+	@BeforeAll static void raiseHostLogger() {
+		var l = Logger.getLogger(Host.class.getName());
+		prevLevel = l.getLevel();
+		l.setLevel(Level.FINE);
+	}
+
+	@AfterAll static void restoreHostLogger() {
+		Logger.getLogger(Host.class.getName()).setLevel(prevLevel);
 	}
 
 	@Configuration

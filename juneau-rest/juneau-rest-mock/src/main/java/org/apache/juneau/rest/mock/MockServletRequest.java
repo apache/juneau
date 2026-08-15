@@ -28,6 +28,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import java.io.*;
 import java.security.*;
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.http.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -119,6 +120,8 @@ public class MockServletRequest implements HttpServletRequest {
 	private String uri = "";
 
 	private Set<String> roles = set();
+
+	private Level logLevel;
 
 	/**
 	 * If the specified request is a
@@ -978,17 +981,30 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	/**
-	 * Enabled debug mode on this request.
+	 * Sets the JUL log level to transiently apply to the target resource's logger for the duration of this
+	 * request's dispatch.
 	 *
 	 * <p>
-	 * Causes information about the request execution to be sent to STDERR.
+	 * This is a pure data holder read by the mock transport at the actual dispatch call site, which is responsible
+	 * for saving the resource logger's current level, applying this value, invoking {@code RestContext.execute(...)},
+	 * and restoring the prior level in a {@code finally} block. The mutation is therefore transient and never leaks
+	 * across requests or tests. Replaces the removed {@code debug(boolean)} flag, which set a now-meaningless
+	 * {@code Debug} request header.
 	 *
-	 * @param value The enable flag value.
+	 * @param value The log level to apply during dispatch, or <jk>null</jk> for no override.
 	 * @return This object.
 	 */
-	public MockServletRequest debug(boolean value) {
-		if (value)
-			header("Debug", "true");
+	public MockServletRequest logLevel(Level value) {
+		logLevel = value;
 		return this;
+	}
+
+	/**
+	 * Returns the log level set via {@link #logLevel(Level)}.
+	 *
+	 * @return The log level to apply during dispatch, or <jk>null</jk> if not set.
+	 */
+	public Level getLogLevel() {
+		return logLevel;
 	}
 }

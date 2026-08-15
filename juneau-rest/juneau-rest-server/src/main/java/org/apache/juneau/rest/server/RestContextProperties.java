@@ -57,7 +57,6 @@ public class RestContextProperties {
 
 	private static final String FALSE = "false";
 
-	private String debugDefault = "";
 	private String allowedHeaderParams = "Accept,Content-Type";
 	private String allowedMethodHeaders = "";
 	private String allowedMethodParams = "HEAD,OPTIONS";
@@ -72,21 +71,6 @@ public class RestContextProperties {
 	private String clientVersionHeader = "Client-Version";
 	private String uriRelativity = "";
 	private String uriResolution = "";
-
-	/**
-	 * The env/config {@code RestContext.debugDefault} default debug-enablement value ({@code "ALWAYS"} /
-	 * {@code "NEVER"} / {@code "CONDITIONAL"}); blank means unset.
-	 *
-	 * <p>
-	 * There is no corresponding {@code @Rest} annotation attribute for this setting &mdash; it is an environment/config
-	 * default only. {@link RestContext} reads this value (SVL-resolved) as the starting debug enablement, which is then
-	 * overridden by {@code @Rest(debug=true|false)} and the {@code Debug} request header.
-	 *
-	 * @return The value. Never <jk>null</jk>.
-	 */
-	public String getDebugDefault() {
-		return debugDefault;
-	}
 
 	/**
 	 * The default set of header names that may be passed via URL query parameter ({@code @Rest(allowedHeaderParams)}).

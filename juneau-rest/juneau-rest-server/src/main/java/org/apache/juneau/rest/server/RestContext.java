@@ -82,10 +82,8 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.config.*;
-import org.apache.juneau.rest.server.debug.*;
-import org.apache.juneau.rest.server.debug.format.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.rest.server.logger.*;
+import org.apache.juneau.rest.server.logging.*;
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.openapi.*;
 import org.apache.juneau.rest.server.processor.*;
@@ -122,8 +120,8 @@ import jakarta.servlet.http.*;
  *
  * 		<jc>// Programmatically contribute a bean to the resource's bean store.</jc>
  * 		<ja>@Bean</ja>
- * 		<jk>public</jk> CallLogger callLogger() {
- * 			<jk>return new</jk> MyCustomCallLogger();
+ * 		<jk>public</jk> RestDebugFormatter restDebugFormatter() {
+ * 			<jk>return new</jk> MyCustomRestDebugFormatter();
  * 		}
  * 	}
  * </p>
@@ -1053,14 +1051,12 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(VarResolver.class, varResolver::get);
 		bs.addDefaultSupplier(Config.class, config::get);
 		bs.addDefaultSupplier(ResponseProcessor[].class, responseProcessors::get);
-		bs.addDefaultSupplier(CallLogger.class, callLogger::get);
+		bs.addDefaultSupplier(RestDebugFormatter.class, restDebugFormatter::get);
 		bs.addDefaultSupplier(HttpPartSerializer.class, partSerializer::get);
 		bs.addDefaultSupplier(HttpPartParser.class, partParser::get);
 		bs.addDefaultSupplier(JsonSchemaGenerator.class, jsonSchemaGenerator::get);
 		bs.addDefaultSupplier(StaticFiles.class, staticFiles::get);
 		bs.addDefaultSupplier(FileFinder.class, staticFiles::get);
-		bs.addDefaultSupplier(DebugEnablement.class, debugEnablement::get);
-		bs.addDefaultSupplier(DebugConfig.class, debugConfig::get);
 		bs.addDefaultSupplier(SwaggerProvider.class, swaggerProvider::get);
 		bs.addDefaultSupplier(OpenApiProvider.class, openApiProvider::get);
 		bs.addDefaultSupplier(RestOperations.class, restOperations::get);
@@ -1281,29 +1277,18 @@ public class RestContext extends Context {
 	// @formatter:on
 
 	/**
-	 * The {@link CallLogger} for this resource.
+	 * The default {@link RestDebugFormatter} for this resource.
 	 *
 	 * <p>
-	 * Defaults to {@link BasicCallLogger}. {@code @Rest(callLogger=X)} most-derived non-{@code Void} class wins.
-	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
+	 * Defaults to {@link BasicRestDebugFormatter}. A bean-store override or {@code @Bean} factory method REPLACES the
+	 * result. (Resource-class-implements-the-SPI precedence is applied by {@link #getRestDebugFormatter()}, ahead of this
+	 * default supplier.)
 	 */
-	private final Memoizer<CallLogger> callLogger = memoizer(() -> {
+	private final Memoizer<RestDebugFormatter> restDebugFormatter = memoizer(() -> {
 		var bs = beanStore();
-		// Test-installed beans (registered via Args.beanStoreConfigurer / addSupplier) live in the
-		// bean store's entries deque and are returned by bs.getBean(CallLogger.class) before falling
-		// through to this memoizer's default supplier (which is what the @Rest(callLogger) chain
-		// produces).  The memoizer therefore only needs to produce the framework default.
-		var creator = BeanInstantiator.of(CallLogger.class, bs).type(BasicCallLogger.class).noBuilder();
-		bs.getBeanType(CallLogger.class).ifPresent(creator::type);
-		// @Rest(callLogger=X) — most-derived non-Void wins.
-		// getRestAnnotationsForProperty(...) yields parent-to-child order (rstream reversal); reduce-last
-		// keeps the most-derived value, mirroring the prior "apply each annotation, child overrides parent" semantics.
-		getRestAnnotationsForProperty(PROPERTY_callLogger)
-			.map(ai -> ai.inner().callLogger())
-			.filter(c -> c != CallLogger.Void.class)
-			.reduce((first, second) -> second)
-			.ifPresent(creator::type);
-		bs.createBeanFromMethod(CallLogger.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
+		var creator = BeanInstantiator.of(RestDebugFormatter.class, bs).type(BasicRestDebugFormatter.class).noBuilder();
+		bs.getBeanType(RestDebugFormatter.class).ifPresent(creator::type);
+		bs.createBeanFromMethod(RestDebugFormatter.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
 	});
 
@@ -1440,10 +1425,6 @@ public class RestContext extends Context {
 	// mergeReplacedBooleanAttribute as the initial value before the @Rest annotation chain is walked.
 	//---------------------------------------------------------------------------------------------
 
-	/** Env-driven default for the call-logger debug level fallback in the {@link #debugConfig} memoizer. */
-	@Value("${juneau.restLogger.level:INFO}")
-	private String defaultDebugLevel;
-
 	/** Env-driven default for {@code @Rest(uriAuthority)}; {@link Optional#empty()} when unset (preserves null-vs-empty distinction). */
 	@Value("${RestContext.uriAuthority}")
 	private Optional<String> defaultUriAuthority;
@@ -1466,93 +1447,6 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<RestContextProperties> restContextProperties = memoizer(() ->
 		BeanInstantiator.of(RestContextProperties.class, beanStore()).run());
-
-	/**
-	 * The {@link DebugEnablement} for this resource.
-	 *
-	 * <p>
-	 * Resolved from the env/config {@code RestContext.debugDefault} setting (see
-	 * {@link RestContextProperties#getDebugDefault()}) when non-blank, falling back to
-	 * {@code @Rest(debug=true|false)}. The resolved {@link Enablement} is published into the bean store
-	 * so that {@link BasicDebugEnablement} subclasses can pick it up. Defaults to {@link BasicDebugEnablement}.
-	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
-	 */
-	private final Memoizer<DebugEnablement> debugEnablement = memoizer(() -> {
-		// The env/config RestContext.debugDefault setting ("ALWAYS|NEVER|CONDITIONAL") is resolved first and, when
-		// non-blank, published as an Enablement bean so that BasicDebugEnablement.init() (and any subclass) can pick
-		// it up via beanStore().getBean(Enablement.class). It overrides any pre-registered Enablement bean (e.g. a
-		// mock-client default). If neither a debugDefault value NOR a pre-registered Enablement bean is present,
-		// fall back to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise.
-		var bs = beanStore();
-		String debugDefaultStr = resolve(getRestContextProperties().getDebugDefault());
-		Enablement resolvedDebugDefault = null;
-		if (nn(debugDefaultStr) && !debugDefaultStr.isBlank())
-			resolvedDebugDefault = Enablement.fromString(debugDefaultStr);
-		if (nn(resolvedDebugDefault))
-			bs.addBean(Enablement.class, resolvedDebugDefault);
-		else if (bs.getBean(Enablement.class).isEmpty())
-			bs.addBean(Enablement.class, isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
-		var creator = BeanInstantiator.of(DebugEnablement.class, bs).type(BasicDebugEnablement.class).noBuilder();
-		bs.getBeanType(DebugEnablement.class).ifPresent(creator::type);
-		bs.createBeanFromMethod(DebugEnablement.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
-		return creator.asOptional().orElse(null);
-	});
-
-	/**
-	 * The {@link DebugConfig} for this resource.
-	 */
-	private final Memoizer<DebugConfig> debugConfig = memoizer(() -> {
-		var bs = beanStore();
-		var mode = getRestAnnotationsForProperty(PROPERTY_debug)
-			.map(ai -> resolve(ai.inner().debug().value()))
-			.filter(StringUtils::isNotBlank)
-			.reduce((first, second) -> second)
-			.orElse("");
-		var formatType = getRestAnnotationsForProperty(PROPERTY_debug)
-			.map(ai -> ai.inner().debug().format())
-			.filter(c -> c != DebugFormat.Void.class)
-			.reduce((first, second) -> second)
-			.orElse(null);
-		var levelStr = getRestAnnotationsForProperty(PROPERTY_debug)
-			.map(ai -> resolve(ai.inner().debug().level()))
-			.filter(StringUtils::isNotBlank)
-			.reduce((first, second) -> second)
-			.orElse("");
-		var format = formatType == null ? new BasicTextFormat() : BeanInstantiator.of(DebugFormat.class, bs).type(formatType).run();
-		var level = StringUtils.isNotBlank(levelStr) ? Level.parse(levelStr) : Level.parse(defaultDebugLevel);
-		var mode2 = mode;
-		return new DebugConfig(bs) {
-			@Override
-			public DebugResult resolve(RestContext context, HttpServletRequest req) {
-				var enabled = isTrue(cast(Boolean.class, req.getAttribute("Debug")));
-				if (!enabled) {
-					if ("always".equalsIgnoreCase(mode2))
-						enabled = true;
-					else if ("conditional".equalsIgnoreCase(mode2))
-						enabled = "true".equalsIgnoreCase(req.getHeader("Debug"));
-				}
-				var cacheBodies = enabled;
-				return new DebugResult(enabled, format, level, cacheBodies);
-			}
-
-			@Override
-			public DebugResult resolve(RestOpContext context, HttpServletRequest req) {
-				var opDebug = AnnotationProvider.INSTANCE.find(RestOp.class, MethodInfo.of(context.getJavaMethod())).stream().findFirst();
-				if (opDebug.isPresent()) {
-					var v = RestContext.this.resolve(opDebug.get().inner().debug().value());
-					if (StringUtils.isNotBlank(v)) {
-						if ("always".equalsIgnoreCase(v))
-							return new DebugResult(true, format, level, true);
-						if ("never".equalsIgnoreCase(v))
-							return new DebugResult(false, format, level, false);
-						if ("conditional".equalsIgnoreCase(v))
-							return new DebugResult("true".equalsIgnoreCase(req.getHeader("Debug")), format, level, true);
-					}
-				}
-				return resolve(context.getContext(), req);
-			}
-		};
-	});
 
 	/**
 	 * The default request attributes contributed by {@code @Rest(defaultRequestAttributes)} for this resource.
@@ -2947,10 +2841,8 @@ public class RestContext extends Context {
 			.parsers(m.parsers())
 			.responseProcessors(m.responseProcessors())
 			.restOpArgs(m.restOpArgs())
-			.callLogger(m.callLogger())
 			.partSerializer(m.partSerializer())
 			.partParser(m.partParser())
-			.debug(m.debug())
 			.messages(m.messages())
 			.defaultRequestHeaders(m.defaultRequestHeaders())
 			.defaultResponseHeaders(m.defaultResponseHeaders())
@@ -3000,10 +2892,8 @@ public class RestContext extends Context {
 			.roleGuard(c.roleGuard())
 			.rolesDeclared(c.rolesDeclared())
 			.converters(c.converters())
-			.callLogger(c.callLogger())
 			.partSerializer(c.partSerializer())
 			.partParser(c.partParser())
-			.debug(c.debug())
 			.defaultCharset(c.defaultCharset())
 			.maxInput(c.maxInput());
 		// @formatter:on
@@ -3862,7 +3752,7 @@ public class RestContext extends Context {
 		if (nn(localSession.get()))
 			LOG.warning("WARNING:  Thread-local call object was not cleaned up from previous request.  {}, thread=[{}]", this, Thread.currentThread().getName());
 
-		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
+		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2);
 
 		try {
 
@@ -3894,7 +3784,8 @@ public class RestContext extends Context {
 				});
 			} else {
 					var call = sb.build();
-					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
+					installCaptureIfNeeded(call);
+					call.status(SC_NOT_FOUND).finish();
 					return;
 				}
 			}
@@ -3921,7 +3812,8 @@ public class RestContext extends Context {
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
 					var call = sb.build();
-					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
+					installCaptureIfNeeded(call);
+					call.status(SC_NOT_FOUND).finish();
 				}
 				return;
 			}
@@ -3934,7 +3826,7 @@ public class RestContext extends Context {
 
 		try {
 			localSession.set(s);
-			s.debug(isDebug(s));
+			installCaptureIfNeeded(s);
 			startCall(s);
 			s.run();
 		} catch (Exception e) {
@@ -4036,26 +3928,26 @@ public class RestContext extends Context {
 	public ServletConfig getBuilder() { return builder; }
 
 	/**
-	 * Returns the call logger to use for this resource.
+	 * Returns the debug formatter to use for this resource.
 	 *
 	 * <p>
-	 * The default call logger is {@link BasicCallLogger}. Override via {@link Rest#callLogger() @Rest(callLogger)}
-	 * on the resource class, by registering a {@link CallLogger} bean in the bean store, or by declaring a
-	 * {@link Bean @Bean}-annotated static method on the resource class:
-	 * <p class='bjava'>
-	 * 	<ja>@Bean</ja> <jk>public static</jk> CallLogger myCallLogger(<i>&lt;args&gt;</i>) {...}
-	 * </p>
+	 * Resolution precedence: the resource class itself implementing {@link RestDebugFormatter} &gt; a
+	 * {@link RestDebugFormatter} bean registered in the bean store (or a {@link Bean @Bean}-annotated factory method)
+	 * &gt; {@link BasicRestDebugFormatter}.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link Rest#callLogger}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 	 * </ul>
 	 *
 	 * @return
-	 * 	The call logger to use for this resource.
+	 * 	The debug formatter to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public CallLogger getCallLogger() { return beanStore.getBean(CallLogger.class).orElse(null); }
+	public RestDebugFormatter getRestDebugFormatter() {
+		if (resource.get() instanceof RestDebugFormatter f)
+			return f;
+		return beanStore.getBean(RestDebugFormatter.class).orElse(null);
+	}
 
 	/**
 	 * Returns the name of the client version header name used by this resource.
@@ -4096,20 +3988,6 @@ public class RestContext extends Context {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public List<MediaType> getConsumes() { return consumes.get(); }
-
-	/**
-	 * Returns the debug enablement bean for this context.
-	 *
-	 * @return The debug enablement bean for this context.
-	 */
-	public DebugEnablement getDebugEnablement() { return beanStore.getBean(DebugEnablement.class).orElse(null); }
-
-	/**
-	 * Returns the debug configuration bean for this context.
-	 *
-	 * @return The debug configuration bean for this context.
-	 */
-	public DebugConfig getDebugConfig() { return beanStore.getBean(DebugConfig.class).orElse(null); }
 
 	/**
 	 * Returns the default request attributes for this resource.
@@ -4918,11 +4796,17 @@ public class RestContext extends Context {
 		return this;
 	}
 
-	@SuppressWarnings({
-		"java:S2259" // getDebugConfig() is never null post-construction: registerFrameworkDefaults() always registers a DebugConfig default supplier before the constructor returns.
-	})
-	private boolean isDebug(RestSession call) {
-		return getDebugConfig().resolve(this, call.getRequest()).enabled();
+	/**
+	 * Installs bounded body-caching wrappers on the call (Phase A) when this resource's logger is loggable at
+	 * {@link Level#FINEST FINEST}. Used on the resource-level (404/no-op) paths; per-operation capture is installed by
+	 * {@link RestOpContext#createSession(RestSession)}.
+	 *
+	 * @param call The current call.
+	 * @throws IOException If the request/response streams could not be wrapped.
+	 */
+	private void installCaptureIfNeeded(RestSession call) throws IOException {
+		if (getLogger().isLoggable(Level.FINEST))
+			call.installCapture();
 	}
 
 	/**
@@ -4983,7 +4867,7 @@ public class RestContext extends Context {
 		getVarResolver();
 		getConfig();
 		getResponseProcessors();
-		getCallLogger();
+		getRestDebugFormatter();
 		getPartSerializer();
 		getPartParser();
 		getJsonSchemaGenerator();
@@ -4991,8 +4875,6 @@ public class RestContext extends Context {
 		getDefaultRequestHeaders();
 		getDefaultResponseHeaders();
 		getDefaultRequestAttributes();
-		getDebugEnablement();
-		getDebugConfig();
 		getSwaggerProvider();
 		getOpenApiProvider();
 	}
@@ -5226,7 +5108,7 @@ public class RestContext extends Context {
 
 		session.exception(e);
 
-		if (session.isDebug())
+		if (getLogger().isLoggable(Level.FINE))
 			getLogger().log(Level.WARNING, e, () -> "Error occurred during REST call.");
 
 		int code = 500;

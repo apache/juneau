@@ -64,7 +64,6 @@ public class RestPostAnnotation {
 		private Class<?>[] parsers = {};
 		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		private String clientVersion = "";
-		private String debug = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
 		private String defaultContentType = "";
@@ -148,17 +147,6 @@ public class RestPostAnnotation {
 		@SafeVarargs
 		public final Builder converters(Class<? extends RestConverter>...value) {
 			converters = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestPost#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(String value) {
-			debug = value;
 			return this;
 		}
 
@@ -500,7 +488,6 @@ public class RestPostAnnotation {
 		private final Class<?>[] parsers;
 		private final OpSwagger swagger;
 		private final String clientVersion;
-		private final String debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
 		private final String defaultContentType;
@@ -532,7 +519,6 @@ public class RestPostAnnotation {
 			clientVersion = b.clientVersion;
 			consumes = cp(b.consumes);
 			converters = cp(b.converters);
-			debug = b.debug;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultContentType = b.defaultContentType;
@@ -577,11 +563,6 @@ public class RestPostAnnotation {
 		@Override /* Overridden from RestPost */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
-		}
-
-		@Override /* Overridden from RestPost */
-		public String debug() {
-			return debug;
 		}
 
 		@Override /* Overridden from RestPost */

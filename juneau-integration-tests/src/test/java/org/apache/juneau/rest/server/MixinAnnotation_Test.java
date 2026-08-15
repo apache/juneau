@@ -25,7 +25,6 @@ import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.converter.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.junit.jupiter.api.*;
 
@@ -52,10 +51,8 @@ class MixinAnnotation_Test extends TestBase {
 			.parsers(JsonParser.class)
 			.responseProcessors(InputStreamProcessor.class)
 			.restOpArgs(AuthArg.class)
-			.callLogger(BasicCallLogger.class)
 			.partSerializer(UonSerializer.class)
 			.partParser(UonParser.class)
-			.debug(null)  // null coalesces to DebugAnnotation.DEFAULT
 			.messages("Msgs")
 			.defaultRequestHeaders("X-A: 1")
 			.defaultResponseHeaders("X-B: 2")
@@ -101,11 +98,8 @@ class MixinAnnotation_Test extends TestBase {
 		assertEquals(JsonParser.class, a1.parsers()[0]);
 		assertEquals(InputStreamProcessor.class, a1.responseProcessors()[0]);
 		assertEquals(AuthArg.class, a1.restOpArgs()[0]);
-		assertEquals(BasicCallLogger.class, a1.callLogger());
 		assertEquals(UonSerializer.class, a1.partSerializer());
 		assertEquals(UonParser.class, a1.partParser());
-		// debug(null) coalesced to the default @Debug.
-		assertEquals(DebugAnnotation.DEFAULT, a1.debug());
 	}
 
 	@Test void a02_testEquivalency() {
@@ -122,14 +116,6 @@ class MixinAnnotation_Test extends TestBase {
 		assertEquals(0, d.noInherit().length);
 	}
 
-	@Test void a04_debugNonNullValueKept() {
-		// The non-null branch of debug(Debug): a supplied @Debug is kept as-is (not coalesced to DEFAULT).
-		var dbg = DebugAnnotation.create().value("always").build();
-		var m = MixinAnnotation.create().type(FooMixin.class).debug(dbg).build();
-		assertEquals(dbg, m.debug());
-		assertEquals("always", m.debug().value());
-	}
-
 	// Comparison with the declarative @Mixin form.
 
 	@Rest(mixinDefs=@Mixin(
@@ -143,7 +129,6 @@ class MixinAnnotation_Test extends TestBase {
 		parsers=JsonParser.class,
 		responseProcessors=InputStreamProcessor.class,
 		restOpArgs=AuthArg.class,
-		callLogger=BasicCallLogger.class,
 		partSerializer=UonSerializer.class,
 		partParser=UonParser.class,
 		messages="Msgs",

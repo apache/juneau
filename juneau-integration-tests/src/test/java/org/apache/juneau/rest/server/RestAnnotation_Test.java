@@ -29,7 +29,6 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.swagger.*;
@@ -52,13 +51,11 @@ class RestAnnotation_Test extends TestBase {
 		.allowedHeaderParams("b")
 		.allowedMethodHeaders("c")
 		.allowedMethodParams("d")
-		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("e")
 		.config("f")
 		.consumes("g")
 		.converters(RestConverter.class)
-		.debug(DebugAnnotation.create().value("h").on("i").build())
 		.defaultAccept("j")
 		.defaultCharset("k")
 		.defaultContentType("l")
@@ -100,13 +97,11 @@ class RestAnnotation_Test extends TestBase {
 		.allowedHeaderParams("b")
 		.allowedMethodHeaders("c")
 		.allowedMethodParams("d")
-		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("e")
 		.config("f")
 		.consumes("g")
 		.converters(RestConverter.class)
-		.debug(DebugAnnotation.create().value("h").on("i").build())
 		.defaultAccept("j")
 		.defaultCharset("k")
 		.defaultContentType("l")
@@ -142,8 +137,8 @@ class RestAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,callLogger,children,clientVersionHeader,config,consumes,converters,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,noInherit,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
-			"b,c,d,[e1],[e2],CallLogger,[RestAnnotation_Test],e,f,[g],[RestConverter],j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[e3],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],[RestOpArg],w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
+			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,children,clientVersionHeader,config,consumes,converters,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,noInherit,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
+			"b,c,d,[e1],[e2],[RestAnnotation_Test],e,f,[g],[RestConverter],j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[e3],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],[RestOpArg],w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -174,13 +169,11 @@ class RestAnnotation_Test extends TestBase {
 		allowedHeaderParams="b",
 		allowedMethodHeaders="c",
 		allowedMethodParams="d",
-		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="e",
 		config="f",
 		consumes="g",
 		converters=RestConverter.class,
-		debug=@Debug(value="h", on="i"),
 		defaultAccept="j",
 		defaultCharset="k",
 		defaultContentType="l",
@@ -224,13 +217,11 @@ class RestAnnotation_Test extends TestBase {
 		allowedHeaderParams="b",
 		allowedMethodHeaders="c",
 		allowedMethodParams="d",
-		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="e",
 		config="f",
 		consumes="g",
 		converters=RestConverter.class,
-		debug=@Debug(value="h", on="i"),
 		defaultAccept="j",
 		defaultCharset="k",
 		defaultContentType="l",

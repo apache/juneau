@@ -37,9 +37,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.debug.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.stats.*;
 import org.apache.juneau.rest.server.util.*;
@@ -202,12 +200,10 @@ class RestArgResolvers_Test extends TestBase {
 		public void withConfig(org.apache.juneau.config.Config r) { /* annotation carrier only */ }
 		public void withLogger(java.util.logging.Logger r) { /* annotation carrier only */ }
 		// RestContextArgs — additional type-dispatch targets
-		public void withDebugEnablement(DebugEnablement r) { /* annotation carrier only */ }
 		public void withEncoderSet(EncoderSet r) { /* annotation carrier only */ }
 		public void withMethodExecStore(MethodExecStore r) { /* annotation carrier only */ }
 		public void withRestChildren(RestChildren r) { /* annotation carrier only */ }
 		public void withRestContextStats(RestContextStats r) { /* annotation carrier only */ }
-		public void withCallLogger(CallLogger r) { /* annotation carrier only */ }
 		public void withRestOperations(RestOperations r) { /* annotation carrier only */ }
 		public void withStaticFiles(StaticFiles r) { /* annotation carrier only */ }
 		public void withThrownStore(ThrownStore r) { /* annotation carrier only */ }
@@ -890,10 +886,6 @@ class RestArgResolvers_Test extends TestBase {
 		assertNotNull(RestContextArgs.create(firstParam(Fixture.class, "withLogger")));
 	}
 
-	@Test void z03_restContextArgs_create_matchesDebugEnablement() {
-		assertNotNull(RestContextArgs.create(firstParam(Fixture.class, "withDebugEnablement")));
-	}
-
 	@Test void z04_restContextArgs_create_matchesEncoderSet() {
 		assertNotNull(RestContextArgs.create(firstParam(Fixture.class, "withEncoderSet")));
 	}
@@ -908,10 +900,6 @@ class RestArgResolvers_Test extends TestBase {
 
 	@Test void z07_restContextArgs_create_matchesRestContextStats() {
 		assertNotNull(RestContextArgs.create(firstParam(Fixture.class, "withRestContextStats")));
-	}
-
-	@Test void z08_restContextArgs_create_matchesCallLogger() {
-		assertNotNull(RestContextArgs.create(firstParam(Fixture.class, "withCallLogger")));
 	}
 
 	@Test void z09_restContextArgs_create_matchesRestOperations() {

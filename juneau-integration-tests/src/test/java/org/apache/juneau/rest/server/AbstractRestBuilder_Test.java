@@ -269,16 +269,6 @@ class AbstractRestBuilder_Test extends TestBase {
 	// Observability / logging / errors
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_callLogger() {
-		// Using class assignment is verified by direct annotation read.
-		var b = b().callLogger(org.apache.juneau.rest.server.logger.BasicCallLogger.class);
-		assertEquals(org.apache.juneau.rest.server.logger.BasicCallLogger.class, b.toRestAnnotation().callLogger());
-	}
-
-	@Test void f02_debug() {
-		assertEquals("always", b().debug("always").toRestAnnotation().debug().value());
-	}
-
 	@Test void f03_observability() {
 		assertEquals("true", b().observability("true").toRestAnnotation().observability());
 	}

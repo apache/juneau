@@ -25,8 +25,6 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.encoders.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.debug.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.stats.*;
 
@@ -36,7 +34,6 @@ import org.apache.juneau.rest.server.stats.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link MarshallingContext}
  * 	<li class='jc'>{@link Config}
- * 	<li class='jc'>{@link DebugEnablement}
  * 	<li class='jc'>{@link EncoderSet}
  * 	<li class='jc'>{@link FileFinder}
  * 	<li class='jc'>{@link Logger}
@@ -44,7 +41,6 @@ import org.apache.juneau.rest.server.stats.*;
  * 	<li class='jc'>{@link RestChildren}
  * 	<li class='jc'>{@link RestContext}
  * 	<li class='jc'>{@link RestContextStats}
- * 	<li class='jc'>{@link CallLogger}
  * 	<li class='jc'>{@link RestOperations}
  * 	<li class='jc'>{@link StaticFiles}
  * 	<li class='jc'>{@link ThrownStore}
@@ -67,8 +63,6 @@ public class RestContextArgs extends SimpleRestOperationArg {
 			return new RestContextArgs(RestContext::getMarshallingContext);
 		if (paramInfo.isType(Config.class))
 			return new RestContextArgs(RestContext::getConfig);
-		if (paramInfo.isType(DebugEnablement.class))
-			return new RestContextArgs(RestContext::getDebugEnablement);
 		if (paramInfo.isType(EncoderSet.class))
 			return new RestContextArgs(RestContext::getEncoders);
 		if (paramInfo.isType(Logger.class))
@@ -81,8 +75,6 @@ public class RestContextArgs extends SimpleRestOperationArg {
 			return new RestContextArgs(x -> x);
 		if (paramInfo.isType(RestContextStats.class))
 			return new RestContextArgs(RestContext::getStats);
-		if (paramInfo.isType(CallLogger.class))
-			return new RestContextArgs(RestContext::getCallLogger);
 		if (paramInfo.isType(RestOperations.class))
 			return new RestContextArgs(RestContext::getRestOperations);
 		if (paramInfo.isType(StaticFiles.class))

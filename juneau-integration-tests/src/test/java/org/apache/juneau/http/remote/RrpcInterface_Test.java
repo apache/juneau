@@ -42,7 +42,6 @@ import org.apache.juneau.marshall.urlencoding.*;
 import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.params.*;
@@ -250,7 +249,6 @@ class RrpcInterface_Test extends TestBase {
 		}
 	}
 
-	@Rest(callLogger=BasicDisabledCallLogger.class)
 	@SerializerConfig(addRootType="true",addBeanTypes="true")
 	public static class InterfaceProxyResource extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;

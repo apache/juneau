@@ -33,6 +33,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.logging.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.*;
@@ -57,10 +58,8 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.common.utils.*;
 import org.apache.juneau.rest.server.converter.*;
-import org.apache.juneau.rest.server.debug.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.matcher.*;
 import org.apache.juneau.rest.server.util.*;
 
@@ -260,8 +259,40 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return v.get().build();
 	});
 
-	/** The call logger for this operation (delegated to the parent {@link RestContext}). */
-	private final Memoizer<CallLogger> callLogger = memoizer(() -> restContext().getCallLogger());
+	/**
+	 * The per-operation JUL logger for debug capture.
+	 *
+	 * <p>
+	 * A hierarchical child of the <b>host</b> resource logger ({@code <hostResourceClass>.<methodName>}) so an operator
+	 * can raise the debug level for a single operation without affecting its siblings (JUL parent-level inheritance).
+	 *
+	 * <p>
+	 * For an operation contributed by a composed {@linkplain Rest#mixins() mixin}, the class-name portion is the
+	 * <b>host / top-level resource class</b> &mdash; not the mixin class &mdash; so raising the host resource's JUL
+	 * level cascades to its mixin-served operations, and the same mixin composed into different hosts resolves to
+	 * distinct, host-isolated loggers.  Non-mixin operations (including child resources, which are their own resources)
+	 * resolve to their own resource class as before.
+	 */
+	private final Memoizer<Logger> logger = memoizer(() ->
+		Logger.getLogger(hostResourceClass().getName() + "." + getJavaMethod().getName()));
+
+	/**
+	 * Returns the host / top-level resource class for logger naming.
+	 *
+	 * <p>
+	 * When this operation's context originates from a {@linkplain RestContext#isMixinContext() mixin sub-context},
+	 * walks up the {@linkplain RestContext#getParentContext() parent-context} linkage past any composed mixin
+	 * sub-contexts to the host resource that composed the mixin.  Non-mixin contexts (including child resources)
+	 * return their own resource class unchanged.
+	 *
+	 * @return The host resource class.
+	 */
+	private Class<?> hostResourceClass() {
+		var rc = restContext();
+		while (rc.isMixinContext() && rc.getParentContext() != null)
+			rc = rc.getParentContext();
+		return rc.getResourceClass();
+	}
 
 	/**
 	 * The response-converter array for this operation.
@@ -290,9 +321,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			override = bs.getBean(RestConverterList.class).orElse(null);
 		return (nn(override) ? override : b.build()).asArray();
 	});
-
-	/** The effective {@link DebugConfig} for this operation. */
-	private final Memoizer<DebugConfig> debugConfig = memoizer(() -> restContext().getDebugConfig());
 
 	/** The effective default {@link Charset} for this operation, resolved from op annotations, context, or env. */
 	private final Memoizer<Charset> defaultCharset = memoizer(() -> {
@@ -1167,8 +1195,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Returns {@code true} if context-level values for the given property should be merged.
 	 *
 	 * @param property The annotation attribute name (e.g. {@link RestServerConstants#PROPERTY_allowedParserOptions},
-	 * 	{@link RestServerConstants#PROPERTY_defaultCharset}, {@link RestServerConstants#PROPERTY_maxInput},
-	 * 	{@link RestServerConstants#PROPERTY_debug}).
+	 * 	{@link RestServerConstants#PROPERTY_defaultCharset}, {@link RestServerConstants#PROPERTY_maxInput}).
 	 * @return {@code true} if {@code noInherit} does not contain this property.
 	 */
 	protected boolean isInherited(String property) {
@@ -1486,7 +1513,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @throws Exception If op session could not be created.
 	 */
 	public RestOpSession.Builder createSession(RestSession session) throws Exception {
-		return RestOpSession.create(this, session).logger(getCallLogger()).debug(debugConfig.get().resolve(this, session.getRequest()).enabled());
+		var b = RestOpSession.create(this, session);
+		if (getLogger().isLoggable(Level.FINEST))
+			session.installCapture();
+		return b;
 	}
 
 	@Override /* Overridden from Object */
@@ -1719,19 +1749,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public List<RestMatcher> getRequiredMatchers() { return requiredMatchersView.get(); }
 
 	/**
-	 * Returns the call logger for this operation.
+	 * Returns the per-operation JUL logger used for debug capture.
 	 *
-	 * @return The call logger for this operation.
+	 * <p>
+	 * A hierarchical child of the resource logger ({@code <resourceClass>.<methodName>}).
+	 *
+	 * @return The per-operation logger.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public CallLogger getCallLogger() { return callLogger.get(); }
-
-	/**
-	 * Returns the debug config for this operation.
-	 *
-	 * @return The debug config for this operation.
-	 */
-	public DebugConfig getDebugConfig() { return debugConfig.get(); }
+	public Logger getLogger() { return logger.get(); }
 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.

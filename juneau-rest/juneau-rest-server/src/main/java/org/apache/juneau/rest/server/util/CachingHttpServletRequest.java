@@ -16,56 +16,129 @@
  */
 package org.apache.juneau.rest.server.util;
 
-import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.Shorts.*;
-
 import java.io.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**
- * Wraps an {@link HttpServletRequest} and preloads the content into memory for debugging purposes.
+ * Wraps an {@link HttpServletRequest} and tees a <b>bounded</b> copy of the request body into memory for debug logging.
+ *
+ * <p>
+ * Unlike a fully-buffering wrapper, this captures at most a configured cap (default 8&nbsp;KB) of the body while passing
+ * the full stream through to the handler untouched. The total number of bytes read is tracked so a truncation marker can
+ * be rendered. Memory stays bounded even for large uploads.
  *
  */
-@SuppressWarnings({
-	"resource" // CachingHttpServletRequest manages Closeable resources
-})
 public class CachingHttpServletRequest extends HttpServletRequestWrapper {
+
+	/** Default body capture cap, in bytes (8&nbsp;KB). */
+	public static final int DEFAULT_CAP = 8 * 1024;
+
+	/**
+	 * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already, using the default cap.
+	 *
+	 * @param req The request to wrap. Must not be <jk>null</jk>.
+	 * @return The wrapped request.
+	 */
+	public static CachingHttpServletRequest wrap(HttpServletRequest req) {
+		return wrap(req, DEFAULT_CAP);
+	}
 
 	/**
 	 * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already.
 	 *
 	 * @param req The request to wrap. Must not be <jk>null</jk>.
+	 * @param cap The maximum number of body bytes to capture.
 	 * @return The wrapped request.
-	 * @throws IOException Thrown by underlying content stream.
 	 */
-	public static CachingHttpServletRequest wrap(HttpServletRequest req) throws IOException {
+	public static CachingHttpServletRequest wrap(HttpServletRequest req, int cap) {
 		if (req instanceof CachingHttpServletRequest req2)
 			return req2;
-		return new CachingHttpServletRequest(req);
+		return new CachingHttpServletRequest(req, cap);
 	}
 
-	private final byte[] content;
+	private final int cap;
+	private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	private long totalLength = 0;
+	private TeeServletInputStream stream;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param req The request being wrapped. Must not be <jk>null</jk>.
-	 * @throws IOException If content could not be loaded into memory.
+	 * @param cap The maximum number of body bytes to capture.
 	 */
-	protected CachingHttpServletRequest(HttpServletRequest req) throws IOException {
+	protected CachingHttpServletRequest(HttpServletRequest req, int cap) {
 		super(req);
-		this.content = readBytes(req.getInputStream());
+		this.cap = cap;
 	}
 
 	/**
-	 * Returns the content of the servlet request without consuming the stream.
+	 * Returns the captured (possibly truncated) request body bytes.
 	 *
-	 * @return The content of the request.  This is a defensive copy; modifying it does not affect the cached request body.
+	 * @return The captured body bytes (at most the configured cap). Never <jk>null</jk>; empty if the body was not read.
 	 */
-	public byte[] getContent() { return cp(content); }
+	public byte[] getContent() { return buffer.toByteArray(); }
+
+	/**
+	 * Returns the total number of body bytes read so far, including any bytes beyond the capture cap.
+	 *
+	 * @return The total body length in bytes.
+	 */
+	public long getTotalLength() { return totalLength; }
 
 	@Override
-	public ServletInputStream getInputStream() { return new BoundedServletInputStream(content); }
+	public ServletInputStream getInputStream() throws IOException {
+		if (stream == null)
+			stream = new TeeServletInputStream(getRequest().getInputStream());
+		return stream;
+	}
+
+	private void capture(int b) {
+		totalLength++;
+		if (buffer.size() < cap)
+			buffer.write(b);
+	}
+
+	private void capture(byte[] b, int off, int len) {
+		totalLength += len;
+		var room = cap - buffer.size();
+		if (room > 0)
+			buffer.write(b, off, Math.min(room, len));
+	}
+
+	private final class TeeServletInputStream extends ServletInputStream {
+
+		private final ServletInputStream delegate;
+
+		TeeServletInputStream(ServletInputStream delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public int read() throws IOException {
+			var b = delegate.read();
+			if (b != -1)
+				capture(b);
+			return b;
+		}
+
+		@Override
+		public int read(byte[] b, int off, int len) throws IOException {
+			var n = delegate.read(b, off, len);
+			if (n > 0)
+				capture(b, off, n);
+			return n;
+		}
+
+		@Override
+		public boolean isFinished() { return delegate.isFinished(); }
+
+		@Override
+		public boolean isReady() { return delegate.isReady(); }
+
+		@Override
+		public void setReadListener(ReadListener readListener) { delegate.setReadListener(readListener); }
+	}
 }

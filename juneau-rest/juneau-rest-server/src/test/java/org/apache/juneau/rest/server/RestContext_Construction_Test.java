@@ -25,7 +25,6 @@ import java.util.logging.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.marshall.oapi.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.openapi.*;
 import org.apache.juneau.rest.server.staticfile.*;
@@ -116,18 +115,17 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------
 	// c - multi-level @Rest hierarchy: reduce-last combiner + Void-filter true branch for
-	//     callLogger / staticFiles / swaggerProvider / openApiProvider
+	//     staticFiles / swaggerProvider / openApiProvider
 	//-----------------------------------------------------------------------------------------------------------
 
-	@Rest(callLogger = BasicCallLogger.class, staticFiles = BasicStaticFiles.class, swaggerProvider = BasicSwaggerProvider.class, openApiProvider = BasicOpenApiProvider.class)
+	@Rest(staticFiles = BasicStaticFiles.class, swaggerProvider = BasicSwaggerProvider.class, openApiProvider = BasicOpenApiProvider.class)
 	static class Fix_OverrideParent {}
 
-	@Rest(callLogger = BasicCallLogger.class, staticFiles = BasicStaticFiles.class, swaggerProvider = BasicSwaggerProvider.class, openApiProvider = BasicOpenApiProvider.class)
+	@Rest(staticFiles = BasicStaticFiles.class, swaggerProvider = BasicSwaggerProvider.class, openApiProvider = BasicOpenApiProvider.class)
 	static class Fix_OverrideChild extends Fix_OverrideParent {}
 
 	@Test void c01_multiLevelOverrides_reduceLastCombinerFires() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_OverrideChild.class, Fix_OverrideChild::new));
-		assertInstanceOf(BasicCallLogger.class, ctx.getCallLogger());
 		assertInstanceOf(BasicStaticFiles.class, ctx.getStaticFiles());
 		assertInstanceOf(BasicSwaggerProvider.class, ctx.getSwaggerProvider());
 		assertInstanceOf(BasicOpenApiProvider.class, ctx.getOpenApiProvider());

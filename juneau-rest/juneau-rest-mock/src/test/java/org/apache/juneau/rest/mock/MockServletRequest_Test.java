@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -368,5 +369,26 @@ class MockServletRequest_Test extends TestBase {
 		};
 		var req = MockServletRequest.create();
 		assertThrows(RuntimeException.class, () -> req.content(failingReader));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// N. logLevel(Level)/getLogLevel() fluent round-trip (replaces the removed debug(boolean) flag).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void n01_logLevel_defaultsToNull() {
+		assertNull(MockServletRequest.create().getLogLevel());
+	}
+
+	@Test void n02_logLevel_fluentRoundTrip() {
+		var req = MockServletRequest.create();
+		assertSame(req, req.logLevel(Level.FINEST));
+		assertEquals(Level.FINEST, req.getLogLevel());
+	}
+
+	@Test void n03_logLevel_canBeClearedBackToNull() {
+		var req = MockServletRequest.create().logLevel(Level.FINE);
+		assertEquals(Level.FINE, req.getLogLevel());
+		req.logLevel(null);
+		assertNull(req.getLogLevel());
 	}
 }

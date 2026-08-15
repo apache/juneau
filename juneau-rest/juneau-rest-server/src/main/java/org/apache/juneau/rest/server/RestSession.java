@@ -31,7 +31,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.auth.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.util.*;
 
 import jakarta.servlet.http.*;
@@ -66,7 +65,6 @@ public class RestSession extends ContextSession {
 	})
 	public static class Builder extends ContextSession.Builder {
 
-		private CallLogger logger;
 		private HttpServletRequest req;
 		private HttpServletResponse res;
 		private Object resource;
@@ -110,18 +108,6 @@ public class RestSession extends ContextSession {
 			if (urlPath == null)
 				urlPath = UrlPath.of(getPathInfoUndecoded());
 			return urlPath;
-		}
-
-		/**
-		 * Specifies the logger to use for this session.
-		 *
-		 * @param value The value for this setting.
-		 * 	<br>Can be <jk>null</jk> (will use the default logger from the context if available).
-		 * @return This object.
-		 */
-		public Builder logger(CallLogger value) {
-			logger = value;
-			return this;
 		}
 
 		/**
@@ -221,7 +207,6 @@ public class RestSession extends ContextSession {
 
 	private final long startTime = System.currentTimeMillis();
 	private final WritableBeanStore beanStore;
-	private CallLogger logger;
 	private HttpServletRequest req;
 	private HttpServletResponse res;
 	private Map<String,String[]> queryParams;
@@ -245,7 +230,6 @@ public class RestSession extends ContextSession {
 		resource = builder.resource;
 		beanStore = new BasicBeanStore(context.getBeanStore()).addBean(RestContext.class, context);
 
-		logger = beanStore.add(CallLogger.class, builder.logger);
 		pathInfoUndecoded = builder.pathInfoUndecoded;
 		req = beanStore.add(HttpServletRequest.class, builder.req);
 		res = beanStore.add(HttpServletResponse.class, builder.res);
@@ -253,20 +237,18 @@ public class RestSession extends ContextSession {
 	}
 
 	/**
-	 * Enables or disabled debug mode on this call.
+	 * Installs bounded body-caching wrappers on this call's request/response for debug capture (Phase A).
 	 *
-	 * @param value The new value for this setting.
+	 * <p>
+	 * Called by the two-phase debug pipeline when the resolved logger is loggable at
+	 * {@link java.util.logging.Level#FINEST FINEST}. Idempotent — the wrappers no-op if already installed.
+	 *
 	 * @return This object.
-	 * @throws IOException Occurs if request content could not be cached into memory.
+	 * @throws IOException Occurs if the request/response streams could not be wrapped.
 	 */
-	public RestSession debug(boolean value) throws IOException {
-		if (value) {
-			req = CachingHttpServletRequest.wrap(req);
-			res = CachingHttpServletResponse.wrap(res);
-			req.setAttribute("Debug", true);
-		} else {
-			req.removeAttribute("Debug");
-		}
+	public RestSession installCapture() throws IOException {
+		req = CachingHttpServletRequest.wrap(req);
+		res = CachingHttpServletResponse.wrap(res);
 		return this;
 	}
 
@@ -300,10 +282,7 @@ public class RestSession extends ContextSession {
 		} catch (Exception e) {
 			exception(e);
 		}
-		if (nn(logger))
-			req.setAttribute("DebugConfig", opSession != null ? opSession.getContext().getDebugConfig() : context.getDebugConfig());
-		if (nn(logger))
-			logger.log(req, res);
+		org.apache.juneau.rest.server.logging.RestDebugPipeline.emit(this);
 		return this;
 	}
 
@@ -510,18 +489,6 @@ public class RestSession extends ContextSession {
 	 * @return The URL path pattern match on this call, or <jk>null</jk> if not set.
 	 */
 	public UrlPathMatch getUrlPathMatch() { return urlPathMatch; }
-
-	/**
-	 * Sets the logger to use when logging this call.
-	 *
-	 * @param value The new value for this setting.
-	 * 	<br>Can be <jk>null</jk> (will use the default logger from the context if available).
-	 * @return This object.
-	 */
-	public RestSession logger(CallLogger value) {
-		logger = beanStore.add(CallLogger.class, value);
-		return this;
-	}
 
 	/**
 	 * Runs this session.

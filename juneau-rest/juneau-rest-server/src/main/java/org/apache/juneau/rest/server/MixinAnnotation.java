@@ -25,7 +25,6 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.processor.*;
 
 /**
@@ -64,10 +63,8 @@ public class MixinAnnotation {
 		Class<?>[] parsers = {};
 		Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
 		Class<? extends RestOpArg>[] restOpArgs = new Class[0];
-		Class<? extends CallLogger> callLogger = CallLogger.Void.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
-		Debug debug = DebugAnnotation.DEFAULT;
 		String messages = "";
 		String[] defaultRequestHeaders = {};
 		String[] defaultResponseHeaders = {};
@@ -178,14 +175,6 @@ public class MixinAnnotation {
 		public Builder restOpArgs(Class<? extends RestOpArg>... value) { restOpArgs = value; return this; }
 
 		/**
-		 * Sets the {@link Mixin#callLogger()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder callLogger(Class<? extends CallLogger> value) { callLogger = value; return this; }
-
-		/**
 		 * Sets the {@link Mixin#partSerializer()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -200,14 +189,6 @@ public class MixinAnnotation {
 		 * @return This object.
 		 */
 		public Builder partParser(Class<? extends HttpPartParser> value) { partParser = value; return this; }
-
-		/**
-		 * Sets the {@link Mixin#debug()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debug(Debug value) { debug = value == null ? DebugAnnotation.DEFAULT : value; return this; }
 
 		/**
 		 * Sets the {@link Mixin#messages()} property on this annotation.
@@ -339,10 +320,8 @@ public class MixinAnnotation {
 		private final Class<?>[] parsers;
 		private final Class<? extends ResponseProcessor>[] responseProcessors;
 		private final Class<? extends RestOpArg>[] restOpArgs;
-		private final Class<? extends CallLogger> callLogger;
 		private final Class<? extends HttpPartSerializer> partSerializer;
 		private final Class<? extends HttpPartParser> partParser;
-		private final Debug debug;
 		private final String messages;
 		private final String[] defaultRequestHeaders;
 		private final String[] defaultResponseHeaders;
@@ -370,10 +349,8 @@ public class MixinAnnotation {
 			parsers = cp(b.parsers);
 			responseProcessors = cp(b.responseProcessors);
 			restOpArgs = cp(b.restOpArgs);
-			callLogger = b.callLogger;
 			partSerializer = b.partSerializer;
 			partParser = b.partParser;
-			debug = b.debug;
 			messages = b.messages;
 			defaultRequestHeaders = cp(b.defaultRequestHeaders);
 			defaultResponseHeaders = cp(b.defaultResponseHeaders);
@@ -400,10 +377,8 @@ public class MixinAnnotation {
 		@Override /* Overridden from Mixin */ public Class<?>[] parsers() { return cp(parsers); }
 		@Override /* Overridden from Mixin */ public Class<? extends ResponseProcessor>[] responseProcessors() { return cp(responseProcessors); }
 		@Override /* Overridden from Mixin */ public Class<? extends RestOpArg>[] restOpArgs() { return cp(restOpArgs); }
-		@Override /* Overridden from Mixin */ public Class<? extends CallLogger> callLogger() { return callLogger; }
 		@Override /* Overridden from Mixin */ public Class<? extends HttpPartSerializer> partSerializer() { return partSerializer; }
 		@Override /* Overridden from Mixin */ public Class<? extends HttpPartParser> partParser() { return partParser; }
-		@Override /* Overridden from Mixin */ public Debug debug() { return debug; }
 		@Override /* Overridden from Mixin */ public String messages() { return messages; }
 		@Override /* Overridden from Mixin */ public String[] defaultRequestHeaders() { return cp(defaultRequestHeaders); }
 		@Override /* Overridden from Mixin */ public String[] defaultResponseHeaders() { return cp(defaultResponseHeaders); }

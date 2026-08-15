@@ -19,13 +19,13 @@ package org.apache.juneau.rest.mock.classic;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 import java.util.zip.*;
 
 import org.apache.http.*;
@@ -42,7 +42,7 @@ import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.RestRequest;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.logger.*;
+import org.apache.juneau.rest.server.logging.*;
 
 import jakarta.servlet.http.*;
 
@@ -289,7 +289,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 		@Override /* Overridden from Context.Builder<?> */
 		public Builder debug() {
-			header("Debug", "true");
 			super.debug();
 			return this;
 		}
@@ -618,8 +617,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				var isClass = restBean instanceof Class;
 				var o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
 				restBeanCtx = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
-					bs.addBean(Enablement.class, CONDITIONAL);
-					bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
+					bs.addBeanType(RestDebugFormatter.class, BasicTestRestDebugFormatter.class);
 				}, overlay, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
 				if (overlay == null)
 					restContexts.put(c, restBeanCtx);
@@ -854,7 +852,19 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
 			var res = MockServletResponse.create();
-			restContext.execute(restObject, sreq.get(), res);
+			var logLevel = sreq.get().getLogLevel();
+			if (logLevel != null) {
+				var target = Logger.getLogger(restObject.getClass().getName());
+				var prevLevel = target.getLevel();
+				target.setLevel(logLevel);
+				try {
+					restContext.execute(restObject, sreq.get(), res);
+				} finally {
+					target.setLevel(prevLevel);
+				}
+			} else {
+				restContext.execute(restObject, sreq.get(), res);
+			}
 
 			// If the status isn't set, something's broken.
 			if (res.getStatus() == 0)
@@ -934,7 +944,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (nn(pr.getError()))
 				throw new IllegalStateException(pr.getError());
 
-			var r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars).debug(isDebug());
+			var r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars).logLevel(isDebug() ? Level.FINEST : null);
 
 			for (var h : request.getAllHeaders())
 				r.header(h.getName(), h.getValue());

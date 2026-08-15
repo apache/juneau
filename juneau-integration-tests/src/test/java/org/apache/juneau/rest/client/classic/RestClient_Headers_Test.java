@@ -35,7 +35,6 @@ import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
@@ -44,14 +43,6 @@ import org.junit.jupiter.api.*;
 	"java:S5961" // High assertion count acceptable in comprehensive test
 })
 public class RestClient_Headers_Test extends TestBase {
-
-	public static final CaptureLogger LOGGER = new CaptureLogger();
-
-	public static class CaptureLogger extends BasicTestCaptureCallLogger {
-		public static CaptureLogger getInstance() {
-			return LOGGER;
-		}
-	}
 
 	public static class ABean {
 		public int f;
@@ -68,7 +59,7 @@ public class RestClient_Headers_Test extends TestBase {
 
 	private static ABean bean = ABean.get();
 
-	@Rest(callLogger=CaptureLogger.class)
+	@Rest
 	public static class A extends BasicRestResource {
 		@RestGet(allowedSerializerOptions="simple", allowedParserOptions="addBeanTypes")
 		public String[] headers(org.apache.juneau.rest.server.RestRequest req) {

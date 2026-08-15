@@ -14,51 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.server.debug;
+package org.apache.juneau.rest.mock;
 
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.rest.server.logging.*;
 
 /**
- * A reflection map for the {@link Enablement} setting.
+ * Default {@link RestDebugFormatter} registered by {@link MockRestClient} / {@code mock.classic.MockRestClient} for
+ * mocked resources.
+ *
+ * <p>
+ * Identical to {@link BasicRestDebugFormatter} today &mdash; the shipped defaults (credential-bearing header
+ * redaction, an 8&nbsp;KB body capture cap) are already test-safe. Kept as a distinct type, rather than registering
+ * {@link BasicRestDebugFormatter} directly, so mock-specific rendering can be layered in independently of the
+ * server's shipped default without affecting non-mock resources.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
+ *
+ * @since 10.0.0
  */
-public class DebugEnablementMap extends ReflectionMap<Enablement> {
-
-	/**
-	 * Builder class.
-	 */
-	public static class Builder extends ReflectionMap.Builder<Enablement> {
-
-		/**
-		 * Constructor.
-		 */
-		protected Builder() {}
-
-		@Override /* Overridden from ReflectionMapBuilder */
-		public DebugEnablementMap build() {
-			return new DebugEnablementMap(this);
-		}
-	}
-
-	/**
-	 * Static builder creator.
-	 *
-	 * @return A new instance of the builder for this object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder.  Must not be <jk>null</jk>.
-	 */
-	protected DebugEnablementMap(Builder builder) {
-		super(builder);
-	}
-}
+public class BasicTestRestDebugFormatter extends BasicRestDebugFormatter {}

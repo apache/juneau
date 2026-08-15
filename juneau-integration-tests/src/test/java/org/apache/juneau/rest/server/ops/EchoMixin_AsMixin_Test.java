@@ -33,10 +33,10 @@ import org.junit.jupiter.api.*;
  * <p>
  * Cases covered:
  * <ul>
- * 	<li>Default deny &mdash; no {@code @Rest(debug)} on the host returns {@code 404} from
+ * 	<li>Default deny &mdash; a host whose resolved JUL logger is below {@code FINE} returns {@code 404} from
  * 		{@code /echo/*} so the endpoint's existence isn't disclosed.
- * 	<li>{@code @Rest(debug=@Debug("always"))} unlocks the endpoint and returns the full echo payload.
- * 	<li>{@code @Rest(debug=@Debug("conditional"))} requires the {@code Debug: true} request header.
+ * 	<li>Raising the host resource's logger to {@code FINE}-or-finer (here via the mock client's
+ * 		{@code .debug()}) unlocks the endpoint and returns the full echo payload.
  * 	<li>Sensitive headers ({@code Authorization}, {@code Cookie}) are redacted by default.
  * 	<li>Importer's {@code @Bean EchoMixin} factory drives the body cap and redact list.
  * 	<li>Body capture truncates correctly when the inbound body exceeds the configured cap.
@@ -76,13 +76,13 @@ class EchoMixin_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with debug always-on so the echo endpoint serves. */
-	@Rest(mixins=EchoMixin.class, debug=@Debug("always"))
+	@Rest(mixins=EchoMixin.class)
 	public static class B extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
 
-	private static final MockRestClient cb = MockRestClient.buildLax(B.class);
+	private static final MockRestClient cb = MockRestClient.createLax(B.class).debug().build();
 
 	@Test void b01_echoServesFullPayload() throws Exception {
 		var body = cb.get("/echo/foo/bar?x=1&y=hello")
@@ -148,28 +148,8 @@ class EchoMixin_AsMixin_Test extends TestBase {
 			.assertContent().asString().isContains("\"method\": \"PUT\"");
 	}
 
-	/** Host with conditional debug — requires {@code Debug: true} request header to unlock echo. */
-	@Rest(mixins=EchoMixin.class, debug=@Debug("conditional"))
-	public static class C extends RestServlet {
-		private static final long serialVersionUID = 1L;
-	}
-
-	private static final MockRestClient cc = MockRestClient.buildLax(C.class);
-
-	@Test void c01_conditional_withoutDebugHeaderReturns404() throws Exception {
-		cc.get("/echo/anything").run().assertStatus(404);
-	}
-
-	@Test void c02_conditional_withDebugHeaderUnlocks() throws Exception {
-		cc.get("/echo/anything")
-			.header("Debug", "true")
-			.run()
-			.assertStatus(200)
-			.assertContent().asString().isContains("\"pathRemainder\": \"anything\"");
-	}
-
 	/** Host with a custom redact list and a tight body cap via @Bean factory. */
-	@Rest(mixins=EchoMixin.class, debug=@Debug("always"))
+	@Rest(mixins=EchoMixin.class)
 	public static class D extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
@@ -180,7 +160,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 		}
 	}
 
-	private static final MockRestClient cd = MockRestClient.buildLax(D.class);
+	private static final MockRestClient cd = MockRestClient.createLax(D.class).debug().build();
 
 	@Test void d01_customRedactHeaderHonored() throws Exception {
 		var body = cd.get("/echo/")
@@ -217,7 +197,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with a zero body cap — every non-empty body truncates immediately. */
-	@Rest(mixins=EchoMixin.class, debug=@Debug("always"))
+	@Rest(mixins=EchoMixin.class)
 	public static class G extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
@@ -225,7 +205,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 		}
 	}
 
-	private static final MockRestClient cg = MockRestClient.buildLax(G.class);
+	private static final MockRestClient cg = MockRestClient.createLax(G.class).debug().build();
 
 	@Test void g01_zeroBodyLimitTruncatesNonEmptyBody() throws Exception {
 		var body = cg.post("/echo/", "ANY")
@@ -239,7 +219,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with a redactedHeaders(...) replace-list that disables built-in defaults. */
-	@Rest(mixins=EchoMixin.class, debug=@Debug("always"))
+	@Rest(mixins=EchoMixin.class)
 	public static class E extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
@@ -249,7 +229,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 		}
 	}
 
-	private static final MockRestClient ce = MockRestClient.buildLax(E.class);
+	private static final MockRestClient ce = MockRestClient.createLax(E.class).debug().build();
 
 	@Test void e01_replaceListDropsBuiltInRedactions() throws Exception {
 		var body = ce.get("/echo/")

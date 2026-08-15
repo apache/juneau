@@ -17,21 +17,20 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.logger.*;
+import org.apache.juneau.rest.server.logging.*;
 
 import jakarta.servlet.*;
 
@@ -286,8 +285,7 @@ public final class MockRestClient implements Closeable {
 					var isClass = impl instanceof Class<?>;
 					var o = isClass ? ((Class<?>)impl).getDeclaredConstructor().newInstance() : impl;
 					restContext = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
-						bs.addBean(Enablement.class, CONDITIONAL);
-						bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
+						bs.addBeanType(RestDebugFormatter.class, BasicTestRestDebugFormatter.class);
 					}, overlay, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
 					if (overlay == null)
 						restContextCache.put(c, restContext);
@@ -355,7 +353,19 @@ public final class MockRestClient implements Closeable {
 
 				var servletRes = MockServletResponse.create();
 
-				restContext.execute(restObject, servletReq, servletRes);
+				var logLevel = servletReq.getLogLevel();
+				if (logLevel != null) {
+					var target = Logger.getLogger(restObject.getClass().getName());
+					var prevLevel = target.getLevel();
+					target.setLevel(logLevel);
+					try {
+						restContext.execute(restObject, servletReq, servletRes);
+					} finally {
+						target.setLevel(prevLevel);
+					}
+				} else {
+					restContext.execute(restObject, servletReq, servletRes);
+				}
 
 				if (servletRes.getStatus() == 0) // HTT: would require a buggy RestContext that never sets a status
 					throw new TransportException("REST context returned status 0 — response was never committed");

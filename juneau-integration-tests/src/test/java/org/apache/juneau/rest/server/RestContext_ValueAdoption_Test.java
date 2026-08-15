@@ -46,7 +46,6 @@ class RestContext_ValueAdoption_Test extends TestBase {
 	public static class A {}
 
 	private static final List<String> PROPS = List.of(
-		"RestContext.debugDefault",
 		"RestContext.allowedHeaderParams",
 		"RestContext.allowedMethodHeaders",
 		"RestContext.allowedMethodParams",
@@ -59,8 +58,7 @@ class RestContext_ValueAdoption_Test extends TestBase {
 		"RestContext.uriRelativity",
 		"RestContext.uriAuthority",
 		"RestContext.uriContext",
-		"RestContext.uriResolution",
-		"juneau.restLogger.level"
+		"RestContext.uriResolution"
 	);
 
 	@AfterEach

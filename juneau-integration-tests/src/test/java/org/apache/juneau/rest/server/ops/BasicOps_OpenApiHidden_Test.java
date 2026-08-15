@@ -46,7 +46,6 @@ class BasicOps_OpenApiHidden_Test extends TestBase {
 			RouteIndexMixin.class,
 			OpenApiMixin.class
 		},
-		debug=@Debug("always"),
 		swaggerProvider=BasicSwaggerProvider.class
 	)
 	public static class A extends RestServlet {
@@ -58,7 +57,7 @@ class BasicOps_OpenApiHidden_Test extends TestBase {
 		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
 	}
 
-	private static final MockRestClient c = MockRestClient.buildLax(A.class);
+	private static final MockRestClient c = MockRestClient.createLax(A.class).debug().build();
 
 	@Test void a01_openapiSpecExcludesAllOpsPaths() throws Exception {
 		var spec = c.get("/openapi.json")

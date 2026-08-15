@@ -94,14 +94,12 @@ import org.apache.juneau.rest.server.*;
  * <h5 class='section'>Debug gating:</h5>
  *
  * <p>
- * The handler is gated behind the host's
- * {@link RestContext#getDebugEnablement() DebugEnablement} chain &mdash; the same mechanism that
- * powers {@code @Rest(debug=...)}. When {@code Debug} resolves to {@code OFF} for the current
- * request, the handler returns {@code 404 Not Found} (so the existence of the endpoint isn't
- * disclosed). When debug is {@code ALWAYS}, or {@code CONDITIONAL} with the {@code Debug: true}
- * request header, the full echo payload is returned. The recommended posture for production
- * deployments is {@code @Rest(debug="conditional")} paired with a guard chain so only authorized
- * operators can flip the {@code Debug} header.
+ * The handler is gated on {@link RestRequest#isDebug()} &mdash; i.e. whether the resolved (per-operation) JUL logger is
+ * loggable at {@link java.util.logging.Level#FINE FINE}-or-finer. When it is not, the handler returns
+ * {@code 404 Not Found} (so the existence of the endpoint isn't disclosed). Raise the resource's (or the specific
+ * operation's) logger to {@code FINE} to enable the echo payload. The recommended posture for production deployments is
+ * to leave the logger below {@code FINE} and pair any temporary elevation with a guard chain so only authorized
+ * operators can reach it.
  *
  * <h5 class='section'>Sensitive-header redaction:</h5>
  *
@@ -228,10 +226,8 @@ public class EchoMixin {
 		"resource" // sreq.getInputStream() is the servlet container's request body stream; it must not be closed by application code (lifecycle is tied to the request, not this handler).
 	})
 	public void echo(RestRequest req, RestResponse res, @Path("/*") String remainder) throws IOException {
-		var ctx = req.getContext();
-		var de = ctx.getDebugEnablement();
 		var sreq = req.getHttpServletRequest();
-		if (de == null || ! de.isDebug(ctx, sreq))
+		if (! req.isDebug())
 			throw new NotFound("Echo endpoint disabled (Debug not enabled).");
 
 		var headers = new LinkedHashMap<String,String>();

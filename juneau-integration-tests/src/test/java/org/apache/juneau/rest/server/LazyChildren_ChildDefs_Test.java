@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -31,8 +31,8 @@ import org.junit.jupiter.api.*;
  */
 class LazyChildren_ChildDefs_Test extends TestBase {
 
-	public static class SeedLogger extends CallLogger {
-		public SeedLogger(org.apache.juneau.commons.inject.BeanStore bs) { super(bs); }
+	public static class SeedPS extends FakeWriterSerializer {
+		public SeedPS(FakeWriterSerializer.Builder b) { super(b); }
 	}
 
 	@Rest(path="/lazychild")
@@ -43,7 +43,7 @@ class LazyChildren_ChildDefs_Test extends TestBase {
 	@Rest(
 		path="/root",
 		lazyChildren="true",
-		childrenDefs=@Child(type=LazyChildResource.class, callLogger=SeedLogger.class)
+		childrenDefs=@Child(type=LazyChildResource.class, partSerializer=SeedPS.class)
 	)
 	public static class LazySeedParent extends BasicRestServletGroup {
 		private static final long serialVersionUID = 1L;
@@ -66,13 +66,13 @@ class LazyChildren_ChildDefs_Test extends TestBase {
 		client.get("/lazychild/ping").run().assertStatus(200).assertContent("lazy-pong");
 		assertTrue(entry.isMaterialized(), "Should be materialized after first request");
 
-		// The materialized context must carry the host's seeded callLogger -- proving the ResolvedChild
+		// The materialized context must carry the host's seeded partSerializer -- proving the ResolvedChild
 		// (including its @Child seed) survived deferred construction, not just eager construction.
 		// (Materialized lazy children live on the LazyChildEntry itself, not in RestChildren.asMap() --
 		// that map holds only eagerly-built children.)
 		var childCtx = entry.materialized;
 		assertNotNull(childCtx);
-		assertInstanceOf(SeedLogger.class, childCtx.getCallLogger(),
-			"Lazily-materialized child must receive the host's seeded SeedLogger, same as an eager child would");
+		assertInstanceOf(SeedPS.class, childCtx.getPartSerializer(),
+			"Lazily-materialized child must receive the host's seeded SeedPS, same as an eager child would");
 	}
 }
