@@ -17,10 +17,13 @@
 package org.apache.juneau.rest.server;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.concurrent.*;
+import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.junit.jupiter.api.*;
@@ -444,5 +447,31 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 	@Test void j02_httpMethodFromAnnotation_valueShorthandNoSpace_usesWholeTrimmedValue() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_ValueShorthand.class, Fix_ValueShorthand::new));
 		assertEquals("PATCH", opOf(ctx, "opNoPath").getHttpMethod());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------
+	// k - getLogger(): RichLogger canonical identity and FINEST session-capture gate wiring.
+	//-----------------------------------------------------------------------------------------------------------
+
+	@Test void k01_getLogger_returnsCanonicalRichLogger_forHostMethodName() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
+		var op = opOf(ctx, "op");
+		var name = Fix_Bare.class.getName() + ".op";
+		assertSame(RichLogger.getLogger(name), op.getLogger());
+	}
+
+	@Test void k02_createSession_installsBodyCapture_whenLoggerIsFinestLoggable() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
+		var op = opOf(ctx, "op");
+		var session = mock(RestSession.class);
+		var target = Logger.getLogger(Fix_Bare.class.getName());
+		var prevLevel = target.getLevel();
+		target.setLevel(Level.FINEST);
+		try {
+			op.createSession(session);
+			verify(session).installCapture();
+		} finally {
+			target.setLevel(prevLevel);
+		}
 	}
 }

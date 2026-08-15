@@ -42,6 +42,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
@@ -260,7 +261,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	});
 
 	/**
-	 * The per-operation JUL logger for debug capture.
+	 * The per-operation logger for debug capture.
 	 *
 	 * <p>
 	 * A hierarchical child of the <b>host</b> resource logger ({@code <hostResourceClass>.<methodName>}) so an operator
@@ -273,8 +274,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * distinct, host-isolated loggers.  Non-mixin operations (including child resources, which are their own resources)
 	 * resolve to their own resource class as before.
 	 */
-	private final Memoizer<Logger> logger = memoizer(() ->
-		Logger.getLogger(hostResourceClass().getName() + "." + getJavaMethod().getName()));
+	private final Memoizer<RichLogger> logger = memoizer(() ->
+		RichLogger.getLogger(hostResourceClass().getName() + "." + getJavaMethod().getName()));
 
 	/**
 	 * Returns the host / top-level resource class for logger naming.
@@ -1749,15 +1750,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public List<RestMatcher> getRequiredMatchers() { return requiredMatchersView.get(); }
 
 	/**
-	 * Returns the per-operation JUL logger used for debug capture.
+	 * Returns the per-operation logger used for debug capture.
 	 *
 	 * <p>
-	 * A hierarchical child of the resource logger ({@code <resourceClass>.<methodName>}).
+	 * A hierarchical child of the host resource logger ({@code <hostResourceClass>.<methodName>}).
 	 *
 	 * @return The per-operation logger.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Logger getLogger() { return logger.get(); }
+	public RichLogger getLogger() { return logger.get(); }
 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
