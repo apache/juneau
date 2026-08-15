@@ -109,8 +109,8 @@ import jakarta.servlet.http.*;
  * <p>
  * Configuration is supplied declaratively through the {@link Rest @Rest} annotation on the resource class
  * (and inherited from any parent classes), and programmatically through {@link Bean @Bean}-annotated
- * methods/fields that contribute named beans (e.g. <c>encoders</c>, <c>parsers</c>, <c>callLogger</c>) to the REST
- * resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
+ * methods/fields that contribute named beans (e.g. <c>encoders</c>, <c>parsers</c>, <c>restDebugFormatter</c>) to
+ * the REST resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
  * the public constructor takes a {@link RestContext.Args} record carrying the bootstrap state.
  *
  * <h5 class='section'>Example:</h5>
@@ -994,7 +994,7 @@ public class RestContext extends Context {
 	 * A mixin sub-context is parent-linked to the host's {@link RestContext} so that
 	 * {@link #getRestAnnotationsForProperty(String) annotation-property walks} prepend the host's {@code @Rest}
 	 * chain before the mixin's own &mdash; serializers, parsers, encoders, converters, response processors,
-	 * REST op args, guards, callLogger, debugEnablement, messages, and varResolver tokens all inherit from the
+	 * REST op args, guards, restDebugFormatter, messages, and varResolver tokens all inherit from the
 	 * host first, with the mixin's contributions appended.  Use {@link Rest#noInherit() @Rest(noInherit)} on the
 	 * mixin class to cut off inheritance for any specific property.
 	 *
@@ -1977,7 +1977,7 @@ public class RestContext extends Context {
 		var bs = beanStore();
 		var creator = BeanInstantiator.of(StaticFiles.class, bs).type(BasicStaticFiles.class).noBuilder();
 		bs.getBeanType(StaticFiles.class).ifPresent(creator::type);
-		// @Rest(staticFiles=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
+		// @Rest(staticFiles=X) — most-derived non-Void wins (parent-to-child chain; reduce-last keeps the closest-to-child override).
 		getRestAnnotationsForProperty(PROPERTY_staticFiles)
 			.map(ai -> ai.inner().staticFiles())
 			.filter(c -> c != StaticFiles.Void.class)
@@ -2001,7 +2001,7 @@ public class RestContext extends Context {
 		bs.addBean(SwaggerResource.class, SwaggerResource.of(resourceClass()));
 		var creator = BeanInstantiator.of(SwaggerProvider.class, bs).type(BasicSwaggerProvider.class).noBuilder();
 		bs.getBeanType(SwaggerProvider.class).ifPresent(creator::type);
-		// @Rest(swaggerProvider=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
+		// @Rest(swaggerProvider=X) — most-derived non-Void wins (parent-to-child chain; reduce-last keeps the closest-to-child override).
 		getRestAnnotationsForProperty(PROPERTY_swaggerProvider)
 			.map(ai -> ai.inner().swaggerProvider())
 			.filter(c -> c != SwaggerProvider.Void.class)
@@ -2076,7 +2076,7 @@ public class RestContext extends Context {
 	 * Each sub-context is constructed with a {@link ContextKind.Mixin} {@link Args#kind() kind}, with its
 	 * {@code parentContext} pointing at this host context.  That parent-linkage drives the inheritance walk in
 	 * {@link #getRestAnnotationsForProperty(String)} for serializers, parsers, encoders, converters, response
-	 * processors, REST op args, guards, callLogger, debugEnablement, messages, varResolver tokens, etc.
+	 * processors, REST op args, guards, restDebugFormatter, messages, varResolver tokens, etc.
 	 *
 	 * @since 10.0.0
 	 */
@@ -2540,7 +2540,7 @@ public class RestContext extends Context {
 			// For mixin sub-contexts, the bean store is parent-linked to the host's full beanStore so that
 			// host-declared @Bean factory results (e.g. @Bean(name="db") HealthIndicator dbIndicator()) are
 			// visible through the mixin's lookup chain.  But the parent walk also picks up the host's
-			// framework defaults (SerializerSet, ParserSet, CallLogger, ...) at the parent's tier-4 slot
+			// framework defaults (SerializerSet, ParserSet, RichLogger, ...) at the parent's tier-4 slot
 			// before this store's tier-4 defaults can fire — which would shadow this mixin's per-context
 			// framework objects.  Promoting our defaults into local entries (tier 2) makes them resolve
 			// ahead of the parent walk while still letting an overriding parent (e.g. Spring) and explicit
@@ -2581,7 +2581,7 @@ public class RestContext extends Context {
 			// and store the result via addBean.
 			//
 			// For framework types (those with a default supplier registered above): the @Bean
-			// scan already ran inside the corresponding memoizer body (see e.g. createCallLogger()),
+			// scan already ran inside the corresponding memoizer body (see e.g. the `logger` memoizer above),
 			// so re-invoking createBeanFromMethod here would create a SECOND instance and produce
 			// inconsistent state between the framework's memoizer-backed bean and the bean store's
 			// local entry.  Instead, PROMOTE the existing default supplier (which is memoizer-backed
@@ -3377,7 +3377,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * Mirrors the "List-shaped" override set documented on {@link Mixin}: these are append-semantics properties, so a
 	 * mixin's contributions can be safely concatenated after the host's own chain (with the individual list builders'
-	 * same-class de-duplication).  Replace-shaped properties (e.g. {@code callLogger}, {@code partSerializer}) and the
+	 * same-class de-duplication).  Replace-shaped properties (e.g. {@code restDebugFormatter}, {@code partSerializer}) and the
 	 * {@link #HOST_ONLY_PROPERTIES host-only} properties are deliberately excluded &mdash; merging them would be a
 	 * conflict-resolution / namespace concern, not an append, and is out of scope for this opt-in directive.
 	 */
@@ -3398,7 +3398,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * When this context is a {@linkplain #isMixinContext() mixin sub-context}, the parent context's annotation
 	 * chain is prepended to the mixin's own &mdash; serializers, parsers, encoders, converters, response
-	 * processors, guards, callLogger, debugEnablement, messages, and other contribution lists inherit from the
+	 * processors, guards, restDebugFormatter, messages, and other contribution lists inherit from the
 	 * host first, with the mixin's contributions appended.  The local {@code @Rest(noInherit)} on the mixin
 	 * cuts off the parent walk for any specific property; the {@link #HOST_ONLY_PROPERTIES} allowlist
 	 * unconditionally skips the parent walk for properties whose semantics are host-only (mount paths, the

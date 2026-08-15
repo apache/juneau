@@ -43,7 +43,7 @@ import org.apache.juneau.commons.inject.*;
  * 	<jc>// Build the overlay.</jc>
  * 	<jk>var</jk> <jv>overlay</jv> = <jk>new</jk> TestBeanStore()
  * 		.override(MyExternalApi.<jk>class</jk>, mockApi)
- * 		.override(CallLogger.<jk>class</jk>, () -&gt; spyLogger);
+ * 		.override(RichLogger.<jk>class</jk>, () -&gt; spyLogger);
  *
  * 	<jc>// Wire into the SUT.</jc>
  * 	<jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>create</jsm>(MyResource.<jk>class</jk>)

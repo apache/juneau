@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.util;
 
 import java.io.*;
+import java.nio.charset.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -65,6 +66,7 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 	private long totalLength = 0;
 	private TeeServletInputStream stream;
+	private BufferedReader reader;
 
 	/**
 	 * Constructor.
@@ -96,6 +98,25 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 		if (stream == null)
 			stream = new TeeServletInputStream(getRequest().getInputStream());
 		return stream;
+	}
+
+	/**
+	 * Returns a character-stream tee over the same underlying byte stream captured by {@link #getInputStream()}.
+	 *
+	 * <p>
+	 * A handler that reads the request body through {@code getReader()} instead of {@code getInputStream()} would
+	 * otherwise bypass capture entirely &mdash; the default {@link HttpServletRequestWrapper#getReader()} delegates
+	 * straight to the wrapped request. This override routes the reader through the tee'd stream so both access
+	 * styles are captured identically.
+	 */
+	@Override
+	public BufferedReader getReader() throws IOException {
+		if (reader == null) {
+			var enc = getCharacterEncoding();
+			var cs = enc == null ? StandardCharsets.ISO_8859_1 : Charset.forName(enc);
+			reader = new BufferedReader(new InputStreamReader(getInputStream(), cs));
+		}
+		return reader;
 	}
 
 	private void capture(int b) {

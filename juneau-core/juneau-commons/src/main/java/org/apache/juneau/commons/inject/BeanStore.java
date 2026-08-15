@@ -196,18 +196,18 @@ public interface BeanStore {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Filter only</jc>
-	 * 	<jv>beanStore</jv>.createBeanFromMethod(CallLogger.<jk>class</jk>, <jv>resource</jv>,
-	 * 		RestContext::isBeanMethod)
-	 * 		.ifPresent(<jv>creator</jv>::impl);
-	 *
-	 * 	<jc>// Filter + extra bean not yet in the store</jc>
-	 * 	<jv>beanStore</jv>.createBeanFromMethod(EncoderSet.<jk>class</jk>, <jv>resource</jv>,
-	 * 		RestContext::isBeanMethod, <jv>builder</jv>)
-	 * 		.ifPresent(<jv>x</jv> -&gt; <jv>builder</jv>.impl(<jv>x</jv>));
-	 *
-	 * 	<jc>// No filter, no extra beans</jc>
-	 * 	<jv>beanStore</jv>.createBeanFromMethod(CallLogger.<jk>class</jk>, <jv>resource</jv>);
+ * 	<jc>// Filter only</jc>
+ * 	<jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>,
+ * 		RestContext::isBeanMethod)
+ * 		.ifPresent(<jv>creator</jv>::impl);
+ *
+ * 	<jc>// Filter + extra bean not yet in the store</jc>
+ * 	<jv>beanStore</jv>.createBeanFromMethod(EncoderSet.<jk>class</jk>, <jv>resource</jv>,
+ * 		RestContext::isBeanMethod, <jv>builder</jv>)
+ * 		.ifPresent(<jv>x</jv> -&gt; <jv>builder</jv>.impl(<jv>x</jv>));
+ *
+ * 	<jc>// No filter, no extra beans</jc>
+ * 	<jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>);
 	 * </p>
 	 *
 	 * @param <T> The bean type.

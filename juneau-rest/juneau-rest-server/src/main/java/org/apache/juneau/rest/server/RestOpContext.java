@@ -264,35 +264,39 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * The per-operation logger for debug capture.
 	 *
 	 * <p>
-	 * A hierarchical child of the <b>host</b> resource logger ({@code <hostResourceClass>.<methodName>}) so an operator
-	 * can raise the debug level for a single operation without affecting its siblings (JUL parent-level inheritance).
+	 * A hierarchical child of the <b>host</b> resource's {@linkplain RestContext#getLogger() resolved logger}
+	 * ({@code <hostLoggerName>.<methodName>}) so an operator can raise the debug level for a single operation
+	 * without affecting its siblings (JUL parent-level inheritance). Deriving from the resolved logger &mdash;
+	 * rather than the raw resource class name &mdash; means a bean-store {@code RichLogger} override on the host
+	 * (see {@link RestContext#getLogger()}) is honored: the op logger is a true JUL child of whatever logger the
+	 * host actually resolves to, not a same-named-but-unrelated sibling.
 	 *
 	 * <p>
-	 * For an operation contributed by a composed {@linkplain Rest#mixins() mixin}, the class-name portion is the
-	 * <b>host / top-level resource class</b> &mdash; not the mixin class &mdash; so raising the host resource's JUL
-	 * level cascades to its mixin-served operations, and the same mixin composed into different hosts resolves to
-	 * distinct, host-isolated loggers.  Non-mixin operations (including child resources, which are their own resources)
-	 * resolve to their own resource class as before.
+	 * For an operation contributed by a composed {@linkplain Rest#mixins() mixin}, the host is the <b>host /
+	 * top-level resource</b> &mdash; not the mixin class &mdash; so raising the host resource's JUL level cascades
+	 * to its mixin-served operations, and the same mixin composed into different hosts resolves to distinct,
+	 * host-isolated loggers.  Non-mixin operations (including child resources, which are their own resources)
+	 * resolve to their own resource's logger as before.
 	 */
 	private final Memoizer<RichLogger> logger = memoizer(() ->
-		RichLogger.getLogger(hostResourceClass().getName() + "." + getJavaMethod().getName()));
+		RichLogger.getLogger(hostRestContext().getLogger().getName() + "." + getJavaMethod().getName()));
 
 	/**
-	 * Returns the host / top-level resource class for logger naming.
+	 * Returns the host / top-level resource context for logger naming.
 	 *
 	 * <p>
 	 * When this operation's context originates from a {@linkplain RestContext#isMixinContext() mixin sub-context},
 	 * walks up the {@linkplain RestContext#getParentContext() parent-context} linkage past any composed mixin
 	 * sub-contexts to the host resource that composed the mixin.  Non-mixin contexts (including child resources)
-	 * return their own resource class unchanged.
+	 * return their own context unchanged.
 	 *
-	 * @return The host resource class.
+	 * @return The host resource context.
 	 */
-	private Class<?> hostResourceClass() {
+	private RestContext hostRestContext() {
 		var rc = restContext();
 		while (rc.isMixinContext() && rc.getParentContext() != null)
 			rc = rc.getParentContext();
-		return rc.getResourceClass();
+		return rc;
 	}
 
 	/**
@@ -1753,7 +1757,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Returns the per-operation logger used for debug capture.
 	 *
 	 * <p>
-	 * A hierarchical child of the host resource logger ({@code <hostResourceClass>.<methodName>}).
+	 * A hierarchical child of the host resource's resolved logger ({@code <hostLoggerName>.<methodName>}) &mdash;
+	 * see the {@code logger} memoizer for how the host's bean-store-overridden {@link RichLogger} (if any) is
+	 * honored.
 	 *
 	 * @return The per-operation logger.
 	 * 	<br>Never <jk>null</jk>.

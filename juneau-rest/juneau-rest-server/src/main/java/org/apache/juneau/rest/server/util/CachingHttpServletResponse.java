@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.util;
 
 import java.io.*;
+import java.nio.charset.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -28,10 +29,14 @@ import jakarta.servlet.http.*;
  * At most a configured cap (default 8&nbsp;KB) of the response body is captured while all bytes are still written through
  * to the real client. The total number of bytes written is tracked so a truncation marker can be rendered.
  *
+ * <p>
+ * The underlying {@link HttpServletResponse#getOutputStream()} is not acquired until the first
+ * {@link #getOutputStream()} or {@link #getWriter()} call &mdash; acquiring it eagerly in the constructor would
+ * permanently lock the response into stream mode, making a subsequent direct {@code getWriter()} call on this
+ * wrapper (or on the underlying response) throw {@link IllegalStateException} per the servlet spec, even for
+ * calls that never write anything.
+ *
  */
-@SuppressWarnings({
-	"resource" // os is a servlet-container-managed stream obtained from the wrapped response; closed by the container
-})
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 
 	/** Default body capture cap, in bytes (8&nbsp;KB). */
@@ -42,9 +47,8 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	 *
 	 * @param res The response to wrap. Must not be <jk>null</jk>.
 	 * @return The wrapped response.
-	 * @throws IOException Thrown by underlying content stream.
 	 */
-	public static CachingHttpServletResponse wrap(HttpServletResponse res) throws IOException {
+	public static CachingHttpServletResponse wrap(HttpServletResponse res) {
 		return wrap(res, DEFAULT_CAP);
 	}
 
@@ -54,9 +58,8 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	 * @param res The response to wrap. Must not be <jk>null</jk>.
 	 * @param cap The maximum number of body bytes to capture.
 	 * @return The wrapped response.
-	 * @throws IOException Thrown by underlying content stream.
 	 */
-	public static CachingHttpServletResponse wrap(HttpServletResponse res, int cap) throws IOException {
+	public static CachingHttpServletResponse wrap(HttpServletResponse res, int cap) {
 		if (res instanceof CachingHttpServletResponse res2)
 			return res2;
 		return new CachingHttpServletResponse(res, cap);
@@ -65,19 +68,18 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	private final int cap;
 	private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 	private long totalLength = 0;
-	private final ServletOutputStream os;
+	private TeeServletOutputStream stream;
+	private PrintWriter writer;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param res The wrapped servlet response. Must not be <jk>null</jk>.
 	 * @param cap The maximum number of body bytes to capture.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected CachingHttpServletResponse(HttpServletResponse res, int cap) throws IOException {
+	protected CachingHttpServletResponse(HttpServletResponse res, int cap) {
 		super(res);
 		this.cap = cap;
-		os = res.getOutputStream();
 	}
 
 	/**
@@ -100,33 +102,76 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 			buffer.write(b);
 	}
 
+	private void capture(byte[] b, int off, int len) {
+		totalLength += len;
+		var room = cap - buffer.size();
+		if (room > 0)
+			buffer.write(b, off, Math.min(room, len));
+	}
+
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
-		return new ServletOutputStream() {
+		if (stream == null)
+			stream = new TeeServletOutputStream(getResponse().getOutputStream());
+		return stream;
+	}
 
-			@Override
-			public void close() throws IOException {
-				os.close();
-			}
+	/**
+	 * Returns a character-stream tee that writes through {@link #getOutputStream()}.
+	 *
+	 * <p>
+	 * Juneau's own {@link org.apache.juneau.rest.server.RestResponse#getWriter()} always negotiates its writer over
+	 * {@link #getOutputStream()}, so this override chiefly protects direct/raw consumers (filters, non-Juneau
+	 * servlets in the same chain) that call {@code HttpServletResponse.getWriter()} on the wrapped response after
+	 * capture has been installed &mdash; without it, that call would either bypass the tee entirely or throw
+	 * {@link IllegalStateException} because {@link #getOutputStream()} may have already been called.
+	 */
+	@Override
+	public PrintWriter getWriter() throws IOException {
+		if (writer == null) {
+			var enc = getCharacterEncoding();
+			var cs = enc == null ? StandardCharsets.ISO_8859_1 : Charset.forName(enc);
+			writer = new PrintWriter(new OutputStreamWriter(getOutputStream(), cs));
+		}
+		return writer;
+	}
 
-			@Override
-			public void flush() throws IOException {
-				os.flush();
-			}
+	private final class TeeServletOutputStream extends ServletOutputStream {
 
-			@Override
-			public boolean isReady() { return os.isReady(); }
+		private final ServletOutputStream delegate;
 
-			@Override
-			public void setWriteListener(WriteListener writeListener) {
-				os.setWriteListener(writeListener);
-			}
+		TeeServletOutputStream(ServletOutputStream delegate) {
+			this.delegate = delegate;
+		}
 
-			@Override
-			public void write(int b) throws IOException {
-				capture(b);
-				os.write(b);
-			}
-		};
+		@Override
+		public void close() throws IOException {
+			delegate.close();
+		}
+
+		@Override
+		public void flush() throws IOException {
+			delegate.flush();
+		}
+
+		@Override
+		public boolean isReady() { return delegate.isReady(); }
+
+		@Override
+		public void setWriteListener(WriteListener writeListener) {
+			delegate.setWriteListener(writeListener);
+		}
+
+		@Override
+		public void write(int b) throws IOException {
+			capture(b);
+			delegate.write(b);
+		}
+
+		@Override
+		public void write(byte[] b, int off, int len) throws IOException {
+			capture(b, off, len);
+			delegate.write(b, off, len);
+		}
 	}
 }

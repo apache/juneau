@@ -1741,8 +1741,8 @@ public class BeanInstantiator<T> {
 				//   1. The build method's declared return type is exactly beanSubType, OR
 				//   2. The runtime instance produced by the build method is assignment-compatible with beanSubType.
 				// Case 2 supports the legacy pattern where a parent class's Builder.build() declares the parent
-				// type but constructs a configured subclass at runtime (e.g. DebugEnablement.Builder.build() returning
-				// a BasicDebugEnablement because the builder's internal type-binding was preset).
+				// type but constructs a configured subclass at runtime because the builder's internal
+				// type-binding was preset.
 				// If neither matches, we fall through to factory-method / constructor resolution on beanSubType
 				// rather than throwing — that lets standard "subclass adds its own constructor" patterns succeed.
 				if (returnType.is(beanSubType.inner()) || (builtBean != null && beanSubType.inner().isInstance(builtBean))) {

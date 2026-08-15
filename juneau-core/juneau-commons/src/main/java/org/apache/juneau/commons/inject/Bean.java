@@ -30,18 +30,18 @@ import java.lang.annotation.*;
  *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
- * 	<jc>// Rest resource that uses a customized call logger.</jc>
+ * 	<jc>// Rest resource that uses a customized logger.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
  *
  * 		<jc>// Option #1:  As a field.</jc>
  * 		<ja>@Bean</ja>
- * 		CallLogger <jf>myCallLogger</jf> = CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
+ * 		RichLogger <jf>myLogger</jf> = RichLogger.<jsm>getLogger</jsm>(<js>"mylogger"</js>);
  *
  * 		<jc>// Option #2:  As a method.</jc>
  * 		<ja>@Bean</ja>
- * 		<jk>public</jk> CallLogger myCallLogger() {
- * 			<jk>return</jk> CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
+ * 		<jk>public</jk> RichLogger myLogger() {
+ * 			<jk>return</jk> RichLogger.<jsm>getLogger</jsm>(<js>"mylogger"</js>);
  * 		}
  * 	}
  * </p>
@@ -99,7 +99,7 @@ import java.lang.annotation.*;
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	<jc>// Fields that get set during initialization based on beans found in the bean store.</jc>
- * 	<ja>@Bean</ja> CallLogger <jf>callLogger</jf>;
+ * 	<ja>@Bean</ja> RichLogger <jf>logger</jf>;
  * 	<ja>@Bean</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that the BeanStore itself can be accessed this way.</jc>
  * </p>
  *
@@ -115,7 +115,7 @@ import java.lang.annotation.*;
  * <p>
  * 	{@code @Bean} acts as a <i>programmable default</i>, analogous to Spring's
  * 	<c>&#64;ConditionalOnMissingBean</c>.  When a REST context resolves a framework-managed bean
- * 	(<c>CallLogger</c>, <c>EncoderSet</c>, <c>SerializerSet</c>, <c>ParserSet</c>, <c>ThrownStore</c>,
+ * 	(<c>RichLogger</c>, <c>EncoderSet</c>, <c>SerializerSet</c>, <c>ParserSet</c>, <c>ThrownStore</c>,
  * 	<c>Config</c>, <c>VarResolver</c>, <c>HttpPartSerializer</c>, <c>HttpPartParser</c>, etc.), the lookup
  * 	walks the following tiers in order, returning the first hit:
  * </p>
@@ -128,9 +128,9 @@ import java.lang.annotation.*;
  * 	<li><b>Memoizer-backed framework default</b> — built into the context as a default supplier.</li>
  * </ol>
  * <p>
- * 	In other words: a Spring <c>&#64;Bean</c> of type <c>CallLogger</c> wins over a {@code @Bean CallLogger}
- * 	method on the same servlet, which in turn wins over the framework's built-in <c>BasicCallLogger</c>.  Non-Spring
- * 	deployments have an empty overriding-parent layer, so the chain naturally collapses to
+ * 	In other words: a Spring <c>&#64;Bean</c> of type <c>RichLogger</c> wins over a {@code @Bean RichLogger}
+ * 	method on the same servlet, which in turn wins over the framework's built-in class-name-based default logger.
+ * 	Non-Spring deployments have an empty overriding-parent layer, so the chain naturally collapses to
  * 	{@code @Bean > default}.
  * </p>
  * <p>

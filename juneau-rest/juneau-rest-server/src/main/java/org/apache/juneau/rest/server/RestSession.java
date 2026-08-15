@@ -31,6 +31,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.auth.*;
+import org.apache.juneau.rest.server.logging.*;
 import org.apache.juneau.rest.server.util.*;
 
 import jakarta.servlet.http.*;
@@ -243,13 +244,34 @@ public class RestSession extends ContextSession {
 	 * Called by the two-phase debug pipeline when the resolved logger is loggable at
 	 * {@link java.util.logging.Level#FINEST FINEST}. Idempotent — the wrappers no-op if already installed.
 	 *
+	 * <p>
+	 * The capture cap is snapshotted from {@link RestContext#getRestDebugFormatter()}<c>.bodyCap()</c> at install
+	 * time, so a formatter override actually raises, lowers, or (via {@code bodyCap(0)}) disables the number of
+	 * bytes retained &mdash; not just the wrapper's own 8&nbsp;KB default.
+	 *
 	 * @return This object.
 	 * @throws IOException Occurs if the request/response streams could not be wrapped.
 	 */
 	public RestSession installCapture() throws IOException {
-		req = CachingHttpServletRequest.wrap(req);
-		res = CachingHttpServletResponse.wrap(res);
+		var cap = resolveBodyCap();
+		req = CachingHttpServletRequest.wrap(req, cap);
+		res = CachingHttpServletResponse.wrap(res, cap);
 		return this;
+	}
+
+	/**
+	 * Resolves the body capture cap in effect for this call, per {@link RestDebugFormatter#bodyCap()}.
+	 *
+	 * <p>
+	 * Mirrors the formatter-resolution fallback used by {@link RestDebugPipeline} (a bean-store lookup can return
+	 * <jk>null</jk> despite the {@link RestContext#getRestDebugFormatter()} javadoc contract) so the cap enforced at
+	 * capture time always matches the cap the eventual render will report against.
+	 *
+	 * @return The body capture cap, in bytes.
+	 */
+	private int resolveBodyCap() {
+		var formatter = context.getRestDebugFormatter();
+		return formatter != null ? formatter.bodyCap() : new BasicRestDebugFormatter().bodyCap();
 	}
 
 	/**
@@ -282,7 +304,7 @@ public class RestSession extends ContextSession {
 		} catch (Exception e) {
 			exception(e);
 		}
-		org.apache.juneau.rest.server.logging.RestDebugPipeline.emit(this);
+		RestDebugPipeline.emit(this);
 		return this;
 	}
 
