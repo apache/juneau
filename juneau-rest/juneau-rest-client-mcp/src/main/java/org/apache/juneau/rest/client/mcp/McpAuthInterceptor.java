@@ -38,7 +38,8 @@ import org.apache.juneau.rest.client.*;
  * {@link RestRequest#run()}'s documented interceptor-exception handling aborts the call before it is sent.
  *
  * <p>
- * <b>Note:</b> when a token is set, {@link RestRequest#debug()} logs the full outgoing request including all
+ * <b>Note:</b> when a token is set, enabling {@code FINE}/{@code FINEST}-level logging on the client's debug
+ * logger (see {@link RestClient.Builder#debugLoggerName(String)}) logs the full outgoing request including all
  * headers, so enabling debug logging on a client using this interceptor will log the {@code Authorization}
  * header (and therefore the bearer token) in plain text.
  *

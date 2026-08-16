@@ -23,7 +23,6 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore.PendingLogin;
 import org.junit.jupiter.api.*;
 
 /**

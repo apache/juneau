@@ -39,13 +39,10 @@ class CachingHttpServletResponse_Test {
 	/** Minimal in-memory ServletOutputStream backed by a ByteArrayOutputStream for testing the tee path. */
 	private static final class FakeServletOutputStream extends ServletOutputStream {
 		final ByteArrayOutputStream sink = new ByteArrayOutputStream();
-		boolean closed;
 
 		@Override public void write(int b) { sink.write(b); }
 
 		@Override public void write(byte[] b, int off, int len) { sink.write(b, off, len); }
-
-		@Override public void close() { closed = true; }
 
 		@Override public boolean isReady() { return true; }
 

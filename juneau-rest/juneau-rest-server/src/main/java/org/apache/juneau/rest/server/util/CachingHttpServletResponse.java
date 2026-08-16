@@ -37,6 +37,9 @@ import jakarta.servlet.http.*;
  * calls that never write anything.
  *
  */
+@SuppressWarnings({
+	"resource" // The tee'd response stream is owned by the underlying response/servlet container, which closes it when the response completes; closing it here would break response body caching. Eclipse JDT @Owning warning is by design.
+})
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 
 	/** Default body capture cap, in bytes (8&nbsp;KB). */

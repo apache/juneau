@@ -47,7 +47,6 @@ public final class RestResponse implements Closeable {
 	private final RestClient client;
 	private final RestRequest request;
 	private final Level debugLevel;
-	private final int debugBodyCap;
 	private final InputStream body;
 	private byte[] cachedContent;
 	private long cachedContentLength = -1;
@@ -63,7 +62,6 @@ public final class RestResponse implements Closeable {
 		this.client = client;
 		this.request = request;
 		this.debugLevel = debugLevel;
-		this.debugBodyCap = debugBodyCap;
 		var originalBody = response.getBody();
 		if (debugLevel == Level.FINEST && originalBody != null)
 			this.body = new BoundedCaptureInputStream(originalBody, debugBodyCap);

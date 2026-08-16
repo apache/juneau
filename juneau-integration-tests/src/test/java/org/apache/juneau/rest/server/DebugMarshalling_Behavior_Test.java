@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * 		message is prefixed with the debug traversal stack (e.g. {@code " > [0] root:..."}) and the session collects it
  * 		as a warning ({@code "Warnings occurred in session:"}).  That prefix/warning is absent when debug is off.
  * 	<li><b>Parser buffered-input retention</b> &mdash; when marshalling debug is engaged, a malformed-parse failure
- * 		retains and quotes the buffered request content (e.g. {@code "1: {name:"}).  When debug is off the message
+ * 		retains and quotes the buffered request content (e.g. <code>"1: {name:"</code>).  When debug is off the message
  * 		instead reads {@code "Use BEAN_debug setting to display content."}.
  * </ul>
  *

@@ -237,6 +237,8 @@ class HttpBodies_Test extends TestBase {
 
 	// Hostile File whose getName() returns attacker-controlled text with embedded CR/LF.
 	static class F09_HostileFile extends File {
+		private static final long serialVersionUID = 1L;
+
 		F09_HostileFile() {
 			super("innocuous.txt");
 		}
