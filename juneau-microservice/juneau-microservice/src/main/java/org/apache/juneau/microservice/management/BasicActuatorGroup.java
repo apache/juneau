@@ -28,10 +28,23 @@ import org.apache.juneau.rest.server.servlet.*;
  * Mounts the management endpoints by composing their {@code *Mixin} flavors via
  * {@link Rest#mixins() @Rest(mixins=...)} on top of {@link BasicRestServletGroup}:
  * <ul>
- * 	<li>{@code /info} &mdash; {@link InfoMixin} (manifest/build/version/git metadata)
- * 	<li>{@code /loggers}, {@code /loggers/{name}} &mdash; {@link LoggersMixin} (runtime JUL level get/set)
  * 	<li>{@code /healthz}, {@code /readyz}, {@code /livez} &mdash; {@link HealthMixin} (read-through health view)
  * 	<li>{@code /threaddump}, {@code /heapdump} &mdash; {@link DumpsMixin} (deny-by-default diagnostics)
+ * </ul>
+ *
+ * <p>
+ * <b>{@code /info} and {@code /loggers} are off by default</b> &mdash; unlike health, they are not mounted
+ * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}'s read side
+ * discloses logger topology, neither behind any auth. Turn either back on (either approach suffices):
+ * <ul>
+ * 	<li><b>A-la-carte (recommended):</b> mount {@link InfoMixin} / {@link LoggersMixin} on a resource you
+ * 		control, e.g. a {@code BasicActuatorGroup} subclass with
+ * 		{@code @Rest(mixins={InfoMixin.class, LoggersMixin.class})} &mdash; mixins declared on a subclass are
+ * 		additive to the mixins inherited from this class, so {@code HealthMixin}/{@code DumpsMixin} stay mounted
+ * 		too.
+ * 	<li><b>Zero-code:</b> not currently supported &mdash; {@code @Rest(mixins=...)} is a compile-time class
+ * 		list, and the {@code RestContext.Builder} injection point that would have let a system property add a
+ * 		mixin at init time was removed prior to 10.0.0 (see {@link RestInit}).  Use the a-la-carte subclass above.
  * </ul>
  *
  * <p>
@@ -46,10 +59,9 @@ import org.apache.juneau.rest.server.servlet.*;
  * (which this module does not depend on), so add {@code MetricsMixin} a-la-carte when that module is present.
  *
  * <p>
- * <b>Exposure policy:</b> the read endpoints ({@code /info}, {@code /loggers} read, health) are on; the
- * mutating/sensitive ones ({@code /loggers} write, {@code /threaddump}, {@code /heapdump}) are deny-by-default
- * &mdash; the dumps via {@link DumpsSettings}, and logger-writes should be guarded by the consumer.  No auth
- * provider is auto-wired (explicit-over-magic).
+ * <b>Exposure policy:</b> of the mounted endpoints, health is on; the mutating/sensitive ones
+ * ({@code /threaddump}, {@code /heapdump}) are deny-by-default via {@link DumpsSettings}.  No auth provider is
+ * auto-wired (explicit-over-magic).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface</a>
@@ -63,8 +75,6 @@ import org.apache.juneau.rest.server.servlet.*;
 	title="Management",
 	description="Actuator-style management surface.",
 	mixins={
-		InfoMixin.class,
-		LoggersMixin.class,
 		HealthMixin.class,
 		DumpsMixin.class
 	}

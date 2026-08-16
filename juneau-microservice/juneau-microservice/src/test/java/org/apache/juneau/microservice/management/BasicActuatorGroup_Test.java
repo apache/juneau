@@ -31,9 +31,9 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link BasicActuatorGroup} &mdash; verifies the management endpoints are reachable under the
- * configured prefix, the deny-by-default gating on the diagnostics is honored, and the standalone flavors
- * remain independently mountable.
+ * Tests for {@link BasicActuatorGroup} &mdash; verifies that {@code /info} and {@code /loggers} are off by
+ * default (not disclosed to an unauthenticated client), that health and the deny-by-default diagnostics behave
+ * as before, and that a-la-carte subclassing restores {@code /info} and {@code /loggers}.
  */
 @SuppressWarnings({
 	"resource" // Closeable MockRestClient fixtures; lifecycle managed by the test/framework, not a real leak.
@@ -58,9 +58,6 @@ class BasicActuatorGroup_Test extends TestBase {
 		@Bean public DumpsSettings dumpsSettings() {
 			return DumpsSettings.create().enableThreadDump().enableHeapDump().build();
 		}
-		@Bean public LoggersSettings loggersSettings() {
-			return LoggersSettings.create().enableWrite().build();
-		}
 	}
 
 	@Rest(children={ActuatorChild.class})
@@ -73,22 +70,21 @@ class BasicActuatorGroup_Test extends TestBase {
 		Logger.getLogger(LName).setLevel(null);
 	}
 
-	@Test void a01_infoReachable() throws Exception {
+	@Test void a01_infoOffByDefault() throws Exception {
 		var c = MockRestClient.buildLax(A.class);
-		c.get("/actuator/info").accept("application/json").run().assertStatus(200)
-			.assertContent().asString().isContains("Implementation-Version", "10.0.0");
+		c.get("/actuator/info").accept("application/json").run().assertStatus(404);
 	}
 
-	@Test void a02_loggersReadReachable() throws Exception {
+	@Test void a02_loggersReadOffByDefault() throws Exception {
 		var c = MockRestClient.buildLax(A.class);
-		c.get("/actuator/loggers").accept("application/json").run().assertStatus(200)
-			.assertContent().asString().isContains("ROOT");
+		c.get("/actuator/loggers").accept("application/json").run().assertStatus(404);
 	}
 
-	@Test void a03_loggersWriteRoundTrip() throws Exception {
+	@Test void a03_loggersWriteOffByDefault() throws Exception {
 		var c = MockRestClient.buildLax(A.class);
-		c.put("/actuator/loggers/" + LName, "FINE").accept("application/json").run().assertStatus(200);
-		assertEquals(Level.FINE, Logger.getLogger(LName).getLevel());
+		// The entire LoggersMixin (read and write) is unmounted by default, so the write side is also
+		// unreachable regardless of the child's LoggersSettings bean.
+		c.put("/actuator/loggers/" + LName, "FINE").accept("application/json").run().assertStatus(404);
 	}
 
 	@Test void a04_healthReachable() throws Exception {
@@ -124,16 +120,62 @@ class BasicActuatorGroup_Test extends TestBase {
 		c.get("/actuator/heapdump").run().assertStatus(403);
 	}
 
-	@Test void b03_loggersWriteDeniedByDefaultInGroup() throws Exception {
-		var c = MockRestClient.buildLax(B.class);
-		// Reads still work; the mutating set-level is denied without an opt-in LoggersSettings bean.
-		c.get("/actuator/loggers").accept("application/json").run().assertStatus(200);
+	/**
+	 * A-la-carte re-enablement: a subclass that adds {@link InfoMixin} and {@link LoggersMixin} restores both
+	 * endpoints, on top of the {@link org.apache.juneau.rest.server.health.HealthMixin}/{@link DumpsMixin}
+	 * inherited from {@link BasicActuatorGroup} (mixins declared on a subclass are additive, not a replacement).
+	 */
+	@Rest(path="/actuator", mixins={InfoMixin.class, LoggersMixin.class})
+	public static class EnabledChild extends BasicActuatorGroup {
+		private static final long serialVersionUID = 1L;
+		@Bean public ManifestFile manifest() throws IOException { return BasicActuatorGroup_Test.manifest(); }
+	}
+
+	@Rest(children={EnabledChild.class})
+	public static class C extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void c01_infoReachableWhenMixinAddedALaCarte() throws Exception {
+		var c = MockRestClient.buildLax(C.class);
+		c.get("/actuator/info").accept("application/json").run().assertStatus(200)
+			.assertContent().asString().isContains("Implementation-Version", "10.0.0");
+	}
+
+	@Test void c02_loggersReadReachableWhenMixinAddedALaCarte() throws Exception {
+		var c = MockRestClient.buildLax(C.class);
+		c.get("/actuator/loggers").accept("application/json").run().assertStatus(200)
+			.assertContent().asString().isContains("ROOT");
+	}
+
+	@Test void c03_loggersWriteStillDeniedByDefaultWhenMixinAddedALaCarte() throws Exception {
+		var c = MockRestClient.buildLax(C.class);
+		// The read side is reachable once the mixin is mounted, but the mutating set-level endpoint keeps its
+		// own independent deny-by-default policy (no LoggersSettings bean registered on EnabledChild).
 		c.put("/actuator/loggers/" + LName, "FINE").run().assertStatus(403);
 	}
 
-	@Test void b02_infoStillReachableWithoutManifest() throws Exception {
-		// No manifest bean -> /info degrades to an empty map but stays reachable (200).
-		var c = MockRestClient.buildLax(B.class);
+	@Test void c04_healthAndDumpsStillMountedWhenMixinAddedALaCarte() throws Exception {
+		// Confirms subclass mixins are additive: adding Info/Loggers didn't drop the inherited Health/Dumps.
+		var c = MockRestClient.buildLax(C.class);
+		c.get("/actuator/healthz").accept("application/json").run().assertStatus(200);
+		c.get("/actuator/threaddump").run().assertStatus(403);
+	}
+
+	/** A-la-carte {@link InfoMixin} with no manifest bean registered. */
+	@Rest(path="/actuator", mixins={InfoMixin.class})
+	public static class D01_BareEnabledChild extends BasicActuatorGroup {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Rest(children={D01_BareEnabledChild.class})
+	public static class D01_D extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void d01_infoStillReachableWithoutManifest() throws Exception {
+		// No manifest bean -> /info degrades to an empty map but stays reachable (200), once mounted a-la-carte.
+		var c = MockRestClient.buildLax(D01_D.class);
 		c.get("/actuator/info").accept("application/json").run().assertStatus(200).assertContent().asString().is("{}");
 	}
 }
