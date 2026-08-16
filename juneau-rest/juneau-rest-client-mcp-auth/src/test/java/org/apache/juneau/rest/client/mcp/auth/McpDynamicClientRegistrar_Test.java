@@ -20,6 +20,7 @@ import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -79,6 +80,12 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 			.registrationEndpoint(URI.create("http://127.0.0.1:9000/register"))
 			.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
 			.addRedirectUri(URI.create("http://127.0.0.1/callback")).build());
+	}
+
+	@Test void a06_noRequireSecureEscapeHatch() {
+		var hasRequireSecure = Arrays.stream(McpDynamicClientRegistrar.Builder.class.getMethods())
+			.anyMatch(m -> m.getName().equals("requireSecure"));
+		assertFalse(hasRequireSecure, "Builder must not expose a public requireSecure(...) escape hatch");
 	}
 
 	// Request construction

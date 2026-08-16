@@ -102,7 +102,6 @@ public class McpDynamicClientRegistrar {
 		boolean confidential;
 		String clientName;
 		Supplier<String> initialAccessTokenSupplier;
-		boolean requireSecure = true;
 		Duration httpTimeout = DEFAULT_HTTP_TIMEOUT;
 		Consumer<HTTPRequest> httpRequestConfigurator;
 
@@ -255,17 +254,6 @@ public class McpDynamicClientRegistrar {
 		}
 
 		/**
-		 * Whether to require the registration endpoint to use {@code https} (loopback exempt).  Default <jk>true</jk>.
-		 *
-		 * @param value <jk>false</jk> to allow a plaintext registration endpoint (testing only).
-		 * @return This object.
-		 */
-		public Builder requireSecure(boolean value) {
-			requireSecure = value;
-			return this;
-		}
-
-		/**
 		 * Sets the connect/read timeout applied to the registration request.  Default 10 seconds.
 		 *
 		 * @param value The timeout.  Must not be <jk>null</jk> and must be positive.
@@ -303,7 +291,7 @@ public class McpDynamicClientRegistrar {
 				throw isex("McpDynamicClientRegistrar requires applicationType(...) (SEP-837)");
 			if (redirectUris.isEmpty())
 				throw isex("McpDynamicClientRegistrar requires at least one redirectUri(...)");
-			if (requireSecure && ! isSecureOrLoopback(registrationEndpoint))
+			if (! isSecureOrLoopback(registrationEndpoint))
 				throw isex("McpDynamicClientRegistrar registration endpoint must use https (loopback exempt): " + registrationEndpoint);
 			return new McpDynamicClientRegistrar(this);
 		}
