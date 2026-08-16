@@ -32,8 +32,9 @@ import org.apache.juneau.rest.server.*;
  * 	<li>tier {@code INFO} &mdash; {@code formatBasic} only.
  * 	<li>tier {@code FINE} &mdash; {@code +formatHeaders}.
  * 	<li>tier {@code FINEST} &mdash; {@code +formatBody} (from the cached bytes).
- * 	<li>below {@code INFO} &mdash; nothing is emitted.
+ * 	<li>coarser than {@code INFO} ({@code WARNING}, {@code SEVERE}, {@code OFF}) &mdash; nothing is emitted.
  * </ul>
+ * The emitted record level is always {@link Level#INFO}; the resolved tier controls message detail only.
  *
  * @since 10.0.0
  */
@@ -42,7 +43,11 @@ public class RestDebugPipeline {
 	private RestDebugPipeline() {}
 
 	/**
-	 * Emits the debug record for the completed call, if the resolved logger's level warrants it.
+	 * Emits one debug record for the completed call, if the resolved logger's effective level warrants it.
+	 *
+	 * <p>
+	 * The emitted record is always stamped at {@link Level#INFO}; the resolved tier controls only which
+	 * sections are rendered into the message body.
 	 *
 	 * @param session The completed REST session. Must not be <jk>null</jk>.
 	 */
@@ -52,13 +57,13 @@ public class RestDebugPipeline {
 		if (logger == null)
 			return;
 
-		var level = resolveTier(logger);
-		if (level == null)
+		var tier = resolveTier(logger);
+		if (tier == null)
 			return;
 
-		var msg = render(session, opSession, level);
+		var msg = render(session, opSession, tier);
 
-		var record = new LogRecord(level, msg);
+		var record = new LogRecord(Level.INFO, msg);
 		record.setLoggerName(logger.getName());
 		var thrown = session.getException();
 		if (thrown != null)
@@ -93,7 +98,7 @@ public class RestDebugPipeline {
 	 * Maps the resolved logger's effective level to the cumulative debug tier.
 	 *
 	 * @param logger The resolved logger.
-	 * @return {@code FINEST}/{@code FINE}/{@code INFO}, or <jk>null</jk> if the logger is not loggable at {@code INFO}.
+	 * @return {@code FINEST}/{@code FINE}/{@code INFO}, or <jk>null</jk> if the logger is coarser than {@code INFO}.
 	 */
 	static Level resolveTier(Logger logger) {
 		if (logger.isLoggable(Level.FINEST))

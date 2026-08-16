@@ -1576,11 +1576,11 @@ public class RestContext extends Context {
 	 * The {@link RichLogger} for this resource.
 	 *
 	 * <p>
-	 * Defaults to {@code RichLogger.getLogger(resourceClass.getName())}. A bean-store override or
+	 * Defaults to {@code RichLogger.getLogger(LoggerNaming.userClassName(resourceClass))}. A bean-store override or
 	 * {@code @Bean} factory method REPLACES the default.
 	 */
 	private final Memoizer<RichLogger> logger = memoizer(() -> {
-		var v = Holder.of(RichLogger.getLogger(cn(resourceClass())));
+		var v = Holder.of(RichLogger.getLogger(LoggerNaming.userClassName(resourceClass())));
 		beanStore().createBeanFromMethod(RichLogger.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(v::set);
 		return v.get();
 	});

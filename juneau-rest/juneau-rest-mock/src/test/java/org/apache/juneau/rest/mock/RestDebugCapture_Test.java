@@ -19,6 +19,7 @@ package org.apache.juneau.rest.mock;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -61,6 +62,27 @@ class RestDebugCapture_Test {
 
 	@Rest(path="/mix", mixins=A05_Mixin.class)
 	public static class A05_HostResource {}
+
+	@Rest(path="/proxyname")
+	public static class A08_UserResource {
+		@RestGet(path="/who")
+		public String who() {
+			return "ok";
+		}
+	}
+
+	@Rest(path="/proxyname")
+	public static class A08_UserResource$$SpringCGLIB$$ extends A08_UserResource {}
+
+	public static class A09_NestedHolder {
+		@Rest(path="/nestedname")
+		public static class NestedResource {
+			@RestGet(path="/who")
+			public String who() {
+				return "ok";
+			}
+		}
+	}
 
 	/**
 	 * A resource that IS its own {@link RestDebugFormatter} (highest-precedence resolution path, per
@@ -126,7 +148,9 @@ class RestDebugCapture_Test {
 				.filter(r -> (B_HostA.class.getName() + ".who").equals(r.getLoggerName()))
 				.findFirst().orElse(null);
 			assertNotNull(opA, "expected a mixin op-logger record named <HostA>.who (host-level cascade)");
-			assertEquals(Level.FINEST, opA.getLevel());
+			assertEquals(Level.INFO, opA.getLevel());
+			assertTrue(opA.getMessage().contains("---Request Headers---"),
+				"HostA debug path should still resolve a fine-grained tier (headers/body), even though emitted records are INFO");
 
 			var opB = cb.getRecords().stream()
 				.filter(r -> (B_HostB.class.getName() + ".who").equals(r.getLoggerName()))
@@ -135,6 +159,8 @@ class RestDebugCapture_Test {
 			assertEquals(Level.INFO, opB.getLevel(),
 				"HostB's mixin op logger must NOT inherit HostA's elevated level -- hosts composing the same mixin "
 					+ "must be isolated");
+			assertFalse(opB.getMessage().contains("---Request Headers---"),
+				"HostB remains at the INFO detail tier and must not render headers");
 		}
 	}
 
@@ -169,9 +195,13 @@ class RestDebugCapture_Test {
 
 			assertNotNull(recOne);
 			assertNotNull(recTwo);
-			assertEquals(Level.FINEST, recOne.getLevel());
+			assertEquals(Level.INFO, recOne.getLevel());
+			assertTrue(recOne.getMessage().contains("---Request Headers---"),
+				"elevated child logger should still render higher-tier detail");
 			assertEquals(Level.INFO, recTwo.getLevel(),
 				"sibling operation must not inherit the elevated per-op child logger level");
+			assertFalse(recTwo.getMessage().contains("---Request Headers---"),
+				"sibling operation at INFO tier must not render headers");
 		} finally {
 			opOneLogger.setLevel(prevLevel);
 		}
@@ -187,6 +217,80 @@ class RestDebugCapture_Test {
 		}
 	}
 
+	private static final class D00_CollectingHandler extends Handler {
+		private final List<java.util.logging.LogRecord> records = new ArrayList<>();
+
+		@Override
+		public void publish(java.util.logging.LogRecord record) {
+			if (isLoggable(record))
+				records.add(record);
+		}
+
+		@Override
+		public void flush() {}
+
+		@Override
+		public void close() {}
+
+		List<java.util.logging.LogRecord> records() {
+			return records;
+		}
+
+		void clear() {
+			records.clear();
+		}
+	}
+
+	@Test void d00_realHandlerVisibilityTracksHandlerThreshold_notTierLevel() throws Exception {
+		var logger = Logger.getLogger(D_Resource.class.getName());
+		var prevLevel = logger.getLevel();
+		var prevUseParentHandlers = logger.getUseParentHandlers();
+		var prevHandlers = logger.getHandlers();
+		var handler = new D00_CollectingHandler();
+		try {
+			logger.setUseParentHandlers(false);
+			for (var h : prevHandlers)
+				logger.removeHandler(h);
+			handler.setLevel(Level.INFO);
+			logger.addHandler(handler);
+			logger.setLevel(Level.FINEST);
+
+			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(D_Resource.class).build();
+			client.post("/echo", "real-handler-secret").run().assertContent("real-handler-secret");
+
+			assertEquals(1, handler.records().size(),
+				"effective logger FINEST with INFO handler should publish one INFO-stamped debug record");
+			var finestRecord = handler.records().get(0);
+			assertEquals(Level.INFO, finestRecord.getLevel());
+			assertTrue(finestRecord.getMessage().contains("real-handler-secret"),
+				"FINEST detail should still render request/response body content");
+
+			handler.clear();
+			handler.setLevel(Level.WARNING);
+			client.post("/echo", "real-handler-secret").run().assertContent("real-handler-secret");
+			assertTrue(handler.records().isEmpty(),
+				"INFO-stamped records must be filtered by handlers above INFO");
+
+			handler.setLevel(Level.INFO);
+			logger.setLevel(Level.INFO);
+			client.post("/echo", "real-handler-secret").run().assertContent("real-handler-secret");
+
+			assertEquals(1, handler.records().size(),
+				"logger INFO + handler INFO should preserve the prior single visible basic-line behavior");
+			var infoRecord = handler.records().get(0);
+			assertEquals(Level.INFO, infoRecord.getLevel());
+			assertTrue(infoRecord.getMessage().contains("[200] HTTP POST /twophase/echo"), infoRecord.getMessage());
+			assertFalse(infoRecord.getMessage().contains("real-handler-secret"),
+				"INFO tier does not install capture wrappers, so the body must not render");
+		} finally {
+			logger.removeHandler(handler);
+			for (var h : prevHandlers)
+				logger.addHandler(h);
+			logger.setUseParentHandlers(prevUseParentHandlers);
+			logger.setLevel(prevLevel);
+		}
+	}
+
 	@Test void d01_fineTier_noCaptureWrapperInstalled_bodyNeverRendered() throws Exception {
 		var target = Logger.getLogger(D_Resource.class.getName());
 		var prevLevel = target.getLevel();
@@ -198,7 +302,7 @@ class RestDebugCapture_Test {
 			client.post("/echo", "two-phase-secret").run().assertContent("two-phase-secret");
 
 			assertFalse(c.isEmpty());
-			assertEquals(Level.FINE, c.last().getLevel());
+			assertEquals(Level.INFO, c.last().getLevel());
 			assertFalse(c.last().getMessage().contains("two-phase-secret"),
 				"FINE tier must not install the capture wrapper, so the body cannot appear in the record: " + c.last().getMessage());
 		} finally {
@@ -213,7 +317,7 @@ class RestDebugCapture_Test {
 			client.post("/echo", "two-phase-secret").run().assertContent("two-phase-secret");
 
 			assertFalse(c.isEmpty());
-			assertEquals(Level.FINEST, c.last().getLevel());
+			assertEquals(Level.INFO, c.last().getLevel());
 			assertTrue(c.last().getMessage().contains("two-phase-secret"),
 				"FINEST tier must install the capture wrapper and render the body: " + c.last().getMessage());
 		}
@@ -282,7 +386,9 @@ class RestDebugCapture_Test {
 				.findFirst().orElse(null);
 			assertNotNull(rec, "op logger must be named as a child of the bean-overridden logger, not "
 				+ F_Resource.class.getName() + ".who");
-			assertEquals(Level.FINEST, rec.getLevel());
+			assertEquals(Level.INFO, rec.getLevel());
+			assertTrue(rec.getMessage().contains("---Request Headers---"),
+				"elevated override logger should still drive higher-tier detail");
 		} finally {
 			overrideLogger.setLevel(prevLevel);
 		}
@@ -304,7 +410,8 @@ class RestDebugCapture_Test {
 				.reduce((a, b) -> b)
 				.orElse(null);
 			assertNotNull(rec);
-			assertEquals(Level.FINEST, rec.getLevel(), "the resolved resource logger's tier is still FINEST");
+			assertEquals(Level.INFO, rec.getLevel(),
+				"records remain INFO-stamped even when the resolved detail tier is FINEST");
 			assertFalse(rec.getMessage().contains("X-Secret-Header"),
 				"no headers should ever render on the 404/no-op path, even at FINEST: " + rec.getMessage());
 			assertFalse(rec.getMessage().contains("leak-test-value"), rec.getMessage());
@@ -322,7 +429,7 @@ class RestDebugCapture_Test {
 			client.get("/who").run().getContent().asString();
 
 			assertFalse(c.isEmpty());
-			assertEquals(Level.FINEST, c.last().getLevel());
+			assertEquals(Level.INFO, c.last().getLevel());
 			assertTrue(c.last().getMessage().contains("[200] HTTP GET /api/who"));
 			assertNull(c.last().getThrown());
 		}
@@ -435,6 +542,37 @@ class RestDebugCapture_Test {
 			assertFalse(c.isEmpty());
 			var msg = c.last().getMessage();
 			assertFalse(msg.contains("Request Content"), "no body section should render when bodyCap(0): " + msg);
+		}
+	}
+
+	@Test void a08_proxyShapedResourceUsesUserClassLogger_nestedResourceNameRemainsDistinct() throws Exception {
+		var userName = A08_UserResource.class.getName() + ".who";
+		var proxyName = A08_UserResource$$SpringCGLIB$$.class.getName() + ".who";
+		try (var c = RichLogger.getLogger(A08_UserResource.class).captureEvents(Level.FINEST)) {
+			var client = org.apache.juneau.rest.mock.classic.MockRestClient
+				.create(A08_UserResource$$SpringCGLIB$$.class)
+				.debug()
+				.build();
+
+			client.get("/who").run().assertStatus().asCode().is(200);
+
+			assertTrue(c.getRecords().stream().map(java.util.logging.LogRecord::getLoggerName).anyMatch(userName::equals),
+				"proxy-shaped resource should normalize to the user class logger name");
+			assertFalse(c.getRecords().stream().map(java.util.logging.LogRecord::getLoggerName).anyMatch(proxyName::equals),
+				"proxy-shaped logger name must not leak to emitted records");
+		}
+
+		var nestedName = A09_NestedHolder.NestedResource.class.getName() + ".who";
+		try (var c = RichLogger.getLogger(A09_NestedHolder.NestedResource.class).captureEvents(Level.FINEST)) {
+			var client = org.apache.juneau.rest.mock.classic.MockRestClient
+				.create(A09_NestedHolder.NestedResource.class)
+				.debug()
+				.build();
+
+			client.get("/who").run().assertStatus().asCode().is(200);
+
+			assertTrue(c.getRecords().stream().map(java.util.logging.LogRecord::getLoggerName).anyMatch(nestedName::equals),
+				"ordinary nested resource names must remain distinct and unnormalized");
 		}
 	}
 }

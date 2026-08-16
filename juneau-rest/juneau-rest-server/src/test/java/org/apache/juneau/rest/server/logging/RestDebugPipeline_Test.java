@@ -43,11 +43,27 @@ class RestDebugPipeline_Test {
 		assertEquals(Level.FINE, RestDebugPipeline.resolveTier(newLogger(Level.FINE)));
 	}
 
-	@Test void a03_info_resolvesInfo() {
+	@Test void a03_finer_resolvesFine() {
+		assertEquals(Level.FINE, RestDebugPipeline.resolveTier(newLogger(Level.FINER)));
+	}
+
+	@Test void a04_config_resolvesInfo() {
+		assertEquals(Level.INFO, RestDebugPipeline.resolveTier(newLogger(Level.CONFIG)));
+	}
+
+	@Test void a05_info_resolvesInfo() {
 		assertEquals(Level.INFO, RestDebugPipeline.resolveTier(newLogger(Level.INFO)));
 	}
 
-	@Test void a04_warning_resolvesNull() {
+	@Test void a06_warning_resolvesNull() {
 		assertNull(RestDebugPipeline.resolveTier(newLogger(Level.WARNING)));
+	}
+
+	@Test void a07_severe_resolvesNull() {
+		assertNull(RestDebugPipeline.resolveTier(newLogger(Level.SEVERE)));
+	}
+
+	@Test void a08_off_resolvesNull() {
+		assertNull(RestDebugPipeline.resolveTier(newLogger(Level.OFF)));
 	}
 }
