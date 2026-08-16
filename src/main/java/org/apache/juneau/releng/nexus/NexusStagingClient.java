@@ -34,8 +34,9 @@ import org.apache.juneau.marshall.marshaller.Json;
 /**
  * In-process HTTPS client for the Apache Nexus staging suite. No CLI, no argv exposure — Basic auth built
  * in-process, normally from the committer's Keychain-backed Apache LDAP credentials (see
- * {@link #create(String, String)}), falling back to {@code ~/.m2/settings.xml}'s {@code apache.releases.https}
- * server entry (see {@link #create(String)}) only when that Keychain entry is absent.
+ * {@link #create(String, String, String, String)}), falling back to {@code ~/.m2/settings.xml}'s
+ * {@code apache.releases.https} server entry (see {@link #create(String, String, String)}) only when that
+ * Keychain entry is absent.
  */
 public class NexusStagingClient {
 

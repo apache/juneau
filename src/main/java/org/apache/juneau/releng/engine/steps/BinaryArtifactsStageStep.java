@@ -29,6 +29,7 @@ import org.apache.juneau.releng.engine.Preview;
 import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
+import org.apache.juneau.releng.util.SvnArgs;
 
 /** §5.12 binary-artifacts-stage: pull signed artifacts, rename to ASF convention, commit to dist/dev SVN. Mutating. */
 public class BinaryArtifactsStageStep implements ReleaseStep {
@@ -66,7 +67,7 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 		var pw = ctx.ldapPassword + "\n";
 
 		// svn auth: --username <availid> --password-from-stdin (passphrase via stdin, never argv).
-		var co = ctx.dryRunOr(List.of("svn", "checkout", "--username", ctx.availid, "--password-from-stdin",
+		var co = ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN,
 				ctx.target.distDevBase(), dist.toString()), pw, null);
 		if (!co.ok())
 			return StepResult.fail("svn checkout of dist/dev failed.");
@@ -96,9 +97,8 @@ public class BinaryArtifactsStageStep implements ReleaseStep {
 
 		ctx.dryRunOr(List.of("svn", "add", sourceRc.toString()));
 		ctx.dryRunOr(List.of("svn", "add", binariesRc.toString()));
-		var commit = ctx.dryRunOr(
-				List.of("svn", "commit", dist.toString(), "-m", rc, "--username", ctx.availid, "--password-from-stdin"),
-				pw, Map.of());
+		var commit = ctx.dryRunOr(List.of("svn", "commit", dist.toString(), "-m", rc, SvnArgs.USERNAME, ctx.availid,
+				SvnArgs.PASSWORD_FROM_STDIN), pw, Map.of());
 		return commit.ok() ? StepResult.ok("Artifacts staged + committed to dist/dev.")
 				: StepResult.fail("svn commit to dist/dev failed.");
 	}

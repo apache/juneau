@@ -119,8 +119,8 @@ class BinaryArtifactsStageStepTest {
 
 		var gpgCalls = calls.stream().filter(x -> x.contains("gpg")).toList();
 		assertEquals(2, gpgCalls.size());
-		assertTrue(gpgCalls.get(0).equals(
-				List.of("gpg", "--print-md", "SHA512", dist + "/source/" + rc + "/apache-juneau-9.2.1-src.zip")));
+		assertEquals(List.of("gpg", "--print-md", "SHA512", dist + "/source/" + rc + "/apache-juneau-9.2.1-src.zip"),
+				gpgCalls.get(0));
 
 		// gpg --print-md SHA512 output is written to the .sha512 file (ProcessRunner has no shell redirect).
 		var shaFile = dist.resolve("source").resolve(rc).resolve("apache-juneau-9.2.1-src.zip.sha512");

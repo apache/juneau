@@ -24,6 +24,7 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 import org.apache.juneau.releng.release.ReleaseVersion;
+import org.apache.juneau.releng.util.SvnArgs;
 
 /** §5.19 dist-promote: svn move dist/dev -> dist/release/<version>; remove prior release on the line. Mutating. */
 public class DistPromoteStep implements ReleaseStep {
@@ -66,12 +67,12 @@ public class DistPromoteStep implements ReleaseStep {
 		var release = ctx.stateDir.resolve("dist-release");
 		var pw = ctx.ldapPassword + "\n";
 
-		var coDev = ctx.dryRunOr(List.of("svn", "checkout", "--username", ctx.availid, "--password-from-stdin",
-				ctx.target.distDevBase(), dev.toString()), pw, null);
+		var coDev = ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid,
+				SvnArgs.PASSWORD_FROM_STDIN, ctx.target.distDevBase(), dev.toString()), pw, null);
 		if (!coDev.ok())
 			return StepResult.fail("svn checkout of dist/dev failed.");
-		var coRelease = ctx.dryRunOr(List.of("svn", "checkout", "--username", ctx.availid, "--password-from-stdin",
-				ctx.target.distReleaseBase(), release.toString()), pw, null);
+		var coRelease = ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid,
+				SvnArgs.PASSWORD_FROM_STDIN, ctx.target.distReleaseBase(), release.toString()), pw, null);
 		if (!coRelease.ok())
 			return StepResult.fail("svn checkout of dist/release failed.");
 
@@ -93,7 +94,8 @@ public class DistPromoteStep implements ReleaseStep {
 			ctx.dryRunOr(List.of("svn", "rm", release.resolve(prior).toString()));
 
 		var commit = ctx.dryRunOr(List.of("svn", "commit", dev.toString(), release.toString(), "-m",
-				"Apache Juneau " + version, "--username", ctx.availid, "--password-from-stdin"), pw, Map.of());
+				"Apache Juneau " + version, SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN), pw,
+				Map.of());
 		return commit.ok() ? StepResult.ok("Promoted to dist/release.") : StepResult.fail("svn promote failed.");
 	}
 
@@ -104,11 +106,8 @@ public class DistPromoteStep implements ReleaseStep {
 		ReleaseVersion best = null;
 		for (var t : tags) {
 			var v = ReleaseVersion.ofTag(t);
-			if (v.isPrerelease() || v.major() != target.major() || v.minor() != target.minor())
-				continue;
-			if (v.compareTo(target) >= 0)
-				continue;
-			if (best == null || v.compareTo(best) > 0)
+			var onSameLine = !v.isPrerelease() && v.major() == target.major() && v.minor() == target.minor();
+			if (onSameLine && v.compareTo(target) < 0 && (best == null || v.compareTo(best) > 0))
 				best = v;
 		}
 		return best == null ? null : best.version();

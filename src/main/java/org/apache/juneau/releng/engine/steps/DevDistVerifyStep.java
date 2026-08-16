@@ -25,6 +25,7 @@ import org.apache.juneau.releng.engine.Preview;
 import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
+import org.apache.juneau.releng.util.SvnArgs;
 
 /** §5.13 dev-dist-verify: confirm the 6 expected files present + non-empty; open dist URL for spot-check. */
 public class DevDistVerifyStep implements ReleaseStep {
@@ -78,7 +79,7 @@ public class DevDistVerifyStep implements ReleaseStep {
 	private List<String> missingOrEmptyFiles(StepContext ctx) {
 		var rc = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var dist = ctx.stateDir.resolve("dist");
-		ctx.dryRunOr(List.of("svn", "checkout", "--username", ctx.availid, "--password-from-stdin",
+		ctx.dryRunOr(List.of("svn", "checkout", SvnArgs.USERNAME, ctx.availid, SvnArgs.PASSWORD_FROM_STDIN,
 				ctx.target.distDevBase(), dist.toString()), ctx.ldapPassword + "\n", null);
 
 		var missing = new ArrayList<String>();

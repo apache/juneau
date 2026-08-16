@@ -32,6 +32,7 @@ import org.apache.juneau.releng.log.LogBroadcaster;
 import org.apache.juneau.releng.log.RunLog;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
+import org.apache.juneau.releng.util.SvnArgs;
 
 /** The one coarse Drop-RC action: drop remote state, bump RC, reset from workspace-setup. */
 public class DropRcService {
@@ -104,7 +105,7 @@ public class DropRcService {
 	public Preview preview(String version) {
 		var rs = store.load(version).orElseThrow();
 		var tag = "juneau-" + rs.version + "-RC" + rs.rc;
-		var p = new Preview("drop-rc", true);
+		var p = new Preview(LOG_STEP_ID, true);
 		p.line("Drop Nexus staging repo: " + rs.nexusRepoId);
 		p.line("svn rm dist/dev/juneau/{source,binaries}/" + tag);
 		p.line("Delete tag " + tag + " (local + remote)");
@@ -132,12 +133,12 @@ public class DropRcService {
 		}
 		// b) svn checkout dist/dev, rm the rejected RC's directories, commit
 		var dist = stateDir.resolve("dist");
-		tierB(List.of("svn", "checkout", "--username", availid.get(), "--password-from-stdin", target.distDevBase(),
-				dist.toString()), pw + "\n", Map.of(), log);
+		tierB(List.of("svn", "checkout", SvnArgs.USERNAME, availid.get(), SvnArgs.PASSWORD_FROM_STDIN,
+				target.distDevBase(), dist.toString()), pw + "\n", Map.of(), log);
 		tierB(List.of("svn", "rm", dist.resolve("source").resolve(tag).toString()), null, null, log);
 		tierB(List.of("svn", "rm", dist.resolve("binaries").resolve(tag).toString()), null, null, log);
-		tierB(List.of("svn", "commit", dist.toString(), "-m", "Drop " + tag, "--username", availid.get(),
-				"--password-from-stdin"), pw + "\n", Map.of(), log);
+		tierB(List.of("svn", "commit", dist.toString(), "-m", "Drop " + tag, SvnArgs.USERNAME, availid.get(),
+				SvnArgs.PASSWORD_FROM_STDIN), pw + "\n", Map.of(), log);
 		// c) delete tag local + remote
 		tierB(List.of("git", "-C", git, "tag", "-d", tag), null, null, log);
 		tierB(List.of("git", "-C", git, "push", "origin", ":refs/tags/" + tag), null, null, log);
