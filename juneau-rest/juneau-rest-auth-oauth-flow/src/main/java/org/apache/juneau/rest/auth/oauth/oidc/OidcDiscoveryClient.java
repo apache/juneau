@@ -24,6 +24,8 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.utils.*;
+
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.as.*;
 import com.nimbusds.oauth2.sdk.http.*;
@@ -119,10 +121,12 @@ public class OidcDiscoveryClient {
 		 * Builds the client.
 		 *
 		 * @return A new {@link OidcDiscoveryClient}.
+		 * @throws IllegalArgumentException If the issuer is not <js>"https"</js> and does not target a loopback host.
 		 */
 		public OidcDiscoveryClient build() {
 			if (issuer == null)
 				throw new IllegalStateException("OidcDiscoveryClient requires issuer(...)");
+			UriUtils.assertSecureOrLoopback(issuer);
 			return new OidcDiscoveryClient(this);
 		}
 	}
