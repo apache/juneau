@@ -37,6 +37,13 @@ public class RunState {
 	public String nexusRepoId; // set by nexus-staging-close
 	public String githubReleaseUrl; // set by github-release-create
 	public Integer milestoneNumber; // New-Release form field; pre-filled by gh title-match resolution, user-editable
+	public ExecutionMode mode; // per-run SAFE/LIVE, capped by the box-wide rm.mode; null on pre-toggle JSON → SAFE
+	// Optional operator-authored narrative, captured at start and editable later; threaded into the four
+	// release emails (blank fields are omitted from every email rather than rendering empty sections).
+	public String releaseSummary; // short "why we're releasing" line
+	public String highlights; // multiline "what's added"
+	public String knownIssues; // multiline known-issues list
+	public String acknowledgements; // multiline thanks/acknowledgements
 	public List<StepState> steps = new ArrayList<>();
 
 	public RunState() {

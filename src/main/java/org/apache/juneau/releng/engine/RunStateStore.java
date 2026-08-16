@@ -25,12 +25,21 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import org.apache.juneau.marshall.marshaller.Json;
 
 /** Reads/writes {@code release-<version>.json} state files under {@code rm.state.dir}. */
 public class RunStateStore {
 
 	private final Path stateDir;
+
+	// Invoked with the just-saved run after every save() — the single choke point the New-Release tab's
+	// live rail push (RunStateBroadcaster, ReleaseEngine) hooks into, since every status-mutating
+	// transition (ReleaseEngine's own methods, and DropRcService's drop-RC action) ultimately calls
+	// save(). Defaults to a no-op so this store is usable standalone (e.g. in tests) with no hook installed.
+	private Consumer<RunState> onSave = rs -> {
+		// No-op by default; ReleaseEngine installs a snapshot-publishing hook.
+	};
 
 	public RunStateStore(Path stateDir) {
 		this.stateDir = stateDir;
@@ -44,6 +53,13 @@ public class RunStateStore {
 		return stateDir.resolve("release-" + version + ".json");
 	}
 
+	/** Installs the callback invoked with the just-saved run after every {@link #save}. */
+	public void setOnSave(Consumer<RunState> hook) {
+		this.onSave = hook == null ? rs -> {
+			// No-op: clearing the hook restores default behavior.
+		} : hook;
+	}
+
 	/** Persist the run (pretty JSON), creating {@code rm.state.dir} if absent. */
 	public synchronized void save(RunState rs) {
 		try {
@@ -53,6 +69,7 @@ public class RunStateStore {
 		} catch (IOException e) {
 			throw isex(e, "Cannot save run state for %s", rs.version);
 		}
+		onSave.accept(rs);
 	}
 
 	public Optional<RunState> load(String version) {
@@ -88,9 +105,23 @@ public class RunStateStore {
 		return out;
 	}
 
-	/** The single run whose status is RUNNING or AWAITING_VOTE, if any. */
+	/** The single run whose status is RUNNING or AWAITING_VOTE, if any. Used as the start-lock. */
 	public Optional<RunState> activeRun() {
 		return loadAll().stream().filter(r -> r.status == RunStatus.RUNNING || r.status == RunStatus.AWAITING_VOTE)
 				.findFirst();
+	}
+
+	/**
+	 * The run the New-Release page should show: an {@linkplain #activeRun() active} run if any, otherwise
+	 * the most recently updated {@code FAILED} run. FAILED is <em>not</em> a start-lock (a new version can
+	 * still begin) but it must stay visible so the operator can resume it — a FAILED run with PENDING later
+	 * steps is resumable, not abandoned.
+	 */
+	public Optional<RunState> displayRun() {
+		var active = activeRun();
+		if (active.isPresent())
+			return active;
+		return loadAll().stream().filter(r -> r.status == RunStatus.FAILED)
+				.max((a, b) -> String.valueOf(a.updatedAt).compareTo(String.valueOf(b.updatedAt)));
 	}
 }

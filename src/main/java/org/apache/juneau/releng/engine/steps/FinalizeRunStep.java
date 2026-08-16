@@ -23,7 +23,13 @@ import org.apache.juneau.releng.engine.RunStatus;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.24 finalize-run: mark RELEASED, freeze state, release the single-active-run lock. Terminal. */
+/**
+ * finalize-run: mark RELEASED, freeze state, release the single-active-run lock. Terminal.
+ *
+ * <p>{@link org.apache.juneau.releng.engine.ReleaseEngine#apply} refuses to invoke this step's
+ * {@code apply()} at all unless every required predecessor has already reached a terminal-success
+ * state, so this method itself never needs to re-check prerequisites.
+ */
 public class FinalizeRunStep implements ReleaseStep {
 	@Override
 	public String id() {

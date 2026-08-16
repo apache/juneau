@@ -22,6 +22,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import org.apache.juneau.commons.secret.SecretStore;
 import org.apache.juneau.releng.credential.AccountStore;
@@ -40,6 +41,7 @@ import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.engine.RunStateStore;
 import org.apache.juneau.releng.engine.StepRegistry;
 import org.apache.juneau.releng.log.LogBroadcaster;
+import org.apache.juneau.releng.log.RunStateBroadcaster;
 import org.apache.juneau.releng.log.SseLogServlet;
 import org.apache.juneau.releng.milestone.GithubPrSource;
 import org.apache.juneau.releng.milestone.MilestoneService;
@@ -57,7 +59,6 @@ import org.apache.juneau.releng.rest.ReleaseRunRest;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.secret.keychain.KeychainSecretStore;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,6 +69,9 @@ import jakarta.servlet.Servlet;
 @SuppressWarnings({ "java:S6539" // Spring @Configuration legitimately aggregates cohesive bean wiring; splitting would fragment it.
 })
 public class AppConfiguration {
+
+	/** Non-secret credential stand-in handed to the Nexus client on SAFE runs, which never reach a real server. */
+	private static final String SAFE_PLACEHOLDER = "safe-placeholder";
 
 	@Bean
 	public ProcessRunner processRunner() {
@@ -100,10 +104,10 @@ public class AppConfiguration {
 
 	@Bean
 	public ReleaseListService releaseListService(ProcessRunner runner, @Value("${rm.repo.dir}") String repoDir,
-			@Value("${rm.repo.slug}") String repoSlug, @Value("${rm.state.dir}") String stateDir) {
+			@Value("${rm.repo.slug}") String repoSlug, RunStateStore runStateStore) {
 		var tags = new GitTagReleaseSource(runner, repoDir);
 		var github = new GithubReleaseSource(runner, repoSlug);
-		var state = new LocalStateReleaseSource(Path.of(stateDir));
+		var state = new LocalStateReleaseSource(runStateStore);
 		return new ReleaseListService(tags::list, github::list, state::list);
 	}
 
@@ -194,9 +198,9 @@ public class AppConfiguration {
 
 	/**
 	 * The release target's centralized endpoints. Everything is the canonical Apache Juneau production value
-	 * except the Nexus base, which is <b>mode-derived</b>: the in-app {@code /mock/nexus} loopback under SAFE,
-	 * real {@code repository.apache.org} under LIVE. This is what makes the 3 Tier-A Nexus staging callouts
-	 * hit the mock in SAFE and real Nexus in LIVE without any per-step branching.
+	 * except the Nexus base, which is the box-wide default: the in-app {@code /mock/nexus} loopback when
+	 * {@code rm.mode=safe}, real {@code repository.apache.org} when {@code rm.mode=live}. Per-run Dry-run on
+	 * a LIVE box still rewrites the Nexus base to the loopback (see {@link ReleaseEngine#setMockNexusBaseUrl}).
 	 */
 	@Bean
 	public TargetProfile targetProfile(ExecutionMode mode, @Value("${server.address:127.0.0.1}") String address,
@@ -267,8 +271,8 @@ public class AppConfiguration {
 			@Override
 			public NexusStagingClient nexus() {
 				if (mode == ExecutionMode.SAFE)
-					return NexusStagingClient.create(target.nexusBaseUrl(), target.nexusProfileId(), "safe-placeholder",
-							"safe-placeholder");
+					return NexusStagingClient.create(target.nexusBaseUrl(), target.nexusProfileId(), SAFE_PLACEHOLDER,
+							SAFE_PLACEHOLDER);
 				return nexusClient(target, availid(), ldapPassword(), () -> NexusStagingClient
 						.create(target.nexusBaseUrl(), target.nexusProfileId(), "apache.releases.https"));
 			}
@@ -300,9 +304,11 @@ public class AppConfiguration {
 			BranchResolver branches, EmailService email, MilestoneService milestone,
 			ReleaseEngine.SecretResolver secrets, ExecutionMode mode, TargetProfile target,
 			@Value("${rm.state.dir}") String stateDir, @Value("${rm.staging.dir}") String stagingDir,
-			@Value("${rm.repo.dir}") String repoDir, @Value("${rm.git.committer.email}") String committerEmail) {
+			@Value("${rm.repo.dir}") String repoDir, @Value("${rm.git.committer.email}") String committerEmail,
+			@Value("${server.address:127.0.0.1}") String address, @Value("${server.port:8790}") int port) {
 		var engine = new ReleaseEngine(store, registry, runner, branches, Path.of(stateDir), Path.of(stagingDir),
 				repoDir, committerEmail, email, milestone, secrets, mode, target);
+		engine.setMockNexusBaseUrl("http://" + address + ":" + port + "/mock/nexus");
 		engine.recoverOnBoot(); // Demote runs left mid-flight by a previous process on restart.
 		return engine;
 	}
@@ -311,8 +317,12 @@ public class AppConfiguration {
 	public DropRcService dropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner,
 			ReleaseEngine.SecretResolver secrets, ReleaseEngine engine, ExecutionMode mode, TargetProfile target,
 			@Value("${rm.staging.dir}") String stagingDir, @Value("${rm.state.dir}") String stateDir) {
-		return new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
+		var svc = new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
 				secrets.nexus(), mode, engine::isArmed, target, engine::broadcaster);
+		if (engine.mockNexusBaseUrl() != null)
+			svc.setSafeNexus(NexusStagingClient.create(engine.mockNexusBaseUrl(), target.nexusProfileId(),
+					SAFE_PLACEHOLDER, SAFE_PLACEHOLDER));
+		return svc;
 	}
 
 	@Bean
@@ -321,18 +331,15 @@ public class AppConfiguration {
 	}
 
 	/**
-	 * The SAFE-only Nexus loopback mock (OQ-D): a dedicated Juneau REST resource that lets the real
-	 * {@link NexusStagingClient} run its full staging flow against an in-memory model with zero canonical
-	 * side effects. Present only when {@code rm.mode=safe} (default), so it can never serve a LIVE run.
+	 * The in-app Nexus loopback mock. Always registered so a Dry-run on a LIVE box can still hit it; LIVE
+	 * runs use the real Nexus base URL and never call this servlet.
 	 */
 	@Bean
-	@ConditionalOnProperty(name = "rm.mode", havingValue = "safe", matchIfMissing = true)
 	public NexusMockRest nexusMockRest(TargetProfile target) {
 		return new NexusMockRest(target.nexusProfileId());
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "rm.mode", havingValue = "safe", matchIfMissing = true)
 	public ServletRegistrationBean<Servlet> nexusMockRegistration(NexusMockRest mock, ReleaseEngine engine) {
 		// Each new run resets the mock so the lazily-synthesized staging repo starts from a clean slate.
 		engine.setRunStartHook(() -> mock.model().reset());
@@ -340,13 +347,16 @@ public class AppConfiguration {
 	}
 
 	/**
-	 * The SSE servlet — a plain HttpServlet, registered alongside RootRest. Keyed by
-	 * {@code (version, stepId)} rather than {@code version} alone, and resolves each step's log path from
-	 * its {@code StepState.logRef} rather than a run-level {@code logFile}.
+	 * The SSE servlet — a plain HttpServlet, registered alongside RootRest. Serves the per-step console
+	 * channel keyed by {@code (version, stepId)} (resolving each step's log path from its
+	 * {@code StepState.logRef} rather than a run-level {@code logFile}), and the run-state channel keyed
+	 * by {@code version} alone (trailing segment {@code state}) that pushes rail-status snapshots to
+	 * every connected New-Release tab.
 	 */
 	@Bean
 	public ServletRegistrationBean<Servlet> sseLogRegistration(ReleaseEngine engine, RunStateStore store) {
-		var servlet = new SseLogServlet(logPathForStep(store), broadcasterForStep(engine, store));
+		var servlet = new SseLogServlet(logPathForStep(store), broadcasterForStep(engine, store),
+				engine::snapshotJson, stateBroadcasterForVersion(engine, store));
 		return new ServletRegistrationBean<>(servlet, "/events/*");
 	}
 
@@ -370,5 +380,15 @@ public class AppConfiguration {
 			RunStateStore store) {
 		return (version, stepId) -> store.load(version).filter(rs -> rs.step(stepId) != null)
 				.map(rs -> engine.broadcaster(version, stepId));
+	}
+
+	/**
+	 * That version's live {@link RunStateBroadcaster}, or empty when there's no persisted run for
+	 * {@code version} — same "no active run" fast-path rationale as {@link #broadcasterForStep} above.
+	 * Package-private for {@code AppConfigurationTest}.
+	 */
+	static Function<String, Optional<RunStateBroadcaster>> stateBroadcasterForVersion(ReleaseEngine engine,
+			RunStateStore store) {
+		return version -> store.load(version).map(rs -> engine.stateBroadcaster(version));
 	}
 }

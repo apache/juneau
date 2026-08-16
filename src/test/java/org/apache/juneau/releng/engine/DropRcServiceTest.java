@@ -19,8 +19,10 @@ package org.apache.juneau.releng.engine;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.log.LogBroadcaster;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
@@ -170,5 +172,77 @@ class DropRcServiceTest {
 		var log = java.nio.file.Files.readString(dir.resolve("logs/9.2.1-RC1-drop-rc.log"),
 				java.nio.charset.StandardCharsets.UTF_8);
 		assertTrue(log.contains("https://dist.apache.org/repos/dist/dev/juneau"));
+	}
+
+	@Test
+	void liveBoxSafeRunDoesNotSpawnSubprocess(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var rs = seededThroughReleasePrepare(store);
+		rs.mode = ExecutionMode.SAFE;
+		store.save(rs);
+		var runCount = new int[] { 0 };
+		var runner = new ProcessRunner() {
+			@Override
+			public List<String> runLines(List<String> c) {
+				return List.of();
+			}
+
+			@Override
+			public String runText(List<String> c) {
+				return "";
+			}
+
+			@Override
+			public ProcResult run(List<String> c, String s, Map<String, String> e) {
+				runCount[0]++;
+				return new ProcResult(0, "");
+			}
+
+			@Override
+			public ProcResult run(List<String> c, String s, Map<String, String> e,
+					java.util.function.Consumer<String> k) {
+				runCount[0]++;
+				return new ProcResult(0, "");
+			}
+		};
+		var svc = new DropRcService(store, StepRegistry.standard(new BranchResolver(runner, "/repo")), runner,
+				Path.of("/staging/git/juneau"), dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.LIVE,
+				v -> true, TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+
+		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
+
+		assertEquals(0, runCount[0], "a Dry-run on a LIVE box still command-logs Drop-RC; no real subprocess");
+	}
+
+	/**
+	 * Drop-RC's own {@code store.save(rs)} is the same choke point {@link ReleaseEngine} hooks in its
+	 * constructor (see {@code RunStateStore.setOnSave}) — since AppConfiguration wires the SAME
+	 * {@code RunStateStore} bean into both the engine and this service, a drop-RC push must reach the
+	 * New-Release tab's rail without any drop-RC-specific broadcast wiring.
+	 */
+	@Test
+	@SuppressWarnings({
+		"resource" // The subscription stays open for the whole test; the JVM tears it down. Closing it would stop collecting snapshots.
+	})
+	void applyPublishesAResetSnapshotViaTheEngineSSharedRunStateStoreHook(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var branches = new BranchResolver(runner(), "/repo");
+		var eng = ReleaseEngine.forTests(store, StepRegistry.standard(branches), runner(), branches, dir,
+				ExecutionMode.LIVE); // installs the onSave hook on this exact store instance
+		seededThroughReleasePrepare(store);
+		var seen = new ArrayList<RunStateSnapshot>();
+		eng.stateBroadcaster("9.2.1").subscribe(json -> seen.add(Json.DEFAULT.read(json, RunStateSnapshot.class)));
+
+		var svc = new DropRcService(store, StepRegistry.standard(branches), runner(), Path.of("/staging/git/juneau"),
+				dir, NexusStagingClient.forTests((m, p, b) -> ""), ExecutionMode.LIVE, v -> true,
+				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+
+		svc.apply("9.2.1", "vote rejected: -1 jdoe", () -> "avail", () -> "pw");
+
+		assertEquals(1, seen.size());
+		var snap = seen.get(0);
+		assertEquals(RunStatus.RUNNING, snap.status);
+		assertEquals(StepStatus.PENDING, snap.steps.stream().filter(s -> s.stepId.equals("workspace-setup"))
+				.findFirst().orElseThrow().status);
 	}
 }

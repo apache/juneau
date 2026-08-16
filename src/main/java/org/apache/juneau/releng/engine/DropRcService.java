@@ -46,6 +46,7 @@ public class DropRcService {
 	private final Path stagingRepo;
 	private final Path stateDir;
 	private final NexusStagingClient nexus;
+	private NexusStagingClient safeNexus;
 	private final ExecutionMode mode;
 	private final Predicate<String> armed;
 	private final TargetProfile target;
@@ -68,8 +69,23 @@ public class DropRcService {
 		this.broadcasterFn = broadcasterFn == null ? (v, s) -> new LogBroadcaster() : broadcasterFn;
 	}
 
-	private boolean live() {
-		return mode == ExecutionMode.LIVE;
+	/**
+	 * Placeholder Nexus client aimed at the in-app loopback mock. Used for Dry-run drops on a LIVE box so
+	 * they never hit real Nexus. Null in tests keeps {@link #nexus}.
+	 */
+	public void setSafeNexus(NexusStagingClient client) {
+		this.safeNexus = client;
+	}
+
+	private ExecutionMode effectiveMode(RunState rs) {
+		var requested = rs.mode != null ? rs.mode : this.mode;
+		if (requested == ExecutionMode.LIVE && this.mode != ExecutionMode.LIVE)
+			return ExecutionMode.SAFE;
+		return requested;
+	}
+
+	private boolean live(RunState rs) {
+		return effectiveMode(rs) == ExecutionMode.LIVE;
 	}
 
 	/**
@@ -90,8 +106,8 @@ public class DropRcService {
 	 * "would run:" line and no-ops in SAFE so a rehearsed drop has zero canonical side effects (the Tier-A
 	 * Nexus drop still round-trips the mock).
 	 */
-	private void tierB(List<String> command, String stdin, Map<String, String> env, Consumer<String> log) {
-		if (live()) {
+	private void tierB(List<String> command, String stdin, Map<String, String> env, Consumer<String> log, boolean live) {
+		if (live) {
 			runner.run(command, stdin, env);
 			return;
 		}
@@ -116,34 +132,37 @@ public class DropRcService {
 
 	/** Execute the drop, bump RC, and reset. */
 	public synchronized void apply(String version, String reason, Supplier<String> availid, Supplier<String> password) {
-		// Default-safe guard chokepoint (mirrors ReleaseEngine.apply): the real destructive drop only runs in
-		// LIVE once the run is armed. SAFE rehearses it (Tier-A drop against the mock, Tier-B calls logged).
-		if (live() && !armed.test(version))
-			throw isex("Refused: drop-RC is a mutating action. Enable LIVE mode and arm run %s first.", version);
 		var rs = store.load(version).orElseThrow();
+		// Default-safe guard chokepoint (mirrors ReleaseEngine.apply): the real destructive drop only runs on
+		// a LIVE run once it is armed. A Dry-run rehearses it (Tier-A drop against the mock, Tier-B logged).
+		if (live(rs) && !armed.test(version))
+			throw isex("Refused: drop-RC is a mutating action. Enable LIVE mode and arm run %s first.", version);
 		var tag = "juneau-" + rs.version + "-RC" + rs.rc;
 		var git = stagingRepo.toString();
 		var pw = password.get();
 		var log = logSink(rs);
+		var live = live(rs);
+		var safeClient = safeNexus != null ? safeNexus : nexus;
+		var client = live ? nexus : safeClient;
 
 		// a) drop Nexus staging repo (Tier A: real client round-trip, against the loopback mock in SAFE)
-		if (rs.nexusRepoId != null && nexus != null) {
+		if (rs.nexusRepoId != null && client != null) {
 			log.accept("Dropping Nexus staging repo " + rs.nexusRepoId);
-			nexus.drop(rs.nexusRepoId);
+			client.drop(rs.nexusRepoId);
 		}
 		// b) svn checkout dist/dev, rm the rejected RC's directories, commit
 		var dist = stateDir.resolve("dist");
 		tierB(List.of("svn", "checkout", SvnArgs.USERNAME, availid.get(), SvnArgs.PASSWORD_FROM_STDIN,
-				target.distDevBase(), dist.toString()), pw + "\n", Map.of(), log);
-		tierB(List.of("svn", "rm", dist.resolve("source").resolve(tag).toString()), null, null, log);
-		tierB(List.of("svn", "rm", dist.resolve("binaries").resolve(tag).toString()), null, null, log);
+				target.distDevBase(), dist.toString()), pw + "\n", Map.of(), log, live);
+		tierB(List.of("svn", "rm", dist.resolve("source").resolve(tag).toString()), null, null, log, live);
+		tierB(List.of("svn", "rm", dist.resolve("binaries").resolve(tag).toString()), null, null, log, live);
 		tierB(List.of("svn", "commit", dist.toString(), "-m", "Drop " + tag, SvnArgs.USERNAME, availid.get(),
-				SvnArgs.PASSWORD_FROM_STDIN), pw + "\n", Map.of(), log);
+				SvnArgs.PASSWORD_FROM_STDIN), pw + "\n", Map.of(), log, live);
 		// c) delete tag local + remote
-		tierB(List.of("git", "-C", git, "tag", "-d", tag), null, null, log);
-		tierB(List.of("git", "-C", git, "push", "origin", ":refs/tags/" + tag), null, null, log);
+		tierB(List.of("git", "-C", git, "tag", "-d", tag), null, null, log, live);
+		tierB(List.of("git", "-C", git, "push", "origin", ":refs/tags/" + tag), null, null, log, live);
 		// d) roll back the release:prepare version-bump commits
-		tierB(List.of("mvn", "-f", git + "/pom.xml", "release:rollback"), null, null, log);
+		tierB(List.of("mvn", "-f", git + "/pom.xml", "release:rollback"), null, null, log, live);
 
 		// 4) reset state
 		rs.rcHistory.add(new RcHistoryEntry(rs.rc, Instant.now().toString(), reason));

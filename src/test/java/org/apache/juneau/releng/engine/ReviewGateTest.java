@@ -62,10 +62,23 @@ class ReviewGateTest {
 		return ReleaseEngine.forTests(new RunStateStore(dir), StepRegistry.standard(branches), runner, branches, dir);
 	}
 
+	// Marks every step ahead of stepId SUCCEEDED so the forward-apply guard (ReleaseEngine) doesn't refuse
+	// to run stepId in isolation; this test is about the review-gate hold, not the whole pipeline.
+	private void satisfyAllPredecessorsOf(Path dir, String version, String stepId) {
+		var store = new RunStateStore(dir);
+		var rs = store.load(version).orElseThrow();
+		var ids = StepRegistry.standard(new BranchResolver(okRunner(), "/repo")).ids();
+		var idx = ids.indexOf(stepId);
+		for (var i = 0; i < idx; i++)
+			rs.step(ids.get(i)).status = StepStatus.SUCCEEDED;
+		store.save(rs);
+	}
+
 	@Test
 	void reviewGateStepHoldsUntilConfirmed(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
+		satisfyAllPredecessorsOf(dir, "9.2.1", "javadoc-verify");
 
 		var res = eng.apply("9.2.1", "javadoc-verify", Map.of());
 		assertTrue(res.success);

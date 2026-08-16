@@ -17,42 +17,62 @@
 
 package org.apache.juneau.releng.release;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.juneau.marshall.marshaller.Json;
+import org.apache.juneau.releng.engine.RunState;
+import org.apache.juneau.releng.engine.RunStateStore;
+import org.apache.juneau.releng.engine.RunStatus;
 
-/** Produces in-progress rows from JSON state files under the state dir. */
+/**
+ * Produces in-progress rows from the engine's persisted {@link RunState} files (via {@link RunStateStore}), mapped
+ * into this package's {@link Release} view shape.
+ *
+ * <p>The run-state files and the Releases-tab rows are different JSON shapes ({@link RunState} carries
+ * {@code branch}, {@code steps}, {@code rcHistory}, etc.; {@link Release} is a flattened table row) — this class
+ * is the one place that translates between them, rather than re-parsing a run-state file directly as a
+ * {@link Release} (which fails on {@code branch} and any other {@link RunState}-only property).
+ */
 public class LocalStateReleaseSource {
 
-	private final Path stateDir;
+	private final RunStateStore store;
 
-	public LocalStateReleaseSource(Path stateDir) {
-		this.stateDir = stateDir;
+	public LocalStateReleaseSource(RunStateStore store) {
+		this.store = store;
 	}
 
 	public List<Release> list() {
 		var out = new ArrayList<Release>();
-		if (!Files.isDirectory(stateDir))
-			return out;
-		try (var files = Files.list(stateDir)) {
-			files.filter(p -> p.toString().endsWith(".json")).sorted().forEach(p -> {
-				try {
-					var r = Json.DEFAULT.read(Files.readString(p), Release.class);
-					if (r.source == null)
-						r.source = "state";
-					out.add(r);
-				} catch (IOException e) {
-					throw isex(e, "Unreadable state file: %s", p);
-				}
-			});
-		} catch (IOException e) {
-			throw isex(e, "Cannot list state dir: %s", stateDir);
-		}
+		for (var rs : store.loadAll())
+			out.add(toRelease(rs));
 		return out;
+	}
+
+	private static Release toRelease(RunState rs) {
+		var r = new Release(rs.version, statusOf(rs.status), "state");
+		r.rc = "RC" + rs.rc;
+		r.stage = stageOf(rs.status);
+		r.voteCloses = rs.voteDeadline == null ? "—" : rs.voteDeadline;
+		return r;
+	}
+
+	/** Coarse Releases-tab status, per {@link Release}'s {@code "VOTING" | "RELEASED" | "DROPPED" | "DRAFT"}. */
+	private static String statusOf(RunStatus status) {
+		return switch (status) {
+			case AWAITING_VOTE -> "VOTING";
+			case RELEASED -> "RELEASED";
+			case DROPPED -> "DROPPED";
+			case RUNNING, FAILED -> "DRAFT";
+		};
+	}
+
+	/** Human-readable phase, per {@link Release}'s {@code "Awaiting vote" | "Distributed" | "Cancelled"}. */
+	private static String stageOf(RunStatus status) {
+		return switch (status) {
+			case AWAITING_VOTE -> "Awaiting vote";
+			case RELEASED -> "Distributed";
+			case DROPPED -> "Cancelled";
+			case RUNNING -> "Building";
+			case FAILED -> "Failed";
+		};
 	}
 }

@@ -18,12 +18,15 @@
 package org.apache.juneau.releng.engine;
 
 /**
- * Global execution posture for the release engine.
+ * Global box-wide execution posture for the release engine, and the cap on per-run mode.
  *
  * <p>{@code SAFE} (the default) rehearses a release with zero canonical side effects: the Nexus staging
  * callouts run their real client flow against an in-app loopback mock, and every other mutating callout is
  * command-logged rather than executed. {@code LIVE} executes everything for real and additionally requires
  * the run to be armed before any mutating step is allowed.
+ *
+ * <p>Each run stores its own mode (Dry-run vs Actual on the start form). A LIVE run is only possible when
+ * this box was started with {@code rm.mode=live}; a SAFE box always caps the run to SAFE.
  */
 public enum ExecutionMode {
 	SAFE, LIVE;

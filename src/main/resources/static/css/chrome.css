@@ -36,9 +36,9 @@
 :root {
   /* ---- Swappable brand tokens (override per-app) ---- */
   --rm-font: 'Inter', 'Source Sans 3', system-ui, -apple-system, sans-serif;
-  --rm-logo: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0OCA0OCc+PHJlY3Qgd2lkdGg9JzQ4JyBoZWlnaHQ9JzQ4JyByeD0nMTAnIGZpbGw9JyMxNTg5RUUnLz48cGF0aCBkPSdNMjQgOGMtNyA2LTExIDEzLTExIDE5YTExIDExIDAgMCAwIDIyIDBjMC02LTQtMTMtMTEtMTl6JyBmaWxsPScjZmZmZmZmJyBmaWxsLW9wYWNpdHk9JzAuOTUnLz48cGF0aCBkPSdNMjQgMTR2MjAnIHN0cm9rZT0nIzE1ODlFRScgc3Ryb2tlLXdpZHRoPScxLjYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjwvc3ZnPgo=");
-  --rm-logo-size: 26px 26px;
-  --rm-page-bg: linear-gradient(180deg, #b0c4df 0%, #c7d5e8 22%, #e4eaf2 55%, #f5f6f9 100%);
+  --rm-logo: url("/img/oakleaf.svg");
+  --rm-logo-size: 36px 48px;
+  --rm-page-bg: url("/img/topo-bg.png") center top / cover no-repeat fixed, linear-gradient(180deg, #b0c4df 0%, #c7d5e8 22%, #e4eaf2 55%, #f5f6f9 100%);
   --rm-header-icon-color: #747474;
 
   /* ---- Brand accent ---- */
@@ -304,6 +304,31 @@ a:hover { text-decoration: underline; }
   font-size: 1rem;
   font-weight: 700;
   color: var(--rm-text);
+  margin: 0;
+}
+
+.rm-card-header a {
+  font-size: 0.8125rem;
+}
+
+/* ==========================================================================
+   Detail list (release detail page)
+   ========================================================================== */
+
+.rm-detail-list {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 4px 0 16px;
+}
+
+.rm-detail-list dt {
+  font-weight: 600;
+  color: var(--rm-text-soft);
+}
+
+.rm-detail-list dd {
   margin: 0;
 }
 

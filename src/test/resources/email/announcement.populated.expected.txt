@@ -1,0 +1,18 @@
+The Apache Juneau team is pleased to announce the release of Apache Juneau 9.2.1.
+
+This patch release fixes a regression in the REST client and refreshes dependencies.
+
+- Fixed a NullPointerException in RestClient
+- Upgraded Jetty to 12.0.x
+
+Known issues:
+- The OpenAPI 3.1 parser does not yet support webhooks.
+
+Downloads:      https://dist.apache.org/repos/dist/release/juneau/9.2.1/
+GitHub Release: https://github.com/apache/juneau/releases/tag/9.2.1
+Release notes:  https://juneau.apache.org/#release-notes
+
+Acknowledgements:
+Thanks to Jane Doe and John Smith for their contributions.
+
+The Apache Juneau Team

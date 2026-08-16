@@ -32,8 +32,13 @@
                 </thead>
                 <tbody>
                     <#list releases as r>
+                    <#if r.rc?? && r.rc != '—'>
+                        <#assign rcNumber = r.rc?replace('RC', '')>
+                    <#else>
+                        <#assign rcNumber = '1'>
+                    </#if>
                     <tr>
-                        <td class="version-cell">${r.version!'—'}</td>
+                        <td class="version-cell"><#if r.version??><a href="/rest/releases/${r.version}/${rcNumber}">${r.version}</a><#else>&mdash;</#if></td>
                         <td class="rc-cell">${r.rc!'—'}</td>
                         <td><span class="tag status ${(r.status!'UNKNOWN')?lower_case}">${r.status!'—'}</span></td>
                         <td>
@@ -43,7 +48,7 @@
                                 <span class="tag stage ${r.stage?lower_case?replace(' ', '-')}">${r.stage}</span>
                             </#if>
                         </td>
-                        <td>${r.voteCloses!'—'}</td>
+                        <td><@ts value=r.voteCloses/></td>
                         <td>${r.released!'—'}</td>
                         <td class="links-cell">
                             <#if r.githubReleaseUrl??><a href="${r.githubReleaseUrl}">GitHub</a></#if>

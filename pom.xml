@@ -77,6 +77,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- In-process REST dispatch (real servlet + response-processor pipeline, no socket) for HTTP-level
+             regression tests of @Rest resources, e.g. NexusMockRest's JSON-body serialization. -->
+        <dependency>
+            <groupId>org.apache.juneau</groupId>
+            <artifactId>juneau-rest-mock</artifactId>
+            <version>${juneau.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

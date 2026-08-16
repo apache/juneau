@@ -19,6 +19,7 @@ package org.apache.juneau.releng.engine;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -62,5 +63,64 @@ class RunStateStoreTest {
 		var running = RunState.create("9.2.1", "b1", List.of("preflight"));
 		store.save(running);
 		assertEquals("9.2.1", store.activeRun().orElseThrow().version);
+	}
+
+	@Test
+	void displayRunFallsBackToAFailedRunSoTheRailStaysVisible(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var released = RunState.create("9.2.0", "b0", List.of("preflight"));
+		released.status = RunStatus.RELEASED;
+		store.save(released);
+		var failed = RunState.create("9.2.1", "b1", List.of("preflight"));
+		failed.status = RunStatus.FAILED;
+		store.save(failed);
+		assertTrue(store.activeRun().isEmpty(), "FAILED is not a start-lock; a new version can still begin");
+		assertEquals("9.2.1", store.displayRun().orElseThrow().version);
+	}
+
+	@Test
+	void displayRunPrefersAnActiveRunOverAFailedOne(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var failed = RunState.create("9.2.0", "b0", List.of("preflight"));
+		failed.status = RunStatus.FAILED;
+		store.save(failed);
+		var running = RunState.create("9.2.1", "b1", List.of("preflight"));
+		store.save(running);
+		assertEquals("9.2.1", store.displayRun().orElseThrow().version);
+	}
+
+	@Test
+	void saveIsANoOpTowardTheOnSaveHookByDefault(@TempDir Path dir) {
+		// No hook installed: save() must not throw just because nothing is listening.
+		var store = new RunStateStore(dir);
+		assertDoesNotThrow(() -> store.save(RunState.create("9.2.1", "b1", List.of("preflight"))));
+	}
+
+	@Test
+	void setOnSaveIsInvokedWithTheJustSavedRunOnEverySave(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		// rs is mutated in place across the two save() calls below, so the hook must capture each step's
+		// status at call time (an enum value, immutable) rather than a reference into the shared RunState.
+		var seenStatuses = new ArrayList<StepStatus>();
+		store.setOnSave(rs -> seenStatuses.add(rs.step("preflight").status));
+
+		var rs = RunState.create("9.2.1", "b1", List.of("preflight"));
+		store.save(rs);
+		rs.step("preflight").status = StepStatus.SUCCEEDED;
+		store.save(rs);
+
+		assertEquals(List.of(StepStatus.PENDING, StepStatus.SUCCEEDED), seenStatuses);
+	}
+
+	@Test
+	void setOnSaveWithNullRestoresTheNoOpDefault(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var seen = new ArrayList<RunState>();
+		store.setOnSave(seen::add);
+		store.setOnSave(null);
+
+		store.save(RunState.create("9.2.1", "b1", List.of("preflight")));
+
+		assertTrue(seen.isEmpty());
 	}
 }

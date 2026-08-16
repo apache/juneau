@@ -95,6 +95,25 @@ class AppConfigurationTest {
 	}
 
 	@Test
+	void stateBroadcasterResolverIsEmptyForUnknownVersion(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var eng = engine(dir);
+		var resolver = AppConfiguration.stateBroadcasterForVersion(eng, store);
+		assertTrue(resolver.apply("nope").isEmpty());
+	}
+
+	@Test
+	void stateBroadcasterResolverIsPresentAndSharedForAKnownVersion(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var eng = engine(dir);
+		eng.start("9.2.1", null);
+		var resolver = AppConfiguration.stateBroadcasterForVersion(eng, store);
+		var bc = resolver.apply("9.2.1");
+		assertTrue(bc.isPresent());
+		assertSame(eng.stateBroadcaster("9.2.1"), bc.get());
+	}
+
+	@Test
 	void logPathResolverIsEmptyForUnknownVersionAndStep(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var resolver = AppConfiguration.logPathForStep(store);

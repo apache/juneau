@@ -19,6 +19,8 @@ package org.apache.juneau.releng.rest;
 
 import java.util.List;
 import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.http.Path;
+import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
@@ -54,5 +56,22 @@ public class ReleaseRest extends BasicRestResource {
 	@RestGet("/data")
 	public List<Release> data() {
 		return service.list();
+	}
+
+	/**
+	 * Human page — a single release's detail view, linked from the Releases table's version cell.
+	 * {@code rc} is the RC number (e.g. {@code 1} for RC1); it's not currently used to pick among multiple
+	 * historical RCs of the same version (only one {@link Release} row exists per version today), but is
+	 * part of the path so a future multi-RC history view doesn't need a URL-breaking change.
+	 */
+	@RestGet("/{version}/{rc}")
+	public View detail(@Path("version") String version, @Path("rc") String rc) {
+		var release = findByVersion(version);
+		return FreemarkerView.of("release-detail").attr("release", release).attr("rc", rc);
+	}
+
+	private Release findByVersion(String version) {
+		return service.list().stream().filter(r -> version.equals(r.version)).findFirst()
+				.orElseThrow(() -> new NotFound("No release found for %s", version));
 	}
 }

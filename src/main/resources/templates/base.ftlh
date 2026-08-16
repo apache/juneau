@@ -15,11 +15,19 @@
   limitations under the License.
 -->
 
+<#-- Shared timestamp renderer: an ISO value renders as a compact Zulu span (progressively enhanced by
+     renderers.js into "YYYY-MM-DD HH:mmZ" with a native title tooltip showing local time), falling back
+     to the raw ISO string if JS never runs. In scope for every child template that <#include>s this file. -->
+<#macro ts value>
+    <#if !value??>&mdash;<#else><span data-render="ts-zulu" data-value="${value}">${value}</span></#if>
+</#macro>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Apache Juneau · Release Manager</title>
+    <link rel="icon" type="image/svg+xml" href="/img/oakleaf.svg">
     <#if activeTab?? && activeTab == 'releases'>
     <link rel="stylesheet" href="/datatables/dataTables.dataTables.min.css">
     </#if>
@@ -67,5 +75,6 @@
     <link rel="stylesheet" href="/css/new-release.css">
     <script src="/js/new-release.js"></script>
     </#if>
+    <script src="/js/renderers.js"></script>
 </body>
 </html>

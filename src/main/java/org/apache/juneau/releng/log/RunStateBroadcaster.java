@@ -21,8 +21,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-/** Per-run in-memory pub/sub of output lines. Subscribers are SSE connections. */
-public class LogBroadcaster implements Broadcaster {
+/**
+ * Per-run in-memory pub/sub of run/step-status snapshots, mirroring {@link LogBroadcaster}'s shape.
+ * Subscribers are SSE connections to the run-state channel ({@code /events/{version}/state}); each
+ * published payload is one JSON-serialized {@code RunStateSnapshot}. Publish is thread-safe since steps
+ * run on a background thread while SSE connections read/write on request-handling threads.
+ */
+public class RunStateBroadcaster implements Broadcaster {
 
 	private final List<Consumer<String>> subscribers = new CopyOnWriteArrayList<>();
 
@@ -32,10 +37,10 @@ public class LogBroadcaster implements Broadcaster {
 		return () -> subscribers.remove(sink);
 	}
 
-	public void publish(String line) {
+	public void publish(String snapshotJson) {
 		for (var s : subscribers) {
 			try {
-				s.accept(line);
+				s.accept(snapshotJson);
 			} catch (RuntimeException ignore) {
 				/* a dead client must not break others */ }
 		}

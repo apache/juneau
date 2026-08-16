@@ -63,10 +63,22 @@ class SafeModeGuardTest {
 				mode);
 	}
 
+	// Marks every step ahead of stepId SUCCEEDED so the forward-apply guard (ReleaseEngine) doesn't refuse
+	// to run stepId in isolation; this test is about the LIVE-armed/SAFE guard, not the whole pipeline.
+	private void satisfyAllPredecessorsOf(Path dir, String version, String stepId) {
+		var store = new RunStateStore(dir);
+		var rs = store.load(version).orElseThrow();
+		var ids = StepRegistry.standard(new BranchResolver(okRunner(), "/repo")).ids();
+		var idx = ids.indexOf(stepId);
+		for (var i = 0; i < idx; i++)
+			rs.step(ids.get(i)).status = StepStatus.SUCCEEDED;
+		store.save(rs);
+	}
+
 	@Test
 	void liveUnarmedRefusesMutatingStep(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null);
+		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		var res = eng.apply("9.2.1", "release-prepare", Map.of());
 		assertFalse(res.success);
 		assertTrue(res.message.toLowerCase().contains("arm"));
@@ -76,8 +88,9 @@ class SafeModeGuardTest {
 	@Test
 	void liveArmedRunsMutatingStep(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null);
+		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertTrue(eng.arm("9.2.1", "9.2.1 LIVE").success);
+		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
 		var res = eng.apply("9.2.1", "release-prepare", Map.of());
 		assertTrue(res.success);
 		assertEquals(StepStatus.SUCCEEDED, eng.state("9.2.1").step("release-prepare").status);
@@ -87,6 +100,7 @@ class SafeModeGuardTest {
 	void safeAllowsMutatingStepWithoutArming(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.SAFE);
 		eng.start("9.2.1", null);
+		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
 		var res = eng.apply("9.2.1", "release-prepare", Map.of());
 		assertTrue(res.success, "SAFE simulates the mutating step; no arming required");
 	}
@@ -101,9 +115,27 @@ class SafeModeGuardTest {
 	}
 
 	@Test
-	void armRequiresTheExactConfirmPhrase(@TempDir Path dir) {
+	void liveBoxSafeRunAllowsMutatingWithoutArming(@TempDir Path dir) {
+		var eng = engine(dir, ExecutionMode.LIVE);
+		eng.start("9.2.1", null); // defaults Dry-run even on a LIVE box
+		satisfyAllPredecessorsOf(dir, "9.2.1", "release-prepare");
+		var res = eng.apply("9.2.1", "release-prepare", Map.of());
+		assertTrue(res.success, "a Dry-run on a LIVE box still simulates; no arming required");
+	}
+
+	@Test
+	void armIsRejectedOnASafeRunEvenOnALiveBox(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
 		eng.start("9.2.1", null);
+		var res = eng.arm("9.2.1", "9.2.1 LIVE");
+		assertFalse(res.success);
+		assertFalse(eng.isArmed("9.2.1"));
+	}
+
+	@Test
+	void armRequiresTheExactConfirmPhrase(@TempDir Path dir) {
+		var eng = engine(dir, ExecutionMode.LIVE);
+		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertFalse(eng.arm("9.2.1", "yes").success);
 		assertFalse(eng.isArmed("9.2.1"));
 	}
@@ -111,7 +143,7 @@ class SafeModeGuardTest {
 	@Test
 	void armDoesNotSurviveARestart(@TempDir Path dir) {
 		var eng = engine(dir, ExecutionMode.LIVE);
-		eng.start("9.2.1", null);
+		eng.start("9.2.1", null, null, ExecutionMode.LIVE);
 		assertTrue(eng.arm("9.2.1", "9.2.1 LIVE").success);
 		assertTrue(eng.isArmed("9.2.1"));
 

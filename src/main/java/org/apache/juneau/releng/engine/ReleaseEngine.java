@@ -21,20 +21,26 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.log.LogBroadcaster;
 import org.apache.juneau.releng.log.RunLog;
+import org.apache.juneau.releng.log.RunStateBroadcaster;
 import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 
 /** Single-active-run orchestrator. One run advances at a time; state is persisted after every step. */
 public class ReleaseEngine {
+
+	private static final String VOTE_GATE = "vote-gate";
+	private static final String UNKNOWN_STEP = "Unknown step: ";
 
 	private final RunStateStore store;
 	private final StepRegistry registry;
@@ -58,10 +64,17 @@ public class ReleaseEngine {
 	// In-memory per-step broadcasters, keyed "version/stepId". Lost on restart; log files survive.
 	private final Map<String, LogBroadcaster> broadcasters = new ConcurrentHashMap<>();
 
+	// In-memory per-run run-state broadcasters, keyed by version. Lost on restart; a reconnecting SSE
+	// client gets a fresh initial snapshot instead (see AppConfiguration's state resolver).
+	private final Map<String, RunStateBroadcaster> stateBroadcasters = new ConcurrentHashMap<>();
+
 	// Invoked when a new run starts, e.g. to reset the SAFE Nexus loopback mock. Defaults to a no-op.
 	private Runnable runStartHook = () -> {
 		// No-op by default; the SAFE-mode wiring installs a mock-reset hook.
 	};
+
+	// Loopback mock base (http://host:port/mock/nexus). Null in forTests so those keep secrets.nexus().
+	private String mockNexusBaseUrl;
 
 	/** Everything the REST layer must provide to build a mutating StepContext. */
 	public interface SecretResolver {
@@ -96,6 +109,11 @@ public class ReleaseEngine {
 		this.secrets = secrets;
 		this.mode = mode == null ? ExecutionMode.SAFE : mode;
 		this.target = target == null ? TargetProfile.prodDefault() : target;
+		// The single choke point for the New-Release tab's live rail push: every status-mutating
+		// transition — this engine's own methods AND DropRcService's drop-RC action, since it shares this
+		// same RunStateStore instance — ultimately calls store.save(), so hooking it here catches all of
+		// them without a separate publish call at each mutation site.
+		store.setOnSave(this::publishSnapshot);
 	}
 
 	/** Minimal test factory (no secrets/nexus/email). */
@@ -144,8 +162,40 @@ public class ReleaseEngine {
 		return broadcasters.computeIfAbsent(version + "/" + stepId, k -> new LogBroadcaster());
 	}
 
+	/** One run-state broadcaster per version, for the New-Release tab's live rail push. */
+	public RunStateBroadcaster stateBroadcaster(String version) {
+		return stateBroadcasters.computeIfAbsent(version, k -> new RunStateBroadcaster());
+	}
+
+	/** {@code version}'s current snapshot as JSON, or empty when there's no persisted run for it. */
+	public Optional<String> snapshotJson(String version) {
+		return store.load(version)
+				.map(rs -> Json.DEFAULT.write(RunStateSnapshot.of(rs, effectiveMode(rs), isArmed(version))));
+	}
+
+	/**
+	 * Builds {@code rs}'s snapshot and pushes it to that version's {@link RunStateBroadcaster}. Registered
+	 * as {@link RunStateStore}'s {@code onSave} hook (see the constructor), and also called directly from
+	 * {@link #arm}/{@link #disarm}, since arming is transient in-memory posture that never itself triggers
+	 * a {@code save()}.
+	 */
+	private void publishSnapshot(RunState rs) {
+		stateBroadcaster(rs.version)
+				.publish(Json.DEFAULT.write(RunStateSnapshot.of(rs, effectiveMode(rs), isArmed(rs.version))));
+	}
+
+	/** Same as {@link #publishSnapshot(RunState)}, reloading the current persisted state for {@code version}. */
+	private void publishSnapshot(String version) {
+		store.load(version).ifPresent(this::publishSnapshot);
+	}
+
 	public Optional<RunState> activeRun() {
 		return store.activeRun();
+	}
+
+	/** The run the New-Release page should render — see {@link RunStateStore#displayRun()}. */
+	public Optional<RunState> displayRun() {
+		return store.displayRun();
 	}
 
 	public RunState state(String version) {
@@ -160,9 +210,19 @@ public class ReleaseEngine {
 	/**
 	 * Start a new run, recording the milestone number resolved (or overridden) on the New-Release form.
 	 * {@code milestoneNumber} may be null (no matching milestone; {@code milestone-close} then legitimately
-	 * no-ops).
+	 * no-ops). Defaults the run to Dry-run (SAFE).
 	 */
 	public synchronized RunState start(String version, String developmentVersion, Integer milestoneNumber) {
+		return start(version, developmentVersion, milestoneNumber, null);
+	}
+
+	/**
+	 * Start a new run. {@code requestedMode} is the form's Dry-run/Actual choice; null means Dry-run.
+	 * Actual (LIVE) is honored only when this box was started with {@code rm.mode=live} — a SAFE box
+	 * always caps the run to SAFE.
+	 */
+	public synchronized RunState start(String version, String developmentVersion, Integer milestoneNumber,
+			ExecutionMode requestedMode) {
 		var active = store.activeRun();
 		if (active.isPresent())
 			throw isex("A run is already active: %s (%s). Finish or drop it first.", active.get().version,
@@ -171,8 +231,25 @@ public class ReleaseEngine {
 		var rs = RunState.create(version, branch, registry.ids());
 		rs.developmentVersion = developmentVersion;
 		rs.milestoneNumber = milestoneNumber;
+		rs.mode = capMode(requestedMode);
 		store.save(rs);
 		runStartHook.run(); // e.g. reset the SAFE Nexus loopback mock so this run starts from a clean slate
+		return rs;
+	}
+
+	/**
+	 * Update the optional narrative fields ({@code releaseSummary}, {@code highlights}, {@code knownIssues},
+	 * {@code acknowledgements}) on an existing run and persist. Any of the values may be null/blank; those
+	 * are simply stored and later omitted from the composed emails. Returns the updated run.
+	 */
+	public synchronized RunState updateDetails(String version, String releaseSummary, String highlights,
+			String knownIssues, String acknowledgements) {
+		var rs = require(version);
+		rs.releaseSummary = releaseSummary;
+		rs.highlights = highlights;
+		rs.knownIssues = knownIssues;
+		rs.acknowledgements = acknowledgements;
+		store.save(rs);
 		return rs;
 	}
 
@@ -181,6 +258,30 @@ public class ReleaseEngine {
 		this.runStartHook = hook == null ? () -> {
 			// No-op: clearing the hook restores default behavior.
 		} : hook;
+	}
+
+	/** Loopback mock base used for Dry-run Nexus callouts. Null in {@link #forTests} keeps {@code secrets.nexus()}. */
+	public void setMockNexusBaseUrl(String url) {
+		this.mockNexusBaseUrl = url;
+	}
+
+	public String mockNexusBaseUrl() {
+		return mockNexusBaseUrl;
+	}
+
+	/**
+	 * The run's effective mode: persisted {@code rs.mode} (null → SAFE), capped so a SAFE box can never
+	 * execute LIVE even if on-disk state claims it.
+	 */
+	public ExecutionMode effectiveMode(RunState rs) {
+		return capMode(rs == null ? null : rs.mode);
+	}
+
+	private ExecutionMode capMode(ExecutionMode requested) {
+		var req = requested != null ? requested : ExecutionMode.SAFE;
+		if (req == ExecutionMode.LIVE && mode != ExecutionMode.LIVE)
+			return ExecutionMode.SAFE;
+		return req;
 	}
 
 	public ExecutionMode mode() {
@@ -192,15 +293,20 @@ public class ReleaseEngine {
 	}
 
 	/**
-	 * Arms {@code version} for LIVE mutation. Rejected unless mode is LIVE and {@code confirm} equals the
-	 * required phrase {@code "<version> LIVE"}. Returns the outcome message-bearing result.
+	 * Arms {@code version} for LIVE mutation. Rejected unless the box is LIVE, this run is Actual (LIVE),
+	 * and {@code confirm} equals the required phrase {@code "<version> LIVE"}. Returns the outcome
+	 * message-bearing result.
 	 */
 	public synchronized StepResult arm(String version, String confirm) {
 		if (mode != ExecutionMode.LIVE)
 			return StepResult.fail("Arming is only possible in LIVE mode; this box is running in SAFE mode.");
+		var rs = require(version);
+		if (effectiveMode(rs) != ExecutionMode.LIVE)
+			return StepResult.fail("Arming is only possible for an Actual (LIVE) run; this run is Dry-run.");
 		if (!Objects.equals(confirm, version + " LIVE"))
 			return StepResult.fail("Type '" + version + " LIVE' to arm this run for live mutation.");
 		armedVersion = version;
+		publishSnapshot(version); // armed flag isn't part of RunState, so arming alone never calls store.save()
 		return StepResult.ok("Run " + version + " is armed for LIVE mutation.");
 	}
 
@@ -209,8 +315,10 @@ public class ReleaseEngine {
 	}
 
 	public synchronized void disarm(String version) {
-		if (isArmed(version))
+		if (isArmed(version)) {
 			armedVersion = null;
+			publishSnapshot(version); // same rationale as arm() above
+		}
 	}
 
 	/** Preview a step: no mutation, no persistence, no log reset. */
@@ -225,13 +333,24 @@ public class ReleaseEngine {
 	 * independently, regardless of {@code currentStepId}). Persists status transitions; halts on failure.
 	 * Overwrites that step's own log in place via {@code resetLog=true}.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Linear per-outcome status bookkeeping (vote-gate/tally/finalize forks); splitting it would scatter the run's state machine.
+	})
 	public synchronized StepResult apply(String version, String stepId, Map<String, String> form) {
 		var rs = require(version);
-		var step = requireStep(stepId);
-		// Default-safe guard chokepoint: a mutating step is refused in LIVE until the run is armed. In SAFE it
-		// is allowed to run (simulated) so the pipeline can be rehearsed end-to-end with no canonical effect.
-		if (step.mutating() && mode == ExecutionMode.LIVE && !isArmed(version))
+		var step = registry.byId(stepId);
+		if (step == null)
+			return StepResult.fail(UNKNOWN_STEP + stepId);
+		// Default-safe guard chokepoint: a mutating step is refused on a LIVE run until it is armed. A
+		// Dry-run (SAFE) simulates without arming, even when the box itself was started with rm.mode=live.
+		if (step.mutating() && effectiveMode(rs) == ExecutionMode.LIVE && !isArmed(version))
 			return StepResult.fail(guardMessage(step));
+		// Strict forward-apply guard: refuses to run stepId ahead of an unsatisfied required predecessor.
+		// This is also finalize-run's own prerequisite check, since finalize-run's predecessors are every
+		// other step in the pipeline — no separate check is needed there.
+		var blocked = forwardApplyGuardMessage(rs, stepId);
+		if (blocked.isPresent())
+			return StepResult.fail(blocked.get());
 		var ss = rs.step(stepId);
 		ss.status = StepStatus.RUNNING;
 		ss.startedAt = Instant.now().toString();
@@ -248,7 +367,8 @@ public class ReleaseEngine {
 		}
 
 		if (result.success) {
-			if (stepId.equals("vote-gate")) {
+			ss.error = null; // a later success of the same step must not keep a leftover failure message
+			if (stepId.equals(VOTE_GATE)) {
 				ss.status = StepStatus.AWAITING_VOTE;
 				rs.status = RunStatus.AWAITING_VOTE;
 			} else if (step.reviewGate()) {
@@ -258,9 +378,24 @@ public class ReleaseEngine {
 				ss.status = StepStatus.SUCCEEDED;
 			}
 			ss.completedAt = Instant.now().toString();
+			if (stepId.equals("tally-vote-result") && "passed".equals(form == null ? null : form.get("voteOutcome"))) {
+				// A passing tally is the one action that resolves the vote gate — flip vote-gate's own
+				// status to terminal so the forward-apply guard (and finalize-run's prerequisite check)
+				// treat it as satisfied. A rejected tally leaves vote-gate AWAITING_VOTE; that path forks
+				// to Drop-RC instead of advancing the linear pipeline.
+				var gate = rs.step(VOTE_GATE);
+				if (gate != null) {
+					gate.status = StepStatus.SUCCEEDED;
+					gate.completedAt = ss.completedAt;
+				}
+			}
 			if (stepId.equals("finalize-run")) {
 				rs.status = RunStatus.RELEASED;
 				disarm(version); // the run is complete; drop the arm
+			} else if (rs.status == RunStatus.FAILED) {
+				// Unstick: a subsequent success must not leave the run FAILED, or the New-Release page
+				// (which keys off non-terminal status) hides the remaining PENDING steps.
+				rs.status = RunStatus.RUNNING;
 			}
 		} else {
 			ss.status = StepStatus.FAILED;
@@ -274,7 +409,9 @@ public class ReleaseEngine {
 	/** Mark a step SKIPPED (only steps whose registry entry is skippable). */
 	public synchronized StepResult skip(String version, String stepId) {
 		var rs = require(version);
-		var step = requireStep(stepId);
+		var step = registry.byId(stepId);
+		if (step == null)
+			return StepResult.fail(UNKNOWN_STEP + stepId);
 		if (!step.skippable())
 			return StepResult.fail(stepId + " is not skippable.");
 		var ss = rs.step(stepId);
@@ -289,7 +426,7 @@ public class ReleaseEngine {
 		requireStep(stepId);
 		var ss = rs.step(stepId);
 		if (ss == null)
-			return StepResult.fail("Unknown step: " + stepId);
+			return StepResult.fail(UNKNOWN_STEP + stepId);
 		if (ss.status != StepStatus.AWAITING_REVIEW)
 			return StepResult.fail(stepId + " is not awaiting review.");
 		ss.status = StepStatus.SUCCEEDED;
@@ -300,6 +437,51 @@ public class ReleaseEngine {
 
 	private String guardMessage(ReleaseStep step) {
 		return "Refused: '" + step.id() + "' is a mutating step. Enable LIVE mode and arm this run first.";
+	}
+
+	/**
+	 * Is {@code status} a terminal-success outcome for {@code step}: always {@code SUCCEEDED}, or
+	 * {@code SKIPPED} but only when the step is explicitly markable {@link ReleaseStep#skippable()}.
+	 * {@code PENDING}/{@code RUNNING}/{@code FAILED}/{@code AWAITING_VOTE}/{@code AWAITING_REVIEW} never
+	 * qualify — those are the exact statuses that let a run reach {@code finalize-run} despite an
+	 * unresolved required step.
+	 */
+	private boolean isTerminalSuccess(ReleaseStep step, StepStatus status) {
+		return status == StepStatus.SUCCEEDED || (status == StepStatus.SKIPPED && step.skippable());
+	}
+
+	/**
+	 * Strict forward-apply guard: refuses {@code stepId} while an earlier required step hasn't reached a
+	 * terminal-success state, so a run can never advance past an unsatisfied predecessor — including all
+	 * the way to {@code finalize-run}, whose own predecessors are every other step in the pipeline. Returns
+	 * empty when {@code stepId} may proceed.
+	 *
+	 * <p>vote-gate's own {@code AWAITING_VOTE} state is specifically NOT treated as blocking when the step
+	 * being applied is {@code tally-vote-result} — recording a tally is the one legitimate action that
+	 * resolves an open vote, so it must stay reachable while the gate itself is still open.
+	 */
+	private Optional<String> forwardApplyGuardMessage(RunState rs, String stepId) {
+		var ids = registry.ids();
+		var idx = ids.indexOf(stepId);
+		if (idx <= 0)
+			return Optional.empty(); // unknown id, or the first step: no predecessor to satisfy
+		var offending = new ArrayList<String>();
+		for (var i = 0; i < idx; i++) {
+			var priorId = ids.get(i);
+			var priorState = rs.step(priorId);
+			// A predecessor is satisfied when it's absent, terminal-success, or the still-open vote-gate that
+			// the tally step is specifically allowed to resolve — none of those block forward apply.
+			var satisfied = priorState == null || isTerminalSuccess(registry.byId(priorId), priorState.status)
+					|| (priorId.equals(VOTE_GATE) && stepId.equals("tally-vote-result")
+							&& priorState.status == StepStatus.AWAITING_VOTE);
+			if (satisfied)
+				continue;
+			offending.add(priorId + " (" + priorState.status + ")");
+		}
+		if (offending.isEmpty())
+			return Optional.empty();
+		return Optional.of("Blocked: '" + stepId + "' requires these prior step(s) to succeed first: "
+				+ String.join(", ", offending));
 	}
 
 	/** On boot: demote any RUNNING step to FAILED (its subprocess died with the JVM). */
@@ -329,8 +511,16 @@ public class ReleaseEngine {
 		var ctx = new StepContext();
 		ctx.run = rs;
 		ctx.runner = runner;
-		ctx.mode = mode;
-		ctx.target = target;
+		var runMode = effectiveMode(rs);
+		ctx.mode = runMode;
+		if (runMode == ExecutionMode.SAFE && mockNexusBaseUrl != null) {
+			ctx.target = target.withNexusBaseUrl(mockNexusBaseUrl);
+			ctx.nexus = NexusStagingClient.create(mockNexusBaseUrl, target.nexusProfileId(), "safe-placeholder",
+					"safe-placeholder");
+		} else {
+			ctx.target = target;
+			ctx.nexus = secrets.nexus();
+		}
 		var log = new RunLog(stateDir.resolve(stepLogRelativePath(rs, stepId)), broadcaster(rs.version, stepId));
 		if (resetLog)
 			log.reset();
@@ -344,7 +534,6 @@ public class ReleaseEngine {
 		ctx.gpgKeyId = secrets.gpgKeyId();
 		ctx.gpgPassphrase = secrets.gpgPassphrase();
 		ctx.githubToken = secrets.githubToken();
-		ctx.nexus = secrets.nexus();
 		ctx.email = email;
 		ctx.milestone = milestone;
 		ctx.formInputs = form == null ? Map.of() : form;

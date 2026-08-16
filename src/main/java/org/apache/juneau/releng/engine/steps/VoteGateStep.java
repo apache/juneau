@@ -24,7 +24,10 @@ import org.apache.juneau.releng.engine.ReleaseStep;
 import org.apache.juneau.releng.engine.StepContext;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** §5.15 vote-gate: hold the pipeline open ~72h. Entering it is the gate; only tally-vote-result advances. */
+/**
+ * vote-gate: hold the pipeline open ~72h. Entering it is the gate; only a passing
+ * {@code tally-vote-result} advances it, flipping it (in {@code ReleaseEngine}) to a terminal status.
+ */
 public class VoteGateStep implements ReleaseStep {
 	@Override
 	public String id() {

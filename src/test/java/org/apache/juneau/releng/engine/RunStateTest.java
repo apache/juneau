@@ -33,6 +33,15 @@ class RunStateTest {
 		assertEquals(RunStatus.RUNNING, rs.status);
 		assertEquals(3, rs.steps.size());
 		assertTrue(rs.steps.stream().allMatch(s -> s.status == StepStatus.PENDING));
+		assertNull(rs.mode, "create() must leave mode unset so pre-toggle JSON and Drop-RC tests fall back to constructor mode");
+	}
+
+	@Test
+	void jsonWithoutModeFieldLeavesModeNull() {
+		var rs = RunState.create("9.2.1", "b", List.of("preflight"));
+		var json = Json.DEFAULT.write(rs);
+		var back = Json.DEFAULT.read(json, RunState.class);
+		assertNull(back.mode);
 	}
 
 	@Test
@@ -49,6 +58,11 @@ class RunStateTest {
 		rs.rcHistory.add(new RcHistoryEntry(1, "2026-08-15T14:02:11Z", "vote rejected"));
 		rs.step("preflight").status = StepStatus.SUCCEEDED;
 		rs.nexusRepoId = "orgapachejuneau-1042";
+		rs.releaseSummary = "Patch release.";
+		rs.highlights = "- One\n- Two";
+		rs.knownIssues = "- A known thing";
+		rs.acknowledgements = "Thanks all.";
+		rs.mode = ExecutionMode.LIVE;
 
 		var json = Json.DEFAULT.write(rs);
 		var back = Json.DEFAULT.read(json, RunState.class);
@@ -58,6 +72,11 @@ class RunStateTest {
 		assertEquals("vote rejected", back.rcHistory.get(0).reason);
 		assertEquals(StepStatus.SUCCEEDED, back.step("preflight").status);
 		assertEquals("orgapachejuneau-1042", back.nexusRepoId);
+		assertEquals("Patch release.", back.releaseSummary);
+		assertEquals("- One\n- Two", back.highlights);
+		assertEquals("- A known thing", back.knownIssues);
+		assertEquals("Thanks all.", back.acknowledgements);
+		assertEquals(ExecutionMode.LIVE, back.mode);
 	}
 
 }

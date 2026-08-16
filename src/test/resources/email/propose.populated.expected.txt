@@ -1,0 +1,5 @@
+I propose to release Apache Juneau 9.2.1 (RC1) from branch juneau-9.2.1-branch.
+
+This patch release fixes a regression in the REST client and refreshes dependencies.
+
+If there are last-minute blockers, please reply on this thread before the build starts.

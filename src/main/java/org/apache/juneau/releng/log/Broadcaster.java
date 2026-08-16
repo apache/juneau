@@ -17,31 +17,15 @@
 
 package org.apache.juneau.releng.log;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-/** Per-run in-memory pub/sub of output lines. Subscribers are SSE connections. */
-public class LogBroadcaster implements Broadcaster {
+/**
+ * Common subscribe shape shared by {@link LogBroadcaster} (console log lines) and
+ * {@link RunStateBroadcaster} (run/step status snapshots) so {@link SseLogServlet}'s tail loop can serve
+ * either channel without duplicating it.
+ */
+public interface Broadcaster {
 
-	private final List<Consumer<String>> subscribers = new CopyOnWriteArrayList<>();
-
-	@Override
-	public AutoCloseable subscribe(Consumer<String> sink) {
-		subscribers.add(sink);
-		return () -> subscribers.remove(sink);
-	}
-
-	public void publish(String line) {
-		for (var s : subscribers) {
-			try {
-				s.accept(line);
-			} catch (RuntimeException ignore) {
-				/* a dead client must not break others */ }
-		}
-	}
-
-	public int subscriberCount() {
-		return subscribers.size();
-	}
+	/** Subscribes {@code sink} to every payload published from now on; closing the return unsubscribes it. */
+	AutoCloseable subscribe(Consumer<String> sink);
 }

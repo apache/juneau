@@ -255,6 +255,36 @@
   margin-top: 8px;
 }
 
+/* LIVE-mode vote-gate form (§5.16 tally-vote-result) — SAFE gets a single "Simulate (SAFE)" button
+   (see .rm-step-note above) instead of this form, since there's no real 72h wait or tally to record. */
+.rm-vote-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+}
+
+.rm-vote-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rm-text-muted-2);
+}
+
+.rm-vote-form select,
+.rm-vote-form textarea {
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  padding: 6px 10px;
+  border: 1px solid var(--rm-border-2);
+  border-radius: var(--rm-radius);
+  background: var(--rm-white);
+  color: var(--rm-text);
+  resize: vertical;
+}
+
 /* ==========================================================================
    OPTION A — left rail + right detail/console
    ========================================================================== */
@@ -513,6 +543,158 @@ pre.rm-console {
 
 .rm-mode-chip.safe { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); border-color: var(--rm-tag-green-border); }
 .rm-mode-chip.live { background: #fdeceb; color: var(--rm-danger); border-color: #f3c6c2; }
+
+/* ==========================================================================
+   App-local Input / Execution subtabs (client-side show/hide; see new-release.js)
+   ========================================================================== */
+
+.rm-subtabs {
+  display: flex;
+  gap: 6px;
+  max-width: 1180px;
+  margin: 0 auto 16px;
+  padding: 4px;
+  background: var(--rm-white);
+  border: 1px solid var(--rm-border);
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.rm-subtab {
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--rm-text-muted-2);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 18px;
+  cursor: pointer;
+}
+
+.rm-subtab:hover { background: var(--rm-accent-wash); }
+
+.rm-subtab.active {
+  background: var(--rm-accent);
+  color: var(--rm-white);
+}
+
+.rm-subtab-panel[hidden] { display: none; }
+
+/* ==========================================================================
+   Full-width "Start a new release" / "Release details" form card
+   ========================================================================== */
+
+.rm-form-card {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.rm-form-card h2 { margin-top: 0; }
+
+/* Metadata row: version / development version / milestone, responsive down to one column. */
+.rm-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px 16px;
+  margin: 12px 0 4px;
+}
+
+/* Label-above-input stack; each narrative field spans the full card width. */
+.rm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 14px;
+}
+
+.rm-form-grid .rm-field { margin-top: 0; }
+
+.rm-field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--rm-text-muted-2);
+}
+
+.rm-field-opt {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--rm-text-muted);
+}
+
+.rm-field input,
+.rm-field textarea {
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  padding: 8px 11px;
+  border: 1px solid var(--rm-border-2);
+  border-radius: var(--rm-radius);
+  background: var(--rm-white);
+  color: var(--rm-text);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rm-field textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.rm-field input:focus,
+.rm-field textarea:focus {
+  outline: none;
+  border-color: var(--rm-accent);
+  box-shadow: 0 0 0 2px var(--rm-accent-wash);
+}
+
+.rm-field input[readonly] {
+  background: var(--rm-card-bg);
+  color: var(--rm-text-muted-2);
+}
+
+.rm-mode-picker {
+  margin-top: 16px;
+}
+
+.rm-mode-picker-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--rm-text-muted);
+  margin-bottom: 8px;
+}
+
+.rm-mode-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.rm-mode-option.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.rm-field.rm-mode-picker input[type="radio"] {
+  width: auto;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  accent-color: var(--rm-accent);
+}
+
+.rm-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
 
 /* The run is armed for live mutation (LIVE only). */
 .tag.armed {
