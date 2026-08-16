@@ -29,6 +29,7 @@ import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.mcp.McpExchange;
@@ -354,6 +355,93 @@ class McpSchemaSafety_Test {
 		var burnedMs = (after - before) / 1_000_000;
 
 		assertTrue(burnedMs < 200, () -> "validation-pool worker kept burning CPU after budget trip: " + burnedMs + "ms");
+	}
+
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep deterministically exhausts the simulated pre-check deadline; burnCpuFor's timer-bounded loop models a bounded compute cost. Neither is a wait-and-hope delay.
+	})
+	@Test
+	void d08_staleSharedDeadlineBudget_falselyTripsTrivialValidation_freshBudgetDoesNot() {
+		// Regression test for the flaky Characterization_Test false-positive (McpSchemaSafety.validateInput ->
+		// validateBounded): the OLD code derived the validation task's compute budget from
+		// JsonValueSafety.remainingNanos(sharedDeadline) - the caller's remaining share of the SAME wall-clock
+		// deadline already partially spent by the two structural JsonValueSafety.check() calls and the
+		// schema-to-bean conversion. Under heavy concurrent load those pre-phases can consume the entire 100ms
+		// deadline, collapsing "remaining" to ~0 - at which point even bounded, genuinely-trivial validation
+		// work trips -32602 purely from external scheduling pressure, not from anything about the schema or
+		// arguments being validated. The fix (validateBounded) instead hands the task a FRESH
+		// MAX_VALIDATION_MILLIS budget, measured from when the task itself starts running, so the identical
+		// pre-delay has zero effect.
+		//
+		// Reproduces this deterministically (no dependence on machine load) via the same JsonValueSafety
+		// deadline/remaining arithmetic the OLD code used, feeding the result into the still-live
+		// awaitBounded/TaskStart seam: the SAME bounded ~30ms "validation" work is run twice - once under the
+		// literal OLD-style stale/collapsed budget (a real deadline slept past, then remainingNanos()'d down to
+		// 0) and once under the CURRENT fresh budget - proving the outcome now depends only on the fresh
+		// budget, not on how much wall-clock some unrelated earlier phase had already spent.
+		var boundedWorkMillis = 30;
+		assertTrue(boundedWorkMillis < McpSchemaSafety.MAX_SCHEDULING_MILLIS, "test fixture assumption");
+
+		// Simulates the pre-check phase (structural checks + schema conversion) fully consuming the shared
+		// deadline under load - the exact wall-clock arithmetic the OLD validateBounded fed into awaitBounded.
+		var simulatedPreCheckDeadline = JsonValueSafety.deadlineNanos();
+		sleepPastDeadline(simulatedPreCheckDeadline);
+		var staleRemaining = JsonValueSafety.remainingNanos(simulatedPreCheckDeadline);
+		assertEquals(0, staleRemaining, "test fixture assumption: simulated pre-check delay must fully exhaust the shared deadline");
+
+		// (a) OLD behavior: a budget derived from an already-exhausted shared deadline (remaining == 0) trips
+		// the guard even though the validation work itself is well within the real MAX_VALIDATION_MILLIS budget.
+		var e = assertThrows(McpException.class, () -> runBoundedTask(boundedWorkMillis, staleRemaining));
+		assertEquals(-32602, e.getCode());
+		assertContains("exceeded " + McpSchemaSafety.MAX_VALIDATION_MILLIS + " ms", e.getMessage());
+
+		// (b) FIX: the identical bounded work succeeds under a fresh MAX_VALIDATION_MILLIS budget - exactly as
+		// validateBounded now computes it - unaffected by how much wall-clock a caller's OTHER deadline had
+		// already spent.
+		assertDoesNotThrow(() -> runBoundedTask(boundedWorkMillis,
+			TimeUnit.MILLISECONDS.toNanos(McpSchemaSafety.MAX_VALIDATION_MILLIS)));
+	}
+
+	/** Sleeps until {@code deadlineNanos} ({@link System#nanoTime()} units) has passed. */
+	private static void sleepPastDeadline(long deadlineNanos) {
+		while (System.nanoTime() < deadlineNanos) {
+			var remainingMs = (deadlineNanos - System.nanoTime()) / 1_000_000 + 1;
+			try {
+				Thread.sleep(Math.max(1, remainingMs));
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				throw new AssertionError(e);
+			}
+		}
+	}
+
+	/** Submits a task that burns CPU for {@code workMillis} and awaits it under {@code budgetNanos} via the real {@code awaitBounded} seam. */
+	private static void runBoundedTask(long workMillis, long budgetNanos) throws InterruptedException {
+		var started = new CountDownLatch(1);
+		var taskStart = new AtomicReference<McpSchemaSafety.TaskStart>();
+		var executor = Executors.newSingleThreadExecutor();
+		try {
+			var future = executor.submit(() -> {
+				taskStart.set(McpSchemaSafety.TaskStart.capture());
+				started.countDown();
+				burnCpuFor(workMillis);
+				return null;
+			});
+			McpSchemaSafety.awaitBounded(future, started, taskStart, budgetNanos);
+		} finally {
+			executor.shutdownNow();
+		}
+	}
+
+	/** Busy-spins for (approximately) {@code millis}, so the calling thread actually consumes CPU rather than sleeping. */
+	private static void burnCpuFor(long millis) {
+		var deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(millis);
+		var sink = 0L;
+		while (System.nanoTime() < deadline)
+			for (var i = 1; i < 100_000; i++)
+				sink += (long) Math.sqrt(i) * i;
+		if (sink == Long.MIN_VALUE)  // never true; prevents the JIT from eliding the loop
+			throw new AssertionError();
 	}
 
 	private static long poolCpuNanos(ThreadMXBean threadMx) {

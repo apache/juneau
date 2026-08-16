@@ -48,9 +48,12 @@ import org.apache.juneau.rest.server.mcp.McpSchema;
  * code path that opens a network connection or a file to dereference one.
  *
  * <p>
- * Validation itself runs on a fixed-size pool of daemon threads and is bounded by the same overall budget: if
- * a pathological schema (for example a catastrophically-backtracking {@code pattern}) fails to complete in
- * time, the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread.
+ * Validation itself runs on a fixed-size pool of daemon threads and is bounded by its own independent compute
+ * budget ({@link #MAX_VALIDATION_MILLIS}), measured fresh from when the validation task actually starts running
+ * &mdash; <b>not</b> from the structural-traversal deadline above, so wall-clock time spent in the structural
+ * pre-checks or the schema-bean conversion never shrinks it (see {@link #validateBounded} for why). If a
+ * pathological schema (for example a catastrophically-backtracking {@code pattern}) fails to complete in time,
+ * the task is cancelled and a {@code -32602} error is raised instead of hanging the request thread.
  *
  * <p>
  * <b>Cancellation actually reclaims the worker thread.</b> When the budget trips, {@link #awaitBounded} calls
@@ -178,19 +181,24 @@ final class McpSchemaSafety {
 			throw new McpException(McpRevision.CODE_INVALID_PARAMS, e.getMessage());
 		}
 		var jsonSchema = Json.to(Json.of(schemaMap), JsonSchema.class);
-		validateBounded(jsonSchema, args, deadline);
+		validateBounded(jsonSchema, args);
 	}
 
 	/**
-	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces the remaining share of the shared
-	 * {@link JsonValueSafety} deadline against the task's own compute time - never against however long it had
-	 * to wait in {@link #VALIDATION_POOL} for a free thread, and (when CPU timing is available) never against
-	 * wall-clock time it spent preempted rather than running.
+	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces a fresh {@link #MAX_VALIDATION_MILLIS}
+	 * compute budget against the task's own compute time - deliberately <b>not</b> the caller's remaining share
+	 * of the structural-traversal deadline computed in {@link #validateInput}. That deadline is a wall-clock
+	 * budget that is already partially spent by the two {@link JsonValueSafety#check} calls and the
+	 * schema-to-bean conversion above, both of which run on the (possibly preempted) request thread under load;
+	 * deriving the validation budget from whatever wall-clock happened to remain would let purely-external
+	 * scheduling pressure - not any property of the schema or arguments being validated - trip a false-positive
+	 * {@code -32602} on a trivial validation. Anchoring a fresh budget here, measured from when the pool task
+	 * actually starts (see {@link TaskStart#capture}), keeps the DoS guard (validation CPU still capped at
+	 * {@link #MAX_VALIDATION_MILLIS}) independent of that pre-check wall-clock entirely. Also never against
+	 * however long the task had to wait in {@link #VALIDATION_POOL} for a free thread, and (when CPU timing is
+	 * available) never against wall-clock time it spent preempted rather than running.
 	 */
-	private static void validateBounded(JsonSchema<?> schema, Object value, long deadlineNanos) {
-		var remaining = JsonValueSafety.remainingNanos(deadlineNanos);
-		if (remaining == 0)
-			throw validationTimeoutException();
+	private static void validateBounded(JsonSchema<?> schema, Object value) {
 		var started = new CountDownLatch(1);
 		var taskStart = new AtomicReference<TaskStart>();
 		var future = VALIDATION_POOL.submit(() -> {
@@ -199,7 +207,7 @@ final class McpSchemaSafety {
 			JsonSchemaValidator.of(schema).validate(value);
 			return null;
 		});
-		awaitBounded(future, started, taskStart, remaining);
+		awaitBounded(future, started, taskStart, MILLISECONDS.toNanos(MAX_VALIDATION_MILLIS));
 	}
 
 	/**
@@ -222,8 +230,9 @@ final class McpSchemaSafety {
 
 	/**
 	 * Waits for a submitted validation task to complete, charging only its own compute time against
-	 * {@code remaining} (the caller's share of the shared {@link JsonValueSafety} deadline) - never however long
-	 * it had to wait in {@link #VALIDATION_POOL} for a free thread.
+	 * {@code remaining} (the caller's compute budget, a fresh interval unrelated to any other deadline the
+	 * caller may separately be tracking) - never however long it had to wait in {@link #VALIDATION_POOL} for a
+	 * free thread.
 	 *
 	 * <p>
 	 * This waits in two phases. First, {@code started} is awaited so the calling thread learns exactly when the
@@ -243,7 +252,8 @@ final class McpSchemaSafety {
 	 * @param future The in-flight (or already-complete) validation task.
 	 * @param started Counted down by the task as its first instruction, once it actually begins running.
 	 * @param taskStart Set by the task (before counting down {@code started}) to its {@link TaskStart} snapshot.
-	 * @param remaining The caller's remaining share of the shared deadline, in nanoseconds, captured before submission.
+	 * @param remaining The caller's compute budget, in nanoseconds, captured fresh before submission (see
+	 * 	{@link #validateBounded} for why this must be independent of any pre-existing wall-clock deadline).
 	 */
 	static void awaitBounded(Future<?> future, CountDownLatch started, AtomicReference<TaskStart> taskStart, long remaining) {
 		try {
