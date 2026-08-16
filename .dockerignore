@@ -1,0 +1,5 @@
+target/
+!target/*.jar
+website/
+.git/
+.mvn/
