@@ -151,6 +151,17 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	}
 
 	/**
+	 * Resolves the configured {@link ParquetParser#getMaxDecompressedBytes()} to an effective bound,
+	 * translating the {@code <= 0} "disabled" sentinel to {@link Long#MAX_VALUE}.
+	 *
+	 * @return The effective aggregate decompressed-byte budget.
+	 */
+	private long effectiveMaxDecompressedBytes() {
+		var v = ctx.getMaxDecompressedBytes();
+		return v <= 0 ? Long.MAX_VALUE : v;
+	}
+
+	/**
 	 * Opens a whole-value pull-parser cursor over a Parquet document, bound to this live session.
 	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
 	 * {@link ParserSession#read(Object, Class)} entry point.
@@ -373,6 +384,13 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	static final int DEFAULT_MAX_INPUT_LENGTH = 256 * 1024 * 1024;
 
 	/**
+	 * Default cap (64 MiB) on the aggregate decompressed-byte total across every page read during a
+	 * single parse, used when {@link ParquetParser#getMaxDecompressedBytes()} has not been explicitly
+	 * configured.
+	 */
+	static final int DEFAULT_MAX_DECOMPRESSED_BYTES = 64 * 1024 * 1024;
+
+	/**
 	 * Clamps an untrusted row-count to a sane initial-capacity ceiling before it is handed to an
 	 * {@link ArrayList} constructor.  Defense in depth: the count is already bounded upstream (see
 	 * {@link #readAllRows}), but sizing every reassembly buffer through this guard keeps a stray value
@@ -413,6 +431,32 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	/** Sentinel for a null intermediate OPTIONAL group at the given def level (GAP-14 multi-level nesting). */
 	private record GroupNull(int defLevel) {}
+
+	/**
+	 * Mutable per-parse aggregate decompressed-byte budget, threaded through every {@code codec.decompress}
+	 * call site (plain, list, and map column-chunk page reads) so many pages that each individually pass
+	 * the per-page {@code maxLength} cap cannot together accumulate into an unbounded decompression bomb.
+	 */
+	private static final class DecompressionBudget {
+
+		private long remaining;
+
+		DecompressionBudget(long remaining) {
+			this.remaining = remaining;
+		}
+
+		/**
+		 * Charges {@code uncompressedSize} bytes against the running budget before the page is actually
+		 * decompressed, so an over-budget page fails fast without performing the decompression work.
+		 *
+		 * @throws ParseException If the charge would drive the remaining budget negative.
+		 */
+		void charge(long uncompressedSize, String columnPath) throws ParseException {
+			remaining -= uncompressedSize;
+			if (remaining < 0)
+				throw new ParseException("Column '%s' exceeds the aggregate decompressed-byte budget", columnPath);
+		}
+	}
 
 	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical) {}
 	private record RowGroupMeta(long numRows, List<ColumnChunkMeta> columns) {}
@@ -776,6 +820,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		// per-group count wasn't recorded (older Juneau-written files).
 		var maxCount = effectiveMaxCount();
 		var allRows = new ArrayList<Object>((int)Math.min(meta.numRows(), maxCount));
+		// Shared across every row group/column in this parse (see DecompressionBudget): per-page maxLength
+		// alone can't stop many individually-valid pages from summing to a decompression bomb.
+		var budget = new DecompressionBudget(effectiveMaxDecompressedBytes());
 		// Each per-row-group num_rows is untrusted and drives ArrayList pre-allocation and reassembly loops
 		// downstream.  Bound every group count (and the running total) against the same configured ceiling
 		// used for the file-level total above, before it is used to size anything, so a tiny footer
@@ -788,7 +835,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			if (totalGroupRows > maxCount)
 				throw new ParseException("Total row group numRows %s exceeds maximum allowed %s", totalGroupRows, maxCount);
 			int groupRows = (int)group.numRows();
-			allRows.addAll(readRowGroupRows(fileBytes, group, groupRows, elementType, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical));
+			allRows.addAll(readRowGroupRows(fileBytes, group, groupRows, elementType, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical, budget));
 		}
 		return allRows;
 	}
@@ -796,7 +843,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@SuppressWarnings({
 		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
 	})
-	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical) throws ParseException {
+	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, DecompressionBudget budget) throws ParseException {
 		var columnData = new LinkedHashMap<String,List<Object>>();
 		var maxLength = effectiveMaxLength();
 		var maxCount = effectiveMaxCount();
@@ -805,11 +852,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			List<Object> values;
 			var trim = isTrimStrings();
 			if (isListColumnPath(path))
-				values = readListColumnChunk(fileBytes, cc, numRows, trim, maxLength, maxCount);
+				values = readListColumnChunk(fileBytes, cc, numRows, trim, maxLength, maxCount, budget);
 			else if (isMapKeyValueColumnPath(path))
-				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows, trim, maxLength, maxCount);
+				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows, trim, maxLength, maxCount, budget);
 			else
-				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical, trim, maxLength, maxCount);
+				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical, trim, maxLength, maxCount, budget);
 			columnData.put(path, values);
 		}
 		if (parquetDebug()) {
@@ -852,7 +899,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return idx < 0 ? listColumnPath : listColumnPath.substring(0, idx);
 	}
 
-	private static List<Object> readListColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings, int maxLength, long maxCount) throws ParseException {
+	private static List<Object> readListColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings, int maxLength, long maxCount, DecompressionBudget budget) throws ParseException {
 		try {
 			var path = String.join(".", cc.pathInSchema());
 			var rowRelPath = rowRelativePath(path);
@@ -872,6 +919,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			var chunkPath = String.join(".", cc.pathInSchema());
 			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath, maxLength, maxCount);
 			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath, maxLength, maxCount);
+			budget.charge(ph.uncompressedSize(), chunkPath);
 			var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
 			var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 
@@ -1021,7 +1069,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private static final int MAP_MAX_DEF = 2;
 	private static final int MAP_MAX_REP = 1;
 
-	private static List<Object> readMapKeyValueColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings, int maxLength, long maxCount) throws ParseException {
+	private static List<Object> readMapKeyValueColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings, int maxLength, long maxCount, DecompressionBudget budget) throws ParseException {
 		try {
 			int maxDef = MAP_MAX_DEF;
 			int maxRep = MAP_MAX_REP;
@@ -1038,6 +1086,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			var chunkPath = String.join(".", cc.pathInSchema());
 			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath, maxLength, maxCount);
 			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath, maxLength, maxCount);
+			budget.charge(ph.uncompressedSize(), chunkPath);
 			var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
 			var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 
@@ -1111,7 +1160,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	@SuppressWarnings({
 		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
 	})
-	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, boolean trimStrings, int maxLength, long maxCount) throws ParseException {
+	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String,Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String,ColumnLogical> columnLogical, boolean trimStrings, int maxLength, long maxCount, DecompressionBudget budget) throws ParseException {
 		try {
 			if (cc.numValues() < 0 || cc.numValues() > maxCount)
 				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
@@ -1147,6 +1196,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				if (++pageGuard > MAX_PAGES_PER_CHUNK)
 					throw new ParseException("Column '%s' exceeds the maximum of %s pages per chunk", path, MAX_PAGES_PER_CHUNK);
 				var ph = readPageHeader(fileBytes, pageOff, path, maxLength, maxCount);
+				budget.charge(ph.uncompressedSize(), path);
 				var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
 				var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 				if (ph.pageType() == PAGE_DICTIONARY) {

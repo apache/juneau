@@ -84,6 +84,19 @@ public @interface ParquetConfig {
 	 */
 	String maxInputLength() default "";
 
+	/**
+	 * Maximum allowed aggregate decompressed-byte total across every Parquet page read during a single
+	 * parse.
+	 *
+	 * <p>
+	 * Guards against a decompression bomb assembled from many pages that each individually pass the
+	 * per-page {@link #maxLength()} cap. Default is <js>"67108864"</js> (64 MiB). A value of
+	 * <js>"0"</js> or less disables the cap.
+	 *
+	 * @return The annotation value.
+	 */
+	String maxDecompressedBytes() default "";
+
 	/** Rank for application order. */
 	int rank() default 0;
 }

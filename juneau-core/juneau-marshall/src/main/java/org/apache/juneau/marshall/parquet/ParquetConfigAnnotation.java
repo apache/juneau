@@ -85,6 +85,7 @@ public class ParquetConfigAnnotation {
 			integer(a.maxLength(), "maxLength").ifPresent(b::maxLength);
 			integer(a.maxCount(), "maxCount").ifPresent(b::maxCount);
 			integer(a.maxInputLength(), "maxInputLength").ifPresent(b::maxInputLength);
+			integer(a.maxDecompressedBytes(), "maxDecompressedBytes").ifPresent(b::maxDecompressedBytes);
 		}
 	}
 

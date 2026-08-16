@@ -51,6 +51,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	private static final int DEFAULT_MAX_LENGTH = ParquetParserSession.DEFAULT_MAX_LENGTH;
 	private static final int DEFAULT_MAX_COUNT = ParquetParserSession.DEFAULT_MAX_COUNT;
 	private static final int DEFAULT_MAX_INPUT_LENGTH = ParquetParserSession.DEFAULT_MAX_INPUT_LENGTH;
+	private static final int DEFAULT_MAX_DECOMPRESSED_BYTES = ParquetParserSession.DEFAULT_MAX_DECOMPRESSED_BYTES;
 
 	private final Map<BeanPropertyMeta,ParquetBeanPropertyMeta> parquetBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,ParquetClassMeta> parquetClassMetas = new ConcurrentHashMap<>();
@@ -69,6 +70,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		private int maxLength = DEFAULT_MAX_LENGTH;
 		private int maxCount = DEFAULT_MAX_COUNT;
 		private int maxInputLength = DEFAULT_MAX_INPUT_LENGTH;
+		private int maxDecompressedBytes = DEFAULT_MAX_DECOMPRESSED_BYTES;
 
 		/**
 		 * Constructor, default settings.
@@ -79,6 +81,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 			maxLength = env("ParquetParser.maxLength", DEFAULT_MAX_LENGTH);
 			maxCount = env("ParquetParser.maxCount", DEFAULT_MAX_COUNT);
 			maxInputLength = env("ParquetParser.maxInputLength", DEFAULT_MAX_INPUT_LENGTH);
+			maxDecompressedBytes = env("ParquetParser.maxDecompressedBytes", DEFAULT_MAX_DECOMPRESSED_BYTES);
 		}
 
 		protected Builder(Builder copyFrom) {
@@ -87,6 +90,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 			maxLength = copyFrom.maxLength;
 			maxCount = copyFrom.maxCount;
 			maxInputLength = copyFrom.maxInputLength;
+			maxDecompressedBytes = copyFrom.maxDecompressedBytes;
 		}
 
 		protected Builder(ParquetParser copyFrom) {
@@ -95,6 +99,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 			maxLength = copyFrom.maxLength;
 			maxCount = copyFrom.maxCount;
 			maxInputLength = copyFrom.maxInputLength;
+			maxDecompressedBytes = copyFrom.maxDecompressedBytes;
 		}
 
 		/**
@@ -161,6 +166,24 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 			return this;
 		}
 
+		/**
+		 * The maximum allowed aggregate decompressed-byte total across every Parquet page read during a
+		 * single parse.
+		 *
+		 * <p>
+		 * Guards against a decompression bomb assembled from many pages that each individually pass the
+		 * per-page {@link #maxLength(int)} cap: this ceiling charges every page's declared uncompressed
+		 * size against a running per-parse total, so a chunk (or a whole file) whose pages sum past the
+		 * ceiling is rejected with a clean parse error instead of buffering the excess.
+		 *
+		 * @param value The maximum aggregate decompressed-byte total.  Default is 64 MiB.  Values &le; 0 disable the cap.
+		 * @return This object.
+		 */
+		public Builder maxDecompressedBytes(int value) {
+			maxDecompressedBytes = value;
+			return this;
+		}
+
 		@Override /* InputStreamParser.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
@@ -173,7 +196,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 
 		@Override
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), nullKeyString, maxLength, maxCount, maxInputLength);
+			return HashKey.of(super.hashKey(), nullKeyString, maxLength, maxCount, maxInputLength, maxDecompressedBytes);
 		}
 	}
 
@@ -190,6 +213,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	private final int maxLength;
 	private final int maxCount;
 	private final int maxInputLength;
+	private final int maxDecompressedBytes;
 
 	/**
 	 * Constructor.
@@ -202,6 +226,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		maxLength = builder.maxLength;
 		maxCount = builder.maxCount;
 		maxInputLength = builder.maxInputLength;
+		maxDecompressedBytes = builder.maxDecompressedBytes;
 	}
 
 	/**
@@ -229,6 +254,16 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	 */
 	public int getMaxInputLength() {
 		return maxInputLength;
+	}
+
+	/**
+	 * Returns the maximum allowed aggregate decompressed-byte total across every page read during a
+	 * single parse.
+	 *
+	 * @return The maximum aggregate decompressed-byte total.
+	 */
+	public int getMaxDecompressedBytes() {
+		return maxDecompressedBytes;
 	}
 
 	@Override /* Overridden from Context */

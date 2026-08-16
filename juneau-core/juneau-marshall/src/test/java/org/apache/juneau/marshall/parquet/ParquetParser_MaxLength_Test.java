@@ -42,9 +42,12 @@ import org.junit.jupiter.api.*;
  * A full Parquet file embeds these values deep inside a Thrift-compact footer/page, so hand-crafting a
  * complete malformed file to exercise the end-to-end path is impractical for the low-level helpers; those
  * are covered directly (oversized rejected, in-range accepted, and the boundary).  The configurable
- * {@code maxLength}/{@code maxCount} knobs on {@link ParquetParser} themselves are covered end-to-end via
- * real serialize/parse round trips (category <b>c</b>/<b>d</b> below), mirroring
- * {@code MsgPackParser_MaxLength_Test}.
+ * {@code maxLength}/{@code maxCount}/{@code maxInputLength}/{@code maxDecompressedBytes} knobs on
+ * {@link ParquetParser} themselves are covered end-to-end via real serialize/parse round trips (category
+ * <b>c</b>/<b>d</b>/<b>e</b>/<b>f</b> below), mirroring {@code MsgPackParser_MaxLength_Test}.  Category
+ * <b>f</b> additionally proves the <i>aggregate</i> decompressed-byte budget (as opposed to the per-page
+ * {@code maxLength} bound above): many pages that each individually pass {@code maxLength} must still be
+ * rejected once their decompressed sizes sum past the configured ceiling.
  */
 @SuppressWarnings("unchecked")
 class ParquetParser_MaxLength_Test extends TestBase {
@@ -253,5 +256,66 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		var p = ParquetParser.create().maxInputLength(0).build();
 		var parsed = (List<SimpleBean>) p.read(bytes, List.class, SimpleBean.class);
 		assertEquals(3, parsed.size());
+	}
+
+	// ================================================================
+	// f. Configurable maxDecompressedBytes (aggregate decompressed-byte budget)
+	// ================================================================
+
+	/**
+	 * Serializes {@code n} rows with a small {@code pageSize}, forcing the writer to split each column
+	 * chunk into many small data pages (32 rows/page at the 1024-byte pageSize floor) instead of the
+	 * single page a default-sized write produces.  Every individual page stays far under the (huge
+	 * default) {@code maxLength} bound; only their aggregate decompressed size is at risk.
+	 */
+	private static byte[] manyPagesBytes(int n) throws Exception {
+		return ParquetSerializer.create().pageSize(1024).build().write(beans(n));
+	}
+
+	@Test
+	void f01_configurableAggregateBudgetEnforcedEndToEnd() throws Exception {
+		var bytes = manyPagesBytes(2_000);
+
+		// A generous cap parses fine even though the file has dozens of pages per column.
+		var lenient = ParquetParser.create().maxDecompressedBytes(1_000_000).build();
+		var parsed = (List<SimpleBean>) lenient.read(bytes, List.class, SimpleBean.class);
+		assertEquals(2_000, parsed.size());
+
+		// Every individual page is tiny (well under the default 256 MiB maxLength), but a cap that only
+		// a handful of pages can satisfy on their own is still exceeded once their sizes accumulate.
+		var strict = ParquetParser.create().maxDecompressedBytes(2_000).build();
+		assertThrowsWithMessage(ParseException.class, "aggregate decompressed-byte budget",
+			() -> strict.read(bytes, List.class, SimpleBean.class));
+	}
+
+	@Test
+	void f02_singlePageWithinBothCapsStillParses() throws Exception {
+		// A single-page file (default pageSize) comfortably under both the per-page and aggregate caps.
+		var bytes = ParquetSerializer.DEFAULT.write(beans(3));
+		var p = ParquetParser.create().maxDecompressedBytes(1_024).build();
+		var parsed = (List<SimpleBean>) p.read(bytes, List.class, SimpleBean.class);
+		assertEquals(3, parsed.size());
+	}
+
+	@Test
+	void f03_maxDecompressedBytesAffectsCacheKey() {
+		// Different maxDecompressedBytes values must NOT collide in the parser cache (hashKey wiring).
+		var p1 = ParquetParser.create().maxDecompressedBytes(100).build();
+		var p2 = ParquetParser.create().maxDecompressedBytes(200).build();
+		var p3 = ParquetParser.create().maxDecompressedBytes(100).build();
+		assertNotSame(p1, p2);
+		assertSame(p1, p3);
+		assertEquals(100, p1.getMaxDecompressedBytes());
+		assertEquals(200, p2.getMaxDecompressedBytes());
+	}
+
+	@Test
+	void f04_maxDecompressedBytesNonPositiveDisablesCap() throws Exception {
+		// A non-positive cap disables the aggregate-budget check, even for the many-small-pages file that
+		// a small positive cap (f01) would reject.
+		var bytes = manyPagesBytes(2_000);
+		var p = ParquetParser.create().maxDecompressedBytes(0).build();
+		var parsed = (List<SimpleBean>) p.read(bytes, List.class, SimpleBean.class);
+		assertEquals(2_000, parsed.size());
 	}
 }
