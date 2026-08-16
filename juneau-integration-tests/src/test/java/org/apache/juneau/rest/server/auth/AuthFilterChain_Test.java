@@ -165,10 +165,10 @@ class AuthFilterChain_Test extends TestBase {
 		var capturing = new CapturingChain();
 		chain.doFilter(req("/"), capturingResponse(), capturing);
 		var w = (AuthenticatedRequestWrapper) capturing.captured;
-		// All roles from all successful filters must be present
+		// Bob is a distinct principal from alice — his roles must NOT be unioned onto alice's identity.
 		assertTrue(w.isUserInRole("user"));
-		assertTrue(w.isUserInRole("admin"));
-		assertTrue(w.isUserInRole("billing"));
+		assertFalse(w.isUserInRole("admin"));
+		assertFalse(w.isUserInRole("billing"));
 	}
 
 	@Test void a06_allMatchingFiltersFail_returns401() throws Exception {

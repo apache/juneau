@@ -166,10 +166,24 @@ class AuthFilterChain_Test extends TestBase {
 		var capturing = new CapturingChain();
 		chain.doFilter(req("/"), capturingResponse(), capturing);
 		var w = (AuthenticatedRequestWrapper) capturing.captured;
-		// All roles from all successful filters must be present
+		// Bob is a distinct principal from alice — his roles must NOT be unioned onto alice's identity.
+		assertTrue(w.isUserInRole("user"));
+		assertFalse(w.isUserInRole("admin"));
+		assertFalse(w.isUserInRole("billing"));
+	}
+
+	@Test void a05b_roleAggregation_unionAcrossFiltersForSamePrincipal() throws Exception {
+		Principal aliceAgain = () -> "alice";  // distinct instance, same getName() — same subject
+		var chain = AuthFilterChain.create(null)
+			.append(succeeds(ALICE, "user"))
+			.append(succeeds(aliceAgain, "admin"))
+			.build();
+		var capturing = new CapturingChain();
+		chain.doFilter(req("/"), capturingResponse(), capturing);
+		var w = (AuthenticatedRequestWrapper) capturing.captured;
+		// Same subject authenticated by two schemes — roles still union.
 		assertTrue(w.isUserInRole("user"));
 		assertTrue(w.isUserInRole("admin"));
-		assertTrue(w.isUserInRole("billing"));
 	}
 
 	@Test void a06_allMatchingFiltersFail_returns401() throws Exception {
@@ -281,6 +295,19 @@ class AuthFilterChain_Test extends TestBase {
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE, "user"))
 			.append(succeeds(BOB, "admin"))
+			.build();
+		var r = chain.authenticate(req("/")).orElseThrow();
+		assertSame(ALICE, r.getPrincipal());
+		assertTrue(r.getRoles().contains("user"));
+		// Bob is a distinct principal from alice — his role must NOT be unioned onto alice's identity.
+		assertFalse(r.getRoles().contains("admin"));
+	}
+
+	@Test void e05b_authenticateRoleUnionForSamePrincipal() {
+		Principal aliceAgain = () -> "alice";  // distinct instance, same getName() — same subject
+		var chain = AuthFilterChain.create(null)
+			.append(succeeds(ALICE, "user"))
+			.append(succeeds(aliceAgain, "admin"))
 			.build();
 		var r = chain.authenticate(req("/")).orElseThrow();
 		assertSame(ALICE, r.getPrincipal());

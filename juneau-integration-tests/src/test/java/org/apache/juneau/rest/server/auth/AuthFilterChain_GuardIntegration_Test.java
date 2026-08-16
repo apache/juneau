@@ -157,16 +157,16 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 		assertFalse(w.isUserInRole("user"));
 	}
 
-	@Test void a03_bothCredentials_bearerPrincipalWins_rolesUnion() throws Exception {
-		// Both bearer-user (user role) and apikey-admin (admin role) present.
-		// Bearer is registered first → alice wins for principal; roles = union.
+	@Test void a03_bothCredentials_bearerPrincipalWins_rolesNotUnionedAcrossDistinctPrincipals() throws Exception {
+		// Both bearer-user (alice, user role) and apikey-admin (bob, admin role) present.
+		// Bearer is registered first → alice wins for principal; bob is a DIFFERENT principal, so his
+		// admin role must NOT be unioned onto alice's identity.
 		var r = runChain(buildChain(), "Bearer bearer-user", "apikey-admin");
 		assertNotNull(r.captured);
 		var w = (AuthenticatedRequestWrapper) r.captured;
 		assertEquals("alice", w.getUserPrincipal().getName());
-		// Union: user (from bearer) + admin (from api-key)
 		assertTrue(w.isUserInRole("user"));
-		assertTrue(w.isUserInRole("admin"));
+		assertFalse(w.isUserInRole("admin"));
 	}
 
 	@Test void a04_noCredentials_passThroughUnchanged() throws Exception {

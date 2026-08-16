@@ -20,14 +20,19 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Mutable helper that folds a sequence of {@link AuthResult}s into a single result, honoring
  * {@link AuthResult.MergeMode}.
  *
  * <p>
- * {@link AuthResult.MergeMode#ADD ADD} unions roles and keeps the first non-<jk>null</jk> principal;
- * {@link AuthResult.MergeMode#REPLACE REPLACE} resets the accumulated principal + roles.  Used by both
+ * {@link AuthResult.MergeMode#ADD ADD} keeps the first non-<jk>null</jk> principal and unions roles from
+ * later results <b>only when</b> those results carry no principal of their own or the <b>same</b> principal
+ * (compared by {@link Principal#getName()}, null-safe).  A later result with a <i>different</i> non-<jk>null</jk>
+ * principal does not contribute its roles &mdash; a second authenticated identity must not silently elevate the
+ * first.  {@link AuthResult.MergeMode#REPLACE REPLACE} resets the accumulated principal + roles.  Used by both
  * {@link AuthFilterChain} and the resource-level fold in {@link org.apache.juneau.rest.server.RestContext}.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -39,6 +44,8 @@ import java.util.*;
  * @since 10.0.0
  */
 public final class AuthResultAccumulator {
+
+	private static final Logger LOG = Logger.getLogger(AuthResultAccumulator.class.getName());
 
 	private Principal principal;
 	private final Set<String> roles = new LinkedHashSet<>();
@@ -58,10 +65,20 @@ public final class AuthResultAccumulator {
 			principal = r.getPrincipal();
 			roles.clear();
 			roles.addAll(r.getRoles());
-		} else {
-			if (principal == null)
-				principal = r.getPrincipal();  // may still be null (roles-only)
+			return this;
+		}
+		if (principal == null) {
+			principal = r.getPrincipal();  // may still be null (roles-only)
 			roles.addAll(r.getRoles());
+			return this;
+		}
+		var otherPrincipal = r.getPrincipal();
+		if (otherPrincipal == null || Objects.equals(principal.getName(), otherPrincipal.getName())) {
+			roles.addAll(r.getRoles());
+		} else {
+			var establishedName = principal.getName();
+			LOG.log(Level.WARNING, () -> "Ignoring roles from a distinct authenticated principal ('"
+				+ otherPrincipal.getName() + "'); request identity remains '" + establishedName + "'.");
 		}
 		return this;
 	}

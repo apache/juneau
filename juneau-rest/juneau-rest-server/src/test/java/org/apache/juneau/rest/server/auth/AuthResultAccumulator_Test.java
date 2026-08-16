@@ -34,10 +34,20 @@ class AuthResultAccumulator_Test extends TestBase {
 	private static final Principal ALICE = () -> "alice";
 	private static final Principal BOB = () -> "bob";
 
-	@Test void a01_addUnionsRoles_firstPrincipalWins() {
+	@Test void a01_addFromDifferentPrincipal_rolesNotUnioned_firstPrincipalWins() {
 		var acc = new AuthResultAccumulator();
 		acc.add(AuthResult.of(ALICE, "r1"));
-		acc.add(AuthResult.of(BOB, "r2"));      // ADD: principal stays alice, roles union
+		acc.add(AuthResult.of(BOB, "r2"));      // ADD: principal stays alice; bob's roles are NOT unioned (different subject)
+		var r = acc.result().orElseThrow();
+		assertSame(ALICE, r.getPrincipal());
+		assertEquals(Set.of("r1"), r.getRoles());
+	}
+
+	@Test void a01b_addFromSameNamedPrincipal_rolesUnion() {
+		var acc = new AuthResultAccumulator();
+		Principal aliceAgain = () -> "alice";  // distinct instance, same getName() — same subject
+		acc.add(AuthResult.of(ALICE, "r1"));
+		acc.add(AuthResult.of(aliceAgain, "r2"));
 		var r = acc.result().orElseThrow();
 		assertSame(ALICE, r.getPrincipal());
 		assertEquals(Set.of("r1", "r2"), r.getRoles());

@@ -46,8 +46,10 @@ import jakarta.servlet.http.*;
  * 		<ul>
  * 			<li>{@link Optional#empty()} &mdash; filter doesn't apply this request; continue.
  * 			<li>{@link Optional#of(Object) Optional.of(AuthResult)} &mdash; success.  The first successful filter's
- * 				{@link Principal} wins for identity.  All subsequent successful filters contribute their roles to the
- * 				union.
+ * 				{@link Principal} wins for identity.  Subsequent successful filters contribute their roles to the
+ * 				union only when they carry no principal of their own or the <b>same</b> principal (by
+ * 				{@link Principal#getName()}); a filter that authenticates a <i>different</i> principal does not
+ * 				contribute its roles, so a second identity cannot silently elevate the first.
  * 			<li>throw {@link AuthenticationException} &mdash; credentials present but invalid; record as a failure.
  * 		</ul>
  * 	<li>After iterating:
