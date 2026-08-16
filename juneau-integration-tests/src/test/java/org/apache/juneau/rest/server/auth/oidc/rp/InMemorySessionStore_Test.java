@@ -103,7 +103,7 @@ class InMemorySessionStore_Test extends TestBase {
 
 	@Test void c01_expiredSession_missedAndRemoved() {
 		var base = Instant.parse("2026-01-01T00:00:00Z");
-		var clock = new EphemeralStore_Test.MutableClock(base);
+		var clock = new OidcTestSupport.MutableClock(base);
 		var store = new InMemorySessionStore(100, clock);
 		store.createSessionCookieValue(session("id-1", "alice", "sess-1", base));
 		clock.advance(Duration.ofHours(9));

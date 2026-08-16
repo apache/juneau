@@ -144,9 +144,10 @@ public class OidcRelyingParty {
 		String postLoginRedirect = "/";
 		Set<String> scopes = st();
 		SessionStore sessionStore;
+		LoginStateStore loginStateStore;
 		String rolesClaim = DEFAULT_ROLES_CLAIM;
-		Duration stateNonceTtl = EphemeralStore.DEFAULT_TTL;
-		int ephemeralMaxEntries = EphemeralStore.DEFAULT_MAX_ENTRIES;
+		Duration stateNonceTtl = InMemoryLoginStateStore.DEFAULT_TTL;
+		int ephemeralMaxEntries = InMemoryLoginStateStore.DEFAULT_MAX_ENTRIES;
 		Duration sessionTtl = DEFAULT_SESSION_TTL;
 		String cookieName = DEFAULT_COOKIE_NAME;
 		boolean cookieSecure = true;
@@ -300,13 +301,54 @@ public class OidcRelyingParty {
 		}
 
 		/**
-		 * Sets the single-use TTL for the {@code state} / {@code nonce} store.  Defaults to 5 minutes.
+		 * Sets the single-use TTL the framework enforces for the login-state ({@code state} / {@code nonce} /
+		 * PKCE {@code code_verifier}) association.  Defaults to 5 minutes.
 		 *
-		 * @param value The TTL.  Must be positive and not exceed 30 minutes.
+		 * <p>
+		 * This is the RP-enforced policy applied to <b>every</b> consumed record &mdash; both the default
+		 * {@link InMemoryLoginStateStore} and any custom {@link #loginStateStore(LoginStateStore) injected store}.
+		 * The framework mints {@code expiresAt = createdAt + stateNonceTtl} on the record and re-checks it on
+		 * consume, so the ceiling holds even for a shared store that fails to expire an entry.  The
+		 * {@code (0, }{@link LoginStateStore#MAX_TTL}{@code ]} cap is enforced here (not only in the default
+		 * impl's constructor, which is skipped when a custom store is injected).
+		 *
+		 * @param value The TTL.  Must be positive and not exceed {@link LoginStateStore#MAX_TTL} (30 minutes).
 		 * @return This object.
 		 */
 		public Builder stateNonceTtl(Duration value) {
-			stateNonceTtl = assertArgNotNull("value", value);
+			assertArgNotNull("value", value);
+			assertArg(!value.isZero() && !value.isNegative(), "stateNonceTtl must be positive");
+			assertArg(value.compareTo(LoginStateStore.MAX_TTL) <= 0, "stateNonceTtl must not exceed 30 minutes (was %s)", value);
+			stateNonceTtl = value;
+			return this;
+		}
+
+		/**
+		 * Sets an optional custom {@link LoginStateStore} for the pending-login ({@code state} &rarr;
+		 * {@code nonce} / PKCE {@code code_verifier} / redirect) association.
+		 *
+		 * <p>
+		 * Optional (unlike {@link #sessionStore(SessionStore)}): when omitted the RP uses the shipped per-JVM
+		 * {@link InMemoryLoginStateStore}, and behavior is identical to a single-node deployment.  Supply a
+		 * shared (Redis / JDBC) implementation to support a clustered deployment where {@code /login} and
+		 * {@code /callback} may land on different nodes without sticky sessions &mdash; the same motivation as a
+		 * distributed {@link SessionStore}.
+		 *
+		 * <p>
+		 * <b>The store is secret-bearing</b> ({@code code_verifier} + {@code nonce}); read the
+		 * {@link LoginStateStore} security contract before implementing one (TLS + locked-down ACL floor,
+		 * encryption-at-rest recommended, never log the payload, atomic {@code GETDEL}/Lua single-use consume).
+		 * The framework retains authority over the security-critical decisions regardless of the store: it
+		 * re-validates {@code redirectTarget} via {@code safeRelativePath} and re-checks {@code expiresAt}
+		 * against its own {@link #clock(Clock) clock} on consume, and enforces the
+		 * {@link #stateNonceTtl(Duration)} ceiling &mdash; the store persists the record and enforces single-use,
+		 * but is treated as a blob store, not a trusted oracle.
+		 *
+		 * @param value The login-state store.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder loginStateStore(LoginStateStore value) {
+			loginStateStore = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -458,7 +500,14 @@ public class OidcRelyingParty {
 		}
 
 		/**
-		 * Overrides the clock used for session expiry + the ephemeral store.  Useful in tests.
+		 * Overrides the clock used for session expiry and the login-state store.  Useful in tests.
+		 *
+		 * <p>
+		 * The login-state {@code expiresAt} is both minted (on {@code startLogin}) and re-checked (on
+		 * {@code completeLogin}) against this clock.  In a clustered deployment with a shared
+		 * {@link #loginStateStore(LoginStateStore) LoginStateStore}, the ceiling is therefore only as
+		 * trustworthy as clock synchronization across nodes; a backend {@code EXPIRE}/TTL is a GC hint, not the
+		 * authoritative expiry decision.
 		 *
 		 * @param value The clock.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -508,7 +557,8 @@ public class OidcRelyingParty {
 	private final JWKSource<SecurityContext> injectedJwkSource;
 	private final Set<String> userInfoClaims;
 	private final Clock clock;
-	private final EphemeralStore ephemeralStore;
+	private final Duration stateNonceTtl;
+	private final LoginStateStore loginStateStore;
 
 	@SuppressWarnings({
 		"java:S3077" // Publish-once cache: assigned once under double-checked locking in metadata(); the OidcMetadata payload is fully built before assignment, so volatile safe-publication is sufficient.
@@ -564,7 +614,10 @@ public class OidcRelyingParty {
 		this.injectedJwkSource = b.jwkSource;
 		this.userInfoClaims = u(cp(b.userInfoClaims));
 		this.clock = b.clock;
-		this.ephemeralStore = new EphemeralStore(b.stateNonceTtl, b.ephemeralMaxEntries, b.clock);
+		this.stateNonceTtl = b.stateNonceTtl;
+		this.loginStateStore = b.loginStateStore != null
+			? b.loginStateStore
+			: new InMemoryLoginStateStore(b.stateNonceTtl, b.ephemeralMaxEntries, b.clock);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -588,7 +641,16 @@ public class OidcRelyingParty {
 		var verifier = new CodeVerifier();
 		var challenge = CodeChallenge.compute(CodeChallengeMethod.S256, verifier);
 		var redirectTarget = safeRelativePath(req.getParameter("redirect"));
-		ephemeralStore.store(state, nonce, verifier.getValue(), redirectTarget);
+		var createdAt = clock.instant();
+		var pending = new LoginStateStore.PendingLogin(nonce, verifier.getValue(), redirectTarget, createdAt, createdAt.plus(stateNonceTtl));
+		try {
+			loginStateStore.store(state, pending);
+		} catch (RuntimeException e) {
+			// Fail closed before any authorization URL is issued.  Do NOT chain the raw backend exception as the
+			// cause: a shared-store backend may echo the state/code_verifier into its own message, and
+			// AuthenticationException publishes the cause via getCause(), so a raw chain would re-expose the secret.
+			throw new AuthenticationException("OIDC login-state store unavailable");
+		}
 		var authUrl = codeFlow().buildAuthenticationUrl(state, challenge, nonce, authenticationRequestCustomizer);
 		noStore(res);
 		res.sendRedirect(authUrl.toString());
@@ -626,8 +688,22 @@ public class OidcRelyingParty {
 		var code = success.getAuthorizationCode().getValue();
 		var state = success.getState() == null ? null : success.getState().getValue(); // HTT: null state branch: AuthCode response always carries state per PKCE flow; null branch is defensive dead code
 
-		var pending = ephemeralStore.consume(state).orElseThrow(
+		Optional<LoginStateStore.PendingLogin> consumed;
+		try {
+			consumed = loginStateStore.consume(state);
+		} catch (RuntimeException e) {
+			// Infra failure (backend unreachable) is distinct from a CSRF/replay miss; reject as unavailable
+			// without leaking the payload (do not chain the raw backend exception as cause).
+			throw new AuthenticationException("OIDC login-state store unavailable");
+		}
+		var pending = consumed.orElseThrow(
 			() -> new AuthenticationException("OIDC callback state is missing, expired, or already used"));
+
+		// Fail-closed expiry re-check BEFORE the token exchange: the framework owns the TTL ceiling independently
+		// of the store, so an honest store that failed to expire an over-age record cannot extend usability.  Null
+		// createdAt/expiresAt (a foreign/deserialized blob) is treated as expired, not an NPE->500.
+		if (pending.createdAt() == null || pending.expiresAt() == null || ! clock.instant().isBefore(pending.expiresAt()))
+			throw new AuthenticationException("OIDC callback state is missing, expired, or already used");
 
 		OAuthToken token;
 		try {
@@ -658,7 +734,9 @@ public class OidcRelyingParty {
 		var cookieValue = sessionStore.createSessionCookieValue(session);
 		noStore(res);
 		res.addHeader("Set-Cookie", buildSetCookie(cookieValue, sessionTtl.toSeconds()));
-		res.sendRedirect(or(pending.redirectTarget(), postLoginRedirect));
+		// Re-validate the redirect target on consume: a writable/compromised shared store cannot inject an open
+		// redirect.  A failing re-validation falls back to the operator-configured default (not itself re-sanitized).
+		res.sendRedirect(or(safeRelativePath(pending.redirectTarget()), postLoginRedirect));
 	}
 
 	/**

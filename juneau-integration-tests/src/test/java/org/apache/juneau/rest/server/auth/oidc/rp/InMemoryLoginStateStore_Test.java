@@ -21,29 +21,39 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore.PendingLogin;
+import org.apache.juneau.rest.server.auth.oidc.rp.OidcTestSupport.MutableClock;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link EphemeralStore} &mdash; single-use, TTL-bounded, size-bounded state/nonce storage.
+ * Tests for {@link InMemoryLoginStateStore} &mdash; the shipped single-node, single-use, TTL-bounded,
+ * size-bounded default {@link LoginStateStore}.
  *
  * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
-class EphemeralStore_Test extends TestBase {
+class InMemoryLoginStateStore_Test extends TestBase {
 
 	// Fixed clock seam: these cases don't depend on wall-clock time, so a deterministic clock
 	// replaces the system clock (java:S8692) without changing behavior.
 	private static final Clock CLOCK = Clock.fixed(Instant.parse("2026-01-01T00:00:00Z"), ZoneOffset.UTC);
+	private static final Duration TTL = Duration.ofMinutes(5);
 
-	private static EphemeralStore store(Clock clock) {
-		return new EphemeralStore(Duration.ofMinutes(5), 100, clock);
+	private static InMemoryLoginStateStore store(Clock clock) {
+		return new InMemoryLoginStateStore(TTL, 100, clock);
+	}
+
+	/** Builds a framework-shaped record stamped from the given clock (createdAt=now, expiresAt=now+TTL). */
+	private static PendingLogin pending(Clock clock, String nonce, String verifier, String redirect) {
+		var now = clock.instant();
+		return new PendingLogin(nonce, verifier, redirect, now, now.plus(TTL));
 	}
 
 	@Test void a01_storeThenConsume_roundTrips() {
 		var s = store(CLOCK);
-		s.store("state-1", "nonce-1", "verifier-1", "/dashboard");
+		s.store("state-1", pending(CLOCK, "nonce-1", "verifier-1", "/dashboard"));
 		var p = s.consume("state-1");
 		assertTrue(p.isPresent());
 		assertEquals("nonce-1", p.get().nonce());
@@ -53,7 +63,7 @@ class EphemeralStore_Test extends TestBase {
 
 	@Test void a02_consume_isSingleUse() {
 		var s = store(CLOCK);
-		s.store("state-1", "nonce-1", "verifier-1", null);
+		s.store("state-1", pending(CLOCK, "nonce-1", "verifier-1", null));
 		assertTrue(s.consume("state-1").isPresent());
 		assertTrue(s.consume("state-1").isEmpty(), "second consume of same state must miss (replay defense)");
 	}
@@ -71,56 +81,65 @@ class EphemeralStore_Test extends TestBase {
 	@Test void b01_expiredEntry_isMissed() {
 		var base = Instant.parse("2026-01-01T00:00:00Z");
 		var clock = new MutableClock(base);
-		var s = new EphemeralStore(Duration.ofMinutes(5), 100, clock);
-		s.store("state-1", "nonce-1", "verifier-1", null);
+		var s = new InMemoryLoginStateStore(TTL, 100, clock);
+		s.store("state-1", pending(clock, "nonce-1", "verifier-1", null));
 		clock.advance(Duration.ofMinutes(6));
-		assertTrue(s.consume("state-1").isEmpty(), "entry past TTL must be treated as a miss");
+		assertTrue(s.consume("state-1").isEmpty(), "entry past expiresAt must be treated as a miss");
 	}
 
 	@Test void b02_notYetExpired_survives() {
 		var base = Instant.parse("2026-01-01T00:00:00Z");
 		var clock = new MutableClock(base);
-		var s = new EphemeralStore(Duration.ofMinutes(5), 100, clock);
-		s.store("state-1", "nonce-1", "verifier-1", null);
+		var s = new InMemoryLoginStateStore(TTL, 100, clock);
+		s.store("state-1", pending(clock, "nonce-1", "verifier-1", null));
 		clock.advance(Duration.ofMinutes(4));
 		assertTrue(s.consume("state-1").isPresent());
 	}
 
+	/** A stored record with a {@code null} expiresAt fails closed as expired (defensive against a foreign blob). */
+	@Test void b03_nullExpiresAt_isTreatedAsExpired() {
+		var s = store(CLOCK);
+		var now = CLOCK.instant();
+		s.store("state-1", new PendingLogin("nonce-1", "verifier-1", null, now, null));
+		assertTrue(s.consume("state-1").isEmpty(), "null expiresAt must fail closed as expired");
+	}
+
 	@Test void c01_sizeCap_evictsEldest() {
-		var s = new EphemeralStore(Duration.ofMinutes(5), 3, CLOCK);
-		s.store("s1", "n", "v", null);
-		s.store("s2", "n", "v", null);
-		s.store("s3", "n", "v", null);
-		s.store("s4", "n", "v", null);  // evicts s1
+		var s = new InMemoryLoginStateStore(TTL, 3, CLOCK);
+		s.store("s1", pending(CLOCK, "n", "v", null));
+		s.store("s2", pending(CLOCK, "n", "v", null));
+		s.store("s3", pending(CLOCK, "n", "v", null));
+		s.store("s4", pending(CLOCK, "n", "v", null));  // evicts s1
 		assertEquals(3, s.size());
 		assertTrue(s.consume("s1").isEmpty());
 		assertTrue(s.consume("s4").isPresent());
 	}
 
 	@Test void d01_rejectsNonPositiveTtl() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ZERO, 100, CLOCK));
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryLoginStateStore(Duration.ZERO, 100, CLOCK));
+	}
+
+	/** Negative TTL rejected — second bytecode branch of {@code !isZero && !isNegative}. */
+	@Test void d05_rejectsNegativeTtl() {
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryLoginStateStore(Duration.ofSeconds(-1), 100, CLOCK));
 	}
 
 	@Test void d02_rejectsTtlAbove30Minutes() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(31), 100, CLOCK));
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryLoginStateStore(Duration.ofMinutes(31), 100, CLOCK));
 	}
 
 	@Test void d03_rejectsNonPositiveMaxEntries() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(5), 0, CLOCK));
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryLoginStateStore(Duration.ofMinutes(5), 0, CLOCK));
 	}
 
 	@Test void d04_rejectsBlankStateOnStore() {
 		var s = store(CLOCK);
-		assertThrows(IllegalArgumentException.class, () -> s.store("", "n", "v", null));
+		var p = pending(CLOCK, "n", "v", null);
+		assertThrows(IllegalArgumentException.class, () -> s.store("", p));
 	}
 
-	/** A test clock the test can advance manually. */
-	static final class MutableClock extends Clock {
-		private Instant now;
-		MutableClock(Instant start) { now = start; }
-		void advance(Duration d) { now = now.plus(d); }
-		@Override public ZoneId getZone() { return ZoneOffset.UTC; }
-		@Override public Clock withZone(ZoneId zone) { return this; }
-		@Override public Instant instant() { return now; }
+	@Test void d06_rejectsNullPendingOnStore() {
+		var s = store(CLOCK);
+		assertThrows(IllegalArgumentException.class, () -> s.store("state-1", null));
 	}
 }

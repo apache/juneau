@@ -20,8 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 import java.time.*;
+import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore.PendingLogin;
 import org.junit.jupiter.api.*;
 
 /**
@@ -133,5 +135,57 @@ class OidcRelyingPartyBuilder_Test extends TestBase {
 			.sessionStore(InMemorySessionStore.create())
 			.build();
 		assertNotNull(rp);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// F: stateNonceTtl (0, MAX_TTL] cap enforced on a site that runs for CUSTOM stores + loginStateStore hook.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	// A TTL-oblivious no-op store, constructed independently of any TTL value (S1): it does NOT implement the
+	// (0, MAX_TTL] cap, so a rejection with this store injected proves the cap comes from the builder side, not
+	// from the default InMemoryLoginStateStore constructor (which is skipped when a custom store is supplied).
+	private static final LoginStateStore NOOP_STORE = new LoginStateStore() {
+		@Override public void store(String state, PendingLogin pending) { /* no-op */ }
+		@Override public Optional<PendingLogin> consume(String state) { return Optional.empty(); }
+	};
+
+	/**
+	 * Over-30-min TTL rejected even when a TTL-oblivious custom store is injected — proves the cap runs on the
+	 * custom-store path (Phase 2 gate).  On main the cap lives only in the default impl ctor, which a custom
+	 * store skips, so this over-TTL config would build successfully → gate red.
+	 */
+	@Test void f01_stateNonceTtl_over30Min_rejected_customStorePath() {
+		assertThrows(IllegalArgumentException.class,
+			() -> base().loginStateStore(NOOP_STORE).stateNonceTtl(Duration.ofMinutes(31)).build());
+	}
+
+	/** Zero TTL rejected on the custom-store path (fail-closed = immediately-expired), sibling of the 31-min case. */
+	@Test void f02_stateNonceTtl_zero_rejected_customStorePath() {
+		assertThrows(IllegalArgumentException.class,
+			() -> base().loginStateStore(NOOP_STORE).stateNonceTtl(Duration.ZERO).build());
+	}
+
+	/** Negative TTL rejected — second bytecode branch of {@code !isZero && !isNegative}. */
+	@Test void f03_stateNonceTtl_negative_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> base().stateNonceTtl(Duration.ofSeconds(-1)));
+	}
+
+	/** A valid TTL with a custom store is accepted. */
+	@Test void f04_stateNonceTtl_valid_customStore_accepted() {
+		assertDoesNotThrow(() -> base().loginStateStore(NOOP_STORE).stateNonceTtl(Duration.ofMinutes(10)).build());
+	}
+
+	/** The optional loginStateStore hook rejects null. */
+	@Test void f05_loginStateStore_null_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> base().loginStateStore(null));
+	}
+
+	/**
+	 * Over-30-min TTL rejected on the DEFAULT-store path too (S5 throw-site test).  Same
+	 * {@link IllegalArgumentException} type as on main; only the throw <i>site</i> moves (impl ctor at
+	 * {@code build()} &rarr; the {@code stateNonceTtl(...)} setter), pinning the Decision-3 delta.
+	 */
+	@Test void f06_stateNonceTtl_over30Min_rejected_defaultStorePath() {
+		assertThrows(IllegalArgumentException.class, () -> base().stateNonceTtl(Duration.ofMinutes(31)).build());
 	}
 }

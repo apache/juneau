@@ -90,7 +90,7 @@ class SignedCookieSessionStore_Test extends TestBase {
 
 	@Test void c01_expiredCookie_isRejected() {
 		var base = Instant.parse("2026-01-01T00:00:00Z");
-		var clock = new EphemeralStore_Test.MutableClock(base);
+		var clock = new OidcTestSupport.MutableClock(base);
 		var store = SignedCookieSessionStore.create().signingKey(KEY).clock(clock).build();
 		var cookie = store.createSessionCookieValue(session(base, null));
 		clock.advance(Duration.ofHours(9));

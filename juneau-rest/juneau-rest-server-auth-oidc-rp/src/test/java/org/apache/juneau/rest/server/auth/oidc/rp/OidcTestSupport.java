@@ -121,6 +121,19 @@ final class OidcTestSupport {
 		return null;
 	}
 
+	/** Extracts a single {@code application/x-www-form-urlencoded} field value from a request body (URL-decoded). */
+	static String formField(String body, String name) {
+		if (body == null)
+			return null;
+		for (var pair : body.split("&")) {
+			var i = pair.indexOf('=');
+			var k = i < 0 ? pair : pair.substring(0, i);
+			if (k.equals(name))
+				return i < 0 ? "" : URLDecoder.decode(pair.substring(i + 1), StandardCharsets.UTF_8);
+		}
+		return null;
+	}
+
 	/** Parses the cookie value out of a {@code Set-Cookie} header (the bit between {@code =} and the first {@code ;}). */
 	static String cookieValue(String setCookieHeader) {
 		if (setCookieHeader == null)
@@ -154,6 +167,16 @@ final class OidcTestSupport {
 		volatile boolean userInfoFail;
 		/** Extra claims served by {@code /userinfo}. */
 		volatile Map<String,Object> userInfo = new LinkedHashMap<>();
+		/**
+		 * Number of times {@code /token} was invoked.  An order proof for gate 7: a rejected {@code completeLogin}
+		 * that never reaches {@code codeFlow().exchange} leaves this at {@code 0}.
+		 */
+		final java.util.concurrent.atomic.AtomicInteger tokenHits = new java.util.concurrent.atomic.AtomicInteger();
+		/**
+		 * The PKCE {@code code_verifier} observed on the most recent {@code /token} call.  Record-only &mdash; the
+		 * stub still succeeds with any verifier; this only lets a test assert the injected verifier was exchanged.
+		 */
+		volatile String lastCodeVerifier;
 
 		StubIdp() throws IOException {
 			server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
@@ -163,7 +186,9 @@ final class OidcTestSupport {
 		}
 
 		private void handleToken(HttpExchange ex) throws IOException {
+			tokenHits.incrementAndGet();
 			var body = new String(ex.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+			lastCodeVerifier = formField(body, "code_verifier");
 			if (failToken) {
 				writeJson(ex, 400, "{\"error\":\"invalid_grant\"}");
 				return;
@@ -236,5 +261,15 @@ final class OidcTestSupport {
 		public void close() {
 			server.stop(0);
 		}
+	}
+
+	/** A test clock the test can advance manually. */
+	static final class MutableClock extends Clock {
+		private Instant now;
+		MutableClock(Instant start) { now = start; }
+		void advance(Duration d) { now = now.plus(d); }
+		@Override public ZoneId getZone() { return ZoneOffset.UTC; }
+		@Override public Clock withZone(ZoneId zone) { return this; }
+		@Override public Instant instant() { return now; }
 	}
 }
