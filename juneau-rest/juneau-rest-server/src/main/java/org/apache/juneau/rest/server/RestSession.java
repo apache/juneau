@@ -23,10 +23,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
@@ -49,6 +51,9 @@ import jakarta.servlet.http.*;
 	"resource"   // the per-call BasicBeanStore is owned by this RestSession (closed via finish/close paths); fluent add/addBean calls return the same store we already own.
 })
 public class RestSession extends ContextSession {
+
+	/** Logger for the finish-path diagnostic-failure containment token (see {@link #finish()}). */
+	private static final RichLogger LOG = RichLogger.getLogger(RestSession.class);
 
 	// Property name constants
 	private static final String PROP_context = "context";
@@ -304,7 +309,15 @@ public class RestSession extends ContextSession {
 		} catch (Exception e) {
 			exception(e);
 		}
-		RestDebugPipeline.emit(this);
+		// Contain diagnostic formatting/emission: a formatter (or a scrubber that escaped the fail-closed guard) throwing
+		// a RuntimeException/Error during a completed request must not escape and fail the request thread. Log only a
+		// fixed token — never e.getMessage(), the body, the stack, or a second formatter pass — so a scrubber throwing
+		// new RuntimeException(body) cannot re-leak the secret the placeholder just refused.
+		try {
+			RestDebugPipeline.emit(this);
+		} catch (Throwable t) {  // NOSONAR - deliberate containment of any diagnostic failure at request completion.
+			LOG.log(Level.WARNING, "debug formatter failed");
+		}
 		return this;
 	}
 

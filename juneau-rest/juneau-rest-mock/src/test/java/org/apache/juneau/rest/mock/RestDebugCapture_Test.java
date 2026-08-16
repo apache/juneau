@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -37,6 +38,11 @@ import org.junit.jupiter.api.*;
 	"resource" // MockRestClient instances are short-lived test fixtures.
 })
 class RestDebugCapture_Test {
+
+	@AfterEach void resetDumpGate() {
+		// Never leak a forced body-dump gate state into other tests; next resolution re-reads the environment once.
+		reset();
+	}
 
 	@Rest(path="/api")
 	public static class A_Resource {
@@ -248,6 +254,8 @@ class RestDebugCapture_Test {
 		var prevHandlers = logger.getHandlers();
 		var handler = new D00_CollectingHandler();
 		try {
+			// Body dumping is off by default (TODO-370); force it on so the FINEST body-visibility proof still holds.
+			forceOn();
 			logger.setUseParentHandlers(false);
 			for (var h : prevHandlers)
 				logger.removeHandler(h);
@@ -256,24 +264,25 @@ class RestDebugCapture_Test {
 			logger.setLevel(Level.FINEST);
 
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(D_Resource.class).build();
-			client.post("/echo", "real-handler-secret").run().assertContent("real-handler-secret");
+			// Renderable Content-Type so the opted-in body can actually be dumped (absent CT ⇒ non-renderable placeholder).
+			client.post("/echo", "real-handler-secret").header("Content-Type", "text/plain").run().assertContent("real-handler-secret");
 
 			assertEquals(1, handler.records().size(),
 				"effective logger FINEST with INFO handler should publish one INFO-stamped debug record");
 			var finestRecord = handler.records().get(0);
 			assertEquals(Level.INFO, finestRecord.getLevel());
 			assertTrue(finestRecord.getMessage().contains("real-handler-secret"),
-				"FINEST detail should still render request/response body content");
+				"FINEST detail should still render request/response body content when the operator has opted in");
 
 			handler.clear();
 			handler.setLevel(Level.WARNING);
-			client.post("/echo", "real-handler-secret").run().assertContent("real-handler-secret");
+			client.post("/echo", "real-handler-secret").header("Content-Type", "text/plain").run().assertContent("real-handler-secret");
 			assertTrue(handler.records().isEmpty(),
 				"INFO-stamped records must be filtered by handlers above INFO");
 
 			handler.setLevel(Level.INFO);
 			logger.setLevel(Level.INFO);
-			client.post("/echo", "real-handler-secret").run().assertContent("real-handler-secret");
+			client.post("/echo", "real-handler-secret").header("Content-Type", "text/plain").run().assertContent("real-handler-secret");
 
 			assertEquals(1, handler.records().size(),
 				"logger INFO + handler INFO should preserve the prior single visible basic-line behavior");
@@ -311,15 +320,17 @@ class RestDebugCapture_Test {
 	}
 
 	@Test void d02_finestTier_captureWrapperInstalled_bodyRendered() throws Exception {
+		// Body dumping is off by default (TODO-370); force it on + renderable Content-Type to prove the FINEST body path.
+		forceOn();
 		try (var c = RichLogger.getLogger(D_Resource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(D_Resource.class).debug().build();
 
-			client.post("/echo", "two-phase-secret").run().assertContent("two-phase-secret");
+			client.post("/echo", "two-phase-secret").header("Content-Type", "text/plain").run().assertContent("two-phase-secret");
 
 			assertFalse(c.isEmpty());
 			assertEquals(Level.INFO, c.last().getLevel());
 			assertTrue(c.last().getMessage().contains("two-phase-secret"),
-				"FINEST tier must install the capture wrapper and render the body: " + c.last().getMessage());
+				"FINEST tier must install the capture wrapper and render the body when opted in: " + c.last().getMessage());
 		}
 	}
 
@@ -512,6 +523,8 @@ class RestDebugCapture_Test {
 	}
 
 	@Test void a06_bodyCapOverride_lowersCaptureAtCaptureTime() throws Exception {
+		// Body dumping is off by default (TODO-370); force it on + renderable Content-Type to preserve the bodyCap proof.
+		forceOn();
 		try (var c = RichLogger.getLogger(A06_Resource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient
 				.create(A06_Resource.class)
@@ -519,7 +532,7 @@ class RestDebugCapture_Test {
 				.build();
 
 			// 10-byte body; formatter overrides the cap to 4, well below the 8KB wrapper default.
-			client.post("/echo", "0123456789").run().assertContent("0123456789");
+			client.post("/echo", "0123456789").header("Content-Type", "text/plain").run().assertContent("0123456789");
 
 			assertFalse(c.isEmpty());
 			var msg = c.last().getMessage();

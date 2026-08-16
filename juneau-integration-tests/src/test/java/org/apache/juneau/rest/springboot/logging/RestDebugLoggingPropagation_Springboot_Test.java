@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.springboot.logging;
 
+import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -157,7 +158,14 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 			var record = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
 			assertNotNull(record, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
 			assertEquals(Level.INFO, record.getLevel());
-			assertTrue(record.getMessage().contains("phase4-body"), record.getMessage());
+			// Secure-by-default (TODO-370): FINEST no longer dumps bodies without the JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES
+			// env-var master gate. The proof that the TRACE property drove the FINEST *tier* (not just headers) is that the
+			// body SECTION is rendered at all — here as the suppression placeholder, since the gate is unset — while the
+			// raw body never appears.
+			var msg = record.getMessage();
+			assertTrue(msg.contains("---Request Content---"), msg);
+			assertTrue(msg.contains("body suppressed") && msg.contains("JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES"), msg);
+			assertFalse(msg.contains("phase4-body"), msg);
 		} finally {
 			state.restore(logger);
 		}
@@ -238,6 +246,46 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 			parentState.restore(parent);
 			opOneState.restore(opOne);
 			opTwoState.restore(opTwo);
+		}
+	}
+
+	/**
+	 * Companion to {@link #b01_tracePropertyDrivesFinestBodyDetail_withoutProgrammaticSetLevel()}: that test proves
+	 * only the gate-OFF (secure-by-default) half of the contract -- the suppression placeholder is rendered and the
+	 * raw body never appears. This test forces the body-dump gate <b>on</b> through the test-only seam (never the
+	 * process environment) and proves the complementary half -- the raw body DOES appear at {@code FINEST} once the
+	 * operator has opted in -- inside this module's forked Spring Boot container context.
+	 */
+	@Test void b06_bodyDumpGateOn_rawBodyAppearsAtFinestTier() throws Exception {
+		var logger = Logger.getLogger(OP_ECHO);
+		var state = new LoggerState(logger);
+		var handler = new CollectingHandler();
+		try {
+			forceOn();
+			for (var h : logger.getHandlers())
+				logger.removeHandler(h);
+			logger.setUseParentHandlers(false);
+			handler.setLevel(Level.INFO);
+			logger.addHandler(handler);
+
+			try (var app = start("logging.level." + HOST + "=TRACE")) {
+				var port = port(app);
+				var resp = post(port, "/api/echo", "phase4-body-visible", "Content-Type", "text/plain");
+				assertEquals(200, resp.statusCode());
+				assertTrue(resp.body().contains("phase4-body-visible"), resp.body());
+			}
+
+			var record = handler.records().stream().filter(x -> OP_ECHO.equals(x.getLoggerName())).reduce((a, b) -> b).orElse(null);
+			assertNotNull(record, "TRACE property should drive JUL detail without direct Logger.setLevel(...) calls");
+			assertEquals(Level.INFO, record.getLevel());
+			var msg = record.getMessage();
+			assertTrue(msg.contains("---Request Content---"), msg);
+			assertTrue(msg.contains("phase4-body-visible"),
+				"gate forced on via the test-only seam should render the raw body: " + msg);
+			assertFalse(msg.contains("body suppressed"), msg);
+		} finally {
+			reset();
+			state.restore(logger);
 		}
 	}
 }

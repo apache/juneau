@@ -73,9 +73,10 @@ public class RestDebugPipeline {
 
 	private static String render(RestSession session, RestOpSession opSession, Level level) {
 		// No operation resolved (404/no-op path): only the basic status line is renderable — there is no
-		// RestRequest/RestResponse to drive the formatter tiers through.
+		// RestRequest/RestResponse to drive the formatter tiers through. Resolve the formatter instance so the
+		// sanitized, length-capped instance statusLine (not a static-only path) renders it.
 		if (opSession == null)
-			return BasicRestDebugFormatter.statusLine(session.getRequest(), session.getResponse());
+			return resolveFormatter(session).statusLine(session.getRequest(), session.getResponse());
 
 		var formatter = resolveFormatter(session);
 		var req = opSession.getRequest();
