@@ -1,0 +1,13 @@
+Please vote on releasing Apache Juneau 9.2.1 RC1.
+
+Staging repo:   orgapachejuneau-1042
+Commit:         deadbeef
+Source SHA-512: aaa
+Binary SHA-512: bbb
+Dist (dev):     https://dist.apache.org/repos/dist/dev/juneau/
+
+The vote is open for at least 72 hours and closes 2026-08-18T12:00:00Z.
+
+[ ] +1  Release this package
+[ ]  0  No opinion
+[ ] -1  Do not release (please provide a reason)

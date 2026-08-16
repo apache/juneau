@@ -1,0 +1,10 @@
+The Apache Juneau team is pleased to announce the release of Apache Juneau 9.2.1.
+
+- Bug fixes
+- Performance improvements
+
+Downloads:      https://dist.apache.org/repos/dist/release/juneau/9.2.1/
+GitHub Release: https://github.com/apache/juneau/releases/tag/9.2.1
+Release notes:  https://juneau.apache.org/#release-notes
+
+The Apache Juneau Team

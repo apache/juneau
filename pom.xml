@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.apache.juneau</groupId>
+    <artifactId>juneau-release-manager</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Apache Juneau Release Manager</name>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <juneau.version>10.0.0-SNAPSHOT</juneau.version>
+        <spring.boot.version>4.1.0</spring.boot.version>
+        <freemarker.version>2.3.34</freemarker.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.juneau</groupId>
+            <artifactId>juneau-rest-server-springboot</artifactId>
+            <version>${juneau.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.juneau</groupId>
+            <artifactId>juneau-rest-server-view-freemarker</artifactId>
+            <version>${juneau.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.juneau</groupId>
+            <artifactId>juneau-secret-keychain</artifactId>
+            <version>${juneau.version}</version>
+        </dependency>
+        <!-- FreeMarker engine (provided-scope in the bridge module; supply it here). -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <executions>
+                    <execution><goals><goal>repackage</goal></goals></execution>
+                </executions>
+            </plugin>
+            <!--
+                Runs Apache Rat against all source code to make sure all first-party
+                files carry the AL2.0 header. Bound to the verify phase so `mvn verify`
+                fails the build on any unapproved (unlicensed) file.
+            -->
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
+                <configuration>
+                    <consoleOutput>true</consoleOutput>
+                    <excludes>
+                        <!-- Vendored third-party MIT assets - keep their own upstream headers -->
+                        <exclude>src/main/resources/static/datatables/**</exclude>
+
+                        <!-- Docs / release metadata - no license-header comment syntax -->
+                        <exclude>**/*.md</exclude>
+                        <exclude>LICENSE</exclude>
+                        <exclude>NOTICE</exclude>
+                        <exclude>.gitignore</exclude>
+
+                        <!-- Eclipse IDE metadata -->
+                        <exclude>.settings/**</exclude>
+                        <exclude>.classpath</exclude>
+                        <exclude>.project</exclude>
+
+                        <!-- Test fixtures compared byte-for-byte by unit tests - must not be altered -->
+                        <exclude>src/test/resources/email/**</exclude>
+
+                        <!-- Build output / local run-state -->
+                        <exclude>target/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

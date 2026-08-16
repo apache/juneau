@@ -1,0 +1,3 @@
+I propose to release Apache Juneau 9.2.1 (RC1) from branch juneau-9.2.1-branch.
+
+If there are last-minute blockers, please reply on this thread before the build starts.

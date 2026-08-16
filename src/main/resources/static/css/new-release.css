@@ -1,0 +1,532 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* ==========================================================================
+   Apache Juneau · Release Manager — "New Release" page, layout-specific CSS
+   ==========================================================================
+
+   Loaded AFTER chrome.css. Never redefines header/nav/card/table/tag rules
+   that already exist there — only adds:
+     1. A shared run-header/meta bar + vote-gate banner (used by all 3 options).
+     2. A handful of NEW `.tag.status.*` values the 24-step pipeline needs
+        that the Releases tab never used (running / succeeded / skipped /
+        failed / awaiting-vote) — each mapped onto the SAME color tokens as
+        chrome.css's existing tag domains, per the design note in §current
+        (succeeded→green, running→blue, skipped/awaiting-vote→neutral,
+        failed→red). `pending` is intentionally NOT redefined here — it
+        already exists in chrome.css's amber group and is reused as-is.
+     3. Per-step console styling (shared by all 3 options).
+     4. Layout-specific rules for option A (rail), B (stepper), C (datatable),
+        clearly namespaced/commented per section.
+   ========================================================================== */
+
+/* ==========================================================================
+   New step-status tag values (extends chrome.css's tag system; see header)
+   ========================================================================== */
+
+.tag.status.succeeded { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); border-color: var(--rm-tag-green-border); }
+.tag.status.running   { background: var(--rm-tag-blue-bg);  color: var(--rm-tag-blue-text);  border-color: var(--rm-tag-blue-border); }
+.tag.status.skipped,
+.tag.status.awaiting-vote,
+.tag.status.neutral   { background: var(--rm-tag-neutral-bg); color: var(--rm-tag-neutral-text); border-color: var(--rm-tag-neutral-border); }
+.tag.status.failed    { background: #fdeceb; color: var(--rm-danger); border-color: #f3c6c2; }
+
+.tag.status.running::before { content: '\25CF'; margin-right: 4px; font-size: 8px; position: relative; top: -1px; animation: rm-pulse 1.4s ease-in-out infinite; }
+.tag.status.awaiting-vote::before { content: '\23F8'; margin-right: 3px; font-size: 9px; position: relative; top: 0; }
+
+@keyframes rm-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+/* ==========================================================================
+   Run header + vote banner (shared across all 3 options)
+   ========================================================================== */
+
+.rm-run-header {
+  max-width: 1180px;
+  margin: 0 auto 16px;
+  background: var(--rm-card-bg);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius);
+  padding: 16px 20px;
+}
+
+.rm-run-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rm-run-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rm-run-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--rm-text);
+  margin: 0;
+}
+
+.rm-run-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rm-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--rm-text-muted-2);
+  background: var(--rm-white);
+  border: 1px solid var(--rm-border-2);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.rm-meta-chip b { color: var(--rm-text); font-weight: 700; }
+
+.rm-run-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rm-vote-banner {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8125rem;
+  color: var(--rm-text-muted-2);
+  background: var(--rm-tag-neutral-bg);
+  border: 1px solid var(--rm-tag-neutral-border);
+  border-radius: var(--rm-radius);
+  padding: 9px 14px;
+}
+
+.rm-vote-banner b { color: var(--rm-text); }
+
+.rm-vote-banner .rm-vote-countdown {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--rm-text);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Per-step console (shared by all 3 options)
+   ========================================================================== */
+
+.rm-console {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.65;
+  padding: 12px 14px;
+  border-radius: var(--rm-radius);
+  max-height: 240px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.rm-console .l-cmd   { color: #7ec9ff; }
+.rm-console .l-ok    { color: #8fd19e; }
+.rm-console .l-warn  { color: #e8c766; }
+.rm-console .l-muted { color: #9a9a9a; }
+
+.rm-console .rm-cursor {
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  background: #8fd19e;
+  vertical-align: text-bottom;
+  margin-left: 1px;
+  animation: rm-blink 1s steps(1) infinite;
+}
+
+@keyframes rm-blink { 50% { opacity: 0; } }
+
+.rm-console-empty {
+  color: #8a8a8a;
+  font-style: italic;
+  font-size: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.rm-console-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--rm-text-muted);
+  margin: 14px 0 6px;
+}
+
+.rm-console-label .rm-console-hint {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.6875rem;
+  color: var(--rm-text-muted);
+}
+
+/* ==========================================================================
+   Shared step-detail bits (title row, description, action buttons)
+   ========================================================================== */
+
+.rm-step-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.rm-step-title-row h3 {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--rm-text);
+  margin: 0;
+}
+
+.rm-step-num {
+  color: var(--rm-text-muted);
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+.rm-step-desc {
+  font-size: 0.8125rem;
+  color: var(--rm-text-muted-2);
+  margin: 0 0 12px;
+  max-width: 62ch;
+}
+
+.rm-step-times {
+  font-size: 0.75rem;
+  color: var(--rm-text-muted);
+  margin-bottom: 12px;
+}
+
+.rm-actions-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.btn-sm {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.rm-step-note {
+  font-size: 0.75rem;
+  color: var(--rm-text-muted);
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   OPTION A — left rail + right detail/console
+   ========================================================================== */
+
+.rm-rail-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.rm-rail-col {
+  flex: 0 0 340px;
+  background: var(--rm-white);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius);
+  overflow: hidden;
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+.rm-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--rm-border);
+  cursor: pointer;
+}
+
+.rm-rail-item:last-child { border-bottom: none; }
+.rm-rail-item:hover { background: var(--rm-accent-wash); }
+
+.rm-rail-item.selected {
+  background: var(--rm-accent-wash);
+  box-shadow: inset 3px 0 0 var(--rm-accent);
+}
+
+.rm-rail-num {
+  flex: 0 0 auto;
+  width: 18px;
+  text-align: right;
+  font-size: 0.6875rem;
+  color: var(--rm-text-muted);
+}
+
+.rm-rail-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--rm-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rm-rail-item .tag { flex: 0 0 auto; }
+
+.rm-detail-col {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--rm-white);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius);
+  padding: 18px 20px;
+}
+
+/* ==========================================================================
+   OPTION B — vertical stepper / accordion
+   ========================================================================== */
+
+.rm-stepper {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rm-step-row {
+  background: var(--rm-white);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius);
+  overflow: hidden;
+}
+
+.rm-step-row-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  cursor: pointer;
+}
+
+.rm-step-row-head:hover { background: var(--rm-accent-wash); }
+
+.rm-step-row.expanded .rm-step-row-head {
+  border-bottom: 1px solid var(--rm-border);
+  background: var(--rm-accent-wash);
+}
+
+.rm-step-chevron {
+  flex: 0 0 auto;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--rm-border-2);
+  color: var(--rm-text-muted-2);
+  font-size: 10px;
+  line-height: 15px;
+  text-align: center;
+  transition: transform 0.15s ease;
+}
+
+.rm-step-row.expanded .rm-step-chevron { transform: rotate(90deg); }
+
+.rm-step-row-num {
+  flex: 0 0 auto;
+  width: 20px;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--rm-text-muted);
+}
+
+.rm-step-row-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.8438rem;
+  font-weight: 600;
+  color: var(--rm-text);
+}
+
+.rm-step-row-body {
+  display: none;
+  padding: 14px 18px 18px 48px;
+}
+
+.rm-step-row.expanded .rm-step-row-body { display: block; }
+
+/* ==========================================================================
+   OPTION C — DataTable with expandable console rows
+   ========================================================================== */
+
+.rm-table td.step-num-cell {
+  color: var(--rm-text-muted-2);
+  width: 32px;
+}
+
+.rm-table td.step-name-cell {
+  font-weight: 600;
+  color: var(--rm-text);
+}
+
+.rm-table .step-actions-cell {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.rm-table .step-actions-cell .btn { margin-left: 6px; }
+
+tr.step-detail-row td {
+  background: var(--rm-card-bg);
+  padding: 14px 18px;
+}
+
+/* ==========================================================================
+   Real-app additions — classes the wired new-release.ftlh/new-release.js use
+   that the static mockup above didn't need (start form, empty-detail hint,
+   the mutating-step marker tag). Follows the mockup's existing conventions
+   rather than introducing a parallel style system.
+   ========================================================================== */
+
+/* Generic form row for the "start a run" card (the mockup never showed this
+   state) — same look as .cred .row in chrome.css, just not scoped to .cred. */
+.row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.row input {
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  padding: 6px 10px;
+  border: 1px solid var(--rm-border-2);
+  border-radius: var(--rm-radius);
+  background: var(--rm-white);
+  color: var(--rm-text);
+}
+
+.hint {
+  font-size: 0.8125rem;
+  color: var(--rm-text-muted);
+  font-style: italic;
+}
+
+/* Marks a step whose apply() mutates remote state (spec §3.8), slotted into
+   the same amber domain chrome.css already uses for "pending"/in-progress. */
+.tag.mutating {
+  background: var(--rm-tag-amber-bg);
+  color: var(--rm-tag-amber-text);
+  border-color: var(--rm-tag-amber-border);
+}
+
+/* new-release.js renders the console into a <pre>, not the mockup's <div> —
+   reset the browser default block margin so .rm-console's own padding governs spacing. */
+pre.rm-console {
+  margin: 0;
+}
+
+/* A review-gate step held after its read-only work ran — reuses the same paused affordance as the
+   vote gate, since both are "done its work, awaiting a human". */
+.tag.status.awaiting-review {
+  background: var(--rm-tag-blue-bg);
+  color: var(--rm-tag-blue-text);
+  border-color: var(--rm-tag-blue-border);
+}
+
+.tag.status.awaiting-review::before { content: '\23F8'; margin-right: 3px; font-size: 9px; }
+
+/* ==========================================================================
+   Slice 3: run-level execution-mode banner + arming affordance.
+   ========================================================================== */
+
+.rm-mode-banner {
+  max-width: 1180px;
+  margin: 0 auto 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--rm-tag-neutral-border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--rm-muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rm-mode-banner.safe { background: var(--rm-tag-green-bg); border-color: var(--rm-tag-green-border); }
+.rm-mode-banner.live { background: #fdeceb; border-color: #f3c6c2; }
+
+.rm-mode-chip {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.rm-mode-chip.safe { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); border-color: var(--rm-tag-green-border); }
+.rm-mode-chip.live { background: #fdeceb; color: var(--rm-danger); border-color: #f3c6c2; }
+
+/* The run is armed for live mutation (LIVE only). */
+.tag.armed {
+  background: #fdeceb;
+  color: var(--rm-danger);
+  border-color: #f3c6c2;
+  font-weight: 700;
+}
+
+/* "Arm this run" — a deliberately cautionary amber action distinct from the primary/danger buttons. */
+.btn-warning {
+  background: var(--rm-tag-amber-bg);
+  color: var(--rm-tag-amber-text);
+  border: 1px solid var(--rm-tag-amber-border);
+}
+
+.btn-warning:hover { filter: brightness(0.97); }

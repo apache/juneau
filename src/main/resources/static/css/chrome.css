@@ -1,0 +1,738 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* ==========================================================================
+   Apache Juneau · Release Manager — shared "chrome" stylesheet
+   ==========================================================================
+
+   PURPOSE
+   This file defines the admin-console app shell (header, primary nav, card,
+   DataTable, tag/pill system) using only open, redistributable assets. It is
+   designed to evolve into the *real* shared chrome CSS for the Release
+   Manager UI.
+
+   SWAPPABLE THEME TOKENS
+   All brand-specific bits are expressed as CSS custom properties on :root
+   so a sibling app can re-skin the exact same markup/CSS by overriding a
+   small token block — no other rule in this file should need to change.
+
+   Default theme = "Apache" (this file, below) — open assets only.
+   ========================================================================== */
+
+:root {
+  /* ---- Swappable brand tokens (override per-app) ---- */
+  --rm-font: 'Inter', 'Source Sans 3', system-ui, -apple-system, sans-serif;
+  --rm-logo: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0OCA0OCc+PHJlY3Qgd2lkdGg9JzQ4JyBoZWlnaHQ9JzQ4JyByeD0nMTAnIGZpbGw9JyMxNTg5RUUnLz48cGF0aCBkPSdNMjQgOGMtNyA2LTExIDEzLTExIDE5YTExIDExIDAgMCAwIDIyIDBjMC02LTQtMTMtMTEtMTl6JyBmaWxsPScjZmZmZmZmJyBmaWxsLW9wYWNpdHk9JzAuOTUnLz48cGF0aCBkPSdNMjQgMTR2MjAnIHN0cm9rZT0nIzE1ODlFRScgc3Ryb2tlLXdpZHRoPScxLjYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjwvc3ZnPgo=");
+  --rm-logo-size: 26px 26px;
+  --rm-page-bg: linear-gradient(180deg, #b0c4df 0%, #c7d5e8 22%, #e4eaf2 55%, #f5f6f9 100%);
+  --rm-header-icon-color: #747474;
+
+  /* ---- Brand accent ---- */
+  --rm-accent: #1589EE;
+  --rm-accent-2: #1589ed;
+  --rm-accent-wash: #1589ee1a;
+
+  /* ---- Text ---- */
+  --rm-link: #0174d3;
+  --rm-text: #080707;
+  --rm-text-soft: #080707cc;
+  --rm-text-muted: #706e6b;
+  --rm-text-muted-2: #3e3e3c;
+
+  /* ---- Borders / surfaces ---- */
+  --rm-border: #dddbda;
+  --rm-border-2: #ced4da;
+  --rm-card-bg: #f5f6f9;
+  --rm-chrome-bg: #f3f2f2;
+  --rm-white: #ffffff;
+
+  /* ---- Buttons / status ---- */
+  --rm-btn-primary: #1a5297;
+  --rm-btn-primary-hover: #005fb2;
+  --rm-danger: #c23934;
+  --rm-success: #2e844a;
+
+  /* ---- Tag / pill palette ---- */
+  --rm-tag-green-bg: #b8e6c4;
+  --rm-tag-green-text: #155724;
+  --rm-tag-green-border: #9fd6ad;
+
+  --rm-tag-blue-bg: #dceefb;
+  --rm-tag-blue-text: #0c5460;
+  --rm-tag-blue-border: #c3e0f3;
+
+  --rm-tag-amber-bg: #fff3cd;
+  --rm-tag-amber-text: #856404;
+  --rm-tag-amber-border: #ffe69c;
+
+  --rm-tag-neutral-bg: #e2e3e5;
+  --rm-tag-neutral-text: #383d41;
+  --rm-tag-neutral-border: #c6c8ca;
+
+  --rm-radius: 0.25rem;
+}
+
+/* ==========================================================================
+   Base / page
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--rm-font);
+  color: var(--rm-text);
+  background: var(--rm-page-bg);
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: var(--rm-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.rm-header {
+  display: flex;
+  align-items: center;
+  height: 68px;
+  background: var(--rm-white);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.rm-brand {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rm-brand-mark {
+  width: 48px;
+  height: 48px;
+  margin: 10px 20px;
+  flex: 0 0 auto;
+  border-radius: var(--rm-radius);
+  background-color: var(--rm-white);
+  background-image: var(--rm-logo);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: var(--rm-logo-size);
+}
+
+.rm-brand-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--rm-text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rm-brand-title .rm-brand-sep {
+  margin: 0 6px;
+  color: var(--rm-text-muted);
+  font-weight: 400;
+}
+
+.rm-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 16px;
+  flex: 0 0 auto;
+}
+
+.rm-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--rm-header-icon-color);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.rm-icon-btn:hover { background: var(--rm-chrome-bg); }
+
+.rm-icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+.rm-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rm-accent), var(--rm-btn-primary));
+  color: var(--rm-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+
+/* ==========================================================================
+   Primary navigation
+   ========================================================================== */
+
+.nav {
+  display: flex;
+  align-items: stretch;
+  background: var(--rm-white);
+  border-bottom: 3px solid var(--rm-accent);
+  padding: 0 16px;
+  position: sticky;
+  top: 68px;
+  z-index: 19;
+}
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--rm-text-soft);
+  padding: 8px 10px;
+  margin-right: 2px;
+  border-top: 3px solid transparent;
+  border-bottom: none;
+  cursor: pointer;
+  transition: background-color 0.1s ease-in;
+}
+
+.nav-tab:hover {
+  background: var(--rm-accent-wash);
+  text-decoration: none;
+}
+
+.nav-tab.active {
+  background: var(--rm-accent-wash);
+  border-top-color: var(--rm-accent);
+  color: var(--rm-text);
+}
+
+/* ==========================================================================
+   Page scaffolding
+   ========================================================================== */
+
+.rm-main {
+  flex: 1 1 auto;
+  padding: 20px 24px 40px;
+}
+
+.rm-page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rm-page-header h1 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--rm-text);
+  margin: 0;
+}
+
+.rm-page-header .rm-page-sub {
+  font-size: 0.8125rem;
+  color: var(--rm-text-muted);
+  margin-top: 2px;
+}
+
+.rm-breadcrumb {
+  font-size: 0.75rem;
+  color: var(--rm-text-muted);
+  margin-bottom: 4px;
+}
+
+.rm-breadcrumb a { color: var(--rm-text-muted); }
+.rm-breadcrumb .sep { margin: 0 6px; }
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+
+.rm-card {
+  max-width: 1180px;
+  margin: 0 auto;
+  background: var(--rm-card-bg);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius);
+  padding: 18px 20px 8px;
+}
+
+.rm-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rm-card-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--rm-text);
+  margin: 0;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--rm-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.btn-primary {
+  background: var(--rm-btn-primary);
+  color: var(--rm-white);
+}
+.btn-primary:hover { background: var(--rm-btn-primary-hover); }
+
+.btn-outline {
+  background: var(--rm-white);
+  color: var(--rm-text-soft);
+  border-color: var(--rm-border-2);
+}
+.btn-outline:hover { background: var(--rm-chrome-bg); }
+
+.btn-danger {
+  background: var(--rm-white);
+  color: var(--rm-danger);
+  border-color: var(--rm-border-2);
+}
+.btn-danger:hover { background: #fdeceb; }
+
+/* ==========================================================================
+   Tag / pill system
+   ========================================================================== */
+
+.tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1.5;
+  /* Neutral default so any value outside the known domain vocabulary below
+     (e.g. free-text release "stage" values this app has beyond the mockup's
+     controlled vocabulary) still renders as a filled pill. */
+  background: var(--rm-tag-neutral-bg);
+  color: var(--rm-tag-neutral-text);
+  border-color: var(--rm-tag-neutral-border);
+}
+
+/* domain: status */
+.tag.status.released,
+.tag.stage.released { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); border-color: var(--rm-tag-green-border); }
+
+.tag.status.voting,
+.tag.status.rc,
+.tag.stage.voting,
+.tag.stage.rc { background: var(--rm-tag-blue-bg); color: var(--rm-tag-blue-text); border-color: var(--rm-tag-blue-border); }
+
+.tag.status.draft,
+.tag.status.pending,
+.tag.stage.draft,
+.tag.stage.pending,
+.tag.stage.building { background: var(--rm-tag-amber-bg); color: var(--rm-tag-amber-text); border-color: var(--rm-tag-amber-border); }
+
+.tag.status.dropped,
+.tag.status.unknown,
+.tag.stage.dropped,
+.tag.stage.unknown,
+.tag.stage.archived,
+.tag.stage.cancelled { background: var(--rm-tag-neutral-bg); color: var(--rm-tag-neutral-text); border-color: var(--rm-tag-neutral-border); }
+
+/* Release Manager app's own "stage" vocabulary (Release.stage — not part of
+   the mockup's controlled vocabulary above, but slotted into the same
+   green/blue/neutral domains for visual consistency). */
+.tag.stage.distributed { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); border-color: var(--rm-tag-green-border); }
+.tag.stage.awaiting-vote { background: var(--rm-tag-blue-bg); color: var(--rm-tag-blue-text); border-color: var(--rm-tag-blue-border); }
+
+/* ==========================================================================
+   Data table (DataTables integration)
+   ========================================================================== */
+
+.rm-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  color: var(--rm-text-muted-2);
+  padding: 6px 2px 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rm-table-length,
+.rm-table-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rm-table-length select,
+.rm-table-search input {
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  padding: 4px 8px;
+  border: 1px solid var(--rm-border-2);
+  border-radius: var(--rm-radius);
+  background: var(--rm-white);
+  color: var(--rm-text);
+}
+
+.rm-table-search input { width: 200px; }
+
+/* Horizontal-scroll container so wide tables stay inside the card
+   instead of bleeding past its border on narrow viewports. */
+.rm-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.rm-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  background: var(--rm-white);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius);
+  overflow: hidden;
+}
+
+table.rm-table thead th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--rm-text-muted-2);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--rm-border);
+  background: var(--rm-chrome-bg);
+  white-space: nowrap;
+}
+
+table.rm-table thead th.sortable { cursor: pointer; position: relative; }
+table.rm-table thead th.sortable::after {
+  content: '\2195';
+  margin-left: 5px;
+  color: var(--rm-border-2);
+  font-weight: 400;
+}
+
+table.rm-table tbody td {
+  font-size: 0.8125rem;
+  color: var(--rm-text);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--rm-border);
+  vertical-align: middle;
+}
+
+table.rm-table tbody tr:nth-child(odd) { background: #fbfbfc; }
+table.rm-table tbody tr:hover { background: var(--rm-accent-wash); }
+table.rm-table tbody tr:last-child td { border-bottom: none; }
+
+td.details-control {
+  width: 28px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--rm-text-muted);
+}
+
+td.details-control .chevron {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--rm-border-2);
+  color: var(--rm-text-muted-2);
+  font-size: 10px;
+  line-height: 15px;
+  text-align: center;
+  transition: transform 0.15s ease;
+}
+
+tr.row-expanded td.details-control .chevron { transform: rotate(90deg); }
+
+tr.detail-row td {
+  background: var(--rm-card-bg);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--rm-border);
+}
+
+tr.detail-row .detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 10px 24px;
+  font-size: 0.8125rem;
+}
+
+tr.detail-row dt {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--rm-text-muted);
+  margin: 0 0 2px;
+}
+
+tr.detail-row dd {
+  margin: 0;
+  color: var(--rm-text);
+}
+
+.rm-table-info {
+  font-size: 0.75rem;
+  color: var(--rm-text-muted);
+  padding: 10px 2px 4px;
+}
+
+.version-cell {
+  font-weight: 700;
+  color: var(--rm-text);
+}
+
+.rc-cell { color: var(--rm-text-muted-2); }
+
+.links-cell a { margin-right: 10px; font-size: 0.8125rem; }
+.links-cell a:last-child { margin-right: 0; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.rm-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--rm-text-muted);
+  padding: 24px 0 32px;
+}
+
+/* ==========================================================================
+   DataTables integration (Release Manager app only — not part of the mockup)
+   ==========================================================================
+
+   The app keeps its real vendored jQuery + DataTables (static/datatables/*)
+   and existing per-tab init JS; nothing below changes DataTables' markup,
+   classes, or behavior. These rules only restyle DataTables' own generated
+   controls (div.dt-container, .dt-length, .dt-search, .dt-info, .dt-paging —
+   the DataTables 2.x class names) with the chrome tokens so the enhanced
+   grid matches the mockup. table.rm-table's rules above already apply to
+   the DataTables-enhanced table itself, since DataTables adds its own
+   "dataTable" class alongside — not instead of — the "rm-table" class this
+   app puts on the <table> element.
+   ========================================================================== */
+
+div.dt-container {
+  font-family: var(--rm-font);
+  color: var(--rm-text-muted-2);
+  font-size: 0.8125rem;
+}
+
+div.dt-container .dt-length,
+div.dt-container .dt-search,
+div.dt-container .dt-info,
+div.dt-container .dt-paging {
+  color: var(--rm-text-muted-2);
+  padding: 6px 2px;
+}
+
+div.dt-container .dt-search input,
+div.dt-container .dt-length select,
+div.dt-container select.dt-input,
+div.dt-container input.dt-input {
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  padding: 4px 8px;
+  border: 1px solid var(--rm-border-2);
+  border-radius: var(--rm-radius);
+  background: var(--rm-white);
+  color: var(--rm-text);
+}
+
+div.dt-container .dt-search input { width: 200px; }
+
+table.dataTable.rm-table thead > tr > th {
+  background: var(--rm-chrome-bg);
+  color: var(--rm-text-muted-2);
+}
+
+table.dataTable.rm-table thead > tr > th.dt-orderable-asc,
+table.dataTable.rm-table thead > tr > th.dt-orderable-desc {
+  cursor: pointer;
+}
+
+table.dataTable.rm-table thead > tr > th .dt-column-order:before,
+table.dataTable.rm-table thead > tr > th .dt-column-order:after {
+  color: var(--rm-border-2);
+}
+
+table.dataTable.rm-table thead > tr > th.dt-ordering-asc .dt-column-order:before,
+table.dataTable.rm-table thead > tr > th.dt-ordering-desc .dt-column-order:after {
+  color: var(--rm-accent);
+}
+
+div.dt-container .dt-paging .dt-paging-button {
+  font-family: var(--rm-font);
+  border-radius: var(--rm-radius);
+}
+
+div.dt-container .dt-paging .dt-paging-button.current,
+div.dt-container .dt-paging .dt-paging-button.current:hover {
+  background: var(--rm-accent) !important;
+  border-color: var(--rm-accent) !important;
+  color: var(--rm-white) !important;
+}
+
+div.dt-container .dt-paging .dt-paging-button:not(.current):not(.disabled):hover {
+  background: var(--rm-accent-wash) !important;
+  border-color: var(--rm-accent) !important;
+  color: var(--rm-text) !important;
+}
+
+/* ==========================================================================
+   Home tab (welcome / instructions)
+   ========================================================================== */
+
+.rm-home-steps,
+.rm-home-prereqs {
+  margin: 0;
+  padding: 4px 0 4px 20px;
+  font-size: 0.8125rem;
+  color: var(--rm-text);
+  line-height: 1.6;
+}
+
+.rm-home-steps li,
+.rm-home-prereqs li {
+  margin-bottom: 8px;
+}
+
+.rm-home-steps li:last-child,
+.rm-home-prereqs li:last-child {
+  margin-bottom: 4px;
+}
+
+.rm-home-steps code,
+.rm-home-prereqs code,
+.rm-page-sub code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.75rem;
+  background: var(--rm-chrome-bg);
+  border: 1px solid var(--rm-border);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+/* ==========================================================================
+   Credential cards (Credentials tab)
+   ==========================================================================
+
+   Not shown in the design mockup (which only covers the Releases tab), so
+   this restyles the app's existing .cred/.pill/.row/.msg markup with the
+   same chrome tokens rather than inventing new markup/classes — the
+   Credentials tab JS (static/js/credentials.js) looks up elements by these
+   exact class names and rewrites .pill's className directly, so the names
+   themselves must stay put.
+   ========================================================================== */
+
+.cred {
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius);
+  background: var(--rm-white);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.cred:last-child { margin-bottom: 0; }
+
+.cred h3 {
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--rm-text);
+}
+
+.cred .row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cred input {
+  font-family: var(--rm-font);
+  font-size: 0.8125rem;
+  padding: 6px 10px;
+  border: 1px solid var(--rm-border-2);
+  border-radius: var(--rm-radius);
+  background: var(--rm-white);
+  color: var(--rm-text);
+}
+
+.cred .msg {
+  font-size: 0.75rem;
+  color: var(--rm-text-muted);
+  margin-top: 8px;
+}
+
+.pill {
+  display: inline-block;
+  padding: 1px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pill.valid { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); }
+.pill.invalid { background: #fdeceb; color: var(--rm-danger); }
+.pill.unset { background: var(--rm-tag-neutral-bg); color: var(--rm-tag-neutral-text); }

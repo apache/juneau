@@ -1,0 +1,7 @@
+target/
+*.class
+.DS_Store
+
+# Eclipse IDE metadata (machine-specific; the shared .settings/ convention prefs ARE tracked)
+.classpath
+.project
