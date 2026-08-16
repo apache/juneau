@@ -712,8 +712,9 @@ class BsonParserSession_Test extends TestBase {
 		var nameValue = cat(le4("n".getBytes(StandardCharsets.UTF_8).length + 1), cstring("n"));
 		var body = cat(
 			new byte[]{0x0A}, cstring("_type"),
-			new byte[]{0x02}, cstring("name"), nameValue);
-		var bytes = cat(le4(body.length + 4), body, new byte[]{0x00});
+			new byte[]{0x02}, cstring("name"), nameValue,
+			new byte[]{0x00});
+		var bytes = cat(le4(body.length + 4), body);
 		var result = BsonParser.DEFAULT.read(bytes, G02_Bean.class);
 		assertNotNull(result);
 		assertEquals("n", result.name);

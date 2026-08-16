@@ -367,6 +367,74 @@ class BsonInputStream_Test extends TestBase {
 	}
 
 	// ====================================================================
+	// Document/array declared-length bound enforcement (forged-header protection; see b05_readDocumentSize)
+	// ====================================================================
+
+	@Test
+	void b31_readDocumentSize_forgedShortBoundRejectsUnterminatedCString() throws Exception {
+		// Forged-short document length (5 = 4-byte header + 1 remaining body byte) followed by a long run
+		// of non-null bytes simulating an attacker-controlled unterminated cstring. Before the fix, traversal
+		// relied solely on finding 0x00 and would grow the buffer across the entire stream.
+		var unterminated = new byte[10_000];
+		Arrays.fill(unterminated, (byte) 'a');
+		try (var is = openIs(cat(le4(5), unterminated))) {
+			is.readDocumentSize();
+			var ex = assertThrows(IOException.class, is::readCString);
+			assertTrue(ex.getMessage().contains("declared length exceeded"));
+		}
+	}
+
+	@Test
+	void b32_readDocumentSize_wellFormedDocumentBoundedReadSucceeds() throws Exception {
+		// Declared size exactly matches the payload: bound enforcement must not reject the well-formed case.
+		var body = cat(cstring("ok"), new byte[]{0x00});
+		var doc = cat(le4(body.length + 4), body);
+		try (var is = openIs(doc)) {
+			is.readDocumentSize();
+			assertEquals("ok", is.readCString());
+			is.readDocumentTerminator();
+		}
+	}
+
+	@Test
+	void b33_readDocumentSize_nestedDocumentHonorsOwnBound() throws Exception {
+		// Outer document has ample remaining budget; a nested document's own forged-short declared length
+		// must still bound its cstring reads independently of (and tighter than) the outer bound.
+		var unterminated = new byte[1_000];
+		Arrays.fill(unterminated, (byte) 'x');
+		var outerBody = cat(le4(5), unterminated); // nested doc header (size=5) + long unterminated payload
+		var outer = cat(le4(outerBody.length + 4), outerBody);
+		try (var is = openIs(outer)) {
+			is.readDocumentSize(); // outer bound: ~1000 bytes remaining
+			is.readDocumentSize(); // nested bound: 1 byte remaining
+			var ex = assertThrows(IOException.class, is::readCString);
+			assertTrue(ex.getMessage().contains("declared length exceeded"));
+		}
+	}
+
+	@Test
+	void b34_readDocumentTerminator_trailingUnconsumedBytesRejected() throws Exception {
+		// Declared size promises more body bytes than are actually consumed before the terminator arrives.
+		var bytes = cat(le4(20), new byte[]{0x00}); // declares 16 body bytes, but terminator arrives immediately
+		try (var is = openIs(bytes)) {
+			is.readDocumentSize();
+			assertTrue(is.isDocumentEnd());
+			var ex = assertThrows(IOException.class, is::readDocumentTerminator);
+			assertTrue(ex.getMessage().contains("not fully consumed"));
+		}
+	}
+
+	@Test
+	void b35_readDocumentSize_eofBeforeDeclaredSizeConsumedRejected() throws Exception {
+		// Stream ends before the declared document length is fully consumed.
+		var bytes = le4(100); // declares 96 body bytes, but the stream provides none
+		try (var is = openIs(bytes)) {
+			is.readDocumentSize();
+			assertThrows(IOException.class, is::readElementType);
+		}
+	}
+
+	// ====================================================================
 	// Pushback mechanism (read after pushback)
 	// ====================================================================
 

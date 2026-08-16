@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.math.*;
 import java.nio.charset.*;
+import java.util.*;
 
 import org.apache.juneau.marshall.parser.*;
 
@@ -49,6 +50,12 @@ public class BsonInputStream extends ParserInputStream {
 
 	private int pushback = -1;
 
+	// Stack of remaining-byte counts, one per currently-open document/array (innermost on top). Every
+	// physical byte pulled off the wire decrements *all* active levels, since bytes consumed by a nested
+	// document/array also count against its enclosing document's declared length. This is what stops a
+	// forged-short document length plus an unterminated cstring from growing past the declared bound.
+	private final Deque<int[]> bounds = new ArrayDeque<>();
+
 	/**
 	 * Constructor.
 	 *
@@ -66,7 +73,11 @@ public class BsonInputStream extends ParserInputStream {
 			pushback = -1;
 			return b;
 		}
-		return super.read();
+		checkBoundAvailable();
+		var b = super.read();
+		if (b >= 0)
+			decrementBounds();
+		return b;
 	}
 
 	/**
@@ -74,6 +85,48 @@ public class BsonInputStream extends ParserInputStream {
 	 */
 	private void pushBack(int b) {
 		pushback = b & 0xFF;
+	}
+
+	/**
+	 * Verifies every currently-open document/array bound still has at least one byte of budget left,
+	 * before a further physical byte is pulled off the wire.
+	 */
+	private void checkBoundAvailable() throws IOException {
+		for (var bound : bounds)
+			if (bound[0] <= 0)
+				throw ioex("BSON document declared length exceeded");
+	}
+
+	/**
+	 * Charges one byte against every currently-open document/array bound.
+	 */
+	private void decrementBounds() {
+		for (var bound : bounds)
+			bound[0]--;
+	}
+
+	/**
+	 * Opens a length-bounded scope for a document/array body being entered, so cstrings and nested values
+	 * cannot be read past its declared length regardless of what the enclosing bound(s) still allow.
+	 *
+	 * @param remaining The number of bytes remaining in the body (declared size minus the 4-byte length
+	 * 	header already consumed).
+	 */
+	private void pushDocumentBound(int remaining) {
+		bounds.push(new int[]{remaining});
+	}
+
+	/**
+	 * Closes the innermost document/array bound after its terminator has been consumed.
+	 *
+	 * @throws IOException If the declared length was not fully consumed (unconsumed trailing bytes).
+	 */
+	private void popDocumentBound() throws IOException {
+		if (bounds.isEmpty())
+			return;
+		var remaining = bounds.pop()[0];
+		if (remaining != 0)
+			throw ioex("BSON document declared length not fully consumed (%s byte(s) remaining)", remaining);
 	}
 
 	/**
@@ -105,13 +158,17 @@ public class BsonInputStream extends ParserInputStream {
 	}
 
 	/**
-	 * Reads the document size (int32) from the stream.
+	 * Reads the document size (int32) from the stream and opens a length-bounded scope for the document
+	 * body that follows, so a forged-short declared length cannot be bypassed by traversal that otherwise
+	 * relies solely on finding a {@code 0x00} terminator.
 	 *
 	 * @return The document size in bytes.
 	 * @throws IOException If the stream ends prematurely.
 	 */
 	public int readDocumentSize() throws IOException {
-		return checkLength(readLE4(), "document");
+		var size = checkLength(readLE4(), "document");
+		pushDocumentBound(size - 4);
+		return size;
 	}
 
 	/**
@@ -140,14 +197,21 @@ public class BsonInputStream extends ParserInputStream {
 	/**
 	 * Reads a cstring (UTF-8 bytes until 0x00).
 	 *
+	 * <p>
+	 * Growth is capped by whichever is tighter of the innermost open document/array bound (enforced by
+	 * {@link #read()}) or the configured {@link #setMaxLength(int) maxLength}, so an unterminated cstring
+	 * cannot grow the backing buffer without limit.
+	 *
 	 * @return The string value.
-	 * @throws IOException If the stream ends prematurely.
+	 * @throws IOException If the stream ends prematurely or the cstring exceeds the configured maximum length.
 	 */
 	public String readCString() throws IOException {
 		var baos = new ByteArrayOutputStream();
 		int b;
-		while ((b = read()) >= 0 && b != 0)
+		while ((b = read()) >= 0 && b != 0) {
+			checkLength(baos.size() + 1, "cstring");
 			baos.write(b);
+		}
 		if (b < 0)
 			throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 		return new String(baos.toByteArray(), UTF8);
@@ -167,14 +231,18 @@ public class BsonInputStream extends ParserInputStream {
 	}
 
 	/**
-	 * Consumes the document terminator byte (0x00).
+	 * Consumes the document terminator byte (0x00) and closes the length-bounded scope opened by the
+	 * matching {@link #readDocumentSize()}, rejecting trailing bytes left unconsumed within the declared
+	 * length.
 	 *
-	 * @throws IOException If the stream ends prematurely or byte is not 0x00.
+	 * @throws IOException If the stream ends prematurely, the byte is not 0x00, or the declared document
+	 * 	length was not fully consumed.
 	 */
 	public void readDocumentTerminator() throws IOException {
 		var b = read();
 		if (b != 0x00)
 			throw ioex("Expected document terminator, got %s", b);
+		popDocumentBound();
 	}
 
 	/**
