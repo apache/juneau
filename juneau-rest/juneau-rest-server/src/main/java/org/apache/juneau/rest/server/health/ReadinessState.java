@@ -34,9 +34,15 @@ import org.apache.juneau.commons.inject.*;
  * <p>
  * {@link HealthAggregator} and the embedded-server shutdown hooks resolve the state via
  * {@link #resolve(BeanStore)}: a {@code ReadinessState} bean registered in the relevant {@link BeanStore} wins;
- * otherwise the process-wide {@link #shared() shared} instance is used.  In the standalone microservice runtime
- * the auto-mounted health probe servlet and the server lifecycle component live in <i>different</i> bean stores,
- * so they bridge through the shared instance &mdash; the server flips it on stop and the probe observes the flip.
+ * otherwise the process-wide {@link #shared() shared} instance is used.  In the standalone Jetty/Tomcat
+ * microservice runtime, the embedded-server lifecycle component (e.g. {@code JettyServerComponent}) constructs
+ * one per-service instance on {@code start()} &mdash; reusing an app/test-supplied {@code @Bean ReadinessState}
+ * if one is already registered &mdash; and explicitly publishes that <b>same</b> instance into both the
+ * microservice's bean store and the auto-mounted health-probe servlet's own bean store.  The two sides then
+ * observe each other's flips without ever touching {@link #shared()}, so stopping one default-configured
+ * microservice does not affect any other microservice's readiness in the same JVM.  {@link #shared()} remains
+ * the last-resort fallback for embeddings that skip that dual-store publish (a plain servlet container, Spring
+ * Boot without this integration, or unit tests that never register a bean).
  *
  * <p>
  * This class is thread-safe; the flag is {@code volatile}.
@@ -56,9 +62,11 @@ public final class ReadinessState {
 	 *
 	 * <p>
 	 * Used as the fallback when no {@code ReadinessState} bean is registered in the relevant {@link BeanStore}.
-	 * In the standalone microservice runtime this is the bridge between the embedded-server lifecycle component
-	 * (which flips it on shutdown) and the auto-mounted health probe servlet (which observes the flip), since the
-	 * two live in separate bean stores.
+	 * This is <b>not</b> the standalone Jetty/Tomcat microservice path: that runtime constructs a per-service
+	 * instance and publishes it into both the microservice's bean store and the health-probe servlet's bean
+	 * store (see the class-level <i>Resolution</i> notes above), so two default-configured microservices in the
+	 * same JVM never share readiness.  This shared instance exists only for embeddings that skip that publish
+	 * step.
 	 *
 	 * @return The shared instance.  Never <jk>null</jk>.
 	 */

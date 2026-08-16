@@ -243,7 +243,15 @@ public class TomcatServerComponent implements MicroserviceListener {
 			//  - Mark readiness ready so a freshly-(re)started service serves traffic.
 			stopTimeout.set(coalesce(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));
 			shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));
-			ReadinessState.resolve(store).markReady();
+
+			// Per-service readiness: reuse an app/test-supplied @Bean ReadinessState if present, else construct
+			// one, and publish it into this microservice's bean store.  shared() is intentionally NOT used here:
+			// it is one JVM-wide singleton, so falling back to it would leak this service's readiness into every
+			// other default-configured microservice in the same JVM.  The health-probe servlet side of this
+			// dual-store publish happens below, in the @Rest servlet auto-discovery loop.
+			var readinessState = store.getBean(ReadinessState.class).orElseGet(ReadinessState::new);
+			store.addBean(ReadinessState.class, readinessState);
+			readinessState.markReady();
 
 			// Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.
 			var mountedPaths = new LinkedHashMap<String,String>();
@@ -266,6 +274,11 @@ public class TomcatServerComponent implements MicroserviceListener {
 				var cls = servlet.getClass();
 				if (cls.getAnnotation(Rest.class) == null)
 					continue;
+				if (servlet instanceof HealthServlet hs)
+					// Dual-store publish (READY-394): this probe's own RestContext bean store is not linked to
+					// ms.getBeanStore(), so the lifecycle-owned instance must be handed to it explicitly before
+					// it initializes; HealthServlet.initReadinessState() registers it into its own bean store.
+					hs.publishReadinessState(readinessState);
 				var pathSpecs = restPathsFor(servlet, store);
 				var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");
 				for (var pathSpec : pathSpecs)

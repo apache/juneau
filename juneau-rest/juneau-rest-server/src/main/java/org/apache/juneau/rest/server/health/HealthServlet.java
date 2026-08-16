@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.health;
 
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.health.HealthAggregator.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -43,6 +44,41 @@ public class HealthServlet extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final transient HealthAggregator aggregator = new HealthAggregator();
+	private transient volatile ReadinessState readinessState;
+
+	/**
+	 * Publishes the lifecycle-owned {@link ReadinessState} that this probe should observe.
+	 *
+	 * <p>
+	 * Called by the embedded-server lifecycle component (e.g. {@code JettyServerComponent},
+	 * {@code TomcatServerComponent}) before the server starts, so the per-service instance that component flips
+	 * on shutdown is registered into this resource's own bean store &mdash; see {@link #initReadinessState}
+	 * &mdash; closing the gap between the microservice's bean store and this servlet's bean store that
+	 * {@link HealthAggregator} consults.
+	 *
+	 * @param state The per-service readiness state.  Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public HealthServlet publishReadinessState(ReadinessState state) {
+		this.readinessState = state;
+		return this;
+	}
+
+	/**
+	 * Registers the {@linkplain #publishReadinessState(ReadinessState) published} readiness state (if any) into
+	 * this resource's own bean store, so {@link HealthAggregator#aggregate} resolves the lifecycle-owned
+	 * instance instead of falling back to {@link ReadinessState#shared()}.
+	 *
+	 * @param beanStore This resource's bean store.
+	 */
+	@RestInit
+	@SuppressWarnings({
+		"resource" // addBean returns this; the discarded return is the store the caller already holds
+	})
+	public void initReadinessState(WritableBeanStore beanStore) {
+		if (readinessState != null)
+			beanStore.addBean(ReadinessState.class, readinessState);
+	}
 
 	/**
 	 * Health probe endpoint.
