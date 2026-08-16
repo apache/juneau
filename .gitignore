@@ -1,0 +1,14 @@
+# Java / Maven
+target/
+*.class
+
+# Microservice runtime
+logs/
+
+# OS / IDE
+.DS_Store
+.idea/
+*.iml
+.settings/
+.classpath
+.project
