@@ -1,0 +1,5 @@
+target/
+!target/my-app.war
+website/
+.git/
+.mvn/
