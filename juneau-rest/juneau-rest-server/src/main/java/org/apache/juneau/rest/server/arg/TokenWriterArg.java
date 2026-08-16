@@ -103,7 +103,7 @@ public class TokenWriterArg extends SimpleRestOperationArg {
 			.timeZone(req.getTimeZone().orElse(null))
 			.mediaType(mediaType)
 			.apply(WriterSerializerSession.Builder.class, x -> x.streamCharset(res.getCharset()))
-			.debug(req.isDebug() ? true : null)
+			.debug(req.isDebugMarshalling() ? true : null)
 			.build();
 		Object output = session.isWriterSerializer()
 			? res.getNegotiatedWriter()

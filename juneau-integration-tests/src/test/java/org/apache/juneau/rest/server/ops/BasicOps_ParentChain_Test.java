@@ -36,10 +36,9 @@ import org.junit.jupiter.api.*;
  * <p>
  * Setup: a single {@link RestServlet} host mounts all three ops mixins
  * ({@link EchoMixin}, {@link AdminMixin}, {@link RouteIndexMixin}) plus a
- * vanilla {@code /items} op of its own. The client's {@code debug()} raises the host resource logger to
- * {@code FINEST}, which unlocks the echo endpoint (mixin-served ops resolve their logger from the host class);
- * an empty {@code @Bean RestGuardList} factory replaces the {@link DenyAllGuard} default to
- * unlock the admin endpoints.
+ * vanilla {@code /items} op of its own. A {@code @Bean EchoMixin.create().enabled()} factory turns on the
+ * (default-OFF) echo endpoint &mdash; independent of the JUL logger level &mdash; and an empty
+ * {@code @Bean RestGuardList} factory replaces the {@link DenyAllGuard} default to unlock the admin endpoints.
  *
  * <p>
  * Acceptance:
@@ -63,9 +62,12 @@ class BasicOps_ParentChain_Test extends TestBase {
 
 		// Allow-all guard chain — replaces the AdminMixin deny-all default.
 		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+
+		// Echo is default-OFF and decoupled from the JUL level; enable it explicitly so a02 can exercise it.
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
-	private static final MockRestClient c = MockRestClient.createLax(A.class).debug().build();
+	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_allThreeMixinContextsRegistered() {
 		MockRestClient.buildLax(A.class);

@@ -54,8 +54,8 @@ import org.springframework.test.annotation.*;
  * 		ApplicationContext.getBean(...)}.
  * 	<li>End-to-end format-pinned JSON ({@link org.apache.juneau.rest.server.server.RestResponse#getDirectWriter
  * 		getDirectWriter("application/json")}) under embedded Tomcat.
- * 	<li>The {@link Host} servlet's own JUL logger &mdash; not {@link EchoMixin}'s &mdash; gating
- * 		{@code req.isDebug()} for the mixin-served echo op under a real Spring container.
+ * 	<li>Explicit {@code @Bean EchoMixin.create().enabled()} enablement driving reachability for the mixin-served
+ * 		echo op under a real Spring container, independent of the {@link Host} servlet's JUL logger level.
  * </ul>
  *
  * @since 10.0.0
@@ -77,7 +77,7 @@ class EchoMixin_Springboot_Test {
 		}
 
 		@Bean public EchoMixin echoResource() {
-			return EchoMixin.create().bodyLimit(2048L).build();
+			return EchoMixin.create().enabled().bodyLimit(2048L).build();
 		}
 	}
 
@@ -105,33 +105,27 @@ class EchoMixin_Springboot_Test {
 	}
 
 	/**
-	 * The echo op is contributed by {@link EchoMixin} but its resolved debug logger is named after the
+	 * The echo op is contributed by {@link EchoMixin} and its resolved debug logger is named after the
 	 * <b>host</b> resource class ({@link Host}) that composes the mixin &mdash; not {@link EchoMixin} itself
-	 * (see {@code RestOpContext.hostResourceClass()}). Raising this logger's level is what unlocks
-	 * {@code /echo/*} for this host.
+	 * (see {@code RestOpContext.hostResourceClass()}). This logger no longer gates {@code /echo/*} reachability
+	 * (reachability is the explicit {@code EchoMixin.create().enabled()} switch); {@code a03} drives it below
+	 * {@code FINE} to prove that.
 	 *
 	 * <p>
 	 * Held in a {@code static final} field (rather than re-resolved via {@code Logger.getLogger(...)} on demand):
 	 * {@code java.util.logging}'s {@code LogManager} only holds loggers by a weak reference, so a logger with no
 	 * other strong referent can be garbage-collected and silently re-created at its default level.
-	 *
-	 * <p>
-	 * The level is set per-test (not once in a class-level {@code @BeforeAll}): Spring Boot's logging-system
-	 * bootstrap resets {@code java.util.logging}'s {@code LogManager} configuration while the context is starting,
-	 * which wipes out a level set before the context finishes loading. Setting it inside each {@code @Test} runs
-	 * after that reset has already happened, and also makes the tests order-independent.
 	 */
-	private static final Logger ECHO_LOGGER = Logger.getLogger(Host.class.getName());
+	private static final Logger HOST_LOGGER = Logger.getLogger(Host.class.getName());
 
 	@AfterAll
-	static void restoreEchoLogger() {
+	static void restoreHostLogger() {
 		// Static, process-global JUL state — restore to "inherit from root" so other test classes
-		// in the same JVM aren't left with debug capture silently enabled on this host's logger.
-		ECHO_LOGGER.setLevel(null);
+		// in the same JVM aren't left with an elevated level on this host's logger.
+		HOST_LOGGER.setLevel(null);
 	}
 
 	@Test void a01_echoUnderSpringBoot() throws Exception {
-		ECHO_LOGGER.setLevel(Level.FINE);
 		var resp = get("/echo/spring/abc?q=1");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("\"method\": \"GET\""), "Body: " + resp.body());
@@ -141,16 +135,16 @@ class EchoMixin_Springboot_Test {
 	}
 
 	@Test void a02_authorizationRedactedUnderSpringBoot() throws Exception {
-		ECHO_LOGGER.setLevel(Level.FINE);
 		var resp = get("/echo/", "Authorization", "Bearer spring-secret-token");
 		assertEquals(200, resp.statusCode());
 		assertFalse(resp.body().contains("spring-secret-token"),
 			"Authorization secret must NEVER cross back through Spring; body: " + resp.body());
 	}
 
-	@Test void a03_echo404WhenLoggerBelowFine() throws Exception {
-		ECHO_LOGGER.setLevel(Level.INFO);
+	@Test void a03_echoServesRegardlessOfLoggerLevel() throws Exception {
+		// Decoupling: with the host logger below FINE (isDebug()==false), the explicitly-enabled endpoint still serves.
+		HOST_LOGGER.setLevel(Level.INFO);
 		var resp = get("/echo/anything");
-		assertEquals(404, resp.statusCode(), "Body: " + resp.body());
+		assertEquals(200, resp.statusCode(), "Body: " + resp.body());
 	}
 }

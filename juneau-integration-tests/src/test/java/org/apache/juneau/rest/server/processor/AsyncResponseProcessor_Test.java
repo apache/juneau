@@ -16,11 +16,15 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.json.*;
@@ -377,5 +381,102 @@ class AsyncResponseProcessor_Test extends TestBase {
 		// In the sync-fallback path, ExecutionException.getCause() is the CompletionException; // NOSONAR
 		// the existing convertThrowable pipeline maps it to a 500.
 		CK.get("/withCompletionException").run().assertStatus(500);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// L: Sync-fallback emission lockdown — under MockRestClient no request obtains a real AsyncContext, so every future
+	// and ordinary-synchronous path must emit exactly ONE synchronous INFO record AFTER its body is written. This proves
+	// the async completion-path redesign did not move or duplicate emission for the sync/MockRestClient fallback.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(asyncTimeoutMillis = "120")
+	public static class L {
+		@RestPost("/echo")
+		public CompletableFuture<String> echo(RestRequest req) throws IOException {
+			return CompletableFuture.completedFuture(req.getContent().asString());  // completed-future happy fallback
+		}
+		@RestGet("/plain")
+		public String plain() { return "sync-plain"; }  // ordinary synchronous response
+		@RestGet("/cancelled")
+		public CompletableFuture<String> cancelled() {
+			var f = new CompletableFuture<String>();
+			f.cancel(true);  // pre-cancelled → CancellationException in the sync fallback
+			return f;
+		}
+		@RestGet("/boom")
+		public CompletableFuture<String> boom() {
+			var f = new CompletableFuture<String>();
+			f.completeExceptionally(new IllegalStateException("sync-boom"));  // execution-exception body
+			return f;
+		}
+		@RestGet("/never")
+		public CompletableFuture<String> never() { return new CompletableFuture<>(); }  // sync-fallback timeout
+	}
+
+	private long opRecordCount(LogRecordCapture c, String method) {
+		return c.getRecords().stream().filter(r -> (L.class.getName() + "." + method).equals(r.getLoggerName())).count();
+	}
+
+	private java.util.logging.LogRecord opRecord(LogRecordCapture c, String method) {
+		return c.getRecords().stream()
+			.filter(r -> (L.class.getName() + "." + method).equals(r.getLoggerName()))
+			.reduce((a, b) -> b).orElse(null);
+	}
+
+	@Test void l01_completedFutureFallback_emitsOneSyncRecordWithBody() throws Exception {
+		forceOn();  // Body-dump gate (test-only seam) so the FINEST body renders.
+		try (var c = RichLogger.getLogger(L.class).captureEvents(Level.FINEST);
+				var client = MockRestClient.create(L.class).debug().build()) {
+			client.post("/echo", "sync-echo-body").header("Content-Type", "text/plain").run()
+				.assertStatus(200).assertContent().isContains("sync-echo-body");
+
+			assertEquals(1, opRecordCount(c, "echo"), "sync fallback must emit exactly one record");
+			var rec = opRecord(c, "echo");
+			assertEquals(Level.INFO, rec.getLevel());
+			assertTrue(rec.getMessage().contains("sync-echo-body"),
+				"sync fallback must render the body it already wrote: " + rec.getMessage());
+		} finally {
+			reset();
+		}
+	}
+
+	@Test void l02_ordinarySyncResponse_emitsOneInfoRecord() throws Exception {
+		try (var c = RichLogger.getLogger(L.class).captureEvents(Level.FINEST);
+				var client = MockRestClient.create(L.class).debug().build()) {
+			client.get("/plain").run().assertStatus(200).assertContent().isContains("sync-plain");
+
+			assertEquals(1, opRecordCount(c, "plain"), "ordinary sync response must emit exactly one record");
+			assertEquals(Level.INFO, opRecord(c, "plain").getLevel());
+		}
+	}
+
+	@Test void l03_preCancelledFuture_emitsOneRecord() throws Exception {
+		try (var c = RichLogger.getLogger(L.class).captureEvents(Level.FINEST);
+				var client = MockRestClient.create(L.class).debug().build()) {
+			client.get("/cancelled").ignoreErrors().run().assertStatus(500);
+
+			assertEquals(1, opRecordCount(c, "cancelled"), "pre-cancelled fallback must emit exactly one record");
+			assertEquals(Level.INFO, opRecord(c, "cancelled").getLevel());
+		}
+	}
+
+	@Test void l04_executionExceptionFallback_emitsOneRecordWithThrown() throws Exception {
+		try (var c = RichLogger.getLogger(L.class).captureEvents(Level.FINEST);
+				var client = MockRestClient.create(L.class).debug().build()) {
+			client.get("/boom").ignoreErrors().run().assertStatus(500);
+
+			assertEquals(1, opRecordCount(c, "boom"), "execution-exception fallback must emit exactly one record");
+			assertEquals(Level.INFO, opRecord(c, "boom").getLevel());
+		}
+	}
+
+	@Test void l05_timeoutFallback_emitsOneRecord() throws Exception {
+		try (var c = RichLogger.getLogger(L.class).captureEvents(Level.FINEST);
+				var client = MockRestClient.create(L.class).debug().build()) {
+			client.get("/never").ignoreErrors().run().assertStatus(504);
+
+			assertEquals(1, opRecordCount(c, "never"), "timeout fallback must emit exactly one record");
+			assertEquals(Level.INFO, opRecord(c, "never").getLevel());
+		}
 	}
 }

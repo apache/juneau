@@ -33,10 +33,11 @@ import org.junit.jupiter.api.*;
  * <p>
  * Cases covered:
  * <ul>
- * 	<li>Default deny &mdash; a host whose resolved JUL logger is below {@code FINE} returns {@code 404} from
- * 		{@code /echo/*} so the endpoint's existence isn't disclosed.
- * 	<li>Raising the host resource's logger to {@code FINE}-or-finer (here via the mock client's
- * 		{@code .debug()}) unlocks the endpoint and returns the full echo payload.
+ * 	<li>Default deny &mdash; a host that does not explicitly enable echo returns {@code 404} from
+ * 		{@code /echo/*} so the endpoint's existence isn't disclosed. Reachability is decoupled from the JUL logger
+ * 		level (proven in {@link EchoMixin_Enablement_Test}).
+ * 	<li>Explicit builder enablement ({@code EchoMixin.create().enabled()}) makes the endpoint reachable
+ * 		independently of the logger level and returns the full echo payload.
  * 	<li>Sensitive headers ({@code Authorization}, {@code Cookie}) are redacted by default.
  * 	<li>Importer's {@code @Bean EchoMixin} factory drives the body cap and redact list.
  * 	<li>Body capture truncates correctly when the inbound body exceeds the configured cap.
@@ -61,8 +62,21 @@ class EchoMixin_AsMixin_Test extends TestBase {
 
 	private static final MockRestClient ca = MockRestClient.buildLax(A.class);
 
-	@Test void a01_echoReturns404WhenDebugDisabled() throws Exception {
+	@Test void a01_echoReturns404WhenNotEnabled() throws Exception {
+		// Default-OFF: without explicit enablement (and no global fallback) the endpoint stays hidden.
 		ca.get("/echo/anything").run().assertStatus(404);
+	}
+
+	@Test void a04_raisingLoggerAloneDoesNotUnhideEcho() throws Exception {
+		// Decoupling regression: raising the host logger to FINEST must NOT unhide echo when enablement is absent.
+		var logger = java.util.logging.Logger.getLogger(A.class.getName());
+		var prev = logger.getLevel();
+		logger.setLevel(java.util.logging.Level.FINEST);
+		try {
+			ca.get("/echo/anything").run().assertStatus(404);
+		} finally {
+			logger.setLevel(prev);
+		}
 	}
 
 	@Test void a02_legacyDebugEchoAliasNotMountedByDefault() throws Exception {
@@ -75,14 +89,15 @@ class EchoMixin_AsMixin_Test extends TestBase {
 		ca.get("/items").run().assertStatus(200).assertContent().asString().isContains("items");
 	}
 
-	/** Host with debug always-on so the echo endpoint serves. */
+	/** Host that explicitly enables echo so the endpoint serves. */
 	@Rest(mixins=EchoMixin.class)
 	public static class B extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
-	private static final MockRestClient cb = MockRestClient.createLax(B.class).debug().build();
+	private static final MockRestClient cb = MockRestClient.buildLax(B.class);
 
 	@Test void b01_echoServesFullPayload() throws Exception {
 		var body = cb.get("/echo/foo/bar?x=1&y=hello")
@@ -154,13 +169,14 @@ class EchoMixin_AsMixin_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
 			return EchoMixin.create()
+				.enabled()
 				.bodyLimit(8L)
 				.redactHeader("X-Internal-Trace")
 				.build();
 		}
 	}
 
-	private static final MockRestClient cd = MockRestClient.createLax(D.class).debug().build();
+	private static final MockRestClient cd = MockRestClient.buildLax(D.class);
 
 	@Test void d01_customRedactHeaderHonored() throws Exception {
 		var body = cd.get("/echo/")
@@ -201,11 +217,11 @@ class EchoMixin_AsMixin_Test extends TestBase {
 	public static class G extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
-			return EchoMixin.create().bodyLimit(0L).build();
+			return EchoMixin.create().enabled().bodyLimit(0L).build();
 		}
 	}
 
-	private static final MockRestClient cg = MockRestClient.createLax(G.class).debug().build();
+	private static final MockRestClient cg = MockRestClient.buildLax(G.class);
 
 	@Test void g01_zeroBodyLimitTruncatesNonEmptyBody() throws Exception {
 		var body = cg.post("/echo/", "ANY")
@@ -224,12 +240,13 @@ class EchoMixin_AsMixin_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
 			return EchoMixin.create()
+				.enabled()
 				.redactedHeaders("X-Custom-Only")
 				.build();
 		}
 	}
 
-	private static final MockRestClient ce = MockRestClient.createLax(E.class).debug().build();
+	private static final MockRestClient ce = MockRestClient.buildLax(E.class);
 
 	@Test void e01_replaceListDropsBuiltInRedactions() throws Exception {
 		var body = ce.get("/echo/")

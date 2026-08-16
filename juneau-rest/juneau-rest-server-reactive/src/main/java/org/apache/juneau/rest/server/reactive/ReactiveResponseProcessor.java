@@ -31,6 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.logging.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.util.*;
 
@@ -204,10 +205,28 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		}
 
 		if (asyncCtx != null) { // HTT: true branch requires a real servlet container
-			req.setAttribute(AsyncResponseProcessor.ATTR_ASYNC_DISPATCH_OWNED, Boolean.TRUE);
+			// Publish async ownership + the resolved debug snapshot on the request thread BEFORE subscribing, so an
+			// inline-terminating publisher never observes a null snapshot and finish() reliably skips synchronous emit.
+			AsyncResponseProcessor.markAsyncOwnedAndSnapshot(opSession);
 			var ac = asyncCtx;
 			ac.setTimeout(0);  // No artificial timeout — streams are paced by the producer / client disconnect.
-			pub.subscribe(new StreamingSubscriber(res, writer, encoder, mdc, t -> completeAsync(ac, res, t)));
+
+			// Single exactly-once completion gate shared by the subscriber terminal, the container AsyncListener
+			// fallback (error/timeout/complete), and a subscribe() that throws after handoff — so a client abort or
+			// container error can never silently skip the completion-path emit, and it can never fire twice.
+			var completed = new AtomicBoolean(false);
+			Consumer<Throwable> completion = t -> {
+				if (completed.compareAndSet(false, true))
+					completeAsync(ac, opSession, t);
+			};
+			ac.addListener(new ReactiveCompletionListener(completion));
+			try {
+				pub.subscribe(new StreamingSubscriber(res, writer, encoder, mdc, completion));
+			} catch (RuntimeException e) {
+				// subscribe() threw after the async handoff — route it through the same completion hook rather than
+				// leaking async ownership with no emit and no AsyncContext.complete().
+				completion.accept(e);
+			}
 			return FINISHED;
 		}
 
@@ -267,16 +286,33 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		return true;
 	}
 
-	private static void completeAsync(AsyncContext asyncCtx, RestResponse res, Throwable error) { // HTT: only reachable from the async path (real servlet container required)
+	private static void completeAsync(AsyncContext asyncCtx, RestOpSession opSession, Throwable error) { // HTT: only reachable from the async path (real servlet container required)
+		var res = opSession.getResponse();
+		var session = opSession.getRestSession();
 		try {
-			if (error != null) // HTT: false branch only reachable from async path
+			if (error != null) { // HTT: false branch only reachable from async path
 				LOG.log(Level.FINE, error, () -> "Reactive stream terminated with error: " + error.getMessage());
+				session.exception(error);
+			}
 			if (! res.getHttpServletResponse().isCommitted()) // HTT: true branch (committed=false) only via async path
 				res.flushBuffer();
 		} catch (IOException e) {
 			LOG.log(Level.FINEST, e, () -> "Flush during async stream completion failed: " + e.getMessage());
 		} finally {
-			completeQuietly(asyncCtx);
+			// Same completion-path ordering as ordinary async: render from the final stream state, then release the
+			// request, then complete the async context. Nested try/finally isolates each step so a debug-emit failure
+			// cannot suppress request close, and a request-close failure cannot suppress async-context completion.
+			try {
+				RestDebugPipeline.emitOnCompletion(session);
+			} finally {
+				try {
+					opSession.closeRequest();
+				} catch (RuntimeException e) {
+					LOG.log(Level.FINEST, e, () -> "Async request close failed: " + e.getMessage());
+				} finally {
+					completeQuietly(asyncCtx);
+				}
+			}
 		}
 	}
 
@@ -286,6 +322,29 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		} catch (IllegalStateException e) {
 			LOG.log(Level.FINEST, e, () -> "AsyncContext.complete() raced with the container: " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Container-side fallback that routes servlet async terminal events (error, timeout, complete) through the shared
+	 * completion hook.
+	 *
+	 * <p>
+	 * The subscriber's own terminal callback is the normal completion trigger; this listener guarantees that a container
+	 * error or timeout that bypasses the subscriber still reaches the exactly-once completion gate, so completion-path
+	 * emission and request close are never silently skipped. All events funnel through the same gated {@link Consumer};
+	 * {@code onComplete} (fired by our own {@code AsyncContext.complete()}) is therefore a gated no-op.
+	 */
+	private static final class ReactiveCompletionListener implements AsyncListener {
+		private final Consumer<Throwable> completion;
+
+		ReactiveCompletionListener(Consumer<Throwable> completion) {
+			this.completion = completion;
+		}
+
+		@Override public void onComplete(AsyncEvent event) { completion.accept(null); }
+		@Override public void onError(AsyncEvent event) { completion.accept(event.getThrowable()); }
+		@Override public void onTimeout(AsyncEvent event) { completion.accept(new TimeoutException("Reactive stream timed out.")); }
+		@Override public void onStartAsync(AsyncEvent event) { /* no-op */ }
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

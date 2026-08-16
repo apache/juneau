@@ -22,7 +22,6 @@ import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
-import java.util.logging.*;
 
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.springboot.*;
@@ -54,8 +53,8 @@ import org.springframework.test.annotation.*;
  * 		ApplicationContext.getBean(...)}.
  * 	<li>End-to-end format-pinned JSON ({@link org.apache.juneau.rest.server.server.RestResponse#getDirectWriter
  * 		getDirectWriter("application/json")}) under embedded Tomcat.
- * 	<li>The host resource's JUL logger raised to {@link java.util.logging.Level#FINE FINE} unlocking the echo
- * 		through Spring's container into the mixin sub-context (mixin-served ops resolve their logger from the host class).
+ * 	<li>Explicit {@code @Bean EchoMixin.create().enabled()} enablement reaching the mixin sub-context through
+ * 		Spring's container, independent of the JUL logger level.
  * </ul>
  *
  * @since 10.0.0
@@ -77,31 +76,13 @@ class EchoMixin_Springboot_Test {
 		}
 
 		@Bean public EchoMixin echoResource() {
-			return EchoMixin.create().bodyLimit(2048L).build();
+			return EchoMixin.create().enabled().bodyLimit(2048L).build();
 		}
 	}
 
 	@Rest(mixins=EchoMixin.class)
 	public static class Host extends BasicSpringRestServlet {
 		private static final long serialVersionUID = 1L;
-	}
-
-	// Strong reference so the level isn't silently GC-reset (JUL only weakly references named loggers).
-	private static final Logger HOST_LOGGER = Logger.getLogger(Host.class.getName());
-	private static Level prevLevel;
-
-	@BeforeAll static void captureHostLogger() {
-		prevLevel = HOST_LOGGER.getLevel();
-	}
-
-	@BeforeEach void raiseHostLogger() {
-		// Set here rather than in @BeforeAll: Spring Boot's logging bootstrap resets the JUL LogManager
-		// during context startup, which would wipe a level set before the context finished loading.
-		HOST_LOGGER.setLevel(Level.FINE);
-	}
-
-	@AfterAll static void restoreHostLogger() {
-		HOST_LOGGER.setLevel(prevLevel);
 	}
 
 	@LocalServerPort

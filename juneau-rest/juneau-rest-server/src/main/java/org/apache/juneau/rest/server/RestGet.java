@@ -431,6 +431,27 @@ public @interface RestGet {
 	String problemDetails() default "";
 
 	/**
+	 * Per-operation override for {@link Rest#debugMarshalling() @Rest(debugMarshalling)}.
+	 *
+	 * <p>
+	 * When set on a {@code @RestGet} method, this value takes precedence over the resource-level
+	 * {@code @Rest(debugMarshalling)} attribute for this operation. Tri-state semantics:
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; enable marshalling debug for this operation.
+	 * 	<li><js>"false"</js> &mdash; disable marshalling debug for this operation (overrides an opted-in resource).
+	 * 	<li><js>""</js> (default) &mdash; inherit from {@link Rest#debugMarshalling()}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#debugMarshalling()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String debugMarshalling() default "";
+
+	/**
 	 * Per-operation observability opt-in / opt-out control.
 	 *
 	 * <p>
@@ -552,7 +573,8 @@ public @interface RestGet {
 	 * Property names for which less-derived contributions are NOT inherited.
 	 *
 	 * <p>
-	 * Accepted values: {@code "allowedSerializerOptions"}, {@code "allowedParserOptions"}.
+	 * Accepted values: {@code "allowedSerializerOptions"}, {@code "allowedParserOptions"},
+	 * {@code "problemDetails"}, {@code "debugMarshalling"}.
 	 * Prevents the named property from inheriting values from the enclosing {@code @Rest} annotation.
 	 * The {@code noInherit} attribute itself is never inherited.
 	 *

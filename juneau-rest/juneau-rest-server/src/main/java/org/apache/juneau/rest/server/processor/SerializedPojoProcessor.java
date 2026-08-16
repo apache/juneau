@@ -81,7 +81,7 @@ public class SerializedPojoProcessor implements CatchAllResponseProcessor {
 					.mediaType(mediaType)
 					.apply(WriterSerializerSession.Builder.class, x -> x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? true : null))
 					.schema(schema)
-					.debug(req.isDebug() ? true : null)
+					.debug(req.isDebugMarshalling() ? true : null)
 					.uriContext(req.getUriContext())
 					.resolver(req.getVarResolverSession())
 					.apply(HtmlDocSerializerSession.Builder.class, x -> req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).ifPresent(x::nonce))

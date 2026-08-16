@@ -140,6 +140,18 @@ public class RestOpSession extends ContextSession {
 	}
 
 	/**
+	 * Closes the underlying request resources on the async response-completion path.
+	 *
+	 * <p>
+	 * When a request is handed off to a real {@code AsyncContext}, {@link #finish()} skips the synchronous
+	 * {@code req.close()} so cached bytes remain readable by completion-path debug emission. The completion hook calls
+	 * this method after the body has been written and rendered, before completing the async context.
+	 */
+	public void closeRequest() {
+		req.close();
+	}
+
+	/**
 	 * Returns the bean store for this session.
 	 *
 	 * @return The bean store for this session.

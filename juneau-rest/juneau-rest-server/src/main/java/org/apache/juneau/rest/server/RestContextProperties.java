@@ -63,6 +63,7 @@ public class RestContextProperties {
 	private String disableContentParam = FALSE;
 	private String renderResponseStackTraces = FALSE;
 	private String problemDetails = FALSE;
+	private String debugMarshalling = FALSE;
 	private String virtualThreads = FALSE;
 	private String responseTraceparent = "true";
 	private String mdcAsyncPropagation = "true";
@@ -138,6 +139,19 @@ public class RestContextProperties {
 	 */
 	public String getProblemDetailsRaw() {
 		return problemDetails;
+	}
+
+	/**
+	 * The raw (unresolved) {@code @Rest(debugMarshalling)} default &mdash; whether REST-driven serializer/parser debug
+	 * behavior is enabled.
+	 *
+	 * <p>
+	 * Stored verbatim; {@link RestContext} owns SVL resolution and boolean parsing (see {@link #getDisableContentParamRaw()}).
+	 *
+	 * @return The raw value. Never <jk>null</jk>.
+	 */
+	public String getDebugMarshallingRaw() {
+		return debugMarshalling;
 	}
 
 	/**

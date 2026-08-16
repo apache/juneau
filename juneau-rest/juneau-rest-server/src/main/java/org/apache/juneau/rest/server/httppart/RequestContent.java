@@ -588,7 +588,7 @@ public class RequestContent {
 				.mediaType(mediaType2)
 				.apply(ReaderParser.Builder.class, x -> x.streamCharset(req.getCharset()))
 				.schema(schema)
-				.debug(req.isDebug() ? true : null)
+				.debug(req.isDebugMarshalling() ? true : null)
 				.build();
 			// @formatter:on
 

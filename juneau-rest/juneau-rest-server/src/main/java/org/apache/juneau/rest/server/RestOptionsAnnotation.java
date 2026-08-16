@@ -70,6 +70,7 @@ public class RestOptionsAnnotation {
 		private String metricName = "";
 		private String metricTags = "";
 		private String problemDetails = "";
+		private String debugMarshalling = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -270,6 +271,17 @@ public class RestOptionsAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOptions#debugMarshalling()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debugMarshalling(String value) {
+			debugMarshalling = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOptions#observability()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -434,6 +446,7 @@ public class RestOptionsAnnotation {
 		private final String metricName;
 		private final String metricTags;
 		private final String problemDetails;
+		private final String debugMarshalling;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -471,6 +484,7 @@ public class RestOptionsAnnotation {
 			metricName = b.metricName;
 			metricTags = b.metricTags;
 			problemDetails = b.problemDetails;
+			debugMarshalling = b.debugMarshalling;
 			produces = cp(b.produces);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -578,6 +592,11 @@ public class RestOptionsAnnotation {
 		@Override /* Overridden from RestOptions */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from RestOptions */
+		public String debugMarshalling() {
+			return debugMarshalling;
 		}
 
 		@Override /* Overridden from RestOptions */

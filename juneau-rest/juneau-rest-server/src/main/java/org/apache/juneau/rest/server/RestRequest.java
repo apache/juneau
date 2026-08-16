@@ -170,6 +170,7 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestRequest#getUriContext() getUriContext()}
  * 			<li class='jm'>{@link RestRequest#getUriResolver() getUriResolver()}
  * 			<li class='jm'>{@link RestRequest#isDebug() isDebug()}
+ * 			<li class='jm'>{@link RestRequest#isDebugMarshalling() isDebugMarshalling()}
  * 			<li class='jm'>{@link RestRequest#isPlainText() isPlainText()}
  * 			<li class='jm'>{@link RestRequest#isUserInRole(String) isUserInRole(String)}
  * 			<li class='jm'>{@link RestRequest#setAttribute(String,Object) setAttribute(String,Object)}
@@ -1611,16 +1612,35 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if debug mode is enabled for this request.
+	 * Log-level query only: returns whether this request's resolved (per-operation) JUL logger is loggable at
+	 * {@link java.util.logging.Level#FINE FINE}-or-finer.
 	 *
 	 * <p>
-	 * Debug is now derived solely from the resolved (per-operation) JUL logger level: it is enabled when that logger is
-	 * loggable at {@link java.util.logging.Level#FINE FINE}-or-finer. This is read-only; there is no request attribute or
-	 * setter driving it.
+	 * This is read-only; there is no request attribute or setter driving it. It reports <b>logging verbosity</b> only
+	 * and is <b>not</b> consulted by any framework behavior. Do <b>not</b> key security or marshalling behavior on this
+	 * method &mdash; use the explicit, non-logging controls instead:
+	 * <ul class='spaced-list'>
+	 * 	<li>Echo-endpoint reachability &rarr; {@link org.apache.juneau.rest.server.ops.EchoMixin.Builder#enabled(Boolean) EchoMixin enablement}.
+	 * 	<li>Serializer/parser debug behavior &rarr; {@link #isDebugMarshalling()} / {@link Rest#debugMarshalling() @Rest(debugMarshalling)}.
+	 * </ul>
 	 *
 	 * @return <jk>true</jk> if the resolved logger is loggable at {@code FINE}-or-finer.
 	 */
 	public boolean isDebug() { return opContext.getLogger().isLoggable(java.util.logging.Level.FINE); }
+
+	/**
+	 * Returns whether REST-driven serializer/parser debug behavior is enabled for this request's operation.
+	 *
+	 * <p>
+	 * Resolved from the cascading {@link Rest#debugMarshalling() @Rest(debugMarshalling)} /
+	 * {@link RestOp#debugMarshalling() @RestOp(debugMarshalling)} setting (default OFF), <b>independent</b> of the JUL
+	 * logger level. When enabled, the REST layer forces {@code Context.debug} on the serializer/parser session used to
+	 * handle this request &mdash; engaging recursion-detection-that-throws, parse-input buffering, and stack-trace-prefixed
+	 * marshalling exceptions.
+	 *
+	 * @return <jk>true</jk> if REST-driven marshalling debug is enabled for this operation.
+	 */
+	public boolean isDebugMarshalling() { return opContext.isDebugMarshalling(); }
 
 	/**
 	 * Returns the captured (bounded) request body bytes for debug logging.

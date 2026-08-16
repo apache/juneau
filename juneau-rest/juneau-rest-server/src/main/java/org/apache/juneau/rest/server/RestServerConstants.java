@@ -69,6 +69,9 @@ public final class RestServerConstants {
 	/** The {@code "problemDetails"} annotation attribute name — used in {@code noInherit} matching to opt the resource (or one of its router parents) into RFC 7807 {@code application/problem+json} error responses. */
 	public static final String PROPERTY_problemDetails = "problemDetails";
 
+	/** The {@code "debugMarshalling"} annotation attribute name — used in {@code noInherit} matching to opt the resource (or operation) into REST-driven serializer/parser debug behavior (recursion-detection-that-throws, parse-input buffering, stack-trace-prefixed marshalling exceptions), independent of the JUL logger level. */
+	public static final String PROPERTY_debugMarshalling = "debugMarshalling";
+
 	/** The {@code "eagerInit"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_eagerInit = "eagerInit";
 

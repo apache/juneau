@@ -115,7 +115,7 @@ public class TokenReaderArg extends SimpleRestOperationArg {
 			.timeZone(req.getTimeZone().orElse(null))
 			.mediaType(match.get().getMediaType())
 			.apply(ReaderParser.Builder.class, x -> x.streamCharset(req.getCharset()))
-			.debug(req.isDebug() ? true : null)
+			.debug(req.isDebugMarshalling() ? true : null)
 			.build();
 		var input = session.isReaderParser() ? content.getReader() : content.getInputStream();
 		var cursor = ((TokenReadable) session).readTokens(input);

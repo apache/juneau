@@ -66,6 +66,7 @@ public class RestDeleteAnnotation {
 		private String metricName = "";
 		private String metricTags = "";
 		private String problemDetails = "";
+		private String debugMarshalling = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -242,6 +243,17 @@ public class RestDeleteAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestDelete#debugMarshalling()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debugMarshalling(String value) {
+			debugMarshalling = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestDelete#observability()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -393,6 +405,7 @@ public class RestDeleteAnnotation {
 		private final String metricName;
 		private final String metricTags;
 		private final String problemDetails;
+		private final String debugMarshalling;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -428,6 +441,7 @@ public class RestDeleteAnnotation {
 			metricName = b.metricName;
 			metricTags = b.metricTags;
 			problemDetails = b.problemDetails;
+			debugMarshalling = b.debugMarshalling;
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
 			summary = b.summary;
@@ -528,6 +542,11 @@ public class RestDeleteAnnotation {
 		@Override /* Overridden from RestDelete */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from RestDelete */
+		public String debugMarshalling() {
+			return debugMarshalling;
 		}
 
 		@Override /* Overridden from RestDelete */

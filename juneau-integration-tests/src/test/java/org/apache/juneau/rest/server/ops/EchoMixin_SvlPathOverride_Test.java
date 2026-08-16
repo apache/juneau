@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.ops;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -32,9 +33,9 @@ import org.junit.jupiter.api.parallel.*;
  * {@code debug/echo}. The {@code a02} test exercises that migration scenario.
  *
  * <p>
- * Uses the client's {@code debug()} (raising the host resource logger to {@code FINEST}) so the debug
- * gate does not return 404 &mdash; the default-deny behavior of {@link EchoMixin} is exercised
- * separately in the AsMixin test suite.
+ * Each host explicitly enables the endpoint via a {@code @Bean EchoMixin.create().enabled()} factory so the
+ * (default-OFF) endpoint serves &mdash; reachability is decoupled from the JUL logger level (see
+ * {@link EchoMixin_Enablement_Test}). The default-deny behavior is exercised separately in the AsMixin suite.
  *
  * <p>
  * Uses a fresh inner-class resource per scenario because {@link MockRestClient} caches
@@ -49,6 +50,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A01_OverridePath extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a01_svlOverrideChangesPath() throws Exception {
@@ -56,7 +58,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		var prev = System.getProperty(key);
 		System.setProperty(key, "introspect");
 		try {
-			var c = MockRestClient.createLax(A01_OverridePath.class).debug().build();
+			var c = MockRestClient.createLax(A01_OverridePath.class).build();
 
 			c.get("/echo/anything").run().assertStatus(404);
 
@@ -73,6 +75,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A02_DebugEchoAliasMigration extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a02_debugEchoLegacyAliasReachableViaOverride() throws Exception {
@@ -80,7 +83,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		var prev = System.getProperty(key);
 		System.setProperty(key, "debug/echo");
 		try {
-			var c = MockRestClient.createLax(A02_DebugEchoAliasMigration.class).debug().build();
+			var c = MockRestClient.createLax(A02_DebugEchoAliasMigration.class).build();
 
 			c.get("/echo/anything").run().assertStatus(404);
 
@@ -97,6 +100,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A03_BareToken extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a03_overrideBareToken() throws Exception {
@@ -104,7 +108,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		var prev = System.getProperty(key);
 		System.setProperty(key, "xxx");
 		try {
-			var c = MockRestClient.createLax(A03_BareToken.class).debug().build();
+			var c = MockRestClient.createLax(A03_BareToken.class).build();
 			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
 		} finally {
 			if (prev == null) System.clearProperty(key);
@@ -115,6 +119,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A04_LeadingSlash extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a04_overrideLeadingSlash() throws Exception {
@@ -122,7 +127,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		var prev = System.getProperty(key);
 		System.setProperty(key, "/xxx");
 		try {
-			var c = MockRestClient.createLax(A04_LeadingSlash.class).debug().build();
+			var c = MockRestClient.createLax(A04_LeadingSlash.class).build();
 			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
 		} finally {
 			if (prev == null) System.clearProperty(key);
@@ -133,6 +138,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A05_TrailingSlash extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a05_overrideTrailingSlash() throws Exception {
@@ -140,7 +146,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		var prev = System.getProperty(key);
 		System.setProperty(key, "xxx/");
 		try {
-			var c = MockRestClient.createLax(A05_TrailingSlash.class).debug().build();
+			var c = MockRestClient.createLax(A05_TrailingSlash.class).build();
 			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
 		} finally {
 			if (prev == null) System.clearProperty(key);
@@ -151,6 +157,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A06_BothSlashes extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a06_overrideBothSlashes() throws Exception {
@@ -158,7 +165,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		var prev = System.getProperty(key);
 		System.setProperty(key, "/xxx/");
 		try {
-			var c = MockRestClient.createLax(A06_BothSlashes.class).debug().build();
+			var c = MockRestClient.createLax(A06_BothSlashes.class).build();
 			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
 		} finally {
 			if (prev == null) System.clearProperty(key);
@@ -169,6 +176,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A07_WildcardSuffix extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a07_overrideWildcardSuffix() throws Exception {
@@ -176,7 +184,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		var prev = System.getProperty(key);
 		System.setProperty(key, "/xxx/*");
 		try {
-			var c = MockRestClient.createLax(A07_WildcardSuffix.class).debug().build();
+			var c = MockRestClient.createLax(A07_WildcardSuffix.class).build();
 			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
 		} finally {
 			if (prev == null) System.clearProperty(key);
@@ -187,6 +195,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 	@Rest(mixins=EchoMixin.class)
 	public static class A08_MultiSegment extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
 	@Test void a08_overrideMultiSegment() throws Exception {
@@ -199,7 +208,7 @@ class EchoMixin_SvlPathOverride_Test extends TestBase {
 		// with 3+ segment base paths in SVL-resolved @RestOp patterns.
 		System.setProperty(key, "/debug/echo2/*");
 		try {
-			var c = MockRestClient.createLax(A08_MultiSegment.class).debug().build();
+			var c = MockRestClient.createLax(A08_MultiSegment.class).build();
 			c.get("/debug/echo2/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
 		} finally {
 			if (prev == null) System.clearProperty(key);

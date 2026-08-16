@@ -225,6 +225,14 @@ public class RestSession extends ContextSession {
 	private UrlPathMatch urlPathMatch;
 
 	/**
+	 * Opaque holder for the debug-resolution snapshot ({@code RestDebugSnapshot}) published at the async-dispatch
+	 * handoff and read back on the response-completion thread. Typed as {@link Object} because the snapshot type is a
+	 * package-private detail of the {@code logging} package that this class must not expose. Immutable once stashed;
+	 * published before the completion callback is registered.
+	 */
+	private Object debugSnapshot;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder for this object.
@@ -295,20 +303,32 @@ public class RestSession extends ContextSession {
 	/**
 	 * Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
 	 *
+	 * <p>
+	 * When the request has been handed off to a real {@code AsyncContext}, the response body/headers are written later
+	 * on the response-completion thread. In that case this method neither flushes nor emits nor writes formatter-visible
+	 * finish-time attributes — the completion hook owns all of that after the async body exists. The synchronous and
+	 * synchronous-fallback (e.g. MockRestClient) paths are unchanged: they set finish-time attributes, flush, and emit
+	 * here.
+	 *
 	 * @return This object.
 	 */
 	public RestSession finish() {
+		var asyncOwned = org.apache.juneau.rest.server.processor.AsyncResponseProcessor.isAsyncDispatchOwned(req);
 		try {
-			req.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
+			if (! asyncOwned)
+				setFinishTimeAttributes();
 			if (nn(opSession))
 				opSession.finish();
-			else if (! org.apache.juneau.rest.server.processor.AsyncResponseProcessor.isAsyncDispatchOwned(req)) {
+			else if (! asyncOwned) {
 				// Skip flush when AsyncContext has been started — see AsyncResponseProcessor.
 				res.flushBuffer();
 			}
 		} catch (Exception e) {
 			exception(e);
 		}
+		// Skip synchronous emission on the async path — the completion hook emits after the body/headers are written.
+		if (asyncOwned)
+			return this;
 		// Contain diagnostic formatting/emission: a formatter (or a scrubber that escaped the fail-closed guard) throwing
 		// a RuntimeException/Error during a completed request must not escape and fail the request thread. Log only a
 		// fixed token — never e.getMessage(), the body, the stack, or a second formatter pass — so a scrubber throwing
@@ -320,6 +340,40 @@ public class RestSession extends ContextSession {
 		}
 		return this;
 	}
+
+	/**
+	 * Records the finish-time request attributes consumed by the debug formatter (currently {@code ExecTime}).
+	 *
+	 * <p>
+	 * On the synchronous path this is called from {@link #finish()}. On the asynchronous path it is called by the
+	 * completion hook immediately before rendering — never by {@link #finish()} after the async handoff — so the record
+	 * always reflects the true request duration and the completion thread never races the request thread over
+	 * formatter-visible response state. Idempotent: recomputing the value on repeat calls is harmless.
+	 */
+	public void setFinishTimeAttributes() {
+		req.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
+	}
+
+	/**
+	 * Stashes the opaque debug-resolution snapshot on the request thread at the async-dispatch handoff.
+	 *
+	 * <p>
+	 * Internal plumbing for the two-thread async debug pipeline; not part of the public REST contract. The value is a
+	 * package-private {@code RestDebugSnapshot} passed as {@link Object} so this class does not expose the type.
+	 *
+	 * @param value The snapshot, or <jk>null</jk> when access logging is off.
+	 */
+	public void stashDebugSnapshot(Object value) { debugSnapshot = value; }
+
+	/**
+	 * Returns the opaque debug-resolution snapshot stashed at the async-dispatch handoff.
+	 *
+	 * <p>
+	 * Internal plumbing for the two-thread async debug pipeline; not part of the public REST contract.
+	 *
+	 * @return The stashed snapshot, or <jk>null</jk> if none was stashed (synchronous path or access logging off).
+	 */
+	public Object getDebugSnapshot() { return debugSnapshot; }
 
 	/**
 	 * Returns the bean store of this call.

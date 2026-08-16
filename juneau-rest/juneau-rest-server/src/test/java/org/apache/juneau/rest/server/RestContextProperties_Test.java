@@ -46,6 +46,7 @@ class RestContextProperties_Test extends TestBase {
 		assertEquals("false", p.getDisableContentParamRaw());
 		assertEquals("false", p.getRenderResponseStackTracesRaw());
 		assertEquals("false", p.getProblemDetailsRaw());
+		assertEquals("false", p.getDebugMarshallingRaw());
 		assertEquals("false", p.getVirtualThreadsRaw());
 		assertEquals("true", p.getResponseTraceparentRaw());
 		assertEquals("true", p.getMdcAsyncPropagationRaw());
@@ -84,5 +85,13 @@ class RestContextProperties_Test extends TestBase {
 		))).build();
 		var p = ConfigPropertiesBinder.of(new RestContextProperties(), "RestContext").settings(settings).run();
 		assertEquals("true", p.getProblemDetailsRaw());
+	}
+
+	@Test void a05_debugMarshallingRelaxedEnvStyleKeyMatches() {
+		var settings = Settings.create().addSource(source(Map.of(
+			"REST_CONTEXT_DEBUG_MARSHALLING", "true"
+		))).build();
+		var p = ConfigPropertiesBinder.of(new RestContextProperties(), "RestContext").settings(settings).run();
+		assertEquals("true", p.getDebugMarshallingRaw());
 	}
 }

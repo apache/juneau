@@ -55,9 +55,12 @@ class BasicOps_OpenApiHidden_Test extends TestBase {
 
 		// Allow-all guards so the admin paths can serve at all (independent of OpenAPI hide).
 		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+
+		// Echo is default-OFF and decoupled from the JUL level; enable it explicitly so a02 can exercise it.
+		@Bean public EchoMixin echo() { return EchoMixin.create().enabled().build(); }
 	}
 
-	private static final MockRestClient c = MockRestClient.createLax(A.class).debug().build();
+	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_openapiSpecExcludesAllOpsPaths() throws Exception {
 		var spec = c.get("/openapi.json")

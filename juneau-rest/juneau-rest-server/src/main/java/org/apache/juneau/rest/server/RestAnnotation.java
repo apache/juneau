@@ -97,6 +97,7 @@ public class RestAnnotation {
 		private String[] paths = {};
 		private String observability = "";
 		private String problemDetails = "";
+		private String debugMarshalling = "";
 		private String virtualThreads = "";
 		private String asyncTimeoutMillis = "";
 		private String asyncCompletionExecutor = "";
@@ -549,6 +550,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#debugMarshalling()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debugMarshalling(String value) {
+			debugMarshalling = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#observability()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -815,6 +827,7 @@ public class RestAnnotation {
 		private final String[] paths;
 		private final String observability;
 		private final String problemDetails;
+		private final String debugMarshalling;
 		private final String virtualThreads;
 		private final String asyncTimeoutMillis;
 		private final String asyncCompletionExecutor;
@@ -879,6 +892,7 @@ public class RestAnnotation {
 			paths = cp(b.paths);
 			observability = b.observability;
 			problemDetails = b.problemDetails;
+			debugMarshalling = b.debugMarshalling;
 			virtualThreads = b.virtualThreads;
 			asyncTimeoutMillis = b.asyncTimeoutMillis;
 			asyncCompletionExecutor = b.asyncCompletionExecutor;
@@ -1108,6 +1122,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from Rest */
+		public String debugMarshalling() {
+			return debugMarshalling;
 		}
 
 		@Override /* Overridden from Rest */

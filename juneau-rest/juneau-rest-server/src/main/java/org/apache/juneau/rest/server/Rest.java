@@ -537,6 +537,7 @@ public @interface Rest {
 	 * Accepted values include {@code "allowedParserOptions"}, {@code "allowedSerializerOptions"},
 	 * {@code "allowedHeaderParams"}, {@code "allowedMethodHeaders"}, {@code "allowedMethodParams"},
 	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "problemDetails"},
+	 * {@code "debugMarshalling"},
 	 * {@code "eagerInit"}, {@code "lazyChildren"}, {@code "clientVersionHeader"},
 	 * {@code "uriAuthority"}, {@code "uriContext"}, {@code "uriRelativity"}, and {@code "uriResolution"}.
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
@@ -820,6 +821,41 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String problemDetails() default "";
+
+	/**
+	 * Opt the resource into REST-driven serializer/parser debug behavior.
+	 *
+	 * <p>
+	 * When enabled, the REST layer forces {@code Context.debug} on the serializer/parser sessions it creates to handle
+	 * requests for this resource &mdash; engaging recursion-detection-that-throws (a genuine cycle throws
+	 * {@code MarshallingRecursionException} instead of being size-guard-truncated), parse-input buffering (parse errors
+	 * can quote the offending input), and stack-trace-prefixed marshalling exceptions.
+	 *
+	 * <p>
+	 * This is a <b>behavior</b> switch, independent of the JUL logger level: raising a logger to
+	 * {@link java.util.logging.Level#FINE FINE}/{@link java.util.logging.Level#FINEST FINEST} changes logging verbosity
+	 * only and never changes marshalling behavior. A serializer/parser configured with {@code Context.debug} directly
+	 * is unaffected by this setting.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; enable marshalling debug for this resource.
+	 * 	<li><js>"false"</js> &mdash; disable marshalling debug for this resource (overrides an inherited
+	 * 		{@code "true"} from a parent {@code @Rest}).
+	 * 	<li><js>""</js> (default) &mdash; inherit from the next-most-derived {@code @Rest} in the resource-class
+	 * 		hierarchy. Default behavior (no opt-in anywhere in the chain) is marshalling debug OFF.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Use {@link #noInherit()} to prevent inheriting an opt-in from a parent {@code @Rest}.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String debugMarshalling() default "";
 
 	/**
 	 * Opt this resource into per-request virtual-thread dispatch (Java 21+).

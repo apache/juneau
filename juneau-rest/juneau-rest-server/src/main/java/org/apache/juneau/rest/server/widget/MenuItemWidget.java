@@ -170,7 +170,7 @@ public abstract class MenuItemWidget extends Widget {
 			var session = HtmlSerializer.DEFAULT
 				.createSession()
 				.properties(req.getAttributes().asMap())
-				.debug(req.isDebug() ? true : null)
+				.debug(req.isDebugMarshalling() ? true : null)
 				.uriContext(req.getUriContext())
 				.useWhitespace(req.isPlainText() ? true : null)
 				.resolver(req.getVarResolverSession())

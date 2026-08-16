@@ -83,6 +83,71 @@ class RestOpContext_Test extends org.apache.juneau.TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
+	// aa - debugMarshalling: tri-state (op override / inherit-from-@Rest / default-false), per-method, noInherit
+	//-----------------------------------------------------------------------------------------------------------
+
+	@Rest(debugMarshalling = "true")
+	public static class Fix_DebugMarshalling_ResourceTrue {
+		@RestGet(debugMarshalling = "false")
+		public String opOverrideFalse() { return "x"; }
+		@RestGet
+		public String opInherits() { return "x"; }
+		@RestGet(path = "/noinherit", debugMarshalling = "", noInherit = "debugMarshalling")
+		public String opNoInherit() { return "x"; }
+	}
+
+	@Rest
+	public static class Fix_DebugMarshalling_ResourceDefault {
+		@RestGet(path = "/off")
+		public String opOff() { return "x"; }
+		@RestGet(path = "/on", debugMarshalling = "true")
+		public String opOn() { return "x"; }
+	}
+
+	@Test void aa01_debugMarshalling_opOverrideFalse_winsOverInheritedTrue() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_DebugMarshalling_ResourceTrue.class, Fix_DebugMarshalling_ResourceTrue::new));
+		assertFalse(opOf(ctx, "opOverrideFalse").isDebugMarshalling());
+	}
+
+	@Test void aa02_debugMarshalling_unsetOnOp_inheritsResourceTrue() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_DebugMarshalling_ResourceTrue.class, Fix_DebugMarshalling_ResourceTrue::new));
+		assertTrue(ctx.isDebugMarshalling());
+		assertTrue(opOf(ctx, "opInherits").isDebugMarshalling());
+	}
+
+	@Test void aa03_debugMarshalling_noInheritCutsOffResourceTrue() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_DebugMarshalling_ResourceTrue.class, Fix_DebugMarshalling_ResourceTrue::new));
+		assertFalse(opOf(ctx, "opNoInherit").isDebugMarshalling());
+	}
+
+	@Test void aa04_debugMarshalling_defaultResource_opUnsetIsFalse() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_DebugMarshalling_ResourceDefault.class, Fix_DebugMarshalling_ResourceDefault::new));
+		assertFalse(ctx.isDebugMarshalling());
+		assertFalse(opOf(ctx, "opOff").isDebugMarshalling());
+	}
+
+	@Test void aa05_debugMarshalling_explicitOpTrue_overridesResourceFalse() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_DebugMarshalling_ResourceDefault.class, Fix_DebugMarshalling_ResourceDefault::new));
+		assertTrue(opOf(ctx, "opOn").isDebugMarshalling());
+	}
+
+	@Rest
+	public static class Fix_DebugMarshalling_PerMethod {
+		@RestGet(path = "/g", debugMarshalling = "true") public String g() { return "x"; }
+		@RestPost(path = "/p", debugMarshalling = "true") public String p() { return "x"; }
+		@RestPut(path = "/u", debugMarshalling = "true") public String u() { return "x"; }
+		@RestPatch(path = "/a", debugMarshalling = "true") public String a() { return "x"; }
+		@RestDelete(path = "/d", debugMarshalling = "true") public String d() { return "x"; }
+		@RestOptions(path = "/o", debugMarshalling = "true") public String o() { return "x"; }
+	}
+
+	@Test void aa06_debugMarshalling_settableOnEveryHttpMethodAnnotation() throws Exception {
+		var ctx = new RestContext(argsOf(Fix_DebugMarshalling_PerMethod.class, Fix_DebugMarshalling_PerMethod::new));
+		for (var m : new String[]{"g", "p", "u", "a", "d", "o"})
+			assertTrue(opOf(ctx, m).isDebugMarshalling(), "debugMarshalling must be settable on op method: " + m);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------
 	// b - virtualThreadsEnabled: tri-state (op override / inherit-from-@Rest / default-false)
 	//-----------------------------------------------------------------------------------------------------------
 

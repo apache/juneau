@@ -22,7 +22,6 @@ import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
-import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -47,8 +46,8 @@ import jakarta.servlet.*;
  * Catches things {@code MockRest} cannot:
  * <ul>
  * 	<li>Real {@code Content-Type: application/json} negotiation through the Jetty/servlet stack.
- * 	<li>The host resource's JUL logger raised to {@link java.util.logging.Level#FINE FINE} unlocking the
- * 		echo through the mixin sub-context end-to-end (mixin-served ops resolve their logger from the host class).
+ * 	<li>Explicit {@code @Bean EchoMixin.create().enabled()} enablement reaching the mixin sub-context end-to-end,
+ * 		independent of the JUL logger level.
  * 	<li>Sensitive-header redaction surviving the network stack &mdash; an {@code Authorization}
  * 		header sent over real HTTP must NEVER be reflected back in the response body.
  * </ul>
@@ -63,21 +62,10 @@ class EchoMixin_JettyMicroservice_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		@Bean public EchoMixin echo() {
 			return EchoMixin.create()
+				.enabled()
 				.bodyLimit(1024L)
 				.build();
 		}
-	}
-
-	private static Level prevLevel;
-
-	@BeforeAll static void raiseHostLogger() {
-		var l = Logger.getLogger(Host.class.getName());
-		prevLevel = l.getLevel();
-		l.setLevel(Level.FINE);
-	}
-
-	@AfterAll static void restoreHostLogger() {
-		Logger.getLogger(Host.class.getName()).setLevel(prevLevel);
 	}
 
 	@Configuration

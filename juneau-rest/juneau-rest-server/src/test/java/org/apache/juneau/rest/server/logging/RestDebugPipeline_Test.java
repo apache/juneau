@@ -66,4 +66,16 @@ class RestDebugPipeline_Test {
 	@Test void a08_off_resolvesNull() {
 		assertNull(RestDebugPipeline.resolveTier(newLogger(Level.OFF)));
 	}
+
+	// A null snapshot means access logging is off: the two-argument emit must short-circuit before touching the session,
+	// so even a null session is a safe no-op. Full rendering/thrown/INFO-level behavior is covered by the integration
+	// suites (RestDebugCapture_Test and the Jetty async/reactive harnesses).
+	@Test void b01_emit_nullSnapshot_isNoop() {
+		assertDoesNotThrow(() -> RestDebugPipeline.emit(null, null));
+	}
+
+	// A null session on the completion path (no async handoff occurred / logging off) is a safe no-op.
+	@Test void b02_emitOnCompletion_nullSession_isNoop() {
+		assertDoesNotThrow(() -> RestDebugPipeline.emitOnCompletion(null));
+	}
 }

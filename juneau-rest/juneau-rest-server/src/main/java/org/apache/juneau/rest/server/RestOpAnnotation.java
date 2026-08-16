@@ -75,6 +75,7 @@ public class RestOpAnnotation {
 		private String metricName = "";
 		private String metricTags = "";
 		private String problemDetails = "";
+		private String debugMarshalling = "";
 		private String virtualThreads = "";
 		private String asyncTimeoutMillis = "";
 		private String asyncCompletionExecutor = "";
@@ -335,6 +336,17 @@ public class RestOpAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOp#debugMarshalling()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debugMarshalling(String value) {
+			debugMarshalling = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOp#observability()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -535,6 +547,7 @@ public class RestOpAnnotation {
 		private final String metricName;
 		private final String metricTags;
 		private final String problemDetails;
+		private final String debugMarshalling;
 		private final String virtualThreads;
 		private final String asyncTimeoutMillis;
 		private final String asyncCompletionExecutor;
@@ -579,6 +592,7 @@ public class RestOpAnnotation {
 			metricName = b.metricName;
 			metricTags = b.metricTags;
 			problemDetails = b.problemDetails;
+			debugMarshalling = b.debugMarshalling;
 			virtualThreads = b.virtualThreads;
 			asyncTimeoutMillis = b.asyncTimeoutMillis;
 			asyncCompletionExecutor = b.asyncCompletionExecutor;
@@ -702,6 +716,11 @@ public class RestOpAnnotation {
 		@Override /* Overridden from RestOp */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String debugMarshalling() {
+			return debugMarshalling;
 		}
 
 		@Override /* Overridden from RestOp */

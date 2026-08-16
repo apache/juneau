@@ -72,6 +72,7 @@ public class RestPatchAnnotation {
 		private String metricName = "";
 		private String metricTags = "";
 		private String problemDetails = "";
+		private String debugMarshalling = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -319,6 +320,17 @@ public class RestPatchAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestPatch#debugMarshalling()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debugMarshalling(String value) {
+			debugMarshalling = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPatch#observability()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -497,6 +509,7 @@ public class RestPatchAnnotation {
 		private final String metricName;
 		private final String metricTags;
 		private final String problemDetails;
+		private final String debugMarshalling;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -541,6 +554,7 @@ public class RestPatchAnnotation {
 			metricName = b.metricName;
 			metricTags = b.metricTags;
 			problemDetails = b.problemDetails;
+			debugMarshalling = b.debugMarshalling;
 			produces = cp(b.produces);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -673,6 +687,11 @@ public class RestPatchAnnotation {
 		@Override /* Overridden from RestPatch */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from RestPatch */
+		public String debugMarshalling() {
+			return debugMarshalling;
 		}
 
 		@Override /* Overridden from RestPatch */

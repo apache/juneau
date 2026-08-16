@@ -3133,6 +3133,13 @@ public class RestContext extends Context {
 		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, resolveBooleanDefault(getRestContextProperties().getProblemDetailsRaw())));
 
 	/**
+	 * Whether REST-driven serializer/parser debug behavior is enabled for this resource; resolved from
+	 * {@code @Rest(debugMarshalling)}.
+	 */
+	private final Memoizer<Boolean> debugMarshalling = memoizer(() ->
+		mergeReplacedBooleanAttribute(PROPERTY_debugMarshalling, resolveBooleanDefault(getRestContextProperties().getDebugMarshallingRaw())));
+
+	/**
 	 * Whether the resource opts into per-request virtual-thread dispatch on Java 21+; resolved from
 	 * {@code @Rest(virtualThreads)}.
 	 *
@@ -4581,6 +4588,23 @@ public class RestContext extends Context {
 	 * @return <jk>true</jk> if RFC 7807 problem-details responses are enabled on this resource.
 	 */
 	public boolean isProblemDetails() { return problemDetails.get(); }
+
+	/**
+	 * Returns whether REST-driven serializer/parser debug behavior is enabled on this resource via
+	 * {@code @Rest(debugMarshalling="true")}.
+	 *
+	 * <p>
+	 * When {@code true}, the REST layer forces {@code Context.debug} on the serializer/parser sessions it creates to
+	 * handle requests &mdash; engaging recursion-detection-that-throws, parse-input buffering, and stack-trace-prefixed
+	 * marshalling exceptions. This is independent of the JUL logger level.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#debugMarshalling()}
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if REST-driven marshalling debug is enabled on this resource.
+	 */
+	public boolean isDebugMarshalling() { return debugMarshalling.get(); }
 
 	/**
 	 * Returns whether the resource opted into per-request virtual-thread dispatch (Java 21+) via

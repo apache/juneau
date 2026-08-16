@@ -692,6 +692,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	});
 
 	/**
+	 * Whether REST-driven serializer/parser debug behavior is enabled for this operation.
+	 *
+	 * <p>
+	 * Tri-state semantics on the {@code @RestOp}-group annotations:
+	 * <ul>
+	 * 	<li>{@code "true"} &mdash; opt this operation in.
+	 * 	<li>{@code "false"} &mdash; opt this operation out (overrides an opted-in resource).
+	 * 	<li>{@code ""} (default) &mdash; inherit from the resource-level {@code @Rest(debugMarshalling)}.
+	 * </ul>
+	 */
+	private final Memoizer<Boolean> debugMarshalling = memoizer(() -> {
+		var v = findOpString(PROPERTY_debugMarshalling);
+		if (v.isPresent())
+			return Boolean.parseBoolean(v.get());
+		if (isInherited(PROPERTY_debugMarshalling))
+			return restContext().isDebugMarshalling();
+		return false;
+	});
+
+	/**
 	 * Whether this operation opts into per-request virtual-thread dispatch on Java 21+.
 	 *
 	 * <p>
@@ -1629,6 +1649,23 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return <jk>true</jk> if RFC 7807 problem-details responses are enabled on this operation.
 	 */
 	public boolean isProblemDetails() { return problemDetails.get(); }
+
+	/**
+	 * Returns whether REST-driven serializer/parser debug behavior is enabled for this operation.
+	 *
+	 * <p>
+	 * Resolved via the tri-state {@code @RestOp}-group {@code debugMarshalling} attribute ({@code "true"} wins,
+	 * {@code "false"} opts out, {@code ""} inherits the resource-level {@code @Rest(debugMarshalling)}), independent
+	 * of the JUL logger level.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#debugMarshalling()}
+	 * 	<li class='ja'>{@link RestOp#debugMarshalling()}
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if REST-driven marshalling debug is enabled for this operation.
+	 */
+	public boolean isDebugMarshalling() { return debugMarshalling.get(); }
 
 	/**
 	 * Returns whether this operation opts into per-request virtual-thread dispatch on Java 21+.

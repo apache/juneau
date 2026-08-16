@@ -307,6 +307,9 @@ public abstract class AbstractRestBuilder<R,SELF extends AbstractRestBuilder<R,S
 	@Override /* RestBuilder<?> */
 	public SELF problemDetails(String value) { anno.problemDetails(value); return self(); }
 
+	@Override /* RestBuilder<?> */
+	public SELF debugMarshalling(String value) { anno.debugMarshalling(value); return self(); }
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Docs / metadata / i18n / static files
 	//-----------------------------------------------------------------------------------------------------------------

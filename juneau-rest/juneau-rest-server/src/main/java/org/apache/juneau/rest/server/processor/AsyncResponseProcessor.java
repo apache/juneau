@@ -27,6 +27,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.logging.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -203,8 +204,10 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	}
 
 	private void dispatchAsync(RestOpSession opSession, CompletableFuture<?> cf, AsyncContext asyncCtx, long timeoutMs) {
-		var req = opSession.getRequest().getHttpServletRequest();
-		req.setAttribute(ATTR_ASYNC_DISPATCH_OWNED, Boolean.TRUE);
+		// Publish async ownership + the resolved debug snapshot on the request thread BEFORE registering any completion
+		// callback, so an already-completed future (whose whenComplete runs inline) never observes a null snapshot and
+		// finish() reliably observes async ownership and skips synchronous flush/emit.
+		markAsyncOwnedAndSnapshot(opSession);
 
 		var done = new AtomicBoolean(false);
 
@@ -258,17 +261,19 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 			return;
 
 		var res = opSession.getResponse();
+		var session = opSession.getRestSession();
 
 		try {
 			if (timeout) {
 				cf.cancel(true);
 				res.setStatus(SC_GATEWAY_TIMEOUT);
-				res.setContent(opSession.getRestContext().convertThrowable(
-					new GatewayTimeout("Async response timed out after " + timeoutMs + "ms.")
-				));
+				var cause = new GatewayTimeout("Async response timed out after " + timeoutMs + "ms.");
+				session.exception(cause);
+				res.setContent(opSession.getRestContext().convertThrowable(cause));
 			} else if (error != null) {
 				Throwable cause = unwrap(error);
 				res.setStatus(SC_INTERNAL_SERVER_ERROR);
+				session.exception(cause);
 				res.setContent(opSession.getRestContext().convertThrowable(cause));
 			} else {
 				res.setContent(value);
@@ -278,6 +283,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 			res.flushBuffer();
 		} catch (Exception e) {
 			LOG.log(Level.WARNING, e, () -> "Async response finalization failed: " + e.getMessage());
+			session.exception(e);
 			try {
 				if (! res.getHttpServletResponse().isCommitted())
 					res.getHttpServletResponse().sendError(SC_INTERNAL_SERVER_ERROR);
@@ -285,11 +291,50 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 				LOG.log(Level.FINEST, inner, () -> "Async response error-fallback also failed: " + inner.getMessage());
 			}
 		} finally {
+			// Completion-path emission runs AFTER the body/headers are written, then request close, then async-context
+			// completion. Nested try/finally isolates each step: a debug-emit failure cannot suppress request close,
+			// and a request-close failure cannot suppress async-context completion.
 			try {
-				asyncCtx.complete();
-			} catch (IllegalStateException ise) {
-				LOG.log(Level.FINEST, ise, () -> "AsyncContext.complete() raced with the container: " + ise.getMessage());
+				RestDebugPipeline.emitOnCompletion(session);
+			} finally {
+				try {
+					closeRequestQuietly(opSession);
+				} finally {
+					completeQuietly(asyncCtx);
+				}
 			}
+		}
+	}
+
+	/**
+	 * Publishes async ownership and the resolved debug snapshot on the request thread, before any completion callback or
+	 * streaming subscription is registered.
+	 *
+	 * <p>
+	 * Shared by {@link AsyncResponseProcessor} and the reactive streaming processor so both async-owned families use the
+	 * same race-safe handoff: the ownership flag makes {@link RestSession#finish()} skip synchronous flush/emit, and the
+	 * snapshot carries the resolved logger/formatter/detail-tier across the async hop.
+	 *
+	 * @param opSession The operation session being handed off to async dispatch. Must not be <jk>null</jk>.
+	 */
+	public static void markAsyncOwnedAndSnapshot(RestOpSession opSession) {
+		opSession.getRequest().getHttpServletRequest().setAttribute(ATTR_ASYNC_DISPATCH_OWNED, Boolean.TRUE);
+		RestDebugPipeline.captureAsyncSnapshot(opSession.getRestSession());
+	}
+
+	private static void closeRequestQuietly(RestOpSession opSession) {
+		try {
+			opSession.closeRequest();
+		} catch (RuntimeException e) {
+			LOG.log(Level.FINEST, e, () -> "Async request close failed: " + e.getMessage());
+		}
+	}
+
+	private static void completeQuietly(AsyncContext asyncCtx) {
+		try {
+			asyncCtx.complete();
+		} catch (IllegalStateException ise) {
+			LOG.log(Level.FINEST, ise, () -> "AsyncContext.complete() raced with the container: " + ise.getMessage());
 		}
 	}
 

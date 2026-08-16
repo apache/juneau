@@ -77,29 +77,52 @@ import org.apache.juneau.rest.server.*;
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		path=<js>"/api"</js>,
- * 		mixins=EchoMixin.<jk>class</jk>,
- * 		debug=<js>"conditional"</js>          <jc>// gates the echo endpoint per request</jc>
+ * 		mixins=EchoMixin.<jk>class</jk>
  * 	)
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet { }
  *
- * 	<jc>// Optional: tighten the body cap or adjust redacted headers via a @Bean factory:</jc>
+ * 	<jc>// Enable the endpoint (default OFF) and, optionally, tighten the body cap or adjust</jc>
+ * 	<jc>// redacted headers via a @Bean factory:</jc>
  * 	<ja>@Bean</ja> EchoMixin echo() {
  * 		<jk>return</jk> EchoMixin.<jsm>create</jsm>()
+ * 			.enabled()
  * 			.bodyLimit(64 * 1024L)
  * 			.redactHeader(<js>"X-Internal-Trace"</js>)
  * 			.build();
  * 	}
  * </p>
  *
- * <h5 class='section'>Debug gating:</h5>
+ * <h5 class='section'>Enablement:</h5>
  *
  * <p>
- * The handler is gated on {@link RestRequest#isDebug()} &mdash; i.e. whether the resolved (per-operation) JUL logger is
- * loggable at {@link java.util.logging.Level#FINE FINE}-or-finer. When it is not, the handler returns
- * {@code 404 Not Found} (so the existence of the endpoint isn't disclosed). Raise the resource's (or the specific
- * operation's) logger to {@code FINE} to enable the echo payload. The recommended posture for production deployments is
- * to leave the logger below {@code FINE} and pair any temporary elevation with a guard chain so only authorized
- * operators can reach it.
+ * The endpoint is <b>disabled by default</b>. Reachability is controlled by an explicit, non-logging switch and is
+ * <b>independent of the JUL logger level</b> &mdash; raising a resource's (or operation's) logger to
+ * {@link java.util.logging.Level#FINE FINE}/{@link java.util.logging.Level#FINEST FINEST} never exposes {@code /echo/*}.
+ * When the endpoint is disabled the handler returns {@code 404 Not Found} (so the existence of the endpoint isn't
+ * disclosed).
+ *
+ * <p>
+ * Enablement is tri-state, resolved per request:
+ * <ul class='spaced-list'>
+ * 	<li>An explicit {@link Builder#enabled(Boolean) builder value} ({@code true}/{@code false}) always wins.
+ * 	<li>When the builder value is left unset ({@code null}, the default), the handler resolves the SVL expression
+ * 		{@code ${juneau.echo.enabled:false}} through {@link RestRequest#getVarResolverSession()} &mdash; i.e. the
+ * 		system property {@code -Djuneau.echo.enabled=true} or the relaxed environment variable
+ * 		{@code JUNEAU_ECHO_ENABLED=true}. A per-resource {@code Config} key is <b>not</b> consulted for this switch.
+ * </ul>
+ *
+ * <p>
+ * <b>GLOBAL blast-radius warning:</b> {@code juneau.echo.enabled=true} is a <b>process-wide</b> system-property /
+ * environment switch. It enables {@code /echo/*} on <b>every</b> host in the JVM that mixes in {@code EchoMixin}
+ * &mdash; including hosts the operator did not intend to open &mdash; and, because it is resolved per request, setting
+ * it flips this <b>security</b> switch mid-process without a restart. It is a convenience for single-app deployments
+ * and local testing, <b>not</b> the recommended production posture.
+ *
+ * <p>
+ * <b>Recommended production posture:</b> leave echo OFF by default and enable it per host explicitly via a
+ * {@code @Bean EchoMixin} factory that calls {@link Builder#enabled()}, gated behind an authorization guard chain.
+ * Host-level {@link Rest#guards() @Rest(guards=...)} inherit onto the mixed-in {@code /echo/*} operation, so declaring
+ * guards at the host authorizes the endpoint.
  *
  * <h5 class='section'>Sensitive-header redaction:</h5>
  *
@@ -183,6 +206,7 @@ public class EchoMixin {
 	private final long bodyLimit;
 	private final Set<String> redactedHeaders;
 	private final Set<String> redactedHeadersLower;
+	private final Boolean enabled;
 
 	/** No-arg constructor &mdash; uses {@link #DEFAULT_BODY_LIMIT} and {@link #DEFAULT_REDACTED_HEADERS}. */
 	public EchoMixin() {
@@ -201,25 +225,28 @@ public class EchoMixin {
 		for (var h : builder.redactedHeaders)
 			s.add(h.toLowerCase(Locale.ROOT));
 		redactedHeadersLower = u(s);
+		enabled = builder.enabled;
 	}
 
 	/**
 	 * [* /echo/*] &mdash; emit an introspection echo of the inbound request.
 	 *
 	 * <p>
-	 * Returns {@code 404 Not Found} when {@code Debug} is not enabled for the current request.
+	 * Returns {@code 404 Not Found} when the endpoint is not {@link Builder#enabled(Boolean) enabled} for the current
+	 * request. Reachability is independent of the JUL logger level (see the class-level Javadoc for the enablement
+	 * rules and the global-fallback blast-radius warning).
 	 *
 	 * @param req The current REST request.
 	 * @param res The current REST response.
 	 * @param remainder The path remainder after the mount prefix (multi-segment, may be empty).
 	 * @throws IOException If an I/O error occurs while reading the request or writing the response.
-	 * @throws NotFound When {@code Debug} resolves to {@code OFF} for the current request.
+	 * @throws NotFound When the endpoint resolves to disabled for the current request.
 	 */
 	@RestOp(
 		method="*",
 		path="/#{pathToken(${juneau.echo.path:echo})}/*",
 		summary="Request echo",
-		description="Round-trip introspection of the inbound request. Debug-gated.",
+		description="Round-trip introspection of the inbound request. Disabled by default; enable via EchoMixin enablement.",
 		swagger=@OpSwagger(ignore=true)
 	)
 	@SuppressWarnings({
@@ -227,8 +254,9 @@ public class EchoMixin {
 	})
 	public void echo(RestRequest req, RestResponse res, @Path("/*") String remainder) throws IOException {
 		var sreq = req.getHttpServletRequest();
-		if (! req.isDebug())
-			throw new NotFound("Echo endpoint disabled (Debug not enabled).");
+		var on = enabled != null ? enabled.booleanValue() : Boolean.parseBoolean(req.getVarResolverSession().resolve("${juneau.echo.enabled:false}"));
+		if (! on)
+			throw new NotFound("Echo endpoint disabled.");
 
 		var headers = new LinkedHashMap<String,String>();
 		var names = sreq.getHeaderNames();
@@ -282,6 +310,16 @@ public class EchoMixin {
 		return redactedHeadersLower;
 	}
 
+	/**
+	 * Returns the explicit enablement tri-state configured on the builder (test/inspection helper).
+	 *
+	 * @return {@code Boolean.TRUE}/{@code Boolean.FALSE} when explicitly configured, or {@code null} when unset
+	 * 	(deferred to the {@code ${juneau.echo.enabled:false}} deployment fallback).
+	 */
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
 	@SuppressWarnings({
 		"java:S135" // The two breaks are distinct truncation exits (limit-reached vs. partial-final-chunk); merging them would obscure the bounded-read logic.
 	})
@@ -330,10 +368,38 @@ public class EchoMixin {
 
 		private long bodyLimit = DEFAULT_BODY_LIMIT;
 		private final Set<String> redactedHeaders;
+		private Boolean enabled;
 
 		/** Constructor &mdash; package access for {@link EchoMixin#create()}. */
 		protected Builder() {
 			redactedHeaders = new LinkedHashSet<>(DEFAULT_REDACTED_HEADERS);
+		}
+
+		/**
+		 * Sets the explicit enablement tri-state for the {@code /echo/*} endpoint.
+		 *
+		 * <p>
+		 * This is a non-logging switch that is independent of the JUL logger level. The default is unset
+		 * ({@code null}), which defers to the {@code ${juneau.echo.enabled:false}} deployment fallback (system
+		 * property / relaxed environment variable) &mdash; see the class-level Javadoc for the resolution rules and
+		 * the global-fallback blast-radius warning.
+		 *
+		 * @param value {@code Boolean.TRUE} to enable, {@code Boolean.FALSE} to explicitly disable (overriding the
+		 * 	global fallback), or {@code null} to leave unset (defer to the fallback).
+		 * @return This object.
+		 */
+		public Builder enabled(Boolean value) {
+			enabled = value;
+			return this;
+		}
+
+		/**
+		 * Enables the {@code /echo/*} endpoint &mdash; shorthand for {@link #enabled(Boolean) enabled(Boolean.TRUE)}.
+		 *
+		 * @return This object.
+		 */
+		public Builder enabled() {
+			return enabled(Boolean.TRUE);
 		}
 
 		/**

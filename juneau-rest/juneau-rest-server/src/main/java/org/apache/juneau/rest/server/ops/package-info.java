@@ -21,7 +21,7 @@
  *
  * <p>
  * Three sibling mixins compose into the host {@code @Rest}-annotated resource. Each mixin owns
- * its default mount paths, ships secure-by-default (guarded for echo, deny-all-guard for
+ * its default mount paths, ships secure-by-default (disabled-by-default for echo, deny-all-guard for
  * admin), and is independently mountable; the three together drop in as a pack via
  * {@code @Rest(mixins={EchoMixin.class, AdminMixin.class, RouteIndexMixin.class})}.
  * </p>

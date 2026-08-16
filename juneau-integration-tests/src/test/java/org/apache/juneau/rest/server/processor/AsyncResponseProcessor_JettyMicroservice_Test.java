@@ -16,13 +16,16 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
+import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -233,5 +236,250 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		var resp = HTTP.send(req, BodyHandlers.ofString());
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
 		assertTrue(resp.body().contains("exec-pool-async"), "body: " + resp.body());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// H: Completion-path emission — proves async debug records are emitted on the response-completion path (after the
+	// late headers/body exist), NOT during synchronous finish().  These are the completion-path redesign gates: the
+	// delayed test's post-finish/pre-completion zero-capture assertion is RED on a synchronous-finish emit and GREEN
+	// only once emission moves to completion.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(paths="/asyncCap/*", asyncTimeoutMillis="1000")
+	public static class AsyncCaptureServlet extends RestServlet {
+		private static final long serialVersionUID = 1L;
+
+		/** Test-controlled gate future for the delayed endpoint; completed by the test to trigger completion-path emit. */
+		static volatile CompletableFuture<String> gate;
+
+		/** Counted down by {@code @RestEndCall} on the request thread — i.e. AFTER {@code RestSession.finish()} returns. */
+		static volatile CountDownLatch finishLatch;
+
+		@RestGet("/delayed")
+		public CompletableFuture<String> delayed(RestResponse res) {
+			var g = new CompletableFuture<String>();
+			gate = g;
+			// The header + content-type are set on the COMPLETION thread (inside thenApply), so a record that captured
+			// them proves rendering happened after async completion, not during synchronous finish().
+			return g.thenApply(body -> {
+				res.setContentType("text/plain");
+				res.setHeader("X-Late-Header", "late-header-value");
+				return body;
+			});
+		}
+
+		@RestGet("/completed")
+		public CompletableFuture<String> completed(RestResponse res) {
+			res.setContentType("text/plain");
+			return CompletableFuture.completedFuture("completed-body-value");  // already complete → inline callback
+		}
+
+		@RestGet("/finestError")
+		public CompletableFuture<String> finestError() {
+			var f = new CompletableFuture<String>();
+			f.completeExceptionally(new IllegalStateException("finest-error-cause"));
+			return f;
+		}
+
+		@RestGet("/neverCompletes")
+		public CompletableFuture<String> neverCompletes() {
+			return new CompletableFuture<>();  // never completes → fires the AsyncContext timeout
+		}
+
+		@RestEndCall
+		public void endCall() {
+			var l = finishLatch;
+			if (l != null)
+				l.countDown();
+		}
+	}
+
+	@Configuration
+	public static class ConfigCap {
+		@Bean(name="asyncCaptureServlet")
+		public Servlet asyncCaptureServlet() { return new AsyncCaptureServlet(); }
+	}
+
+	@RegisterExtension
+	static MicroserviceTestFixture capFixture = MicroserviceTestFixture.create()
+		.configurations(ConfigCap.class);
+
+	/** JUL handler that records only the events for a single op logger (attached with {@code useParentHandlers=false}). */
+	private static final class CollectingHandler extends Handler {
+		private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
+
+		@Override public void publish(LogRecord record) {
+			if (isLoggable(record))
+				records.add(record);
+		}
+
+		@Override public void flush() {}
+		@Override public void close() {}
+
+		List<LogRecord> forLogger(String name) {
+			synchronized (records) {
+				return records.stream().filter(x -> name.equals(x.getLoggerName())).toList();
+			}
+		}
+	}
+
+	/** Snapshot/restore of a JUL logger's mutable level/handler state so tests never leak elevated levels. */
+	private static final class LoggerState {
+		private final Logger logger;
+		private final Level level;
+		private final boolean useParentHandlers;
+		private final Handler[] handlers;
+
+		LoggerState(Logger logger) {
+			this.logger = logger;
+			level = logger.getLevel();
+			useParentHandlers = logger.getUseParentHandlers();
+			handlers = logger.getHandlers();
+		}
+
+		void restore() {
+			for (var h : logger.getHandlers())
+				logger.removeHandler(h);
+			for (var h : handlers)
+				logger.addHandler(h);
+			logger.setUseParentHandlers(useParentHandlers);
+			logger.setLevel(level);
+		}
+	}
+
+	private static CollectingHandler attach(Logger logger, Level tier) {
+		for (var h : logger.getHandlers())
+			logger.removeHandler(h);
+		logger.setUseParentHandlers(false);
+		logger.setLevel(tier);
+		var handler = new CollectingHandler();
+		handler.setLevel(Level.INFO);
+		logger.addHandler(handler);
+		return handler;
+	}
+
+	private static HttpResponse<String> capGet(String path) throws Exception {
+		var req = HttpRequest.newBuilder()
+			.uri(URI.create(capFixture.getRootUrl() + path))
+			.timeout(Duration.ofSeconds(15))
+			.GET()
+			.build();
+		return HTTP.send(req, BodyHandlers.ofString());
+	}
+
+	@Test void h01_delayedAsync_emitsOnCompletionPath_notOnFinish() throws Exception {
+		var opLogger = Logger.getLogger(AsyncCaptureServlet.class.getName() + ".delayed");
+		var state = new LoggerState(opLogger);
+		try {
+			forceOn();  // Body-dump gate (test-only seam) so the FINEST response body renders.
+			var handler = attach(opLogger, Level.FINEST);
+			AsyncCaptureServlet.gate = null;
+			AsyncCaptureServlet.finishLatch = new CountDownLatch(1);
+
+			var respFuture = HTTP.sendAsync(
+				HttpRequest.newBuilder()
+					.uri(URI.create(capFixture.getRootUrl() + "/asyncCap/delayed"))
+					.timeout(Duration.ofSeconds(15))
+					.GET()
+					.build(),
+				BodyHandlers.ofString());
+
+			// Barrier: the request thread has returned from RestSession.finish() and run @RestEndCall.
+			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+				"request thread did not reach @RestEndCall");
+
+			// RED on synchronous-finish emit: finish() would already have emitted an incomplete record here.
+			// GREEN on completion-path emit: nothing is emitted until the future completes below.
+			assertEquals(0, handler.forLogger(opLogger.getName()).size(),
+				"no debug record may be emitted between synchronous finish() and async completion");
+
+			// Complete on the completion thread with a non-empty body; the endpoint sets a late header there too.
+			assertNotNull(AsyncCaptureServlet.gate, "gate future should have been published by the handler");
+			AsyncCaptureServlet.gate.complete("delayed-body-value");
+
+			var resp = respFuture.get(15, TimeUnit.SECONDS);
+			assertEquals(200, resp.statusCode(), "body: " + resp.body());
+			assertTrue(resp.body().contains("delayed-body-value"), "body: " + resp.body());
+
+			// Exactly one INFO record, emitted only after completion, carrying the late header AND the late body.
+			var recs = handler.forLogger(opLogger.getName());
+			assertEquals(1, recs.size(), "exactly one completion-path record expected");
+			var rec = recs.get(0);
+			assertEquals(Level.INFO, rec.getLevel(), "records remain INFO-stamped; tier controls detail only");
+			assertTrue(rec.getMessage().contains("X-Late-Header"), rec.getMessage());
+			assertTrue(rec.getMessage().contains("late-header-value"), rec.getMessage());
+			assertTrue(rec.getMessage().contains("delayed-body-value"),
+				"completion-path record must contain the body written during completion: " + rec.getMessage());
+		} finally {
+			reset();
+			AsyncCaptureServlet.finishLatch = null;
+			var g = AsyncCaptureServlet.gate;
+			if (g != null)
+				g.complete("cleanup");  // never leave a request hung if an assertion failed before completion
+			AsyncCaptureServlet.gate = null;
+			state.restore();
+		}
+	}
+
+	@Test void h02_alreadyCompletedFuture_recordIncludesExecTime() throws Exception {
+		var opLogger = Logger.getLogger(AsyncCaptureServlet.class.getName() + ".completed");
+		var state = new LoggerState(opLogger);
+		try {
+			var handler = attach(opLogger, Level.FINE);  // FINE tier → headers section, which carries "Exec time:".
+			var resp = capGet("/asyncCap/completed");
+			assertEquals(200, resp.statusCode(), resp.body());
+			assertTrue(resp.body().contains("completed-body-value"), resp.body());
+
+			var recs = handler.forLogger(opLogger.getName());
+			assertEquals(1, recs.size(), "exactly one completion-path record expected");
+			var rec = recs.get(0);
+			assertEquals(Level.INFO, rec.getLevel());
+			assertTrue(rec.getMessage().contains("Exec time:"),
+				"an inline-completed future must still carry finish-time attributes: " + rec.getMessage());
+		} finally {
+			state.restore();
+		}
+	}
+
+	@Test void h03_futureError_finest_emitsOnceWithThrown() throws Exception {
+		var opLogger = Logger.getLogger(AsyncCaptureServlet.class.getName() + ".finestError");
+		var state = new LoggerState(opLogger);
+		try {
+			forceOn();
+			var handler = attach(opLogger, Level.FINEST);
+			var resp = capGet("/asyncCap/finestError");
+			assertEquals(500, resp.statusCode(), resp.body());
+
+			var recs = handler.forLogger(opLogger.getName());
+			assertEquals(1, recs.size(), "error path must still emit exactly one completion-path record");
+			var rec = recs.get(0);
+			assertEquals(Level.INFO, rec.getLevel());
+			assertNotNull(rec.getThrown(), "error record must carry the terminal cause as thrown");
+			assertTrue(rec.getMessage().contains("[500]"), rec.getMessage());
+		} finally {
+			reset();
+			state.restore();
+		}
+	}
+
+	@Test void h04_timeout_finest_emitsOnceWithThrown() throws Exception {
+		var opLogger = Logger.getLogger(AsyncCaptureServlet.class.getName() + ".neverCompletes");
+		var state = new LoggerState(opLogger);
+		try {
+			forceOn();
+			var handler = attach(opLogger, Level.FINEST);
+			var resp = capGet("/asyncCap/neverCompletes");
+			assertEquals(504, resp.statusCode(), resp.body());
+
+			var recs = handler.forLogger(opLogger.getName());
+			assertEquals(1, recs.size(), "timeout path must still emit exactly one completion-path record");
+			var rec = recs.get(0);
+			assertEquals(Level.INFO, rec.getLevel());
+			assertNotNull(rec.getThrown(), "timeout record must carry the GatewayTimeout as thrown");
+			assertTrue(rec.getMessage().contains("[504]"), rec.getMessage());
+		} finally {
+			reset();
+			state.restore();
+		}
 	}
 }
