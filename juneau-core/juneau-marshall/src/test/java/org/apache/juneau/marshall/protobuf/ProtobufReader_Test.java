@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -110,5 +113,44 @@ class ProtobufReader_Test extends TestBase {
 		var r4 = reader(0x03, 0xAA, 0xBB, 0xCC, 0x10);
 		r4.skipField(WireType.LEN);
 		assertEquals(2, ProtobufReader.fieldNumber(r4.readTag()));
+	}
+
+	@Test
+	void a09_varintRejectsOverlongContinuation() throws Exception {
+		// 10 continuation bytes (0x80) with no terminating byte: the 10th byte still has the continuation
+		// bit set, so the varint never terminates within the 10-byte cap.
+		var r = reader(0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80);
+		assertThrowsWithMessage(IOException.class, "exceeds maximum length of 10 bytes", r::readVarint);
+
+		// Same shape but with an 11th byte present ("10x0x80 + more") -- still rejected at byte 10.
+		var r2 = reader(0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x01);
+		assertThrowsWithMessage(IOException.class, "exceeds maximum length of 10 bytes", r2::readVarint);
+	}
+
+	@Test
+	void a10_varintCanonicalTenByteNegativeOneStillDecodes() throws Exception {
+		// Canonical 10-byte encoding of -1L must remain valid (terminating byte on the 10th).
+		assertEquals(-1L, reader(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x01).readVarint());
+	}
+
+	@Test
+	void a11_tagRejectsOverlongContinuation() throws Exception {
+		var r = reader(0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80);
+		assertThrowsWithMessage(IOException.class, "exceeds maximum length of 10 bytes", r::readTag);
+	}
+
+	@Test
+	void b01_skipFieldLenRejectsLengthAboveMaxLength() throws Exception {
+		// Declared length (10) exceeds the configured maximum (5); must reject before skipping any data.
+		var r = reader(0x0A, 1,2,3,4,5,6,7,8,9,10, 0x10);
+		r.setMaxLength(5);
+		assertThrowsWithMessage(IOException.class, "exceeds maximum allowed", () -> r.skipField(WireType.LEN));
+	}
+
+	@Test
+	void b02_skipFieldLenRejectsWrappedNegativeVarint() throws Exception {
+		// Varint decodes to -1L (wrapped-negative as an int cast); must reject rather than skip a negative count.
+		var r = reader(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x01);
+		assertThrowsWithMessage(IOException.class, "negative", () -> r.skipField(WireType.LEN));
 	}
 }

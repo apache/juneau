@@ -57,6 +57,9 @@ public class ProtobufReader {
 	/** Default cap (16 MiB) for wire-declared length-delimited block sizes. */
 	static final int DEFAULT_MAX_LENGTH = 16 * 1024 * 1024;
 
+	/** Maximum encoded length, in bytes, of a 64-bit protobuf varint (ceil(64 / 7) LEB128 groups). */
+	private static final int MAX_VARINT_BYTES = 10;
+
 	private final InputStream is;
 	private int maxLength = DEFAULT_MAX_LENGTH;
 
@@ -112,19 +115,28 @@ public class ProtobufReader {
 	/**
 	 * Reads a base-128 varint (LEB128) as a 64-bit value.
 	 *
+	 * <p>
+	 * Caps the encoding at {@value #MAX_VARINT_BYTES} bytes (the maximum a 64-bit varint can occupy), so a
+	 * malformed stream of continuation bytes cannot burn unbounded CPU/bytes before EOF.
+	 *
 	 * @return The decoded value.
-	 * @throws IOException If the stream ends mid-varint or the underlying stream fails.
+	 * @throws IOException If the stream ends mid-varint, the varint exceeds {@value #MAX_VARINT_BYTES} bytes,
+	 * 	or the underlying stream fails.
 	 */
 	public long readVarint() throws IOException {
 		var result = 0L;
 		var shift = 0;
+		var count = 0;
 		int b;
 		do {
 			b = read();
 			if (b == -1)
 				throw ioex("Unexpected end of protobuf input while reading varint");
+			count++;
 			result |= ((long)(b & 0x7F)) << shift;
 			shift += 7;
+			if (count == MAX_VARINT_BYTES && (b & 0x80) != 0)
+				throw ioex("Protobuf varint exceeds maximum length of %s bytes", MAX_VARINT_BYTES);
 		} while ((b & 0x80) != 0);
 		return result;
 	}
@@ -132,8 +144,12 @@ public class ProtobufReader {
 	/**
 	 * Reads a field tag, or returns {@link #EOF} if the stream is exhausted at a field boundary.
 	 *
+	 * <p>
+	 * Caps the encoding at {@value #MAX_VARINT_BYTES} bytes, the same bound applied by {@link #readVarint()}.
+	 *
 	 * @return The decoded tag value (<c>(fieldNumber &lt;&lt; 3) | wireType</c>), or {@link #EOF} at end of stream.
-	 * @throws IOException If the stream ends mid-tag or the underlying stream fails.
+	 * @throws IOException If the stream ends mid-tag, the tag exceeds {@value #MAX_VARINT_BYTES} bytes, or the
+	 * 	underlying stream fails.
 	 */
 	public long readTag() throws IOException {
 		var b = read();
@@ -141,12 +157,16 @@ public class ProtobufReader {
 			return EOF;
 		var result = (long)(b & 0x7F);
 		var shift = 7;
+		var count = 1;
 		while ((b & 0x80) != 0) {
 			b = read();
 			if (b == -1)
 				throw ioex("Unexpected end of protobuf input while reading tag");
+			count++;
 			result |= ((long)(b & 0x7F)) << shift;
 			shift += 7;
+			if (count == MAX_VARINT_BYTES && (b & 0x80) != 0)
+				throw ioex("Protobuf varint exceeds maximum length of %s bytes", MAX_VARINT_BYTES);
 		}
 		return result;
 	}
@@ -277,15 +297,24 @@ public class ProtobufReader {
 	/**
 	 * Skips a field's value, consuming exactly the right number of bytes for the specified wire type.
 	 *
+	 * <p>
+	 * For {@link WireType#LEN}, the wire-declared length is validated against the configured maximum (the
+	 * same check applied by {@link #readLenDelimited()}) before skipping, so an unknown forward-compatible
+	 * field cannot bypass the length cap via an unbounded or wrapped-negative skip.
+	 *
 	 * @param wireType The wire type of the field to skip.
-	 * @throws IOException If the stream ends early or the underlying stream fails.
+	 * @throws IOException If the stream ends early, the declared length is out of bounds, or the underlying
+	 * 	stream fails.
 	 */
 	public void skipField(WireType wireType) throws IOException {
 		switch (wireType) {
 			case VARINT -> readVarint();
 			case I64 -> skip(8);
 			case I32 -> skip(4);
-			case LEN -> skip((int)readVarint());
+			case LEN -> {
+				var len = ParserInputStream.checkLength(readVarint(), maxLength, "protobuf field");
+				skip(len);
+			}
 			default -> throw ioex("Cannot skip unsupported protobuf wire type: %s", wireType);
 		}
 	}
