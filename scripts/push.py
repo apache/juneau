@@ -55,12 +55,13 @@ from pathlib import Path
 # starter repos against that local install to recover the downstream-consumer compile/test guard that
 # externalizing the starters would otherwise lose.  Edit this list to match your local checkout locations.
 # A path that does not exist is SKIPPED WITH A WARNING (not a failure).  Any PRESENT starter that fails to
-# build fails the push.  Docker / Docusaurus validation is left to each repo's own GitHub Actions CI.
+# build fails the push.  There is no GitHub Actions CI on these branches; this script is the compile gate.
+# Docker image builds are not part of this gate.
 # ----------------------------------------------------------------------------------------------------------------------
 STARTER_REPO_PATHS = [
-    Path.home() / "git" / "jamesbognar" / "juneau-microservice-jetty-starter",
-    Path.home() / "git" / "jamesbognar" / "juneau-microservice-springboot-starter",
-    Path.home() / "git" / "jamesbognar" / "juneau-microservice-tomcat-starter",
+    Path.home() / "git" / "apache" / "juneau-microservice-jetty-starter",
+    Path.home() / "git" / "apache" / "juneau-microservice-springboot-starter",
+    Path.home() / "git" / "apache" / "juneau-microservice-tomcat-starter",
 ]
 
 
