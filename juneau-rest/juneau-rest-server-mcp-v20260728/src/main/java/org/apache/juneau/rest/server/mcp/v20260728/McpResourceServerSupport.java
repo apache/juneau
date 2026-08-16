@@ -513,32 +513,21 @@ public final class McpResourceServerSupport {
 	}
 
 	/**
-	 * Returns whether the granted scopes satisfy every required scope, honoring OAuth scope hierarchies where a broader
-	 * granted scope implies its narrower children.
+	 * Returns whether the granted scopes satisfy every required scope, using exact string equality.
 	 *
 	 * <p>
-	 * A required scope {@code r} is satisfied when some granted scope {@code g} either equals {@code r} exactly, or is a
-	 * hierarchical <em>ancestor</em> of it &mdash; i.e. {@code r} begins with {@code g} followed by a {@code :} or
-	 * {@code .} delimiter (so granted {@code repo} implies required {@code repo:read} / {@code repo.write}, but granted
-	 * {@code repo:read} does <b>not</b> imply required {@code repo}).
+	 * A required scope {@code r} is satisfied only when some granted scope {@code g} is exactly equal to it.  OAuth
+	 * scopes have no universal hierarchy, so a granted {@code repo} does <b>not</b> imply a required {@code repo:write}
+	 * or {@code repo.admin} &mdash; a broad-but-low-privilege scope must never authorize a differently named privileged
+	 * operation. Applications that want scope implication must expand their granted scopes themselves before calling
+	 * this method; this method does not provide a hierarchical-implication SPI.
 	 *
 	 * @param grantedScopes The caller's granted scopes.  Never <jk>null</jk>.
 	 * @param requiredScopes The scopes required to invoke the operation.  Never <jk>null</jk>.
 	 * @return <jk>true</jk> if every required scope is satisfied.
 	 */
 	public static boolean satisfies(Collection<String> grantedScopes, Collection<String> requiredScopes) {
-		for (var r : requiredScopes) {
-			var ok = false;
-			for (var g : grantedScopes) {
-				if (g.equals(r) || r.startsWith(g + ":") || r.startsWith(g + ".")) {
-					ok = true;
-					break;
-				}
-			}
-			if (!ok)
-				return false;
-		}
-		return true;
+		return grantedScopes.containsAll(requiredScopes);
 	}
 
 	/**

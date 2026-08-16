@@ -72,11 +72,12 @@ class McpResourceServerBinding_Test extends TestBase {
 		case "good4" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp.read mcp.write", "iss", "https://idp-b", "sub", "alice"));
 		case "noscope" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "other"));
 		case "wrongaud" -> new ClaimsPrincipal("alice", Map.of("aud", "http://evil.example.com", "scope", "mcp.read"));
-		// SEP-2350 step-up fixtures: baseline mcp.read + the per-operation tools.exec (exact and hierarchical grants).
+		// SEP-2350 step-up fixtures: baseline mcp.read + the per-operation tools.exec (exact grant vs. a
+		// broader-but-not-exact grant that must NOT satisfy it).
 		case "opok" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp.read tools.exec"));
 		case "broad" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp.read tools"));
-		// H1 baseline-hierarchy fixture: granted ONLY the broad ancestor "mcp", which satisfies the baseline
-		// "mcp.read" hierarchically (never exact-string).
+		// Baseline fixture: granted ONLY the broader "mcp" scope, which does NOT satisfy the exact-match baseline
+		// requirement "mcp.read" (OAuth scopes have no universal hierarchy).
 		case "basehier" -> new ClaimsPrincipal("alice", Map.of("aud", RESOURCE, "scope", "mcp"));
 		default -> throw new AuthenticationException("bad token");
 	};
@@ -201,13 +202,15 @@ class McpResourceServerBinding_Test extends TestBase {
 		assertContains("alice", s);
 	}
 
-	// H1: a token granted ONLY the broad ancestor "mcp" satisfies the baseline "mcp.read" hierarchically and
-	// dispatches.  The old exact-string containsAll baseline gate would have 403'd this.
-	@Test void a10_baselineHierarchicalScope_dispatches() throws Exception {
+	// A token granted only the broader "mcp" scope does NOT satisfy the exact-match baseline requirement
+	// "mcp.read": a broad-but-differently-named scope must never authorize a differently named privileged operation.
+	@Test void a10_baselineBroaderScopeDoesNotSatisfy_403() throws Exception {
 		clientA().post("/").contentString(body(1, "server/discover", null))
 			.header("Mcp-Method", "server/discover").header("Mcp-Name", "")
 			.header("Authorization", "Bearer basehier")
-			.run().assertStatus(200);
+			.run()
+			.assertStatus(403)
+			.assertHeader("WWW-Authenticate").is("Bearer realm=\"mcp\", error=\"insufficient_scope\", scope=\"mcp.read\", resource_metadata=\"" + PRM_URL + "\"");
 	}
 
 	// M5: the wildcard well-known route must not serve this endpoint's PRM for an arbitrary suffix.
@@ -218,7 +221,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	// ---------------------------------------------------------------------------------------------
 	// SEP-2350 (F3) per-operation step-up: an end-to-end HTTP round-trip exercising the POST-parse enforcement
 	// point in McpRevision.dispatch (a token satisfying the endpoint-wide baseline but not the operation's scope
-	// yields a scoped 403 insufficient_scope challenge; the correct scope, exact or hierarchical, dispatches).
+	// yields a scoped 403 insufficient_scope challenge; only the exact required scope dispatches).
 	// ---------------------------------------------------------------------------------------------
 
 	private static McpOptions rsEnabledWithOpScope() {
@@ -266,12 +269,15 @@ class McpResourceServerBinding_Test extends TestBase {
 			.run().assertStatus(200);
 	}
 
-	// A broader ancestor scope (tools) satisfies the narrower required tools.exec (server MUST: hierarchy-aware).
-	@Test void d03_stepUp_hierarchicalScope_dispatches() throws Exception {
+	// A broader scope (tools) does NOT satisfy the exact required scope tools.exec: OAuth scopes have no universal
+	// hierarchy, so this must be a scoped 403 step-up challenge, not a dispatch.
+	@Test void d03_stepUp_broaderScopeDoesNotSatisfy_403() throws Exception {
 		clientD().post("/").contentString(body(1, "tools/call", callEcho()))
 			.header("Mcp-Method", "tools/call").header("Mcp-Name", "echo")
 			.header("Authorization", "Bearer broad")
-			.run().assertStatus(200);
+			.run()
+			.assertStatus(403)
+			.assertHeader("WWW-Authenticate").is("Bearer realm=\"mcp\", error=\"insufficient_scope\", scope=\"tools.exec\", resource_metadata=\"" + PRM_URL + "\"");
 	}
 
 	// An operation with no per-operation scope configured is unaffected: baseline mcp.read alone dispatches it.

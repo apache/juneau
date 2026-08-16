@@ -191,8 +191,9 @@ class McpResourceServerSupport_Test {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// SEP-2350 per-operation step-up: scope satisfaction (hierarchy-aware), scoped challenge shape, and the
-	// POST-parse enforcement decision (throws 403 insufficient_scope + WWW-Authenticate, or is a no-op).
+	// SEP-2350 per-operation step-up: scope satisfaction (exact-match only, no hierarchy/prefix inheritance),
+	// scoped challenge shape, and the POST-parse enforcement decision (throws 403 insufficient_scope +
+	// WWW-Authenticate, or is a no-op).
 	// ---------------------------------------------------------------------------------------------
 
 	private static McpOperationContext op(String method, String name) {
@@ -203,10 +204,12 @@ class McpResourceServerSupport_Test {
 		assertTrue(McpResourceServerSupport.satisfies(Set.of("repo.delete"), Set.of("repo.delete")));
 	}
 
-	@Test void f02_satisfies_broaderAncestorImpliesNarrower() {
-		// Granted "repo" implies required "repo.delete" (dot) and "repo:delete" (colon).
-		assertTrue(McpResourceServerSupport.satisfies(Set.of("repo"), Set.of("repo.delete")));
-		assertTrue(McpResourceServerSupport.satisfies(Set.of("repo"), Set.of("repo:delete")));
+	@Test void f02_satisfies_broaderScopeDoesNotImplyNarrower() {
+		// OAuth scopes have no universal hierarchy: granted "repo" must NOT satisfy required "repo.delete" (dot) or
+		// "repo:delete" (colon) &mdash; a broad-but-low-privilege scope must never authorize a differently named,
+		// more-privileged operation.
+		assertFalse(McpResourceServerSupport.satisfies(Set.of("repo"), Set.of("repo.delete")));
+		assertFalse(McpResourceServerSupport.satisfies(Set.of("repo"), Set.of("repo:delete")));
 	}
 
 	@Test void f03_satisfies_narrowerDoesNotImplyBroader() {
@@ -214,8 +217,8 @@ class McpResourceServerSupport_Test {
 		assertFalse(McpResourceServerSupport.satisfies(Set.of("repo.read"), Set.of("repo")));
 	}
 
-	@Test void f04_satisfies_partialTokenIsNotAncestor() {
-		// "rep" is a string prefix of "repo.read" but NOT a hierarchical ancestor (no delimiter), so it must not satisfy.
+	@Test void f04_satisfies_partialTokenIsNotAMatch() {
+		// "rep" is a string prefix of "repo.read" but not an exact match, so it must not satisfy.
 		assertFalse(McpResourceServerSupport.satisfies(Set.of("rep"), Set.of("repo.read")));
 	}
 
@@ -224,11 +227,20 @@ class McpResourceServerSupport_Test {
 		assertTrue(McpResourceServerSupport.satisfies(Set.of("a", "b"), Set.of("a", "b")));
 	}
 
-	@Test void f05b_satisfies_baselineParity_grantedAncestorSatisfiesBaseline() {
-		// H1 parity: the baseline required-scope gate uses satisfies(...) exactly like the per-operation gate, so a
-		// token granted "mcp" satisfies a baseline of "mcp.read" hierarchically (no exact-string containsAll needed).
-		assertTrue(McpResourceServerSupport.satisfies(Set.of("mcp"), Set.of("mcp.read")));
-		assertFalse(Set.of("mcp").containsAll(Set.of("mcp.read")));  // the OLD containsAll gate would have 403'd this.
+	@Test void f05b_satisfies_baselineParity_grantedBroaderScopeDoesNotSatisfyBaseline() {
+		// Parity: the baseline required-scope gate uses satisfies(...) exactly like the per-operation gate, so a
+		// token granted only "mcp" does NOT satisfy a baseline of "mcp.read" &mdash; exact-match only, no
+		// prefix/hierarchy inheritance.
+		assertFalse(McpResourceServerSupport.satisfies(Set.of("mcp"), Set.of("mcp.read")));
+	}
+
+	@Test void f05c_satisfies_emptyRequired_alwaysTrue() {
+		assertTrue(McpResourceServerSupport.satisfies(Set.of(), Set.of()));
+		assertTrue(McpResourceServerSupport.satisfies(Set.of("a"), Set.of()));
+	}
+
+	@Test void f05d_satisfies_emptyGrantedNonEmptyRequired_false() {
+		assertFalse(McpResourceServerSupport.satisfies(Set.of(), Set.of("a")));
 	}
 
 	@Test void f06_stepUpChallengeShape() {
