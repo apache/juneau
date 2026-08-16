@@ -88,6 +88,26 @@ class OAuthIntrospectionValidator_Builder_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> fresh().requiredScopes("ok", "  "));
 	}
 
+	@Test void c03_audience_accumulate() {
+		var v = fresh().audience("api1").audience("api2", "api3").build();
+		assertEquals(java.util.Set.of("api1", "api2", "api3"), v.getExpectedAudiences());
+	}
+
+	@Test void c04_audience_blankRejected() {
+		assertThrows(IllegalArgumentException.class, () -> fresh().audience(""));
+		assertThrows(IllegalArgumentException.class, () -> fresh().audience("ok", "  "));
+	}
+
+	@Test void c05_resource_isAliasForAudience() {
+		var v = fresh().resource("api1").audience("api2").build();
+		assertEquals(java.util.Set.of("api1", "api2"), v.getExpectedAudiences());
+	}
+
+	@Test void c06_noAudienceConfigured_emptyByDefault() {
+		var v = fresh().build();
+		assertTrue(v.getExpectedAudiences().isEmpty());
+	}
+
 	@Test void d01_clientSecret_blankRejected() {
 		assertThrows(IllegalArgumentException.class, () -> OAuthIntrospectionValidator.create().clientSecret(""));
 	}

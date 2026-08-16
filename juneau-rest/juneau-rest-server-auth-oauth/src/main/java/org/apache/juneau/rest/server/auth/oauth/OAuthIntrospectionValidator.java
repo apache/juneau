@@ -102,6 +102,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		private TokenCache tokenCache;
 		private Duration cacheTtl = DEFAULT_CACHE_TTL;
 		private Set<String> requiredScopes = st();
+		private Set<String> expectedAudiences = st();
 		private Clock clock = Clock.systemUTC();
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
@@ -210,6 +211,47 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		}
 
 		/**
+		 * Adds expected audience values (RFC 7662 {@code aud}) that a token must carry to be accepted.
+		 *
+		 * <p>
+		 * When at least one value is configured here (via this method or {@link #resource(String...)}), the
+		 * introspection response's {@code aud} claim must contain <b>at least one</b> matching value, or the
+		 * token is rejected as {@code invalid_token} &mdash; even when {@code active=true} and required scopes
+		 * match.  This binds the token to the resource server it was minted for, so a token issued for a
+		 * different API cannot be replayed against this one.
+		 *
+		 * <p>
+		 * When left unset (the default), no audience/resource check is performed: today's
+		 * {@code active} + optional-required-scopes behavior is preserved unchanged.
+		 *
+		 * @param values The expected audience values.  Must contain at least one non-blank entry.
+		 * @return This object.
+		 */
+		public Builder audience(String... values) {
+			assertArgNotNull("values", values);
+			for (var v : values) {
+				assertArgNotNullOrBlank("audience", v);
+				expectedAudiences.add(v);
+			}
+			return this;
+		}
+
+		/**
+		 * Adds expected resource-indicator values (RFC 8707).
+		 *
+		 * <p>
+		 * Alias for {@link #audience(String...)}: RFC 8707 resource indicators are echoed back by
+		 * conformant authorization servers in the same introspection {@code aud} claim as RFC 7662
+		 * audiences, so both methods add to the same expected-value set.
+		 *
+		 * @param values The expected resource values.  Must contain at least one non-blank entry.
+		 * @return This object.
+		 */
+		public Builder resource(String... values) {
+			return audience(values);
+		}
+
+		/**
 		 * Overrides the {@link Clock} used for cache expiry.  Useful in tests.
 		 *
 		 * @param value The clock.  Must not be <jk>null</jk>.
@@ -259,6 +301,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	private final TokenCache tokenCache;
 	private final Duration cacheTtl;
 	private final Set<String> requiredScopes;
+	private final Set<String> expectedAudiences;
 	private final Clock clock;
 	private final Consumer<HTTPRequest> httpRequestConfigurator;
 
@@ -274,6 +317,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		this.tokenCache = b.tokenCache;
 		this.cacheTtl = b.cacheTtl;
 		this.requiredScopes = u(cp(b.requiredScopes));
+		this.expectedAudiences = u(cp(b.expectedAudiences));
 		this.clock = b.clock;
 		this.httpRequestConfigurator = b.httpRequestConfigurator;
 	}
@@ -312,6 +356,15 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 	 */
 	public Set<String> getRequiredScopes() {
 		return requiredScopes;
+	}
+
+	/**
+	 * Returns the configured expected audience / resource-indicator set.
+	 *
+	 * @return An unmodifiable view.  Empty when no audience/resource binding is configured (default).
+	 */
+	public Set<String> getExpectedAudiences() {
+		return expectedAudiences;
 	}
 
 	/**
@@ -362,6 +415,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		if (!success.isActive())
 			throw new AuthenticationException("OAuth token inactive")
 				.wwwAuthenticate(bearerError("invalid_token", "token inactive"));
+		enforceAudience(success);
 		var scopes = extractScopes(success);
 		enforceRequiredScopes(scopes);
 		var claims = buildClaims(success, scopes);
@@ -381,6 +435,23 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 			if (v != null && !v.isBlank()) // HTT: v==null branch unreachable; Nimbus Scope.toStringList() never returns null entries
 				out.add(v);
 		return out;
+	}
+
+	/**
+	 * Rejects the token when an expected audience/resource set is configured and the introspection
+	 * response's {@code aud} claim contains none of the expected values.  No-op when
+	 * {@link #expectedAudiences} is empty (no bind configured).
+	 */
+	private void enforceAudience(TokenIntrospectionSuccessResponse success) throws AuthenticationException {
+		if (expectedAudiences.isEmpty())
+			return;
+		var tokenAudiences = success.getAudience();
+		var matched = tokenAudiences != null && tokenAudiences.stream()
+			.map(Audience::getValue)
+			.anyMatch(expectedAudiences::contains);
+		if (!matched)
+			throw new AuthenticationException("OAuth token audience/resource mismatch")
+				.wwwAuthenticate(bearerError("invalid_token", "audience mismatch"));
 	}
 
 	private void enforceRequiredScopes(Set<String> tokenScopes) throws AuthenticationException {
