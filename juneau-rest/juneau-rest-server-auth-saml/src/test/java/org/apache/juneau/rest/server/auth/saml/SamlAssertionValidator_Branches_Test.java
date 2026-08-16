@@ -73,17 +73,19 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// B: nbf == null and noa == null → timestamps not checked (lines 561–564 both false branches)
+	// B: nbf == null and noa == null → the NotBefore/NotOnOrAfter checks are skipped in validateConditions, but
+	//    an assertion with no NotOnOrAfter anywhere has an unbounded validity window and is rejected at the
+	//    one-time-use stage (its lifetime cannot be bounded, so single-use cannot be enforced past eviction).
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_noNbf_noNoa_accepted() throws Exception {
+	@Test void b01_noNbf_noNoa_rejected() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
-		// conditions() with null notBefore and null notOnOrAfter → neither timestamp check fires
+		// conditions() with null notBefore and null notOnOrAfter → neither timestamp check fires, but the missing
+		// NotOnOrAfter leaves the assertion unbounded → rejected (fail-closed) rather than replayable.
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", null, null);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var principal = validator(cred).validate(xml);
-		assertEquals("alice", principal.getName());
+		assertThrows(AuthenticationException.class, () -> validator(cred).validate(xml));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

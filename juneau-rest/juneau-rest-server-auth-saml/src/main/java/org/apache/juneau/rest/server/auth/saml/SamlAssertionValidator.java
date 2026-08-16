@@ -79,7 +79,10 @@ import net.shibboleth.shared.resolver.*;
  * 		{@code InResponseTo}/{@code Address} expectations.
  * 	<li><b>One-time use</b> &mdash; each assertion ID is recorded in a {@link ReplayCache} and a second
  * 		presentation of the same ID is rejected.  The check is fail-closed: if the cache cannot answer, the
- * 		assertion is rejected.
+ * 		assertion is rejected.  An assertion whose validity window is unbounded &mdash; carrying neither a
+ * 		{@code Conditions/NotOnOrAfter} nor a bearer {@code SubjectConfirmationData/NotOnOrAfter} &mdash; is
+ * 		rejected outright, and the cache record is retained until the resolved {@code NotOnOrAfter} (plus clock
+ * 		skew) rather than a short default window that would later expire and re-open replay.
  * 	<li><b>Encrypted assertions</b> &mdash; if the response contains
  * 		{@code <EncryptedAssertion>}, a {@code decryptionCredential} must be configured.
  * </ul>
@@ -133,12 +136,6 @@ public class SamlAssertionValidator {
 
 	/** XML-DSig namespace URI, used when scanning the signature DOM for reference digest methods. */
 	private static final String XMLSIG_NS = "http://www.w3.org/2000/09/xmldsig#";
-
-	/**
-	 * Retention window applied to a one-time-use cache entry when the assertion carries no
-	 * {@code Conditions/NotOnOrAfter} to bound it (5 minutes).
-	 */
-	private static final Duration DEFAULT_REPLAY_RETENTION = Duration.ofMinutes(5);
 
 	/** Default allowlist of XML signature algorithms. */
 	private static final Set<String> DEFAULT_ALGORITHMS = Set.of(
@@ -814,7 +811,10 @@ public class SamlAssertionValidator {
 		var id = assertion.getID();
 		if (id == null || id.isEmpty())
 			throw rejectAssertion("assertion has no ID for single-use enforcement");
-		var expiresAtMs = singleUseExpiry(assertion);
+		var notOnOrAfter = resolveNotOnOrAfter(assertion);
+		if (notOnOrAfter == null)
+			throw rejectAssertion("assertion has no NotOnOrAfter to bound one-time use");
+		var expiresAtMs = notOnOrAfter.plus(clockSkew).toEpochMilli();
 		var firstSeen = replayCache.checkAndRecord(id, expiresAtMs, ReplayCache.FailMode.FAIL_CLOSED,
 			e -> LOG.log(Level.WARNING, e, () -> "SAML assertion single-use check failed; rejecting (fail-closed)."));
 		if (! firstSeen)
@@ -822,11 +822,36 @@ public class SamlAssertionValidator {
 				.wwwAuthenticate("SAML error=\"assertion_replayed\"");
 	}
 
-	private long singleUseExpiry(Assertion assertion) {
-		var conditions = assertion.getConditions();
-		if (conditions != null && conditions.getNotOnOrAfter() != null)
-			return conditions.getNotOnOrAfter().plus(clockSkew).toEpochMilli();
-		return clock.instant().plus(DEFAULT_REPLAY_RETENTION).toEpochMilli();
+	/**
+	 * Resolves the effective {@code NotOnOrAfter} that bounds one-time use of the assertion.
+	 *
+	 * <p>
+	 * The resolved value is the latest of the assertion's {@code Conditions/NotOnOrAfter} and any bearer
+	 * {@code SubjectConfirmationData/NotOnOrAfter}.  Returns <jk>null</jk> when the assertion carries neither
+	 * &mdash; in that case its validity window is unbounded, so single-use cannot be enforced past a cache
+	 * eviction and the caller rejects the assertion rather than inventing a short fallback that later re-opens
+	 * replay.  {@code <Conditions>} itself is guaranteed non-<jk>null</jk> here (a null {@code <Conditions>} is
+	 * rejected earlier by {@link #validateConditions(Assertion)}).
+	 *
+	 * @param assertion The assertion.
+	 * @return The latest bounding instant, or <jk>null</jk> if the assertion carries no {@code NotOnOrAfter}.
+	 */
+	private static Instant resolveNotOnOrAfter(Assertion assertion) {
+		var result = assertion.getConditions().getNotOnOrAfter();
+		var subject = assertion.getSubject();
+		if (subject != null) {
+			for (var sc : subject.getSubjectConfirmations()) {
+				if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
+					continue;
+				var data = sc.getSubjectConfirmationData();
+				if (data == null)
+					continue;
+				var noa = data.getNotOnOrAfter();
+				if (noa != null && (result == null || noa.isAfter(result)))
+					result = noa;
+			}
+		}
+		return result;
 	}
 
 	private static String extractStringValue(org.opensaml.core.xml.XMLObject av) {
