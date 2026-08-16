@@ -2537,6 +2537,20 @@ public class RestContext extends Context {
 			// dependencies through the bean store.
 			registerFrameworkDefaults(beanStore);
 
+			var rci2 = ClassInfo.of(resourceClass);
+
+			// Build the annotation work list as early as possible in construction — immediately after
+			// registerFrameworkDefaults() registers the framework-bean default suppliers above, and
+			// before any step below (the @Bean field/method scan, @RestInit hooks, or the @Bean field
+			// back-fill) that can trigger a beanStore lookup and force-evaluate a creator/builder memoizer
+			// that reads annotationWork directly (partSerializerCreator, partParserCreator,
+			// jsonSchemaGeneratorBuilder, beanContextBuilder). Building it this late used to leave those
+			// memoizers exposed to an NPE whenever something forced them early — e.g. a @Bean static
+			// witness field of type HttpPartSerializer, or an @RestInit method parameter of one of the
+			// affected framework types — since annotationWork was still null at that point.
+			var vrs = getBootstrapVarResolver().createSession();
+			annotationWork = AnnotationWorkList.of(vrs, rstream(AnnotationProvider.INSTANCE.find(rci2)).filter(CONTEXT_APPLY_FILTER));
+
 			// For mixin sub-contexts, the bean store is parent-linked to the host's full beanStore so that
 			// host-declared @Bean factory results (e.g. @Bean(name="db") HealthIndicator dbIndicator()) are
 			// visible through the mixin's lookup chain.  But the parent walk also picks up the host's
@@ -2559,8 +2573,6 @@ public class RestContext extends Context {
 				// child-of-mixin case specifically, leaving ordinary (non-mixin-parented) children at normal
 				// tier-4 default / parent-wins semantics, so a Spring/parent-supplied bean still wins for them.
 				beanStore.addBean(RestContextProperties.class, getRestContextProperties());
-
-			var rci2 = ClassInfo.of(resourceClass);
 
 			// Register @Bean fields that already have a value.
 			// @formatter:off
@@ -2682,10 +2694,10 @@ public class RestContext extends Context {
 			// Config injection visible to SVL without firing the full runtime VarResolver memoizer.
 			paths = resolveMountPaths(builder, resource.get(), getBootstrapVarResolver(), beanStore, getRestAnnotations());
 
-			// Build annotation work list, then trigger beanContextBuilder (which applies it).
-			var vrs = getBootstrapVarResolver().createSession();
-			annotationWork = AnnotationWorkList.of(vrs, rstream(AnnotationProvider.INSTANCE.find(rci2)).filter(CONTEXT_APPLY_FILTER));
-			beanContextBuilder.get(); // force init with annotationWork now set
+			// annotationWork was already built above (right after registerFrameworkDefaults(), well before
+			// any step that could force-evaluate a memoizer reading it) — force-init beanContextBuilder
+			// here so annotation work is applied before the builder is used by any other memoizer.
+			beanContextBuilder.get();
 
 			// @formatter:off
 			beanStore

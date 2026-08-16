@@ -24,6 +24,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.openapi.*;
@@ -310,5 +311,22 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 		var ctx = new RestContext(argsOf(Fix_Bare.class, Fix_Bare::new));
 		assertEquals(Fix_Bare.class.getName(), ctx.getLogger().getName());
 		assertNotNull(Level.INFO);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------
+	// m - a @Bean static witness field forces a framework-bean creator memoizer (partSerializerCreator) during
+	//     the @Bean field back-fill step, well before annotationWork used to be assigned in the constructor
+	//-----------------------------------------------------------------------------------------------------------
+
+	@Rest
+	static class Fix_PartSerializerWitness {
+		@Bean static HttpPartSerializer partSerializerCapture;
+	}
+
+	@Test void m01_beanStaticWitnessField_forcesPartSerializerCreator_duringBackfill_doesNotNpe() throws Exception {
+		Fix_PartSerializerWitness.partSerializerCapture = null;
+		var ctx = new RestContext(argsOf(Fix_PartSerializerWitness.class, Fix_PartSerializerWitness::new));
+		assertNotNull(Fix_PartSerializerWitness.partSerializerCapture);
+		assertSame(ctx.getPartSerializer(), Fix_PartSerializerWitness.partSerializerCapture);
 	}
 }
