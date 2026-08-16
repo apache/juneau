@@ -72,11 +72,17 @@ import net.shibboleth.shared.resolver.*;
  * 	<li><b>Clock skew</b> &mdash; defaults to 60 seconds tolerance on {@code NotBefore} /
  * 		{@code NotOnOrAfter}; capped at 300 seconds.
  * 	<li><b>Audience restriction</b> &mdash; {@code <AudienceRestriction>} must list the configured SP entity ID.
- * 	<li><b>Bearer subject confirmation</b> &mdash; when a {@link Builder#recipient(String) recipient} (the SP
- * 		ACS URL) is configured, the assertion must carry a {@code bearer} {@code <SubjectConfirmation>} whose
- * 		{@code <SubjectConfirmationData>} matches the expected {@code Recipient}, is within its
- * 		{@code NotBefore}/{@code NotOnOrAfter} window, and satisfies the configured
- * 		{@code InResponseTo}/{@code Address} expectations.
+ * 	<li><b>Bearer subject confirmation</b> &mdash; enforced whenever a {@code recipient} (the SP ACS URL) is
+ * 		known, either because {@link Builder#recipient(String)} was configured on this validator or because
+ * 		the caller invoked {@link #validate(String, String)} with one.  {@link SamlAuthFilter} always calls
+ * 		{@link #validate(String, String)} with the ACS URL derived from the current request, so a validator
+ * 		reached only through the filter can never skip this check.  When enforced, the assertion must carry a
+ * 		{@code bearer} {@code <SubjectConfirmation>} whose {@code <SubjectConfirmationData>} matches the
+ * 		expected {@code Recipient}, is within its {@code NotBefore}/{@code NotOnOrAfter} window, and satisfies
+ * 		the configured {@code InResponseTo}/{@code Address} expectations.  A validator used standalone (not
+ * 		through {@link SamlAuthFilter}) skips this check unless {@link Builder#recipient(String)} is
+ * 		configured &mdash; that mode is <b>not</b> safe for browser-SSO ACS endpoints, since nothing then binds
+ * 		the assertion to a specific recipient.
  * 	<li><b>One-time use</b> &mdash; each assertion ID is recorded in a {@link ReplayCache} and a second
  * 		presentation of the same ID is rejected.  The check is fail-closed: if the cache cannot answer, the
  * 		assertion is rejected.  An assertion whose validity window is unbounded &mdash; carrying neither a
@@ -99,6 +105,14 @@ import net.shibboleth.shared.resolver.*;
  * </p>
  *
  * <h5 class='topic'>Builder usage</h5>
+ *
+ * <p>
+ * This recipe builds a <b>standalone</b> validator with no {@link Builder#recipient(String)} configured, so
+ * bearer subject-confirmation is not enforced.  It is safe for assertion-only / non-browser callers that
+ * validate an assertion outside of an ACS redirect.  Deploying it behind {@link SamlAuthFilter} for
+ * browser-SSO is always safe regardless: the filter derives the ACS recipient from the request and calls
+ * {@link #validate(String, String)}, which enforces bearer confirmation for that call no matter how this
+ * validator was built.
  *
  * <p class='bjava'>
  * 	<jk>var</jk> validator = SamlAssertionValidator.<jsm>create</jsm>()
@@ -303,8 +317,10 @@ public class SamlAssertionValidator {
 		 * {@code <SubjectConfirmationData>} names this exact {@code Recipient}, is within its
 		 * {@code NotBefore}/{@code NotOnOrAfter} window, and satisfies the {@link #expectedInResponseTo(String)}
 		 * / {@link #subjectAddress(String)} expectations.  When left unset (the default), subject-confirmation
-		 * validation is skipped &mdash; operators consuming bearer assertions from a browser SSO flow should
-		 * configure this.
+		 * validation is skipped for calls to {@link SamlAssertionValidator#validate(String)} &mdash; safe only
+		 * for assertion-only / non-browser callers.  A validator reached through {@link SamlAuthFilter} enforces
+		 * bearer confirmation regardless of this setting, since the filter derives the recipient from the
+		 * request and calls {@link SamlAssertionValidator#validate(String, String)}.
 		 *
 		 * @param value The expected ACS URL.  Must not be <jk>null</jk> or blank.
 		 * @return This object.
@@ -495,12 +511,41 @@ public class SamlAssertionValidator {
 	 */
 	public Principal validate(String xml) throws AuthenticationException {
 		assertArgNotNullOrBlank("xml", xml);
+		return validateInternal(xml, recipient);
+	}
+
+	/**
+	 * Validates the supplied SAML 2.0 {@code <samlp:Response>} XML, enforcing bearer
+	 * {@code <SubjectConfirmation>} against the given {@code recipient} for this call.
+	 *
+	 * <p>
+	 * Unlike {@link #validate(String)}, bearer subject-confirmation is always enforced here &mdash;
+	 * {@code recipient} overrides whatever {@link Builder#recipient(String)} this validator was built with
+	 * (including unset).  {@link SamlAuthFilter} calls this overload with the ACS URL derived from the
+	 * current request so that a validator built without {@link Builder#recipient(String)} configured still
+	 * rejects an assertion bearer-confirmed to a different endpoint on the filter path.
+	 *
+	 * @param xml The full XML payload (already base64-decoded; already URL-decoded and inflated for the
+	 * 	REDIRECT binding).  Must be a {@code <samlp:Response>} envelope.
+	 * @param recipient The expected {@code Recipient} (this SP's ACS URL) for bearer subject-confirmation.
+	 * 	Must not be <jk>null</jk> or blank.
+	 * @return A {@link ClaimsPrincipal} carrying the IdP-supplied claims plus the {@code issuerType=SAML}
+	 * 	marker.
+	 * @throws AuthenticationException If the response cannot be parsed or validation fails.
+	 */
+	public Principal validate(String xml, String recipient) throws AuthenticationException {
+		assertArgNotNullOrBlank("xml", xml);
+		assertArgNotNullOrBlank("recipient", recipient);
+		return validateInternal(xml, recipient);
+	}
+
+	private Principal validateInternal(String xml, String recipient) throws AuthenticationException {
 		var response = parseResponse(xml);
 		validateStatus(response);
 		var assertion = extractAndDecryptAssertion(response);
 		verifySignature(assertion);
 		var claims = buildClaims(response, assertion);
-		validateSubjectConfirmation(assertion);
+		validateSubjectConfirmation(assertion, recipient);
 		recordSingleUse(assertion);
 		var subject = nameId(assertion);
 		return new ClaimsPrincipal(subject, claims);
@@ -758,8 +803,8 @@ public class SamlAssertionValidator {
 		}
 	}
 
-	private void validateSubjectConfirmation(Assertion assertion) throws AuthenticationException {
-		if (recipient == null)  // Bearer subject-confirmation validation is enabled by configuring recipient(...).
+	private void validateSubjectConfirmation(Assertion assertion, String recipient) throws AuthenticationException {
+		if (recipient == null)  // Bearer subject-confirmation validation is enabled by configuring recipient(...) or calling validate(xml, recipient).
 			return;
 		var subject = assertion.getSubject();
 		if (subject == null)
@@ -770,7 +815,7 @@ public class SamlAssertionValidator {
 			if (! SubjectConfirmation.METHOD_BEARER.equals(sc.getMethod()))
 				continue;
 			sawBearer = true;
-			var reason = confirmationFailureReason(sc);
+			var reason = confirmationFailureReason(sc, recipient);
 			if (reason == null)
 				return;  // A valid bearer confirmation was found.
 			failure = reason;
@@ -780,7 +825,7 @@ public class SamlAssertionValidator {
 		throw rejectAssertion(failure);
 	}
 
-	private String confirmationFailureReason(SubjectConfirmation sc) {
+	private String confirmationFailureReason(SubjectConfirmation sc, String recipient) {
 		var data = sc.getSubjectConfirmationData();
 		if (data == null)
 			return "bearer <SubjectConfirmationData> is missing";

@@ -42,9 +42,13 @@ import jakarta.servlet.http.*;
  * 	<li>For the {@link SamlBinding#POST} binding: reads the {@code SAMLResponse} form parameter and
  * 		base64-decodes it.  For {@link SamlBinding#REDIRECT}: reads the {@code SAMLResponse} query parameter,
  * 		base64-decodes it, and then DEFLATE-inflates (RFC 1951) per OASIS SAML 2.0 Redirect binding rules.
- * 	<li>Delegates to {@link SamlAssertionValidator#validate(String)}.  On success, builds an {@link AuthResult}
- * 		carrying the resolved {@link ClaimsPrincipal}.  On failure, re-throws as an
- * 		{@link AuthenticationException} with a {@code WWW-Authenticate: SAML ...} challenge.
+ * 	<li>Derives the ACS recipient URL (scheme, host, port, and path) from the current request and delegates
+ * 		to {@link SamlAssertionValidator#validate(String, String)} with it, so the assertion's bearer
+ * 		{@code <SubjectConfirmation>} is always bound to the actual endpoint this request was delivered to
+ * 		&mdash; regardless of whether the {@link SamlAssertionValidator} was itself built with
+ * 		{@link SamlAssertionValidator.Builder#recipient(String) recipient(...)} configured.  On success,
+ * 		builds an {@link AuthResult} carrying the resolved {@link ClaimsPrincipal}.  On failure, re-throws as
+ * 		an {@link AuthenticationException} with a {@code WWW-Authenticate: SAML ...} challenge.
  * </ol>
  *
  * <h5 class='topic'>Roles</h5>
@@ -54,6 +58,12 @@ import jakarta.servlet.http.*;
  * names are populated on the {@link AuthResult}.  Otherwise the role set is empty.
  *
  * <h5 class='topic'>Usage</h5>
+ *
+ * <p>
+ * Note that {@code validator} below is <i>not</i> built with
+ * {@link SamlAssertionValidator.Builder#recipient(String) recipient(...)}.  That is safe here because this
+ * filter always derives the ACS recipient from the request and binds it for that call, so bearer
+ * subject-confirmation is enforced regardless of the validator's own configuration.
  *
  * <p class='bjava'>
  * 	<jk>var</jk> validator = SamlAssertionValidator.<jsm>create</jsm>()
@@ -259,7 +269,7 @@ public class SamlAuthFilter extends AuthFilter {
 		if (isEmpty(raw))
 			return oe();
 		var xml = decodeSamlResponse(raw);
-		var principal = runValidator(xml);
+		var principal = runValidator(xml, deriveRecipient(req));
 		return o(AuthResult.of(principal, extractRoles(principal)));
 	}
 
@@ -267,6 +277,55 @@ public class SamlAuthFilter extends AuthFilter {
 		var p = req.getPathInfo();
 		var s = p != null ? p : req.getServletPath();
 		return s != null && s.equals(consumerPath);
+	}
+
+	/**
+	 * Derives the ACS recipient URL (scheme, host, port, and path) that this request was actually delivered
+	 * to, so it can be bound to the assertion's bearer {@code <SubjectConfirmation>}.
+	 *
+	 * <p>
+	 * Normally this is just {@link HttpServletRequest#getRequestURL()}.  Some servlet-container and test
+	 * request implementations return <jk>null</jk> from that method, so as a fallback the URL is
+	 * reconstructed from {@link HttpServletRequest#getScheme()}, {@link HttpServletRequest#getServerName()},
+	 * {@link HttpServletRequest#getServerPort()} (omitted when it's the scheme's default port), and
+	 * {@link HttpServletRequest#getRequestURI()}.  If the recipient still cannot be determined, the request
+	 * is rejected via {@link AuthenticationException} &mdash; never with an {@link NullPointerException}.
+	 *
+	 * @param req The current request; {@link #matchesPath} has already confirmed its path matches
+	 * 	{@code consumerPath}.
+	 * @return The recipient URL, e.g. {@code https://sp.example.com/saml/acs}.
+	 * @throws AuthenticationException If the recipient URL cannot be determined from the request.
+	 */
+	private String deriveRecipient(HttpServletRequest req) throws AuthenticationException {
+		var url = req.getRequestURL();
+		if (url != null)
+			return url.toString();
+		return reconstructRecipient(req);
+	}
+
+	/**
+	 * Fallback for {@link #deriveRecipient(HttpServletRequest)} when {@link HttpServletRequest#getRequestURL()}
+	 * returns <jk>null</jk>.
+	 *
+	 * @param req The current request.
+	 * @return The reconstructed recipient URL.
+	 * @throws AuthenticationException If {@code scheme}, {@code serverName}, or {@code requestURI} is
+	 * 	<jk>null</jk> or blank, so no recipient can be determined.
+	 */
+	private String reconstructRecipient(HttpServletRequest req) throws AuthenticationException {
+		var scheme = req.getScheme();
+		var host = req.getServerName();
+		var uri = req.getRequestURI();
+		if (isBlank(scheme) || isBlank(host) || isBlank(uri))
+			throw new AuthenticationException("Unable to derive SAML ACS recipient from request").wwwAuthenticate(challenge);
+		var port = req.getServerPort();
+		var isDefaultPort = port <= 0
+			|| (port == 80 && "http".equalsIgnoreCase(scheme))
+			|| (port == 443 && "https".equalsIgnoreCase(scheme));
+		var sb = new StringBuilder(scheme).append("://").append(host);
+		if (!isDefaultPort)
+			sb.append(':').append(port);
+		return sb.append(uri).toString();
 	}
 
 	private String decodeSamlResponse(String raw) throws AuthenticationException {
@@ -288,9 +347,9 @@ public class SamlAuthFilter extends AuthFilter {
 		}
 	}
 
-	private Principal runValidator(String xml) throws AuthenticationException {
+	private Principal runValidator(String xml, String recipient) throws AuthenticationException {
 		try {
-			var p = validator.validate(xml);
+			var p = validator.validate(xml, recipient);
 			if (p == null)
 				throw new AuthenticationException("SAML validator returned null").wwwAuthenticate(challenge);
 			return p;

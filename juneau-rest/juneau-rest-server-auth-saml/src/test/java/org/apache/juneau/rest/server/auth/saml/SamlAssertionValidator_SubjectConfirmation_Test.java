@@ -199,4 +199,48 @@ class SamlAssertionValidator_SubjectConfirmation_Test extends TestBase {
 		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", bad, good));
 		assertEquals("alice", base(cred).recipient(ACS).build().validate(xml).getName());
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// validate(xml, recipient) overload — used by SamlAuthFilter to bind the actual per-request ACS URL
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_explicitRecipientOverload_matchingRecipient_accepted() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
+		// No recipient(...) configured on the builder — the two-arg overload must still enforce it.
+		var v = base(cred).build();
+		assertEquals("alice", v.validate(xml, ACS).getName());
+	}
+
+	@Test void f02_explicitRecipientOverload_mismatchedRecipient_rejected() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation("https://evil.example.com/acs", null, NOA, null, null);
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
+		var v = base(cred).build();
+		assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
+	}
+
+	@Test void f03_explicitRecipientOverload_overridesConfiguredBuilderRecipient() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var sc = SamlTestSupport.bearerConfirmation(ACS, null, NOA, null, null);
+		var xml = signedWithSubject(cred, SamlTestSupport.subjectWithConfirmations("alice", sc));
+		// Builder was configured with a DIFFERENT recipient; the per-call argument wins.
+		var v = base(cred).recipient("https://other-sp.example.com/saml/acs").build();
+		assertEquals("alice", v.validate(xml, ACS).getName());
+	}
+
+	@Test void f04_explicitRecipientOverload_nullRecipient_throws() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice", NBF, NOA, Map.of());
+		var v = base(cred).build();
+		assertThrows(IllegalArgumentException.class, () -> v.validate(xml, null));
+	}
+
+	@Test void f05_explicitRecipientOverload_blankRecipient_throws() throws Exception {
+		var cred = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
+		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice", NBF, NOA, Map.of());
+		var v = base(cred).build();
+		assertThrows(IllegalArgumentException.class, () -> v.validate(xml, " "));
+	}
 }

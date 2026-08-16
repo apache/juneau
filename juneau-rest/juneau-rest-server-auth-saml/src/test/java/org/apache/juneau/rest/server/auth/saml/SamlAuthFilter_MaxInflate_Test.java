@@ -51,7 +51,7 @@ class SamlAuthFilter_MaxInflate_Test extends TestBase {
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml) {
+			@Override public Principal validate(String xml, String recipient) {
 				return impl.apply(xml);
 			}
 		};
@@ -62,6 +62,7 @@ class SamlAuthFilter_MaxInflate_Test extends TestBase {
 		when(r.getPathInfo()).thenReturn("/saml/acs");
 		when(r.getServletPath()).thenReturn("/saml/acs");
 		when(r.getParameter("SAMLResponse")).thenReturn(samlResponse);
+		when(r.getRequestURL()).thenReturn(new StringBuffer("https://sp.example.com/saml/acs"));
 		return r;
 	}
 

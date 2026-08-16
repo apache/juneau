@@ -51,7 +51,7 @@ class SamlAuthFilter_Test extends TestBase {
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public Principal validate(String xml) {
+			@Override public Principal validate(String xml, String recipient) {
 				return impl.apply(xml);
 			}
 		};
@@ -62,6 +62,7 @@ class SamlAuthFilter_Test extends TestBase {
 		when(r.getPathInfo()).thenReturn(path);
 		when(r.getServletPath()).thenReturn(path);
 		when(r.getParameter("SAMLResponse")).thenReturn(samlResponse);
+		when(r.getRequestURL()).thenReturn(new StringBuffer("https://sp.example.com" + path));
 		return r;
 	}
 
@@ -144,6 +145,7 @@ class SamlAuthFilter_Test extends TestBase {
 		when(r.getServletPath()).thenReturn("/saml/acs");
 		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
 		when(r.getParameter("SAMLResponse")).thenReturn(b64);
+		when(r.getRequestURL()).thenReturn(new StringBuffer("https://sp.example.com/saml/acs"));
 		var cp = new ClaimsPrincipal("bob", Map.of());
 		var f = SamlAuthFilter.create().validator(validator(x -> cp)).build();
 		assertTrue(f.authenticate(r).isPresent());
