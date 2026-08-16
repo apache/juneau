@@ -21,9 +21,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.net.*;
 import java.net.http.*;
+import java.nio.*;
 import java.nio.file.*;
 import java.security.cert.*;
 import java.time.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import javax.xml.parsers.*;
 
@@ -140,6 +143,10 @@ public final class SamlMetadataResolvers {
 	 * <jv>metadataSigningCert</jv>, so a substituted or tampered metadata blob is rejected regardless of the
 	 * transport used to fetch it.  The same transport rule as {@link #url(String)} still applies.
 	 *
+	 * <p>
+	 * The response body is bounded to {@link SamlAuthFilter#DEFAULT_MAX_INFLATED_BYTES} (1 MiB); use
+	 * {@link #url(String, X509Certificate, long)} to override that cap.
+	 *
 	 * @param url The metadata URL.  Must use HTTPS or target a loopback host.
 	 * @param metadataSigningCert The certificate whose public key signed the metadata document.  When
 	 * 	<jk>null</jk>, no signature validation is performed (equivalent to {@link #url(String)}).
@@ -148,6 +155,29 @@ public final class SamlMetadataResolvers {
 	 * 	verify against the pinned certificate.
 	 */
 	public static MetadataResolver url(String url, X509Certificate metadataSigningCert) throws IOException {
+		return url(url, metadataSigningCert, SamlAuthFilter.DEFAULT_MAX_INFLATED_BYTES);
+	}
+
+	/**
+	 * Creates a {@link MetadataResolver} that fetches SAML 2.0 metadata from the given URL, verifies the
+	 * metadata's XML signature against the supplied pinned certificate (when provided), and bounds the fetched
+	 * response body to <jv>maxMetadataBytes</jv>.
+	 *
+	 * <p>
+	 * A malicious or compromised metadata endpoint must not be able to exhaust heap by returning an
+	 * unbounded response.  The cap is enforced both against a declared {@code Content-Length} header (rejected
+	 * up front) and against the actual streamed byte count (aborted mid-fetch), so a missing or lying
+	 * {@code Content-Length} cannot bypass it.
+	 *
+	 * @param url The metadata URL.  Must use HTTPS or target a loopback host.
+	 * @param metadataSigningCert The certificate whose public key signed the metadata document.  When
+	 * 	<jk>null</jk>, no signature validation is performed.
+	 * @param maxMetadataBytes The maximum number of response bytes to accept before aborting the fetch.
+	 * @return An initialized {@link MetadataResolver}.
+	 * @throws IOException If the URL cannot be fetched, the response exceeds <jv>maxMetadataBytes</jv>, the
+	 * 	metadata is malformed, or its signature does not verify against the pinned certificate.
+	 */
+	public static MetadataResolver url(String url, X509Certificate metadataSigningCert, long maxMetadataBytes) throws IOException {
 		if (url == null)
 			throw new IllegalArgumentException("url must not be null");
 		UriUtils.assertSecureOrLoopback(URI.create(url));
@@ -162,7 +192,7 @@ public final class SamlMetadataResolvers {
 				.timeout(Duration.ofSeconds(30))
 				.GET()
 				.build();
-			var resp = client.send(req, HttpResponse.BodyHandlers.ofByteArray());
+			var resp = client.send(req, boundedByteArrayBodyHandler(maxMetadataBytes));
 			if (resp.statusCode() < 200 || resp.statusCode() >= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests
 				throw ioex("Failed to fetch SAML metadata from %s (HTTP %s)", url, resp.statusCode());
 
@@ -217,5 +247,86 @@ public final class SamlMetadataResolvers {
 		if (path == null) // HTT: false branch (valid path) delegates to file(File); covered wherever file(File) is tested
 			throw new IllegalArgumentException("path must not be null");
 		return file(path.toFile());
+	}
+
+	/**
+	 * Builds a {@link HttpResponse.BodyHandler} that rejects a declared {@code Content-Length} over
+	 * <jv>maxBytes</jv> up front, and otherwise aborts streaming as soon as the actual byte count exceeds
+	 * <jv>maxBytes</jv> &mdash; so a missing or understated {@code Content-Length} cannot bypass the cap.
+	 */
+	private static HttpResponse.BodyHandler<byte[]> boundedByteArrayBodyHandler(long maxBytes) {
+		return responseInfo -> {
+			var declaredLength = responseInfo.headers().firstValueAsLong("Content-Length");
+			if (declaredLength.isPresent() && declaredLength.getAsLong() > maxBytes)
+				return BoundedByteArraySubscriber.rejected(maxBytes, declaredLength.getAsLong());
+			return new BoundedByteArraySubscriber(maxBytes);
+		};
+	}
+
+	/**
+	 * A {@link HttpResponse.BodySubscriber} that accumulates the response body into a byte array, aborting
+	 * (cancelling the upstream subscription and failing {@link #getBody()}) as soon as the accumulated byte
+	 * count exceeds a fixed cap.
+	 */
+	private static final class BoundedByteArraySubscriber implements HttpResponse.BodySubscriber<byte[]> {
+		private final long maxBytes;
+		private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+		private final CompletableFuture<byte[]> future = new CompletableFuture<>();
+		private Flow.Subscription subscription;
+		private long total;
+
+		BoundedByteArraySubscriber(long maxBytes) {
+			this.maxBytes = maxBytes;
+		}
+
+		static BoundedByteArraySubscriber rejected(long maxBytes, long declaredLength) {
+			var subscriber = new BoundedByteArraySubscriber(maxBytes);
+			subscriber.future.completeExceptionally(
+				ioex("SAML metadata response declares Content-Length %s bytes, exceeding the %s-byte cap", declaredLength, maxBytes));
+			return subscriber;
+		}
+
+		@Override /* BodySubscriber */
+		public CompletionStage<byte[]> getBody() {
+			return future;
+		}
+
+		@Override /* Flow.Subscriber */
+		public void onSubscribe(Flow.Subscription subscription) {
+			if (future.isDone()) { // Already rejected via a declared Content-Length over the cap.
+				subscription.cancel();
+				return;
+			}
+			subscription.request(Long.MAX_VALUE);
+			this.subscription = subscription;
+		}
+
+		@Override /* Flow.Subscriber */
+		public void onNext(List<ByteBuffer> item) {
+			if (future.isDone())
+				return;
+			for (var buf : item) {
+				total += buf.remaining();
+				if (total > maxBytes) {
+					subscription.cancel();
+					future.completeExceptionally(ioex("SAML metadata response exceeds the %s-byte cap", maxBytes));
+					return;
+				}
+				var bytes = new byte[buf.remaining()];
+				buf.get(bytes);
+				out.writeBytes(bytes);
+			}
+		}
+
+		@Override /* Flow.Subscriber */
+		public void onError(Throwable throwable) {
+			future.completeExceptionally(throwable);
+		}
+
+		@Override /* Flow.Subscriber */
+		public void onComplete() {
+			if (!future.isDone())
+				future.complete(out.toByteArray());
+		}
 	}
 }
