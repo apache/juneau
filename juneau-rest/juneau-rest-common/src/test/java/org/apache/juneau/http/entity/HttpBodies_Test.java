@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -207,5 +208,57 @@ class HttpBodies_Test extends TestBase {
 		assertEquals("upload", p2.name());
 		assertEquals("missing.txt", p2.filename());
 		assertEquals("text/plain", p2.contentType());
+	}
+
+	@Test void f04_multipartPart_nameCrLfThrows() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "MultipartPart 'name' must not contain CR, LF, or other control characters.",
+			() -> MultipartBody.MultipartPart.of("a\r\nX-Injected: true", null, null, StringBody.of("x")));
+	}
+
+	@Test void f05_multipartPart_filenameCrLfThrows() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "MultipartPart 'filename' must not contain CR, LF, or other control characters.",
+			() -> MultipartBody.MultipartPart.of("a", "evil.txt\r\nX-Injected: true", null, StringBody.of("x")));
+	}
+
+	@Test void f06_multipartPart_contentTypeCrLfThrows() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "MultipartPart 'contentType' must not contain CR, LF, or other control characters.",
+			() -> MultipartBody.MultipartPart.of("a", null, "text/plain\r\nX-Injected: true", StringBody.of("x")));
+	}
+
+	@Test void f07_multipartPart_otherC0ControlThrows() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "MultipartPart 'name' must not contain CR, LF, or other control characters.",
+			() -> MultipartBody.MultipartPart.of("a\u0000b", null, null, StringBody.of("x")));
+	}
+
+	@Test void f08_multipartPart_tabInNameAllowed() {
+		var p = MultipartBody.MultipartPart.of("a\tb", null, null, StringBody.of("x"));
+		assertEquals("a\tb", p.name());
+	}
+
+	// Hostile File whose getName() returns attacker-controlled text with embedded CR/LF.
+	static class F09_HostileFile extends File {
+		F09_HostileFile() {
+			super("innocuous.txt");
+		}
+
+		@Override public String getName() {
+			return "evil.txt\r\nX-Injected: true";
+		}
+	}
+
+	@Test void f09_multipartPart_hostileFileNameThrows() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "MultipartPart 'filename' must not contain CR, LF, or other control characters.",
+			() -> MultipartBody.MultipartPart.file("upload", new F09_HostileFile(), "text/plain"));
+	}
+
+	@Test void f10_multipartBody_writeTo_escapesQuotesAndBackslashesInFilename() throws Exception {
+		var body = MultipartBody.builder()
+			.boundary("b")
+			.part(MultipartBody.MultipartPart.of("upload", "a\"b\\c.txt", "text/plain", StringBody.of("x")))
+			.build();
+		var out = new ByteArrayOutputStream();
+		body.writeTo(out);
+		var wire = out.toString();
+		assertTrue(wire.contains("filename=\"a\\\"b\\\\c.txt\""), "filename must be escaped, not interpolated raw: " + wire);
 	}
 }

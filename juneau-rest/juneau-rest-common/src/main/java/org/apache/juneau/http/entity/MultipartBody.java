@@ -67,6 +67,54 @@ public final class MultipartBody implements HttpBody {
 	private final String boundary;
 	private final List<MultipartPart> parts;
 
+	/**
+	 * Rejects a part-metadata value (name, filename, or content-type) that could inject an extra MIME header line
+	 * or otherwise corrupt the multipart framing at the receiving service.
+	 *
+	 * @param fieldName The name of the field being validated, for the exception message.
+	 * @param value The value to validate. Can be <jk>null</jk> (no-op).
+	 * @throws IllegalArgumentException If {@code value} contains CR, LF, another C0 control, NEL, or a bidi control.
+	 */
+	private static void assertNoInjectionChars(String fieldName, String value) {
+		if (value == null)
+			return;
+		for (var i = 0; i < value.length(); i++)
+			if (isInjectionChar(value.charAt(i)))
+				throw iaex("MultipartPart '%s' must not contain CR, LF, or other control characters.", fieldName);
+	}
+
+	private static boolean isInjectionChar(char c) {
+		if (c == '\t')
+			return false;
+		if (c <= '\u001F')  // C0 controls (CR/LF included).
+			return true;
+		if (c >= '\u007F' && c <= '\u009F')  // DEL + C1 controls (includes NEL \u0085).
+			return true;
+		if (c == '\u2028' || c == '\u2029')  // Line / paragraph separators.
+			return true;
+		if (c >= '\u202A' && c <= '\u202E')  // Bidi embedding/override controls.
+			return true;
+		return c >= '\u2066' && c <= '\u2069';  // Bidi isolate controls.
+	}
+
+	/**
+	 * Escapes {@code \} and {@code "} in a {@code Content-Disposition} quoted-string parameter value so it cannot
+	 * break out of the surrounding quotes.
+	 *
+	 * @param value The raw value to escape. Must not be <jk>null</jk>.
+	 * @return The escaped value, unquoted (caller adds the surrounding {@code "..."}).
+	 */
+	private static String escapeQuoted(String value) {
+		var sb = new StringBuilder(value.length() + 4);
+		for (var i = 0; i < value.length(); i++) {
+			var c = value.charAt(i);
+			if (c == '\\' || c == '"')
+				sb.append('\\');
+			sb.append(c);
+		}
+		return sb.toString();
+	}
+
 	private MultipartBody(String boundary, List<MultipartPart> parts) {
 		this.boundary = boundary;
 		this.parts = List.copyOf(parts);
@@ -94,13 +142,18 @@ public final class MultipartBody implements HttpBody {
 	public void writeTo(OutputStream out) throws IOException {
 		var bnd = boundary.getBytes(StandardCharsets.US_ASCII);
 		for (var part : parts) {
+			// Belt-and-suspenders: MultipartPart's compact constructor already rejects these, but re-validate at
+			// write time in case a part was ever reachable without going through that constructor.
+			assertNoInjectionChars("name", part.name());
+			assertNoInjectionChars("filename", part.filename());
+			assertNoInjectionChars("contentType", part.contentType());
 			out.write(DASHDASH);
 			out.write(bnd);
 			out.write(CRLF);
 			// Content-Disposition header
-			var cd = new StringBuilder("Content-Disposition: form-data; name=\"").append(part.name()).append('"');
+			var cd = new StringBuilder("Content-Disposition: form-data; name=\"").append(escapeQuoted(part.name())).append('"');
 			if (part.filename() != null)
-				cd.append("; filename=\"").append(part.filename()).append('"');
+				cd.append("; filename=\"").append(escapeQuoted(part.filename())).append('"');
 			out.write(cd.toString().getBytes(StandardCharsets.UTF_8));
 			out.write(CRLF);
 			// Content-Type header (if present)
@@ -157,11 +210,16 @@ public final class MultipartBody implements HttpBody {
 	public record MultipartPart(String name, String filename, String contentType, HttpBody body) {
 
 		/**
-		 * Compact constructor enforcing the documented non-null contract on {@code name} and {@code body}.
+		 * Compact constructor enforcing the documented non-null contract on {@code name} and {@code body}, and
+		 * rejecting CR/LF and other control characters in {@code name}, {@code filename}, and {@code contentType}
+		 * that could otherwise inject an extra MIME header line into the multipart wire format.
 		 */
 		public MultipartPart {
 			assertArgNotNull("name", name);
 			assertArgNotNull("body", body);
+			assertNoInjectionChars("name", name);
+			assertNoInjectionChars("filename", filename);
+			assertNoInjectionChars("contentType", contentType);
 		}
 
 		/**
@@ -179,7 +237,8 @@ public final class MultipartBody implements HttpBody {
 		 * Creates a file upload part.
 		 *
 		 * @param name The field name. Must not be <jk>null</jk>.
-		 * @param file The file to upload. Must not be <jk>null</jk>.
+		 * @param file The file to upload. Must not be <jk>null</jk>. Its {@link File#getName()} is validated like any
+		 * 	other {@code filename} — a hostile name containing CR/LF or other control characters is rejected.
 		 * @param contentType The MIME content type for the file (e.g. {@code "application/pdf"}). May be <jk>null</jk>.
 		 * @return A new instance. Never <jk>null</jk>.
 		 */
