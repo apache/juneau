@@ -1772,6 +1772,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/10.63.RestServerRdf',
 							label: '10.63. RDF Support (juneau-rest-server-rdf)',
 						},
+						{
+							type: 'doc',
+							id: 'topics/10.64.AdminConsoleChrome',
+							label: '10.64. Admin-Console Chrome (juneau-rest-server-console-ui)',
+						},
 					],
 					link: {
 						type: 'doc',
