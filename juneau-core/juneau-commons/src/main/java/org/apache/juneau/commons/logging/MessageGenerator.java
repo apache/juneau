@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.logging;
 
+import org.apache.juneau.commons.utils.StringUtils;
+
 /**
  * Strategy interface for rendering log message patterns.
  */
@@ -25,12 +27,12 @@ public interface MessageGenerator {
 	/**
 	 * Printf-style message generator backed by {@link #format(String, Object...)}.
 	 */
-	MessageGenerator PRINTF = (pattern, args) -> org.apache.juneau.commons.utils.StringUtils.format(pattern, args);
+	MessageGenerator PRINTF = StringUtils::format;
 
 	/**
 	 * MessageFormat-style message generator backed by {@link org.apache.juneau.commons.utils.StringUtils#mformat(String, Object...)}.
 	 */
-	MessageGenerator MESSAGE_FORMAT = (pattern, args) -> org.apache.juneau.commons.utils.StringUtils.mformat(pattern, args);
+	MessageGenerator MESSAGE_FORMAT = StringUtils::mformat;
 
 	/**
 	 * Renders a message pattern with arguments.

@@ -178,8 +178,10 @@ class ObjectUtils_Coverage_Test extends TestBase {
 		// own abs(). Pinning the CURRENT (buggy) behavior here rather than fixing it.
 		var value = BigDecimal.valueOf(-5);
 		assertThrows(ClassCastException.class, () -> {
+			@SuppressWarnings({
+				"java:S1854" // Dead store: the checkcast to BigDecimal, inserted at this assignment, is what's under test.
+			})
 			BigDecimal result = abs(value);
-			assertNotNull(result); // unreachable; keeps the assignment from being flagged as dead
 		});
 	}
 

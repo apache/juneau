@@ -91,7 +91,8 @@ class InMemorySecretStore_Test extends TestBase {
 
 	@Test void a10_nullArgumentsRejected() {
 		var store = new InMemorySecretStore();
-		assertThrows(IllegalArgumentException.class, () -> store.store(null, "v".toCharArray()));
+		var chars = "v".toCharArray();
+		assertThrows(IllegalArgumentException.class, () -> store.store(null, chars));
 		assertThrows(IllegalArgumentException.class, () -> store.store("k", null));
 		assertThrows(IllegalArgumentException.class, () -> store.find(null));
 		assertThrows(IllegalArgumentException.class, () -> store.exists(null));

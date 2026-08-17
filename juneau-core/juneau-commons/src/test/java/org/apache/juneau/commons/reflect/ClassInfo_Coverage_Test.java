@@ -123,7 +123,7 @@ class ClassInfo_Coverage_Test extends TestBase {
 
 	@Test
 	void d02_equals_notAClassInfo_returnsFalse() {
-		assertNotEquals(ClassInfo.of(String.class), "not a ClassInfo");
+		assertNotEquals("not a ClassInfo", ClassInfo.of(String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -141,6 +141,9 @@ class ClassInfo_Coverage_Test extends TestBase {
 	void e02_isElementFlag_notAnonymous_bothOutcomes() {
 		assertTrue(ClassInfo.of(String.class).is(NOT_ANONYMOUS));
 		// Lambdas aren't anonymous classes per Class.isAnonymousClass() - need a real anonymous class expression.
+		@SuppressWarnings({
+			"java:S2133" // An actual anonymous class (not Greeter.class) is required so isAnonymousClass() is exercised.
+		})
 		var anon = new Greeter() {
 			@Override
 			public String greet() { return null; }
@@ -164,6 +167,9 @@ class ClassInfo_Coverage_Test extends TestBase {
 
 	@Test
 	void f03_isChildOfType_nonClassType_false() {
+		@SuppressWarnings({
+			"java:S2133" // An anonymous subclass (not ArrayList.class) is required to obtain a genuine ParameterizedType via getGenericSuperclass().
+		})
 		var pt = new ArrayList<String>() {}.getClass().getGenericSuperclass();
 		assertFalse(ClassInfo.of(ArrayList.class).isChildOf(pt));
 	}
@@ -235,6 +241,9 @@ class ClassInfo_Coverage_Test extends TestBase {
 
 	@Test
 	void i04_isParentOfType_nonClassType_false() {
+		@SuppressWarnings({
+			"java:S2133" // An anonymous subclass (not ArrayList.class) is required to obtain a genuine ParameterizedType via getGenericSuperclass().
+		})
 		var pt = new ArrayList<String>() {}.getClass().getGenericSuperclass();
 		assertFalse(ClassInfo.of(List.class).isParentOf(pt));
 	}
@@ -361,6 +370,9 @@ class ClassInfo_Coverage_Test extends TestBase {
 
 	@Test
 	void l07_isAssignableFromType_nonClassType_false() {
+		@SuppressWarnings({
+			"java:S2133" // An anonymous subclass (not ArrayList.class) is required to obtain a genuine ParameterizedType via getGenericSuperclass().
+		})
 		var pt = new ArrayList<String>() {}.getClass().getGenericSuperclass();
 		assertFalse(ClassInfo.of(List.class).isAssignableFrom(pt));
 	}

@@ -104,7 +104,7 @@ class LogRecord_Test extends TestBase {
 	}
 
 	@Test void c01_getMessage_defaultGenerator_usesPrintf() {
-		var rec = new LogRecord("test.logger", Level.INFO, "%s + %s = %s", new Object[]{1, 2, 3}, null);
+		var rec = new LogRecord("test.logger", Level.INFO, "%s + %s = %s", new Object[]{1, 2, 3}, null, MessageGenerator.PRINTF);
 
 		assertEquals("1 + 2 = 3", rec.getMessage());
 	}
@@ -306,10 +306,10 @@ class LogRecord_Test extends TestBase {
 		assertEquals("test.logger:INFO:plain-jul", formatted);
 	}
 
-	private static LogRecord roundTrip(LogRecord record) throws Exception {
+	private static LogRecord roundTrip(LogRecord rec) throws Exception {
 		byte[] data;
 		try (var baos = new ByteArrayOutputStream(); var oos = new ObjectOutputStream(baos)) {
-			oos.writeObject(record);
+			oos.writeObject(rec);
 			oos.flush();
 			data = baos.toByteArray();
 		}

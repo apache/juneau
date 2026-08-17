@@ -98,6 +98,9 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Intentional per-subclass builder-factory override matching FreemarkerMixin.create()'s own convention; each mixin subclass returns its own nested Builder type.
+	})
 	public static Builder create() {
 		return new Builder();
 	}

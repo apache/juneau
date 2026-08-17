@@ -91,11 +91,11 @@ class CollectionUtils_Coverage_Test extends TestBase {
 
 	@Test
 	void b04_removeNegations_nullAndBorderlineTokens_areTreatedAsLiterals() {
-		// Exercises every branch of the "token != null && token.length() > 1 && token.charAt(0) == '-'"
-		// check in both loops:
-		//   null   -> short-circuits on the null check
-		//   "-"    -> length 1, fails the "length() > 1" check
-		//   "ab"   -> length > 1 but doesn't start with '-'
+		// Exercises every branch of the not-null / length-over-one / leading-dash negation-token check
+		// in both loops, using these deliberately borderline inputs:
+		//   null   -> short-circuits on the not-null check
+		//   "-"    -> length one, fails the length-over-one check
+		//   "ab"   -> length over one but doesn't start with a dash
 		//   "-a"   -> the one genuine negation token, present to force the second loop to run
 		var input = new ArrayList<String>();
 		input.add(null);

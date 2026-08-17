@@ -83,7 +83,7 @@ public class DataTablesTable {
 	 * Builds a DataTables-ready table using the specified marshalling context, deriving the columns from the specified
 	 * row bean type via {@link DataTablesColumns#of(MarshallingContext, Class)}, additively honoring each bean
 	 * property's {@link Html @Html(render)} the same way the ordinary {@code HtmlSerializer}/{@code HtmlDocSerializer}
-	 * path already does (TODO-361 Phase 6).
+	 * path already does (ticket 361 Phase 6).
 	 *
 	 * <p>
 	 * Using one context for both column derivation and cell reads keeps the {@code data} keys and the row values

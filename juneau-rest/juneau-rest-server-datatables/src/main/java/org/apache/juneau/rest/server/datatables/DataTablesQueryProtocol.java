@@ -107,6 +107,9 @@ import org.apache.juneau.rest.server.converter.*;
  */
 public class DataTablesQueryProtocol implements QueryProtocol {
 
+	private static final String PARAM_COLUMNS_PREFIX = "columns[";
+	private static final String PARAM_ORDER_PREFIX = "order[";
+
 	private final Class<?> rowType;
 
 	/**
@@ -144,14 +147,14 @@ public class DataTablesQueryProtocol implements QueryProtocol {
 
 		// Column descriptors (columns[i][data|name|searchable|orderable|search[value]|search[regex]]), capped.
 		var cols = new ArrayList<Column>();
-		for (var i = 0; i < settings.maxColumns() && p.contains("columns[" + i + "][data]"); i++) {
-			var data = p.get("columns[" + i + "][data]").asString().orElse("");
-			var name = p.get("columns[" + i + "][name]").asString().orElse("");
+		for (var i = 0; i < settings.maxColumns() && p.contains(PARAM_COLUMNS_PREFIX + i + "][data]"); i++) {
+			var data = p.get(PARAM_COLUMNS_PREFIX + i + "][data]").asString().orElse("");
+			var name = p.get(PARAM_COLUMNS_PREFIX + i + "][name]").asString().orElse("");
 			var key = resolveKey(data, name, positionalKeys);
-			var searchable = p.get("columns[" + i + "][searchable]").asString().map(Boolean::parseBoolean).orElse(Boolean.TRUE);
-			var orderable = p.get("columns[" + i + "][orderable]").asString().map(Boolean::parseBoolean).orElse(Boolean.TRUE);
-			var colSearch = p.get("columns[" + i + "][search][value]").asString().orElse("");
-			var colRegex = p.get("columns[" + i + "][search][regex]").asString().map(Boolean::parseBoolean).orElse(Boolean.FALSE);
+			var searchable = p.get(PARAM_COLUMNS_PREFIX + i + "][searchable]").asString().map(Boolean::parseBoolean).orElse(Boolean.TRUE);
+			var orderable = p.get(PARAM_COLUMNS_PREFIX + i + "][orderable]").asString().map(Boolean::parseBoolean).orElse(Boolean.TRUE);
+			var colSearch = p.get(PARAM_COLUMNS_PREFIX + i + "][search][value]").asString().orElse("");
+			var colRegex = p.get(PARAM_COLUMNS_PREFIX + i + "][search][regex]").asString().map(Boolean::parseBoolean).orElse(Boolean.FALSE);
 			cols.add(new Column(key, searchable, orderable, colSearch, colRegex));
 		}
 
@@ -175,9 +178,9 @@ public class DataTablesQueryProtocol implements QueryProtocol {
 
 		// Ordering (capped; an order referencing a non-orderable or empty-key column is skipped).
 		var sort = new ArrayList<String>();
-		for (var j = 0; j < settings.maxOrderColumns() && p.contains("order[" + j + "][column]"); j++) {
-			var ci = p.get("order[" + j + "][column]").asInteger().orElse(-1);
-			var dir = p.get("order[" + j + "][dir]").asString().orElse("asc");
+		for (var j = 0; j < settings.maxOrderColumns() && p.contains(PARAM_ORDER_PREFIX + j + "][column]"); j++) {
+			var ci = p.get(PARAM_ORDER_PREFIX + j + "][column]").asInteger().orElse(-1);
+			var dir = p.get(PARAM_ORDER_PREFIX + j + "][dir]").asString().orElse("asc");
 			if (ci >= 0 && ci < cols.size()) {
 				var c = cols.get(ci);
 				if (c.orderable && ! c.key.isEmpty())
@@ -216,10 +219,10 @@ public class DataTablesQueryProtocol implements QueryProtocol {
 		return req.getContext().getBeanStore().getBean(QueryableSettings.class).orElse(QueryableSettings.DEFAULT);
 	}
 
-	/** The readable bean-property names of {@link #rowType} (in bean order), or <jk>null</jk> if no row type was supplied. */
+	/** The readable bean-property names of {@link #rowType} (in bean order), or empty if no row type was supplied. */
 	private List<String> positionalKeys() {
 		if (rowType == null)
-			return null;
+			return List.of();
 		var out = new ArrayList<String>();
 		for (var col : DataTablesColumns.of(rowType))
 			out.add((String) col.get("data"));
@@ -238,7 +241,7 @@ public class DataTablesQueryProtocol implements QueryProtocol {
 			return data;
 		if (! name.isEmpty())
 			return name;
-		if (! data.isEmpty() && positionalKeys != null) {
+		if (! data.isEmpty()) {
 			// data is all-digits here (non-numeric data returned above), so the parsed index is always >= 0.
 			var index = Integer.parseInt(data);
 			if (index < positionalKeys.size())

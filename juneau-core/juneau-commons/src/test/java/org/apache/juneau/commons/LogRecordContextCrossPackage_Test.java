@@ -32,14 +32,14 @@ import org.junit.jupiter.api.*;
 class LogRecordContextCrossPackage_Test extends TestBase {
 
 	@Test void a01_publicApiCallableCrossPackage() {
-		var record = new java.util.logging.LogRecord(Level.INFO, "msg");
+		var rec = new java.util.logging.LogRecord(Level.INFO, "msg");
 		try (var s = RichLogger.context().with("requestId", "xyz")) {
-			LogRecordContext.attachIfAbsent(record);
+			LogRecordContext.attachIfAbsent(rec);
 		}
-		assertEquals("xyz", LogRecordContext.of(record).get("requestId"));
+		assertEquals("xyz", LogRecordContext.of(rec).get("requestId"));
 
-		var record2 = new java.util.logging.LogRecord(Level.INFO, "msg");
-		LogRecordContext.attachIfAbsent(record2, Map.of("requestId", "pre"));
-		assertEquals("pre", LogRecordContext.of(record2).get("requestId"));
+		var rec2 = new java.util.logging.LogRecord(Level.INFO, "msg");
+		LogRecordContext.attachIfAbsent(rec2, Map.of("requestId", "pre"));
+		assertEquals("pre", LogRecordContext.of(rec2).get("requestId"));
 	}
 }

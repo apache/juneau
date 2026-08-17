@@ -38,6 +38,9 @@ import java.util.*;
  */
 public final class Uuid7 {
 
+	@SuppressWarnings({
+		"java:S5164" // Process-lifetime cached SecureRandom per thread is intentional; there is no scope boundary at which remove() would apply.
+	})
 	private static final ThreadLocal<SecureRandom> RANDOM = ThreadLocal.withInitial(SecureRandom::new);
 
 	private static final long VERSION_7 = 0x7000L;      // version nibble in the low 16 bits of the MSB long

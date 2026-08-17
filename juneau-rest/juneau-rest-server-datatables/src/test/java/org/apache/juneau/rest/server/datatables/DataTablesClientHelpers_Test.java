@@ -119,7 +119,7 @@ class DataTablesClientHelpers_Test extends TestBase {
 	// DataTablesTable
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_beanRowsRender() throws Exception {
+	@Test void b01_beanRowsRender() {
 		var html = HtmlSerializer.DEFAULT.toString(DataTablesTable.of("releases", List.of(new Row()), Row.class));
 		assertTrue(html.contains("id='releases'") || html.contains("id=\"releases\""), html);
 		assertTrue(html.contains(DataTablesTable.MARKER_ATTR), html);
@@ -127,7 +127,7 @@ class DataTablesClientHelpers_Test extends TestBase {
 		assertTrue(html.contains("Alice"), html);                                     // tbody cell (bean read)
 	}
 
-	@Test void b02_mapRowsWithExplicitColumnsAndNullCell() throws Exception {
+	@Test void b02_mapRowsWithExplicitColumnsAndNullCell() {
 		var columns = List.of(
 			col("name", "Name"),
 			col("age", "Age")
@@ -142,13 +142,13 @@ class DataTablesClientHelpers_Test extends TestBase {
 		assertTrue(html.contains(">40<") || html.contains("40"), html);
 	}
 
-	@Test void b03_emptyRows() throws Exception {
+	@Test void b03_emptyRows() {
 		var html = HtmlSerializer.DEFAULT.toString(DataTablesTable.of("empty", List.of(), Row.class));
 		assertTrue(html.contains("id='empty'") || html.contains("id=\"empty\""), html);
 	}
 
 	// MarshallingContext overloads (of(ctx,id,rows,rowType) and of(ctx,id,rows,columns)) render the same content.
-	@Test void b04_marshallingContextOverloads() throws Exception {
+	@Test void b04_marshallingContextOverloads() {
 		var fromType = HtmlSerializer.DEFAULT.toString(DataTablesTable.of(MarshallingContext.DEFAULT, "releases", List.of(new Row()), Row.class));
 		assertTrue(fromType.contains("Alice") && fromType.contains("Ship Code"), fromType);
 

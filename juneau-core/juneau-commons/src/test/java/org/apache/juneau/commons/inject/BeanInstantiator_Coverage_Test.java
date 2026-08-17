@@ -210,8 +210,8 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 		assertEquals(B01_GrandParent.class.getName(), subTypes.get(2).getName());
 	}
 
-	public interface B02_IFace { /* empty */ }
-	public static class B02_Impl implements B02_IFace { /* empty */ }
+	public interface B02Iface { /* empty */ }
+	public static class B02_Impl implements B02Iface { /* empty */ }
 
 	/**
 	 * LATENT-BUG PIN: {@code findBeanSubTypes()}'s final defensive check is commented
@@ -224,7 +224,7 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 	 */
 	@Test
 	void b02_findBeanSubTypesThrowsWhenBeanTypeIsInterfaceNotInSuperclassChain() {
-		var creator = bc(B02_IFace.class).type(B02_Impl.class);
+		var creator = bc(B02Iface.class).type(B02_Impl.class);
 		var ex = assertThrows(IllegalArgumentException.class, creator::getBeanSubTypes);
 		assertContains("was not found in the parent hierarchy", ex.getMessage());
 	}
@@ -509,7 +509,7 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 		assertFalse(bean.wired);
 	}
 
-	public interface E05_MultiSupplier<X, Y> extends Supplier<X> {
+	public interface E05MultiSupplier<X, Y> extends Supplier<X> {
 		// Second type parameter is used here (rather than left decorative) solely so the setter's parameter
 		// type carries two actual generic type arguments, per the scenario under test.
 		Y other();
@@ -521,8 +521,8 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 		public final boolean wired;
 		E05_Bean(Builder b) { this.wired = b.multi != null; }
 		public static class Builder {
-			E05_MultiSupplier<E05_ServiceX, E05_ServiceY> multi;
-			public void setMulti(E05_MultiSupplier<E05_ServiceX, E05_ServiceY> v) { this.multi = v; }
+			E05MultiSupplier<E05_ServiceX, E05_ServiceY> multi;
+			public void setMulti(E05MultiSupplier<E05_ServiceX, E05_ServiceY> v) { this.multi = v; }
 			public E05_Bean build() { return new E05_Bean(this); }
 		}
 	}

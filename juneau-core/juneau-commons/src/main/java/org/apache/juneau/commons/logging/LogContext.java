@@ -73,6 +73,9 @@ public final class LogContext {
 	/** The single shared instance.  There is exactly one thread-local map; sharing the instance is harmless. */
 	static final LogContext INSTANCE = new LogContext();
 
+	@SuppressWarnings({
+		"java:S5164" // Scope#close() restores/empties the per-thread map on every key; the cached empty map is harmless to retain for the thread's lifetime.
+	})
 	private static final ThreadLocal<Map<String,Object>> CONTEXT = ThreadLocal.withInitial(LinkedHashMap::new);
 
 	private LogContext() {}
@@ -209,8 +212,8 @@ public final class LogContext {
 				return;
 			closed = true;
 			var map = CONTEXT.get();
-			for (var key : priors.keySet())
-				restore(map, key, hadPrior.get(key), priors.get(key));
+			for (var e : priors.entrySet())
+				restore(map, e.getKey(), hadPrior.get(e.getKey()), e.getValue());
 		}
 	}
 }

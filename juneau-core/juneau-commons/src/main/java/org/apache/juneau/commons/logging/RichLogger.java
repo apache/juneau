@@ -154,6 +154,9 @@ public class RichLogger extends java.util.logging.Logger {
 	 * @param name The logger name.  Must not be <jk>null</jk>.
 	 * @return A logger instance (cached and reused for the same name).
 	 */
+	@SuppressWarnings({
+		"java:S9149" // Intentional factory override of the hidden static Logger.getLogger(String); public API callers depend on this name/signature.
+	})
 	public static RichLogger getLogger(String name) {
 		drainCollectedLoggers();
 		while (true) {
@@ -338,19 +341,19 @@ public class RichLogger extends java.util.logging.Logger {
 	}
 
 	@Override
-	public void log(java.util.logging.LogRecord record) {
-		LogRecordContext.attachIfAbsent(record);
-		canonical.listeners.forEach(x -> x.onLogRecord(record));
+	public void log(java.util.logging.LogRecord rec) {
+		LogRecordContext.attachIfAbsent(rec);
+		canonical.listeners.forEach(x -> x.onLogRecord(rec));
 		if (canonical.useParentListeners) {
 			var ancestors = new ArrayList<RichLogger>();
 			forEachLiveAncestor(canonical.getName(), ancestors::add);
 			for (var ancestor : ancestors) {
-				ancestor.listeners.forEach(x -> x.onLogRecord(record));
+				ancestor.listeners.forEach(x -> x.onLogRecord(rec));
 				if (!ancestor.useParentListeners)
 					break;
 			}
 		}
-		delegate.log(record);
+		delegate.log(rec);
 	}
 
 	private static boolean hasAnyListenerInChain(RichLogger logger) {

@@ -164,8 +164,11 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S2133" // An actual anonymous class (not Runnable.class) is required so cm.isAnonymousClass() is exercised.
+	})
 	void a08_create_anonymousClass_returnsReason() {
-		var anon = new Runnable() { @Override public void run() {} };
+		var anon = new Runnable() { @Override public void run() { /* Never invoked; only the anonymous class identity is under test. */ } };
 		var r = BeanMeta.create(new FakeBeanInfo<>(anon.getClass()), null);
 		assertNull(r.beanMeta());
 		assertEquals("Class is not public", r.notABeanReason());
@@ -177,9 +180,12 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	// PUBLIC visibility already makes "! isVisible" true for the anonymous class, so isAnonymousClass() is
 	// never reached at all) - this is the only way to exercise that disjunct's "true" outcome.
 	@Test
+	@SuppressWarnings({
+		"java:S2133" // An actual anonymous class (not Runnable.class) is required so cm.isAnonymousClass() is exercised.
+	})
 	void a08b_create_anonymousClass_permissiveVisibility_stillReturnsReason() {
 		var cfg = BeanConfigContext.create().beanClassVisibility(org.apache.juneau.commons.reflect.Visibility.PRIVATE).build();
-		var anon = new Runnable() { @Override public void run() {} };
+		var anon = new Runnable() { @Override public void run() { /* Never invoked; only the anonymous class identity is under test. */ } };
 		var r = BeanMeta.create(new FakeBeanInfo<>(anon.getClass(), cfg), null);
 		assertNull(r.beanMeta());
 		assertEquals("Class is not public", r.notABeanReason());
@@ -354,8 +360,8 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	void d01b_marshallingContextNonNull_postProcessorThrows_wrappedAsBeanRuntimeException() {
 		// validateAndRegisterProperty()'s try block covers both p.validate() AND the post-processor hook
 		// (~line 722) - a RuntimeException thrown by the latter must be caught and re-wrapped by the same
-		// generic "catch (Exception e) { throw brex(...); }" clause as a validate()-thrown exception would be.
-		// BeanMeta.create()'s own outer "catch (RuntimeException e)" then catches THAT BeanRuntimeException
+		// generic catch-all clause (which throws via brex) that a validate()-thrown exception would hit.
+		// BeanMeta.create()'s own outer catch for RuntimeException then catches that BeanRuntimeException
 		// and surfaces it as notABeanReason rather than propagating it to the caller.
 		var postProcessor = (BeanPropertyPostProcessor) (mc, builder) -> { throw new RuntimeException("boom-postprocess"); };
 		var cfg = BeanConfigContext.create().beanPropertyPostProcessor(postProcessor).build();
@@ -604,6 +610,10 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	public record ExtraCtorArgWithSetterOnlyPropertyRecord(String a) {
 		@BeanCtor(properties = "a,extra")
 		public ExtraCtorArgWithSetterOnlyPropertyRecord(String a, String extra) { this(a); }
+
+		@SuppressWarnings({
+			"java:S1172" // Deliberately setter-only: no backing field/getter; the unused param is the point of this fixture.
+		})
 		public void setBar(String v) { /* no-op - setter-only extra property: no field, no getter */ }
 	}
 
@@ -688,7 +698,7 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 
 	//====================================================================================================
 	// useJavaBeanIntrospector: BeanFilter#getInterfaceClass() override, and a bad stop class surfacing as
-	// the constructor's generic "catch (Exception)" fallback (Introspector.getBeanInfo declares a checked
+	// the constructor's generic catch-all fallback (Introspector.getBeanInfo declares a checked
 	// IntrospectionException, which isn't a BeanRuntimeException and so isn't rethrown as-is).
 	//====================================================================================================
 
@@ -714,7 +724,7 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	void g08_useJavaBeanIntrospector_stopClassNotSuperclass_capturedAsGenericException() {
 		// String isn't a superclass of IntrospectableBean, so Introspector.getBeanInfo(IntrospectableBean.class,
 		// String.class) throws a checked IntrospectionException - caught by the constructor's trailing
-		// "catch (Exception e)" (the BeanRuntimeException-specific catch above it only rethrows, it doesn't
+		// catch-all clause (the BeanRuntimeException-specific catch above it only rethrows, it doesn't
 		// apply here), landing in notABeanReason rather than propagating.
 		var filter = new FakeBeanFilter().stopClass(info(String.class));
 		var cfg = BeanConfigContext.create().useJavaBeanIntrospector(true).beanMetaInitializer(BeanTestFakes.initializerWithFilter(filter)).build();
@@ -848,8 +858,8 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 	@Test
 	void e08_newBean_factoryThrowsExecutableExceptionDirectly_rethrownUnwrapped() {
 		// Distinct from e05 above (which throws a plain RuntimeException, wrapped by the generic
-		// "catch (Exception e)" clause): here the factory throws an ExecutableException directly, which
-		// newBean()'s dedicated "catch (ExecutableException e) { throw e; }" clause must rethrow as-is
+		// catch-all clause): here the factory throws an ExecutableException directly, which
+		// newBean()'s dedicated ExecutableException-rethrow clause must rethrow as-is
 		// rather than double-wrapping it inside another ExecutableException.
 		var bm = BeanMeta.of(ExecutableExceptionFactoryBean.class);
 		var ex = assertThrows(ExecutableException.class, () -> bm.newBean(null));

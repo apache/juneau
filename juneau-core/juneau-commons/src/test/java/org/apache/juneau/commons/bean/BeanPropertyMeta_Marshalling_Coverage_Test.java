@@ -20,11 +20,14 @@ import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.bean.BeanTestFakes.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Coverage tests for the marshalling-only-path branches of {@link BeanPropertyMeta#add}, {@link BeanPropertyMeta#set}
@@ -528,7 +531,7 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	}
 
 	@Test
-	void d07_set_sortedMap_abstractType_noExistingNoAccessor_throws() throws Exception {
+	void d07_set_sortedMap_abstractType_noExistingNoAccessor_throws() {
 		var beanMeta = marshallingBeanMeta(SortedMapFieldBean.class);
 		var pm = BeanPropertyMeta.builder(beanMeta, "props")
 			.canRead().canWrite()
@@ -626,7 +629,7 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	}
 
 	@Test
-	void e07_set_collection_abstractType_noExistingNoAccessor_throws() throws Exception {
+	void e07_set_collection_abstractType_noExistingNoAccessor_throws() {
 		var beanMeta = marshallingBeanMeta(SetFieldBean.class);
 		var pm = BeanPropertyMeta.builder(beanMeta, "items")
 			.canRead().canWrite()
@@ -828,7 +831,7 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	}
 
 	@Test
-	void h03_dynaSet_noAccessorAtAll_throwsWithMarshallingClassName() throws Exception {
+	void h03_dynaSet_noAccessorAtAll_throwsWithMarshallingClassName() {
 		var bean = new NoAccessorBean();
 		var beanMeta = marshallingBeanMeta(NoAccessorBean.class);
 		var builder = BeanPropertyMeta.builder(beanMeta, "*").canRead().canWrite();
@@ -845,21 +848,21 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void i01_add_collection_noAccessor_propagatesBeanRuntimeException() throws Exception {
+	void i01_add_collection_noAccessor_propagatesBeanRuntimeException() {
 		var bean = new NoAccessorCollectionBean();
 		var beanMeta = marshallingBeanMeta(NoAccessorCollectionBean.class);
 		var pm = BeanPropertyMeta.builder(beanMeta, "items").canRead().canWrite()
 			.rawMetaType(new FakeBeanInfo<>(ArrayList.class).elementType(new FakeBeanInfo<>(Object.class)))
 			.build();
 		var bMap = mapOf(bean);
-		// invokeGetter() throws (no getter, no field) inside the try block; add()'s
-		// `catch (BeanRuntimeException e) { throw e; }` must rethrow it unwrapped rather than
-		// re-wrapping it via the generic `catch (Exception e1)` clause.
+		// The getter invocation throws (no getter, no field) inside the try block, so add()'s dedicated
+		// BeanRuntimeException-rethrow clause must rethrow it unwrapped rather than re-wrapping it
+		// via the generic catch-all clause.
 		assertThrowsWithMessage(BeanRuntimeException.class, "Getter or public field not defined", () -> pm.add(bMap, null, "x"));
 	}
 
 	@Test
-	void i02_addKeyValue_map_noAccessor_propagatesBeanRuntimeException() throws Exception {
+	void i02_addKeyValue_map_noAccessor_propagatesBeanRuntimeException() {
 		var bean = new NoAccessorCollectionBean();
 		var beanMeta = marshallingBeanMeta(NoAccessorCollectionBean.class);
 		var pm = BeanPropertyMeta.builder(beanMeta, "props").canRead().canWrite()
@@ -908,9 +911,10 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	// set() — no setter/no field, non-collection/non-map property, ignore-* config combos
 	//====================================================================================================
 
-	@Test
-	void k01_set_noSetterNoField_ignoreUnknownNullBeanProperties_nullValue_returnsNullWithoutThrowing() throws Exception {
-		var cfg = BeanConfigContext.create().ignoreMissingSetters(false).ignoreUnknownNullBeanProperties(true).build();
+	@ParameterizedTest
+	@MethodSource("noSetterNoFieldConfigsProvider")
+	void k01_set_noSetterNoField_variousIgnoreConfigs(boolean ignoreMissingSetters, boolean ignoreUnknownNullBeanProperties, Object value, boolean shouldThrow) throws Exception {
+		var cfg = BeanConfigContext.create().ignoreMissingSetters(ignoreMissingSetters).ignoreUnknownNullBeanProperties(ignoreUnknownNullBeanProperties).build();
 		var beanMeta = marshallingBeanMeta(GetterBean.class, cfg);
 		var pm = BeanPropertyMeta.builder(beanMeta, "x")
 			.setGetter(info(GetterBean.class.getMethod("getX")))
@@ -918,33 +922,19 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 			.rawMetaType(new FakeBeanInfo<>(String.class))
 			.build();
 		var bMap = mapOf(new GetterBean());
-		assertNull(pm.set(bMap, null, null));
+		if (shouldThrow)
+			assertThrowsWithMessage(BeanRuntimeException.class, "Setter or public field not defined", () -> pm.set(bMap, null, value));
+		else
+			assertNull(pm.set(bMap, null, value));
 	}
 
-	@Test
-	void k02_set_noSetterNoField_ignoreMissingSetters_nonNullValue_returnsNullWithoutThrowing() throws Exception {
-		var cfg = BeanConfigContext.create().ignoreMissingSetters(true).ignoreUnknownNullBeanProperties(false).build();
-		var beanMeta = marshallingBeanMeta(GetterBean.class, cfg);
-		var pm = BeanPropertyMeta.builder(beanMeta, "x")
-			.setGetter(info(GetterBean.class.getMethod("getX")))
-			.canRead().canWrite()
-			.rawMetaType(new FakeBeanInfo<>(String.class))
-			.build();
-		var bMap = mapOf(new GetterBean());
-		assertNull(pm.set(bMap, null, "ignored"));
-	}
-
-	@Test
-	void k03_set_noSetterNoField_strictConfig_nonNullValue_throws() throws Exception {
-		var cfg = BeanConfigContext.create().ignoreMissingSetters(false).ignoreUnknownNullBeanProperties(false).build();
-		var beanMeta = marshallingBeanMeta(GetterBean.class, cfg);
-		var pm = BeanPropertyMeta.builder(beanMeta, "x")
-			.setGetter(info(GetterBean.class.getMethod("getX")))
-			.canRead().canWrite()
-			.rawMetaType(new FakeBeanInfo<>(String.class))
-			.build();
-		var bMap = mapOf(new GetterBean());
-		assertThrowsWithMessage(BeanRuntimeException.class, "Setter or public field not defined", () -> pm.set(bMap, null, "v"));
+	static Stream<Arguments> noSetterNoFieldConfigsProvider() {
+		return Stream.of(
+			// ignoreMissingSetters, ignoreUnknownNullBeanProperties, value, shouldThrow
+			Arguments.of(false, true, null, false),
+			Arguments.of(true, false, "ignored", false),
+			Arguments.of(false, false, "v", true)
+		);
 	}
 
 	//====================================================================================================
@@ -993,7 +983,7 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// add(BeanMap, String, String, Object) — generic Exception catch (not a BeanRuntimeException)
+	// add(BeanMap, String, String, Object) — generic catch-all wraps a non-BeanRuntimeException failure
 	//====================================================================================================
 
 	@Test
@@ -1004,9 +994,8 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 			.build();
 		var bMap = mapOf(bean);
 		// FakeBeanInfo.newInstance() throws ExecutableException (not a BeanRuntimeException) when the target
-		// type has no no-arg constructor - add()'s `catch (Exception e) { throw brex(e); }` clause (distinct
-		// from the `catch (BeanRuntimeException e) { throw e; }` clause exercised elsewhere) must still surface
-		// it as a BeanRuntimeException.
+		// type has no no-arg constructor - add()'s generic catch-all clause (distinct from the dedicated
+		// BeanRuntimeException-rethrow clause exercised elsewhere) must still surface it as a BeanRuntimeException.
 		assertThrows(BeanRuntimeException.class, () -> pm.add(bMap, null, "name", "x"));
 	}
 
@@ -1129,7 +1118,7 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	void h04_dynaGet_noAccessorAtAll_throwsWithMarshallingClassName() throws Exception {
+	void h04_dynaGet_noAccessorAtAll_throwsWithMarshallingClassName() {
 		var bean = new NoAccessorBean();
 		var beanMeta = marshallingBeanMeta(NoAccessorBean.class);
 		var builder = BeanPropertyMeta.builder(beanMeta, "*").canRead().canWrite();
@@ -1156,7 +1145,7 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 		// writeTransform.apply() runs directly inside set()'s own try block (unlike the setPropertyValue()
 		// calls, whose exceptions are all caught and re-wrapped internally by setPropertyValue()'s own
 		// try/catch before ever reaching this frame) - it's the only realistic way to have a raw
-		// BasicRuntimeException reach set()'s own `catch (BasicRuntimeException e2) { throw brex(e2); }` clause,
+		// BasicRuntimeException reach set()'s own dedicated BasicRuntimeException-rethrow-as-brex clause,
 		// which must translate it to a BeanRuntimeException (BeanRuntimeException itself does NOT extend
 		// BasicRuntimeException, per the comment on that catch clause, so it would otherwise propagate unchanged).
 		assertThrows(BeanRuntimeException.class, () -> pm.set(bMap, null, "x"));

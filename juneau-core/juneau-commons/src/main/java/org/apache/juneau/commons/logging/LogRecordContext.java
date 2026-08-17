@@ -59,12 +59,12 @@ public final class LogRecordContext {
 	/**
 	 * Returns the context snapshot attached to the specified record.
 	 *
-	 * @param record The record.  Must not be <jk>null</jk>.
+	 * @param rec The record.  Must not be <jk>null</jk>.
 	 * @return The attached snapshot, or the shared empty {@link Map#of()} singleton if none is attached.  Never
 	 * 	<jk>null</jk>.
 	 */
-	public static Map<String,Object> of(java.util.logging.LogRecord record) {
-		var m = TABLE.get(record);
+	public static Map<String,Object> of(java.util.logging.LogRecord rec) {
+		var m = TABLE.get(rec);
 		return m == null ? Map.of() : m;
 	}
 
@@ -77,10 +77,10 @@ public final class LogRecordContext {
 	 * the live context is empty this returns immediately, before touching the synchronized side table, so callers who
 	 * never use {@link LogContext} pay only a thread-local read and an {@code isEmpty()} check &mdash; never a lock.
 	 *
-	 * @param record The record to attach to.  Must not be <jk>null</jk>.
+	 * @param rec The record to attach to.  Must not be <jk>null</jk>.
 	 */
-	public static void attachIfAbsent(java.util.logging.LogRecord record) {
-		attachIfAbsent(record, LogContext.INSTANCE.snapshot());
+	public static void attachIfAbsent(java.util.logging.LogRecord rec) {
+		attachIfAbsent(rec, LogContext.INSTANCE.snapshot());
 	}
 
 	/**
@@ -92,14 +92,14 @@ public final class LogRecordContext {
 	 * &mdash; symmetric with the one-arg overload &mdash; so a later one-arg call from an empty emitting thread cannot
 	 * clobber a previously pre-seeded snapshot.
 	 *
-	 * @param record The record to attach to.  Must not be <jk>null</jk>.
+	 * @param rec The record to attach to.  Must not be <jk>null</jk>.
 	 * @param ctx The context snapshot to attach.  Must not be <jk>null</jk>.
 	 */
-	public static void attachIfAbsent(java.util.logging.LogRecord record, Map<String,Object> ctx) {
+	public static void attachIfAbsent(java.util.logging.LogRecord rec, Map<String,Object> ctx) {
 		if (ctx.isEmpty())
 			return;
 		PUT_COUNT.incrementAndGet();
-		TABLE.putIfAbsent(record, ctx);
+		TABLE.putIfAbsent(rec, ctx);
 	}
 
 	/**

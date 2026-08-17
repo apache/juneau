@@ -55,7 +55,13 @@ class BeanPropertyMeta_Validate_Coverage_Test extends TestBase {
 		public String getStr() { return null; }
 		public Integer getInt() { return null; }
 		public Map<String,Object> getMap() { return null; }
+		@SuppressWarnings({
+			"java:S1172" // Reflection target only: the "key" param's presence/type is what's under test, not its usage.
+		})
 		public Map<String,Object> getMapByKey(String key) { return null; }
+		@SuppressWarnings({
+			"java:S1172" // Reflection target only: the "x" param's presence/type is what's under test, not its usage.
+		})
 		public String getBadDynaGetter(int x) { return null; }
 		public String getBadDynaGetterNoArgs() { return null; }
 	}
@@ -573,7 +579,7 @@ class BeanPropertyMeta_Validate_Coverage_Test extends TestBase {
 	}
 
 	@Test
-	void e02_getDynaMap_noGetterOrFieldOrExtraKeys_throws() throws Exception {
+	void e02_getDynaMap_noGetterOrFieldOrExtraKeys_throws() {
 		// isDyna can only be set true through validate() (private field), and validate() rejects a dyna property
 		// that ends up with no getter/field/extraKeys before returning true - so the "no accessor" throw in
 		// getDynaMap() can only be observed by relaxing isDyna to package-private for direct test construction.

@@ -32,7 +32,7 @@ import freemarker.template.utility.*;
  *
  * <p>
  * Reuses the exact serialize-then-mark-trusted adapter {@code console-ui-freemarker}'s {@code TagMethodModel} built
- * for {@code <@tag>} (TODO-361 Phase 5) &mdash; not reinvented here: (1) call {@link DataTablesTable#of(String,
+ * for {@code <@tag>} (ticket 361 Phase 5) &mdash; not reinvented here: (1) call {@link DataTablesTable#of(String,
  * Collection, Class)} (which additively honors each row property's {@code @Html(render=...)} as of Phase 6), (2) add
  * {@code class="jc-table"} alongside the {@link DataTablesTable#MARKER_ATTR} marker the shipped
  * {@code juneau-datatables.js} glue already looks for, (3) serialize the returned {@link Table} via its own

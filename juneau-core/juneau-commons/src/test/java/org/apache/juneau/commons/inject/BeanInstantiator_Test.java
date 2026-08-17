@@ -260,6 +260,9 @@ class BeanInstantiator_Test extends TestBase {
 			}
 		}
 
+		@SuppressWarnings({
+			"java:S9149" // Intentionally hides the parent's create(): this is the exact covariant-return static-factory convention BeanInstantiator's builder detection is being tested against.
+		})
 		public static BuilderForChild create() {
 			return new BuilderForChild();
 		}
@@ -2046,6 +2049,9 @@ class BeanInstantiator_Test extends TestBase {
 			}
 
 			// Static method to return the builder (needed for builder detection on child class)
+			@SuppressWarnings({
+				"java:S9149" // Intentionally hides the parent's create(): this is the exact covariant-return static-factory convention BeanInstantiator's builder detection is being tested against.
+			})
 			public static D28_BuilderForParentMethod create() {
 				return new D28_BuilderForParentMethod();
 			}

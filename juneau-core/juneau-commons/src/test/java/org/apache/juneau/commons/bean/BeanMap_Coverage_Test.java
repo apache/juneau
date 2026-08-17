@@ -109,9 +109,9 @@ class BeanMap_Coverage_Test extends TestBase {
 	@NullSource
 	@ValueSource(strings = {"nonExistent", "*"})
 	void b02_containsKey_absentKeys_returnFalse(String key) {
-		// null -> emptyIfNull(null) yields "" which is not in the property map;
-		// "nonExistent" -> not a declared property;
-		// "*" -> excluded from containsKey (JUNEAU-248).
+		// a null key is normalized to an empty string, which is not in the property map;
+		// "nonExistent" is simply not a declared property; and
+		// "*" is deliberately excluded from containsKey (JUNEAU-248).
 		var bm = BeanMap.of(new A_Pojo());
 		assertFalse(bm.containsKey(key));
 	}
@@ -246,9 +246,10 @@ class BeanMap_Coverage_Test extends TestBase {
 
 	@Test
 	void e0a2_entrySet_dynaBean_keysAreRealPerEntryKeys() {
-		// Regression test: BeanMapEntry.getKey() must return the real per-entry key (pName) for
-		// dyna-property entries, not the dyna-property meta name ("*").  keySet() already got this right;
-		// entrySet() previously collapsed every dyna entry's key to "*".
+		// Regression test: a bean map entry's key must be the real per-entry key (pName) for
+		// dyna-property entries, not the dyna-property meta name of a single asterisk. The key set view
+		// already handled this correctly, but the entry set view previously collapsed every dyna entry's
+		// key to that same asterisk.
 		var c = new C_DynaPojo();
 		c.name = "n1";
 		c.extras.put("x1", "v1");
@@ -273,9 +274,9 @@ class BeanMap_Coverage_Test extends TestBase {
 		// Exercises the "p = getPropertyMeta("*")" branch in put() (BeanMap.java:710-712).
 		var c = new C_DynaPojo();
 		var bm = BeanMap.of(c);
-		// "unknownProp" is not a declared field.  If WithDynaField recognizes the dyna property, this should
-		// route to the dyna setter.  If not, it throws BeanRuntimeException.  Either outcome is acceptable;
-		// assert that no other exception type escapes the put() dyna branch.
+		// The key here is not a declared field. If the dyna-aware bean recognizes it as a dyna
+		// property, this routes to the dyna setter with no exception. If not, a bean runtime exception
+		// is the acceptable outcome; we're only asserting that no other exception type escapes this branch.
 		assertDoesNotThrow(() -> {
 			try {
 				bm.put("unknownDynaKey", "value");

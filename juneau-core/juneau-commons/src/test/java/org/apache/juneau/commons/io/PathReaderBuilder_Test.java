@@ -122,6 +122,7 @@ class PathReaderBuilder_Test extends TestBase {
 	}
 
 	@Test void a09_allowNoFileBoolean_false() {
-		assertThrows(IllegalStateException.class, () -> PathReaderBuilder.create().allowNoFile(false).build());
+		var builder = PathReaderBuilder.create().allowNoFile(false);
+		assertThrows(IllegalStateException.class, builder::build);
 	}
 }

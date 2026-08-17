@@ -55,7 +55,7 @@ public class DataTablesResults<T> {
 	/**
 	 * Constructor.
 	 */
-	public DataTablesResults() {}
+	public DataTablesResults() { /* All fields are populated via the fluent setters below. */ }
 
 	/**
 	 * Static creator.

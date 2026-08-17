@@ -228,15 +228,15 @@ public class LogRecord extends java.util.logging.LogRecord {
 	/**
 	 * Formats a JUL log record with the same placeholders as {@link #formatted(String)}.
 	 *
-	 * @param record The record to format.
+	 * @param rec The record to format.
 	 * @param format The format string.
 	 * @return The formatted string.
 	 */
 	@SuppressWarnings({
 		"deprecation" // Date constructor is deprecated but needed for compatibility
 	})
-	public static String formatted(java.util.logging.LogRecord record, String format) {
-		var date = new Date(record.getMillis());
+	public static String formatted(java.util.logging.LogRecord rec, String format) {
+		var date = new Date(rec.getMillis());
 
 		Function<String,Object> resolver = key -> switch (key) {
 			case KEY_date -> "%1$s";
@@ -245,11 +245,11 @@ public class LogRecord extends java.util.logging.LogRecord {
 			case KEY_msg -> "%4$s";
 			case KEY_thrown -> "%5$s";
 			case KEY_timestamp -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);
-			case KEY_thread, KEY_threadid -> s(record.getThreadID());
-			case KEY_exception -> o(record.getThrown()).map(x -> x.getMessage()).orElse("");
+			case KEY_thread, KEY_threadid -> s(rec.getThreadID());
+			case KEY_exception -> o(rec.getThrown()).map(x -> x.getMessage()).orElse("");
 			default -> "";
 		};
 
-		return safeOptCatch(() -> f(formatNamed(format, resolver), date, record.getLoggerName(), record.getLevel(), record.getMessage(), record.getThrown()), x -> x.getLocalizedMessage()).orElse(null);
+		return safeOptCatch(() -> f(formatNamed(format, resolver), date, rec.getLoggerName(), rec.getLevel(), rec.getMessage(), rec.getThrown()), x -> x.getLocalizedMessage()).orElse(null);
 	}
 }

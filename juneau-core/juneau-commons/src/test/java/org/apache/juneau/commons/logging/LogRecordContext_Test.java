@@ -37,12 +37,12 @@ class LogRecordContext_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void a01_emptyContextNoTableEntry() {
-		var record = new java.util.logging.LogRecord(Level.INFO, "msg");
+		var rec = new java.util.logging.LogRecord(Level.INFO, "msg");
 		var putBefore = LogRecordContext.putCount();
-		LogRecordContext.attachIfAbsent(record);
+		LogRecordContext.attachIfAbsent(rec);
 		// No live context → must return before touching the synchronized table.
 		assertEquals(putBefore, LogRecordContext.putCount());
-		assertSame(Map.of(), LogRecordContext.of(record));
+		assertSame(Map.of(), LogRecordContext.of(rec));
 	}
 
 	//====================================================================================================
@@ -51,13 +51,13 @@ class LogRecordContext_Test extends TestBase {
 
 	@Test void a02_nonEmptyContextAttachesSnapshot() {
 		var c = RichLogger.context();
-		var record = new java.util.logging.LogRecord(Level.INFO, "msg");
+		var rec = new java.util.logging.LogRecord(Level.INFO, "msg");
 		try (var s = c.with("k", "v")) {
-			LogRecordContext.attachIfAbsent(record);
-			assertEquals("v", LogRecordContext.of(record).get("k"));
+			LogRecordContext.attachIfAbsent(rec);
+			assertEquals("v", LogRecordContext.of(rec).get("k"));
 		}
 		// After the scope closes, the already-attached snapshot is unchanged (point-in-time fact).
-		assertEquals("v", LogRecordContext.of(record).get("k"));
+		assertEquals("v", LogRecordContext.of(rec).get("k"));
 	}
 
 	//====================================================================================================
@@ -65,19 +65,19 @@ class LogRecordContext_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void a03_preseedWinsOverLaterEmptyAttach() {
-		var record = new java.util.logging.LogRecord(Level.INFO, "msg");
-		LogRecordContext.attachIfAbsent(record, Map.of("requestId", "abc"));
+		var rec = new java.util.logging.LogRecord(Level.INFO, "msg");
+		LogRecordContext.attachIfAbsent(rec, Map.of("requestId", "abc"));
 		// Live context is empty here — the one-arg call must not clobber the pre-seed.
-		LogRecordContext.attachIfAbsent(record);
-		assertEquals("abc", LogRecordContext.of(record).get("requestId"));
+		LogRecordContext.attachIfAbsent(rec);
+		assertEquals("abc", LogRecordContext.of(rec).get("requestId"));
 	}
 
 	@Test void a04_twoArgEmptyMapSkipsTable() {
-		var record = new java.util.logging.LogRecord(Level.INFO, "msg");
+		var rec = new java.util.logging.LogRecord(Level.INFO, "msg");
 		var putBefore = LogRecordContext.putCount();
-		LogRecordContext.attachIfAbsent(record, Map.of());
+		LogRecordContext.attachIfAbsent(rec, Map.of());
 		assertEquals(putBefore, LogRecordContext.putCount());
-		assertSame(Map.of(), LogRecordContext.of(record));
+		assertSame(Map.of(), LogRecordContext.of(rec));
 	}
 
 	//====================================================================================================

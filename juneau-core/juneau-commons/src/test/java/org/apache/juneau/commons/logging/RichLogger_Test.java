@@ -724,7 +724,11 @@ class RichLogger_Test extends TestBase {
 		}
 	}
 
-	@Test void j03_unreferencedCanonical_eventuallyCollectable() throws Exception {
+	@Test
+	@SuppressWarnings({
+		"java:S1854" // Load-bearing: nulling the local drops its stack-frame liveness before the GC-poll below; removing it made this test flaky/failing (confirmed empirically).
+	})
+	void j03_unreferencedCanonical_eventuallyCollectable() throws Exception {
 		var name = "j03.collectable." + System.nanoTime();
 		var logger = RichLogger.getLogger(name);
 		var ref = new WeakReference<>(logger);
@@ -739,11 +743,11 @@ class RichLogger_Test extends TestBase {
 		var published = new AtomicInteger();
 		var h = new Handler() {
 			@Override
-			public void publish(java.util.logging.LogRecord record) {
+			public void publish(java.util.logging.LogRecord rec2) {
 				published.incrementAndGet();
 			}
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* Not needed: this fixture only counts publish() calls. */ }
+			@Override public void close() { /* Not needed: this fixture only counts publish() calls. */ }
 		};
 		delegate.addHandler(h);
 		try (var capture = logger.captureEvents()) {
@@ -881,12 +885,12 @@ class RichLogger_Test extends TestBase {
 		var published = new AtomicInteger();
 		var h = new Handler() {
 			@Override
-			public void publish(java.util.logging.LogRecord record) {
-				if (name.equals(record.getLoggerName()))
+			public void publish(java.util.logging.LogRecord rec2) {
+				if (name.equals(rec2.getLoggerName()))
 					published.incrementAndGet();
 			}
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* Not needed: this fixture only counts publish() calls. */ }
+			@Override public void close() { /* Not needed: this fixture only counts publish() calls. */ }
 		};
 		// Before delegate.log(record) interception existed, wrapper publication ended on the
 		// unregistered wrapper and never reached root handlers.
@@ -905,6 +909,9 @@ class RichLogger_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Polling for an async GC event has no latch/await equivalent; the sleep is load-bearing for the poll interval.
+	})
 	private static boolean awaitCollected(WeakReference<?> ref) throws Exception {
 		for (int i = 0; i < 20; i++) {
 			System.gc();

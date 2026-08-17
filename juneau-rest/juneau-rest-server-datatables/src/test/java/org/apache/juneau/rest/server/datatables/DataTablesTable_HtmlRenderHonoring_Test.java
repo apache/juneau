@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-361 Phase 6: {@code DataTablesTable.of(ctx, id, rows, rowType)} additively honors a property's
+ * Ticket 361 Phase 6: {@code DataTablesTable.of(ctx, id, rows, rowType)} additively honors a property's
  * {@code @Html(render=...)} the same way the ordinary {@code HtmlSerializer}/{@code HtmlDocSerializer} path already
  * does &mdash; closing r3 should-fixes S4 (Map-row branch preserved) and S5 ({@code DataTablesTable} does not
  * actually resolve {@code BeanMeta} today; it delegates to the raw-value {@code DataTablesColumns}-overload path).
@@ -63,7 +63,7 @@ class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
 	// it delegates to the raw-value columns-overload path (DataTablesTable.java:94-96 as of pre-Phase-6 source).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_htmlRenderHonored_annotatedPropertyIsTransformed() throws Exception {
+	@Test void a01_htmlRenderHonored_annotatedPropertyIsTransformed() {
 		var html = HtmlSerializer.DEFAULT.toString(DataTablesTable.of(MarshallingContext.DEFAULT, "t", List.of(new Row()), Row.class));
 		assertTrue(html.contains("RELEASED"), () -> "expected the LocalFixtureRender-transformed (uppercased) value in the <td>, got:\n" + html);
 	}
@@ -72,7 +72,7 @@ class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
 	// Back-compat: an un-annotated property on the SAME row bean still emits the raw value, unchanged.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a02_unannotatedPropertyOnSameRow_stillRaw() throws Exception {
+	@Test void a02_unannotatedPropertyOnSameRow_stillRaw() {
 		var html = HtmlSerializer.DEFAULT.toString(DataTablesTable.of(MarshallingContext.DEFAULT, "t", List.of(new Row()), Row.class));
 		assertTrue(html.contains("widget"), () -> "expected the plain property's raw (lowercase, unmodified) value, got:\n" + html);
 		assertFalse(html.contains("WIDGET"), () -> "un-annotated property must NOT be transformed, got:\n" + html);
@@ -95,7 +95,7 @@ class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
 	// String.valueOf(value) would happily print "NULL" for -- assert the SHORT-CIRCUIT, not just "no exception").
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a04_nullValueOnAnnotatedProperty_noNpe_rendersEmpty() throws Exception {
+	@Test void a04_nullValueOnAnnotatedProperty_noNpe_rendersEmpty() {
 		var html = HtmlSerializer.DEFAULT.toString(DataTablesTable.of(MarshallingContext.DEFAULT, "t", List.of(new NullRow()), NullRow.class));
 		assertFalse(html.contains("NULL"), () -> "getContent(...) must not be invoked on a null value, got:\n" + html);
 	}
@@ -106,7 +106,7 @@ class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
 	// both before and after this change (a Map row has no BeanPropertyMeta / @Html(render)).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a05_mapRowWithBeanRowType_stillRawNoRenderAttempted() throws Exception {
+	@Test void a05_mapRowWithBeanRowType_stillRawNoRenderAttempted() {
 		var row = new LinkedHashMap<String,Object>();
 		row.put("status", "released");
 		row.put("name", "widget");
@@ -121,7 +121,7 @@ class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
 	// DataTablesTable.of(..., rowType) -- named explicitly so it shows up in the diff/PR description.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a06_behaviorChangeNotPurelyAdditive_existingHtmlRenderNowAppliesInDataTablesTableToo() throws Exception {
+	@Test void a06_behaviorChangeNotPurelyAdditive_existingHtmlRenderNowAppliesInDataTablesTableToo() {
 		// The serializer path (unrelated to DataTablesTable) already honors @Html(render) -- this is pre-existing.
 		var plainSerializerHtml = HtmlSerializer.DEFAULT.toString(new Row());
 		assertTrue(plainSerializerHtml.contains("RELEASED"), () -> "sanity: plain HtmlSerializer already honors @Html(render), got:\n" + plainSerializerHtml);

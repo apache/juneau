@@ -48,13 +48,13 @@ class BeanMeta_FindMethods_Coverage_Test extends TestBase {
 		public String fooBar() { return "x"; }
 	}
 
-	// SUSPECTED BUG (not fixed here): a normal, unannotated `getFoo()` (non-void)
+	// SUSPECTED BUG (not fixed here): a normal, unannotated getter (non-void)
 	// resolves to property "foo" (lowercased by the PropertyNamer at line ~1436) - but this bare-@BeanProp
-	// void-returning `getFoo()` resolves to "Foo" (capital F, unlowercased).  Root cause: the bpName-fallback
-	// branch (~1391-1396) sets `bpName = n` using the *pre-namer* stripped name ("Foo"), and that raw value
-	// then overrides the already-namered `n` again at line ~1442-1443 (`if (nn(bpName) && !bpName.isEmpty())
-	// n = bpName;`), undoing the lowercasing that just happened one line earlier for every other bpName-driven
-	// getter shape.  Pinning current (buggy) behavior here rather than silently fixing it.
+	// void-returning getter resolves to "Foo" (capital F, unlowercased). Root cause: the bpName-fallback
+	// branch (~1391-1396) assigns the name using the pre-namer stripped name ("Foo"), and that raw value
+	// then overrides the already-namered name again a few lines later, undoing the lowercasing that just
+	// happened one line earlier for every other bpName-driven getter shape. Pinning current (buggy)
+	// behavior here rather than silently fixing it.
 	@Test
 	void a01_bareBeanProp_voidGetPrefixed_stripsGetPrefix_butSkipsNamerLowercasing() {
 		var bm = BeanMeta.of(BareBeanPropZeroParamBean.class);
@@ -174,7 +174,7 @@ class BeanMeta_FindMethods_Coverage_Test extends TestBase {
 
 	//====================================================================================================
 	// 2-param: "*" dyna shape that does NOT match the setter pattern (name doesn't start with "set") ->
-	// falls through to the `else { methodType = GETTER; }` branch for 2-param methods.
+	// falls through to the trailing GETTER-fallback branch for 2-param methods.
 	//====================================================================================================
 
 	public static class DynaTwoParamNonSetterShapeBean {
@@ -187,9 +187,10 @@ class BeanMeta_FindMethods_Coverage_Test extends TestBase {
 
 	@Test
 	void c01_dynaTwoParam_nonSetterShape_fallsThroughToGetterBranch() {
-		// oddTwoArgMethod's 2-param condition (bpName=="*" && param0==String && name.startsWith("set") && ...)
-		// is false purely because the method name doesn't start with "set" - exercising the `else` GETTER
-		// fallback at the end of the params.size()==2 block.  The resulting BeanMeta still just reflects
+		// oddTwoArgMethod's 2-param dyna-setter condition (a conjunction of the "*" bpName, a String first
+		// param, and a "set"-prefixed name) is false purely because the method name doesn't start with "set" -
+		// exercising the trailing GETTER fallback at the end of the two-param handling block. The resulting
+		// BeanMeta still just reflects
 		// whichever dyna getter method was processed last; this test only proves construction doesn't throw
 		// and the dyna property remains discoverable.
 		var bm = BeanMeta.of(DynaTwoParamNonSetterShapeBean.class);
@@ -291,9 +292,9 @@ class BeanMeta_FindMethods_Coverage_Test extends TestBase {
 
 	//====================================================================================================
 	// 1-param setter: explicit (non-empty) @BeanProp name on a method that doesn't match "set"/"with" at
-	// all - exercises the `else { n = bpName; }` branch (bpName.isEmpty()==false) of the setter-side
-	// bare/explicit-@BeanProp fallback, as opposed to d01/d02 above (which both use a BARE @BeanProp, so
-	// bpName is empty rather than a real name).
+	// all - exercises the non-empty-bpName-wins branch of the setter-side bare/explicit-@BeanProp
+	// fallback, as opposed to d01/d02 above (which both use a BARE @BeanProp, so bpName is empty rather
+	// than a real name).
 	//====================================================================================================
 
 	public static class ExplicitNamedOneParamSetterBean {
@@ -368,10 +369,10 @@ class BeanMeta_FindMethods_Coverage_Test extends TestBase {
 
 	//====================================================================================================
 	// 2-param: "*" dyna shape, String key, "set"-prefixed, but return type is NEITHER void NOR assignable to
-	// the declaring class (an unrelated return type) - both disjuncts of `rt.isAssignableFrom(ci) ||
-	// rt.is(Void.TYPE)` must be explicitly evaluated to false here (as opposed to c02, where the second
-	// disjunct short-circuits true via void, and c04, where the first disjunct short-circuits true via a
-	// fluent return type), so the whole condition is false and this falls through to the `else` GETTER
+	// the declaring class (an unrelated return type) - both disjuncts of the "return type assignable to the
+	// declaring class, or void" condition must be explicitly evaluated to false here (as opposed to c02, where
+	// the second disjunct short-circuits true via void, and c04, where the first disjunct short-circuits true
+	// via a fluent return type), so the whole condition is false and this falls through to the trailing GETTER
 	// branch despite matching every other conjunct.
 	//====================================================================================================
 
@@ -388,10 +389,10 @@ class BeanMeta_FindMethods_Coverage_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// 2-param: bpName present but NOT "*" - the outer `"*".equals(bpName)` conjunct is false (as opposed to
-	// c01 above, where bpName IS "*" but a later conjunct in the same condition is what's false), so this
-	// exercises a distinct branch outcome for that same guard even though both fall through to the same
-	// `else { methodType = GETTER; }`.
+	// 2-param: bpName present but NOT "*" - the outer "bpName is the dyna marker" conjunct is false (as
+	// opposed to c01 above, where bpName IS "*" but a later conjunct in the same condition is what's false),
+	// so this exercises a distinct branch outcome for that same guard even though both fall through to the
+	// same trailing GETTER fallback.
 	//====================================================================================================
 
 	public static class ExplicitNamedTwoParamMethodBean {

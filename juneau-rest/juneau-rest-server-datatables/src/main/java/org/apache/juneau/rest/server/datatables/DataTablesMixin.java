@@ -110,6 +110,9 @@ public class DataTablesMixin {
 	static final String GLUE_CACHE_CONTROL = "max-age=86400, public";
 
 	/** The shipped glue script bytes, read once from the classpath on first request. */
+	@SuppressWarnings({
+		"java:S3077" // Double-checked-locking safe publication of one whole immutable array reference, not per-element mutation; AtomicReferenceArray solves a different problem.
+	})
 	private static volatile byte[] glueScript;
 
 	/** A known-good CDN URL for jQuery (the caller-supplied DataTables dependency).  Documentation aid. */

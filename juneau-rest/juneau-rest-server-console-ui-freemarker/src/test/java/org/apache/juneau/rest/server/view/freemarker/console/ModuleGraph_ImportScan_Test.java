@@ -41,7 +41,7 @@ class ModuleGraph_ImportScan_Test extends TestBase {
 				.filter(p -> p.toString().endsWith(".java"))
 				.filter(ModuleGraph_ImportScan_Test::importsDatatables)
 				.map(Path::toString)
-				.collect(Collectors.toList());
+				.toList();
 			assertTrue(offenders.isEmpty(), () -> "Found forbidden org.apache.juneau.rest.server.datatables.* import(s) in: " + offenders);
 		}
 	}

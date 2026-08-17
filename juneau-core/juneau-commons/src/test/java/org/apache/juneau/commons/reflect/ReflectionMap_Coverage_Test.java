@@ -72,7 +72,7 @@ class ReflectionMap_Coverage_Test extends TestBase {
 	@Test
 	void a06_constructorEntryEquals_notAConstructorEntry_false() {
 		var a = new ReflectionMap.ConstructorEntry<>("Foo", "com.foo.Foo", new String[] {"String"}, 1);
-		assertNotEquals(a, "not a ConstructorEntry");
+		assertNotEquals("not a ConstructorEntry", a);
 	}
 
 	@Test
@@ -131,7 +131,7 @@ class ReflectionMap_Coverage_Test extends TestBase {
 	@Test
 	void b07_methodEntryEquals_notAMethodEntry_false() {
 		var a = new ReflectionMap.MethodEntry<>("Foo", "com.foo.Foo", "myMethod", new String[] {"String"}, 1);
-		assertNotEquals(a, "not a MethodEntry");
+		assertNotEquals("not a MethodEntry", a);
 	}
 
 	@Test

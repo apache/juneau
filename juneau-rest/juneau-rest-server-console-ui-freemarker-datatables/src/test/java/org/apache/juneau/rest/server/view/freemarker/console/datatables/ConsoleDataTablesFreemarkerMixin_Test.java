@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.freemarker.console.datatables;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -33,7 +34,7 @@ import org.apache.juneau.rest.server.view.freemarker.console.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-361 Phase 7 gate: the {@code <@datatable>} macro (this module's only deliverable) &mdash; a golden-HTML
+ * Ticket 361 Phase 7 gate: the {@code <@datatable>} macro (this module's only deliverable) &mdash; a golden-HTML
  * integration proof that a row bean's {@code @Html(render=TagHtmlRender.class)} enum property (Phase 4) renders as
  * pill markup (Phase 6's now-render-aware {@code DataTablesTable}) nested inside a {@code jc-table} through the
  * same trusted-HTML adapter Phase 5 built for {@code <@tag>}.
@@ -99,9 +100,11 @@ class ConsoleDataTablesFreemarkerMixin_Test extends TestBase {
 	@Test void a02_consoleDataTablesFreemarkerMixin_rendersPillMarkupInsideJcTable() throws Exception {
 		var c = MockRestClient.buildLax(DataTablesHost.class);
 		var body = c.get("/releases").run().assertStatus(200).getContent().asString();
-		assertTrue(body.matches("(?s).*<table(?=[^>]*class=['\"]jc-table['\"])(?=[^>]*data-juneau-datatable)[^>]*>.*"),
+		// find() on an anchor-free pattern (no wrapping .*) avoids the super-linear backtracking risk of
+		// String.matches() with unbounded quantifiers at both ends.
+		assertTrue(Pattern.compile("<table(?=[^>]*class=['\"]jc-table['\"])(?=[^>]*data-juneau-datatable)[^>]*>").matcher(body).find(),
 			() -> "expected <table class='jc-table' ...data-juneau-datatable...> (attribute order not asserted), body:\n" + body);
-		assertTrue(body.matches("(?s).*<td[^>]*>\\s*<span[^>]*class=['\"]tag status released['\"][^>]*>.*</td>.*"),
+		assertTrue(Pattern.compile("<td[^>]*>\\s*<span[^>]*class=['\"]tag status released['\"][^>]*>.*?</td>", Pattern.DOTALL).matcher(body).find(),
 			() -> "expected <span class='tag status released'> nested inside a <td>, body:\n" + body);
 		assertTrue(body.contains("widget"), () -> "expected the plain property's raw value too, body:\n" + body);
 		assertFalse(body.contains("&lt;span"), () -> "macro output was HTML-escaped (double-escaped), body:\n" + body);
