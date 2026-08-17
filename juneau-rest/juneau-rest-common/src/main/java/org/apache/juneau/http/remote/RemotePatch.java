@@ -147,8 +147,8 @@ public @interface RemotePatch {
 	 * 		Only <c>http</c>/<c>https</c> schemes are permitted when the override yields an absolute URL; other schemes
 	 * 		are rejected (SSRF guardrail).
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>), with the same http/https-only scheme guard on both.
 	 * </ul>
 	 *
 	 * @return The annotation value.

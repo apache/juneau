@@ -67,8 +67,8 @@ import java.lang.annotation.*;
  * 		Only <c>http</c>/<c>https</c> schemes are permitted; other schemes (e.g. <c>file:</c>, <c>gopher:</c>) are
  * 		rejected (SSRF guardrail).
  * 	<li class='note'>
- * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
- * 		ignores this annotation.
+ * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+ * 		(<c>RestClient.getRemote(...)</c>), with the same http/https-only scheme guard on both.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
