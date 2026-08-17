@@ -177,8 +177,8 @@ public @interface RemoteDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -205,8 +205,8 @@ public @interface RemoteDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -228,8 +228,8 @@ public @interface RemoteDelete {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -251,8 +251,8 @@ public @interface RemoteDelete {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -274,8 +274,8 @@ public @interface RemoteDelete {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -316,8 +316,8 @@ public @interface RemoteDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -348,8 +348,8 @@ public @interface RemoteDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -366,8 +366,8 @@ public @interface RemoteDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -386,8 +386,8 @@ public @interface RemoteDelete {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
