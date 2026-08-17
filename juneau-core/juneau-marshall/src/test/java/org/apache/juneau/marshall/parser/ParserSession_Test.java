@@ -818,6 +818,9 @@ class ParserSession_Test extends TestBase {
 		ExposingSession(JsonParser p) {
 			super(create(p));
 		}
+		ExposingSession(Builder<?> builder) {
+			super(builder);
+		}
 		public boolean exposeIsTrimStrings() { return isTrimStrings(); }
 		public boolean exposeIsAutoCloseStreams() { return isAutoCloseStreams(); }
 		public boolean exposeIsUnbuffered() { return isUnbuffered(); }
@@ -840,6 +843,9 @@ class ParserSession_Test extends TestBase {
 		public java.time.Period exposeParsePeriod(String s) { return readPeriod(s); }
 		public void exposeMark() { mark(); }
 		public void exposeUnmark() { unmark(); }
+		public void exposeEnterParseDepth() throws ParseException { enterParseDepth(); }
+		public void exposeExitParseDepth() { exitParseDepth(); }
+		public <T> T exposeAllocateLocal(String what, java.util.function.Supplier<T> alloc) throws ParseException { return allocateLocal(what, alloc); }
 		public org.apache.juneau.marshall.collections.JsonMap exposeGetLastLocation() { return getLastLocation(); }
 		public ParserPipe exposeSetPipe(ParserPipe pp) { return setPipe(pp); }
 		public Map<String,Object> doParseIntoMap_callDirect() throws Exception {
@@ -976,10 +982,12 @@ class ParserSession_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// t - allocation-failure guard: OutOfMemoryError from within a parse degrades to a bounded ParseException
+	// t - narrowed allocation-failure guard: an OutOfMemoryError from arbitrary downstream code (NOT routed
+	//     through allocateLocal) now propagates as a raw OutOfMemoryError instead of being wrapped as a
+	//     ParseException.  Only allocateLocal's own local allocation is converted (see category u below).
 	// -----------------------------------------------------------------------------------------------------------------
 
-	/** Test session whose parse paths always fail with an OutOfMemoryError, to exercise the allocation-failure guard. */
+	/** Test session whose parse paths always fail with an OutOfMemoryError, to exercise the narrowed guard. */
 	public static class OomSession extends ParserSession {
 		OomSession(JsonParser p) {
 			super(create(p));
@@ -994,21 +1002,95 @@ class ParserSession_Test extends TestBase {
 		}
 	}
 
-	@Test void t01_readInner_outOfMemoryProducesParseException() {
+	@Test void t01_readInner_outOfMemoryPropagatesUnwrapped() {
+		// doRead is arbitrary downstream code, not a local allocation routed through allocateLocal -- the OOME
+		// must propagate as-is rather than being reported as a client parse error.
 		var s = new OomSession(JsonParser.DEFAULT);
-		var e = assertThrows(ParseException.class, () -> s.read("{}", Object.class));
-		assertTrue(e.getMessage().contains("Out of memory"), e.getMessage());
+		assertThrows(OutOfMemoryError.class, () -> s.read("{}", Object.class));
 	}
 
-	@Test void t02_readArgs_outOfMemoryProducesParseException() {
+	@Test void t02_readArgs_outOfMemoryPropagatesUnwrapped() {
 		var s = new OomSession(JsonParser.DEFAULT);
-		var e = assertThrows(ParseException.class, () -> s.readArgs("[]", new Type[]{Object.class}));
-		assertTrue(e.getMessage().contains("Out of memory"), e.getMessage());
+		assertThrows(OutOfMemoryError.class, () -> s.readArgs("[]", new Type[]{Object.class}));
 	}
 
-	@Test void t03_readIntoCollection_outOfMemoryProducesParseException() {
+	@Test void t03_readIntoCollection_outOfMemoryPropagatesUnwrapped() {
 		var s = new OomSession(JsonParser.DEFAULT);
-		var e = assertThrows(ParseException.class, () -> s.readIntoCollection("[]", new ArrayList<>(), Object.class));
+		assertThrows(OutOfMemoryError.class, () -> s.readIntoCollection("[]", new ArrayList<>(), Object.class));
+	}
+
+	@Test void t04_readToBeanConsumer_outOfMemoryPropagatesUnwrapped() {
+		// doReadToBeanConsumer's default impl calls doRead (List.class) internally, so this also exercises the
+		// removed outer-boundary catch on readToBeanConsumer.
+		var s = new OomSession(JsonParser.DEFAULT);
+		BeanConsumer<Object> a = o -> { /* no-op */ };
+		assertThrows(OutOfMemoryError.class, () -> s.readToBeanConsumer("[]", a, Object.class));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// u - shared parse-depth budget (enterParseDepth/exitParseDepth + Builder#maxParseDepth)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void u01_enterExitParseDepth_roundTripsWithinBudget() throws Exception {
+		var s = new ExposingSession(JsonParser.DEFAULT);
+		// Default budget (1000) comfortably allows a handful of nested enter/exit calls.
+		s.exposeEnterParseDepth();
+		s.exposeEnterParseDepth();
+		s.exposeExitParseDepth();
+		s.exposeExitParseDepth();
+		// Depth counter is back at 0; another full round-trip should still succeed.
+		s.exposeEnterParseDepth();
+		s.exposeExitParseDepth();
+	}
+
+	@Test void u02_enterParseDepth_exceedsConfiguredBudget_throwsParseException() throws Exception {
+		// Build a session with maxParseDepth(2) via the builder, then drive it past the budget.
+		var builder = (ParserSession.Builder<?>) ParserSession.create(JsonParser.DEFAULT);
+		builder.maxParseDepth(2);
+		var s = new ExposingSession(builder);
+		s.exposeEnterParseDepth();
+		s.exposeEnterParseDepth();
+		var e = assertThrows(ParseException.class, s::exposeEnterParseDepth);
+		assertTrue(e.getMessage().contains("Maximum parse depth exceeded (2)"), e.getMessage());
+	}
+
+	@Test void u03_builder_property_maxParseDepth_unqualified() throws Exception {
+		var builder = (ParserSession.Builder<?>) ParserSession.create(JsonParser.DEFAULT);
+		builder.property("maxParseDepth", "2");
+		var s = new ExposingSession(builder);
+		s.exposeEnterParseDepth();
+		s.exposeEnterParseDepth();
+		assertThrows(ParseException.class, s::exposeEnterParseDepth);
+	}
+
+	@Test void u04_builder_property_maxParseDepth_qualified() throws Exception {
+		var builder = (ParserSession.Builder<?>) ParserSession.create(JsonParser.DEFAULT);
+		builder.property("ParserSession.maxParseDepth", "1");
+		var s = new ExposingSession(builder);
+		s.exposeEnterParseDepth();
+		assertThrows(ParseException.class, s::exposeEnterParseDepth);
+	}
+
+	@Test void u05_builder_maxParseDepth_defaultIsAThousand() throws Exception {
+		var s = new ExposingSession(JsonParser.DEFAULT);
+		for (var i = 0; i < 1000; i++)
+			s.exposeEnterParseDepth();
+		assertThrows(ParseException.class, s::exposeEnterParseDepth);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// v - allocateLocal: the ONLY remaining place where an OutOfMemoryError is converted to a bounded ParseException
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void v01_allocateLocal_success_returnsSupplierValue() throws Exception {
+		var s = new ExposingSession(JsonParser.DEFAULT);
+		var result = s.exposeAllocateLocal("test-array", () -> new int[10]);
+		assertEquals(10, result.length);
+	}
+
+	@Test void v02_allocateLocal_oomFromSupplier_wrappedAsParseException() {
+		var s = new ExposingSession(JsonParser.DEFAULT);
+		var e = assertThrows(ParseException.class, () -> s.exposeAllocateLocal("huge-buffer", () -> { throw new OutOfMemoryError("simulated"); }));
 		assertTrue(e.getMessage().contains("Out of memory"), e.getMessage());
 	}
 }

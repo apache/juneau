@@ -152,13 +152,26 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	}
 
 	/*
+	 * Workhorse entry point.  Wraps readAnything0 with the shared ParserSession recursion-depth guard so that
+	 * an adversarial deeply-nested document fails with a ParseException instead of a StackOverflowError.
+	 */
+	<T> T readAnything(ClassMeta<?> eType, CborInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readAnything0(eType, is, outer, pMeta);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
+	/*
 	 * Workhorse method.
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541"  // Single-threaded session contexts do not require synchronization
 	})
-	<T> T readAnything(ClassMeta<?> eType, CborInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <T> T readAnything0(ClassMeta<?> eType, CborInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();

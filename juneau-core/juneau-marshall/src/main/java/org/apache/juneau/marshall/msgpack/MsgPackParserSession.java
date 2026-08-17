@@ -92,21 +92,8 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
-	/**
-	 * Maximum databind parse-recursion depth.
-	 *
-	 * <p>
-	 * The databind {@link #readAnything(ClassMeta, MsgPackInputStream, Object, BeanPropertyMeta) readAnything}
-	 * path recurses once per nesting level; this bound makes an adversarial deeply-nested document fail with a
-	 * {@link ParseException} instead of a {@link StackOverflowError}.  The token-cursor path is iterative and
-	 * unaffected.
-	 */
-	private static final int MAX_PARSE_DEPTH = 1000;
-
 	private final boolean nativeMode;
 	private final int maxLength;
-
-	private int parseDepth;
 
 	/**
 	 * Constructor.
@@ -163,19 +150,16 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	}
 
 	/*
-	 * Workhorse entry point.  Wraps {@link #readAnything0} with a recursion-depth guard so that an
-	 * adversarial deeply-nested document fails with a {@link ParseException} instead of a
-	 * {@link StackOverflowError}.
+	 * Workhorse entry point.  Wraps readAnything0 with the shared ParserSession recursion-depth guard so that
+	 * an adversarial deeply-nested document fails with a ParseException instead of a StackOverflowError.  The
+	 * token-cursor path is iterative and unaffected.
 	 */
 	<T> T readAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
-		if (++parseDepth > MAX_PARSE_DEPTH) {
-			parseDepth--;
-			throw new ParseException(this, "Maximum parse depth exceeded (%s).", MAX_PARSE_DEPTH);
-		}
+		enterParseDepth();
 		try {
 			return readAnything0(eType, is, outer, pMeta);
 		} finally {
-			parseDepth--;
+			exitParseDepth();
 		}
 	}
 

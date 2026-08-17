@@ -108,11 +108,25 @@ public class ProtobufParserSession extends InputStreamParserSession {
 		return (T)readMessage(type, is, getOuter());
 	}
 
+	/*
+	 * Workhorse entry point.  Wraps readMessage0 with the shared ParserSession recursion-depth guard so that
+	 * an adversarial deeply-nested message (via nested MESSAGE fields, TAGGED_REPEATED elements, or map
+	 * entry/value sub-messages) fails with a ParseException instead of a StackOverflowError.
+	 */
+	private Object readMessage(ClassMeta<?> type, ProtobufReader is, Object outer) throws IOException, ParseException, ExecutableException {
+		enterParseDepth();
+		try {
+			return readMessage0(type, is, outer);
+		} finally {
+			exitParseDepth();
+		}
+	}
+
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for the tag-loop dispatch
 		"java:S6541"  // Brain method acceptable for the parse workhorse
 	})
-	private Object readMessage(ClassMeta<?> type, ProtobufReader is, Object outer) throws IOException, ParseException, ExecutableException {
+	private Object readMessage0(ClassMeta<?> type, ProtobufReader is, Object outer) throws IOException, ParseException, ExecutableException {
 		if (type.isMap())
 			return readMapMessage(type, is);
 		var pcm = ctx.getProtobufClassMeta(type);

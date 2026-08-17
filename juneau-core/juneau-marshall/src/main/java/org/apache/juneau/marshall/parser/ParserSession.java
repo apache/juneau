@@ -28,6 +28,7 @@ import java.time.*;
 import java.time.Duration;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.function.*;
 
 import javax.xml.datatype.*;
 
@@ -70,11 +71,18 @@ public class ParserSession extends MarshallingSession {
 	private static final String PROP_schema = "schema";
 	private static final String PROP_trimStrings = "trimStrings";
 	private static final String PROP_nulls = "nulls";
+	private static final String PROP_maxParseDepth = "maxParseDepth";
 	private static final String PROP_ParserSession_javaMethod = "ParserSession.javaMethod";
 	private static final String PROP_ParserSession_outer = "ParserSession.outer";
 	private static final String PROP_ParserSession_schema = "ParserSession.schema";
 	private static final String PROP_ParserSession_trimStrings = "ParserSession.trimStrings";
 	private static final String PROP_ParserSession_nulls = "ParserSession.nulls";
+	private static final String PROP_ParserSession_maxParseDepth = "ParserSession.maxParseDepth";
+
+	/**
+	 * Default value for {@link Builder#maxParseDepth(int)}.
+	 */
+	protected static final int DEFAULT_MAX_PARSE_DEPTH = 1000;
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -92,6 +100,7 @@ public class ParserSession extends MarshallingSession {
 		private Object outer;
 		private boolean trimStrings;
 		private Nulls nulls;
+		private int maxParseDepth = DEFAULT_MAX_PARSE_DEPTH;
 		private Parser ctx;
 
 		/**
@@ -140,6 +149,21 @@ public class ParserSession extends MarshallingSession {
 			return self();
 		}
 
+		/**
+		 * The shared recursive-parse-depth budget honored by binary codec sessions (CBOR, Protobuf, MsgPack)
+		 * at their recursive databind entry points.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Defaults to {@value ParserSession#DEFAULT_MAX_PARSE_DEPTH}.
+		 * @return This object.
+		 * @see ParserSession#enterParseDepth()
+		 */
+		public SELF maxParseDepth(int value) {
+			maxParseDepth = value;
+			return self();
+		}
+
 		@Override /* Overridden from Builder */
 		public SELF property(String key, Object value) {
 			if (key == null) {
@@ -157,6 +181,8 @@ public class ParserSession extends MarshallingSession {
 					return trimStrings(cvt(value, Boolean.class));
 				case PROP_nulls, PROP_ParserSession_nulls:
 					return nulls(cvt(value, Nulls.class));
+				case PROP_maxParseDepth, PROP_ParserSession_maxParseDepth:
+					return maxParseDepth(cvt(value, Integer.class));
 				default:
 					super.property(key, value);
 					return self();
@@ -315,6 +341,7 @@ public class ParserSession extends MarshallingSession {
 	private final Object outer;
 	private final boolean trimStrings;
 	private final Nulls nulls;
+	private final int maxParseDepth;
 	private final Parser ctx;
 	private final ParserListener listener;
 	private final Deque<StringBuilder> sbStack;
@@ -323,6 +350,7 @@ public class ParserSession extends MarshallingSession {
 	private Object parentBean;
 	private Position mark = new Position(-1);
 	private ParserPipe pipe;
+	private int parseDepth;
 
 	/**
 	 * Constructor.
@@ -339,6 +367,7 @@ public class ParserSession extends MarshallingSession {
 		schema = builder.schema;
 		trimStrings = builder.trimStrings;
 		nulls = builder.nulls == null ? Nulls.NOT_SET : builder.nulls;
+		maxParseDepth = builder.maxParseDepth;
 		listener = BeanInstantiator.createOrNull(ctx.getListener());
 		sbStack = new ArrayDeque<>();
 	}
@@ -688,8 +717,6 @@ public class ParserSession extends MarshallingSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
-		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
-			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception=%s, message=%s.", cns(e), localizedMessage(e));
 		} catch (Exception e) {
@@ -725,8 +752,6 @@ public class ParserSession extends MarshallingSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
-		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
-			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception=%s, message=%s.", cns(e), localizedMessage(e));
 		} catch (Exception e) {
@@ -803,8 +828,6 @@ public class ParserSession extends MarshallingSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
-		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
-			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		} catch (Exception e) {
 			throw new ParseException(this, e, "Exception occurred.  exception=%s, message=%s.", cns(e), localizedMessage(e));
 		} finally {
@@ -844,8 +867,6 @@ public class ParserSession extends MarshallingSession {
 	public final <T> void readToBeanConsumer(Object input, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
 			doReadToBeanConsumer(p, consumer, elementType);
-		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
-			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.");
 		}
 	}
 
@@ -1351,6 +1372,71 @@ public class ParserSession extends MarshallingSession {
 	}
 
 	/**
+	 * Enters one level of recursive databind parsing, enforcing the shared {@link Builder#maxParseDepth(int)}
+	 * budget (default {@value #DEFAULT_MAX_PARSE_DEPTH}).
+	 *
+	 * <p>
+	 * Binary codec sessions (CBOR, Protobuf, MsgPack) call this at their recursive databind entry point before
+	 * descending into a nested array/map/message element, and must call {@link #exitParseDepth()} in a matching
+	 * <jk>finally</jk> block regardless of outcome.  Exceeding the budget throws a {@link ParseException} so an
+	 * adversarial deeply-nested document fails cleanly instead of exhausting the call stack with a
+	 * {@link StackOverflowError}.
+	 *
+	 * <p>
+	 * Intentionally not applied to the JSON/XML/text parsers, whose recursive-descent parsers already rely on
+	 * {@link StackOverflowError} conversion at the outer parse boundary.
+	 *
+	 * @throws ParseException If the configured maximum parse depth was exceeded.
+	 */
+	protected final void enterParseDepth() throws ParseException {
+		if (++parseDepth > maxParseDepth) {
+			parseDepth--;
+			throw new ParseException(this, "Maximum parse depth exceeded (%s).", maxParseDepth);
+		}
+	}
+
+	/**
+	 * Exits one level of recursive databind parsing previously entered via {@link #enterParseDepth()}.
+	 *
+	 * <p>
+	 * Must be called exactly once per successful {@link #enterParseDepth()} call, in a matching <jk>finally</jk>
+	 * block so the depth counter is restored even when the nested parse throws.
+	 */
+	protected final void exitParseDepth() {
+		parseDepth--;
+	}
+
+	/**
+	 * Runs a local, parser-controlled allocation (e.g. pre-sizing an array/collection/buffer from a
+	 * wire-declared count) and converts an {@link OutOfMemoryError} thrown specifically from it into a bounded
+	 * {@link ParseException}.
+	 *
+	 * <p>
+	 * Only an {@link OutOfMemoryError} thrown from {@code alloc}'s own execution is converted here.  Any other
+	 * {@link OutOfMemoryError} &mdash; one raised elsewhere in the call stack, signaling a JVM that is
+	 * genuinely running out of heap &mdash; is <b>not</b> this method's concern and is never observed by it; a
+	 * dying JVM is not a client input-validation failure and must not be reported as one.  Format-specific
+	 * parser sessions should route untrusted-length-driven local allocations through this helper instead of
+	 * relying on a blanket catch at an outer parse boundary.
+	 *
+	 * @param <T> The allocated object's type.
+	 * @param what A short human-readable description of what's being allocated, used in the exception message
+	 * 	if the allocation fails.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param alloc The allocation to attempt.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return The allocated object.
+	 * @throws ParseException If {@code alloc} itself threw an {@link OutOfMemoryError}.
+	 */
+	protected final <T> T allocateLocal(String what, Supplier<T> alloc) throws ParseException {
+		try {
+			return alloc.get();
+		} catch (@SuppressWarnings("unused") OutOfMemoryError e) {
+			throw new ParseException(this, "Out of memory occurred.  Input too large to parse.  Allocation: %s", what);
+		}
+	}
+
+	/**
 	 * Marks the current position.
 	 */
 	protected void mark() {
@@ -1409,7 +1495,8 @@ public class ParserSession extends MarshallingSession {
 			.a(PROP_listener, listener)
 			.a(PROP_outer, outer)
 			.a(PROP_trimStrings, trimStrings)
-			.a(PROP_nulls, nulls);
+			.a(PROP_nulls, nulls)
+			.a(PROP_maxParseDepth, maxParseDepth);
 	}
 
 	/**
