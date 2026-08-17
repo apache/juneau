@@ -201,6 +201,17 @@ public class RestSession extends ContextSession {
 	private static final String REST_PATHVARS_ATTR = "juneau.pathVars";
 
 	/**
+	 * Public-internal servlet-request attribute key under which the active {@link RestSession} publishes itself.
+	 *
+	 * <p>
+	 * The session-handle seam that lets code in other packages resolve the call's cached correlation id without a live
+	 * public/custom-key attribute read: the debug formatter's {@code statusLine} (in the {@code logging} package) and
+	 * {@code RequestIdFilter} (in the {@code filter} package) both read the session via {@link #fromRequest} and call
+	 * {@link #getRequestId()}.  Not part of the public REST contract &mdash; the attribute name is an internal detail.
+	 */
+	public static final String REQUEST_SESSION_ATTR = "juneau.internal.RestSession";
+
+	/**
 	 * Creates a builder of this object.
 	 *
 	 * @param ctx The context creating this builder.
@@ -209,6 +220,17 @@ public class RestSession extends ContextSession {
 	 */
 	public static Builder create(RestContext ctx) {
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	}
+
+	/**
+	 * Returns the {@link RestSession} published on the given servlet request via the {@link #REQUEST_SESSION_ATTR}
+	 * session-handle seam, or <jk>null</jk> if none is present.
+	 *
+	 * @param req The servlet request.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return The active session, or <jk>null</jk>.
+	 */
+	public static RestSession fromRequest(HttpServletRequest req) {
+		return (nn(req) && req.getAttribute(REQUEST_SESSION_ATTR) instanceof RestSession s) ? s : null;
 	}
 
 	private final long startTime = System.currentTimeMillis();
@@ -223,6 +245,26 @@ public class RestSession extends ContextSession {
 	private String pathInfoUndecoded;
 	private UrlPath urlPath;
 	private UrlPathMatch urlPathMatch;
+
+	/**
+	 * [TODO-401] Tracks whether an HTTP status was explicitly assigned via {@link #status(int)} /
+	 * {@link #status(HttpStatusLine)} on this call.  The {@code NotFound} sentinel in {@link #run()} keys off this
+	 * flag instead of {@code getStatus() == 0}, so a genuine 404 stays a 404 under a real container whose response
+	 * defaults to the servlet-spec {@code 200} (not the mock's coincidental {@code 0}).  A raw
+	 * {@code HttpServletResponse.setStatus(...)} (e.g. from a {@code @RestStartCall} hook) bypasses this flag; that
+	 * broader real-container 404-status audit is TODO-403's remit, not this fix.
+	 */
+	private boolean statusExplicitlySet;
+
+	/** The correlation id resolved for this call at build time (mint-or-honor).  Never {@code null}. */
+	private final String requestId;
+
+	/**
+	 * The single open {@code requestId} {@link LogContext} scope for this call, opened after id resolution and closed
+	 * exactly once in {@link #finish()} (after emission) &mdash; on the request thread, so a pooled request thread never
+	 * carries the scope into the next request.
+	 */
+	private final LogContext.Scope requestIdScope;
 
 	/**
 	 * Opaque holder for the debug-resolution snapshot ({@code RestDebugSnapshot}) published at the async-dispatch
@@ -248,6 +290,42 @@ public class RestSession extends ContextSession {
 		req = beanStore.add(HttpServletRequest.class, builder.req);
 		res = beanStore.add(HttpServletResponse.class, builder.res);
 		urlPath = beanStore.add(UrlPath.class, builder.urlPath);
+
+		// Always-on request-id correlation resolver.  Runs at every session build so it covers 404 / early-error paths
+		// that never reach a @RestStartCall hook, and gives the debug formatter a synchronous, session-cached id to
+		// render.  Resolve the id first, then open exactly one LogContext scope (closed in finish()).
+		var settings = context.getRequestIdSettings();
+		requestId = resolveRequestId(settings, req, res);
+		req.setAttribute(REQUEST_SESSION_ATTR, this);
+		req.setAttribute(settings.getAttributeKey(), requestId);
+		res.setHeader(RequestIdConstants.HEADER, requestId);
+		requestIdScope = RichLogger.context().with(RestServerConstants.REQUEST_ID, requestId);
+	}
+
+	/**
+	 * Mints or honors the correlation id for this call.
+	 *
+	 * <p>
+	 * Honors (in order): a non-empty id already stashed under the settings attribute key (idempotent re-entry or a
+	 * parent filter); else a sanitized, length-capped, non-truncated, validator-accepted incoming {@code X-Request-Id}
+	 * header (sanitize-and-accept); else a freshly minted id from the settings supplier.
+	 *
+	 * @param settings The resolved request-id settings.  Must not be <jk>null</jk>.
+	 * @param req The servlet request.  Must not be <jk>null</jk>.
+	 * @param res The servlet response.  Must not be <jk>null</jk>.
+	 * @return The resolved id.  Never <jk>null</jk> (unless a custom supplier returns <jk>null</jk>).
+	 */
+	private static String resolveRequestId(RequestIdSettings settings, HttpServletRequest req, HttpServletResponse res) {
+		var existing = req.getAttribute(settings.getAttributeKey());
+		if (existing instanceof String s && ! s.isEmpty())
+			return s;
+		var incoming = req.getHeader(RequestIdConstants.HEADER);
+		if (nn(incoming)) {
+			var sanitized = DebugTextSanitizer.sanitize(incoming, RequestIdConstants.MAX_LEN);
+			if (nn(sanitized) && ! sanitized.isEmpty() && ! sanitized.endsWith(DebugTextSanitizer.TRUNCATED_MARKER) && settings.getValidator().test(sanitized))
+				return sanitized;
+		}
+		return settings.getIdSupplier().get();
 	}
 
 	/**
@@ -313,32 +391,52 @@ public class RestSession extends ContextSession {
 	 * @return This object.
 	 */
 	public RestSession finish() {
-		var asyncOwned = org.apache.juneau.rest.server.processor.AsyncResponseProcessor.isAsyncDispatchOwned(req);
+		// Emit-before-close: the requestId LogContext scope stays open through synchronous emission (so the emitted
+		// record carries the structured id), then always closes in the finally — on the request thread, even on the
+		// async path (where the snapshot was already captured during run()) — so a pooled thread never leaks the scope.
 		try {
-			if (! asyncOwned)
-				setFinishTimeAttributes();
-			if (nn(opSession))
-				opSession.finish();
-			else if (! asyncOwned) {
-				// Skip flush when AsyncContext has been started — see AsyncResponseProcessor.
-				res.flushBuffer();
+			var asyncOwned = org.apache.juneau.rest.server.processor.AsyncResponseProcessor.isAsyncDispatchOwned(req);
+			try {
+				if (! asyncOwned)
+					setFinishTimeAttributes();
+				if (nn(opSession))
+					opSession.finish();
+				else if (! asyncOwned) {
+					// Skip flush when AsyncContext has been started — see AsyncResponseProcessor.
+					res.flushBuffer();
+				}
+			} catch (Exception e) {
+				exception(e);
 			}
-		} catch (Exception e) {
-			exception(e);
-		}
-		// Skip synchronous emission on the async path — the completion hook emits after the body/headers are written.
-		if (asyncOwned)
+			// Skip synchronous emission on the async path — the completion hook emits after the body/headers are written.
+			if (asyncOwned)
+				return this;
+			// Contain diagnostic formatting/emission: a formatter (or a scrubber that escaped the fail-closed guard) throwing
+			// a RuntimeException/Error during a completed request must not escape and fail the request thread. Log only a
+			// fixed token — never e.getMessage(), the body, the stack, or a second formatter pass — so a scrubber throwing
+			// new RuntimeException(body) cannot re-leak the secret the placeholder just refused.
+			try {
+				RestDebugPipeline.emit(this);
+			} catch (Throwable t) {  // NOSONAR - deliberate containment of any diagnostic failure at request completion.
+				LOG.log(Level.WARNING, "debug formatter failed");
+			}
 			return this;
-		// Contain diagnostic formatting/emission: a formatter (or a scrubber that escaped the fail-closed guard) throwing
-		// a RuntimeException/Error during a completed request must not escape and fail the request thread. Log only a
-		// fixed token — never e.getMessage(), the body, the stack, or a second formatter pass — so a scrubber throwing
-		// new RuntimeException(body) cannot re-leak the secret the placeholder just refused.
-		try {
-			RestDebugPipeline.emit(this);
-		} catch (Throwable t) {  // NOSONAR - deliberate containment of any diagnostic failure at request completion.
-			LOG.log(Level.WARNING, "debug formatter failed");
+		} finally {
+			closeRequestIdScope();
 		}
-		return this;
+	}
+
+	/**
+	 * Closes this call's {@code requestId} {@link LogContext} scope, if open.
+	 *
+	 * <p>
+	 * Idempotent: safe to call more than once (and from a build path that never reaches {@link #finish()}, such as a
+	 * throwaway error session).  Must run on the request thread that opened the scope so a pooled thread does not carry
+	 * the scope into the next request.
+	 */
+	public void closeRequestIdScope() {
+		if (nn(requestIdScope))
+			requestIdScope.close();
 	}
 
 	/**
@@ -374,6 +472,18 @@ public class RestSession extends ContextSession {
 	 * @return The stashed snapshot, or <jk>null</jk> if none was stashed (synchronous path or access logging off).
 	 */
 	public Object getDebugSnapshot() { return debugSnapshot; }
+
+	/**
+	 * Returns the correlation id resolved for this call (mint-or-honor), cached at build time.
+	 *
+	 * <p>
+	 * This is the synchronous, session-cached value the debug formatter and {@code RequestIdFilter} read through the
+	 * {@link #fromRequest(HttpServletRequest) session-handle seam} &mdash; never a live public/custom-key attribute
+	 * read.
+	 *
+	 * @return The resolved request id.  Never <jk>null</jk> (unless a custom id supplier returned <jk>null</jk>).
+	 */
+	public String getRequestId() { return requestId; }
 
 	/**
 	 * Returns the bean store of this call.
@@ -617,7 +727,7 @@ public class RestSession extends ContextSession {
 				context.processResponse(opSession);
 			}
 		} catch (NotFound e) {
-			if (getStatus() == 0)
+			if (! statusExplicitlySet)
 				status(404);
 			exception(e);
 			context.handleNotFound(this);
@@ -653,6 +763,7 @@ public class RestSession extends ContextSession {
 	 * @return This object.
 	 */
 	public RestSession status(int value) {
+		statusExplicitlySet = true;
 		res.setStatus(value);
 		return this;
 	}
@@ -665,8 +776,10 @@ public class RestSession extends ContextSession {
 	 * @return This object.
 	 */
 	public RestSession status(HttpStatusLine value) {
-		if (nn(value))
+		if (nn(value)) {
+			statusExplicitlySet = true;
 			res.setStatus(value.getStatusCode());
+		}
 		return this;
 	}
 

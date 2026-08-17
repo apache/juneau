@@ -1,0 +1,398 @@
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************/
+
+/* ==========================================================================
+   Apache Juneau — admin-console chrome ("chrome.css")
+   ==========================================================================
+
+   PURPOSE
+   A themeable IRS-style admin-console shell (branded header, primary nav tab
+   bar, content card on a tinted page background, data grid with semantic
+   status pills). Structural rules only — this file ships no :root block of
+   its own. Every --jc-* token is defined by the DYNAMIC part of the served
+   response: ConsoleChromeMixin always appends Theme.OPEN's token block, then
+   (if a non-default theme is active) a second block of that theme's
+   overrides. Appended blocks win by CSS cascade order, so a consumer never
+   needs to out-rank a token defined in this static file.
+
+   SECURITY - SINK-PROPERTY DISCIPLINE (do not casually add a new var(--jc-*)
+   reference without re-reading this):
+     - Every var(--jc-*) reference below is the ENTIRE value of its property
+       - never an argument nested inside another function call
+       (linear-gradient(..., var(--jc-x), ...), rgb(var(--jc-x)),
+       url(var(--jc-x)) are all forbidden shapes).
+     - Color/font/length tokens sink ONLY into color, background-color,
+       border-color (+ border-top-color/border-bottom-color), font-family,
+       or border-radius - never a url-capable property.
+     - The ONLY url-capable property that takes a var(--jc-*) value is
+       background-image, and only for the two gradient tokens
+       --jc-page-bg / --jc-avatar-bg (their values are locked to
+       gradient/color shapes by Theme's allowlist grammar, so a url() can
+       never be their value).
+     - The logo is NOT a token. .jc-logo's background-image is a hard-coded
+       url("data:...") literal below; there is no --jc-logo custom property
+       anywhere in this file or the Theme API.
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--jc-font);
+  color: var(--jc-text);
+  background-color: var(--jc-chrome-bg);
+  background-image: var(--jc-page-bg);
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: var(--jc-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.jc-header {
+  display: flex;
+  align-items: center;
+  height: 68px;
+  background-color: var(--jc-white);
+  border-bottom: 1px solid var(--jc-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.jc-brand {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.jc-logo {
+  width: 48px;
+  height: 48px;
+  margin: 10px 20px;
+  flex: 0 0 auto;
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-white);
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0OCA0OCc+PHJlY3Qgd2lkdGg9JzQ4JyBoZWlnaHQ9JzQ4JyByeD0nMTAnIGZpbGw9JyMxNTg5RUUnLz48cGF0aCBkPSdNMjQgOGMtNyA2LTExIDEzLTExIDE5YTExIDExIDAgMCAwIDIyIDBjMC02LTQtMTMtMTEtMTl6JyBmaWxsPScjZmZmZmZmJyBmaWxsLW9wYWNpdHk9JzAuOTUnLz48cGF0aCBkPSdNMjQgMTR2MjAnIHN0cm9rZT0nIzE1ODlFRScgc3Ryb2tlLXdpZHRoPScxLjYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjwvc3ZnPgo=");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px 26px;
+}
+
+.jc-brand-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--jc-text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jc-brand-title .jc-brand-sep {
+  margin: 0 6px;
+  color: var(--jc-text-muted);
+  font-weight: 400;
+}
+
+.jc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 16px;
+  flex: 0 0 auto;
+}
+
+.jc-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--jc-header-icon-color);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.jc-icon-btn:hover { background-color: var(--jc-chrome-bg); }
+
+.jc-icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+.jc-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-image: var(--jc-avatar-bg);
+  color: var(--jc-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+
+/* ==========================================================================
+   Primary navigation
+   ========================================================================== */
+
+.jc-nav {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--jc-white);
+  border-bottom: 3px solid var(--jc-accent);
+  padding: 0 16px;
+  position: sticky;
+  top: 68px;
+  z-index: 19;
+}
+
+.jc-nav-tab {
+  display: flex;
+  align-items: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--jc-text-soft);
+  padding: 8px 10px;
+  margin-right: 2px;
+  border-top: 3px solid transparent;
+  border-bottom: none;
+  cursor: pointer;
+  transition: background-color 0.1s ease-in;
+}
+
+.jc-nav-tab:hover {
+  background-color: var(--jc-accent-wash);
+  text-decoration: none;
+}
+
+.jc-nav-tab.active {
+  background-color: var(--jc-accent-wash);
+  border-top-color: var(--jc-accent);
+  color: var(--jc-text);
+}
+
+/* ==========================================================================
+   Page scaffolding
+   ========================================================================== */
+
+.jc-main {
+  flex: 1 1 auto;
+  padding: 20px 24px 40px;
+}
+
+.jc-page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.jc-page-header h1 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--jc-text);
+  margin: 0;
+}
+
+.jc-page-header .jc-page-sub {
+  font-size: 0.8125rem;
+  color: var(--jc-text-muted);
+  margin-top: 2px;
+}
+
+.jc-breadcrumb {
+  font-size: 0.75rem;
+  color: var(--jc-text-muted);
+  margin-bottom: 4px;
+}
+
+.jc-breadcrumb a { color: var(--jc-text-muted); }
+.jc-breadcrumb .sep { margin: 0 6px; }
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+
+.jc-card {
+  max-width: 1180px;
+  margin: 0 auto;
+  background-color: var(--jc-card-bg);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  padding: 18px 20px 8px;
+}
+
+.jc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.jc-card-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--jc-text);
+  margin: 0;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.jc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--jc-font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--jc-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.jc-btn-primary {
+  background-color: var(--jc-btn-primary);
+  color: var(--jc-white);
+}
+.jc-btn-primary:hover { background-color: var(--jc-btn-primary-hover); }
+
+.jc-btn-outline {
+  background-color: var(--jc-white);
+  color: var(--jc-text-soft);
+  border-color: var(--jc-border-2);
+}
+.jc-btn-outline:hover { background-color: var(--jc-chrome-bg); }
+
+.jc-btn-danger {
+  background-color: var(--jc-white);
+  color: var(--jc-danger);
+  border-color: var(--jc-border-2);
+}
+.jc-btn-danger:hover { background-color: #fdeceb; }
+
+.jc-btn-success {
+  background-color: var(--jc-white);
+  color: var(--jc-success);
+  border-color: var(--jc-border-2);
+}
+.jc-btn-success:hover { background-color: #eaf6ee; }
+
+/* ==========================================================================
+   Tag / pill system
+   ========================================================================== */
+
+.tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+/* Example domain/value vocabulary (lifted from the release-manager dogfood) - an extension point, not a closed
+   contract. A consumer app is expected to add its own .tag.<domain>.<value> rules using the same palette tokens. */
+.tag.status.released,
+.tag.stage.released { background-color: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); border-color: var(--jc-tag-green-border); }
+
+.tag.status.voting,
+.tag.status.rc,
+.tag.stage.voting,
+.tag.stage.rc { background-color: var(--jc-tag-blue-bg); color: var(--jc-tag-blue-text); border-color: var(--jc-tag-blue-border); }
+
+.tag.status.draft,
+.tag.status.pending,
+.tag.stage.draft,
+.tag.stage.pending,
+.tag.stage.building { background-color: var(--jc-tag-amber-bg); color: var(--jc-tag-amber-text); border-color: var(--jc-tag-amber-border); }
+
+.tag.status.dropped,
+.tag.status.unknown,
+.tag.stage.dropped,
+.tag.stage.unknown,
+.tag.stage.archived { background-color: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
+
+/* ==========================================================================
+   Data table (IRS / DataTables style)
+   ========================================================================== */
+
+table.jc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--jc-white);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  overflow: hidden;
+}
+
+table.jc-table thead th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--jc-text-muted);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--jc-border);
+  background-color: var(--jc-chrome-bg);
+  white-space: nowrap;
+}
+
+table.jc-table tbody td {
+  font-size: 0.8125rem;
+  color: var(--jc-text);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--jc-border);
+  vertical-align: middle;
+}
+
+table.jc-table tbody tr:nth-child(odd) { background-color: #fbfbfc; }
+table.jc-table tbody tr:hover { background-color: var(--jc-accent-wash); }
+table.jc-table tbody tr:last-child td { border-bottom: none; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.jc-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--jc-text-muted);
+  padding: 24px 0 32px;
+}

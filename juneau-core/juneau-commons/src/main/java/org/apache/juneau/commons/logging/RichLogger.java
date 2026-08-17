@@ -182,6 +182,19 @@ public class RichLogger extends java.util.logging.Logger {
 		return getLogger(cn(clazz));
 	}
 
+	/**
+	 * Returns the thread-confined {@link LogContext} whose entries are auto-attached to every {@link LogRecord} emitted
+	 * on the current thread while a scope is open.
+	 *
+	 * <p>
+	 * Repeated calls return the same singleton (there is exactly one thread-local context map; sharing is harmless).
+	 *
+	 * @return The shared {@link LogContext} singleton.  Never <jk>null</jk>.
+	 */
+	public static LogContext context() {
+		return LogContext.INSTANCE;
+	}
+
 	static RichLogger findLogger(String name) {
 		drainCollectedLoggers();
 		var ref = loggers.get(name);
@@ -326,6 +339,7 @@ public class RichLogger extends java.util.logging.Logger {
 
 	@Override
 	public void log(java.util.logging.LogRecord record) {
+		LogRecordContext.attachIfAbsent(record);
 		canonical.listeners.forEach(x -> x.onLogRecord(record));
 		if (canonical.useParentListeners) {
 			var ancestors = new ArrayList<RichLogger>();

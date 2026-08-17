@@ -41,12 +41,11 @@ import org.junit.jupiter.api.*;
  * microservice flipped {@code /readyz} for every other one in the same JVM.
  *
  * <p>
- * These tests deliberately verify the bean-store publish and the exact {@link ReadinessState#resolve(BeanStore)}
- * resolution that {@link HealthAggregator#aggregate} performs, rather than round-tripping real HTTP requests
- * through the Jetty connector: this module's {@code @Rest(paths={"/healthz","/readyz","/livez"})} multi-path
- * auto-mount does not currently route those requests to the matching {@code @RestGet} operation (a pre-existing
- * mount/dispatch issue unrelated to READY-394 -- see the READY-394 final report). Testing the resolution
- * directly still exercises the exact mechanism the probe depends on, without that unrelated flakiness.
+ * These tests intentionally stay scoped to the bean-store publish and the exact {@link ReadinessState#resolve(BeanStore)}
+ * resolution that {@link HealthAggregator#aggregate} performs, per their own names.  Real-HTTP-level probe-routing
+ * coverage (a real {@code GET /healthz}/{@code /readyz}/{@code /livez} over the Jetty connector) now lives in
+ * {@code HealthServlet_JettyHttpConnector_Test}; the multi-path auto-mount dispatch bug that previously prevented
+ * that round-trip was fixed in [TODO-401].
  *
  * @since 10.0.0
  */

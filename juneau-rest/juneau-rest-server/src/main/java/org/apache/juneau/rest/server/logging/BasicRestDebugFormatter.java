@@ -269,7 +269,17 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	public String statusLine(HttpServletRequest req, HttpServletResponse res) {
 		var method = DebugTextSanitizer.sanitize(req.getMethod(), maxUriLength);
 		var uri = DebugTextSanitizer.sanitize(req.getRequestURI(), maxUriLength);
-		return new StringBuilder().append('[').append(res.getStatus()).append("] HTTP ").append(method).append(' ').append(uri).toString();
+		var sb = new StringBuilder();
+		// Prepend the resolved correlation id (Should-fix 1): read the session-cached getRequestId() through the
+		// session-handle seam — never a live public/custom-key attribute read.  Missing session/id → no prefix (today's
+		// unprefixed line), never a throw.  Both formatBasic and the 404 render path route through here.
+		var session = RestSession.fromRequest(req);
+		if (session != null) {
+			var id = session.getRequestId();
+			if (id != null && ! id.isEmpty())
+				sb.append("[requestId=").append(id).append("] ");
+		}
+		return sb.append('[').append(res.getStatus()).append("] HTTP ").append(method).append(' ').append(uri).toString();
 	}
 
 	@Override /* Overridden from RestDebugFormatter */

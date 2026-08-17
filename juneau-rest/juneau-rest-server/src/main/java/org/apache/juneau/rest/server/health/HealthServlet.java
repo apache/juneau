@@ -81,36 +81,63 @@ public class HealthServlet extends BasicRestServlet {
 	}
 
 	/**
-	 * Health probe endpoint.
+	 * Health/readiness/liveness probe endpoint.
 	 *
+	 * <p>
+	 * [TODO-401] Serves all three mount paths ({@code /healthz}, {@code /readyz}, {@code /livez}) through one
+	 * {@code /*} operation, dispatching on the request's last path segment.  A single zero-part,
+	 * {@code hasRemainder=true} matcher is required because this servlet is auto-mounted at three <i>exact-match</i>
+	 * top-level path-specs: a real container delivers a bare {@code GET /readyz} with a zero-segment
+	 * {@code pathInfo} that no 1-segment matcher can satisfy, so three separate {@code @RestGet(path="/{probe}")}
+	 * operations all 404.  The last-path-segment key ({@link #probeFor}) is the only thing that differs per mount,
+	 * so it is the disambiguator.
+	 *
+	 * <p>
+	 * This replaces the former {@code healthz(...)}/{@code readyz(...)}/{@code livez(...)} entry points; subclasses
+	 * that overrode any of those must override {@link #probeFor(RestRequest)} (or this method) instead.
+	 *
+	 * @param req The request (its last path segment selects the probe).
 	 * @param res The response.
 	 * @return Aggregated health payload.
 	 */
-	@RestGet(path="/healthz")
-	public HealthResponse healthz(RestResponse res) {
-		return aggregator.aggregate(getContext(), indicators(), null, res);
+	@RestGet(path="/*")  // Sibling-servlet pin (matches FaviconServlet/VersionServlet): a zero-part, hasRemainder=true
+	                     // matcher that resolves BOTH a container's zero-segment bare-mount hit AND a mock/remount remainder.
+	public HealthResponse probe(RestRequest req, RestResponse res) {
+		return aggregator.aggregate(getContext(), indicators(), probeFor(req), res);
 	}
 
 	/**
-	 * Readiness probe endpoint.
+	 * Resolves which probe this request is for, keyed off the LAST PATH SEGMENT.
 	 *
-	 * @param res The response.
-	 * @return Aggregated health payload.
+	 * <p>
+	 * Prefers {@link RestRequest#getPathInfo()} when it carries a real (non-root) value &mdash; this is what
+	 * {@code MockRestClient} and any remainder-based remount populate ({@code servletPath="", pathInfo="/readyz"}).
+	 * Falls back to {@link RestRequest#getServletPath()} for a real container's bare exact-match hit, where
+	 * {@code pathInfo} is {@code null} ({@code servletPath="/readyz", pathInfo=null}).
+	 *
+	 * @param req The request.
+	 * @return The resolved probe, or {@code null} for {@code /healthz} (the overall aggregate).
 	 */
-	@RestGet(path="/readyz")
-	public HealthResponse readyz(RestResponse res) {
-		return aggregator.aggregate(getContext(), indicators(), HealthProbe.READY, res);
+	protected HealthProbe probeFor(RestRequest req) {
+		var hint = req.getPathInfo();
+		if (hint == null || hint.isEmpty() || "/".equals(hint))
+			hint = req.getServletPath();
+		var last = lastSegment(hint);
+		if ("readyz".equals(last) || "ready".equals(last))
+			return HealthProbe.READY;
+		if ("livez".equals(last) || "live".equals(last))
+			return HealthProbe.LIVE;
+		return null; // "/healthz" (or anything else this instance is mounted at) -- overall aggregate.
 	}
 
-	/**
-	 * Liveness probe endpoint.
-	 *
-	 * @param res The response.
-	 * @return Aggregated health payload.
-	 */
-	@RestGet(path="/livez")
-	public HealthResponse livez(RestResponse res) {
-		return aggregator.aggregate(getContext(), indicators(), HealthProbe.LIVE, res);
+	private static String lastSegment(String path) {
+		if (path == null)
+			return "";
+		var p = path;
+		while (p.length() > 1 && p.endsWith("/"))
+			p = p.substring(0, p.length() - 1);
+		var i = p.lastIndexOf('/');
+		return i < 0 ? p : p.substring(i + 1);
 	}
 
 	/**

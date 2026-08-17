@@ -52,6 +52,9 @@ public final class RestResponse implements Closeable {
 	private long cachedContentLength = -1;
 	private boolean debugEmitted;
 	private Duration execTime;
+	// The X-Request-Id echoed by the server for this exchange, captured at onConnect; null when the server echoed
+	// none (or onConnect never ran on a synthetic error).  Never silently falls back to the sent id.
+	private String requestId;
 
 	RestResponse(TransportResponse response, RestClient client) {
 		this(response, client, null, null, 0);
@@ -111,6 +114,30 @@ public final class RestResponse implements Closeable {
 	 */
 	public String getReasonPhrase() {
 		return response.getReasonPhrase();
+	}
+
+	/**
+	 * Returns the {@code X-Request-Id} correlation id the server echoed for this exchange.
+	 *
+	 * <p>
+	 * Captured at {@code onConnect} from the response header (which may differ from the sent id if the server
+	 * sanitized it).  Returns <jk>null</jk> when the server echoed no id, or on a synthetic no-response error where
+	 * {@code onConnect} never ran &mdash; it never silently falls back to the sent id.
+	 *
+	 * @return The echoed correlation id, or <jk>null</jk> if none was observed.
+	 * @since 10.0.0
+	 */
+	public String getRequestId() {
+		return requestId;
+	}
+
+	/**
+	 * Records the correlation id echoed by the server for this exchange (auto-send interceptor internal use).
+	 *
+	 * @param value The echoed id.
+	 */
+	void setEchoedRequestId(String value) {
+		this.requestId = value;
 	}
 
 	/**

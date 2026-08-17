@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
+import java.util.*;
+
 /**
  * Per-tier formatter for JUL-level-driven REST client debug logging.
  *
@@ -72,5 +74,45 @@ public interface RestClientDebugFormatter {
 	 */
 	default int bodyCap() {
 		return 8 * 1024;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if a body with the given content type is worth rendering as text (as opposed to being
+	 * binary/unknown).
+	 *
+	 * <p>
+	 * This is a text-vs-binary renderability predicate, <b>not</b> a redaction allowlist. It parses only the media type
+	 * (type/subtype, ignoring parameters such as {@code ; charset=utf-8}), case-folds, and treats the following as
+	 * renderable: {@code text/*}, {@code application/json}, {@code application/xml}, any {@code +json}/{@code +xml}
+	 * suffix, and {@code application/x-www-form-urlencoded}. {@code multipart/form-data} is explicitly non-renderable.
+	 * An absent or blank content type is conservatively treated as non-renderable.
+	 *
+	 * <p>
+	 * {@code Content-Encoding} is not visible to this one-argument predicate; a caller that dumps bodies must separately
+	 * treat any non-identity encoding (e.g. {@code gzip}) as non-renderable.
+	 *
+	 * <p>
+	 * Keep byte-identical to {@code org.apache.juneau.rest.server.logging.RestDebugFormatter}'s counterpart.
+	 *
+	 * @param contentType The body's content type. Can be <jk>null</jk> (returns <jk>false</jk>).
+	 * @return <jk>true</jk> if the content type is renderable as text.
+	 */
+	default boolean isBodyRenderable(String contentType) {
+		if (contentType == null)
+			return false;
+		var ct = contentType.trim();
+		var semi = ct.indexOf(';');
+		if (semi >= 0)
+			ct = ct.substring(0, semi).trim();
+		ct = ct.toLowerCase(Locale.ROOT);
+		if (ct.isEmpty())
+			return false;
+		if (ct.startsWith("text/"))
+			return true;
+		if (ct.equals("multipart/form-data"))
+			return false;
+		if (ct.equals("application/json") || ct.equals("application/xml") || ct.equals("application/x-www-form-urlencoded"))
+			return true;
+		return ct.endsWith("+json") || ct.endsWith("+xml");
 	}
 }

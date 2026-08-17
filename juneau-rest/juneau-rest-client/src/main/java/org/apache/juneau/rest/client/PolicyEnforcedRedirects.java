@@ -77,6 +77,9 @@ public final class PolicyEnforcedRedirects {
 	 * @throws TransportException If a hop fails, the redirect chain exceeds {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS},
 	 * 	a hop targets a denied host, or a non-repeatable body would need to be replayed.
 	 */
+	@SuppressWarnings({
+		"resource" // Returns the final hop's response for the caller to close; Eclipse JDT @Owning warning is by design.
+	})
 	public static TransportResponse execute(TransportRequest initial, HopExecutor executor) throws TransportException {
 		var allowPrivateUrls = initial.isAllowPrivateUrls();
 		var current = initial;

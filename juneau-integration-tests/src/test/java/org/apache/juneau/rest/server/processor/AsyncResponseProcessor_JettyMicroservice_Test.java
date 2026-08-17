@@ -29,6 +29,9 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.LogContext;
+import org.apache.juneau.commons.logging.LogRecordContext;
+import org.apache.juneau.commons.logging.RichLogger;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -252,11 +255,34 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		/** Test-controlled gate future for the delayed endpoint; completed by the test to trigger completion-path emit. */
 		static volatile CompletableFuture<String> gate;
 
+		/** Test-controlled gate future for the ad-hoc-log endpoint (TODO-364 Phase 6 tripwire). */
+		static volatile CompletableFuture<String> adhocGate;
+
 		/** Counted down by {@code @RestEndCall} on the request thread — i.e. AFTER {@code RestSession.finish()} returns. */
 		static volatile CountDownLatch finishLatch;
 
+		/**
+		 * When non-<jk>null</jk>, the async handlers open a {@link LogContext} scope carrying {@code corrId=carryValue} on
+		 * the request thread. TODO-364 v1 leaves request-id/{@code LogContext}-scope ownership to {@code [TODO-402]}'s
+		 * {@code RequestIdFilter}, so these Phase-6 async-carry tests establish their own request-thread scope instead of
+		 * relying on any framework-opened scope. The scope stays open across the async hand-off (so
+		 * {@code RestDebugPipeline.captureAsyncSnapshot(...)} snapshots it) and is closed in {@link #endCall()} on the same
+		 * request thread — no thread-pool leak.
+		 */
+		static volatile String carryValue;
+
+		/** The request-thread {@link LogContext} scope opened from {@link #carryValue}; closed in {@link #endCall()}. */
+		static volatile LogContext.Scope carryScope;
+
+		private void openCarryScopeIfRequested() {
+			var cv = carryValue;
+			if (cv != null)
+				carryScope = RichLogger.context().with("corrId", cv);
+		}
+
 		@RestGet("/delayed")
 		public CompletableFuture<String> delayed(RestResponse res) {
+			openCarryScopeIfRequested();
 			var g = new CompletableFuture<String>();
 			gate = g;
 			// The header + content-type are set on the COMPLETION thread (inside thenApply), so a record that captured
@@ -286,8 +312,30 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			return new CompletableFuture<>();  // never completes → fires the AsyncContext timeout
 		}
 
+		@RestGet("/adhoc")
+		public CompletableFuture<String> adhoc(RestRequest req, RestResponse res) {
+			openCarryScopeIfRequested();
+			var g = new CompletableFuture<String>();
+			adhocGate = g;
+			// The ad-hoc app log runs inside the completion callback (the COMPLETION thread), where the request-thread
+			// LogContext scope has already closed — TODO-364 Phase 6 documented v1 edge.
+			return g.thenApply(body -> {
+				res.setContentType("text/plain");
+				req.fine("adhoc-completion-log");
+				return body;
+			});
+		}
+
 		@RestEndCall
 		public void endCall() {
+			// Close the request-thread carry scope here — on the request thread, AFTER captureAsyncSnapshot(...) has
+			// already snapshotted it during response processing — so the thread-local is restored and never leaks into a
+			// pooled Jetty worker.
+			var sc = carryScope;
+			if (sc != null) {
+				sc.close();
+				carryScope = null;
+			}
 			var l = finishLatch;
 			if (l != null)
 				l.countDown();
@@ -479,6 +527,123 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertTrue(rec.getMessage().contains("[504]"), rec.getMessage());
 		} finally {
 			reset();
+			state.restore();
+		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// H05/H06 (TODO-364 Phase 6): the async-completion debug record carries the request-thread's LogContext across the
+	// async hop (RestDebugSnapshot carry + emit pre-seed), while ad-hoc app logging on the completion thread does NOT
+	// (the documented v1 thread-confined boundary).
+	//
+	// TODO-364 v1 does NOT open any framework LogContext scope itself (request-id / scope ownership is [TODO-402]'s
+	// RequestIdFilter, opened after @RestStartCall). These tests therefore establish their own request-thread scope in
+	// the handler (carrying a generic "corrId"), left open across the async hand-off and closed in @RestEndCall — which
+	// is exactly the shape [TODO-402] will produce — to exercise the 364-owned carry mechanism in isolation.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void h05_asyncCompletionRecord_carriesRequestThreadContextField() throws Exception {
+		var opLogger = Logger.getLogger(AsyncCaptureServlet.class.getName() + ".delayed");
+		var state = new LoggerState(opLogger);
+		try {
+			var handler = attach(opLogger, Level.FINE);
+			AsyncCaptureServlet.gate = null;
+			AsyncCaptureServlet.carryValue = "async-corr-1";  // handler opens a request-thread LogContext scope from this
+			AsyncCaptureServlet.finishLatch = new CountDownLatch(1);
+
+			var respFuture = HTTP.sendAsync(
+				HttpRequest.newBuilder()
+					.uri(URI.create(capFixture.getRootUrl() + "/asyncCap/delayed"))
+					.timeout(Duration.ofSeconds(15))
+					.GET()
+					.build(),
+				BodyHandlers.ofString());
+
+			// The request thread has returned from finish() and @RestEndCall closed the carry scope — so the completion
+			// record can only carry corrId if it was snapshotted on the request thread and re-established at emit (carry).
+			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+				"request thread did not reach @RestEndCall");
+			assertNotNull(AsyncCaptureServlet.gate, "gate future should have been published by the handler");
+			AsyncCaptureServlet.gate.complete("delayed-body-value");
+
+			var resp = respFuture.get(15, TimeUnit.SECONDS);
+			assertEquals(200, resp.statusCode(), "body: " + resp.body());
+
+			var recs = handler.forLogger(opLogger.getName());
+			assertEquals(1, recs.size(), "exactly one completion-path record expected");
+			var rec = recs.get(0);
+			assertEquals("async-corr-1", LogRecordContext.of(rec).get("corrId"),
+				"the async completion record must carry the LogContext captured on the request thread (design §8.2 carry)");
+
+			// TODO-402 Phase 10 async gate: the always-on requestId scope (opened in RestSession's constructor) is
+			// carried across the async hop via the same 364 snapshot, AND the completion-thread rendered message
+			// carries the [requestId=<id>] prefix (statusLine reading session.getRequestId()) — proving 364's carry
+			// and 402's statusLine read compose on the completion thread, where the live LogContext is empty.
+			var rid = LogRecordContext.of(rec).get("requestId");
+			assertNotNull(rid, "the async completion record must also carry the always-on framework requestId");
+			assertTrue(rec.getMessage().contains("[requestId=" + rid + "] "),
+				"the async completion rendered message must carry the requestId prefix: " + rec.getMessage());
+		} finally {
+			AsyncCaptureServlet.carryValue = null;
+			AsyncCaptureServlet.finishLatch = null;
+			var g = AsyncCaptureServlet.gate;
+			if (g != null)
+				g.complete("cleanup");
+			AsyncCaptureServlet.gate = null;
+			state.restore();
+		}
+	}
+
+	@Test void h06_adHocCompletionThreadLog_doesNotCarryContext_documentedV1Edge() throws Exception {
+		var opLogger = Logger.getLogger(AsyncCaptureServlet.class.getName() + ".adhoc");
+		var state = new LoggerState(opLogger);
+		try {
+			var handler = attach(opLogger, Level.FINE);
+			handler.setLevel(Level.ALL);  // also collect the FINE ad-hoc record, not just the INFO debug record
+			AsyncCaptureServlet.adhocGate = null;
+			AsyncCaptureServlet.carryValue = "async-corr-adhoc";  // handler opens a request-thread LogContext scope
+			AsyncCaptureServlet.finishLatch = new CountDownLatch(1);
+
+			var respFuture = HTTP.sendAsync(
+				HttpRequest.newBuilder()
+					.uri(URI.create(capFixture.getRootUrl() + "/asyncCap/adhoc"))
+					.timeout(Duration.ofSeconds(15))
+					.GET()
+					.build(),
+				BodyHandlers.ofString());
+
+			assertTrue(AsyncCaptureServlet.finishLatch.await(10, TimeUnit.SECONDS),
+				"request thread did not reach @RestEndCall");
+			assertNotNull(AsyncCaptureServlet.adhocGate, "adhoc gate future should have been published by the handler");
+			AsyncCaptureServlet.adhocGate.complete("adhoc-body");
+
+			var resp = respFuture.get(15, TimeUnit.SECONDS);
+			assertEquals(200, resp.statusCode(), "body: " + resp.body());
+
+			// The documented v1 edge: ad-hoc req.fine(...) run on the completion thread does NOT carry the context (the
+			// request-thread scope is closed and nothing re-opens a general scope there). Update this test AND the docs
+			// scope line if general async LogContext propagation is ever added.
+			var adhocRec = handler.forLogger(opLogger.getName()).stream()
+				.filter(r -> "adhoc-completion-log".equals(r.getMessage()))
+				.findFirst().orElse(null);
+			assertNotNull(adhocRec, "expected the ad-hoc FINE record emitted on the completion thread");
+			assertNull(LogRecordContext.of(adhocRec).get("corrId"),
+				"documented v1 edge: ad-hoc completion-thread logging must NOT carry the request-thread context");
+
+			// Contrast: the debug-pipeline completion record on the SAME logger DOES carry it (the Phase 6 carry).
+			var debugRec = handler.forLogger(opLogger.getName()).stream()
+				.filter(r -> r.getLevel() == Level.INFO)
+				.findFirst().orElse(null);
+			assertNotNull(debugRec, "expected the INFO debug completion record");
+			assertEquals("async-corr-adhoc", LogRecordContext.of(debugRec).get("corrId"),
+				"the debug-pipeline completion record must still carry the context via the Phase 6 carry");
+		} finally {
+			AsyncCaptureServlet.carryValue = null;
+			AsyncCaptureServlet.finishLatch = null;
+			var g = AsyncCaptureServlet.adhocGate;
+			if (g != null)
+				g.complete("cleanup");
+			AsyncCaptureServlet.adhocGate = null;
 			state.restore();
 		}
 	}

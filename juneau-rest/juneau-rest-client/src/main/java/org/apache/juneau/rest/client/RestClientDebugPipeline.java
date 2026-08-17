@@ -16,8 +16,10 @@
  */
 package org.apache.juneau.rest.client;
 
+import java.util.*;
 import java.util.logging.*;
 
+import org.apache.juneau.commons.logging.LogRecordContext;
 import org.apache.juneau.commons.logging.RichLogger;
 
 final class RestClientDebugPipeline {
@@ -44,10 +46,22 @@ final class RestClientDebugPipeline {
 		if (level.intValue() <= Level.FINEST.intValue())
 			sb.append(formatter.formatBody(req, res));
 
-		var record = new LogRecord(level, sb.toString());
+		// Stable-INFO emission: the record is always stamped INFO so the basic access line survives under an
+		// INFO handler even when a logger is raised to FINE/FINEST for diagnostics. `level` (the resolved tier)
+		// continues to drive only the cumulative section-inclusion checks above.
+		var record = new LogRecord(Level.INFO, sb.toString());
 		record.setLoggerName(logger.getName());
 		if (thrown != null)
 			record.setThrown(thrown);
+
+		// Stamp-from-field: attach the resolved correlation id as a structured field so it survives to emission
+		// regardless of any log-context scope's lifetime (the load-bearing client fix).  Prefer the server-confirmed
+		// echoed id, else the sent id.  Map.of rejects null, so skip the attach entirely when neither exists (e.g.
+		// sendRequestId(false)) — a null-valued map would throw.
+		var effectiveId = (res != null && res.getRequestId() != null) ? res.getRequestId() : (req != null ? req.getRequestId() : null);
+		if (effectiveId != null)
+			LogRecordContext.attachIfAbsent(record, Map.of("requestId", effectiveId));
+
 		logger.log(record);
 	}
 }

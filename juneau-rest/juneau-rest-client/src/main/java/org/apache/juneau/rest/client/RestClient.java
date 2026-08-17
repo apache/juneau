@@ -111,7 +111,7 @@ public final class RestClient implements Closeable {
 		this.defaultHeaders = List.copyOf(builder.defaultHeaders);
 		this.defaultQueryData = List.copyOf(builder.defaultQueryData);
 		this.rootUrl = builder.rootUrl;
-		this.interceptors = List.copyOf(builder.interceptors);
+		this.interceptors = buildInterceptors(builder);
 		this.debugLogger = RichLogger.getLogger(builder.debugLoggerName != null ? builder.debugLoggerName : RestClient.class.getName());
 		this.debugFormatter = builder.debugFormatter != null ? builder.debugFormatter : new BasicRestClientDebugFormatter();
 		this.bodyConverters = List.copyOf(builder.bodyConverters);
@@ -120,6 +120,23 @@ public final class RestClient implements Closeable {
 		this.defaultSerializer = builder.defaultSerializer;
 		this.defaultParser = builder.defaultParser;
 		this.allowPrivateUrls = builder.allowPrivateUrls || Boolean.getBoolean(RemoteUrlPolicy.ALLOW_PRIVATE_URLS_PROPERTY);
+	}
+
+	/**
+	 * Builds the effective interceptor list, prepending the built-in {@code X-Request-Id} auto-send interceptor when
+	 * {@link Builder#sendRequestId(boolean)} is enabled (the default).
+	 *
+	 * <p>
+	 * The built-in runs first so its {@code onInit} stamps the id before any caller interceptor observes the request,
+	 * and it is additive with {@link Builder#interceptors(RestCallInterceptor...)} rather than replacing it.
+	 */
+	private static List<RestCallInterceptor> buildInterceptors(Builder builder) {
+		if (! builder.sendRequestId)
+			return List.copyOf(builder.interceptors);
+		var l = new ArrayList<RestCallInterceptor>(builder.interceptors.size() + 1);
+		l.add(new RequestIdInterceptor());
+		l.addAll(builder.interceptors);
+		return List.copyOf(l);
 	}
 
 	/**
@@ -411,6 +428,7 @@ public final class RestClient implements Closeable {
 		final List<Serializer> serializerList = l();
 		final List<Parser> parserList = l();
 		boolean allowPrivateUrls;
+		boolean sendRequestId = true;
 
 		private Builder() {}
 
@@ -457,6 +475,25 @@ public final class RestClient implements Closeable {
 		 */
 		public Builder allowPrivateUrls(boolean value) {
 			allowPrivateUrls = value;
+			return this;
+		}
+
+		/**
+		 * Controls the built-in {@code X-Request-Id} auto-send interceptor (enabled by default).
+		 *
+		 * <p>
+		 * When enabled, every request that does not already carry an {@code X-Request-Id} header (case-insensitive) is
+		 * stamped with a freshly minted version-7 UUID before it is sent, and the server's echoed id is captured on the
+		 * response ({@link RestResponse#getRequestId()}).  Set to {@code false} to disable the interceptor entirely:
+		 * no id is sent or captured, and a later {@link #interceptors(RestCallInterceptor...)} call does not resurrect
+		 * it.  Callers can still set an id per request via {@link RestRequest#requestId(String)}.
+		 *
+		 * @param value {@code false} to disable the auto-send interceptor. Default {@code true}.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public Builder sendRequestId(boolean value) {
+			sendRequestId = value;
 			return this;
 		}
 

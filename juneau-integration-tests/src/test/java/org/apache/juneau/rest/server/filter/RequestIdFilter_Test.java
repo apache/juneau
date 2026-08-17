@@ -26,6 +26,16 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
 
+/**
+ * {@link RequestIdFilter} reconciled as a thin façade over the always-on {@link RestSession} resolver.
+ *
+ * <p>
+ * Proves the filter no longer owns the lifecycle: its {@code apply()} re-echoes the id already resolved at session
+ * build (idempotent), its builder still rejects null/blank arguments (retained contracts), and its per-instance tuning
+ * knobs are documented no-ops (the real knobs live on {@link RequestIdSettings}).
+ *
+ * @since 10.0.0
+ */
 @SuppressWarnings({
 	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
@@ -45,7 +55,7 @@ class RequestIdFilter_Test extends TestBase {
 		}
 	}
 
-	@Test void a01_mintsRequestIdWhenAbsent() throws Exception {
+	@Test void a01_alwaysOnMintsRequestId() throws Exception {
 		var c = MockRestClient.buildLax(A.class);
 		c.get("/a").run()
 			.assertStatus(200)
@@ -53,7 +63,7 @@ class RequestIdFilter_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Builder rejects null arguments.
+	// Builder still rejects null/blank arguments (retained contracts even though the knobs are no-ops).
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_builderRejectsNullSupplier() {
@@ -81,7 +91,7 @@ class RequestIdFilter_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Custom supplier is honored when minting.
+	// The per-instance idSupplier knob is a documented no-op — the always-on resolver mints the id, not the filter.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -98,10 +108,13 @@ class RequestIdFilter_Test extends TestBase {
 		public String d() { return "ok"; }
 	}
 
-	@Test void d01_customSupplierUsedToMintId() throws Exception {
+	@Test void d01_idSupplierKnobIsNoOp() throws Exception {
 		var c = MockRestClient.buildLax(D.class);
-		c.get("/d").run()
+		var echoed = c.get("/d").run()
 			.assertStatus(200)
-			.assertHeader("X-Request-Id").is("fixed-id-123");
+			.getHeader("X-Request-Id").asString().orElseThrow();
+		// The resolver minted the id; the filter's idSupplier knob had no effect.
+		assertFalse(echoed.isEmpty());
+		assertNotEquals("fixed-id-123", echoed);
 	}
 }

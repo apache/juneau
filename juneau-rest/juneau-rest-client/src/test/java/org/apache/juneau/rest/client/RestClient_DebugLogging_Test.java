@@ -76,7 +76,7 @@ class RestClient_DebugLogging_Test extends TestBase {
 				res.body().asString();
 			}
 			assertNotNull(c.last());
-			assertEquals(Level.FINE, c.last().getLevel());
+			assertEquals(Level.INFO, c.last().getLevel());
 			var msg = c.last().getMessage();
 			assertTrue(msg.contains("---Request Headers---"));
 			assertTrue(msg.contains("Authorization: [REDACTED]"));
@@ -94,6 +94,9 @@ class RestClient_DebugLogging_Test extends TestBase {
 		var logger = RichLogger.getLogger(loggerName);
 		var prevLevel = logger.getLevel();
 		logger.setLevel(Level.FINEST);
+		// Gate forced on: the response body must actually render for this test's truncation-at-cap intent to be
+		// observable at all once the secure-by-default no-dump gate exists (Phase 3).
+		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
 		try (var c = logger.captureEvents(Level.FINEST)) {
 			try (var client = RestClient.builder()
 				.transport(req -> {
@@ -104,7 +107,10 @@ class RestClient_DebugLogging_Test extends TestBase {
 							throw new RuntimeException(e);
 						}
 					}
-					return response(200, "uvwxyz");
+					// Renderable Content-Type required on the response side: isBodyRenderable(null) is false by
+					// design (fail-closed on absent/unknown types), so an untyped response would otherwise still
+					// render the "body not rendered" placeholder instead of the raw truncated text.
+					return response(200, "uvwxyz", "text/plain");
 				})
 				.debugLoggerName(loggerName)
 				.debugFormatter(new BasicRestClientDebugFormatter().bodyCap(4))
@@ -113,15 +119,19 @@ class RestClient_DebugLogging_Test extends TestBase {
 				res.body().asString();
 			}
 			assertNotNull(c.last());
-			assertEquals(Level.FINEST, c.last().getLevel());
+			assertEquals(Level.INFO, c.last().getLevel());
 			var msg = c.last().getMessage();
-			assertTrue(msg.contains("---Request Content UTF-8---"));
+			assertTrue(msg.contains("---Request Content---"));
 			assertTrue(msg.contains("abcd"));
 			assertTrue(msg.contains("…[truncated 2 bytes]"));
-			assertTrue(msg.contains("---Response Content UTF-8---"));
+			assertTrue(msg.contains("---Response Content---"));
 			assertTrue(msg.contains("uvwx"));
+			// Proves the old unconditional UTF-8+hex dump is gone, not just that the new label is present.
+			assertFalse(msg.contains("UTF-8---"));
+			assertFalse(msg.contains("Content Hex"));
 		} finally {
 			logger.setLevel(prevLevel);
+			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(null);
 		}
 	}
 
@@ -131,9 +141,10 @@ class RestClient_DebugLogging_Test extends TestBase {
 		var logger = RichLogger.getLogger(loggerName);
 		var prevLevel = logger.getLevel();
 		logger.setLevel(Level.FINEST);
+		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
 		try (var c = logger.captureEvents(Level.FINEST)) {
 			try (var client = RestClient.builder()
-				.transport(req -> response(200, "abcdef"))
+				.transport(req -> response(200, "abcdef", "text/plain"))
 				.debugLoggerName(loggerName)
 				.build();
 				var res = client.get("http://example.com/partial").run()) {
@@ -143,10 +154,13 @@ class RestClient_DebugLogging_Test extends TestBase {
 			}
 			assertNotNull(c.last());
 			var msg = c.last().getMessage();
-			assertTrue(msg.contains("---Response Content UTF-8---"));
+			assertTrue(msg.contains("---Response Content---"));
 			assertTrue(msg.contains("abcdef"));
+			assertFalse(msg.contains("UTF-8---"));
+			assertFalse(msg.contains("Content Hex"));
 		} finally {
 			logger.setLevel(prevLevel);
+			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(null);
 		}
 	}
 
@@ -167,10 +181,44 @@ class RestClient_DebugLogging_Test extends TestBase {
 		}
 	}
 
+	/**
+	 * Proves stable-{@code INFO} stamping applies uniformly to the second {@code emit(...)} call site
+	 * ({@code RestRequest.run()}'s transport-exception synthetic-response path), not just the normal
+	 * {@code RestResponse.close()} path exercised by {@code a01}-{@code a04}.
+	 */
+	@Test
+	void a06_transportExceptionPath_stampsInfoRegardlessOfTier() throws Exception {
+		var loggerName = getClass().getName() + ".a06";
+		var logger = RichLogger.getLogger(loggerName);
+		var prevLevel = logger.getLevel();
+		logger.setLevel(Level.FINE);
+		try (var c = logger.captureEvents(Level.FINE)) {
+			try (var client = RestClient.builder()
+				.transport(req -> { throw new TransportException("boom"); })
+				.debugLoggerName(loggerName)
+				.build()) {
+				assertThrows(TransportException.class, () -> client.get("http://example.com/err").run());
+			}
+			assertNotNull(c.last());
+			assertEquals(Level.INFO, c.last().getLevel());
+		} finally {
+			logger.setLevel(prevLevel);
+		}
+	}
+
 	private static TransportResponse response(int statusCode, String body) {
 		return TransportResponse.builder()
 			.statusCode(statusCode)
 			.reasonPhrase("OK")
+			.body(new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)))
+			.build();
+	}
+
+	private static TransportResponse response(int statusCode, String body, String contentType) {
+		return TransportResponse.builder()
+			.statusCode(statusCode)
+			.reasonPhrase("OK")
+			.header("Content-Type", contentType)
 			.body(new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)))
 			.build();
 	}

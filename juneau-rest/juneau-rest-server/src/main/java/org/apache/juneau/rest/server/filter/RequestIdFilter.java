@@ -18,76 +18,53 @@ package org.apache.juneau.rest.server.filter;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.util.*;
 import java.util.function.*;
-import java.util.regex.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.server.*;
 
 import jakarta.servlet.http.*;
 
 /**
- * Per-request id mint-or-honor filter that stashes the id on the servlet request and echoes it on the response.
+ * Thin configuration façade over the always-on request-id correlation resolver.
  *
  * <p>
- * Designed to be invoked from a {@link RestStartCall @RestStartCall} method so the id is available to every
- * downstream component — the call logger, observability layers, and any application code that reads
- * {@code req.getAttribute(RestServerConstants.REQUEST_ID)}.
- *
- * <h5 class='topic'>Behavior</h5>
- *
- * <ul>
- * 	<li>If the incoming request carries an {@code X-Request-Id} header and the value matches the configured
- * 		{@linkplain Builder#validator(Predicate) validator}, that value is honored.
- * 	<li>Otherwise (header absent, blank, or rejected by the validator), a fresh id is minted via the configured
- * 		{@linkplain Builder#idSupplier(Supplier) supplier} (default: {@link UUID#randomUUID()}).
- * 	<li>The chosen id is stashed on the underlying servlet request under the
- * 		{@link RestServerConstants#REQUEST_ID REQUEST_ID} attribute key.
- * 	<li>The chosen id is echoed on the response as {@code X-Request-Id}.
- * </ul>
- *
- * <h5 class='topic'>Default validator</h5>
+ * <b>The correlation lifecycle is now owned by the always-on resolver built into {@link RestSession} at session-build
+ * time</b> &mdash; it mints or honors the {@code X-Request-Id} correlation id for <i>every</i> request (including 404 /
+ * early-error paths that never reach a {@code @RestStartCall} hook), stashes it under
+ * {@link RestServerConstants#REQUEST_ID}, echoes it on the response, and opens the {@code requestId} log-context scope.
+ * The real tuning knobs live on {@link RequestIdSettings} (resolved via {@link RestContext#getRequestIdSettings()}).
  *
  * <p>
- * The default validator is {@code ^[A-Za-z0-9-_]{1,128}$}, which accepts UUIDs and the bulk of distributed-tracing
- * id schemes (W3C Trace Context, OpenTelemetry, Datadog, etc.) while rejecting whitespace, control characters,
- * header-injection payloads, and oversized strings.  Customize via {@link Builder#validator(Predicate)}.
- *
- * <h5 class='topic'>Example usage</h5>
- *
- * <p class='bjava'>
- * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> ApiResource <jk>extends</jk> BasicRestServlet {
- *
- * 		<jk>private static final</jk> RequestIdFilter <jsf>REQUEST_ID</jsf> = RequestIdFilter.<jsm>create</jsm>().build();
- *
- * 		<ja>@RestStartCall</ja>
- * 		<jk>public void</jk> stampRequestId(HttpServletRequest <jv>req</jv>, HttpServletResponse <jv>res</jv>) {
- * 			<jsf>REQUEST_ID</jsf>.apply(<jv>req</jv>, <jv>res</jv>);
- * 		}
- * 	}
- * </p>
+ * This filter is retained for source compatibility.  Its {@link #apply(HttpServletRequest, HttpServletResponse) apply}
+ * method is now <b>idempotent</b>: it reads the already-resolved id back through the {@link RestSession#fromRequest
+ * session-handle seam} and re-echoes it &mdash; it never double-mints.  Its per-instance builder knobs
+ * ({@link Builder#idSupplier idSupplier}, {@link Builder#validator validator}, {@link Builder#attributeKey attributeKey})
+ * are <b>documented no-ops</b>: configure {@link RequestIdSettings} instead.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">REST Server — Rate-Limiting and Request-Id Propagation</a>
+ * 	<li class='jc'>{@link RequestIdSettings}
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  *
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are HTTP header names (e.g. X-Request-ID); intentional
+	"java:S1192" // Duplicate string literals are HTTP header names (e.g. X-Request-Id); intentional
 })
 public class RequestIdFilter {
 
 	/** Standard request and response header name for the request id. */
-	public static final String HEADER_REQUEST_ID = "X-Request-Id";
+	public static final String HEADER_REQUEST_ID = RequestIdConstants.HEADER;
 
-	/** Default validator pattern.  Matches UUIDs and most distributed-tracing id schemes. */
+	/**
+	 * Legacy default validator pattern, retained for source compatibility.
+	 *
+	 * @deprecated The resolver now defaults to sanitize-and-accept (see {@link RequestIdSettings}); this pattern is no
+	 * 	longer applied.
+	 */
+	@Deprecated
 	public static final String DEFAULT_VALIDATOR_PATTERN = "^[A-Za-z0-9-_]{1,128}$";
-
-	private final Supplier<String> idSupplier;
-	private final Predicate<String> validator;
-	private final String attributeKey;
 
 	/**
 	 * Constructor.
@@ -96,9 +73,6 @@ public class RequestIdFilter {
 	 */
 	protected RequestIdFilter(Builder b) {
 		assertArgNotNull("builder", b);
-		this.idSupplier = b.idSupplier != null ? b.idSupplier : () -> UUID.randomUUID().toString();
-		this.validator = b.validator != null ? b.validator : Pattern.compile(DEFAULT_VALIDATOR_PATTERN).asPredicate();
-		this.attributeKey = b.attributeKey;
 	}
 
 	/**
@@ -111,39 +85,38 @@ public class RequestIdFilter {
 	}
 
 	/**
-	 * Mints or honors a request id, stashes it on the request, and echoes it on the response.
+	 * Re-echoes the correlation id already resolved by the always-on {@link RestSession} resolver.
 	 *
 	 * <p>
-	 * Idempotent: if the attribute is already set on the servlet request (for example by a parent filter), the
-	 * existing value is honored and re-echoed.
+	 * Idempotent façade: the id was already minted/honored/echoed at session build.  This reads it back through the
+	 * {@link RestSession#fromRequest session-handle seam} (falling back to the {@link RestServerConstants#REQUEST_ID}
+	 * attribute) and re-echoes it on the response &mdash; it never double-mints.
 	 *
 	 * @param req The servlet request.  Must not be <jk>null</jk>.
 	 * @param res The servlet response.  Must not be <jk>null</jk>.
-	 * @return The resolved request id.  Never <jk>null</jk>.
+	 * @return The resolved request id, or <jk>null</jk> if none has been resolved (e.g. invoked outside a Juneau call).
 	 */
 	public String apply(HttpServletRequest req, HttpServletResponse res) {
 		assertArgNotNull("req", req);
 		assertArgNotNull("res", res);
-		var existing = req.getAttribute(attributeKey);
-		if (existing instanceof String s && ! s.isEmpty()) {
-			res.setHeader(HEADER_REQUEST_ID, s);
-			return s;
-		}
-		var incoming = req.getHeader(HEADER_REQUEST_ID);
-		var id = (incoming != null && validator.test(incoming)) ? incoming : idSupplier.get();
-		req.setAttribute(attributeKey, id);
-		res.setHeader(HEADER_REQUEST_ID, id);
+		var session = RestSession.fromRequest(req);
+		String id = session != null ? session.getRequestId() : null;
+		if (id == null && req.getAttribute(RestServerConstants.REQUEST_ID) instanceof String s && ! s.isEmpty())
+			id = s;
+		if (id != null)
+			res.setHeader(HEADER_REQUEST_ID, id);
 		return id;
 	}
 
 	/**
 	 * Builder for {@link RequestIdFilter}.
+	 *
+	 * <p>
+	 * The tuning methods below are <b>documented no-ops</b> retained for source compatibility.  They still reject a
+	 * <jk>null</jk> argument (so existing null-validation contracts hold) but no longer affect resolution &mdash;
+	 * configure {@link RequestIdSettings} instead.
 	 */
 	public static class Builder {
-
-		Supplier<String> idSupplier;
-		Predicate<String> validator;
-		String attributeKey = RestServerConstants.REQUEST_ID;
 
 		/**
 		 * Constructor.
@@ -151,44 +124,29 @@ public class RequestIdFilter {
 		protected Builder() {}
 
 		/**
-		 * Sets the supplier used to mint a new id when none is honored from the request.
-		 *
-		 * <p>
-		 * Default is {@link UUID#randomUUID()}.  Swap in a smaller / shorter id scheme (e.g. a 16-byte
-		 * base32 token) when payload size matters.
+		 * <b>No-op</b> (retained for source compatibility).  Configure {@link RequestIdSettings.Builder#idSupplier} instead.
 		 *
 		 * @param value The supplier.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder idSupplier(Supplier<String> value) {
 			assertArgNotNull("value", value);
-			idSupplier = value;
 			return this;
 		}
 
 		/**
-		 * Sets the predicate used to validate an incoming {@code X-Request-Id} header.
-		 *
-		 * <p>
-		 * Default is {@code Pattern.compile("^[A-Za-z0-9-_]{1,128}$").asPredicate()} — accepts UUIDs and most
-		 * distributed-tracing id schemes while rejecting whitespace, control characters, and oversize values.
-		 * Values that fail validation are discarded and a fresh id is minted.
+		 * <b>No-op</b> (retained for source compatibility).  Configure {@link RequestIdSettings.Builder#validator} instead.
 		 *
 		 * @param value The predicate.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder validator(Predicate<String> value) {
 			assertArgNotNull("value", value);
-			validator = value;
 			return this;
 		}
 
 		/**
-		 * Overrides the servlet-request attribute key under which the id is stashed.
-		 *
-		 * <p>
-		 * Defaults to {@link RestServerConstants#REQUEST_ID}.  Override only when
-		 * coexisting with a third-party filter that publishes the id under a different key.
+		 * <b>No-op</b> (retained for source compatibility).  Configure {@link RequestIdSettings.Builder#attributeKey} instead.
 		 *
 		 * @param value The attribute key.  Must not be <jk>null</jk> or blank.
 		 * @return This object.
@@ -197,7 +155,6 @@ public class RequestIdFilter {
 			assertArgNotNull("value", value);
 			if (value.isBlank())
 				throw new IllegalArgumentException("Argument 'value' must not be blank.");
-			attributeKey = value;
 			return this;
 		}
 

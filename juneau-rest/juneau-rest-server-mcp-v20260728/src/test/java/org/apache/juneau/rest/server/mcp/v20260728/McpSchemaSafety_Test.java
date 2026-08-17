@@ -416,7 +416,7 @@ class McpSchemaSafety_Test {
 	}
 
 	/** Submits a task that burns CPU for {@code workMillis} and awaits it under {@code budgetNanos} via the real {@code awaitBounded} seam. */
-	private static void runBoundedTask(long workMillis, long budgetNanos) throws InterruptedException {
+	private static void runBoundedTask(long workMillis, long budgetNanos) {
 		var started = new CountDownLatch(1);
 		var taskStart = new AtomicReference<McpSchemaSafety.TaskStart>();
 		var executor = Executors.newSingleThreadExecutor();

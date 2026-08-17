@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.logging;
 
 import java.util.logging.*;
 
+import org.apache.juneau.commons.logging.LogRecordContext;
 import org.apache.juneau.commons.logging.RichLogger;
 import org.apache.juneau.rest.server.*;
 
@@ -122,7 +123,10 @@ public class RestDebugPipeline {
 		if (tier == null)
 			return null;
 
-		return new RestDebugSnapshot(logger, resolveFormatter(session), tier);
+		// Capture the request thread's LogContext snapshot here (on the request thread, before any async handoff), so an
+		// async completion record can re-establish the structured requestId even though the completion thread's live
+		// LogContext is empty (design §8.2). Empty singleton when no context is active — no allocation.
+		return new RestDebugSnapshot(logger, resolveFormatter(session), tier, RichLogger.context().snapshot());
 	}
 
 	/**
@@ -148,6 +152,11 @@ public class RestDebugPipeline {
 		var thrown = session.getException();
 		if (thrown != null)
 			record.setThrown(thrown);
+		// Pre-seed the record's correlation context from the request-thread snapshot BEFORE log(). Because log()'s own
+		// attach (RichLogger, TODO-364 Phase 2) is attachIfAbsent and the completion thread's live LogContext is empty,
+		// the pre-seeded map wins — this is what carries requestId across the async hop (design §8.2). No-op / empty
+		// short-circuit inside attachIfAbsent when the map is empty (the common synchronous case).
+		LogRecordContext.attachIfAbsent(record, snapshot.context());
 		snapshot.logger().log(record);
 	}
 

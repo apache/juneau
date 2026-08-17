@@ -214,7 +214,7 @@ class RestClientFeatures_Test {
 			var msg = capture.last().getMessage();
 			assertTrue(msg.contains("HTTP GET"), "Basic message should include request line");
 			assertFalse(msg.contains("---Request Headers---"), "INFO should not include headers");
-			assertFalse(msg.contains("---Response Content UTF-8---"), "INFO should not include bodies");
+			assertFalse(msg.contains("---Response Content---"), "INFO should not include bodies");
 		} finally {
 			logger.setLevel(previous);
 		}
@@ -241,7 +241,9 @@ class RestClientFeatures_Test {
 				assertEquals(200, response.getStatusCode());
 			}
 			assertNotNull(capture.last());
-			assertEquals(java.util.logging.Level.FINE, capture.last().getLevel());
+			// Stable-INFO emission (TODO-368): the record is always stamped INFO; FINE only widens which
+			// sections the message body includes (here, the header block below).
+			assertEquals(java.util.logging.Level.INFO, capture.last().getLevel());
 			var msg = capture.last().getMessage();
 			assertTrue(msg.contains("---Request Headers---"), "FINE should include request headers");
 			assertTrue(msg.contains("---Response Headers---"), "FINE should include response headers");
@@ -259,6 +261,9 @@ class RestClientFeatures_Test {
 		var logger = org.apache.juneau.commons.logging.RichLogger.getLogger(loggerName);
 		var previous = logger.getLevel();
 		logger.setLevel(java.util.logging.Level.FINEST);
+		// Secret hardening (TODO-370): body dumping is secure-by-default (off) — force the master gate on for this
+		// test so the FINEST-tier body-inclusion behavior can be observed at all.
+		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
 		try (var capture = logger.captureEvents(java.util.logging.Level.FINEST)) {
 			try (var client = RestClient.builder()
 					.transport(MockHttpTransport.builder()
@@ -272,6 +277,7 @@ class RestClientFeatures_Test {
 							}
 							return TransportResponse.builder()
 								.statusCode(200)
+								.header("Content-Type", "text/plain")
 								.body(new ByteArrayInputStream("uvwxyz".getBytes(StandardCharsets.UTF_8)))
 								.build();
 						})
@@ -284,14 +290,17 @@ class RestClientFeatures_Test {
 				assertEquals("uvwxyz", response.body().asString());
 			}
 			assertNotNull(capture.last());
-			assertEquals(java.util.logging.Level.FINEST, capture.last().getLevel());
+			// Stable-INFO emission (TODO-368): the record is always stamped INFO; FINEST only widens which
+			// sections the message body includes (here, the body blocks below).
+			assertEquals(java.util.logging.Level.INFO, capture.last().getLevel());
 			var msg = capture.last().getMessage();
-			assertTrue(msg.contains("---Request Content UTF-8---"));
+			assertTrue(msg.contains("---Request Content---"));
 			assertTrue(msg.contains("abcd"));
-			assertTrue(msg.contains("---Response Content UTF-8---"));
+			assertTrue(msg.contains("---Response Content---"));
 			assertTrue(msg.contains("uvwx"));
 		} finally {
 			logger.setLevel(previous);
+			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(null);
 		}
 	}
 

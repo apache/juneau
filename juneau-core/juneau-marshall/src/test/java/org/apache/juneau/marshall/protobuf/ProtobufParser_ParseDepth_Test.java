@@ -46,6 +46,9 @@ class ProtobufParser_ParseDepth_Test extends TestBase {
 	 * Hand-builds a protobuf message with {@code depth} levels of nesting via field 1 (a {@code Nested child}
 	 * MESSAGE field), the innermost level being an empty (leafless) sub-message.
 	 */
+	@SuppressWarnings({
+		"resource" // ProtobufWriter wraps a caller-owned OutputStream; its inherited close() is a no-op.
+	})
 	private static byte[] nestedMessage(int depth) {
 		var msg = new byte[0];
 		for (var i = 0; i < depth; i++) {

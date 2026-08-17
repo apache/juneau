@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
@@ -71,6 +72,9 @@ public final class RestRequest {
 	private Duration execTime;
 	private boolean policyEnforced;
 	private boolean allowPrivateUrls;
+	// The X-Request-Id correlation id sent on this request, captured at onInit (minted or caller-supplied).  Read at
+	// debug-emit time as a stored field — never via a live LogContext scope that may not survive to emission.
+	private String requestId;
 
 	RestRequest(RestClient client, String method, String url) {
 		this.client = client;
@@ -438,6 +442,23 @@ public final class RestRequest {
 	}
 
 	/**
+	 * Returns the first resolved request header with the given name (case-insensitive), or {@code null} if absent.
+	 *
+	 * <p>
+	 * Reads from {@link #getResolvedHeaders()} — the finalized, wire-order list — not the pre-conversion header list
+	 * {@link #hasHeader(String)} uses internally for its dedup check.
+	 *
+	 * @param name The header name. Must not be <jk>null</jk>.
+	 * @return The first matching header, or <jk>null</jk> if absent.
+	 */
+	public TransportHeader getFirstHeader(String name) {
+		return resolvedHeaders.stream()
+			.filter(h -> eqic(h.name(), name))
+			.findFirst()
+			.orElse(null);
+	}
+
+	/**
 	 * Returns request body bytes captured for debug logging (up to the configured body cap).
 	 *
 	 * @return Captured request bytes, or <jk>null</jk> if not captured.
@@ -471,6 +492,61 @@ public final class RestRequest {
 	 */
 	public Duration getExecTime() {
 		return execTime;
+	}
+
+	/**
+	 * Sets the {@code X-Request-Id} correlation id for this request (pre-call).
+	 *
+	 * <p>
+	 * Sets both the outgoing {@code X-Request-Id} header and the stored sent-id field returned by
+	 * {@link #getRequestId()}.  Use this to propagate a caller-owned correlation id; otherwise the built-in auto-send
+	 * interceptor mints one at request time (unless disabled via {@link RestClient.Builder#sendRequestId(boolean)}).
+	 *
+	 * @param value The correlation id.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @since 10.0.0
+	 */
+	public RestRequest requestId(String value) {
+		this.requestId = assertArgNotNull("value", value);
+		return header(RequestIdConstants.HEADER, value);
+	}
+
+	/**
+	 * Returns the {@code X-Request-Id} correlation id sent on this request.
+	 *
+	 * <p>
+	 * Captured at request time (minted by the auto-send interceptor, or the caller-supplied value).  Read as a stored
+	 * field at debug-emit time &mdash; never via a live log-context scope.
+	 *
+	 * @return The sent correlation id, or <jk>null</jk> if none was sent (e.g. {@code sendRequestId(false)}).
+	 * @since 10.0.0
+	 */
+	public String getRequestId() {
+		return requestId;
+	}
+
+	/**
+	 * Records the correlation id actually sent on this request (auto-send interceptor internal use).
+	 *
+	 * @param value The sent id.
+	 */
+	void setSentRequestId(String value) {
+		this.requestId = value;
+	}
+
+	/**
+	 * Returns the current value of the {@code X-Request-Id} header set on this request (case-insensitive), or
+	 * <jk>null</jk> if none is set (auto-send interceptor internal use).
+	 *
+	 * @return The header value, or <jk>null</jk>.
+	 */
+	String peekRequestIdHeader() {
+		return headers.stream()
+			.filter(h -> RequestIdConstants.HEADER.equalsIgnoreCase(h.getName()))
+			.map(HttpHeader::getValue)
+			.filter(java.util.Objects::nonNull)
+			.findFirst()
+			.orElse(null);
 	}
 
 	// --------------------------------------------------

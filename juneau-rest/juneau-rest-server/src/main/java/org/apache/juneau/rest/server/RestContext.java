@@ -1293,6 +1293,29 @@ public class RestContext extends Context {
 	});
 
 	/**
+	 * The effective {@link RequestIdSettings} for this resource's always-on request-id resolver.
+	 *
+	 * <p>
+	 * Explicit three-rung resolution (highest precedence first):
+	 * <ol>
+	 * 	<li>Registered bean &mdash; {@code beanStore().getBean(RequestIdSettings.class)}.
+	 * 	<li>{@code @Bean} factory method on the resource.
+	 * 	<li>The built-in defaults ({@link RequestIdSettings.Builder}: sanitize-and-accept validator, {@code "requestId"}
+	 * 		attribute key, version-7 UUID supplier).
+	 * </ol>
+	 */
+	private final Memoizer<RequestIdSettings> requestIdSettings = memoizer(() -> {
+		var bs = beanStore();
+		var bean = bs.getBean(RequestIdSettings.class).orElse(null);
+		if (bean != null)
+			return bean;
+		var fromMethod = bs.createBeanFromMethod(RequestIdSettings.class, resource().get(), RestContext::isBeanMethod).orElse(null);
+		if (fromMethod != null)
+			return fromMethod;
+		return RequestIdSettings.create().build();
+	});
+
+	/**
 	 * The locally-resolved {@link RestAuthenticator} for this resource, if any.
 	 *
 	 * <p>
@@ -3838,7 +3861,15 @@ public class RestContext extends Context {
 			}
 
 		} catch (Exception e) {
-			handleError(sb.build(), convertThrowable(e));
+			// This throwaway error session opens a requestId LogContext scope in its constructor but never reaches
+			// finish(); close it here so the (possibly pooled) request thread does not leak the scope. The subsequent
+			// build() below re-resolves to the same id via the honor-existing-attribute rung.
+			var errorSession = sb.build();
+			try {
+				handleError(errorSession, convertThrowable(e));
+			} finally {
+				errorSession.closeRequestIdScope();
+			}
 		}
 
 		var s = sb.build();
@@ -3966,6 +3997,21 @@ public class RestContext extends Context {
 		if (resource.get() instanceof RestDebugFormatter f)
 			return f;
 		return beanStore.getBean(RestDebugFormatter.class).orElse(null);
+	}
+
+	/**
+	 * Returns the effective {@link RequestIdSettings} for this resource's always-on request-id correlation resolver.
+	 *
+	 * <p>
+	 * Resolved once (memoized) via the three-rung precedence: registered bean, {@code @Bean} factory method, then the
+	 * built-in defaults.  Consumed by {@link RestSession} at build time to mint or honor the {@code X-Request-Id}
+	 * correlation id for every request.
+	 *
+	 * @return The effective request-id settings.  Never <jk>null</jk>.
+	 * @since 10.0.0
+	 */
+	public RequestIdSettings getRequestIdSettings() {
+		return requestIdSettings.get();
 	}
 
 	/**

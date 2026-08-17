@@ -169,6 +169,21 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 		}
 	}
 
+	/**
+	 * Returns the value of a {@link LogContext} entry attached to the specified captured record.
+	 *
+	 * <p>
+	 * Convenience over {@link LogRecordContext#of(java.util.logging.LogRecord)} so capture-based tests do not need to
+	 * know about the side table directly.
+	 *
+	 * @param rec The captured record.
+	 * @param key The context key.
+	 * @return The attached value for the key, or <jk>null</jk> if not present.
+	 */
+	public Object contextValue(java.util.logging.LogRecord rec, String key) {
+		return LogRecordContext.of(rec).get(key);
+	}
+
 	public String assertMessage() {
 		var r = last();
 		return r == null ? null : r.getMessage();

@@ -56,7 +56,7 @@ package org.apache.juneau.http;
 public final class DebugTextSanitizer {
 
 	/** Marker appended when a value is truncated by the length cap. */
-	static final String TRUNCATED_MARKER = "\u2026[truncated]";
+	public static final String TRUNCATED_MARKER = "\u2026[truncated]";
 
 	private DebugTextSanitizer() {}
 

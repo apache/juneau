@@ -47,6 +47,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
@@ -797,6 +798,19 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return The resource context handling the request.
 	 */
 	public RestContext getContext() { return context; }
+
+	/**
+	 * Returns the correlation id resolved for this request (mint-or-honor), cached at session-build time.
+	 *
+	 * <p>
+	 * Delegates to {@link RestSession#getRequestId()} &mdash; the synchronous, session-cached value, never a live
+	 * public/custom-key attribute re-read.  This is the {@code X-Request-Id} correlation id echoed on the response and
+	 * carried in the {@code requestId} log-context field.
+	 *
+	 * @return The resolved request id.  Never <jk>null</jk> (unless a custom id supplier returned <jk>null</jk>).
+	 * @since 10.0.0
+	 */
+	public String getRequestId() { return session.getRequestId(); }
 
 	/**
 	 * Returns the portion of the request URI that indicates the context of the request.
@@ -1627,6 +1641,145 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return <jk>true</jk> if the resolved logger is loggable at {@code FINE}-or-finer.
 	 */
 	public boolean isDebug() { return opContext.getLogger().isLoggable(java.util.logging.Level.FINE); }
+
+	/**
+	 * Returns the resolved per-operation {@link RichLogger} for this request.
+	 *
+	 * <p>
+	 * This is the same logger {@link #isDebug()} queries (`opContext.getLogger()`, wired by {@code [TODO-366]} onto
+	 * {@link RestOpContext#getLogger()}), so anything logged through it &mdash; including the
+	 * {@code fine}/{@code info}/&hellip; convenience methods below &mdash; rides the existing parent-chain capture
+	 * propagation ({@code [TODO-365]}): a {@code LogRecordCapture} attached at a resource-class-level logger name still
+	 * observes these per-operation emissions.
+	 *
+	 * <p>
+	 * These convenience methods are for <b>application handler code</b> that wants to emit its own ad hoc log statements
+	 * <i>during</i> request processing and have them automatically carry whatever {@link RichLogger#context() LogContext}
+	 * is active (most notably {@code requestId}). They are complementary to &mdash; not a replacement for &mdash; the
+	 * REST debug pipeline's one cumulative per-request record; they produce independent, additional {@code LogRecord}s.
+	 *
+	 * @return The resolved per-operation logger. Never <jk>null</jk>.
+	 */
+	public RichLogger getLogger() { return opContext.getLogger(); }
+
+	/**
+	 * Logs a formatted message at {@link java.util.logging.Level#SEVERE SEVERE} through this request's {@link #getLogger() logger}.
+	 *
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void severe(String pattern, Object...args) { getLogger().severe(pattern, args); }
+
+	/**
+	 * Logs a formatted message with an associated throwable at {@link java.util.logging.Level#SEVERE SEVERE}.
+	 *
+	 * @param thrown The throwable to associate with the record.
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void severe(Throwable thrown, String pattern, Object...args) { getLogger().severe(thrown, pattern, args); }
+
+	/**
+	 * Logs a formatted message at {@link java.util.logging.Level#WARNING WARNING} through this request's {@link #getLogger() logger}.
+	 *
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void warning(String pattern, Object...args) { getLogger().warning(pattern, args); }
+
+	/**
+	 * Logs a formatted message with an associated throwable at {@link java.util.logging.Level#WARNING WARNING}.
+	 *
+	 * @param thrown The throwable to associate with the record.
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void warning(Throwable thrown, String pattern, Object...args) { getLogger().warning(thrown, pattern, args); }
+
+	/**
+	 * Logs a formatted message at {@link java.util.logging.Level#INFO INFO} through this request's {@link #getLogger() logger}.
+	 *
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void info(String pattern, Object...args) { getLogger().info(pattern, args); }
+
+	/**
+	 * Logs a formatted message with an associated throwable at {@link java.util.logging.Level#INFO INFO}.
+	 *
+	 * @param thrown The throwable to associate with the record.
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void info(Throwable thrown, String pattern, Object...args) { getLogger().info(thrown, pattern, args); }
+
+	/**
+	 * Logs a formatted message at {@link java.util.logging.Level#CONFIG CONFIG} through this request's {@link #getLogger() logger}.
+	 *
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void config(String pattern, Object...args) { getLogger().config(pattern, args); }
+
+	/**
+	 * Logs a formatted message with an associated throwable at {@link java.util.logging.Level#CONFIG CONFIG}.
+	 *
+	 * @param thrown The throwable to associate with the record.
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void config(Throwable thrown, String pattern, Object...args) { getLogger().config(thrown, pattern, args); }
+
+	/**
+	 * Logs a formatted message at {@link java.util.logging.Level#FINE FINE} through this request's {@link #getLogger() logger}.
+	 *
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void fine(String pattern, Object...args) { getLogger().fine(pattern, args); }
+
+	/**
+	 * Logs a formatted message with an associated throwable at {@link java.util.logging.Level#FINE FINE}.
+	 *
+	 * @param thrown The throwable to associate with the record.
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void fine(Throwable thrown, String pattern, Object...args) { getLogger().fine(thrown, pattern, args); }
+
+	/**
+	 * Logs a formatted message at {@link java.util.logging.Level#FINER FINER} through this request's {@link #getLogger() logger}.
+	 *
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void finer(String pattern, Object...args) { getLogger().finer(pattern, args); }
+
+	/**
+	 * Logs a formatted message with an associated throwable at {@link java.util.logging.Level#FINER FINER}.
+	 *
+	 * @param thrown The throwable to associate with the record.
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void finer(Throwable thrown, String pattern, Object...args) { getLogger().finer(thrown, pattern, args); }
+
+	/**
+	 * Logs a formatted message at {@link java.util.logging.Level#FINEST FINEST} through this request's {@link #getLogger() logger}.
+	 *
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void finest(String pattern, Object...args) { getLogger().finest(pattern, args); }
+
+	/**
+	 * Logs a formatted message with an associated throwable at {@link java.util.logging.Level#FINEST FINEST}.
+	 *
+	 * @param thrown The throwable to associate with the record.
+	 * @param pattern The {@link java.util.Formatter}-style message pattern.
+	 * @param args The message arguments.
+	 */
+	public void finest(Throwable thrown, String pattern, Object...args) { getLogger().finest(thrown, pattern, args); }
 
 	/**
 	 * Returns whether REST-driven serializer/parser debug behavior is enabled for this request's operation.

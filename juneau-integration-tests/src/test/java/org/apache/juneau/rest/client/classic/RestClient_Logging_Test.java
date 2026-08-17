@@ -72,7 +72,7 @@ class RestClient_Logging_Test extends TestBase {
 		c.reset();
 
 		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
-		c.assertContents().asTrimmed().isLines(
+		c.assertContents().asReplaceAll("\\tX-Request-Id: [^\\r\\n]*\\R", "").asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
@@ -93,7 +93,7 @@ class RestClient_Logging_Test extends TestBase {
 		c.reset();
 
 		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().get("/bean").complete();
-		c.assertContents().asTrimmed().isLines(
+		c.assertContents().asReplaceAll("\\tX-Request-Id: [^\\r\\n]*\\R", "").asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"GET http://localhost/bean",
@@ -110,7 +110,7 @@ class RestClient_Logging_Test extends TestBase {
 		c.reset();
 
 		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
-		c.assertContents().asTrimmed().isLines(
+		c.assertContents().asReplaceAll("\\tX-Request-Id: [^\\r\\n]*\\R", "").asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"POST http://localhost/stream",
@@ -147,7 +147,7 @@ class RestClient_Logging_Test extends TestBase {
 
 		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
-		l.assertLastMessage().asTrimmed().isLines(
+		l.assertLastMessage().asReplaceAll("\\tX-Request-Id: [^\\r\\n]*\\R", "").asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
