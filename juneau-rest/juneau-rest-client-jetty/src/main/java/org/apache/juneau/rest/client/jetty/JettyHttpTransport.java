@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.rest.client.*;
 import org.eclipse.jetty.client.*;
+import org.eclipse.jetty.util.*;
 
 /**
  * {@link HttpTransport} implementation backed by Jetty 12 {@link HttpClient}.
@@ -64,14 +65,32 @@ import org.eclipse.jetty.client.*;
 })
 public final class JettyHttpTransport implements HttpTransport {
 
+	private static final ThreadLocal<Boolean> POLICY_ACTIVE = new ThreadLocal<>();
+
 	private final HttpClient httpClient;
 	private final long responseTimeoutMs;
+	private final boolean policySupported;
 
 	JettyHttpTransport(JettyHttpTransportBuilder builder) throws Exception {
+		this.policySupported = builder.httpClient == null;
 		this.httpClient = builder.httpClient != null ? builder.httpClient : new CredentialGuardingHttpClient();
 		this.responseTimeoutMs = builder.responseTimeoutMs;
+		if (this.policySupported && !this.httpClient.isStarted())
+			// A SocketAddressResolver that pin-on-connects SSRF-guard-active @Remote connections (see
+			// PolicyPinningSocketAddressResolver); leaves ordinary (non-@Remote) connections on this same client
+			// completely unaffected. Must be installed before start() -- HttpClient.setSocketAddressResolver()
+			// throws IllegalStateException once started, and HttpClient's own default resolver is an Async built
+			// from its executor/scheduler, which (unlike the resolver field itself) are not safely readable until
+			// after start() -- so the non-policy-active fallback here is Jetty's synchronous SocketAddressResolver.Sync
+			// (a supported, dependency-free implementation) rather than a hand-built copy of the async default.
+			this.httpClient.setSocketAddressResolver(new PolicyPinningSocketAddressResolver(new SocketAddressResolver.Sync()));
 		if (!this.httpClient.isStarted())
 			this.httpClient.start();
+	}
+
+	// Package-visible for PolicyPinningSocketAddressResolver.
+	static boolean isPolicyActive() {
+		return POLICY_ACTIVE.get() == Boolean.TRUE;
 	}
 
 	/**
@@ -95,6 +114,8 @@ public final class JettyHttpTransport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		if (request.isSsrfGuardActive())
+			return executeWithPolicy(request);
 		try {
 			return sendOnce(request);
 		} catch (StaleConnectionException e) {
@@ -110,10 +131,39 @@ public final class JettyHttpTransport implements HttpTransport {
 		}
 	}
 
+	@Override /* HttpTransport */
+	public boolean supportsUrlPolicy() {
+		return policySupported;
+	}
+
+	// Activates pin-on-connect + Juneau-controlled redirect revalidation for the duration of the redirect chain.
+	private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {
+		POLICY_ACTIVE.set(Boolean.TRUE);
+		try {
+			return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
+		} finally {
+			POLICY_ACTIVE.remove();
+		}
+	}
+
+	// Performs one pin-on-connect hop (PolicyPinningSocketAddressResolver is active for the whole redirect chain);
+	// Jetty's own redirect-following is disabled so PolicyEnforcedRedirects owns the loop.
+	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
+		try {
+			return sendOnce(request, false);
+		} catch (StaleConnectionException e) {
+			throw e.asTransportException();
+		}
+	}
+
 	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
 	// pre-response stale-connection failure; throws TransportException for every other failure.
 	private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {
-		var jettyRequest = buildJettyRequest(request);
+		return sendOnce(request, true);
+	}
+
+	private TransportResponse sendOnce(TransportRequest request, boolean followRedirects) throws TransportException, StaleConnectionException {
+		var jettyRequest = buildJettyRequest(request).followRedirects(followRedirects);
 		var listener = new InputStreamResponseListener();
 		jettyRequest.send(listener);
 		Response jettyResponse;

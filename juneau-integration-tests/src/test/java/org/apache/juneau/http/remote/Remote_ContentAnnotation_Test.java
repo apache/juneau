@@ -148,7 +148,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 	}
 
 	@Test void a01_objectTypes_json() throws Exception {
-		var x = MockRestClient.create(A.class).serializer(JsonSerializer.class).build().getRemote(A1.class);
+		var x = MockRestClient.create(A.class).serializer(JsonSerializer.class).allowPrivateUrls(true).build().getRemote(A1.class);
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
@@ -242,7 +242,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 	}
 
 	@Test void b01_objectTypes_openApi() throws Exception {
-		var x = MockRestClient.create(B.class).openApi().contentType(null).build().getRemote(B1.class);
+		var x = MockRestClient.create(B.class).openApi().contentType(null).allowPrivateUrls(true).build().getRemote(B1.class);
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
@@ -322,7 +322,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 	}
 
 	@Test void c01_openApi_overriddenContentType() throws Exception {
-		var x = MockRestClient.create(C.class).parser(JsonParser.class).contentType("text/foo").build().getRemote(C1.class);
+		var x = MockRestClient.create(C.class).parser(JsonParser.class).contentType("text/foo").allowPrivateUrls(true).build().getRemote(C1.class);
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));

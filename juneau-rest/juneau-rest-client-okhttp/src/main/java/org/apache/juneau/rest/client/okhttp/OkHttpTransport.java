@@ -61,9 +61,20 @@ import okio.*;
 public final class OkHttpTransport implements HttpTransport {
 
 	private final OkHttpClient httpClient;
+	private final OkHttpClient policyHttpClient;
 
 	OkHttpTransport(OkHttpTransportBuilder builder) {
 		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
+		// A dedicated client -- sharing this client's connection pool/dispatcher via newBuilder(), but with its own
+		// pin-on-connect Dns and with auto-redirect-following disabled -- used only for SSRF-guard-active @Remote
+		// calls (see executeWithPolicy); ordinary (non-@Remote) calls on httpClient are completely unaffected.
+		// Unlike the shared-connection-manager engines (Apache HttpClient, Jetty), OkHttp's Dns/followRedirects are
+		// per-client (not tied to the shared connection pool), so this derivation works even for a caller-supplied
+		// httpClient -- the policy guard is supported unconditionally.
+		this.policyHttpClient = this.httpClient.newBuilder()
+			.followRedirects(false)
+			.dns(PolicyPinningDns.INSTANCE)
+			.build();
 	}
 
 	private static OkHttpClient createDefaultHttpClient() {
@@ -92,10 +103,26 @@ public final class OkHttpTransport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		if (request.isSsrfGuardActive())
+			return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
+		return sendOnce(request, httpClient);
+	}
+
+	@Override /* HttpTransport */
+	public boolean supportsUrlPolicy() {
+		return true;
+	}
+
+	// Performs one pin-on-connect hop via the dedicated, redirect-disabled policyHttpClient.
+	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
+		return sendOnce(request, policyHttpClient);
+	}
+
+	private static TransportResponse sendOnce(TransportRequest request, OkHttpClient client) throws TransportException {
 		var okRequest = buildOkRequest(request);
 		Response okResponse;
 		try {
-			okResponse = httpClient.newCall(okRequest).execute();
+			okResponse = client.newCall(okRequest).execute();
 		} catch (IOException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}

@@ -135,7 +135,7 @@ class RemoteProxyParity_Test {
 	}
 
 	@Test void t1a_headers_methodOverridesInterface_andMerges() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(HeadersRemote.class, url()).call();
 		}
 		assertEquals("method", lastXFoo, "Method-level X-Foo should override interface-level");
@@ -153,7 +153,7 @@ class RemoteProxyParity_Test {
 	}
 
 	@Test void t1b_queryData_interfaceAndMethod_merged() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(QueryDataRemote.class, url()).call();
 		}
 		assertNotNull(lastQuery);
@@ -173,7 +173,7 @@ class RemoteProxyParity_Test {
 	}
 
 	@Test void t1c_formData_interfaceAndMethod_merged() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(FormDataRemote.class, url()).call();
 		}
 		assertEquals("POST", lastMethod);
@@ -193,7 +193,7 @@ class RemoteProxyParity_Test {
 	}
 
 	@Test void t1d_accept_setsAcceptHeader() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(AcceptRemote.class, url()).call();
 		}
 		assertEquals("application/json", lastAccept);
@@ -210,7 +210,7 @@ class RemoteProxyParity_Test {
 	}
 
 	@Test void t1e_contentType_labelsContentTypeHeader() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(ContentTypeRemote.class, url()).call("hello");
 		}
 		assertNotNull(lastContentType);
@@ -230,7 +230,7 @@ class RemoteProxyParity_Test {
 
 	@Test void t2a_baseUrl_interfaceLevel_noClientRootUrl() throws Exception {
 		System.setProperty("juneau.test.baseUrl", url());
-		try (var c = RestClient.create().build()) {   // No client rootUrl -- baseUrl must supply the host.
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {   // No client rootUrl -- baseUrl must supply the host.
 			c.getRemote(BaseUrlRemote.class).call();
 		} finally {
 			System.clearProperty("juneau.test.baseUrl");
@@ -249,7 +249,7 @@ class RemoteProxyParity_Test {
 	}
 
 	@Test void t2b_urlParam_overridesBaseUrl() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			c.getRemote(UrlParamRemote.class).call(url() + "/fromparam");
 		}
 		assertEquals("/fromparam", lastPath);
@@ -310,7 +310,7 @@ class RemoteProxyParity_Test {
 
 	@Test void t2f_retries_idempotentGet_recoversAfter503() throws Exception {
 		failsBeforeSuccess = 2;  // First two attempts -> 503, third -> 200.
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var result = c.getRemote(RetryGetRemote.class, url()).call();
 			assertEquals("OK", result);
 		}
@@ -326,7 +326,7 @@ class RemoteProxyParity_Test {
 	@Test void t2g_retries_nonIdempotentPost_notRetriedByDefault() throws Exception {
 		failsBeforeSuccess = 2;
 		responseBody = "err";
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			// POST is not retried without retryNonIdempotent: the first 503 body flows through (throwOnError defaults false).
 			var result = c.getRemote(RetryPostRemote.class, url()).call("x");
 			assertEquals("err", result);
@@ -342,7 +342,7 @@ class RemoteProxyParity_Test {
 
 	@Test void t2h_retries_nonIdempotentPost_retriedWhenOptedIn() throws Exception {
 		failsBeforeSuccess = 2;
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var result = c.getRemote(RetryPostOptInRemote.class, url()).call("x");
 			assertEquals("OK", result);
 		}

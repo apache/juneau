@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client.apachehttpclient50;
 import java.io.*;
 
 import org.apache.hc.client5.http.impl.classic.*;
+import org.apache.hc.client5.http.impl.io.*;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.*;
 import org.apache.hc.core5.http.io.support.*;
@@ -57,10 +58,32 @@ import org.apache.juneau.rest.client.*;
 })
 public final class ApacheHc5Transport implements HttpTransport {
 
+	private static final ThreadLocal<Boolean> POLICY_ACTIVE = new ThreadLocal<>();
+
 	private final CloseableHttpClient httpClient;
+	private final boolean policySupported;
 
 	ApacheHc5Transport(ApacheHc5TransportBuilder builder) {
-		this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClients.createDefault();
+		this.policySupported = builder.httpClient == null;
+		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
+	}
+
+	private static CloseableHttpClient createDefaultHttpClient() {
+		// A DnsResolver that pin-on-connects SSRF-guard-active @Remote connections (see PolicyPinningDnsResolver),
+		// and a RedirectStrategy that defers 3xx handling to PolicyEnforcedRedirects for the same requests -- both
+		// leave ordinary (non-@Remote) requests on this same client completely unaffected.
+		var connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+			.setDnsResolver(PolicyPinningDnsResolver.INSTANCE)
+			.build();
+		return HttpClients.custom()
+			.setConnectionManager(connectionManager)
+			.setRedirectStrategy(new PolicyAwareRedirectStrategy())
+			.build();
+	}
+
+	// Package-visible for PolicyPinningDnsResolver / PolicyAwareRedirectStrategy.
+	static boolean isPolicyActive() {
+		return POLICY_ACTIVE.get() == Boolean.TRUE;
 	}
 
 	/**
@@ -83,6 +106,27 @@ public final class ApacheHc5Transport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		if (request.isSsrfGuardActive())
+			return executeWithPolicy(request);
+		return sendOnce(request);
+	}
+
+	@Override /* HttpTransport */
+	public boolean supportsUrlPolicy() {
+		return policySupported;
+	}
+
+	// Activates pin-on-connect + Juneau-controlled redirect revalidation for the duration of the redirect chain.
+	private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {
+		POLICY_ACTIVE.set(Boolean.TRUE);
+		try {
+			return PolicyEnforcedRedirects.execute(request, this::sendOnce);
+		} finally {
+			POLICY_ACTIVE.remove();
+		}
+	}
+
+	private TransportResponse sendOnce(TransportRequest request) throws TransportException {
 		var hcRequest = buildHcRequest(request);
 		ClassicHttpResponse hcResponse;
 		try {

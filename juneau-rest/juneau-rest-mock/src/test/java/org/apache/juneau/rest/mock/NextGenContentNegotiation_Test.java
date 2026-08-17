@@ -149,7 +149,7 @@ class NextGenContentNegotiation_Test {
 	void a04_jsonlRemoteReturn() throws Exception {
 		var pset = ParserSet.create().add(JsonParser.DEFAULT, JsonlParser.DEFAULT).build();
 		try (var mock = MockRestClient.create(JsonlServer.class)) {
-			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).parsers(pset).build()) {
+			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).parsers(pset).allowPrivateUrls(true).build()) {
 				var api = nc.remote(JsonlApi.class);
 				try (JsonlTokenReader r = api.getFeed()) {
 					var got = new ArrayList<Bean>();

@@ -111,7 +111,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	}
 
 	@Test void a01_objectTypes() {
-		var x = MockRestClient.build(A.class).getRemote(A1.class);
+		var x = MockRestClient.create(A.class).allowPrivateUrls(true).build().getRemote(A1.class);
 		assertEquals("{x:'1'}",x.x1(1));
 		assertEquals("{x:'1.0'}",x.x2(1));
 		assertEquals("{x:'f=1'}",x.x3(Bean.create()));
@@ -874,10 +874,10 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	}
 
 	private static RestClient.Builder<?> client(Class<?> c) {
-		return MockRestClient.create(c);
+		return MockRestClient.create(c).allowPrivateUrls(true);
 	}
 
 	private static <T> T remote(Class<?> rest,Class<T> t) {
-		return MockRestClient.build(rest).getRemote(t);
+		return MockRestClient.create(rest).allowPrivateUrls(true).build().getRemote(t);
 	}
 }

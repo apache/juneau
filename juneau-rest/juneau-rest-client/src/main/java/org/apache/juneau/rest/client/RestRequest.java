@@ -69,6 +69,8 @@ public final class RestRequest {
 	private long cachedContentLength = -1;
 	private Throwable exception;
 	private Duration execTime;
+	private boolean policyEnforced;
+	private boolean allowPrivateUrls;
 
 	RestRequest(RestClient client, String method, String url) {
 		this.client = client;
@@ -351,6 +353,25 @@ public final class RestRequest {
 	}
 
 	/**
+	 * Marks this request as a {@code @Remote}/{@code @Url} call subject to the SSRF guardrail (see
+	 * {@code org.apache.juneau.http.remote.RemoteUrlPolicy}), and records the effective {@code allowPrivateUrls}
+	 * opt-in for it.
+	 *
+	 * <p>
+	 * Called by the {@code @Remote}-proxy invocation handler; not intended for direct use by ordinary
+	 * {@code RestClient.get(url)}-style calls, which are never policy-covered.
+	 *
+	 * @param enforced {@code true} if this request is policy-covered.
+	 * @param allowPrivateUrls {@code true} if the {@code allowPrivateUrls} opt-in is in effect for this request.
+	 * @return This object.
+	 */
+	public RestRequest remoteUrlPolicy(boolean enforced, boolean allowPrivateUrls) {
+		this.policyEnforced = enforced;
+		this.allowPrivateUrls = allowPrivateUrls;
+		return this;
+	}
+
+	/**
 	 * Adds per-request lifecycle interceptors.
 	 *
 	 * <p>
@@ -491,6 +512,11 @@ public final class RestRequest {
 			}
 			if (debugLevel == Level.FINEST)
 				transportRequest = captureRequestBody(transportRequest, debugCap);
+			if (transportRequest.isSsrfGuardActive() && ! client.transport.supportsUrlPolicy())
+				throw new TransportException("Refusing to send a policy-covered @Remote request through a transport "
+					+ "that cannot honor the SSRF guardrail's connect-time contract (pin-on-connect + redirect "
+					+ "revalidation): " + cn(client.transport) + ".  Use a first-party transport that supports it, or "
+					+ "set allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
 			var transportResponse = client.transport.execute(transportRequest);
 			response = new RestResponse(transportResponse, client, this, debugLevel, debugCap);
 
@@ -598,7 +624,8 @@ public final class RestRequest {
 		var builder = TransportRequest.builder()
 			.method(method)
 			.uri(resolvedUri)
-			.timeout(timeout);
+			.timeout(timeout)
+			.remoteUrlPolicy(policyEnforced, allowPrivateUrls);
 
 		// Headers
 		for (var h : headers) {
@@ -681,7 +708,8 @@ public final class RestRequest {
 			.uri(request.getUri())
 			.headers(request.getHeaders())
 			.body(TransportBody.of(wrappedBody))
-			.timeout(request.getTimeout());
+			.timeout(request.getTimeout())
+			.remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls());
 		return builder.build();
 	}
 

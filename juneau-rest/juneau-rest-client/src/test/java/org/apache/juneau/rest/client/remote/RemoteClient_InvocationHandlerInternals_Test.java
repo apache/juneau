@@ -66,68 +66,11 @@ class RemoteClient_InvocationHandlerInternals_Test extends TestBase {
 		}
 	}
 
-	// ==========================================================================
-	// a — schemeOf(String)
-	// ==========================================================================
-
-	@Test void a01_schemeOf_emptyString_isNull() throws Exception {
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, ""));
-	}
-
-	@Test void a02_schemeOf_leadingNonLetter_isNull() throws Exception {
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "1abc/path"));
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "{var}/path"));
-	}
-
-	@Test void a03_schemeOf_colonBeforeSlash_returnsScheme() throws Exception {
-		assertEquals("http", invokeStatic("schemeOf", new Class<?>[]{String.class}, "http://host/path"));
-		assertEquals("https", invokeStatic("schemeOf", new Class<?>[]{String.class}, "https://host/path"));
-	}
-
-	@Test void a05_schemeOf_slashBeforeColon_isNull() throws Exception {
-		// Must start with a letter (else the first-char check at line ~350 already returns null before the loop even
-		// starts) so this test genuinely exercises the loop's '/' disjunct rather than the earlier guard.
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "ab/cd:ef"));
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "/no-scheme:here"));
-	}
-
-	@Test void a06_schemeOf_questionOrHashBeforeColon_isNull() throws Exception {
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "a?b:c"));
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "a#b:c"));
-	}
-
-	@Test void a07_schemeOf_invalidSchemeChar_isNull() throws Exception {
-		// '_' is not letter/digit/+/-/. -- not a valid scheme character, so this is treated as scheme-less.
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "a_b:rest"));
-	}
-
-	@Test void a08_schemeOf_noColonAnywhere_isNull() throws Exception {
-		assertNull(invokeStatic("schemeOf", new Class<?>[]{String.class}, "plain-relative-path"));
-	}
-
-	@Test void a09_schemeOf_validSchemeChars_plusDashDot() throws Exception {
-		assertEquals("a+b-c.d", invokeStatic("schemeOf", new Class<?>[]{String.class}, "a+b-c.d://host"));
-	}
-
-	// ==========================================================================
-	// b — requireHttpScheme(String)
-	// ==========================================================================
-
-	@Test void b01_requireHttpScheme_http_accepted() throws Exception {
-		assertEquals("http://x", invokeStatic("requireHttpScheme", new Class<?>[]{String.class}, "http://x"));
-	}
-
-	@Test void b02_requireHttpScheme_https_accepted() throws Exception {
-		assertEquals("HTTPS://x", invokeStatic("requireHttpScheme", new Class<?>[]{String.class}, "HTTPS://x"));
-	}
-
-	@Test void b03_requireHttpScheme_noScheme_passesThrough() throws Exception {
-		assertEquals("/relative/path", invokeStatic("requireHttpScheme", new Class<?>[]{String.class}, "/relative/path"));
-	}
-
-	@Test void b04_requireHttpScheme_otherScheme_rejected() throws Exception {
-		assertThrows(IllegalArgumentException.class, () -> invokeStatic("requireHttpScheme", new Class<?>[]{String.class}, "ftp://evil/x"));
-	}
+	// NOTE: The URL-scheme/deny-private SSRF guard (formerly this class's private static schemeOf/requireHttpScheme
+	// helpers) now lives in the shared org.apache.juneau.http.remote.RemoteUrlPolicy (juneau-rest-common), used by
+	// both this engine's resolveEffectiveUrl(...) and the classic engine's RemoteProxyUtils/RestClient.
+	// See RemoteUrlPolicy_Test (juneau-rest-common) for the deny-list/pin-on-connect/redirect unit coverage, and
+	// RemoteClient_Test (this module) for the @Remote-proxy integration coverage of resolveEffectiveUrl(...).
 
 	// ==========================================================================
 	// c — combinePaths(String, String)

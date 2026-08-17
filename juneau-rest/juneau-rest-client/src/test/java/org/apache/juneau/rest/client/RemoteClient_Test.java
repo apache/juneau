@@ -203,35 +203,35 @@ class RemoteClient_Test extends TestBase {
 	// -----------------------------------------------------------------------
 
 	@Test void b01_returnBody_string() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var svc = client.remote(SimpleService.class);
 			assertEquals("Hello!", svc.getHello());
 		}
 	}
 
 	@Test void b02_returnStatus_int() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var svc = client.remote(SimpleService.class);
 			assertEquals(200, svc.getStatusInt());
 		}
 	}
 
 	@Test void b03_returnStatus_boolean_true() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var svc = client.remote(SimpleService.class);
 			assertTrue(svc.getStatusBoolean());
 		}
 	}
 
 	@Test void b04_returnNone_void() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var svc = client.remote(SimpleService.class);
 			assertDoesNotThrow(svc::doNone);
 		}
 	}
 
 	@Test void b05_returnResponse_callerCloses() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var svc = client.remote(SimpleService.class);
 			try (var resp = svc.getResponse()) {
 				assertNotNull(resp);
@@ -245,25 +245,25 @@ class RemoteClient_Test extends TestBase {
 	// -----------------------------------------------------------------------
 
 	@Test void c01_get() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("GET", client.remote(SimpleService.class).getMethod());
 		}
 	}
 
 	@Test void c02_put() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("PUT", client.remote(SimpleService.class).putMethod(""));
 		}
 	}
 
 	@Test void c03_delete() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("DELETE", client.remote(SimpleService.class).deleteMethod());
 		}
 	}
 
 	@Test void c04_patch() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("PATCH", client.remote(SimpleService.class).patchMethod(""));
 		}
 	}
@@ -273,26 +273,26 @@ class RemoteClient_Test extends TestBase {
 	// -----------------------------------------------------------------------
 
 	@Test void d01_pathParam_nonNull() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("42", client.remote(SimpleService.class).getUser("42"));
 		}
 	}
 
 	@Test void d02_queryParam_nonNull() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(SimpleService.class).getQuery("hello");
 			assertTrue(result.contains("q=hello"), "Expected q=hello in: " + result);
 		}
 	}
 
 	@Test void d03_headerParam_nonNull() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("myval", client.remote(SimpleService.class).getHeader("myval"));
 		}
 	}
 
 	@Test void d04_contentParam_body() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("hello body", client.remote(SimpleService.class).postBody("hello body"));
 		}
 	}
@@ -310,7 +310,7 @@ class RemoteClient_Test extends TestBase {
 
 	@Test void e02_contentParam_null_skipsBody() throws Exception {
 		// null @Content arg → no body set
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(SimpleService.class).postBody(null));
 		}
 	}
@@ -329,14 +329,14 @@ class RemoteClient_Test extends TestBase {
 	}
 
 	@Test void f01_query_nullArg_withDef_usesDef() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(DefaultQueryService.class).getQuery(null);
 			assertTrue(result.contains("default-val"), "Expected default-val in: " + result);
 		}
 	}
 
 	@Test void f02_query_nullArg_withoutDef_skipsParam() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(DefaultQueryService.class).getQueryNoDefault(null);
 			// No query param should be added, query string is empty or absent
 			assertFalse(result.contains("q="), "Expected no q= in: " + result);
@@ -354,7 +354,7 @@ class RemoteClient_Test extends TestBase {
 	}
 
 	@Test void g01_query_mapExpansion() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var params = new LinkedHashMap<String,String>();
 			params.put("a", "1");
 			params.put("b", "2");
@@ -408,7 +408,7 @@ class RemoteClient_Test extends TestBase {
 	}
 
 	@Test void j01_formData_nonNull() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			// FormData values are encoded into the body; server echoes them back
 			var result = client.remote(FormDataService.class).postForm("val");
 			assertNotNull(result);
@@ -426,7 +426,7 @@ class RemoteClient_Test extends TestBase {
 	}
 
 	@Test void k01_pathRemainder_nonNull() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			// PathRemainder injects /* into the path
 			assertDoesNotThrow(() -> client.remote(PathRemainderService.class).get("x/y"));
 		}
@@ -443,13 +443,13 @@ class RemoteClient_Test extends TestBase {
 	}
 
 	@Test void l01_soleUnannotatedParam_usedAsBody() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("direct-body", client.remote(SoleParamService.class).post("direct-body"));
 		}
 	}
 
 	@Test void l02_soleUnannotatedParam_null_noBody() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(SoleParamService.class).post(null));
 		}
 	}

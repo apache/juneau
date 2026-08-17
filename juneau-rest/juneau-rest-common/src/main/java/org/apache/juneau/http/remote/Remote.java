@@ -177,8 +177,8 @@ public @interface Remote {
 	 * 		Only <c>http</c>/<c>https</c> schemes are permitted when the override yields an absolute URL; other schemes
 	 * 		are rejected (SSRF guardrail).
 	 * 	<li class='note'>
-	 * 		Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-	 * 		ignores this attribute.
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>), with the same http/https-only scheme guard on both.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -376,4 +376,32 @@ public @interface Remote {
 	 * @return The annotation value.
 	 */
 	boolean throwOnError() default false;
+
+	/**
+	 * Opts this interface's absolute {@code @Remote}/{@code @Url}/{@code baseUrl()} targets out of the default
+	 * deny-private SSRF guardrail, applied to every method on the proxy.
+	 *
+	 * <p>
+	 * By default, an absolute <c>http</c>/<c>https</c> URL supplied via {@link #baseUrl()}, an {@code @Url}
+	 * parameter, or an already-absolute {@link #path()}/{@link #value()} is rejected &mdash; both at pre-check time
+	 * and at connect time via resolved-address pinning, re-checked on every followed redirect &mdash; when it targets
+	 * a loopback, RFC1918/link-local, IPv6 unique-local, or cloud-metadata address.  Setting this to <jk>true</jk>
+	 * disables that check for local-dev/intranet targets that are intentionally private.
+	 *
+	 * <p>
+	 * The effective value is the logical OR of this annotation value, the {@code RestClient} builder's
+	 * {@code allowPrivateUrls(...)} setting, and the <js>"RestClient.allowPrivateUrls"</js> system property: any one
+	 * of the three opting in is sufficient.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+	 * 		(<c>RestClient.getRemote(...)</c>).
+	 * 	<li class='note'>
+	 * 		Does not affect the http/https-only scheme guard, which always applies.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	boolean allowPrivateUrls() default false;
 }

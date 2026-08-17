@@ -157,7 +157,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void a01_beanReturn_materializesFromStatusAndBody() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var bean = client.remote(BeanReturnService.class).getBean();
 			assertNotNull(bean);
 			assertEquals(200, bean.getStatusCode());
@@ -167,7 +167,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	@Test void a02_bodyMode_httpResponseBeanShortcut_bypassesParsing() throws Exception {
 		// materializeBufferedBody's BasicHttpResponse.isAssignableFrom(returnType) shortcut (line 920) applies even
 		// though returns() is left at its BODY default.
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var bean = client.remote(BeanReturnService.class).getBodyModeHttpResponseBean();
 			assertNotNull(bean);
 			assertEquals(200, bean.getStatusCode());
@@ -175,25 +175,25 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void a03_bodyMode_byteArrayReturn() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertArrayEquals("Hello!".getBytes(StandardCharsets.UTF_8), client.remote(BeanReturnService.class).getBytes());
 		}
 	}
 
 	@Test void a04b_bodyMode_voidReturnType_yieldsNullWithoutError() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(BeanReturnService.class).getVoidBodyMode());
 		}
 	}
 
 	@Test void a04c_bodyMode_boxedVoidReturnType_yieldsNull() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertNull(client.remote(BeanReturnService.class).getBoxedVoidBodyMode());
 		}
 	}
 
 	@Test void a04_bodyMode_httpExceptionBeanShortcut_bypassesParsing() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var bean = client.remote(BeanReturnService.class).getBodyModeHttpExceptionBean();
 			assertNotNull(bean);
 			assertEquals(404, bean.getStatusCode());
@@ -233,44 +233,44 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void b01_statusBoolean_errorStatus_isFalse() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertFalse(client.remote(StatusAndExceptionService.class).getStatusBooleanFalse());
 		}
 	}
 
 	@Test void b02_declaredExceptionType_matchingStatus_thrown() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertThrows(NotFound.class, () -> client.remote(StatusAndExceptionService.class).getMappedToDeclaredException());
 		}
 	}
 
 	@Test void b03_undeclaredError_throwOnError_throwsGenericBasicHttpException() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var ex = assertThrows(BasicHttpException.class, () -> client.remote(StatusAndExceptionService.class).getUndeclaredErrorThrowsGeneric());
 			assertEquals(404, ex.getStatusCode());
 		}
 	}
 
 	@Test void b04_neitherDeclaredExceptionMatches_fallsThroughToNormalBodyHandling() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(StatusAndExceptionService.class).getNeitherDeclaredExceptionMatches());
 		}
 	}
 
 	@Test void b05_statusMode_boxedIntegerReturnType() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals(200, client.remote(StatusAndExceptionService.class).getStatusBoxedInteger());
 		}
 	}
 
 	@Test void b06_statusMode_boxedBooleanReturnType() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals(Boolean.TRUE, client.remote(StatusAndExceptionService.class).getStatusBoxedBoolean());
 		}
 	}
 
 	@Test void b07_statusMode_neitherIntNorBoolean_fallsBackToYieldingStatusCode() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals(200, client.remote(StatusAndExceptionService.class).getStatusFallbackType());
 		}
 	}
@@ -295,7 +295,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void c01_optionalReturn_nonEmptyBody_present() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(WrapperReturnService.class).getOptional();
 			assertTrue(result.isPresent());
 			assertEquals("Hello!", result.get());
@@ -305,7 +305,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	@Test void c02_optionalReturn_emptyBody_presentButBlank() throws Exception {
 		// The JDK HttpClient transport's BodyHandlers.ofInputStream() always yields a (possibly zero-length) stream
 		// rather than a null body reference, so a Content-Length: 0 response still parses to Optional.of("").
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(WrapperReturnService.class).getOptionalFromEmptyBody();
 			assertTrue(result.isPresent());
 			assertEquals("", result.get());
@@ -313,14 +313,14 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void c03_completableFutureReturn_completedWithValue() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var future = client.remote(WrapperReturnService.class).getCompletableFuture();
 			assertEquals("Hello!", future.get(5, TimeUnit.SECONDS));
 		}
 	}
 
 	@Test void c04_futureReturn_completedWithValue() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var future = client.remote(WrapperReturnService.class).getFuture();
 			assertEquals("Hello!", future.get(5, TimeUnit.SECONDS));
 		}
@@ -352,7 +352,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void d01_streamReturn_liveBody_readableAndClosable() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			try (var in = client.remote(StreamReturnService.class).getStream()) {
 				assertEquals("Hello!", new String(in.readAllBytes(), StandardCharsets.UTF_8));
 			}
@@ -360,7 +360,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void d01b_streamReturn_readWithZeroLength_returnsZeroWithoutConsuming() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			try (var in = client.remote(StreamReturnService.class).getStream()) {
 				var buf = new byte[4];
 				assertEquals(0, in.read(buf, 0, 0));
@@ -374,7 +374,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 		// reference for a Content-Length: 0 response, so processStreamReturn's stream==null short-circuit (which
 		// only null-checks resp.getBodyStream()) is not reachable through this transport; other TransportResponse
 		// producers may still supply a genuinely null body, which is why the check remains in the source.
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			try (var in = client.remote(StreamReturnService.class).getStreamFromEmptyBody()) {
 				assertNotNull(in);
 				assertEquals(-1, in.read());
@@ -383,7 +383,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void d03_readerReturn_liveBody_readableAndClosable() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			try (var r = client.remote(StreamReturnService.class).getReader()) {
 				var buf = new char[16];
 				var n = r.read(buf);
@@ -395,7 +395,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	@Test void d04_readerReturn_emptyBody_yieldsEmptyReader() throws Exception {
 		// See d02's note: this transport never actually produces a null body reference, so the analogous
 		// stream==null branch in processReaderReturn is likewise not reachable through it.
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			try (var r = client.remote(StreamReturnService.class).getReaderFromEmptyBody()) {
 				assertNotNull(r);
 				assertEquals(-1, r.read());
@@ -406,14 +406,14 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	@Test void d05_streamReturn_throwOnErrorBeforeHandingBackStream_closesResponse() throws Exception {
 		// throwIfError(...) fires before the stream is ever handed back, exercising processStreamReturn's
 		// "!ok" finally-close branch rather than the normal success path.
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertThrows(BasicHttpException.class, () -> client.remote(StreamReturnService.class).getStreamThrowsBeforeHandingBackStream());
 		}
 	}
 
 	@Test void d06_readerReturn_throwOnErrorBeforeHandingBackReader_closesResponse() throws Exception {
 		// Same as d05 but for processReaderReturn's analogous "!ok" finally-close branch.
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertThrows(BasicHttpException.class, () -> client.remote(StreamReturnService.class).getReaderThrowsBeforeHandingBackReader());
 		}
 	}
@@ -459,7 +459,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 
 	@Test void e01_retry_recoversAfterTransientFailures() throws Exception {
 		failFirstNAttempts = 2;
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("recovered", client.remote(RetryService.class).getWithRetries());
 		}
 		assertEquals(3, retryHits.get(), "Expected exactly 3 attempts (2 failures + 1 success)");
@@ -469,7 +469,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 		// More failures than the retry budget: the loop gives up and returns/materializes the last (still-503) response
 		// rather than throwing, since throwOnError is not set.
 		failFirstNAttempts = 100;
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(RetryService.class).getWithInsufficientRetries());
 		}
 		assertEquals(2, retryHits.get(), "Expected exactly 2 attempts (1 retry after the first failure)");
@@ -477,7 +477,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 
 	@Test void e03_retry_postWithoutOptIn_doesNotRetry() throws Exception {
 		failFirstNAttempts = 2;
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(RetryService.class).postWithoutRetryNonIdempotent("x"));
 		}
 		assertEquals(1, retryHits.get(), "POST without retryNonIdempotent must not auto-retry");
@@ -485,7 +485,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 
 	@Test void e04_retry_postWithOptIn_retries() throws Exception {
 		failFirstNAttempts = 2;
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("recovered", client.remote(RetryService.class).postWithRetryNonIdempotentOptIn("x"));
 		}
 		assertEquals(3, retryHits.get(), "POST with retryNonIdempotent=true should auto-retry like an idempotent verb");
@@ -495,7 +495,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 		// Method-level retryNonIdempotent is left at its false default; only the interface-level @Remote attribute
 		// opts in, exercising isRetryableVerb's second (interface-level) disjunct.
 		failFirstNAttempts = 2;
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertEquals("recovered", client.remote(InterfaceLevelRetryNonIdempotentService.class).post("x"));
 		}
 		assertEquals(3, retryHits.get(), "Interface-level retryNonIdempotent=true should auto-retry POST");
@@ -506,7 +506,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 		// single processReturnOnce call, bypassing the retry loop entirely despite PUT being retryable and
 		// retries being configured.
 		failFirstNAttempts = 100;
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(NonRepeatableBodyRetryService.class)
 				.putWithStreamBody(new ByteArrayInputStream("x".getBytes(StandardCharsets.UTF_8))));
 		}
@@ -558,7 +558,7 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 	}
 
 	@Test void f01_multipart_scalarAndByteArrayParts() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartService.class).upload("my-title", new byte[]{1, 2, 3});
 			assertNotNull(result);
 			assertTrue(result.contains("my-title"), "Expected the title part to appear in the multipart body: " + result);
@@ -571,35 +571,35 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 		try (var out = new FileWriter(tmp)) {
 			out.write("file-contents");
 		}
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartService.class).uploadFile(tmp);
 			assertTrue(result.contains("file-contents"), "Expected file contents in: " + result);
 		}
 	}
 
 	@Test void f03_multipart_streamPart() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartService.class).uploadStream(new ByteArrayInputStream("stream-data".getBytes(StandardCharsets.UTF_8)));
 			assertTrue(result.contains("stream-data"), "Expected stream contents in: " + result);
 		}
 	}
 
 	@Test void f04_multipart_readerPart() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartService.class).uploadReader(new StringReader("reader-data"));
 			assertTrue(result.contains("reader-data"), "Expected reader contents in: " + result);
 		}
 	}
 
 	@Test void f05_multipart_beanPart_serializedViaDefaultSerializer() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultSerializer(org.apache.juneau.marshall.json.JsonSerializer.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultSerializer(org.apache.juneau.marshall.json.JsonSerializer.DEFAULT).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartService.class).uploadBean(new MultipartBean());
 			assertTrue(result.contains("\"x\""), "Expected the serialized bean property in: " + result);
 		}
 	}
 
 	@Test void f06_multipart_nullPart_omitted() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			assertDoesNotThrow(() -> client.remote(MultipartService.class).uploadNullPart(null));
 		}
 	}

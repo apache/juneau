@@ -21,6 +21,7 @@ import java.util.concurrent.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.http.remote.*;
 
 /**
  * Shared helpers for the classic REST-proxy engine.
@@ -114,45 +115,35 @@ public class RemoteProxyUtils {
 	}
 
 	/**
-	 * Enforces the SSRF guardrail: when {@code url} carries a URI scheme it must be {@code http} or {@code https};
-	 * otherwise an {@link IllegalArgumentException} is thrown.  Scheme-less (relative) values pass through unchanged.
-	 *
-	 * <p>
-	 * Ported from the next-generation engine's {@code RemoteInvocationHandler.requireHttpScheme(...)}.
+	 * Enforces the SSRF guardrail with the default (deny-private) policy: delegates to
+	 * {@link #requireHttpScheme(String, boolean) requireHttpScheme(url, false)}.
 	 *
 	 * @param url The URL to validate.
 	 * @return The unchanged URL.
+	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.
 	 */
 	public static String requireHttpScheme(String url) {
-		var scheme = schemeOf(url);
-		if (! (scheme == null || scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
-			throw new IllegalArgumentException("Unsupported URL scheme '" + scheme + "' in @Remote URL override; only http/https are allowed: " + url);
-		return url;
+		return requireHttpScheme(url, false);
 	}
 
 	/**
-	 * Returns the URI scheme of a URL (the token before the first {@code :} when it precedes any {@code /}, {@code ?}
-	 * or {@code #}), or <jk>null</jk> if the value has no scheme.
+	 * Enforces the SSRF guardrail: when {@code url} carries a URI scheme it must be {@code http} or {@code https}
+	 * with a nonempty host, and &mdash; unless {@code allowPrivateUrls} is set &mdash; must not target a
+	 * loopback/private/link-local/metadata host (see {@link RemoteUrlPolicy}).  Scheme-less (relative) values pass
+	 * through unchanged.
 	 *
 	 * <p>
-	 * Ported verbatim from the next-generation engine's {@code RemoteInvocationHandler.schemeOf(...)}.
+	 * Delegates to the shared {@link RemoteUrlPolicy#requireAllowedUrl(String, boolean)} used by both the classic and
+	 * next-generation engines, so the deny-list is defined exactly once.
 	 *
-	 * @param url The URL to inspect.
-	 * @return The scheme, or <jk>null</jk> if none.
+	 * @param url The URL to validate.
+	 * @param allowPrivateUrls When <jk>true</jk>, the deny-private check is skipped (the http/https scheme
+	 * 	requirement still applies).
+	 * @return The unchanged URL.
+	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.
 	 */
-	public static String schemeOf(String url) {
-		if (url.isEmpty() || ! Character.isLetter(url.charAt(0)))
-			return null;
-		for (var i = 0; i < url.length(); i++) {
-			var c = url.charAt(i);
-			if (c == ':')
-				return url.substring(0, i);
-			if (c == '/' || c == '?' || c == '#')
-				return null;
-			if (! (Character.isLetterOrDigit(c) || c == '+' || c == '-' || c == '.'))
-				return null;
-		}
-		return null;
+	public static String requireHttpScheme(String url, boolean allowPrivateUrls) {
+		return RemoteUrlPolicy.requireAllowedUrl(url, allowPrivateUrls);
 	}
 
 	/**

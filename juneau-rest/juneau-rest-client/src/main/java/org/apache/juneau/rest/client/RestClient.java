@@ -103,6 +103,7 @@ public final class RestClient implements Closeable {
 	final ParserSet parsers;
 	final Serializer defaultSerializer;
 	final Parser defaultParser;
+	final boolean allowPrivateUrls;
 
 	private RestClient(Builder builder) {
 		this.transport = assertArgNotNull("transport",
@@ -118,6 +119,22 @@ public final class RestClient implements Closeable {
 		this.parsers = builder.parsers;
 		this.defaultSerializer = builder.defaultSerializer;
 		this.defaultParser = builder.defaultParser;
+		this.allowPrivateUrls = builder.allowPrivateUrls || Boolean.getBoolean(RemoteUrlPolicy.ALLOW_PRIVATE_URLS_PROPERTY);
+	}
+
+	/**
+	 * Returns the effective builder/settings-level {@code allowPrivateUrls} opt-in for this client (the logical OR
+	 * of {@link Builder#allowPrivateUrls(boolean)} and the {@value RemoteUrlPolicy#ALLOW_PRIVATE_URLS_PROPERTY}
+	 * system property).
+	 *
+	 * <p>
+	 * The fully effective per-call value additionally ORs in the {@code @Remote}/{@code @RemoteOp}
+	 * {@code allowPrivateUrls} annotation attribute (see {@link Remote#allowPrivateUrls()}).
+	 *
+	 * @return {@code true} if this client opts into allowing private/loopback/link-local/metadata {@code @Remote} targets.
+	 */
+	public boolean isAllowPrivateUrls() {
+		return allowPrivateUrls;
 	}
 
 	private static HttpTransport discoverTransport() {
@@ -393,6 +410,7 @@ public final class RestClient implements Closeable {
 		Parser defaultParser;
 		final List<Serializer> serializerList = l();
 		final List<Parser> parserList = l();
+		boolean allowPrivateUrls;
 
 		private Builder() {}
 
@@ -420,6 +438,25 @@ public final class RestClient implements Closeable {
 		 */
 		public Builder rootUrl(String value) {
 			rootUrl = value;
+			return this;
+		}
+
+		/**
+		 * Opts every {@code @Remote}/{@code @Url} call made through this client out of the default deny-private SSRF
+		 * guardrail (see {@code org.apache.juneau.http.remote.RemoteUrlPolicy}), for local-dev/intranet targets that
+		 * are intentionally private.
+		 *
+		 * <p>
+		 * The effective per-call value is the logical OR of this setting, the
+		 * {@value RemoteUrlPolicy#ALLOW_PRIVATE_URLS_PROPERTY} system property, and the {@code @Remote}/{@code @RemoteOp}
+		 * {@code allowPrivateUrls} annotation attribute: any one of the three opting in is sufficient. The {@code http}/
+		 * {@code https} scheme requirement is unaffected.
+		 *
+		 * @param value {@code true} to allow private/loopback/link-local/metadata {@code @Remote} targets. Default {@code false}.
+		 * @return This object.
+		 */
+		public Builder allowPrivateUrls(boolean value) {
+			allowPrivateUrls = value;
 			return this;
 		}
 

@@ -61,6 +61,9 @@ class PetStoreClient_Test {
 			.rootUrl(fixture.getRootUrl().toString())
 			.parsers(ParserSet.create().add(JsonParser.DEFAULT).build())
 			.defaultSerializer(JsonSerializer.DEFAULT)
+			// The fixture is a real loopback-bound test server, so the @Remote SSRF guard's deny-private default
+			// (see RemoteUrlPolicy) must be opted out of here -- exactly the documented local-dev/test escape hatch.
+			.allowPrivateUrls(true)
 			.build();
 	}
 

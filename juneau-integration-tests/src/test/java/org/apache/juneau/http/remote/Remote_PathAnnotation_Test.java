@@ -711,10 +711,10 @@ class Remote_PathAnnotation_Test extends TestBase {
 	}
 
 	private static RestClient.Builder<?> client(Class<?> c) {
-		return MockRestClient.create(c).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build());
+		return MockRestClient.create(c).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).allowPrivateUrls(true);
 	}
 
 	private static <T> T remote(Class<?> rest, Class<T> t) {
-		return MockRestClient.create(rest).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build().getRemote(t);
+		return MockRestClient.create(rest).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).allowPrivateUrls(true).build().getRemote(t);
 	}
 }

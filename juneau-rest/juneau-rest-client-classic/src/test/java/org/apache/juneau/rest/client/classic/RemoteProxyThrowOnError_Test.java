@@ -103,7 +103,7 @@ class RemoteProxyThrowOnError_Test {
 	}
 
 	@Test void a01_default_throwOnErrorFalse_bodyFlowsThrough() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var result = c.getRemote(DefaultRemote.class, url()).call();
 			assertEquals("not found", result, "With throwOnError=false the 404 body should flow through");
 		}
@@ -120,7 +120,7 @@ class RemoteProxyThrowOnError_Test {
 	}
 
 	@Test void a02_throwOnErrorTrue_throwsGenericException() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(ThrowOnErrorRemote.class, url());
 			var e = assertThrows(BasicHttpException.class, proxy::call);
 			assertEquals(404, e.getStatusCode());
@@ -134,7 +134,7 @@ class RemoteProxyThrowOnError_Test {
 	}
 
 	@Test void a03_throwOnErrorTrue_methodLevel_throwsGenericException() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(ThrowOnErrorMethodRemote.class, url());
 			var e = assertThrows(BasicHttpException.class, proxy::call);
 			assertEquals(404, e.getStatusCode());
@@ -152,7 +152,7 @@ class RemoteProxyThrowOnError_Test {
 	}
 
 	@Test void a04_typedException_matchesStatus_thrownEvenWhenThrowOnErrorFalse() throws Exception {
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(TypedExceptionRemote.class, url());
 			assertThrows(NotFound.class, proxy::call);
 		}
@@ -162,7 +162,7 @@ class RemoteProxyThrowOnError_Test {
 		// Server returns 500 but the method only declares NotFound (404) -> no typed match, throwOnError=false -> body flows through.
 		status = 500;
 		responseBody = "boom";
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(TypedExceptionRemote.class, url());
 			assertEquals("boom", proxy.call());
 		}
@@ -175,7 +175,7 @@ class RemoteProxyThrowOnError_Test {
 	@Test void a06_successResponse_returnsBody_withThrowOnErrorTrue() throws Exception {
 		status = 200;
 		responseBody = "ok";
-		try (var c = RestClient.create().build()) {
+		try (var c = RestClient.create().allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(ThrowOnErrorRemote.class, url());
 			assertEquals("ok", proxy.call());
 		}

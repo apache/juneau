@@ -189,7 +189,7 @@ class Remote_RemoteOpAnnotation_Test extends TestBase {
 	}
 
 	@Test void c01_returnTypes_json() throws Exception {
-		var x = MockRestClient.buildJson5(C.class).getRemote(C1.class);
+		var x = MockRestClient.create(C.class).json5().allowPrivateUrls(true).build().getRemote(C1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("'foo'",read(x.postX2("foo").getEntity().getContent()));
 		assertEquals("'foo'",read(x.postX3("foo")));
@@ -233,7 +233,7 @@ class Remote_RemoteOpAnnotation_Test extends TestBase {
 	}
 
 	@Test void d01_returnTypes_partSerialization() throws Exception {
-		var x = MockRestClient.create(D.class).openApi().build().getRemote(D1.class);
+		var x = MockRestClient.create(D.class).openApi().allowPrivateUrls(true).build().getRemote(D1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("foo",read(x.postX2("foo").getEntity().getContent()));
 		assertEquals("foo",read(x.postX3("foo")));
@@ -253,6 +253,6 @@ class Remote_RemoteOpAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static <T> T remote(Class<?> rest, Class<T> t) {
-		return MockRestClient.build(rest).getRemote(t);
+		return MockRestClient.create(rest).allowPrivateUrls(true).build().getRemote(t);
 	}
 }

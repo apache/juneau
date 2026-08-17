@@ -73,6 +73,7 @@ public final class RrpcInterfaceMeta {
 	private final int retries;
 	private final boolean retryNonIdempotent;
 	private final boolean throwOnError;
+	private final boolean allowPrivateUrls;
 	private final Map<Method,RrpcInterfaceMethodMeta> methodMetas;
 	private final Map<String,RrpcInterfaceMethodMeta> methodMetasByPath;
 
@@ -121,6 +122,7 @@ public final class RrpcInterfaceMeta {
 		this.retries = buildRetries(remote);
 		this.retryNonIdempotent = buildRetryNonIdempotent(remote);
 		this.throwOnError = buildThrowOnError(remote);
+		this.allowPrivateUrls = buildAllowPrivateUrls(remote);
 		warnHeaderListUnsupported(iface, remote);
 
 		var metas = new LinkedHashMap<Method,RrpcInterfaceMethodMeta>();
@@ -189,6 +191,10 @@ public final class RrpcInterfaceMeta {
 
 	private static boolean buildThrowOnError(Remote remote) {
 		return remote != null && remote.throwOnError();
+	}
+
+	private static boolean buildAllowPrivateUrls(Remote remote) {
+		return remote != null && remote.allowPrivateUrls();
 	}
 
 	/**
@@ -499,6 +505,16 @@ public final class RrpcInterfaceMeta {
 	 */
 	public boolean isThrowOnError() {
 		return throwOnError;
+	}
+
+	/**
+	 * Returns whether the interface opts its absolute {@code @Remote}/{@code @Url}/{@code baseUrl()} targets out of
+	 * the default deny-private SSRF guardrail ({@link Remote#allowPrivateUrls()}).
+	 *
+	 * @return <jk>true</jk> if {@code allowPrivateUrls} is set at the interface level.
+	 */
+	public boolean isAllowPrivateUrls() {
+		return allowPrivateUrls;
 	}
 
 	/**

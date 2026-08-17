@@ -186,10 +186,14 @@ public final class RemoteClient {
 			var methodPath = methodMeta.getPath();
 			var fullPath = combinePaths(basePath, methodPath);
 
+			// The allowPrivateUrls opt-in is interface-level-or-client-level only (no per-method attribute, mirroring
+			// the design's precedence table collapsed to the surfaces this engine actually exposes).
+			var allowPrivateUrls = meta.isAllowPrivateUrls() || client.isAllowPrivateUrls();
+
 			// Apply the call-time @Url parameter / declarative baseUrl override (computed per call;
 			// never cached on the shared meta objects).  {var} substitution still runs at request time so @Path params
 			// can fill tokens inside the resolved URL.
-			var effectivePath = resolveEffectiveUrl(methodMeta, method, args, fullPath);
+			var effectivePath = resolveEffectiveUrl(methodMeta, method, args, fullPath, allowPrivateUrls);
 
 			// throwOnError is enabled if set true at either the method or interface level.
 			var throwOnError = meta.isThrowOnError() || methodMeta.isThrowOnError();
@@ -200,10 +204,10 @@ public final class RemoteClient {
 
 			// Execute and process the return value.  The request is rebuilt per attempt so a (gated) retry resends a
 			// freshly-bound request.
-			return processReturn(() -> buildRequest(methodMeta, effectivePath, method, args), methodMeta, method, throwOnError, acceptFallback);
+			return processReturn(() -> buildRequest(methodMeta, effectivePath, method, args, allowPrivateUrls), methodMeta, method, throwOnError, acceptFallback);
 		}
 
-		private RestRequest buildRequest(RrpcInterfaceMethodMeta methodMeta, String path, Method method, Object[] args) throws IOException {
+		private RestRequest buildRequest(RrpcInterfaceMethodMeta methodMeta, String path, Method method, Object[] args, boolean allowPrivateUrls) throws IOException {
 			var httpMethod = methodMeta.getHttpMethod();
 			var req = switch (httpMethod) {
 				case "GET" -> client.get(path);
@@ -254,6 +258,10 @@ public final class RemoteClient {
 			// Apply annotation-declared interceptors + per-call timeout.
 			applyPolicy(req, methodMeta);
 
+			// Mark this request as policy-covered (SSRF guardrail) so the transport applies pin-on-connect +
+			// redirect revalidation, or fails closed if it cannot honor the contract.
+			req.remoteUrlPolicy(true, allowPrivateUrls);
+
 			return req;
 		}
 
@@ -300,17 +308,20 @@ public final class RemoteClient {
 		 * </ol>
 		 *
 		 * <p>
-		 * SSRF guardrail (v1): when an override is in effect and yields a value carrying a URI scheme, the scheme must be
-		 * {@code http} or {@code https}; any other scheme is rejected.  The default (no-override) path is left untouched
-		 * so pre-existing absolute-{@code @RemoteOp(path)} / templating behavior does not regress.
+		 * SSRF guardrail: when an override is in effect and yields an absolute value (carries a URI scheme), or the
+		 * default (no-override) {@code fullPath} is itself already absolute (an absolute {@code @RemoteOp(path)} /
+		 * templating value), the full deny-private policy applies via {@link RemoteUrlPolicy#requireAllowedUrl}
+		 * &mdash; not just the {@code http}/{@code https} scheme check.  Connect-time pin-on-connect and
+		 * redirect-revalidation are applied downstream by the transport (see {@link RestRequest#remoteUrlPolicy}).
 		 *
 		 * @param methodMeta The method metadata (carries the {@code @Url} param index + the method-level {@code baseUrl}).
 		 * @param method The invoked method (for error messages).
 		 * @param args The invocation arguments (source of the {@code @Url} value).
 		 * @param fullPath The statically-computed {@code basePath + methodPath}.
+		 * @param allowPrivateUrls The effective {@code allowPrivateUrls} opt-in for this call.
 		 * @return The effective URL/path to hand to {@code client.<verb>(...)}.
 		 */
-		private String resolveEffectiveUrl(RrpcInterfaceMethodMeta methodMeta, Method method, Object[] args, String fullPath) {
+		private String resolveEffectiveUrl(RrpcInterfaceMethodMeta methodMeta, Method method, Object[] args, String fullPath, boolean allowPrivateUrls) {
 			// Option A: a call-time @Url parameter wins over everything.
 			var urlParamIndex = methodMeta.getUrlParamIndex();
 			if (urlParamIndex >= 0) {
@@ -318,46 +329,15 @@ public final class RemoteClient {
 				var value = arg == null ? null : arg.toString();
 				assertArg(! isBlank(value), "@Url parameter on %s.%s must not be null or blank",
 					method.getDeclaringClass().getName(), method.getName());
-				return requireHttpScheme(value.trim());
+				return RemoteUrlPolicy.requireAllowedUrl(value.trim(), allowPrivateUrls);
 			}
 			// Option B: a declarative base/host override (method-level wins over interface-level).
 			var baseUrl = firstNonEmpty(methodMeta.getBaseUrl(), meta.getBaseUrl());
 			if (isNotEmpty(baseUrl))
-				return requireHttpScheme(combinePaths(baseUrl, fullPath));
-			// Default: unchanged behavior (no override, no scheme restriction — no regression).
-			return fullPath;
-		}
-
-		/**
-		 * Enforces the SSRF guardrail: when {@code url} carries a URI scheme it must be {@code http} or
-		 * {@code https}; otherwise an {@link IllegalArgumentException} is thrown.  Scheme-less (relative) values pass
-		 * through unchanged.
-		 */
-		private static String requireHttpScheme(String url) {
-			var scheme = schemeOf(url);
-			assertArg(scheme == null || scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"),
-				"Unsupported URL scheme '%s' in @Remote URL override; only http/https are allowed: %s", scheme, url);
-			return url;
-		}
-
-		/**
-		 * Returns the URI scheme of a URL (the token before the first {@code :} when it precedes any {@code /}, {@code ?}
-		 * or {@code #}), or <jk>null</jk> if the value has no scheme (e.g. a relative path or a value beginning with a
-		 * {@code {var}} token).
-		 */
-		private static String schemeOf(String url) {
-			if (url.isEmpty() || ! Character.isLetter(url.charAt(0)))
-				return null;
-			for (var i = 0; i < url.length(); i++) {
-				var c = url.charAt(i);
-				if (c == ':')
-					return url.substring(0, i);
-				if (c == '/' || c == '?' || c == '#')
-					return null;
-				if (! (Character.isLetterOrDigit(c) || c == '+' || c == '-' || c == '.'))
-					return null;
-			}
-			return null;
+				return RemoteUrlPolicy.requireAllowedUrl(combinePaths(baseUrl, fullPath), allowPrivateUrls);
+			// Default: no override — but an already-absolute fullPath (absolute @RemoteOp(path)/templating) is
+			// still policy-covered (Review R4); a genuinely relative fullPath passes through unchanged.
+			return RemoteUrlPolicy.requireAllowedUrl(fullPath, allowPrivateUrls);
 		}
 
 		/**

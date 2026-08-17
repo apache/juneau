@@ -137,26 +137,26 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 		// parseBody's "body == null" short-circuit is HTT-excluded (see RemoteClient.java): every bundled Transport
 		// yields a non-null (possibly empty) body stream, so getBodyAsString() returns "" here, not null, and that
 		// empty string is handed to the parser like any other body.
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			assertThrows(ParseException.class, () -> client.remote(ParseBodyService.class).getWidgetFromEmptyBody());
 		}
 	}
 
 	@Test void a02_parseBody_malformedJson_declaredType_rethrowsParseException() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			assertThrows(ParseException.class, () -> client.remote(ParseBodyService.class).getWidgetFromMalformedJson());
 		}
 	}
 
 	@Test void a03_parseBody_malformedJson_objectReturnType_lenientlyReturnsRawBody() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			var result = client.remote(ParseBodyService.class).getObjectFromMalformedJson_lenientlyReturnsRawString();
 			assertEquals("{not valid json", result);
 		}
 	}
 
 	@Test void a04_selectParser_responseContentTypeUnmatched_fallsBackToAcceptMediaType() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			var widget = client.remote(ParseBodyService.class).getWidgetViaAcceptFallback();
 			assertEquals("fromFallback", widget.getName());
 		}
@@ -177,7 +177,7 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 		// selectParser's first ("response Content-Type matched") branch, which a01-a04 never reach (they leave
 		// "parsers" null, so getParserForMediaType always misses and every call falls through to getMatchingParser).
 		try (var client = RestClient.builder().rootUrl(rootUrl())
-				.parsers(ParserSet.create().add(org.apache.juneau.marshall.json.JsonParser.class).build()).build()) {
+				.parsers(ParserSet.create().add(org.apache.juneau.marshall.json.JsonParser.class).build()).allowPrivateUrls(true).build()) {
 			var widget = client.remote(WidgetService.class).getWidget();
 			assertEquals("gizmo", widget.getName());
 		}
@@ -187,7 +187,7 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 		// No .parsers(...), no .defaultParser(...), and an unlabeled response with no accept fallback: every
 		// selectParser candidate misses, so getMatchingParser(...) falls all the way through to its own
 		// no-default-parser Optional.empty(), and orElseThrow's UnsupportedMediaType-construction lambda finally runs.
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var ex = assertThrows(org.apache.juneau.http.response.UnsupportedMediaType.class,
 				() -> client.remote(WidgetService.class).getWidget());
 			assertTrue(ex.getMessage().contains("No parser matched"), "Unexpected message: " + ex.getMessage());
@@ -200,7 +200,7 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 		// branch -- distinct from a04, which relies on the client's implicit defaultParser fallback (getMatchingParser),
 		// not a registered-parser match on the accept media type.
 		try (var client = RestClient.builder().rootUrl(rootUrl())
-				.parsers(ParserSet.create().add(org.apache.juneau.marshall.json.JsonParser.class).build()).build()) {
+				.parsers(ParserSet.create().add(org.apache.juneau.marshall.json.JsonParser.class).build()).allowPrivateUrls(true).build()) {
 			var widget = client.remote(WidgetService.class).getWidgetViaAcceptFallback();
 			assertEquals("fromFallback", widget.getName());
 		}
@@ -220,7 +220,7 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 	}
 
 	@Test void b01_cursor_liveBody_readable() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			try (var cursor = client.remote(CursorService.class).getCursor()) {
 				assertNotEquals(TokenType.END_OF_STREAM, cursor.next());
 			}
@@ -228,7 +228,7 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 	}
 
 	@Test void b02_cursor_throwOnErrorBeforeHandingBackCursor_closesResponse() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultParser(org.apache.juneau.marshall.json.JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			assertThrows(org.apache.juneau.http.response.BasicHttpException.class,
 				() -> client.remote(CursorService.class).getCursorThrowsBeforeHandingBack());
 		}
@@ -267,7 +267,7 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 	}
 
 	@Test void c01_toPartBody_httpBodyArgument_usedDirectly() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartExtraService.class).uploadHttpBodyPart(
 				StringBody.of("raw-body-content", "text/plain"));
 			assertTrue(result.contains("raw-body-content"), "Expected raw part content in: " + result);
@@ -283,7 +283,7 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 	}
 
 	@Test void c03_bindMultipartBody_nonPartParameter_isSkipped() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartExtraService.class).uploadWithUnannotatedParam("my-title", "ignored-label");
 			assertTrue(result.contains("my-title"), "Expected the title part in: " + result);
 			assertFalse(result.contains("ignored-label"), "The unannotated parameter must not be sent as a part: " + result);
@@ -291,14 +291,14 @@ class RemoteClient_ParseAndCursor_Test extends TestBase {
 	}
 
 	@Test void c04_bindMultipartBody_explicitFileName_usedVerbatim() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartExtraService.class).uploadWithExplicitFileName(new byte[] {1, 2, 3});
 			assertTrue(result.contains("custom.bin"), "Expected the explicit fileName in: " + result);
 		}
 	}
 
 	@Test void c05_toPartBody_beanPart_explicitContentType_usedInsteadOfSerializerDefault() throws Exception {
-		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultSerializer(org.apache.juneau.marshall.json.JsonSerializer.DEFAULT).build()) {
+		try (var client = RestClient.builder().rootUrl(rootUrl()).defaultSerializer(org.apache.juneau.marshall.json.JsonSerializer.DEFAULT).allowPrivateUrls(true).build()) {
 			var result = client.remote(MultipartExtraService.class)
 				.uploadBeanPartWithExplicitContentType(new RemoteClient_ReturnModesAndRetry_Test.MultipartBean());
 			assertTrue(result.contains("application/json"), "Expected the explicit contentType in: " + result);

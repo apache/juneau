@@ -22,8 +22,12 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.config.*;
+import org.apache.http.conn.socket.*;
+import org.apache.http.conn.ssl.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
+import org.apache.http.impl.conn.*;
 import org.apache.juneau.rest.client.*;
 
 /**
@@ -59,14 +63,35 @@ import org.apache.juneau.rest.client.*;
 })
 public final class ApacheHc45Transport implements HttpTransport {
 
+	private static final ThreadLocal<Boolean> POLICY_ACTIVE = new ThreadLocal<>();
+
 	private final CloseableHttpClient httpClient;
+	private final boolean policySupported;
 
 	ApacheHc45Transport(ApacheHc45TransportBuilder builder) {
+		this.policySupported = builder.httpClient == null;
 		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
 	}
 
 	private static CloseableHttpClient createDefaultHttpClient() {
-		return HttpClients.custom().addInterceptorLast(new Hc45RedirectCredentialGuard()).build();
+		// A DnsResolver that pin-on-connects SSRF-guard-active @Remote connections (see PolicyPinningDnsResolver),
+		// and a RedirectStrategy that defers 3xx handling to PolicyEnforcedRedirects for the same requests -- both
+		// leave ordinary (non-@Remote) requests on this same client completely unaffected.
+		var registry = RegistryBuilder.<ConnectionSocketFactory>create()
+			.register("http", PlainConnectionSocketFactory.getSocketFactory())
+			.register("https", SSLConnectionSocketFactory.getSocketFactory())
+			.build();
+		var connectionManager = new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE);
+		return HttpClients.custom()
+			.setConnectionManager(connectionManager)
+			.addInterceptorLast(new Hc45RedirectCredentialGuard())
+			.setRedirectStrategy(new PolicyAwareRedirectStrategy())
+			.build();
+	}
+
+	// Package-visible for PolicyPinningDnsResolver / PolicyAwareRedirectStrategy.
+	static boolean isPolicyActive() {
+		return POLICY_ACTIVE.get() == Boolean.TRUE;
 	}
 
 	/**
@@ -89,6 +114,8 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		if (request.isSsrfGuardActive())
+			return executeWithPolicy(request);
 		try {
 			return sendOnce(request);
 		} catch (StaleConnectionException e) {
@@ -101,6 +128,30 @@ public final class ApacheHc45Transport implements HttpTransport {
 			} catch (StaleConnectionException e2) {
 				throw e2.asTransportException();
 			}
+		}
+	}
+
+	@Override /* HttpTransport */
+	public boolean supportsUrlPolicy() {
+		return policySupported;
+	}
+
+	// Activates pin-on-connect + Juneau-controlled redirect revalidation for the duration of the redirect chain.
+	private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {
+		POLICY_ACTIVE.set(Boolean.TRUE);
+		try {
+			return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
+		} finally {
+			POLICY_ACTIVE.remove();
+		}
+	}
+
+	// Performs one pin-on-connect hop (PolicyPinningDnsResolver is active for the whole redirect chain).
+	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
+		try {
+			return sendOnce(request);
+		} catch (StaleConnectionException e) {
+			throw e.asTransportException();
 		}
 	}
 

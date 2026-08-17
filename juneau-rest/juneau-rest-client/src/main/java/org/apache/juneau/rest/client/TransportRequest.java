@@ -51,6 +51,8 @@ public final class TransportRequest {
 	private final List<TransportHeader> headers;
 	private final TransportBody body;
 	private final Duration timeout;
+	private final boolean policyEnforced;
+	private final boolean allowPrivateUrls;
 
 	private TransportRequest(Builder builder) {
 		this.method = assertArgNotNull("method", builder.method);
@@ -58,6 +60,8 @@ public final class TransportRequest {
 		this.headers = List.copyOf(builder.headers);
 		this.body = builder.body;
 		this.timeout = builder.timeout;
+		this.policyEnforced = builder.policyEnforced;
+		this.allowPrivateUrls = builder.allowPrivateUrls;
 	}
 
 	/** Returns a new {@link Builder}. */
@@ -153,6 +157,42 @@ public final class TransportRequest {
 		return timeout;
 	}
 
+	/**
+	 * Returns {@code true} if this request originated from a {@code @Remote}/{@code @Url} call and is subject to
+	 * the SSRF guardrail (see {@code org.apache.juneau.http.remote.RemoteUrlPolicy}).
+	 *
+	 * <p>
+	 * Ordinary (non-{@code @Remote}) requests built directly via {@code RestClient.get(url)} etc. are never
+	 * policy-covered.
+	 *
+	 * @return {@code true} if the SSRF guardrail applies to this request.
+	 */
+	public boolean isPolicyEnforced() {
+		return policyEnforced;
+	}
+
+	/**
+	 * Returns {@code true} if the {@code allowPrivateUrls} opt-in is in effect for this request, disabling the
+	 * deny-private / pin-on-connect / redirect-revalidation checks (the {@code http}/{@code https} scheme
+	 * requirement still applies upstream).
+	 *
+	 * @return {@code true} if private/loopback/link-local/metadata targets are allowed for this request.
+	 */
+	public boolean isAllowPrivateUrls() {
+		return allowPrivateUrls;
+	}
+
+	/**
+	 * Returns {@code true} if the SSRF guardrail's connect-time machinery (pin-on-connect + Juneau-controlled
+	 * redirect revalidation) must be applied by the transport for this request: {@link #isPolicyEnforced()} is set
+	 * and {@link #isAllowPrivateUrls()} is not.
+	 *
+	 * @return {@code true} if the transport must pin-on-connect and manually revalidate redirects for this request.
+	 */
+	public boolean isSsrfGuardActive() {
+		return policyEnforced && ! allowPrivateUrls;
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// Builder
 	// -----------------------------------------------------------------------------------------------------------------
@@ -172,6 +212,8 @@ public final class TransportRequest {
 		final List<TransportHeader> headers = l();
 		TransportBody body;
 		Duration timeout;
+		boolean policyEnforced;
+		boolean allowPrivateUrls;
 
 		private Builder() {}
 
@@ -255,6 +297,20 @@ public final class TransportRequest {
 		 */
 		public Builder timeout(Duration value) {
 			timeout = value;
+			return this;
+		}
+
+		/**
+		 * Marks this request as originating from a {@code @Remote}/{@code @Url} call, subject to the SSRF guardrail,
+		 * and records whether the {@code allowPrivateUrls} opt-in is in effect.
+		 *
+		 * @param policyEnforced {@code true} if this request is policy-covered.
+		 * @param allowPrivateUrls {@code true} if the {@code allowPrivateUrls} opt-in disables the deny-private checks.
+		 * @return This object.
+		 */
+		public Builder remoteUrlPolicy(boolean policyEnforced, boolean allowPrivateUrls) {
+			this.policyEnforced = policyEnforced;
+			this.allowPrivateUrls = allowPrivateUrls;
 			return this;
 		}
 

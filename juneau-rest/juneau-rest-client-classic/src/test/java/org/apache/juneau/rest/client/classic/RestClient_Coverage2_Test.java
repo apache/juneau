@@ -179,9 +179,40 @@ class RestClient_Coverage2_Test {
 	}
 
 	@Test void a09_getRemote_clientLevelRootUrl_resolvesAndSucceeds() throws Exception {
-		try (var c = RestClient.create().rootUrl(url()).build()) {
+		try (var c = RestClient.create().rootUrl(url()).allowPrivateUrls(true).build()) {
 			var proxy = c.getRemote(EchoRemote.class, null);
 			assertDoesNotThrow(proxy::call);
+		}
+	}
+
+	/**
+	 * Red-on-broken verification-gate test for the design's "caller-supplied {@code HttpClient} fails closed"
+	 * requirement (see {@code TODO-392-remote-url-ssrf-resolved-address.md} "Test notes"): a policy-covered
+	 * {@code @Remote} call through an {@code httpClient(...)}-supplied client — which this {@code RestClient} did
+	 * not build and so cannot guarantee honors pin-on-connect + redirect revalidation — must be rejected before the
+	 * client is ever invoked, rather than silently connecting without the guardrail.
+	 */
+	@Test void a09b_getRemote_callerSuppliedHttpClient_guardActive_failsClosed() throws Exception {
+		var executed = new boolean[]{false};
+		var stubClient = new CloseableHttpClient() {
+			@Override
+			protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, org.apache.http.protocol.HttpContext context) {
+				executed[0] = true;
+				throw new UnsupportedOperationException("Not used by this test.");
+			}
+			@Override public void close() { /* no-op */ }
+			@Override @SuppressWarnings("deprecation") public HttpParams getParams() { return null; }
+			@Override @SuppressWarnings("deprecation") public ClientConnectionManager getConnectionManager() { return null; }
+		};
+		try (var c = RestClient.create().httpClient(stubClient).rootUrl("http://example.com").build()) {
+			var proxy = c.getRemote(EchoRemote.class, null);
+			// EchoRemote#call() does not declare a checked exception, so the classic engine's checked
+			// RestCallException surfaces through the JDK dynamic-proxy dispatch as an UndeclaredThrowableException.
+			var thrown = assertThrows(java.lang.reflect.UndeclaredThrowableException.class, proxy::call);
+			assertInstanceOf(RestCallException.class, thrown.getCause());
+			assertTrue(thrown.getCause().getMessage().contains("cannot be guaranteed to honor the SSRF guardrail"),
+				"Unexpected message: " + thrown.getCause().getMessage());
+			assertFalse(executed[0], "the caller-supplied HttpClient must never be invoked once the request is rejected as fail-closed");
 		}
 	}
 

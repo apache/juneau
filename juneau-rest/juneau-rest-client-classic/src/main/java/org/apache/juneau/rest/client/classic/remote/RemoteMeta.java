@@ -62,6 +62,7 @@ public class RemoteMeta {
 	private final int retries;
 	private final boolean retryNonIdempotent;
 	private final boolean throwOnError;
+	private final boolean allowPrivateUrls;
 
 	/**
 	 * Constructor.
@@ -90,6 +91,7 @@ public class RemoteMeta {
 		var retries2 = 0;
 		var retryNonIdempotent2 = false;
 		var throwOnError2 = false;
+		var allowPrivateUrls2 = false;
 
 		for (var r : remotes) {
 			if (ine(r.path()))
@@ -123,6 +125,7 @@ public class RemoteMeta {
 				retries2 = r.retries();
 			retryNonIdempotent2 |= r.retryNonIdempotent();
 			throwOnError2 |= r.throwOnError();
+			allowPrivateUrls2 |= r.allowPrivateUrls();
 			// Genuinely engine-specific: classic and NG RestCallInterceptor SPI types are nominally
 			// incompatible, so the classic engine cannot honor interface-level interceptors.  Warn once.
 			if (r.interceptors().length > 0)
@@ -148,6 +151,7 @@ public class RemoteMeta {
 		this.retries = retries2;
 		this.retryNonIdempotent = retryNonIdempotent2;
 		this.throwOnError = throwOnError2;
+		this.allowPrivateUrls = allowPrivateUrls2;
 	}
 
 	/**
@@ -219,6 +223,14 @@ public class RemoteMeta {
 	 * @return <jk>true</jk> if {@code throwOnError} is set at the interface level.
 	 */
 	public boolean isThrowOnError() { return throwOnError; }
+
+	/**
+	 * Returns whether the interface opts its absolute {@code @Remote}/{@code @Url}/{@code baseUrl()} targets out of
+	 * the default deny-private SSRF guardrail ({@link Remote#allowPrivateUrls()}).
+	 *
+	 * @return <jk>true</jk> if {@code allowPrivateUrls} is set at the interface level.
+	 */
+	public boolean isAllowPrivateUrls() { return allowPrivateUrls; }
 
 	/**
 	 * Returns the metadata about the specified operation on this resource proxy.

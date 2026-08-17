@@ -37,6 +37,7 @@ import java.util.logging.*;
 
 import org.apache.http.*;
 import org.apache.http.ParseException;
+import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
@@ -45,6 +46,7 @@ import org.apache.http.concurrent.*;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
+import org.apache.http.util.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.httppart.*;
@@ -56,6 +58,8 @@ import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.http.classic.resource.*;
+import org.apache.juneau.http.remote.*;
+import org.apache.juneau.rest.client.classic.remote.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.bson.*;
 import org.apache.juneau.marshall.html.*;
@@ -2149,7 +2153,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				request2.setEntity(entity);
 			}
 
-			response = client.createResponse(this, client.run(target, request, context), parser2);
+			var httpResponse = RemoteUrlPolicyState.isActive() ? runWithPolicyRedirects() : client.run(target, request, context);
+			response = client.createResponse(this, httpResponse, parser2);
 
 			if (isDebug() || client.logRequests == DetailLevel.FULL)
 				response.cacheContent();
@@ -2219,6 +2224,92 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		}
 
 		return this.response;
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// SSRF-guard redirect revalidation (active only while RemoteUrlPolicyState.isActive() -- see that class)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Runs this request with Apache HttpClient's own automatic redirect-following disabled (see
+	 * {@code PolicyAwareRedirectStrategy}) and instead follows {@code 3xx} hops in a Juneau-controlled loop that
+	 * re-validates the {@code Location} of every hop against {@link RemoteUrlPolicy} &mdash; and, via
+	 * {@code PolicyPinningDnsResolver} (active for the whole duration of this loop, since {@link RemoteUrlPolicyState}
+	 * remains set on the calling thread), pin-on-connects each hop's resolved address.  Only called while
+	 * {@link RemoteUrlPolicyState#isActive()}, i.e. for a {@code @Remote} call with the SSRF guard in effect.
+	 */
+	private HttpResponse runWithPolicyRedirects() throws IOException {
+		var currentTarget = target;
+		HttpRequestBase currentRequest = request;
+		for (var hop = 0; hop < RemoteUrlPolicy.MAX_REDIRECT_HOPS; hop++) {
+			// Hop 0's URI was already validated (or is the operator-configured client root, which the resolution
+			// path intentionally does not re-check -- see RemoteUrlPolicy.requireAllowedUrl) before this request
+			// was built; only a redirect Location -- a URL discovered at runtime -- needs a fresh pre-check here.
+			if (hop > 0)
+				requirePolicyAllowed(currentRequest.getURI());
+			var httpResponse = client.run(currentTarget, currentRequest, context);
+			var sc = httpResponse.getStatusLine().getStatusCode();
+			if (! isRedirectStatus(sc))
+				return httpResponse;
+			var locationHeader = httpResponse.getFirstHeader("Location");
+			EntityUtils.consumeQuietly(httpResponse.getEntity());
+			if (locationHeader == null)
+				throw new ClientProtocolException("Redirect response (status " + sc + ") is missing a Location header");
+			URI target2;
+			try {
+				target2 = RemoteUrlPolicy.resolveRedirectLocation(currentRequest.getURI(), locationHeader.getValue());
+			} catch (IllegalArgumentException e) {
+				throw new ClientProtocolException(e.getMessage(), e);
+			}
+			currentRequest = buildRedirectRequest(currentRequest, target2, sc);
+			currentTarget = null; // Recomputed by the connection route planner from the request's own absolute URI.
+		}
+		throw new ClientProtocolException("Redirect limit exceeded (" + RemoteUrlPolicy.MAX_REDIRECT_HOPS
+			+ " hops) while following a policy-covered @Remote redirect chain, starting at: " + request.getURI());
+	}
+
+	private static void requirePolicyAllowed(URI uri) throws ClientProtocolException {
+		try {
+			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), false);
+		} catch (IllegalArgumentException e) {
+			throw new ClientProtocolException(e.getMessage(), e);
+		}
+	}
+
+	private static boolean isRedirectStatus(int statusCode) {
+		return statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 307 || statusCode == 308;
+	}
+
+	/**
+	 * Builds the request for the next hop of a policy-covered redirect chain, following conventional {@code 3xx}
+	 * semantics: {@code 301}/{@code 302}/{@code 303} rewrite the method to {@code GET} with no body unless the
+	 * original method was already {@code GET}/{@code HEAD}; {@code 307}/{@code 308} preserve the original method
+	 * and entity. A non-{@linkplain HttpEntity#isRepeatable() repeatable} entity cannot be safely re-sent, so such a
+	 * redirect is refused (fail closed) rather than risking a corrupt or partial replay.
+	 */
+	private HttpRequestBase buildRedirectRequest(HttpRequestBase current, URI target2, int statusCode) throws ClientProtocolException {
+		var method = current.getMethod();
+		var preserveMethod = method.equalsIgnoreCase("GET") || method.equalsIgnoreCase("HEAD");
+		var rewriteToGet = ! preserveMethod && (statusCode == 301 || statusCode == 302 || statusCode == 303);
+		var entity = (! rewriteToGet && current instanceof HttpEntityEnclosingRequestBase e) ? e.getEntity() : null;
+
+		HttpRequestBase next;
+		if (entity != null) {
+			if (! entity.isRepeatable())
+				throw new ClientProtocolException("Redirect (status " + statusCode + ") requires re-sending a "
+					+ "non-repeatable request body, which cannot be safely replayed; refusing to follow (fail "
+					+ "closed) for a policy-covered @Remote redirect chain: " + target2);
+			var next2 = new BasicHttpEntityRequestBase(this, method);
+			next2.setEntity(entity);
+			next = next2;
+		} else {
+			next = new BasicHttpRequestBase(this, rewriteToGet ? "GET" : method);
+		}
+		next.setURI(target2);
+		for (var h : current.getAllHeaders())
+			if (! (rewriteToGet && (h.getName().equalsIgnoreCase("Content-Length") || h.getName().equalsIgnoreCase("Content-Type"))))
+				next.addHeader(h);
+		return next;
 	}
 
 	/**

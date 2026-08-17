@@ -17,9 +17,14 @@
 package org.apache.juneau.rest.client;
 
 import java.io.*;
+import java.net.*;
 import java.net.http.*;
+import java.net.http.HttpClient.*;
 import java.net.http.HttpRequest.*;
 import java.net.http.HttpResponse.*;
+import java.util.*;
+
+import org.apache.juneau.http.remote.*;
 
 /**
  * {@link HttpTransport} implementation backed by the JDK's built-in {@link HttpClient}.
@@ -50,6 +55,21 @@ import java.net.http.HttpResponse.*;
  * other idempotent methods (e.g. {@code PUT}/{@code DELETE}); this backstop closes that gap while never replaying a
  * {@code POST} or any other non-idempotent request.
  *
+ * <p>
+ * For SSRF-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this
+ * transport pin-on-connects: it resolves the request host, selects an address that passes
+ * {@link org.apache.juneau.http.remote.RemoteUrlPolicy}, and rewrites the request URI to that literal address
+ * (preserving the original host via an explicit {@code Host} header) so the socket connects only to the
+ * validated address &mdash; and re-runs the same check on every {@code Location} hop via
+ * {@link PolicyEnforcedRedirects}. The JDK {@link HttpClient} has no connect-time/DNS SPI, so an IP-literal
+ * rewrite cannot preserve TLS SNI/hostname verification for the original hostname; per the locked design, policy
+ * -covered <b>HTTPS</b> requests are therefore refused (fail closed) on this transport &mdash; use a transport
+ * that supports connect-time pinning (e.g. Apache HttpClient 4.5/5), or set {@code allowPrivateUrls(true)} if the
+ * target is an intentional local-dev/intranet endpoint. A policy-covered request is also refused if the
+ * underlying {@link HttpClient} was built with automatic redirect-following enabled ({@link Redirect#NORMAL} or
+ * {@link Redirect#ALWAYS}), since this transport cannot re-validate hops that client follows on its own; build it
+ * with the default {@link Redirect#NEVER} (the JDK default) to let this transport's own redirect loop apply.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
@@ -60,6 +80,21 @@ import java.net.http.HttpResponse.*;
 	"resource" // Not owned here; lifecycle is managed by the surrounding context
 })
 public final class JavaHttpTransport implements HttpTransport {
+
+	static {
+		// Best-effort: the JDK HttpClient rejects a caller-set "Host" header by default -- a fixed, JVM-wide,
+		// first-touch-wins setting cached the first time any HttpRequest.Builder.header() call reaches the JDK's
+		// internal restricted-header table. Setting this here, as early as this class is loaded (typically before
+		// any unrelated HttpClient usage elsewhere in the same JVM), lets HTTP pin-on-connect preserve the
+		// original Host header for virtual-hosted targets after the IP-literal rewrite. If some other code
+		// already forced that first touch, this has no effect and sendOncePinned() below fails closed instead of
+		// silently sending the wrong Host.
+		var existing = System.getProperty("jdk.httpclient.allowRestrictedHeaders");
+		if (existing == null || existing.isBlank())
+			System.setProperty("jdk.httpclient.allowRestrictedHeaders", "host");
+		else if (! existing.toLowerCase(Locale.ROOT).contains("host"))
+			System.setProperty("jdk.httpclient.allowRestrictedHeaders", existing + ",host");
+	}
 
 	private final HttpClient httpClient;
 
@@ -87,6 +122,8 @@ public final class JavaHttpTransport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		if (request.isSsrfGuardActive())
+			return executeWithPolicy(request);
 		try {
 			return sendOnce(request);
 		} catch (StaleConnectionException e) {
@@ -102,10 +139,76 @@ public final class JavaHttpTransport implements HttpTransport {
 		}
 	}
 
+	@Override /* HttpTransport */
+	public boolean supportsUrlPolicy() {
+		return true;
+	}
+
+	// Runs the Juneau-controlled redirect loop, pinning each hop to a policy-allowed address.
+	private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {
+		if (httpClient.followRedirects() != Redirect.NEVER)
+			throw new TransportException("Refusing to send a policy-covered @Remote request through a "
+				+ "JavaHttpTransport whose HttpClient auto-follows redirects (" + httpClient.followRedirects()
+				+ "); this transport cannot re-validate hops that the client follows on its own. Build the "
+				+ "HttpClient with the default Redirect.NEVER, or set allowPrivateUrls(true) if this is an "
+				+ "intentional local-dev/intranet target.");
+		return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
+	}
+
+	// Performs one pin-on-connect hop: resolves and pins the request host, then sends without following redirects.
+	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
+		var uri = request.getUri();
+		var scheme = uri.getScheme();
+		if (! "http".equalsIgnoreCase(scheme))
+			throw new TransportException("JavaHttpTransport cannot preserve TLS SNI/hostname verification while "
+				+ "pinning the resolved address (the JDK HttpClient has no connect-time/DNS SPI); refusing "
+				+ "(fail closed) a policy-covered HTTPS request: " + uri
+				+ ".  Use a transport with connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set "
+				+ "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
+		InetAddress pinned;
+		try {
+			pinned = RemoteUrlPolicy.selectAllowedAddress(uri.getHost(), false, RemoteUrlPolicy.AddressResolver.DEFAULT);
+		} catch (UnknownHostException e) {
+			throw new TransportException("Could not resolve @Remote request host: " + uri.getHost(), e);
+		}
+		URI pinnedUri;
+		try {
+			pinnedUri = new URI(pinnedUriString(scheme, pinned, uri));
+		} catch (URISyntaxException e) {
+			throw new TransportException("Could not build a pinned request URI for: " + uri, e);
+		}
+		var hostHeader = uri.getPort() >= 0 ? uri.getHost() + ":" + uri.getPort() : uri.getHost();
+		try {
+			return sendOnce(request, pinnedUri, hostHeader);
+		} catch (StaleConnectionException e) {
+			throw e.asTransportException();
+		}
+	}
+
 	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
 	// pre-response stale-connection failure; throws TransportException for every other failure.
 	private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {
-		var jdkRequest = buildJdkRequest(request);
+		return sendOnce(request, request.getUri(), null);
+	}
+
+	// Performs a single HTTP exchange against overrideUri (the pinned address) instead of request.getUri(),
+	// adding an explicit Host header (the original hostname[:port]) when hostHeader is non-null so virtual-hosting
+	// still works after the IP-literal rewrite.
+	private TransportResponse sendOnce(TransportRequest request, URI overrideUri, String hostHeader) throws TransportException, StaleConnectionException {
+		HttpRequest jdkRequest;
+		try {
+			jdkRequest = buildJdkRequest(request, overrideUri, hostHeader);
+		} catch (IllegalArgumentException e) {
+			// Only reachable when hostHeader != null and the JDK rejected the "Host" header override -- i.e. the
+			// static allowRestrictedHeaders attempt above lost the first-touch race to some other HttpClient
+			// usage in this JVM. Fail closed rather than silently pinning without preserving the original Host.
+			throw new TransportException("Could not preserve the original Host header while pin-on-connecting a "
+				+ "policy-covered HTTP request (the JDK HttpClient's restricted-header allowlist was already "
+				+ "initialized elsewhere in this JVM); refusing (fail closed): " + request.getUri()
+				+ ".  Set the JVM flag -Djdk.httpclient.allowRestrictedHeaders=host, use a transport with native "
+				+ "connect-time pinning support (e.g. Apache HttpClient 4.5/5), or set allowPrivateUrls(true) if "
+				+ "this is an intentional local-dev/intranet target.", e);
+		}
 		HttpResponse<InputStream> jdkResponse;
 		try {
 			jdkResponse = httpClient.send(jdkRequest, BodyHandlers.ofInputStream());
@@ -126,8 +229,28 @@ public final class JavaHttpTransport implements HttpTransport {
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
 
-	private static HttpRequest buildJdkRequest(TransportRequest request) {
-		var builder = HttpRequest.newBuilder().uri(request.getUri()).method(request.getMethod(), buildBodyPublisher(request.getBody()));
+	// Builds a URI string identical to "uri" except with its host replaced by the pinned literal address, by
+	// concatenating uri's already-percent-encoded raw components -- NOT via the multi-arg java.net.URI
+	// constructor, which treats its arguments as decoded components and would double-encode any "%" already
+	// present in the raw path/query/fragment (e.g. "%20" would become "%2520").
+	private static String pinnedUriString(String scheme, InetAddress pinned, URI uri) {
+		var hostLiteral = pinned instanceof Inet6Address ? "[" + pinned.getHostAddress() + "]" : pinned.getHostAddress();
+		var sb = new StringBuilder(scheme).append("://").append(hostLiteral);
+		if (uri.getPort() >= 0)
+			sb.append(':').append(uri.getPort());
+		if (uri.getRawPath() != null)
+			sb.append(uri.getRawPath());
+		if (uri.getRawQuery() != null)
+			sb.append('?').append(uri.getRawQuery());
+		if (uri.getRawFragment() != null)
+			sb.append('#').append(uri.getRawFragment());
+		return sb.toString();
+	}
+
+	private static HttpRequest buildJdkRequest(TransportRequest request, URI uri, String hostHeader) {
+		var builder = HttpRequest.newBuilder().uri(uri).method(request.getMethod(), buildBodyPublisher(request.getBody()));
+		if (hostHeader != null)
+			builder.header("Host", hostHeader);
 		for (var h : request.getHeaders())
 			builder.header(h.name(), h.value());
 		var timeout = request.getTimeout();

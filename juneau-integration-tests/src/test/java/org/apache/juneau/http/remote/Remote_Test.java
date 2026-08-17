@@ -694,18 +694,18 @@ class Remote_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder<?> client(Class<?> c) {
-		return MockRestClient.create(c).noTrace().json5();
+		return MockRestClient.create(c).noTrace().json5().allowPrivateUrls(true);
 	}
 
 	private static <T> T remote(Class<?> c, Class<T> r) {
-		return MockRestClient.create(c).noTrace().json5().build().getRemote(r);
+		return MockRestClient.create(c).noTrace().json5().allowPrivateUrls(true).build().getRemote(r);
 	}
 
 	private static <T> T plainRemote(Class<?> c, Class<T> r) {
-		return MockRestClient.create(c).build().getRemote(r);
+		return MockRestClient.create(c).allowPrivateUrls(true).build().getRemote(r);
 	}
 
 	private static <T> T plainRemote(Class<?> c, Class<T> r, String rootUrl) {
-		return MockRestClient.create(c).rootUrl(rootUrl).build().getRemote(r);
+		return MockRestClient.create(c).rootUrl(rootUrl).allowPrivateUrls(true).build().getRemote(r);
 	}
 }

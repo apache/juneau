@@ -61,6 +61,7 @@ import org.apache.http.config.*;
 import org.apache.http.conn.*;
 import org.apache.http.conn.routing.*;
 import org.apache.http.conn.socket.*;
+import org.apache.http.conn.ssl.*;
 import org.apache.http.conn.util.*;
 import org.apache.http.cookie.*;
 import org.apache.http.impl.client.*;
@@ -1103,6 +1104,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		private WritableBeanStore beanStore = new BasicBeanStore();
 		private BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 		private boolean detectLeaks;
+		private boolean allowPrivateUrls;
 		private boolean executorServiceShutdownOnClose;
 		private boolean ignoreErrors;
 		private boolean keepHttpClientOpen;
@@ -1783,6 +1785,25 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF detectLeaks() {
 			detectLeaks = true;
+			return self();
+		}
+
+		/**
+		 * Opts every {@code @Remote}/{@code @Url} call made through this client out of the default deny-private SSRF
+		 * guardrail (see {@code org.apache.juneau.http.remote.RemoteUrlPolicy}), for local-dev/intranet targets that
+		 * are intentionally private.
+		 *
+		 * <p>
+		 * The effective per-call value is the logical OR of this setting, the
+		 * {@code RestClient.allowPrivateUrls} system property, and the {@code @Remote}/{@code @RemoteOp}
+		 * {@code allowPrivateUrls} annotation attribute: any one of the three opting in is sufficient. The {@code http}/
+		 * {@code https} scheme requirement is unaffected.
+		 *
+		 * @param value {@code true} to allow private/loopback/link-local/metadata {@code @Remote} targets. Default {@code false}.
+		 * @return This object.
+		 */
+		public SELF allowPrivateUrls(boolean value) {
+			allowPrivateUrls = value;
 			return self();
 		}
 
@@ -5815,7 +5836,16 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return The connection manager to use.
 		 */
 		protected HttpClientConnectionManager createConnectionManager() {
-			return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
+			// A DnsResolver that pin-on-connects SSRF-guard-active @Remote connections (see PolicyPinningDnsResolver)
+			// while leaving ordinary connections on the default registry (matching Apache HttpClientBuilder's own
+			// unconfigured default) completely unaffected.
+			var registry = RegistryBuilder.<ConnectionSocketFactory>create()
+				.register("http", PlainConnectionSocketFactory.getSocketFactory())
+				.register("https", SSLConnectionSocketFactory.getSocketFactory())
+				.build();
+			return pooled
+				? new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE)
+				: new BasicHttpClientConnectionManager(registry, null, null, PolicyPinningDnsResolver.INSTANCE);
 		}
 
 		/**
@@ -5886,6 +5916,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				connectionManager = createConnectionManager();
 			httpClientBuilder().setConnectionManager(connectionManager);
 			httpClientBuilder().addInterceptorLast(new ClassicRedirectCredentialGuard());
+			httpClientBuilder().setRedirectStrategy(new PolicyAwareRedirectStrategy());
 			return httpClientBuilder().build();
 		}
 
@@ -6021,6 +6052,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	}
 
 	protected final boolean detectLeaks;
+	protected final boolean allowPrivateUrls;
 	protected final boolean ignoreErrors;
 	protected final boolean keepHttpClientOpen;
 	protected final boolean skipEmptyFormData;
@@ -6054,6 +6086,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	private final Supplier<String> rootUrl;
 	private final boolean executorServiceShutdownOnClose;
 	private final boolean logToConsole;
+	private final boolean ssrfPolicySupported;
 	private final AtomicBoolean isClosed = new AtomicBoolean(false);
 	private final AtomicReference<ExecutorService> executorService = new AtomicReference<>();
 
@@ -6072,10 +6105,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		console = nn(builder.console) ? builder.console : System.err;
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 		detectLeaks = builder.detectLeaks;
+		allowPrivateUrls = builder.allowPrivateUrls || Boolean.getBoolean(RemoteUrlPolicy.ALLOW_PRIVATE_URLS_PROPERTY);
 		errorCodes = builder.errorCodes;
 		formData = builder.formData().copy();
 		headerData = builder.headers().copy();
 		httpClient = builder.getHttpClient();
+		ssrfPolicySupported = builder.httpClient == null;
 		ignoreErrors = builder.ignoreErrors;
 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
@@ -6117,6 +6152,21 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 */
 	public String getRootUrl() {
 		return rootUrl != null ? rootUrl.get() : null;
+	}
+
+	/**
+	 * Returns the effective builder/settings-level {@code allowPrivateUrls} opt-in for this client (the logical OR
+	 * of {@code Builder#allowPrivateUrls(boolean)} and the {@value RemoteUrlPolicy#ALLOW_PRIVATE_URLS_PROPERTY}
+	 * system property).
+	 *
+	 * <p>
+	 * The fully effective per-call value additionally ORs in the {@code @Remote}/{@code @RemoteOp}
+	 * {@code allowPrivateUrls} annotation attribute (see {@link Remote#allowPrivateUrls()}).
+	 *
+	 * @return {@code true} if this client opts into allowing private/loopback/link-local/metadata {@code @Remote} targets.
+	 */
+	public boolean isAllowPrivateUrls() {
+		return allowPrivateUrls;
 	}
 
 	/**
@@ -7825,6 +7875,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 */
 	String resolveRemoteUri(Class<?> interfaceClass, String restUrl2, Method method, RemoteOperationMeta rom, RemoteMeta rm, Object[] args) {
 		var fullPath = rom.getFullPath();
+		var allowPrivateUrls = isAllowPrivateUrls() || rm.isAllowPrivateUrls();
 		String uri;
 
 		// Option A: a call-time @Url parameter wins over everything (endpoint replacement).
@@ -7834,7 +7885,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			var v = arg == null ? null : arg.toString();
 			if (v == null || v.trim().isEmpty())
 				throw new RemoteMetadataException(interfaceClass, "@Url parameter on " + method.getDeclaringClass().getName() + "." + method.getName() + " must not be null or blank.");
-			uri = RemoteProxyUtils.requireHttpScheme(v.trim());
+			uri = RemoteProxyUtils.requireHttpScheme(v.trim(), allowPrivateUrls);
 			// A scheme-less @Url value is relative and resolved against the client root URL only.
 			if (uri.indexOf("://") == -1)
 				uri = restUrl2 + '/' + trimSlashes(uri);
@@ -7842,7 +7893,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			// Option B: a declarative base/host override (method-level wins over interface-level).
 			var baseUrl = firstNonEmpty(rom.getBaseUrl(), rm.getBaseUrl());
 			if (ine(baseUrl)) {
-				uri = RemoteProxyUtils.requireHttpScheme(RemoteProxyUtils.combinePaths(baseUrl, fullPath));
+				uri = RemoteProxyUtils.requireHttpScheme(RemoteProxyUtils.combinePaths(baseUrl, fullPath), allowPrivateUrls);
 			} else {
 				uri = fullPath;
 				if (uri.indexOf("://") == -1)
@@ -7853,11 +7904,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		if (uri.indexOf("://") == -1)
 			throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 
-		// SSRF guardrail (parity with juneau-rest-client RemoteClient.requireHttpScheme): the resolved
-		// absolute URL must use the http or https scheme; anything else (file, jar, ftp, ...) is rejected.
-		var scheme = uri.substring(0, uri.indexOf("://"));
-		if (! (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")))
-			throw new RemoteMetadataException(interfaceClass, "Unsupported URL scheme '" + scheme + "'; only http/https are allowed: " + uri);
+		// SSRF guardrail (parity with juneau-rest-client RemoteClient.resolveEffectiveUrl): the fully-resolved
+		// absolute URI -- including a scheme-less @Url/default-path combined with the client root above -- must pass
+		// the full deny-private policy, not just the http/https scheme check (Review R4: the default (no-override)
+		// path is policy-covered too once it is absolute).
+		try {
+			RemoteUrlPolicy.requireAllowedUrl(uri, allowPrivateUrls);
+		} catch (IllegalArgumentException e) {
+			throw new RemoteMetadataException(interfaceClass, e.getMessage());
+		}
 
 		return uri;
 	}
@@ -8049,6 +8104,16 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		var ror = rom.getReturns();
 		var maxRetries = (isRetryableMode(ror, method.getReturnType()) && isRetryableVerb(rom, rm)) ? effectiveRetries(rom, rm) : 0;
 
+		// Every getRemote() call is policy-covered; the SSRF guard is active unless allowPrivateUrls opts out.
+		var allowPrivateUrls = isAllowPrivateUrls() || rm.isAllowPrivateUrls();
+		var guardActive = ! allowPrivateUrls;
+		if (guardActive && ! ssrfPolicySupported)
+			throw new RestCallException(null, null, "Refusing to send a policy-covered @Remote request through a "
+				+ "caller-supplied HttpClient that cannot be guaranteed to honor the SSRF guardrail's connect-time "
+				+ "contract (pin-on-connect + redirect revalidation): the client was supplied via httpClient(...) "
+				+ "instead of being built by this RestClient.  Let this RestClient build its own HttpClient, or set "
+				+ "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
+
 		var attempt = 0;
 		while (true) {
 			var rc = buildRemoteRequest(uri, serializer, parser, rom, rm, args);
@@ -8062,6 +8127,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			var canRetry = maxRetries > 0 && (attempt > 0 || rc.isBodyRepeatable());
 
 			RestResponse res;
+			if (guardActive)
+				RemoteUrlPolicyState.activate();
 			try {
 				res = rc.run();
 			} catch (RestCallException e) {
@@ -8081,6 +8148,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 							throw t2;
 				}
 				throw toRex(e);
+			} finally {
+				if (guardActive)
+					RemoteUrlPolicyState.deactivate();
 			}
 
 			if (canRetry && attempt < maxRetries && isRetryableStatus(res.getStatusCode())) {

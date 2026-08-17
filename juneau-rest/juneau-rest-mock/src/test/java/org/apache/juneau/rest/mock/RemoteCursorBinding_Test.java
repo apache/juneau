@@ -103,7 +103,7 @@ class RemoteCursorBinding_Test {
 
 	@Test
 	void a01_recordReaderReturnType() throws Exception {
-		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.buildJson(JsonServer.class)) {
+		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(JsonServer.class).json().allowPrivateUrls(true).build()) {
 			var api = client.getRemote(JsonClientApi.class);
 			try (RecordReader r = api.getBean()) {
 				var b = r.read(Bean.class);
@@ -115,7 +115,7 @@ class RemoteCursorBinding_Test {
 
 	@Test
 	void a02_tokenReaderReturnType() throws Exception {
-		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.buildJson(JsonServer.class)) {
+		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(JsonServer.class).json().allowPrivateUrls(true).build()) {
 			var api = client.getRemote(JsonClientApi.class);
 			try (TokenReader r = api.getBeanAsTokens()) {
 				var b = r.read(Bean.class);
@@ -127,7 +127,7 @@ class RemoteCursorBinding_Test {
 
 	@Test
 	void a03_concreteCursorReturnType() throws Exception {
-		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.buildJson(JsonServer.class)) {
+		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(JsonServer.class).json().allowPrivateUrls(true).build()) {
 			var api = client.getRemote(JsonClientApi.class);
 			try (JsonTokenReader r = api.getBeanAsJsonTokens()) {
 				var b = r.read(Bean.class);
@@ -143,6 +143,7 @@ class RemoteCursorBinding_Test {
 				.serializer(JsonlSerializer.DEFAULT)
 				.contentType("application/jsonl")
 				.accept("application/jsonl")
+				.allowPrivateUrls(true)
 				.build()) {
 			var api = client.getRemote(JsonlClientApi.class);
 			try (JsonlTokenReader r = api.getFeed()) {
@@ -163,7 +164,7 @@ class RemoteCursorBinding_Test {
 		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close. Eclipse JDT resource-leak warning is by design.
 	})
 	void b01_recordStreamBody_record() throws Exception {
-		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.buildJson(JsonServer.class)) {
+		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(JsonServer.class).json().allowPrivateUrls(true).build()) {
 			var api = client.getRemote(JsonClientApi.class);
 			Bean got = api.echo(RecordStreamBody.records(w -> {
 				try {
@@ -182,7 +183,7 @@ class RemoteCursorBinding_Test {
 		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close. Eclipse JDT resource-leak warning is by design.
 	})
 	void b02_recordStreamBody_token() throws Exception {
-		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.buildJson(JsonServer.class)) {
+		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(JsonServer.class).json().allowPrivateUrls(true).build()) {
 			var api = client.getRemote(JsonClientApi.class);
 			// Build a JSON object via structural events.
 			Bean got = api.echo(RecordStreamBody.token(w -> {

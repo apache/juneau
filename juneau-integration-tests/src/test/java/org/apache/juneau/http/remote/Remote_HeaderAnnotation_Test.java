@@ -802,10 +802,10 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	}
 
 	private static RestClient.Builder<?> client(Class<?> c) {
-		return MockRestClient.create(c);
+		return MockRestClient.create(c).allowPrivateUrls(true);
 	}
 
 	private static <T> T remote(Class<?> rest,Class<T> t) {
-		return MockRestClient.build(rest).getRemote(t);
+		return MockRestClient.create(rest).allowPrivateUrls(true).build().getRemote(t);
 	}
 }

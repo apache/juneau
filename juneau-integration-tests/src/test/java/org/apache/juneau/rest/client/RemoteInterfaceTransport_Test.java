@@ -190,6 +190,9 @@ class RemoteInterfaceTransport_Test extends TestBase {
 		var client = RestClient.builder()
 			.transport(transport)
 			.rootUrl(FIXTURE.getRootUrl().toString())
+			// The fixture is a real loopback-bound test server, so the @Remote SSRF guard's deny-private default
+			// (see RemoteUrlPolicy) must be opted out of here -- exactly the documented local-dev/test escape hatch.
+			.allowPrivateUrls(true)
 			.build();
 		return new ClientHolder(client);
 	}
@@ -279,6 +282,7 @@ class RemoteInterfaceTransport_Test extends TestBase {
 		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl(FIXTURE.getRootUrl().toString())
+				.allowPrivateUrls(true)
 				.header("X-Test", "default-value")
 				.build()) {
 			assertEquals("default-value", client.remote(TestApi.class).headerDefaultOnly());

@@ -85,7 +85,7 @@ class RemoteCursorBinding_NextGen_Test {
 	})
 	void a01_recordReaderReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
-				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			var api = nc.remote(JsonClientApi.class);
 			try (RecordReader r = api.getBean()) {
 				var b = r.read(Bean.class);
@@ -101,7 +101,7 @@ class RemoteCursorBinding_NextGen_Test {
 	})
 	void a02_tokenReaderReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
-				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			var api = nc.remote(JsonClientApi.class);
 			try (TokenReader r = api.getBeanAsTokens()) {
 				var b = r.read(Bean.class);
@@ -117,7 +117,7 @@ class RemoteCursorBinding_NextGen_Test {
 	})
 	void a03_concreteCursorReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
-				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			var api = nc.remote(JsonClientApi.class);
 			try (JsonTokenReader r = api.getBeanAsJsonTokens()) {
 				var b = r.read(Bean.class);
@@ -136,7 +136,7 @@ class RemoteCursorBinding_NextGen_Test {
 	})
 	void b01_recordStreamBody_record() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
-				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			var api = nc.remote(JsonClientApi.class);
 			Bean got = api.echo(RecordStreamBody.records(w -> {
 				try {
@@ -156,7 +156,7 @@ class RemoteCursorBinding_NextGen_Test {
 	})
 	void b02_recordStreamBody_token() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class);
-				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).allowPrivateUrls(true).build()) {
 			var api = nc.remote(JsonClientApi.class);
 			Bean got = api.echo(RecordStreamBody.token(w -> {
 				try {

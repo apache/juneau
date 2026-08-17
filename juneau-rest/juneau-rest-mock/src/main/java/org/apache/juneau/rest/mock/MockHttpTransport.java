@@ -115,6 +115,21 @@ public final class MockHttpTransport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
+		if (request.isSsrfGuardActive())
+			return PolicyEnforcedRedirects.execute(request, this::dispatch);
+		return dispatch(request);
+	}
+
+	@Override /* HttpTransport */
+	public boolean supportsUrlPolicy() {
+		// There is no real DNS resolution or socket connect to pin-on-connect: routing is an in-process dispatch
+		// to registered handlers, so the "cannot honor the connect-time contract" rationale for failing closed
+		// does not apply here. The deny-private lexical pre-check (RemoteUrlPolicy.requireAllowedUrl) still runs
+		// upstream in the @Remote proxy engine before any request reaches this transport.
+		return true;
+	}
+
+	private TransportResponse dispatch(TransportRequest request) throws TransportException {
 		if (recordedRequests != null)
 			recordedRequests.add(request);
 

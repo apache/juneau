@@ -63,6 +63,25 @@ public interface HttpTransport extends Closeable {
 	TransportResponse execute(TransportRequest request) throws TransportException;
 
 	/**
+	 * Returns {@code true} if this transport can honor the SSRF guardrail's connect-time contract for a
+	 * policy-covered request ({@link TransportRequest#isSsrfGuardActive()}): pin-on-connect to a resolved address
+	 * that has passed the deny-private policy, and Juneau-controlled redirect revalidation (no fallback to the
+	 * transport's own auto-follow).
+	 *
+	 * <p>
+	 * The default implementation returns {@code false} (fail closed): an unknown/caller-supplied transport that
+	 * has not affirmatively opted in is presumed unable to honor the contract, so
+	 * {@code RestRequest#run()} rejects policy-covered requests against it rather than silently connecting without
+	 * the guardrail. First-party transports that construct and fully control their own underlying HTTP client
+	 * override this to return {@code true}.
+	 *
+	 * @return {@code true} if this transport supports pin-on-connect + redirect revalidation for policy-covered requests.
+	 */
+	default boolean supportsUrlPolicy() {
+		return false;
+	}
+
+	/**
 	 * Releases resources held by this transport (connection pools, threads, etc.).
 	 *
 	 * <p>

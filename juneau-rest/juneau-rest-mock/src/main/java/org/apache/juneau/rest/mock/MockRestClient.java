@@ -332,7 +332,24 @@ public final class MockRestClient implements Closeable {
 		}
 
 		@Override /* HttpTransport */
+		public boolean supportsUrlPolicy() {
+			// Requests are dispatched in-process, directly to the RestContext -- there is no real DNS resolution or
+			// socket connect to pin-on-connect, so the "cannot honor the connect-time contract" fail-closed
+			// rationale does not apply. The deny-private lexical pre-check (RemoteUrlPolicy.requireAllowedUrl)
+			// still runs upstream in the @Remote proxy engine before any request reaches this transport, and this
+			// class's own "http://localhost" root (see MockRestClient.Builder.build()) is never re-checked by that
+			// pre-check -- only an explicit absolute @Url/baseUrl() override on the proxy interface is.
+			return true;
+		}
+
+		@Override /* HttpTransport */
 		public TransportResponse execute(TransportRequest request) throws TransportException {
+			if (request.isSsrfGuardActive())
+				return PolicyEnforcedRedirects.execute(request, this::dispatch);
+			return dispatch(request);
+		}
+
+		private TransportResponse dispatch(TransportRequest request) throws TransportException {
 			try {
 				var method = request.getMethod();
 				var uri = request.getUri().toString();

@@ -77,7 +77,7 @@ class ThirdPartyProxy_Test extends TestBase {
 		ThirdPartyProxy proxy;
 
 		Input(String label, Serializer serializer, Parser parser) {
-			proxy = MockRestClient.create(ThirdPartyProxyResource.class).ignoreErrors().serializer(serializer).parser(parser).partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
+			proxy = MockRestClient.create(ThirdPartyProxyResource.class).ignoreErrors().serializer(serializer).parser(parser).partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).allowPrivateUrls(true).build().getRemote(ThirdPartyProxy.class, null, serializer, parser);
 		}
 	}
 
