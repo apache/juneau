@@ -11,3 +11,10 @@ e2e/node_modules/
 e2e/test-results/
 e2e/playwright-report/
 e2e/.playwright/
+
+# Local Cursor / AI assistant working files (not part of the Apache source tree)
+AGENTS.md
+.cursor/
+/agents/
+/.claude/
+/.work/

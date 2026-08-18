@@ -143,6 +143,13 @@
 
                         <!-- Build output / local run-state -->
                         <exclude>target/**</exclude>
+
+                        <!-- Local Cursor / AI assistant working files (gitignored; not part of the source tree).
+                             .work/ currently holds only markdown, but will accumulate logs/.txt/.json captures;
+                             excluding it now keeps `mvn verify` from failing on unlicensed local files. -->
+                        <exclude>.work/**</exclude>
+                        <exclude>agents/**</exclude>
+                        <exclude>.claude/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
