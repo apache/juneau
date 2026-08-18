@@ -17,8 +17,8 @@
 
 <#assign activeTab = "releases">
 <#macro content>
-    <div class="rm-card">
-        <div class="rm-card-header">
+    <div class="jc-card">
+        <div class="jc-card-header">
             <h2>Release ${release.version!'—'}</h2>
             <a href="/rest/releases">&larr; All releases</a>
         </div>

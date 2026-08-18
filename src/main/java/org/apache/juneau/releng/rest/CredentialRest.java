@@ -30,6 +30,12 @@ import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
+import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
+import org.apache.juneau.rest.server.views.Column;
+import org.apache.juneau.rest.server.views.RibbonAction;
+import org.apache.juneau.rest.server.views.ViewDef;
+import org.apache.juneau.rest.server.views.ViewDef.DataMode;
+import org.apache.juneau.rest.server.views.ViewDef.Dir;
 import org.apache.juneau.releng.credential.CredentialService;
 import org.apache.juneau.releng.credential.CredentialStatus;
 import org.apache.juneau.releng.credential.Validator.ValidationResult;
@@ -38,15 +44,43 @@ import org.apache.juneau.releng.credential.Validator.ValidationResult;
 @Rest(path = "/credentials", title = "Credentials", responseProcessors = FreemarkerViewRenderer.class)
 public class CredentialRest extends BasicRestResource {
 
+	/** This resource's absolute mount (RootRest {@code /rest/*} + {@code /credentials}), used by {@link #credentialsView()}. */
+	static final String MOUNT = "/rest/credentials";
+
 	private final CredentialService service;
 
 	public CredentialRest(CredentialService service) {
 		this.service = service;
 	}
 
+	/**
+	 * The rich-view toolkit's declarative view of the Credentials list (TODO-399 Phase C dogfood): a second,
+	 * independently-composable {@link ViewDef} alongside {@link ReleaseRest#releasesView()}, wired into the RM
+	 * {@code Admin} tab page ({@code AdminRest}). Client-side data mode: {@link #status()} already returns the
+	 * bare {@code List<CredentialStatus>} the toolkit's client-mode ajax (({@code dataSrc: ""})) expects, so no new
+	 * server-side query wiring is needed.
+	 */
+	static ViewDef credentialsView() {
+		return ViewDef.create("credentials")
+			.rowType(CredentialStatus.class)
+			.dataMode(DataMode.CLIENT)
+			.dataUrl(MOUNT + "/status")
+			.defaultOrder("name", Dir.ASC)
+			.columns(
+				Column.of("name").title("Name"),
+				Column.of("label").title("Label"),
+				Column.of("present").title("Present"),
+				Column.of("lastValid").title("Valid"),
+				Column.of("lastMessage").title("Message"))
+			.ribbon(RibbonAction.refresh())
+			.build();
+	}
+
+	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
+	// ConsoleFreemarkerMixin's class Javadoc).
 	@Bean
 	public FreemarkerMixin freemarker() {
-		return FreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
+		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
 	}
 
 	/** Human page. */

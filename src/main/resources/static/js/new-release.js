@@ -56,9 +56,9 @@
           knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')
         })
       });
-      if (msg) { msg.textContent = r.ok ? 'Saved.' : 'Save failed.'; msg.style.color = r.ok ? '' : 'var(--rm-danger)'; }
+      if (msg) { msg.textContent = r.ok ? 'Saved.' : 'Save failed.'; msg.style.color = r.ok ? '' : 'var(--jc-danger)'; }
     } catch (e) {
-      if (msg) { msg.textContent = 'Save failed.'; msg.style.color = 'var(--rm-danger)'; }
+      if (msg) { msg.textContent = 'Save failed.'; msg.style.color = 'var(--jc-danger)'; }
     }
   };
 
@@ -108,20 +108,20 @@
   // Mirrors the mockup's renderActions(step): button set is entirely a function of current status
   // (spec §3 decisions #11/#12 — every button below is the SAME preview/apply call regardless of status).
   function renderActions(stepId, status) {
-    const dryRun = '<button class="btn btn-outline btn-sm" onclick="nrDryRun(\'' + stepId + '\')">Dry-run</button>';
+    const dryRun = '<button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrDryRun(\'' + stepId + '\')">Dry-run</button>';
     if (status === 'running')
-      return '<button class="btn btn-outline btn-sm" disabled>Dry-run</button> <button class="btn btn-primary btn-sm" disabled>Running&hellip;</button>';
+      return '<button class="jc-btn jc-btn-outline jc-btn-sm" disabled>Dry-run</button> <button class="jc-btn jc-btn-primary jc-btn-sm" disabled>Running&hellip;</button>';
     if (status === 'failed')
-      return dryRun + ' <button class="btn btn-primary btn-sm" onclick="nrApply(\'' + stepId + '\')">Resume</button>';
+      return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Resume</button>';
     if (status === 'awaiting-vote')
       return renderVoteGateActions();
     if (status === 'awaiting-review')
-      return dryRun + ' <button class="btn btn-primary btn-sm" onclick="nrConfirmReview(\'' + stepId + '\')">Confirm review</button>';
+      return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrConfirmReview(\'' + stepId + '\')">Confirm review</button>';
     if (status === 'succeeded')
-      return dryRun + ' <button class="btn btn-outline btn-sm" onclick="nrApply(\'' + stepId + '\')">Re-run</button>';
+      return dryRun + ' <button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Re-run</button>';
     if (status === 'skipped')
-      return dryRun + ' <button class="btn btn-outline btn-sm" onclick="nrApply(\'' + stepId + '\')">Run anyway</button>';
-    return dryRun + ' <button class="btn btn-primary btn-sm" onclick="nrApply(\'' + stepId + '\')">' + runLabel + '</button>';
+      return dryRun + ' <button class="jc-btn jc-btn-outline jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">Run anyway</button>';
+    return dryRun + ' <button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrApply(\'' + stepId + '\')">' + runLabel + '</button>';
   }
 
   // §5.15/§5.16: entering vote-gate only opens the vote (sets AWAITING_VOTE) — it is NOT itself the
@@ -131,12 +131,12 @@
   // requires the operator to pick a real outcome and type the tally summary read off the vote thread.
   function renderVoteGateActions() {
     if (mode !== 'LIVE')
-      return '<button class="btn btn-primary btn-sm" onclick="nrVoteResult(\'passed\')">' + runLabel + '</button>'
+      return '<button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrVoteResult(\'passed\')">' + runLabel + '</button>'
         + '<span class="rm-step-note">Records a simulated passing vote (no real 72h wait or tally) and advances the run.</span>';
     return '<div class="rm-vote-form">'
       + '<label>Vote outcome<select id="nr-vote-outcome"><option value="passed">Passed</option><option value="rejected">Rejected</option></select></label>'
       + '<label>Tally summary<textarea id="nr-vote-tally" rows="3" placeholder="+1/0/-1 counts, binding voters, read off the vote thread"></textarea></label>'
-      + '<button class="btn btn-primary btn-sm" onclick="nrVoteResult()">Submit vote result</button>'
+      + '<button class="jc-btn jc-btn-primary jc-btn-sm" onclick="nrVoteResult()">Submit vote result</button>'
       + '</div>';
   }
 
@@ -264,7 +264,7 @@
     if (armArea) {
       armArea.innerHTML = snap.armed
         ? '<span class="tag armed" title="This run is armed for live mutation">ARMED</span>'
-        : '<button class="btn btn-warning" onclick="nrArm()">Arm this run</button>';
+        : '<button class="jc-btn jc-btn-warning" onclick="nrArm()">Arm this run</button>';
     }
 
     let selected = null;

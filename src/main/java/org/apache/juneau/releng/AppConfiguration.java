@@ -183,6 +183,17 @@ public class AppConfiguration {
 		return new ServletRegistrationBean<>(rest, "/rest/*");
 	}
 
+	/**
+	 * The shared console-ui chrome stylesheet + themeable logo/page-background assets, mounted independently of
+	 * {@code /rest/*} so the site-absolute {@code /juneau-console/*} URLs every tab's {@code base.ftlh} links
+	 * against resolve the same way regardless of which tab rendered the page. See {@link ConsoleAssetsRest}'s
+	 * class Javadoc for why the servlet itself corrects for the container's servlet-path handling.
+	 */
+	@Bean
+	public ServletRegistrationBean<Servlet> consoleAssetsRegistration() {
+		return new ServletRegistrationBean<>(new ConsoleAssetsRest(), "/juneau-console/*");
+	}
+
 	// ==========================================================================================
 	// Release-orchestration engine and New Release tab wiring.
 	// ==========================================================================================

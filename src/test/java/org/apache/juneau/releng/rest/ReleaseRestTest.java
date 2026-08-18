@@ -91,4 +91,52 @@ class ReleaseRestTest {
 			}
 		}
 	}
+
+	/**
+	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a request carrying
+	 * DataTables params it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal, recordsFiltered,
+	 * data}}) with server-side per-column filtering applied &mdash; not the bare {@code List<Release>} array it used
+	 * to return. Wired via the {@code juneau-rest-server-views} toolkit ({@code ViewDef.queryableSettings()} +
+	 * {@code ProtocolQueryable}); this proves the envelope shape and that filtering happens on the server.
+	 */
+	/**
+	 * Regression: the rendered Releases page never included {@code juneau-icons.js} (only renders/ribbon/views
+	 * were wired up), so the icon registry was absent when the ribbon built its buttons and every button fell back
+	 * to rendering its label as plain text instead of a glyph. Asserts the served page's script list carries the
+	 * icons include, ordered before {@code juneau-ribbon.js} (the ribbon resolves icons from the registry when it
+	 * builds its buttons, so the registry must already exist).
+	 */
+	@Test
+	void pageIncludesIconsJsScriptBeforeRibbonJs() throws Exception {
+		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
+			try (var resp = client.request("GET", "/").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertTrue(body.contains("juneau-icons.js"), "Missing juneau-icons.js script include: " + body);
+				var iconsIdx = body.indexOf("juneau-icons.js");
+				var ribbonIdx = body.indexOf("juneau-ribbon.js");
+				assertTrue(ribbonIdx >= 0, "Missing juneau-ribbon.js script include: " + body);
+				assertTrue(iconsIdx < ribbonIdx,
+					"juneau-icons.js must be included before juneau-ribbon.js: " + body);
+			}
+		}
+	}
+
+	@Test
+	void dataReturnsDataTablesEnvelopeWithServerSideFilterApplied() throws Exception {
+		var releases = List.of(release("9.2.1", "RELEASED"), release("9.3.0", "VOTING"));
+		try (var client = client(rest(releases))) {
+			try (var resp = client.request("GET",
+					"/data?draw=3&start=0&length=10&columns[0][data]=status&columns[0][search][value]=RELEASED").run()) {
+				assertEquals(200, resp.getStatusCode());
+				var body = resp.getBodyAsString();
+				assertFalse(body.trim().startsWith("["), "Expected an envelope object, not a bare array: " + body);
+				assertTrue(body.contains("recordsTotal"), "Missing recordsTotal: " + body);
+				assertTrue(body.contains("recordsFiltered"), "Missing recordsFiltered: " + body);
+				assertTrue(body.contains("draw"), "Missing draw: " + body);
+				assertTrue(body.contains("9.2.1"), "Filtered-in row missing: " + body);
+				assertFalse(body.contains("9.3.0"), "Filtered-out row present: " + body);
+			}
+		}
+	}
 }

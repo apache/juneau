@@ -38,12 +38,12 @@
    New step-status tag values (extends chrome.css's tag system; see header)
    ========================================================================== */
 
-.tag.status.succeeded { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); border-color: var(--rm-tag-green-border); }
-.tag.status.running   { background: var(--rm-tag-blue-bg);  color: var(--rm-tag-blue-text);  border-color: var(--rm-tag-blue-border); }
+.tag.status.succeeded { background: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); border-color: var(--jc-tag-green-border); }
+.tag.status.running   { background: var(--jc-tag-blue-bg);  color: var(--jc-tag-blue-text);  border-color: var(--jc-tag-blue-border); }
 .tag.status.skipped,
 .tag.status.awaiting-vote,
-.tag.status.neutral   { background: var(--rm-tag-neutral-bg); color: var(--rm-tag-neutral-text); border-color: var(--rm-tag-neutral-border); }
-.tag.status.failed    { background: #fdeceb; color: var(--rm-danger); border-color: #f3c6c2; }
+.tag.status.neutral   { background: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
+.tag.status.failed    { background: #fdeceb; color: var(--jc-danger); border-color: #f3c6c2; }
 
 .tag.status.running::before { content: '\25CF'; margin-right: 4px; font-size: 8px; position: relative; top: -1px; animation: rm-pulse 1.4s ease-in-out infinite; }
 .tag.status.awaiting-vote::before { content: '\23F8'; margin-right: 3px; font-size: 9px; position: relative; top: 0; }
@@ -57,9 +57,9 @@
 .rm-run-header {
   max-width: 1180px;
   margin: 0 auto 16px;
-  background: var(--rm-card-bg);
-  border: 1px solid var(--rm-border);
-  border-radius: var(--rm-radius);
+  background: var(--jc-card-bg);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
   padding: 16px 20px;
 }
 
@@ -81,7 +81,7 @@
 .rm-run-title {
   font-size: 1.0625rem;
   font-weight: 700;
-  color: var(--rm-text);
+  color: var(--jc-text);
   margin: 0;
 }
 
@@ -97,14 +97,14 @@
   align-items: center;
   gap: 4px;
   font-size: 0.75rem;
-  color: var(--rm-text-muted-2);
-  background: var(--rm-white);
-  border: 1px solid var(--rm-border-2);
+  color: var(--jc-text-soft);
+  background: var(--jc-white);
+  border: 1px solid var(--jc-border-2);
   border-radius: 999px;
   padding: 3px 10px;
 }
 
-.rm-meta-chip b { color: var(--rm-text); font-weight: 700; }
+.rm-meta-chip b { color: var(--jc-text); font-weight: 700; }
 
 .rm-run-actions {
   display: flex;
@@ -118,19 +118,19 @@
   align-items: center;
   gap: 10px;
   font-size: 0.8125rem;
-  color: var(--rm-text-muted-2);
-  background: var(--rm-tag-neutral-bg);
-  border: 1px solid var(--rm-tag-neutral-border);
-  border-radius: var(--rm-radius);
+  color: var(--jc-text-soft);
+  background: var(--jc-tag-neutral-bg);
+  border: 1px solid var(--jc-tag-neutral-border);
+  border-radius: var(--jc-radius);
   padding: 9px 14px;
 }
 
-.rm-vote-banner b { color: var(--rm-text); }
+.rm-vote-banner b { color: var(--jc-text); }
 
 .rm-vote-banner .rm-vote-countdown {
   margin-left: auto;
   font-weight: 700;
-  color: var(--rm-text);
+  color: var(--jc-text);
   white-space: nowrap;
 }
 
@@ -145,7 +145,7 @@
   font-size: 0.75rem;
   line-height: 1.65;
   padding: 12px 14px;
-  border-radius: var(--rm-radius);
+  border-radius: var(--jc-radius);
   max-height: 240px;
   overflow-y: auto;
   white-space: pre-wrap;
@@ -183,7 +183,7 @@
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
   margin: 14px 0 6px;
 }
 
@@ -191,7 +191,7 @@
   text-transform: none;
   letter-spacing: 0;
   font-size: 0.6875rem;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
 }
 
 /* ==========================================================================
@@ -209,26 +209,26 @@
 .rm-step-title-row h3 {
   font-size: 0.9375rem;
   font-weight: 700;
-  color: var(--rm-text);
+  color: var(--jc-text);
   margin: 0;
 }
 
 .rm-step-num {
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
   font-weight: 600;
   font-size: 0.8125rem;
 }
 
 .rm-step-desc {
   font-size: 0.8125rem;
-  color: var(--rm-text-muted-2);
+  color: var(--jc-text-soft);
   margin: 0 0 12px;
   max-width: 62ch;
 }
 
 .rm-step-times {
   font-size: 0.75rem;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
   margin-bottom: 12px;
 }
 
@@ -239,19 +239,14 @@
   margin-bottom: 4px;
 }
 
-.btn-sm {
-  font-size: 0.75rem;
-  padding: 5px 10px;
-}
-
-.btn[disabled] {
+.jc-btn[disabled] {
   opacity: 0.45;
   cursor: not-allowed;
 }
 
 .rm-step-note {
   font-size: 0.75rem;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
   margin-top: 8px;
 }
 
@@ -270,18 +265,18 @@
   gap: 4px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--rm-text-muted-2);
+  color: var(--jc-text-soft);
 }
 
 .rm-vote-form select,
 .rm-vote-form textarea {
-  font-family: var(--rm-font);
+  font-family: var(--jc-font);
   font-size: 0.8125rem;
   padding: 6px 10px;
-  border: 1px solid var(--rm-border-2);
-  border-radius: var(--rm-radius);
-  background: var(--rm-white);
-  color: var(--rm-text);
+  border: 1px solid var(--jc-border-2);
+  border-radius: var(--jc-radius);
+  background: var(--jc-white);
+  color: var(--jc-text);
   resize: vertical;
 }
 
@@ -299,9 +294,9 @@
 
 .rm-rail-col {
   flex: 0 0 340px;
-  background: var(--rm-white);
-  border: 1px solid var(--rm-border);
-  border-radius: var(--rm-radius);
+  background: var(--jc-white);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
   overflow: hidden;
   max-height: 640px;
   overflow-y: auto;
@@ -312,16 +307,16 @@
   align-items: center;
   gap: 8px;
   padding: 9px 12px;
-  border-bottom: 1px solid var(--rm-border);
+  border-bottom: 1px solid var(--jc-border);
   cursor: pointer;
 }
 
 .rm-rail-item:last-child { border-bottom: none; }
-.rm-rail-item:hover { background: var(--rm-accent-wash); }
+.rm-rail-item:hover { background: var(--jc-accent-wash); }
 
 .rm-rail-item.selected {
-  background: var(--rm-accent-wash);
-  box-shadow: inset 3px 0 0 var(--rm-accent);
+  background: var(--jc-accent-wash);
+  box-shadow: inset 3px 0 0 var(--jc-accent);
 }
 
 .rm-rail-num {
@@ -329,7 +324,7 @@
   width: 18px;
   text-align: right;
   font-size: 0.6875rem;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
 }
 
 .rm-rail-name {
@@ -337,7 +332,7 @@
   min-width: 0;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--rm-text);
+  color: var(--jc-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -348,9 +343,9 @@
 .rm-detail-col {
   flex: 1 1 auto;
   min-width: 0;
-  background: var(--rm-white);
-  border: 1px solid var(--rm-border);
-  border-radius: var(--rm-radius);
+  background: var(--jc-white);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
   padding: 18px 20px;
 }
 
@@ -367,9 +362,9 @@
 }
 
 .rm-step-row {
-  background: var(--rm-white);
-  border: 1px solid var(--rm-border);
-  border-radius: var(--rm-radius);
+  background: var(--jc-white);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
   overflow: hidden;
 }
 
@@ -381,11 +376,11 @@
   cursor: pointer;
 }
 
-.rm-step-row-head:hover { background: var(--rm-accent-wash); }
+.rm-step-row-head:hover { background: var(--jc-accent-wash); }
 
 .rm-step-row.expanded .rm-step-row-head {
-  border-bottom: 1px solid var(--rm-border);
-  background: var(--rm-accent-wash);
+  border-bottom: 1px solid var(--jc-border);
+  background: var(--jc-accent-wash);
 }
 
 .rm-step-chevron {
@@ -394,8 +389,8 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 1px solid var(--rm-border-2);
-  color: var(--rm-text-muted-2);
+  border: 1px solid var(--jc-border-2);
+  color: var(--jc-text-soft);
   font-size: 10px;
   line-height: 15px;
   text-align: center;
@@ -409,7 +404,7 @@
   width: 20px;
   text-align: right;
   font-size: 0.75rem;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
 }
 
 .rm-step-row-name {
@@ -417,7 +412,7 @@
   min-width: 0;
   font-size: 0.8438rem;
   font-weight: 600;
-  color: var(--rm-text);
+  color: var(--jc-text);
 }
 
 .rm-step-row-body {
@@ -432,13 +427,13 @@
    ========================================================================== */
 
 .rm-table td.step-num-cell {
-  color: var(--rm-text-muted-2);
+  color: var(--jc-text-soft);
   width: 32px;
 }
 
 .rm-table td.step-name-cell {
   font-weight: 600;
-  color: var(--rm-text);
+  color: var(--jc-text);
 }
 
 .rm-table .step-actions-cell {
@@ -446,10 +441,10 @@
   text-align: right;
 }
 
-.rm-table .step-actions-cell .btn { margin-left: 6px; }
+.rm-table .step-actions-cell .jc-btn { margin-left: 6px; }
 
 tr.step-detail-row td {
-  background: var(--rm-card-bg);
+  background: var(--jc-card-bg);
   padding: 14px 18px;
 }
 
@@ -471,27 +466,27 @@ tr.step-detail-row td {
 }
 
 .row input {
-  font-family: var(--rm-font);
+  font-family: var(--jc-font);
   font-size: 0.8125rem;
   padding: 6px 10px;
-  border: 1px solid var(--rm-border-2);
-  border-radius: var(--rm-radius);
-  background: var(--rm-white);
-  color: var(--rm-text);
+  border: 1px solid var(--jc-border-2);
+  border-radius: var(--jc-radius);
+  background: var(--jc-white);
+  color: var(--jc-text);
 }
 
 .hint {
   font-size: 0.8125rem;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
   font-style: italic;
 }
 
 /* Marks a step whose apply() mutates remote state (spec §3.8), slotted into
    the same amber domain chrome.css already uses for "pending"/in-progress. */
 .tag.mutating {
-  background: var(--rm-tag-amber-bg);
-  color: var(--rm-tag-amber-text);
-  border-color: var(--rm-tag-amber-border);
+  background: var(--jc-tag-amber-bg);
+  color: var(--jc-tag-amber-text);
+  border-color: var(--jc-tag-amber-border);
 }
 
 /* new-release.js renders the console into a <pre>, not the mockup's <div> —
@@ -503,9 +498,9 @@ pre.rm-console {
 /* A review-gate step held after its read-only work ran — reuses the same paused affordance as the
    vote gate, since both are "done its work, awaiting a human". */
 .tag.status.awaiting-review {
-  background: var(--rm-tag-blue-bg);
-  color: var(--rm-tag-blue-text);
-  border-color: var(--rm-tag-blue-border);
+  background: var(--jc-tag-blue-bg);
+  color: var(--jc-tag-blue-text);
+  border-color: var(--jc-tag-blue-border);
 }
 
 .tag.status.awaiting-review::before { content: '\23F8'; margin-right: 3px; font-size: 9px; }
@@ -518,16 +513,16 @@ pre.rm-console {
   max-width: 1180px;
   margin: 0 auto 16px;
   padding: 10px 14px;
-  border: 1px solid var(--rm-tag-neutral-border);
+  border: 1px solid var(--jc-tag-neutral-border);
   border-radius: 8px;
   font-size: 13px;
-  color: var(--rm-muted);
+  color: var(--jc-text-muted);
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.rm-mode-banner.safe { background: var(--rm-tag-green-bg); border-color: var(--rm-tag-green-border); }
+.rm-mode-banner.safe { background: var(--jc-tag-green-bg); border-color: var(--jc-tag-green-border); }
 .rm-mode-banner.live { background: #fdeceb; border-color: #f3c6c2; }
 
 .rm-mode-chip {
@@ -541,8 +536,8 @@ pre.rm-console {
   border: 1px solid transparent;
 }
 
-.rm-mode-chip.safe { background: var(--rm-tag-green-bg); color: var(--rm-tag-green-text); border-color: var(--rm-tag-green-border); }
-.rm-mode-chip.live { background: #fdeceb; color: var(--rm-danger); border-color: #f3c6c2; }
+.rm-mode-chip.safe { background: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); border-color: var(--jc-tag-green-border); }
+.rm-mode-chip.live { background: #fdeceb; color: var(--jc-danger); border-color: #f3c6c2; }
 
 /* ==========================================================================
    App-local Input / Execution subtabs (client-side show/hide; see new-release.js)
@@ -554,17 +549,17 @@ pre.rm-console {
   max-width: 1180px;
   margin: 0 auto 16px;
   padding: 4px;
-  background: var(--rm-white);
-  border: 1px solid var(--rm-border);
+  background: var(--jc-white);
+  border: 1px solid var(--jc-border);
   border-radius: 999px;
   width: fit-content;
 }
 
 .rm-subtab {
-  font-family: var(--rm-font);
+  font-family: var(--jc-font);
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--rm-text-muted-2);
+  color: var(--jc-text-soft);
   background: transparent;
   border: none;
   border-radius: 999px;
@@ -572,11 +567,11 @@ pre.rm-console {
   cursor: pointer;
 }
 
-.rm-subtab:hover { background: var(--rm-accent-wash); }
+.rm-subtab:hover { background: var(--jc-accent-wash); }
 
 .rm-subtab.active {
-  background: var(--rm-accent);
-  color: var(--rm-white);
+  background: var(--jc-accent);
+  color: var(--jc-white);
 }
 
 .rm-subtab-panel[hidden] { display: none; }
@@ -613,24 +608,24 @@ pre.rm-console {
 .rm-field label {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--rm-text-muted-2);
+  color: var(--jc-text-soft);
 }
 
 .rm-field-opt {
   font-weight: 500;
   font-style: italic;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
 }
 
 .rm-field input,
 .rm-field textarea {
-  font-family: var(--rm-font);
+  font-family: var(--jc-font);
   font-size: 0.8125rem;
   padding: 8px 11px;
-  border: 1px solid var(--rm-border-2);
-  border-radius: var(--rm-radius);
-  background: var(--rm-white);
-  color: var(--rm-text);
+  border: 1px solid var(--jc-border-2);
+  border-radius: var(--jc-radius);
+  background: var(--jc-white);
+  color: var(--jc-text);
   width: 100%;
   box-sizing: border-box;
 }
@@ -643,13 +638,13 @@ pre.rm-console {
 .rm-field input:focus,
 .rm-field textarea:focus {
   outline: none;
-  border-color: var(--rm-accent);
-  box-shadow: 0 0 0 2px var(--rm-accent-wash);
+  border-color: var(--jc-accent);
+  box-shadow: 0 0 0 2px var(--jc-accent-wash);
 }
 
 .rm-field input[readonly] {
-  background: var(--rm-card-bg);
-  color: var(--rm-text-muted-2);
+  background: var(--jc-card-bg);
+  color: var(--jc-text-soft);
 }
 
 .rm-mode-picker {
@@ -662,7 +657,7 @@ pre.rm-console {
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--rm-text-muted);
+  color: var(--jc-text-muted);
   margin-bottom: 8px;
 }
 
@@ -686,7 +681,7 @@ pre.rm-console {
   margin: 0;
   box-shadow: none;
   border: none;
-  accent-color: var(--rm-accent);
+  accent-color: var(--jc-accent);
 }
 
 .rm-form-actions {
@@ -699,16 +694,7 @@ pre.rm-console {
 /* The run is armed for live mutation (LIVE only). */
 .tag.armed {
   background: #fdeceb;
-  color: var(--rm-danger);
+  color: var(--jc-danger);
   border-color: #f3c6c2;
   font-weight: 700;
 }
-
-/* "Arm this run" — a deliberately cautionary amber action distinct from the primary/danger buttons. */
-.btn-warning {
-  background: var(--rm-tag-amber-bg);
-  color: var(--rm-tag-amber-text);
-  border: 1px solid var(--rm-tag-amber-border);
-}
-
-.btn-warning:hover { filter: brightness(0.97); }

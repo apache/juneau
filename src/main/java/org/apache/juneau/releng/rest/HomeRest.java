@@ -25,14 +25,17 @@ import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
+import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
 
 /** Home tab: default landing page with basic usage instructions. */
 @Rest(path = "/home", title = "Home", responseProcessors = FreemarkerViewRenderer.class)
 public class HomeRest extends BasicRestResource {
 
+	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
+	// ConsoleFreemarkerMixin's class Javadoc).
 	@Bean
 	public FreemarkerMixin freemarker() {
-		return FreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
+		return ConsoleFreemarkerMixin.create().basePath("/templates/").templateSuffix(".ftlh").build();
 	}
 
 	/** Human page. */

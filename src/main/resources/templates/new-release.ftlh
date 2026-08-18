@@ -38,7 +38,7 @@
 
     <#-- ===================== INPUT SUBTAB: release metadata + narrative ===================== -->
     <section class="rm-subtab-panel" id="nr-panel-input" data-subtab="input"<#if hasRun> hidden</#if>>
-        <div class="rm-card rm-form-card">
+        <div class="jc-card rm-form-card">
             <#if !hasRun>
             <h2>Start a new release</h2>
             <div class="rm-form-grid">
@@ -114,9 +114,9 @@
 
             <div class="rm-form-actions">
                 <#if !hasRun>
-                <button class="btn btn-primary" onclick="nrStart()">Start</button>
+                <button class="jc-btn jc-btn-primary" onclick="nrStart()">Start</button>
                 <#else>
-                <button class="btn btn-primary" onclick="nrSaveDetails()">Save details</button>
+                <button class="jc-btn jc-btn-primary" onclick="nrSaveDetails()">Save details</button>
                 <span id="nr-details-msg" class="rm-step-note"></span>
                 </#if>
             </div>
@@ -126,7 +126,7 @@
     <#-- ===================== EXECUTION SUBTAB: step rail + detail/console ===================== -->
     <section class="rm-subtab-panel" id="nr-panel-exec" data-subtab="exec"<#if !hasRun> hidden</#if>>
     <#if !hasRun>
-        <div class="rm-card">
+        <div class="jc-card">
             <p class="hint">No active run yet. Fill in the Input tab and click Start to begin.</p>
         </div>
     <#else>
@@ -142,11 +142,11 @@
                         <#if armed!false>
                             <span class="tag armed" title="This run is armed for live mutation">ARMED</span>
                         <#else>
-                            <button class="btn btn-warning" onclick="nrArm()">Arm this run</button>
+                            <button class="jc-btn jc-btn-warning" onclick="nrArm()">Arm this run</button>
                         </#if>
                         </span>
                     </#if>
-                    <button class="btn btn-danger" onclick="nrDropRc()">Drop RC</button>
+                    <button class="jc-btn jc-btn-danger" onclick="nrDropRc()">Drop RC</button>
                 </div>
             </div>
             <div class="rm-run-meta" style="margin-top:10px;">

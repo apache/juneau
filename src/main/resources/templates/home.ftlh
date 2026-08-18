@@ -17,8 +17,8 @@
 
 <#assign activeTab = "home">
 <#macro content>
-    <div class="rm-card">
-        <div class="rm-card-header">
+    <div class="jc-card">
+        <div class="jc-card-header">
             <h2>Workflow</h2>
         </div>
         <ol class="rm-home-steps">
@@ -28,8 +28,8 @@
         </ol>
     </div>
 
-    <div class="rm-card">
-        <div class="rm-card-header">
+    <div class="jc-card">
+        <div class="jc-card-header">
             <h2>Prerequisites</h2>
         </div>
         <ul class="rm-home-prereqs">

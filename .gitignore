@@ -5,3 +5,9 @@ target/
 # Eclipse IDE metadata (machine-specific; the shared .settings/ convention prefs ARE tracked)
 .classpath
 .project
+
+# Playwright e2e suite (e2e/) - dependencies + generated run artifacts
+e2e/node_modules/
+e2e/test-results/
+e2e/playwright-report/
+e2e/.playwright/

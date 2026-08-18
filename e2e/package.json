@@ -1,0 +1,15 @@
+{
+  "name": "release-manager-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright end-to-end tests for the Apache Juneau Release Manager app. Standalone (not wired into the Maven build) — boots its own app instance on a dedicated test port.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}

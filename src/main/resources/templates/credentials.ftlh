@@ -17,7 +17,7 @@
 
 <#assign activeTab = "credentials">
 <#macro content>
-    <div class="rm-card">
+    <div class="jc-card">
         <#list credentials as c>
         <div class="cred" data-name="${c.name}">
             <h3>${c.label}
@@ -30,8 +30,8 @@
                     <input type="text" class="acct" placeholder="<#if c.name=='apache'>Apache availid<#else>GPG key ID</#if>">
                 </#if>
                 <input type="password" class="secret" placeholder="<#if c.name=='apache'>password<#elseif c.name=='gpg'>passphrase<#else>token</#if>">
-                <button class="btn btn-primary" onclick="rmSet('${c.name}', this)">Save</button>
-                <button class="btn btn-outline" onclick="rmValidate('${c.name}', this)">Validate</button>
+                <button class="jc-btn jc-btn-primary" onclick="rmSet('${c.name}', this)">Save</button>
+                <button class="jc-btn jc-btn-outline" onclick="rmValidate('${c.name}', this)">Validate</button>
             </div>
             <div class="msg">${c.lastMessage!''}</div>
         </div>

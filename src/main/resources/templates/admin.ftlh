@@ -15,19 +15,20 @@
   limitations under the License.
 -->
 
-<#assign activeTab = "releases">
+<#assign activeTab = "admin">
 <#macro content>
     <div class="jc-card">
         <div class="jc-card-header">
-            <h2>All Releases</h2>
+            <h2>Admin</h2>
         </div>
 
-        <#-- Rich-view toolkit table + JSON sidecar, pre-serialized server-side (ReleaseRest.page via
-             ViewTable.of) and inserted as trusted markup: ?no_esc suppresses this .ftlh's HTML auto-escaping
-             so the emitted <table data-juneau-view>/<script> markup is not double-escaped. juneau-views.js
-             hydrates it into a server-side DataTable + ribbon on DOMContentLoaded. -->
+        <#-- TODO-399 Phase C: the composed tabs/sub-tabs page shell (PageTable.of(...) via AdminRest.page()),
+             pre-serialized server-side and inserted as trusted markup: ?no_esc suppresses this .ftlh's HTML
+             auto-escaping so the emitted [data-juneau-page]/<table data-juneau-view>/<script> markup is not
+             double-escaped. juneau-pages.js hash-routes the tabs and lazy-inits each panel's DataTable on first
+             activation via juneau-views.js's initTable. -->
         <div class="rm-table-scroll">
-            ${viewTable?no_esc}
+            ${pageTable?no_esc}
         </div>
     </div>
 </#macro>
