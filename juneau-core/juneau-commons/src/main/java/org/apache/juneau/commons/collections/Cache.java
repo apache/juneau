@@ -462,15 +462,20 @@ public class Cache<K,V> {
 		return new Builder<>();
 	}
 
-	// Internal map with Tuple1 keys for content-based equality (especially for arrays)
-	// If threadLocal is true, this is null and threadLocalMap is used instead
-	private final Map<Tuple1<K>,V> map;
+	// Internal map holding cached values.
+	// In WEAK mode this is a WeakHashMap keyed DIRECTLY on K (see mapKey()) so entries honor the weak-key
+	// contract; in all other modes it is keyed on a Tuple1<K> wrapper (see wrap()) that provides content-based
+	// equality for array keys.  The static key type is therefore Object.
+	// If threadLocal is true, this is null and threadLocalMap is used instead.
+	private final Map<Object,V> map;
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanup()
 	})
-	private final ThreadLocal<Map<Tuple1<K>,V>> threadLocalMap;
+	private final ThreadLocal<Map<Object,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;
+
+	private final boolean isWeak;
 
 	/**
 	 * Cache of Tuple1 wrapper objects to minimize object creation on repeated get/put calls.
@@ -479,6 +484,11 @@ public class Cache<K,V> {
 	 * Uses WeakHashMap so wrappers can be GC'd when keys are no longer referenced.
 	 * This provides a significant performance improvement for caches with repeated key access.
 	 * If threadLocal is true, this is null and threadLocalWrapperCache is used instead.
+	 *
+	 * <p>
+	 * <b>Left <jk>null</jk> in {@link CacheMode#WEAK WEAK} mode</b>: WEAK mode keys the backing map directly on
+	 * {@code K} to honor weak-key semantics, and wrapping there would reintroduce a self-reference leak (see
+	 * {@link #mapKey(Object)}).
 	 */
 	private final Map<K,Tuple1<K>> wrapperCache;
 
@@ -505,12 +515,15 @@ public class Cache<K,V> {
 		this.disableCaching = builder.cacheMode == NONE;
 		this.supplier = builder.supplier != null ? builder.supplier : key -> null;
 		this.isThreadLocal = builder.threadLocal;
+		this.isWeak = builder.cacheMode == WEAK;
 
 		if (isThreadLocal) {
 			// Thread-local mode: each thread gets its own map
-			if (builder.cacheMode == WEAK) {
+			if (isWeak) {
+				// WEAK mode keys the map directly on K (no Tuple1 wrapper / wrapperCache) so entries stay
+				// reachable exactly as long as the caller's key does.  See mapKey().
 				this.threadLocalMap = ThreadLocal.withInitial(() -> synchronizedMap(new WeakHashMap<>()));
-				this.threadLocalWrapperCache = ThreadLocal.withInitial(() -> synchronizedMap(new WeakHashMap<>()));
+				this.threadLocalWrapperCache = null;
 			} else {
 				this.threadLocalMap = ThreadLocal.withInitial(() -> new ConcurrentHashMap<>());
 				this.threadLocalWrapperCache = ThreadLocal.withInitial(() -> synchronizedMap(new WeakHashMap<>()));
@@ -519,9 +532,11 @@ public class Cache<K,V> {
 			this.wrapperCache = null;
 		} else {
 			// Normal mode: shared map across all threads
-			if (builder.cacheMode == WEAK) {
+			if (isWeak) {
+				// WEAK mode keys the map directly on K (no Tuple1 wrapper / wrapperCache) so entries stay
+				// reachable exactly as long as the caller's key does.  See mapKey().
 				this.map = synchronizedMap(new WeakHashMap<>());
-				this.wrapperCache = synchronizedMap(new WeakHashMap<>());
+				this.wrapperCache = null;
 			} else {
 				this.map = new ConcurrentHashMap<>();
 				this.wrapperCache = synchronizedMap(new WeakHashMap<>());
@@ -539,7 +554,8 @@ public class Cache<K,V> {
 	 */
 	public void clear() {
 		getMap().clear();
-		getWrapperCache().clear(); // Clean up wrapper cache
+		if (! isWeak)
+			getWrapperCache().clear(); // Clean up wrapper cache (unused in WEAK mode)
 	}
 
 	/**
@@ -568,7 +584,7 @@ public class Cache<K,V> {
 	 * @return <jk>true</jk> if the cache contains the key.
 	 */
 	public boolean containsKey(K key) {
-		return getMap().containsKey(wrap(key));
+		return getMap().containsKey(mapKey(key));
 	}
 
 	/**
@@ -654,7 +670,7 @@ public class Cache<K,V> {
 		if (disableCaching)
 			return supplier.get();
 		var m = getMap();
-		Tuple1<K> wrapped = wrap(key);
+		var wrapped = mapKey(key);
 		V v = m.get(wrapped);
 		if (v == null) {
 			if (size() > maxSize)
@@ -715,12 +731,13 @@ public class Cache<K,V> {
 	public V put(K key, V value) {
 		var m = getMap();
 		if (value == null) {
-			Tuple1<K> wrapped = wrap(key);
+			var wrapped = mapKey(key);
 			V result = m.remove(wrapped);
-			getWrapperCache().remove(key); // Clean up wrapper cache
+			if (! isWeak)
+				getWrapperCache().remove(key); // Clean up wrapper cache (unused in WEAK mode)
 			return result;
 		}
-		return m.put(wrap(key), value);
+		return m.put(mapKey(key), value);
 	}
 
 	/**
@@ -731,9 +748,10 @@ public class Cache<K,V> {
 	 */
 	public V remove(K key) {
 		var m = getMap();
-		var wrapped = wrap(key);
+		var wrapped = mapKey(key);
 		V result = m.remove(wrapped);
-		getWrapperCache().remove(key); // Clean up wrapper cache
+		if (! isWeak)
+			getWrapperCache().remove(key); // Clean up wrapper cache (unused in WEAK mode)
 		return result;
 	}
 
@@ -751,7 +769,7 @@ public class Cache<K,V> {
 	 *
 	 * @return The map for the current thread.
 	 */
-	private Map<Tuple1<K>,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
+	private Map<Object,V> getMap() { return isThreadLocal ? threadLocalMap.get() : map; }
 
 	/**
 	 * Gets the wrapper cache for the current thread.
@@ -761,11 +779,42 @@ public class Cache<K,V> {
 	private Map<K,Tuple1<K>> getWrapperCache() { return isThreadLocal ? threadLocalWrapperCache.get() : wrapperCache; }
 
 	/**
+	 * Computes the backing-map key for the given caller key.
+	 *
+	 * <p>
+	 * In {@link CacheMode#WEAK WEAK} mode the key is used <b>directly</b> as the {@link WeakHashMap} key so that
+	 * an entry stays reachable exactly as long as the caller's key {@code K} is strongly reachable elsewhere, and
+	 * becomes GC-eligible the moment the caller drops it - the documented weak-key contract.
+	 *
+	 * <p>
+	 * WEAK mode must <b>never</b> route through {@link #wrap(Object)}/{@code wrapperCache}.  That map's value is a
+	 * {@link Tuple1} which strongly holds its own weak key {@code K}, creating a
+	 * {@code Cache -> wrapperCache -> Tuple1 -> K} strong path that pins the weak key forever - a self-reference
+	 * leak that silently turns WEAK mode into a never-evicting FULL cache.  Do not "optimize" the wrapper back in
+	 * for WEAK mode.  (Consequently array keys are matched by identity, not content, in WEAK mode; that is
+	 * inherent to weak keying, whose retention necessarily tracks the caller's exact key object.)
+	 *
+	 * <p>
+	 * All other modes wrap the key in a {@link Tuple1} (see {@link #wrap(Object)}) for content-based equality,
+	 * which matters especially for array keys.
+	 *
+	 * @param key The caller's key.
+	 * @return The object to use as the backing-map key.
+	 */
+	private Object mapKey(K key) {
+		return isWeak ? key : wrap(key);
+	}
+
+	/**
 	 * Gets or creates a Tuple1 wrapper for the given key.
 	 *
 	 * <p>
 	 * The Tuple1 wrapper provides content-based equality for arrays and other objects.
 	 * By caching these wrappers, we avoid creating new Tuple1 objects on every cache access.
+	 *
+	 * <p>
+	 * Only used by non-{@link CacheMode#WEAK WEAK} modes - see {@link #mapKey(Object)} for why WEAK mode keys on
+	 * {@code K} directly instead.
 	 *
 	 * @param key The key to wrap.
 	 * @return A cached or new Tuple1 wrapper for the key.
