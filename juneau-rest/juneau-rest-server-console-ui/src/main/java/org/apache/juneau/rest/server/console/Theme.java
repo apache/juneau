@@ -97,6 +97,9 @@ public final class Theme {
 		.token("--jc-tag-neutral-bg", "#e2e3e5")
 		.token("--jc-tag-neutral-text", "#383d41")
 		.token("--jc-tag-neutral-border", "#c6c8ca")
+		.token("--jc-tag-red-bg", "#f8d7da")
+		.token("--jc-tag-red-text", "#721c24")
+		.token("--jc-tag-red-border", "#f5c6cb")
 		.build();
 
 	private final String name;
@@ -104,7 +107,11 @@ public final class Theme {
 
 	private Theme(String name, Map<String,String> tokens) {
 		this.name = name;
-		this.tokens = Map.copyOf(tokens);
+		// Insertion-ordered rather than Map.copyOf: ConsoleChromeMixin emits this map's iteration order directly as
+		// the served stylesheet's :root{} declarations, and Map.copyOf's order is perturbed by a per-JVM salt - which
+		// would make the response body differ between two processes serving an identical token set.  cp(Map) is
+		// contractually a LinkedHashMap copy, so it preserves that order; do not swap it for an unordered copy.
+		this.tokens = u(cp(tokens));
 	}
 
 	/**
@@ -133,7 +140,9 @@ public final class Theme {
 	/**
 	 * Returns this theme's token overrides.
 	 *
-	 * @return An immutable map of token name (e.g. {@code "--jc-accent"}) to CSS value. Never <jk>null</jk>.
+	 * @return
+	 * 	An immutable map of token name (e.g. {@code "--jc-accent"}) to CSS value, iterating in the order the tokens
+	 * 	were declared on the builder. Never <jk>null</jk>.
 	 */
 	public Map<String,String> getTokens() { return tokens; }
 

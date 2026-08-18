@@ -497,8 +497,12 @@ class ConsoleChromeMixin_Test extends TestBase {
 		// A0 must not add a --jc-logo or --jc-page-bg-image token - the logo/page-bg mechanism is deliberately
 		// NOT part of the Theme token model (finding 4 of the design doc). If this count ever changes, it must be
 		// a DIFFERENT, deliberate change to Theme.OPEN - not a side effect of the asset feature.
-		assertEquals(32, Theme.OPEN.getTokens().size());
+		//
+		// 35 = the original 32, plus the three-token red tag triad added so a four-state status vocabulary has a
+		// fourth colour. Bumping this number is only ever correct alongside a reviewed edit to Theme.OPEN itself.
+		assertEquals(35, Theme.OPEN.getTokens().size());
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
+		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -714,6 +718,107 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertEquals("/rest/juneau-console/assets/logo" + expectedCacheBuster(VALID_LOGO), emittedUrl(composed, "/assets/logo"));
 		assertEquals(standalone1, standalone2, "the standalone body must come back from cache unchanged");
 		assertEquals(2, MOUNT_CACHE_MIXIN.debugBuildCount(), "expected exactly one assembly per distinct mount");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// n) Tag colour palette: the red triad that makes a four-state (pass/warn/fail/unknown) vocabulary expressible
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/** Every colour family in the tag palette, in the order Theme.OPEN declares them. */
+	private static final List<String> TAG_PALETTE = List.of("green", "blue", "amber", "neutral", "red");
+
+	/** The three properties every tag colour family covers - a family missing one of them cannot paint a whole pill. */
+	private static final List<String> TAG_TRIAD_PROPERTIES = List.of("bg", "text", "border");
+
+	@Test void n01_everyTagColourFamily_isACompleteTriad_includingRed() {
+		for (var colour : TAG_PALETTE)
+			for (var property : TAG_TRIAD_PROPERTIES) {
+				var name = "--jc-tag-" + colour + '-' + property;
+				assertTrue(Theme.OPEN.getTokens().containsKey(name), () -> "Theme.OPEN is missing tag token '" + name + "'");
+			}
+	}
+
+	@Test void n02_redTriadValues_areLiteralHexColours_andSurviveTheValueGrammar() {
+		for (var property : TAG_TRIAD_PROPERTIES) {
+			var value = Theme.OPEN.getTokens().get("--jc-tag-red-" + property);
+			assertNotNull(value, () -> "no value for --jc-tag-red-" + property);
+			assertTrue(value.matches("#[0-9a-f]{6}"), () -> "--jc-tag-red-" + property + " is not a 6-digit hex colour like its siblings: " + value);
+			assertEquals(value, CssValueGrammar.normalizeAndValidate(value));
+		}
+	}
+
+	@Test void n03_chromeCss_mapsAFailValueOntoTheRedTriad() throws IOException {
+		var css = readChromeCss();
+		assertTrue(css.contains(".tag.status.fail"), () -> "no .tag.status.fail mapping rule, css:\n" + css);
+		for (var property : TAG_TRIAD_PROPERTIES)
+			assertTrue(css.contains("var(--jc-tag-red-" + property + ")"), () -> "--jc-tag-red-" + property + " is defined but never consumed");
+	}
+
+	@Test void n04_servedChromeCss_emitsTheRedTriad_alongsideTheOtherFourFamilies() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(DefaultHost.class));
+		for (var colour : TAG_PALETTE)
+			for (var property : TAG_TRIAD_PROPERTIES) {
+				var declaration = "--jc-tag-" + colour + '-' + property + ':';
+				assertTrue(body.contains(declaration), () -> "served chrome.css never declares '" + declaration + "', body:\n" + body);
+			}
+	}
+
+	private static final Theme RED_OVERRIDE_THEME = Theme.create("red-override")
+		.token("--jc-tag-red-bg", "#ffe0e2")
+		.token("--jc-tag-red-text", "#5a0f14")
+		.token("--jc-tag-red-border", "#f0b3b7")
+		.build();
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class RedOverrideHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(RED_OVERRIDE_THEME).build(); }
+	}
+
+	@Test void n05_redTriad_isThemeable_throughTheSameApiAsEveryOtherTriad() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(RedOverrideHost.class));
+		assertEquals(2, countRootBlocks(body), () -> "expected Theme.OPEN block + the override block, body:\n" + body);
+		assertTrue(body.contains("--jc-tag-red-bg:#ffe0e2;"), () -> "red bg override not emitted, body:\n" + body);
+		assertTrue(body.contains("--jc-tag-red-text:#5a0f14;"), () -> "red text override not emitted, body:\n" + body);
+		assertTrue(body.contains("--jc-tag-red-border:#f0b3b7;"), () -> "red border override not emitted, body:\n" + body);
+	}
+
+	/**
+	 * The point of the red family: a four-state {@code pass}/{@code warn}/{@code fail}/{@code unknown} vocabulary
+	 * has to reach four distinct colours. Sharing one between {@code warn} and {@code fail} would make a check that
+	 * could not run indistinguishable from one that passed with a caveat.
+	 */
+	@Test void n06_fourStateStatusVocabulary_resolvesToFourDistinctFills() {
+		var fills = new LinkedHashSet<String>();
+		for (var colour : List.of("green", "amber", "red", "neutral")) {
+			var fill = Theme.OPEN.getTokens().get("--jc-tag-" + colour + "-bg");
+			assertNotNull(fill, () -> "no fill for the '" + colour + "' family");
+			fills.add(fill);
+		}
+		assertEquals(4, fills.size(), () -> "pass/warn/fail/unknown collapse onto fewer than four fills: " + fills);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// o) Deterministic token emission: the :root{} block must be byte-stable for a given token set
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Pins that the emitted declaration order is exactly {@link Theme#getTokens()}'s iteration order, i.e. that
+	 * the theme's ordering guarantee reaches the wire rather than being re-bucketed on the way out. The guarantee
+	 * itself - that the iteration order is the declaration order and not a per-JVM hash order, which is what makes
+	 * the response byte-stable enough to ever carry an {@code ETag} - is proved in {@code Theme_TokenOrdering_Test}.
+	 */
+	@Test void o01_openBlockDeclarationOrder_matchesThemeOpensDeclarationOrder() throws Exception {
+		var block = firstRootBlock(bodyOf(MockRestClient.buildLax(DefaultHost.class)));
+		var emitted = new ArrayList<String>();
+		var m = Pattern.compile("(--jc-[a-z0-9-]+)\\s*:").matcher(block);
+		while (m.find())
+			emitted.add(m.group(1));
+		assertEquals(new ArrayList<>(Theme.OPEN.getTokens().keySet()), emitted);
+	}
+
+	@Test void o02_twoIndependentlyBuiltMixinsWithTheSameTheme_serveByteIdenticalBodies() throws Exception {
+		assertEquals(bodyOf(MockRestClient.buildLax(DefaultHost.class)), bodyOf(MockRestClient.buildLax(DefaultHost.class)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

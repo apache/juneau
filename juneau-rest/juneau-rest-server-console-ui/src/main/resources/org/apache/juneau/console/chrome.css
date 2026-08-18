@@ -346,6 +346,11 @@ a:hover { text-decoration: underline; }
 .tag.stage.unknown,
 .tag.stage.archived { background-color: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
 
+.tag.status.fail,
+.tag.status.failed,
+.tag.stage.fail,
+.tag.stage.failed { background-color: var(--jc-tag-red-bg); color: var(--jc-tag-red-text); border-color: var(--jc-tag-red-border); }
+
 /* ==========================================================================
    Data table (IRS / DataTables style)
    ========================================================================== */
