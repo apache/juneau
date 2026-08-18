@@ -24,11 +24,14 @@
      1. A shared run-header/meta bar + vote-gate banner (used by all 3 options).
      2. A handful of NEW `.tag.status.*` values the 24-step pipeline needs
         that the Releases tab never used (running / succeeded / skipped /
-        failed / awaiting-vote) — each mapped onto the SAME color tokens as
-        chrome.css's existing tag domains, per the design note in §current
-        (succeeded→green, running→blue, skipped/awaiting-vote→neutral,
-        failed→red). `pending` is intentionally NOT redefined here — it
-        already exists in chrome.css's amber group and is reused as-is.
+        awaiting-vote) — each mapped onto the SAME color tokens as chrome.css's
+        existing tag domains, per the design note in §current (succeeded→green,
+        running→blue, skipped/awaiting-vote→neutral). `pending` and `failed`
+        are intentionally NOT redefined here: `pending` already exists in
+        chrome.css's amber group, and `failed` in its red group — the red
+        triad is overridden in ReleaseManagerTheme to this app's own danger
+        palette (matching .tag.armed/.pill.invalid) rather than the framework's
+        Bootstrap-maroon default, so both are reused as-is.
      3. Per-step console styling (shared by all 3 options).
      4. Layout-specific rules for option A (rail), B (stepper), C (datatable),
         clearly namespaced/commented per section.
@@ -43,7 +46,6 @@
 .tag.status.skipped,
 .tag.status.awaiting-vote,
 .tag.status.neutral   { background: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); border-color: var(--jc-tag-neutral-border); }
-.tag.status.failed    { background: #fdeceb; color: var(--jc-danger); border-color: #f3c6c2; }
 
 .tag.status.running::before { content: '\25CF'; margin-right: 4px; font-size: 8px; position: relative; top: -1px; animation: rm-pulse 1.4s ease-in-out infinite; }
 .tag.status.awaiting-vote::before { content: '\23F8'; margin-right: 3px; font-size: 9px; position: relative; top: 0; }
