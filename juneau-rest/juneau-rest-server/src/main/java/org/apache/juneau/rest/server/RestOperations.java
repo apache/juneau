@@ -140,6 +140,12 @@ public class RestOperations {
 			m.put(e.getKey(), toList(e.getValue()));
 		this.map = m;
 		this.list = array(builder.set, RestOpContext.class);
+
+		// Fail the resource if an operation declared @Mutating is bound to a method defined as safe. Done here
+		// because this constructor is the one path every operation table passes through, so the check cannot be
+		// skipped by omission -- and it runs before findOperation can dispatch anything. A resource with no
+		// @Mutating anywhere is unaffected.
+		MethodSafety.check(getOpContexts());
 	}
 
 	/**

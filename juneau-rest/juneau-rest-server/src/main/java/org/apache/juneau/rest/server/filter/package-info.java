@@ -20,6 +20,8 @@
  *
  * <p>
  * Includes {@link org.apache.juneau.rest.server.filter.RequestIdFilter}, which assigns a unique
- * request ID to each incoming request for correlation in logs and responses.
+ * request ID to each incoming request for correlation in logs and responses, and
+ * {@link org.apache.juneau.rest.server.filter.LoopbackBoundaryFilter}, which rejects requests to a
+ * loopback-bound application that did not originate from the page that application served.
  */
 package org.apache.juneau.rest.server.filter;
