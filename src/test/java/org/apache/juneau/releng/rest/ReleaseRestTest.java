@@ -18,6 +18,7 @@
 package org.apache.juneau.releng.rest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import org.apache.juneau.commons.inject.StackOverlay;
@@ -26,6 +27,8 @@ import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.rest.mock.MockRestClient;
 import org.junit.jupiter.api.Test;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 class ReleaseRestTest {
 
@@ -50,17 +53,25 @@ class ReleaseRestTest {
 		return MockRestClient.builder(rest).overridingBeanStore(new StackOverlay()).build();
 	}
 
+	/**
+	 * A request with no loopback-boundary token attribute, which is what a direct call (no servlet filter in the
+	 * path) sees. {@code ConsolePage} renders the token empty in that case rather than failing.
+	 */
+	private static HttpServletRequest req() {
+		return mock(HttpServletRequest.class);
+	}
+
 	@Test
 	void detailReturnsAViewCarryingTheMatchingRelease() {
 		var rest = rest(List.of(release("9.2.1", "RELEASED")));
-		var view = rest.detail("9.2.1", "1");
+		var view = rest.detail("9.2.1", "1", req());
 		assertNotNull(view);
 	}
 
 	@Test
 	void detailForAnUnknownVersionIs404() {
 		var rest = rest(List.of(release("9.2.1", "RELEASED")));
-		var ex = assertThrows(NotFound.class, () -> rest.detail("9.9.9", "1"));
+		var ex = assertThrows(NotFound.class, () -> rest.detail("9.9.9", "1", req()));
 		assertEquals(404, ex.getStatusCode());
 	}
 

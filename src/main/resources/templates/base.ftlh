@@ -27,6 +27,18 @@
 <head>
     <meta charset="utf-8">
     <title>Apache Juneau · Release Manager</title>
+    <#-- The server-held CSRF token for this boot, required back on every state-changing request by the loopback
+         write boundary (LoopbackBoundary). Supplied by ConsolePage.of(...) from the request attribute the
+         boundary's filter sets; referenced with no FreeMarker default on purpose, so a page that forgets to go
+         through ConsolePage fails to render instead of quietly shipping a UI whose writes all 403.
+
+         This is a synchronizer token, NOT a double-submit cookie. Do not "simplify" it into one: cookies ignore
+         the port, so any page on any other localhost:* could plant a value this app would read back and accept
+         as its own. csrf.js reads it from here; nothing writes it to document.cookie. -->
+    <meta name="csrf-token" content="${csrfToken}">
+    <#-- Must load before any other script: it wraps window.fetch so every non-GET request carries the token
+         above, rather than leaving each call site to remember. -->
+    <script src="/js/csrf.js"></script>
     <link rel="icon" type="image/svg+xml" href="/img/oakleaf.svg">
     <#if activeTab?? && (activeTab == 'releases' || activeTab == 'admin')>
     <link rel="stylesheet" href="/datatables/dataTables.dataTables.min.css">

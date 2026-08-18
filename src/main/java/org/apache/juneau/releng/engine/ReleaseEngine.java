@@ -75,6 +75,7 @@ public class ReleaseEngine {
 
 	// Loopback mock base (http://host:port/mock/nexus). Null in forTests so those keep secrets.nexus().
 	private String mockNexusBaseUrl;
+	private Map<String, String> loopbackHeaders = Map.of();
 
 	/** Everything the REST layer must provide to build a mutating StepContext. */
 	public interface SecretResolver {
@@ -270,6 +271,17 @@ public class ReleaseEngine {
 	}
 
 	/**
+	 * Headers the SAFE-mode Nexus client must present to get past the loopback write boundary, since the mock it
+	 * talks to is mounted on this application's own port. Empty in {@link #forTests}, where no boundary is
+	 * installed and the transport is a stub anyway.
+	 *
+	 * @see org.apache.juneau.rest.server.filter.LoopbackBoundary#selfCallHeaders()
+	 */
+	public void setLoopbackHeaders(Map<String, String> headers) {
+		this.loopbackHeaders = headers == null ? Map.of() : Map.copyOf(headers);
+	}
+
+	/**
 	 * The run's effective mode: persisted {@code rs.mode} (null → SAFE), capped so a SAFE box can never
 	 * execute LIVE even if on-disk state claims it.
 	 */
@@ -296,6 +308,25 @@ public class ReleaseEngine {
 	 * Arms {@code version} for LIVE mutation. Rejected unless the box is LIVE, this run is Actual (LIVE),
 	 * and {@code confirm} equals the required phrase {@code "<version> LIVE"}. Returns the outcome
 	 * message-bearing result.
+	 *
+	 * <p><b>Arming is an intent gate, and only that.</b> It establishes that a human meant to do something
+	 * irreversible; it establishes nothing about who or what sent the request. The two questions are separate, and
+	 * the second one is answered by
+	 * {@link org.apache.juneau.rest.server.filter.LoopbackBoundary} — see {@code AppConfiguration}.
+	 *
+	 * <p>Specifically, <b>the confirm phrase is not a secret and carries no authenticity.</b> It is
+	 * {@code "<version> LIVE"}, and the version is displayed on the very page an attacker would be reading, so any
+	 * page in the operator's browser could derive it. Before the boundary existed, a hostile page could POST that
+	 * phrase to {@code /arm} as a plain cross-origin form submission and then trigger a mutating step. What the
+	 * phrase does buy is real but narrower than it looks: it makes an irreversible action require deliberate typing
+	 * rather than a misplaced click, which is worth having, and it is worth being clear that this is all it is.
+	 *
+	 * <p><b>Do not respond to that by making the phrase harder to guess.</b> A longer or hidden phrase would not
+	 * help. Anything the page must display so the operator can type it is readable by any script running in that
+	 * browser, and anything the operator memorises instead gets written down. A secret shared with the attacker is
+	 * not a secret, and dressing this gate up as authentication would obscure the fact that authentication is a
+	 * separate control that has to exist on its own — which is what the boundary is. Keep this phrase exactly as
+	 * hard to type as it needs to be to prevent an accident, and no harder.
 	 */
 	public synchronized StepResult arm(String version, String confirm) {
 		if (mode != ExecutionMode.LIVE)
@@ -516,7 +547,7 @@ public class ReleaseEngine {
 		if (runMode == ExecutionMode.SAFE && mockNexusBaseUrl != null) {
 			ctx.target = target.withNexusBaseUrl(mockNexusBaseUrl);
 			ctx.nexus = NexusStagingClient.create(mockNexusBaseUrl, target.nexusProfileId(), "safe-placeholder",
-					"safe-placeholder");
+					"safe-placeholder", loopbackHeaders);
 		} else {
 			ctx.target = target;
 			ctx.nexus = secrets.nexus();

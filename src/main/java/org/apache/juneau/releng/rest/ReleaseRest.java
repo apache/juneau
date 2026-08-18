@@ -29,7 +29,6 @@ import org.apache.juneau.rest.server.converter.QueryableSettings;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
 import org.apache.juneau.rest.server.views.Column;
@@ -42,12 +41,14 @@ import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.apache.juneau.releng.release.Release;
 import org.apache.juneau.releng.release.ReleaseListService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 /**
  * Releases tab: server-rendered HTML page + DataTables server-side-processing data endpoint.
  *
  * <p>
  * Built on the {@code juneau-rest-server-views} rich-view toolkit: {@link #releasesView()} declares the typed
- * {@link ViewDef} (columns + renderers + ribbon), {@link #page()} emits its {@link ViewTable} shell as trusted markup
+ * {@link ViewDef} (columns + renderers + ribbon), {@link #page(HttpServletRequest)} emits its {@link ViewTable} shell as trusted markup
  * into the FreeMarker template, and {@link #data()} serves the {@code DataTablesResults} envelope via
  * {@link ProtocolQueryable} + the view's {@link ViewDef#queryableSettings() queryable settings}. The four runtime
  * assets are served by the composed {@link ViewsMixin} at this resource's mount.
@@ -118,9 +119,9 @@ public class ReleaseRest extends BasicRestResource {
 
 	/** Human page — the rich-view table shell (emitted as trusted markup) + JSON sidecar, hydrated by the toolkit JS. */
 	@RestGet("/")
-	public View page() {
+	public View page(HttpServletRequest req) {
 		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(releasesView()));
-		return FreemarkerView.of("releases")
+		return ConsolePage.of("releases", req)
 			.attr("viewTable", markup)
 			.attr("viewsCssUrl", asset(ViewsMixin.VIEWS_CSS_PATH))
 			.attr("rendersJsUrl", asset(ViewsMixin.RENDERS_JS_PATH))
@@ -155,9 +156,9 @@ public class ReleaseRest extends BasicRestResource {
 	 * part of the path so a future multi-RC history view doesn't need a URL-breaking change.
 	 */
 	@RestGet("/{version}/{rc}")
-	public View detail(@Path("version") String version, @Path("rc") String rc) {
+	public View detail(@Path("version") String version, @Path("rc") String rc, HttpServletRequest req) {
 		var release = findByVersion(version);
-		return FreemarkerView.of("release-detail").attr("release", release).attr("rc", rc);
+		return ConsolePage.of("release-detail", req).attr("release", release).attr("rc", rc);
 	}
 
 	private Release findByVersion(String version) {

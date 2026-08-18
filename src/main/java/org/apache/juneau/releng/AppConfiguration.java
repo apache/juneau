@@ -57,11 +57,16 @@ import org.apache.juneau.releng.rest.MilestoneRest;
 import org.apache.juneau.releng.rest.ReleaseRest;
 import org.apache.juneau.releng.rest.ReleaseRunRest;
 import org.apache.juneau.releng.util.ProcessRunner;
+import org.apache.juneau.rest.server.filter.LoopbackBoundary;
+import org.apache.juneau.rest.server.filter.LoopbackBoundaryFilter;
+import org.apache.juneau.rest.server.filter.SynchronizerToken;
 import org.apache.juneau.secret.keychain.KeychainSecretStore;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 import jakarta.servlet.Servlet;
 
@@ -76,6 +81,74 @@ public class AppConfiguration {
 	@Bean
 	public ProcessRunner processRunner() {
 		return new ProcessRunner.Default();
+	}
+
+	// ==========================================================================================
+	// Loopback write boundary.
+	//
+	// Two independent gates protect the mutating endpoints, and they answer different questions:
+	//
+	//   - This boundary answers "did this request come from the page we served".
+	//   - The engine's per-run arming (see ReleaseEngine.arm / rm.mode) answers "did a human mean it".
+	//
+	// Before this boundary existed only the second gate was present, which meant a hostile page in the
+	// operator's browser could POST the derivable "<version> LIVE" confirm phrase to /arm as a plain
+	// cross-origin form submission -- no preflight, no CORS, no JavaScript needed -- and then trigger a
+	// mutating step. Arming establishes intent; it never established that the caller was us.
+	//
+	// Two framing points, because getting either wrong invites someone to "strengthen" the wrong gate:
+	//
+	//   - The confirm phrase is not a secret and never authenticated anything. It is derivable from a page the
+	//     attacker is already reading. Making it longer or hidden would not help -- see ReleaseEngine.arm. It is
+	//     typing friction against accident, which is a real thing to want and not this boundary's job.
+	//
+	//   - rm.mode defaulting to safe is an operational safety default, not a security control, even though it was
+	//     doing real security work until this boundary landed. Its protection disappears exactly when someone
+	//     starts the app in live mode -- during a real release, when a forged request costs the most. This
+	//     boundary applies in both modes. See application.properties.
+	// ==========================================================================================
+
+	/**
+	 * The process's CSRF secret: minted here, embedded in every page (see the page beans below), and required
+	 * back on every write. One per boot, so a restart invalidates whatever any still-open tab is holding and
+	 * that tab must reload.
+	 *
+	 * <p>Deliberately <b>not</b> a double-submit cookie: cookies are scoped by host and ignore the port, so any
+	 * page served from any other {@code localhost:*} could plant one this application would read back and
+	 * accept. {@link SynchronizerToken} documents that at length.
+	 */
+	@Bean
+	public SynchronizerToken csrfToken() {
+		return SynchronizerToken.generate();
+	}
+
+	/**
+	 * The boundary itself, pinned to the one authority this application is reached at.
+	 *
+	 * <p>Exactly one spelling is accepted: bound to {@code 127.0.0.1:8790}, the app is <b>not</b> reachable as
+	 * {@code localhost:8790}. That is intentional (see {@link LoopbackBoundary}'s canonical-origin section); a
+	 * 421 with a {@code Host}-naming message is the diagnostic when someone uses the other spelling.
+	 */
+	@Bean
+	public LoopbackBoundary loopbackBoundary(SynchronizerToken token,
+			@Value("${server.address:127.0.0.1}") String address, @Value("${server.port:8790}") int port) {
+		return LoopbackBoundary.create().authority(address, port).token(token).build();
+	}
+
+	/**
+	 * Registers the boundary as a servlet filter at {@code /*} with the highest precedence.
+	 *
+	 * <p>A filter rather than a Juneau guard or mixin hook because it must be impossible to omit: every REST
+	 * resource, the SSE endpoint, the Nexus mock, the static assets and the 404s all pass through it, so an
+	 * endpoint added later is covered without anyone remembering to cover it. A guard declared per-operation
+	 * would leave each new endpoint unprotected by default, and its absence would be invisible in review.
+	 */
+	@Bean
+	public FilterRegistrationBean<LoopbackBoundaryFilter> loopbackBoundaryFilter(LoopbackBoundary boundary) {
+		var reg = new FilterRegistrationBean<>(new LoopbackBoundaryFilter(boundary));
+		reg.addUrlPatterns("/*");
+		reg.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return reg;
 	}
 
 	/**
@@ -186,8 +259,7 @@ public class AppConfiguration {
 	/**
 	 * The shared console-ui chrome stylesheet + themeable logo/page-background assets, mounted independently of
 	 * {@code /rest/*} so the site-absolute {@code /juneau-console/*} URLs every tab's {@code base.ftlh} links
-	 * against resolve the same way regardless of which tab rendered the page. See {@link ConsoleAssetsRest}'s
-	 * class Javadoc for why the servlet itself corrects for the container's servlet-path handling.
+	 * against resolve the same way regardless of which tab rendered the page.
 	 */
 	@Bean
 	public ServletRegistrationBean<Servlet> consoleAssetsRegistration() {
@@ -239,7 +311,7 @@ public class AppConfiguration {
 	/** Resolves live secrets from CredentialService's stores per mutating action. */
 	@Bean
 	public ReleaseEngine.SecretResolver secretResolver(Map<CredentialSpec, SecretStore> stores, AccountStore accounts,
-			ExecutionMode mode, TargetProfile target) {
+			ExecutionMode mode, TargetProfile target, LoopbackBoundary boundary) {
 		return new ReleaseEngine.SecretResolver() {
 			private String read(CredentialSpec spec, String account) {
 				return stores.get(spec).find(account).map(String::new).orElse("");
@@ -279,11 +351,14 @@ public class AppConfiguration {
 			// cannot be used directly. Falls back to ~/.m2/settings.xml only when that Keychain entry
 			// hasn't been stored yet. Under SAFE the base is the loopback mock and the credential is a
 			// throwaway placeholder — the real Keychain secret is never read or sent (OQ-C).
+			//
+			// The SAFE client also carries the boundary's self-call headers: its target is the mock on this
+			// application's own port, which sits behind the same filter as everything else and exempts nobody.
 			@Override
 			public NexusStagingClient nexus() {
 				if (mode == ExecutionMode.SAFE)
 					return NexusStagingClient.create(target.nexusBaseUrl(), target.nexusProfileId(), SAFE_PLACEHOLDER,
-							SAFE_PLACEHOLDER);
+							SAFE_PLACEHOLDER, boundary.selfCallHeaders());
 				return nexusClient(target, availid(), ldapPassword(), () -> NexusStagingClient
 						.create(target.nexusBaseUrl(), target.nexusProfileId(), "apache.releases.https"));
 			}
@@ -313,13 +388,14 @@ public class AppConfiguration {
 	})
 	public ReleaseEngine releaseEngine(RunStateStore store, StepRegistry registry, ProcessRunner runner,
 			BranchResolver branches, EmailService email, MilestoneService milestone,
-			ReleaseEngine.SecretResolver secrets, ExecutionMode mode, TargetProfile target,
+			ReleaseEngine.SecretResolver secrets, ExecutionMode mode, TargetProfile target, LoopbackBoundary boundary,
 			@Value("${rm.state.dir}") String stateDir, @Value("${rm.staging.dir}") String stagingDir,
 			@Value("${rm.repo.dir}") String repoDir, @Value("${rm.git.committer.email}") String committerEmail,
 			@Value("${server.address:127.0.0.1}") String address, @Value("${server.port:8790}") int port) {
 		var engine = new ReleaseEngine(store, registry, runner, branches, Path.of(stateDir), Path.of(stagingDir),
 				repoDir, committerEmail, email, milestone, secrets, mode, target);
 		engine.setMockNexusBaseUrl("http://" + address + ":" + port + "/mock/nexus");
+		engine.setLoopbackHeaders(boundary.selfCallHeaders());
 		engine.recoverOnBoot(); // Demote runs left mid-flight by a previous process on restart.
 		return engine;
 	}
@@ -327,12 +403,13 @@ public class AppConfiguration {
 	@Bean
 	public DropRcService dropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner,
 			ReleaseEngine.SecretResolver secrets, ReleaseEngine engine, ExecutionMode mode, TargetProfile target,
-			@Value("${rm.staging.dir}") String stagingDir, @Value("${rm.state.dir}") String stateDir) {
+			LoopbackBoundary boundary, @Value("${rm.staging.dir}") String stagingDir,
+			@Value("${rm.state.dir}") String stateDir) {
 		var svc = new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
 				secrets.nexus(), mode, engine::isArmed, target, engine::broadcaster);
 		if (engine.mockNexusBaseUrl() != null)
 			svc.setSafeNexus(NexusStagingClient.create(engine.mockNexusBaseUrl(), target.nexusProfileId(),
-					SAFE_PLACEHOLDER, SAFE_PLACEHOLDER));
+					SAFE_PLACEHOLDER, SAFE_PLACEHOLDER, boundary.selfCallHeaders()));
 		return svc;
 	}
 

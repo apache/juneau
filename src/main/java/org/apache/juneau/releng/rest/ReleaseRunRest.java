@@ -23,13 +23,13 @@ import org.apache.juneau.http.Content;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.Conflict;
 import org.apache.juneau.http.response.NotFound;
+import org.apache.juneau.rest.server.Mutating;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
 import org.apache.juneau.releng.engine.DropRcService;
@@ -39,8 +39,18 @@ import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.StepResult;
 
-/** New Release tab: pipeline control panel (View) plus JSON run/step/vote/drop-RC actions. */
-@Rest(path = "/runs", title = "New Release", responseProcessors = FreemarkerViewRenderer.class)
+import jakarta.servlet.http.HttpServletRequest;
+
+/**
+ * New Release tab: pipeline control panel (View) plus JSON run/step/vote/drop-RC actions.
+ *
+ * <p>{@code disableContentParam} is set for the reason given on {@code CredentialRest}: Juneau's default lets a
+ * {@code POST} body arrive in a {@code &content=} query parameter, which puts the arm confirmation phrase and every
+ * other action payload into browser history and access logs. The boundary refuses that shape from a hostile page;
+ * this closes the accidental use of it.
+ */
+@Rest(path = "/runs", title = "New Release", responseProcessors = FreemarkerViewRenderer.class,
+	disableContentParam = "true")
 public class ReleaseRunRest extends BasicRestResource {
 
 	private final ReleaseEngine engine;
@@ -60,11 +70,11 @@ public class ReleaseRunRest extends BasicRestResource {
 
 	/** Human page — the pipeline control panel for the active run (or an empty start form). */
 	@RestGet("/")
-	public View page() {
+	public View page(HttpServletRequest req) {
 		var liveCapable = engine.mode() == ExecutionMode.LIVE;
 		var active = engine.displayRun().orElse(null);
 		var runMode = active == null ? ExecutionMode.SAFE : engine.effectiveMode(active);
-		var view = FreemarkerView.of("new-release").attr("steps", engine.registry().steps())
+		var view = ConsolePage.of("new-release", req).attr("steps", engine.registry().steps())
 				.attr("mode", runMode.name()).attr("appMode", engine.mode().name())
 				.attr("liveCapable", Boolean.valueOf(liveCapable));
 		// FreemarkerView.attr() rejects null values by design; the template only checks run??
@@ -86,6 +96,7 @@ public class ReleaseRunRest extends BasicRestResource {
 	 * capped to SAFE unless the box was started with {@code rm.mode=live}. Rejects a second concurrent run
 	 * with 409.
 	 */
+	@Mutating("creates a run and writes its state to disk")
 	@RestPost("/")
 	public RunState start(@Content StartRequest body) {
 		try {
@@ -103,6 +114,7 @@ public class ReleaseRunRest extends BasicRestResource {
 	 * {@code knownIssues}, {@code acknowledgements}) so they can be edited before each email is composed.
 	 * Returns the updated run.
 	 */
+	@Mutating("updates the run's persisted narrative fields")
 	@RestPost("/{version}/details")
 	public RunState details(@Path("version") String version, @Content DetailsRequest body) {
 		requireRun(version);
@@ -110,6 +122,9 @@ public class ReleaseRunRest extends BasicRestResource {
 		return engine.updateDetails(version, b.releaseSummary, b.highlights, b.knownIssues, b.acknowledgements);
 	}
 
+	// No @Mutating: a preview is a dry run by construction and writes nothing. The annotation is a claim about
+	// effects, so putting it here to be "safe" would be a false one -- and would make the two preview endpoints
+	// indistinguishable from the apply endpoints they exist to be safer than.
 	@RestPost("/{version}/steps/{stepId}/preview")
 	public Preview preview(@Path("version") String version, @Path("stepId") String stepId,
 			@Content Map<String, String> form) {
@@ -117,6 +132,7 @@ public class ReleaseRunRest extends BasicRestResource {
 		return engine.preview(version, stepId, form == null ? Map.of() : form);
 	}
 
+	@Mutating("executes a release step; in LIVE mode this mutates git, SVN, Nexus, GitHub or mailing lists")
 	@RestPost("/{version}/steps/{stepId}/apply")
 	public StepResult apply(@Path("version") String version, @Path("stepId") String stepId,
 			@Content Map<String, String> form) {
@@ -136,6 +152,7 @@ public class ReleaseRunRest extends BasicRestResource {
 	 * history. The UI picks the button label from the step's current status; the engine doesn't care which
 	 * label was clicked.
 	 */
+	@Mutating("re-executes a release step, overwriting its status and log in place")
 	@RestPost("/{version}/steps/{stepId}/resume")
 	public StepResult resume(@Path("version") String version, @Path("stepId") String stepId,
 			@Content Map<String, String> form) {
@@ -143,6 +160,7 @@ public class ReleaseRunRest extends BasicRestResource {
 		return engine.apply(version, stepId, form == null ? Map.of() : form);
 	}
 
+	@Mutating("marks a step skipped in the persisted run state")
 	@RestPost("/{version}/steps/{stepId}/skip")
 	public StepResult skip(@Path("version") String version, @Path("stepId") String stepId) {
 		requireRun(version);
@@ -153,7 +171,13 @@ public class ReleaseRunRest extends BasicRestResource {
 	 * Arm this run for LIVE mutation. Requires a typed confirm phrase ({@code "<version> LIVE"}) and is
 	 * rejected unless the box is LIVE and this run is Actual (LIVE). Arming is in-memory on the engine and
 	 * drops on any restart.
+	 *
+	 * <p>This is an <b>intent</b> gate: the confirm phrase shows a human deliberately typed something, and is not
+	 * a secret and not authentication — it is derivable from the page it is typed on. Whether the request came from
+	 * a page this application served is a separate question, answered by the loopback boundary in front of every
+	 * endpoint. See {@link org.apache.juneau.releng.engine.ReleaseEngine#arm(String, String)}.
 	 */
+	@Mutating("arms the run for irreversible LIVE mutation")
 	@RestPost("/{version}/arm")
 	public StepResult arm(@Path("version") String version, @Content ArmRequest body) {
 		requireRun(version);
@@ -161,6 +185,7 @@ public class ReleaseRunRest extends BasicRestResource {
 	}
 
 	/** Advance a review-gate step held in {@code AWAITING_REVIEW} once the human has confirmed the read-only work. */
+	@Mutating("advances a held review-gate step")
 	@RestPost("/{version}/steps/{stepId}/confirm-review")
 	public StepResult confirmReview(@Path("version") String version, @Path("stepId") String stepId) {
 		requireRun(version);
@@ -168,6 +193,7 @@ public class ReleaseRunRest extends BasicRestResource {
 	}
 
 	/** Record the vote outcome; 'rejected' triggers Drop-RC. */
+	@Mutating("records the vote outcome and runs the tally step")
 	@RestPost("/{version}/vote-result")
 	public StepResult voteResult(@Path("version") String version, @Content VoteResultRequest body) {
 		requireRun(version);
@@ -182,6 +208,7 @@ public class ReleaseRunRest extends BasicRestResource {
 		return dropRc.preview(version);
 	}
 
+	@Mutating("drops the release candidate from Nexus and dist SVN, and bumps the RC number")
 	@RestPost("/{version}/drop-rc/apply")
 	public StepResult dropRcApply(@Path("version") String version, @Content DropRcRequest body) {
 		var rs = requireRun(version);

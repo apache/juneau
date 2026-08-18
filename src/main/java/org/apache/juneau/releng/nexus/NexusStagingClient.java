@@ -64,10 +64,26 @@ public class NexusStagingClient {
 	 * here. Under SAFE mode {@code baseUrl} is the in-app loopback mock and the credential is a placeholder.
 	 */
 	public static NexusStagingClient create(String baseUrl, String profileId, String username, String password) {
+		return create(baseUrl, profileId, username, password, Map.of());
+	}
+
+	/**
+	 * As {@link #create(String, String, String, String)}, plus {@code extraHeaders} added to every request.
+	 *
+	 * <p>
+	 * Exists for the SAFE-mode loopback mock. That mock is mounted on this application's own port, behind the
+	 * {@link org.apache.juneau.rest.server.filter.LoopbackBoundary LoopbackBoundary}, which grants no exemption
+	 * to a caller merely because it happens to be this process — so the close/drop/promote {@code POST}s below
+	 * must present the same {@code Origin} and CSRF token the browser does. Pass
+	 * {@link org.apache.juneau.rest.server.filter.LoopbackBoundary#selfCallHeaders() selfCallHeaders()} here.
+	 * The real Nexus needs none of this and is given an empty map.
+	 */
+	public static NexusStagingClient create(String baseUrl, String profileId, String username, String password,
+			Map<String, String> extraHeaders) {
 		var http = HttpClient.newHttpClient();
 		var basic = "Basic "
 				+ Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
-		return new NexusStagingClient(transport(http, basic, baseUrl), profileId);
+		return new NexusStagingClient(transport(http, basic, baseUrl, extraHeaders), profileId);
 	}
 
 	/**
@@ -84,11 +100,13 @@ public class NexusStagingClient {
 		return create(baseUrl, profileId, creds.username(), creds.password());
 	}
 
-	private static Transport transport(HttpClient http, String basic, String baseUrl) {
+	private static Transport transport(HttpClient http, String basic, String baseUrl,
+			Map<String, String> extraHeaders) {
 		return (method, path, body) -> {
 			try {
 				var b = HttpRequest.newBuilder(URI.create(baseUrl + path)).header("Authorization", basic)
 						.header("Accept", "application/json").header("Content-Type", "application/json");
+				extraHeaders.forEach(b::header);
 				var req = (body == null) ? b.method(method, HttpRequest.BodyPublishers.noBody()).build()
 						: b.method(method, HttpRequest.BodyPublishers.ofString(body)).build();
 				var resp = http.send(req, HttpResponse.BodyHandlers.ofString());

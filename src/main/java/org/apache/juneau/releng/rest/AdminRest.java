@@ -24,13 +24,14 @@ import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
 import org.apache.juneau.rest.server.views.PageDef;
 import org.apache.juneau.rest.server.views.PageTable;
 import org.apache.juneau.rest.server.views.Tab;
 import org.apache.juneau.rest.server.views.ViewsMixin;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Admin tab (TODO-399 Phase C dogfood): a single multi-tab page composing the app's existing
@@ -43,7 +44,7 @@ import org.apache.juneau.rest.server.views.ViewsMixin;
  * definitions, and each child view's {@code dataUrl} stays absolute (its owning resource's own mount), so the
  * ajax data draws still hit {@link ReleaseRest#data()} / {@link CredentialRest#status()} exactly as they do from
  * the standalone Releases/Credentials pages. Per {@link PageTable}'s contract, the emitted per-view markup (marker
- * table + VIEW_META sidecar) is byte-for-byte identical to what {@link ReleaseRest#page()} /
+ * table + VIEW_META sidecar) is byte-for-byte identical to what {@link ReleaseRest#page(HttpServletRequest)} /
  * {@code CredentialRest}'s own view would emit standalone &mdash; this resource only adds the tab-bar/panel shell
  * and the PAGE_META sidecar around them.
  */
@@ -76,9 +77,9 @@ public class AdminRest extends BasicRestResource {
 
 	/** Human page &mdash; the composed tab/sub-tab page shell (emitted as trusted markup) + PAGE_META sidecar. */
 	@RestGet("/")
-	public View page() {
+	public View page(HttpServletRequest req) {
 		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(adminPage()));
-		return FreemarkerView.of("admin")
+		return ConsolePage.of("admin", req)
 			.attr("pageTable", markup)
 			.attr("viewsCssUrl", asset(ViewsMixin.VIEWS_CSS_PATH))
 			.attr("rendersJsUrl", asset(ViewsMixin.RENDERS_JS_PATH))

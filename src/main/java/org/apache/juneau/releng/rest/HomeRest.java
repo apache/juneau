@@ -23,9 +23,10 @@ import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
-import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /** Home tab: default landing page with basic usage instructions. */
 @Rest(path = "/home", title = "Home", responseProcessors = FreemarkerViewRenderer.class)
@@ -40,7 +41,7 @@ public class HomeRest extends BasicRestResource {
 
 	/** Human page. */
 	@RestGet("/")
-	public View page() {
-		return FreemarkerView.of("home");
+	public View page(HttpServletRequest req) {
+		return ConsolePage.of("home", req);
 	}
 }
