@@ -1,0 +1,359 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * juneau-views.css - base ".tag" chip for the Apache Juneau rich-view toolkit (Task B.6).
+ *
+ * DEPENDENCY-FREE + NEUTRAL: this file styles ONLY the shape of the shared ".tag.<domain>.<value>" chip contract -
+ * padding, border-radius, inline layout - and deliberately ships NO colors (no color/background/border-color
+ * palette).  It exists so a client-rendered `render("tag:status")` cell is legible standalone, even before an app
+ * adopts console-ui's chrome.
+ *
+ * The ".tag.<domain>.<value>" class-name contract is OWNED by console-ui (TODO-361).  When console-ui's chrome.css
+ * is present it themes the SAME classes (colors by domain/value); this module takes NO dependency on console-ui and
+ * MUST NOT add a color palette here (per the 361/399 reconciliation).  Any color layering is console-ui's job.
+ *
+ * The banner class below is the fail-loud contract-version-mismatch surface rendered by juneau-views.js (B.8); it,
+ * too, avoids a color palette (uses currentColor / inherited text color only).
+ */
+
+/* Base chip - neutral shape/padding/border-radius, NO colors. */
+.tag {
+	display: inline-block;
+	padding: 0.15em 0.6em;
+	border: 1px solid;            /* border-color falls back to currentColor - no palette color set here */
+	border-radius: 0.75em;
+	font-size: 0.85em;
+	line-height: 1.4;
+	white-space: nowrap;
+	vertical-align: baseline;
+}
+
+/* Fail-loud contract-version-mismatch banner (B.8) - neutral, no palette color. */
+.juneau-view-error {
+	display: block;
+	padding: 0.5em 0.75em;
+	margin: 0.25em 0;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	font-weight: bold;
+}
+
+/*
+ * DataTables table density/shape (design doc §4 IRS-parity pass) - compact rows + thin separators.  NEUTRAL -
+ * shape only (font-size, cell padding, border WIDTH/style); no color/background-color/border-color palette here
+ * (console-ui's chrome.css themes the SAME selectors with --jc-* colors, mirroring the ".tag"/ribbon reconciliation
+ * above).  Selectors list BOTH `table[data-juneau-view]` (the marker attribute present from first paint) and
+ * `table.dataTable` (the class DataTables' own init ADDS to that same element - it never removes the attribute,
+ * so both describe the identical element pre/post-init) so the rule applies whether or not DataTables has run
+ * yet.  Child-combinator (`>`) selectors deliberately mirror the vendored dataTables.dataTables.css structure
+ * (`table.dataTable>thead>tr>th`, `table.dataTable>tbody>tr>td`) so this rule's specificity TIES the vendored
+ * one instead of losing to it; this file is served AFTER the vendored DataTables CSS in every juneau-views page's
+ * <head>, so the tie resolves in our favor by cascade order.
+ */
+table[data-juneau-view],
+table.dataTable {
+	font-size: 0.8125rem;
+}
+
+table[data-juneau-view] > thead > tr > th,
+table[data-juneau-view] > thead > tr > td,
+table.dataTable > thead > tr > th,
+table.dataTable > thead > tr > td {
+	padding: 8px 10px;
+	font-weight: 600;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;   /* color falls back to currentColor - no palette color set here */
+}
+
+table[data-juneau-view] > tbody > tr > th,
+table[data-juneau-view] > tbody > tr > td,
+table.dataTable > tbody > tr > th,
+table.dataTable > tbody > tr > td {
+	padding: 6px 10px;
+	vertical-align: middle;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;   /* color falls back to currentColor - no palette color set here */
+}
+
+/*
+ * DataTables ribbon visual-parity pass (design doc §4.A) - neutral 32px icon-only ribbon-button shape.  NEW rule
+ * (not a rewrite - the module shipped no ".juneau-view-ribbon*" CSS before this pass; buttons rendered with bare
+ * browser-default styling).  NEUTRAL - no palette color (border/color fall back to currentColor); console-ui's
+ * chrome.css layers the themed hover/active accent over these same classes.
+ *
+ * ".juneau-view-ribbon" is the CONTAINER buildRibbon(...) creates (juneau-ribbon.js) - it must lay its buttons out
+ * as a horizontal row itself; ".juneau-view-ribbon-btn" below only shapes each individual button (a per-button
+ * `display: flex` centers that button's own icon, it does NOT make sibling buttons flow horizontally - omitting a
+ * container rule left every button stacking vertically, one per line).
+ */
+.juneau-view-ribbon {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.25em;
+}
+
+.juneau-view-ribbon-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	background: transparent;
+	cursor: pointer;
+}
+
+.juneau-view-ribbon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+.juneau-view-ribbon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Neutral shape for an ACTIVE toggle (`option`/`optionGroup` member button's aria-pressed="true") - a thicker
+ * border only (no palette color here); console-ui's chrome.css layers the themed background/color accent over
+ * this same attribute selector, exactly like it already does for :hover/:active. Without ANY visual affordance
+ * here, a toggled-on filter (e.g. a column-scoped `option` persisted to localStorage) is invisible - indistinguishable
+ * from every other unpressed button - so it can silently keep filtering out all rows after being clicked once. */
+.juneau-view-ribbon-btn[aria-pressed="true"] { border-width: 2px; }
+
+/*
+ * Segmented ribbon group (design doc §4.A, item 2/5 - IRS parity): a "single ribbon" of adjacent buttons that
+ * share a border (no double borders) with rounding only on the group's outer ends.  NEUTRAL - shape only (radius/
+ * margin-collapse); console-ui's chrome.css themes the member buttons' colors exactly like a standalone button
+ * (same ".juneau-view-ribbon-btn" class, so :hover/:active/[aria-pressed] all already apply unchanged).  The
+ * negative margin-left overlaps each member's left border onto its predecessor's right border (collapsing the
+ * pair into one hairline); a raised z-index on hover/focus/pressed keeps that member's own border/background on
+ * top of its neighbors' overlapping edges.
+ */
+.juneau-view-ribbon-group { display: inline-flex; }
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn {
+	border-radius: 0;
+	margin-left: -1px;
+	position: relative;
+}
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child { margin-left: 0; border-radius: 0.25em 0 0 0.25em; }
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child { border-radius: 0 0.25em 0.25em 0; }
+
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:hover,
+.juneau-view-ribbon-group .juneau-view-ribbon-btn:focus,
+.juneau-view-ribbon-group .juneau-view-ribbon-btn[aria-pressed="true"] { z-index: 1; }
+
+/*
+ * Unified paging ribbon (visual-parity follow-up) - hides BOTH DataTables major-version's native length-select/
+ * pagination class-name generations (DT1.x ".dataTables_length"/".dataTables_paginate", DT2.x ".dt-length"/
+ * ".dt-paging") and ships the first-party ribbon's neutral shape: `[First] [Prev] [<range> + page-size menu]
+ * [Next] [Last]` - a SINGLE segmented control (no separate page-size <select>, no second paging control
+ * elsewhere).  NEUTRAL - no palette color; console-ui's chrome.css layers the themed accent/disabled treatment
+ * over these same classes.  The native entry-count text (".dataTables_info"/".dt-info") needs no hide rule here:
+ * `buildOptions(...)` sets DataTables' own `info: false` (juneau-views.js) so that node is never created in the
+ * first place - disabled at the source rather than hidden after the fact.
+ */
+.dataTables_length, .dt-length, .dataTables_paginate, .dt-paging { display: none; }
+
+.juneau-view-pagingpill {
+	display: inline-flex;
+	align-items: stretch;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+}
+
+/* Corner-rounding on the outer segments only (no `overflow: hidden` on the pill itself - that would clip the
+   page-size menu's popup, which is positioned absolute relative to a segment INSIDE the pill). */
+.juneau-view-pagingpill > *:first-child { border-radius: 0.25em 0 0 0.25em; }
+.juneau-view-pagingpill > *:last-child { border-radius: 0 0.25em 0.25em 0; }
+
+.juneau-view-pagingpill-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	border-right: 1px solid;      /* currentColor - segment divider; last-child override below */
+	background: transparent;
+	cursor: pointer;
+}
+.juneau-view-pagingpill-btn:last-child { border-right: none; }
+.juneau-view-pagingpill-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.juneau-view-pagingpill-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+/*
+ * The pill's central segment (visual-parity follow-up): BOTH the compact "n-n of n" range summary AND the
+ * page-size menu button that replaced the old standalone <select> - a WAI-ARIA menu-button (`.juneau-view-
+ * pagingpill-menubtn`, `aria-haspopup="listbox"`) whose popup (`.juneau-view-pagingpill-menu`, `role="listbox"`)
+ * lists the page-size options.  NEUTRAL - shape only; console-ui's chrome.css themes text/accent/background.
+ */
+.juneau-view-pagingpill-menuwrap {
+	position: relative;
+	display: flex;
+	border-right: 1px solid;      /* currentColor - segment divider */
+}
+
+.juneau-view-pagingpill-menubtn {
+	display: flex;
+	align-items: center;
+	gap: 0.35em;
+	height: 32px;
+	padding: 0 0.6em;
+	border: none;
+	background: transparent;
+	font-size: 0.8125rem;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.juneau-view-pagingpill-info { white-space: nowrap; }
+
+.juneau-view-pagingpill-caret svg { width: 14px; height: 14px; fill: currentColor; }
+
+/* The popup itself - absolutely positioned below the menu button; `[hidden]` (set/cleared by juneau-views.js)
+   is enough to show/hide it, so no explicit `display` toggle rule is needed here. */
+.juneau-view-pagingpill-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 10;
+	min-width: 100%;
+	margin: 0.2em 0 0;
+	padding: 0.25em 0;
+	list-style: none;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+}
+
+.juneau-view-pagingpill-menu-option {
+	padding: 0.3em 1.75em 0.3em 0.75em;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.juneau-view-pagingpill-menu-option[aria-selected="true"] { font-weight: bold; }
+
+/* A plain checkmark glyph (not an icon-registry glyph - a bare CSS content string) indicating the current
+   page-size selection, mirroring the affordance a native <select> gives its chosen <option> for free. */
+.juneau-view-pagingpill-menu-option[aria-selected="true"]::after {
+	content: "\2713";
+	float: right;
+	margin-left: 0.75em;
+}
+
+/*
+ * Single unified top-toolbar row (IRS reference layout): a LEFT cluster (page-size + paging nav pill) and a RIGHT
+ * cluster (search, ribbon groups, refresh) laid out with `space-between` so the right cluster stays right-aligned
+ * - built once by `buildToolbarRow(...)` (juneau-views.js), which assembles both clusters above the table.
+ */
+.juneau-view-toolbar-row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5em;
+	margin: 0 0 0.5em 0;
+}
+
+.juneau-view-toolbar-left,
+.juneau-view-toolbar-right {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.juneau-view-ribbon-divider {
+	display: inline-block;
+	width: 0.5em;               /* pure spacing only; no visible glyph. Stays in the DOM (unchanged JS branch). */
+}
+
+/*
+ * Per-column search row (design doc §4, item 4 - IRS parity fix): one text input per searchable column, inserted
+ * into <thead> by buildColumnSearchRow(...) (juneau-views.js) and shown/hidden by the columnSearchToggle ribbon
+ * button.  NEUTRAL - shape only; console-ui's chrome.css themes the input's border/background/focus colors.
+ */
+.juneau-view-columnsearch-row > th {
+	padding: 4px 8px;
+	font-weight: 400;
+}
+
+.juneau-view-columnsearch-input {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 3px 6px;
+	font-size: 0.8125rem;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.2em;
+}
+
+/*
+ * TODO-399 Phase C - self-contained ".jc-*" tabs/sub-tabs page shell (Decision 1(A)).  Folded into this file rather
+ * than a separate juneau-pages.css: small enough not to warrant its own served asset/pom touch (see the module's
+ * ViewsMixin asset-serving pattern).  NEUTRAL - no color palette; console-ui's chrome.css MAY theme these same
+ * classes when present, mirroring the ".tag.<domain>.<value>" chip reconciliation above - this module takes NO
+ * dependency on console-ui either way.
+ */
+.jc-tab-bar,
+.jc-subtab-bar {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	white-space: nowrap;
+	gap: 0.5em;
+	margin: 0 0 0.5em 0;
+}
+
+.jc-tab,
+.jc-subtab {
+	flex: 0 0 auto;
+	display: inline-block;
+	padding: 0.35em 0.75em;
+	text-decoration: none;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	cursor: pointer;
+}
+
+.jc-tab-active,
+.jc-subtab-active {
+	font-weight: bold;
+	border-bottom-width: 3px;
+}
+
+/* Panels are hidden by default; juneau-pages.js toggles ".jc-active" on the one panel that should be visible. */
+.jc-panel,
+.jc-subpanel {
+	display: none;
+}
+
+.jc-panel.jc-active,
+.jc-subpanel.jc-active {
+	display: block;
+}
+
+/* Fail-loud PAGE_META contract-version-mismatch banner - neutral, no palette color (mirrors .juneau-view-error). */
+.jc-page-error {
+	display: block;
+	padding: 0.5em 0.75em;
+	margin: 0.25em 0;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	font-weight: bold;
+}

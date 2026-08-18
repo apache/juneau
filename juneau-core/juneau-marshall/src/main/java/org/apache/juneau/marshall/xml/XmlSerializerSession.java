@@ -383,6 +383,15 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return xcm.getFormat() == XMLTEXT;
 	}
 
+	private boolean isRawText(XmlFormat format, ClassMeta<?> sType) {
+		if (format == RAWTEXT)
+			return true;
+		var xcm = getXmlClassMeta(sType);
+		if (xcm == null)
+			return false;
+		return xcm.getFormat() == RAWTEXT;
+	}
+
 	private Optional<Map.Entry<String,Object>> getPropertyKeyValueIfNotIgnored(BeanPropertyValue p, BeanPropertyMeta pMeta) {
 		var key = p.getName();
 		var value = p.getValue();
@@ -470,7 +479,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 					contentType = (ClassMeta<?>) p.getBeanInfo();
 					hasContent = true;
 					cf = xbm.getContentFormat();
-					if (cf.isOneOf(MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT))
+					if (cf.isOneOf(MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT, RAWTEXT))
 						isMixedOrText = true;
 					if (cf.isOneOf(MIXED_PWS, TEXT_PWS))
 						preserveWhitespace = true;
@@ -535,7 +544,11 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 				writeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 			}
 		} else {
-			if (isAddJsonTags())
+			// A null FREEFORM content property represents an empty container element (e.g. an empty HTML <table> or
+			// <thead>), which must render as an empty element rather than an explicit null.  Emitting nil='true' here
+			// is surprising for such containers.  Other content formats (TEXT/TEXT_PWS/XMLTEXT for null-vs-empty-string
+			// round-tripping, and MIXED/MIXED_PWS) retain the nil marker to preserve existing behavior.
+			if (isAddJsonTags() && xbm.getContentFormat() != FREEFORM)
 				out.attr("nil", "true");
 			out.w('>').nlIf(! isMixedOrText, indent);
 		}
@@ -926,7 +939,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			o = null;
 
 		boolean isCollapsed = false;		// If 'true', this is a collection and we're not rendering the outer element.
-		boolean isRaw = (sType.isReader() || sType.isInputStream()) && nn(o);
+		boolean isRaw = (sType.isReader() || sType.isInputStream() || o instanceof RawContent) && nn(o);
 
 		// Get the JSON type string.
 		if (o == null) {
@@ -947,7 +960,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			type = STRING;
 		}
 
-		if (format.isOneOf(MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT) && type.isOneOf(NULL, STRING, NUMBER, BOOLEAN))
+		if (format.isOneOf(MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT, RAWTEXT) && type.isOneOf(NULL, STRING, NUMBER, BOOLEAN))
 			isCollapsed = true;
 
 		// Is there a name associated with this bean?
@@ -1032,7 +1045,10 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 
 		// Render the tag contents.
 		if (nn(o)) {
-			if (sType.isBean()) {
+			if (o instanceof RawContent) {
+				// Re-serializable, String-backed raw content: emit verbatim (no entity/whitespace encoding), like the Reader path.
+				out.append(o.toString());
+			} else if (sType.isBean()) {
 				rc = writeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
 			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 				if (o instanceof BeanMap o2)
@@ -1049,7 +1065,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 				// Must come before isCharSequence/isChar: @Uri-annotated String properties (where sType is String but pMeta.isUri() is true) need to route here for URI text emission.
 				out.textUri(o);
 			} else if (sType.isCharSequence() || sType.isChar()) {
-				if (isXmlText(format, sType))
+				if (isXmlText(format, sType) || isRawText(format, sType))
 					out.append(o);
 				else
 					out.text(o, preserveWhitespace);
@@ -1076,7 +1092,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			} else if (sType.isInputStream()) {
 				pipe((InputStream)o, out, SerializerSession::handleThrown);
 			} else {
-				if (isXmlText(format, sType))
+				if (isXmlText(format, sType) || isRawText(format, sType))
 					out.append(toString(o));
 				else
 					out.text(toString(o));

@@ -1,0 +1,354 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * juneau-ribbon.js - ribbon/toolbar runtime for the Apache Juneau rich-view toolkit (Task B.7).
+ *
+ * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv via DataTables Buttons, with excel/pdf
+ * lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, option/optionGroup server-query toggles
+ * (with persisted state), and divider.
+ *
+ * CONSISTENCY REQUIREMENT (mirrors the server): when a column-scoped `option`/`optionGroup` toggle is ACTIVE, the
+ * client contributes the SAME `columns[N][search][value]=<value>` request param that the server-side
+ * RibbonAction.toQueryParams(ViewDef) produces (custom `param` options contribute `param=value` verbatim).  The
+ * server maps unconditionally (it has no notion of "active"); the CLIENT owns active state, so ONLY active toggles
+ * contribute here.  ribbonToQueryParams(viewDef, activeState) below is the pure counterpart of the Java mapping and
+ * shares its fixtures so the two implementations cannot drift.
+ *
+ * Everything in the "PURE LOGIC LAYER" is DOM/jQuery/DataTables-free (feature-detection takes its environment as an
+ * argument), so it is unit-checkable (Option B) and Option-B-portable.  The "DOM/JQUERY BINDING LAYER" is the thin
+ * shim that renders the toolbar and wires it to a DataTables instance.
+ */
+(function () {
+	"use strict";
+
+	var NS = window.JuneauViews = window.JuneauViews || {};
+
+	// ==================================================================================================================
+	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
+	// ==================================================================================================================
+
+	/** Resolves a column `data` key to its zero-based index in the view (mirrors RibbonAction.columnIndex). */
+	function columnIndex(viewDef, columnKey) {
+		var cols = viewDef.columns || [];
+		for (var i = 0; i < cols.length; i++)
+			if (cols[i].data === columnKey) return i;
+		return -1;
+	}
+
+	/**
+	 * Maps ONE option/opt to the {name, value} request param it contributes, or null.  Column-scoped options resolve
+	 * to `columns[<index>][search][value]`; custom-param options contribute `param=value` verbatim; a valueless (or
+	 * column+param-less) option contributes nothing.  Byte-for-byte identical to the Java addOptionParam(...).
+	 */
+	function optionParam(viewDef, opt) {
+		if (opt == null || opt.value == null) return null;
+		if (opt.column != null) {
+			var idx = columnIndex(viewDef, opt.column);
+			if (idx < 0) return null;
+			return { name: "columns[" + idx + "][search][value]", value: opt.value };
+		}
+		if (opt.param != null) return { name: opt.param, value: opt.value };
+		return null;
+	}
+
+	/**
+	 * The pure counterpart of RibbonAction.toQueryParams(ViewDef): the request params the ribbon contributes given the
+	 * client's ACTIVE toggle state.  `activeState` is a map keyed by option/group id:
+	 *   - a top-level `option` contributes iff activeState[option.id] is truthy;
+	 *   - an `optionGroup` contributes its member whose id === activeState[group.id] (the selected radio value).
+	 * refresh/columnSearchToggle/divider/export are not query-contributing and are skipped.
+	 */
+	function ribbonToQueryParams(viewDef, activeState) {
+		var out = {};
+		var state = activeState || {};
+		(viewDef.ribbon || []).forEach(function (a) {
+			if (a.type === "option") {
+				if (state[a.id]) {
+					var p = optionParam(viewDef, a);
+					if (p) out[p.name] = p.value;
+				}
+			} else if (a.type === "optionGroup" && a.options) {
+				var selected = state[a.id];
+				a.options.forEach(function (o) {
+					if (o.id === selected) {
+						var p = optionParam(viewDef, o);
+						if (p) out[p.name] = p.value;
+					}
+				});
+			}
+		});
+		return out;
+	}
+
+	/**
+	 * Feature-detects the caller-provided export extensions in the given environment (defaults to window).  Returns
+	 * `{buttons, jszip, pdfmake}` booleans.  Export degrades gracefully: with no DataTables Buttons, no export button
+	 * is offered at all; excel needs JSZip; pdf needs pdfMake.
+	 */
+	function detectExportFeatures(win) {
+		win = win || (typeof window !== "undefined" ? window : {});
+		var $ = win.jQuery;
+		var hasButtons = !!($ && $.fn && $.fn.dataTable && $.fn.dataTable.Buttons);
+		return { buttons: hasButtons, jszip: !!win.JSZip, pdfmake: !!win.pdfMake };
+	}
+
+	/**
+	 * Given an `export` action and detected features, returns the button ids that should actually be offered.  With no
+	 * Buttons extension the result is empty (graceful degrade); optional excel/pdf are included only when their extra
+	 * dep is present, otherwise omitted.
+	 */
+	function resolveExportButtons(action, features) {
+		var out = [];
+		if (!features || !features.buttons) return out;   // degrade gracefully - no export cluster at all
+		(action.buttons || []).forEach(function (b) { out.push(b); });
+		(action.optional || []).forEach(function (b) {
+			if (b === "excel" && features.jszip) out.push(b);
+			else if (b === "pdf" && features.pdfmake) out.push(b);
+			// else: dep absent - omit/grey (feature-detected)
+		});
+		return out;
+	}
+
+	/** localStorage key for a persisted ribbon toggle (VIEW_META §6.8: juneau.view.<viewId>.ribbon.<optionId>). */
+	function ribbonStorageKey(viewId, optionId) {
+		return "juneau.view." + viewId + ".ribbon." + optionId;
+	}
+
+	/**
+	 * Default built-in id -> icon-name lookup (visual-parity design doc §4.A).  Keyed by *button id* for the export
+	 * cluster (one export action renders one button per resolved id) and by *action type* for refresh/
+	 * columnSearchToggle (each renders exactly one button).  `collapse` is not wired to any RibbonAction.type today -
+	 * it ships here purely for forward-compatibility with TODO-399 P4's (deferred) row-expander "collapse all"
+	 * affordance; inert until that action type exists.
+	 */
+	var DEFAULT_ICONS = {
+		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf",
+		refresh: "refresh", columnSearchToggle: "manage_search", collapse: "unfold_less"
+	};
+
+	/**
+	 * Resolves the icon NAME (not markup) for a ribbon button - pure, DOM-free (§4.A).  An explicit `symbol` on the
+	 * action/Opt always wins; otherwise a `defaultKey` (the export button id, or the action `type`) resolves from
+	 * DEFAULT_ICONS; a custom option/optionGroup member with neither falls back to the neutral "tune" glyph, never
+	 * blank/unset.  Markup resolution (NS.icons.resolveIcon(name)) and the "unregistered name -> render title as
+	 * text" fallback both happen in the DOM binding layer (Task 3), since this pure layer has no access to the
+	 * registry's runtime contents (apps can register icons after page load).
+	 */
+	function resolveButtonIcon(actionOrOpt, defaultKey) {
+		if (actionOrOpt && actionOrOpt.symbol != null) return actionOrOpt.symbol;
+		if (defaultKey != null && Object.prototype.hasOwnProperty.call(DEFAULT_ICONS, defaultKey)) return DEFAULT_ICONS[defaultKey];
+		return "tune";
+	}
+
+	// ==================================================================================================================
+	// DOM / JQUERY BINDING LAYER  (thin shim; not exercised by the pure unit tests)
+	// ==================================================================================================================
+
+	function safeStorage() {
+		try { return window.localStorage; } catch (e) { return null; }
+	}
+
+	function loadPersistedState(viewDef) {
+		var state = {};
+		var store = safeStorage();
+		if (!store) return state;
+		(viewDef.ribbon || []).forEach(function (a) {
+			if (a.type === "option" && a.persist) {
+				var raw = store.getItem(ribbonStorageKey(viewDef.id, a.id));
+				if (raw != null) state[a.id] = (raw === "true");
+			} else if (a.type === "optionGroup" && a.persist) {
+				var sel = store.getItem(ribbonStorageKey(viewDef.id, a.id));
+				if (sel != null) state[a.id] = sel;
+			}
+		});
+		return state;
+	}
+
+	function persist(viewDef, id, value) {
+		var store = safeStorage();
+		if (store) store.setItem(ribbonStorageKey(viewDef.id, id), String(value));
+	}
+
+	/**
+	 * Builds the ribbon toolbar element for a view and wires it to its DataTables instance.  Returns the toolbar
+	 * element (or null when there is no ribbon).  `ctx` carries { table, dataTable (the DT api), activeState, redraw,
+	 * columnSearchOn, onColumnSearchToggle }.
+	 *
+	 * <p>Adjacent actions sharing a non-null {@code group} id (visual-parity design doc §4.A, item 2/5) are
+	 * clustered into ONE segmented {@code .juneau-view-ribbon-group} wrapper (shared borders, rounded only on the
+	 * outer ends - see juneau-views.css) via the local {@code place(el, groupId)} helper below.  An {@code export}
+	 * action's own resolved buttons are always clustered this way even without an explicit {@code group} (one
+	 * action, one visual cluster - each export action gets its own synthetic per-index id so consecutive distinct
+	 * export actions never merge).  A {@code divider} or an ungrouped action always closes any open cluster.
+	 */
+	function buildRibbon(viewDef, ctx) {
+		var actions = viewDef.ribbon || [];
+		if (!actions.length) return null;
+
+		var $ = window.jQuery;
+		var features = detectExportFeatures(window);
+		var bar = document.createElement("div");
+		bar.className = "juneau-view-ribbon";
+		bar.setAttribute("data-testid", "ribbon");
+
+		var openGroup = null;   // { id, el } - the currently-open adjacent-group wrapper, or null when ungrouped
+		function place(el, groupId) {
+			if (groupId == null) {
+				openGroup = null;
+				bar.appendChild(el);
+				return;
+			}
+			if (!openGroup || openGroup.id !== groupId) {
+				var wrap = document.createElement("span");
+				wrap.className = "juneau-view-ribbon-group";
+				bar.appendChild(wrap);
+				openGroup = { id: groupId, el: wrap };
+			}
+			openGroup.el.appendChild(el);
+		}
+
+		actions.forEach(function (a, idx) {
+			if (a.type === "divider") {
+				openGroup = null;
+				var d = document.createElement("span");
+				d.className = "juneau-view-ribbon-divider";
+				bar.appendChild(d);
+				return;
+			}
+			if (a.type === "export") {
+				var ids = resolveExportButtons(a, features);
+				if (ids.length && $ && ctx.dataTable && $.fn.dataTable.Buttons) {
+					try {
+						// Still registers/feature-gates each button with DataTables Buttons - but renders our own
+						// first-party icon buttons instead of delegating to Buttons' own DOM (design doc §4.A); a
+						// click programmatically triggers the SAME, already-reviewed Buttons action (design doc §7).
+						new $.fn.dataTable.Buttons(ctx.dataTable, { buttons: ids });
+						var exportGroupId = a.group != null ? a.group : ("__export" + idx);
+						ids.forEach(function (id) {
+							place(button(id, resolveButtonIcon(null, id), function () {
+								ctx.dataTable.button(id).trigger();
+							}), exportGroupId);
+						});
+					} catch (e) { /* Buttons present but init failed - degrade silently */ }
+				}
+				return;
+			}
+			if (a.type === "refresh") {
+				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () { ctx.redraw(); }), a.group || null);
+				return;
+			}
+			if (a.type === "columnSearchToggle") {
+				var csBtn = button(a.title || "Column search", resolveButtonIcon(a, "columnSearchToggle"), function () {
+					csBtn.setAttribute("aria-pressed", toggleColumnSearch(viewDef, ctx) ? "true" : "false");
+				});
+				csBtn.setAttribute("aria-pressed", ctx.columnSearchOn ? "true" : "false");
+				place(csBtn, a.group || null);
+				return;
+			}
+			if (a.type === "option") {
+				place(optionToggle(viewDef, a, ctx), a.group || null);
+				return;
+			}
+			if (a.type === "optionGroup") {
+				openGroup = null;
+				bar.appendChild(optionGroup(viewDef, a, ctx));
+			}
+		});
+		return bar;
+	}
+
+	/**
+	 * Builds one icon-only 32px ribbon/pill button (visual-parity design doc §4.A/§2.2).  No visible text label -
+	 * `label` becomes the button's native `title` (tooltip) and `aria-label` (screen-reader text) only.  Resolves
+	 * `iconName` via the icon registry (`NS.icons.resolveIcon`); the markup assigned to `innerHTML` is ALWAYS a
+	 * static, first-party, build-time-authored SVG string from that registry - never request-/app-supplied - so
+	 * this is not an HTML-injection sink (design doc §7).  An unregistered icon name falls back to rendering the
+	 * label as text (mirrors the "unknown render id -> warn once, fall back to raw value" convention already
+	 * documented for juneau-renders.js).
+	 */
+	function button(label, iconName, onClick) {
+		var b = document.createElement("button");
+		b.type = "button";
+		b.className = "juneau-view-ribbon-btn";
+		b.title = label;
+		b.setAttribute("aria-label", label);
+		var markup = NS.icons && NS.icons.resolveIcon ? NS.icons.resolveIcon(iconName) : null;
+		if (markup != null) {
+			b.innerHTML = markup;
+		} else {
+			b.textContent = b.title;
+		}
+		b.addEventListener("click", onClick);
+		return b;
+	}
+
+	function optionToggle(viewDef, action, ctx) {
+		var b = button(action.title || action.id, resolveButtonIcon(action, null), function () {
+			ctx.activeState[action.id] = !ctx.activeState[action.id];
+			b.setAttribute("aria-pressed", ctx.activeState[action.id] ? "true" : "false");
+			if (action.persist) persist(viewDef, action.id, !!ctx.activeState[action.id]);
+			ctx.redraw();
+		});
+		b.setAttribute("aria-pressed", ctx.activeState[action.id] ? "true" : "false");
+		return b;
+	}
+
+	function optionGroup(viewDef, group, ctx) {
+		var wrap = document.createElement("span");
+		wrap.className = "juneau-view-ribbon-group";
+		(group.options || []).forEach(function (o) {
+			var b = button(o.title || o.id, resolveButtonIcon(o, null), function () {
+				ctx.activeState[group.id] = (ctx.activeState[group.id] === o.id && group.deselectable) ? null : o.id;
+				if (group.persist) persist(viewDef, group.id, ctx.activeState[group.id]);
+				ctx.redraw();
+			});
+			wrap.appendChild(b);
+		});
+		return wrap;
+	}
+
+	/**
+	 * Flips the shared per-column-search-visibility flag on `ctx` and notifies the DOM binding layer (juneau-
+	 * views.js's initTable(...)) so it can show/hide the per-column search row it owns.  Returns the new state so
+	 * the caller (the columnSearchToggle button's click handler above) can reflect it in `aria-pressed` - this
+	 * function itself never touches a DOM node's attributes (kept callable/testable without a live button element).
+	 */
+	function toggleColumnSearch(viewDef, ctx) {
+		ctx.columnSearchOn = !ctx.columnSearchOn;
+		if (ctx.onColumnSearchToggle) ctx.onColumnSearchToggle(ctx.columnSearchOn);
+		return ctx.columnSearchOn;
+	}
+
+	// ==================================================================================================================
+	// PUBLIC API
+	// ==================================================================================================================
+
+	NS.ribbon = {
+		// pure
+		columnIndex: columnIndex,
+		optionParam: optionParam,
+		ribbonToQueryParams: ribbonToQueryParams,
+		detectExportFeatures: detectExportFeatures,
+		resolveExportButtons: resolveExportButtons,
+		ribbonStorageKey: ribbonStorageKey,
+		resolveButtonIcon: resolveButtonIcon,
+		// binding
+		loadPersistedState: loadPersistedState,
+		build: buildRibbon
+	};
+})();

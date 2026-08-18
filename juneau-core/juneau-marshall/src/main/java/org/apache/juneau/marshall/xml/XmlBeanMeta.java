@@ -87,7 +87,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 					if (! pcm.isMapOrBean())
 						throw brex(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
 					attrsProperty = p;
-				} else if (xf.isOneOf(FREEFORM, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
+				} else if (xf.isOneOf(FREEFORM, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT, RAWTEXT)) {
 					if (xf.isOneOf(FREEFORM, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
 						throw brex(c, "Invalid type for %s property.  Only properties of type Collection and array can be used.", xf);
 					if (nn(contentProperty)) {
@@ -173,6 +173,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 * 	<li>{@link XmlFormat#TEXT}
 	 * 	<li>{@link XmlFormat#TEXT_PWS}
 	 * 	<li>{@link XmlFormat#XMLTEXT}
+	 * 	<li>{@link XmlFormat#RAWTEXT}
 	 * 	<li>{@link XmlFormat#VOID}
 	 * 	<li><jk>null</jk>
 	 * </ul>

@@ -920,14 +920,16 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					sType = getClassMetaForObject(o);
 			}
 
-			// Handle the case where we're serializing a raw stream.
-			if (sType.isReader() || sType.isInputStream()) {
+			// Handle the case where we're serializing a raw stream or re-serializable raw content.
+			if (sType.isReader() || sType.isInputStream() || o instanceof RawContent) {
 				pop();
 				indent -= xIndent;
 				if (sType.isReader())
 					pipe((Reader)o, out, SerializerSession::handleThrown);
-				else
+				else if (sType.isInputStream())
 					pipe((InputStream)o, out, SerializerSession::handleThrown);
+				else
+					out.append(o.toString());
 				return ContentResult.CR_MIXED;
 			}
 

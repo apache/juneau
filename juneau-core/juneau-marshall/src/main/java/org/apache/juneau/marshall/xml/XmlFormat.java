@@ -145,6 +145,31 @@ public enum XmlFormat {
 	XMLTEXT,
 
 	/**
+	 * Render property value as the raw, verbatim text content of the element.
+	 *
+	 * <p>
+	 * Similar to {@link #TEXT_PWS} (single, whitespace-preserving value), but the value is emitted with NO XML entity
+	 * escaping (no <c>&amp;amp;</c>/<c>&amp;lt;</c>/<c>&amp;gt;</c> substitution) and NO <c>_x####_</c>
+	 * whitespace/invalid-char encoding.
+	 * This matches HTML5 "raw text" element semantics (<xt>&lt;script&gt;</xt>/<xt>&lt;style&gt;</xt>) where browsers do
+	 * not decode character references.
+	 *
+	 * <p>
+	 * Unlike {@link #XMLTEXT}, the content is NOT re-parsed as XML on parse; it is read back verbatim as a text node
+	 * (no <c>_x####_</c> decoding, no trimming).
+	 *
+	 * <p>
+	 * Only applicable for scalar (non-collection) bean properties.
+	 *
+	 * <p>
+	 * <b>Round-trip caveat:</b> because Juneau parses via a StAX {@link javax.xml.stream.XMLStreamReader}, a value
+	 * containing a raw <js>'&lt;'</js> or a bare <js>'&amp;'</js> will NOT be parseable back.
+	 * Callers embedding markup-bearing content are responsible for escaping <js>'&lt;'</js> (e.g. to the JS/CSS unicode
+	 * escape <js>"\\u003c"</js>) before use, exactly as required for browser-safe raw-text content.
+	 */
+	RAWTEXT,
+
+	/**
 	 * Prevents collections and arrays from being enclosed in <xt>&lt;array&gt;</xt> elements.
 	 *
 	 * <p>

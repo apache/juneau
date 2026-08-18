@@ -389,7 +389,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 
 		var cp = xmlMeta.getContentProperty();
 		var cpf = xmlMeta.getContentFormat();
-		var trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
+		var trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS, RAWTEXT);
 		ClassMeta<?> cpcm = (cp == null ? object() : (ClassMeta<?>) cp.getBeanInfo());
 		StringBuilder sb = null;
 		var breg = cp == null ? null : cp.getBeanRegistry();
@@ -410,6 +410,11 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 					} else {
 						cp.set(m, null, getText(r, trim));
 					}
+				} else if (nn(cp) && cpf == RAWTEXT) {
+					// Verbatim: no trim, no _x####_ decoding (mirrors RAWTEXT serialize which bypasses encoding).
+					if (sb == null)
+						sb = getStringBuilder();
+					sb.append(r.getText());
 				} else if (cpf != FREEFORM) {
 					var s = getText(r, trim);
 					if (nn(s)) {

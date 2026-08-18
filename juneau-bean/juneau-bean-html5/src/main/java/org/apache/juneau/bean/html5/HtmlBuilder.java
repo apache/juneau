@@ -1685,6 +1685,25 @@ public class HtmlBuilder {
 	}
 
 	/**
+	 * Creates a re-serializable, {@link String}-backed {@link RawText} raw-content wrapper.
+	 *
+	 * <p>
+	 * The value is serialized <b>verbatim</b> (no XML entity escaping, no <c>_x####_</c> whitespace encoding, no
+	 * wrapping element) by both the XML and HTML serializers, mirroring the one-shot {@link java.io.Reader} raw path but
+	 * usable any number of times.  Typically used to embed pre-built script/style bodies:
+	 *
+	 * <p class='bjava'>
+	 * 	Script <jv>s</jv> = <jsm>script</jsm>(<js>"application/json"</js>).text(<jsm>rawText</jsm>(<jv>escapedJson</jv>));
+	 * </p>
+	 *
+	 * @param value The raw, verbatim text content. Can be <jk>null</jk> (nothing is emitted).
+	 * @return The new {@link RawText} wrapper.
+	 */
+	public static final RawText rawText(String value) {
+		return new RawText(value);
+	}
+
+	/**
 	 * Creates an empty {@link Script} element.
 	 *
 	 * @return The new element.
