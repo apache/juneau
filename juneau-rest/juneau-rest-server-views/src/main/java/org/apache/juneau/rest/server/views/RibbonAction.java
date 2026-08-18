@@ -207,7 +207,7 @@ public class RibbonAction {
 	public static RibbonAction export(String...buttons) {
 		var a = new RibbonAction();
 		a.type = "export";
-		a.buttons = new ArrayList<>(Arrays.asList(buttons));
+		a.buttons = l(buttons);
 		return a;
 	}
 
@@ -218,7 +218,7 @@ public class RibbonAction {
 	 * @return This object.
 	 */
 	public RibbonAction optional(String...optional) {
-		this.optional = new ArrayList<>(Arrays.asList(optional));
+		this.optional = l(optional);
 		return this;
 	}
 
@@ -387,7 +387,7 @@ public class RibbonAction {
 	 * @return This object.
 	 */
 	public RibbonAction options(Opt...options) {
-		this.options = new ArrayList<>(Arrays.asList(options));
+		this.options = l(options);
 		return this;
 	}
 
@@ -417,7 +417,7 @@ public class RibbonAction {
 	 * @throws IllegalArgumentException If a column-scoped option references a column not present in {@code viewDef}.
 	 */
 	public static Map<String,String> toQueryParams(ViewDef viewDef) {
-		var out = new LinkedHashMap<String,String>();
+		Map<String,String> out = m();
 		if (viewDef.ribbon != null)
 			for (var a : viewDef.ribbon) {
 				if ("option".equals(a.type))

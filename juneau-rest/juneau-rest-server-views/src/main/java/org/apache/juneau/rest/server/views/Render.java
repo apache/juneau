@@ -91,7 +91,7 @@ public class Render {
 	 */
 	public Render meta(String key, String value) {
 		if (meta == null)
-			meta = new LinkedHashMap<>();
+			meta = m();
 		meta.put(key, value);
 		return this;
 	}

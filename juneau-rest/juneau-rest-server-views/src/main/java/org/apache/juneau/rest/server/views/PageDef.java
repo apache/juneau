@@ -110,7 +110,7 @@ public class PageDef {
 	 * @return This object.
 	 */
 	public PageDef tabs(Tab...value) {
-		tabs = new ArrayList<>(Arrays.asList(value));
+		tabs = l(value);
 		return this;
 	}
 

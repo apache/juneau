@@ -243,7 +243,7 @@ public class ViewDef {
 	 * @return This object.
 	 */
 	public ViewDef defaultOrder(String data, Dir dir) {
-		defaultOrder = new ArrayList<>(List.of(OrderEntry.of(data, dir)));
+		defaultOrder = l(OrderEntry.of(data, dir));
 		return this;
 	}
 
@@ -254,7 +254,7 @@ public class ViewDef {
 	 * @return This object.
 	 */
 	public ViewDef columns(Column...value) {
-		columns = new ArrayList<>(Arrays.asList(value));
+		columns = l(value);
 		return this;
 	}
 
@@ -265,7 +265,7 @@ public class ViewDef {
 	 * @return This object.
 	 */
 	public ViewDef ribbon(RibbonAction...value) {
-		ribbon = new ArrayList<>(Arrays.asList(value));
+		ribbon = l(value);
 		return this;
 	}
 
@@ -296,7 +296,7 @@ public class ViewDef {
 
 	private ViewDef addRowClassRule(RowClassRule rule) {
 		if (rowClassRules == null)
-			rowClassRules = new ArrayList<>();
+			rowClassRules = l();
 		rowClassRules.add(rule);
 		return this;
 	}

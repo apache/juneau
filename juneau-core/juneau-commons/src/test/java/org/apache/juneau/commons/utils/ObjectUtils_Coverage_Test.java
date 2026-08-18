@@ -178,10 +178,10 @@ class ObjectUtils_Coverage_Test extends TestBase {
 		// own abs(). Pinning the CURRENT (buggy) behavior here rather than fixing it.
 		var value = BigDecimal.valueOf(-5);
 		assertThrows(ClassCastException.class, () -> {
-			@SuppressWarnings({
-				"java:S1854" // Dead store: the checkcast to BigDecimal, inserted at this assignment, is what's under test.
-			})
+			// The local is load-bearing: it is the assignment that carries the checkcast to BigDecimal, and that
+			// cast is what fails.  Calling abs(value) without assigning it throws nothing at all.
 			BigDecimal result = abs(value);
+			fail("Expected the narrowing cast to fail, but abs() produced: " + result);
 		});
 	}
 

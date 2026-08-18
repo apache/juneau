@@ -88,7 +88,7 @@ public class Tab {
 	 * @return This object.
 	 */
 	public Tab subtabs(Subtab...value) {
-		subtabs = new ArrayList<>(Arrays.asList(value));
+		subtabs = l(value);
 		return this;
 	}
 
