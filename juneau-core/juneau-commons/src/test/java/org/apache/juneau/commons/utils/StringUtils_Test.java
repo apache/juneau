@@ -1070,6 +1070,77 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// escapeForScript(String)
+	//====================================================================================================
+
+	/** The 6-character JSON escape for {@code '<'}.  Not a Java unicode escape - the leading {@code \\} is literal. */
+	private static final String JSON_LT = "\\u003c";
+
+	/** U+2028 LINE SEPARATOR / U+2029 PARAGRAPH SEPARATOR, as raw single characters. */
+	private static final String RAW_LS = String.valueOf((char)0x2028);
+	private static final String RAW_PS = String.valueOf((char)0x2029);
+
+	@Test
+	void a042b_escapeForScript_basics() {
+		assertNull(escapeForScript(null));
+		assertEquals("", escapeForScript(""));
+		// Nothing dangerous -> byte-identical passthrough (never entity-encodes: '&' and '>' must survive intact,
+		// since <script> raw text is not entity-decoded by the browser).
+		assertEquals("{\"a\":\"b & c > d\"}", escapeForScript("{\"a\":\"b & c > d\"}"));
+	}
+
+	@Test
+	void a042b1_escapeForScript_neutralizesScriptEndTagBreakout() {
+		// The primary vector: an end tag inside the payload would close the <script> element early.
+		assertEquals("{\"v\":\"" + JSON_LT + "/script>\"}", escapeForScript("{\"v\":\"</script>\"}"));
+	}
+
+	@Test
+	void a042b2_escapeForScript_neutralizesEveryEndTagSpelling() {
+		// Proves this is NOT a `replace("</script>", ...)` substring guard: the HTML parser matches `</script`
+		// case-insensitively followed by whitespace, '/', or '>', so all of these terminate the element.
+		for (var s : list("</script>", "</SCRIPT>", "</ScRiPt>", "</script >", "</script\t>", "</script/", "</script"))
+			assertFalse(escapeForScript("{\"v\":\"" + s + "\"}").contains("<"), s);
+	}
+
+	@Test
+	void a042b3_escapeForScript_neutralizesDoubleEscapeConfusion() {
+		// `<!--` puts the tokenizer in "script data escaped" state and a following `<script` in "script data double
+		// escaped", where the element's own real </script> no longer closes it - so escaping only `</` is not enough.
+		var a = escapeForScript("{\"v\":\"<!-- <script>alert(1)</script>\"}");
+		assertFalse(a.contains("<"), a);
+		assertEquals("{\"v\":\"" + JSON_LT + "!-- " + JSON_LT + "script>alert(1)" + JSON_LT + "/script>\"}", a);
+	}
+
+	@Test
+	void a042b4_escapeForScript_neutralizesLineAndParagraphSeparators() {
+		// Legal raw characters in a JSON string, but JavaScript line terminators before ES2019 - they would break out
+		// of a string literal when the payload is embedded in a JS expression context.
+		assertEquals("{\"v\":\"a\\u2028b\"}", escapeForScript("{\"v\":\"a" + RAW_LS + "b\"}"));
+		assertEquals("{\"v\":\"a\\u2029b\"}", escapeForScript("{\"v\":\"a" + RAW_PS + "b\"}"));
+		var a = escapeForScript("{\"v\":\"" + RAW_LS + RAW_PS + "\"}");
+		assertFalse(a.contains(RAW_LS), a);
+		assertFalse(a.contains(RAW_PS), a);
+	}
+
+	@Test
+	void a042b5_escapeForScript_insertedBackslashNeverExtendsAPrecedingEscape() {
+		// A '<' in valid JSON can only sit inside a string literal, where a literal backslash is always already
+		// doubled - so the inserted '\' starts a fresh escape rather than turning the preceding '\\' into '\\\'.
+		// Input JSON below carries the value `a\<b` (backslash, then '<').
+		assertEquals("{\"v\":\"a\\\\" + JSON_LT + "b\"}", escapeForScript("{\"v\":\"a\\\\<b\"}"));
+	}
+
+	@Test
+	void a042b6_escapeForScript_outputCarriesNoBreakoutCharacterAtAll() {
+		// The invariant a future "simplification" must not break: no raw '<', U+2028, or U+2029 survives.
+		var a = escapeForScript("{\"v\":\"</script><!--<script>" + RAW_LS + RAW_PS + "\"}");
+		assertFalse(a.contains("<"), a);
+		assertFalse(a.contains(RAW_LS), a);
+		assertFalse(a.contains(RAW_PS), a);
+	}
+
+	//====================================================================================================
 	// escapeHtml(String)
 	//====================================================================================================
 	@Test

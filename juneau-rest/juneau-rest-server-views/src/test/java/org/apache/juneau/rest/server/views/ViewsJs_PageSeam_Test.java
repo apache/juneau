@@ -27,11 +27,14 @@ import org.junit.jupiter.api.*;
  * Lazy-init seam test for {@code juneau-views.js} (TODO-399 Phase C, Task 6, design doc §"Client page runtime").
  *
  * <p>
- * There is no JS-execution (jsdom/Option-B) harness in this module yet (confirmed by inspecting
- * {@code ViewsMixin_Serving_Test}, which is Option-A-only: {@code e03}/{@code g04} assert on served-script content
- * substrings, not on executed behavior) &mdash; so, per that established convention, this test asserts on the
- * served script text: {@code initTable} must be reachable off the public {@code NS.init} namespace (previously
- * private), and {@code initAll} must skip tables scoped under a {@code [data-juneau-page]} shell.
+ * Asserts on the served script text: {@code initTable} must be reachable off the public {@code NS.init} namespace
+ * (previously private), and {@code initAll} must skip tables scoped under a {@code [data-juneau-page]} shell.
+ * <p>
+ * The <i>consequences</i> of this seam &mdash; that a panel lazy-inits exactly the view tables it owns, and that a
+ * sub-tabbed tab's outer panel does not claim its sub-panels' tables &mdash; are verified behaviourally in
+ * {@link PagePanelVisibility_BrowserTest}, which stubs {@code NS.init.initTable} in a real browser and records which
+ * views it is called for.  These text assertions remain as always-on tripwires for the seam's <i>shape</i>, since
+ * that harness is opt-in.
  */
 class ViewsJs_PageSeam_Test extends TestBase {
 

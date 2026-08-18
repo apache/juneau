@@ -17,10 +17,12 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
 import java.util.*;
 
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
 
@@ -50,10 +52,12 @@ import org.apache.juneau.marshall.marshaller.*;
  * The VIEW_META JSON is emitted as the text content of a {@code <script type="application/json">} element.  Per the
  * HTML spec such content is <b>raw text</b> (HTML entities are NOT decoded inside it) and must not contain the
  * substring {@code </} (nor {@code <!--}), or it would prematurely terminate the element.  This emitter therefore
- * escapes every {@code <} in the serialized JSON to its JSON unicode escape {@code \u003c} <b>before</b> insertion,
- * which neutralizes {@code </script>}, {@code <script}, and {@code <!--} break-outs while keeping the payload valid,
- * round-trippable JSON.  The JSON is inserted as verbatim raw content (via
- * {@link org.apache.juneau.bean.html5.HtmlBuilder#rawText(String) rawText}) so Juneau's normal XML/HTML text
+ * hands the serialized JSON to {@link StringUtils#escapeForScript(String)} <b>before</b> insertion, which
+ * neutralizes {@code </script>},
+ * {@code <script}, and {@code <!--} break-outs while keeping the payload valid, round-trippable JSON.  That method
+ * is the single, shared, publicly reusable implementation &mdash; see its javadoc for the exact vectors covered, and
+ * reuse it rather than hand-rolling an escaper for your own sidecar.  The JSON is inserted as verbatim raw content
+ * (via {@link org.apache.juneau.bean.html5.HtmlBuilder#rawText(String) rawText}) so Juneau's normal XML/HTML text
  * entity-encoding does not corrupt the {@code application/json} payload (it would otherwise turn {@code &}/{@code >}
  * into {@code &amp;}/{@code &gt;}, which browsers do NOT decode inside a raw-text {@code <script>}).  Because
  * {@code rawText} is backed by a {@code String} (not a one-shot {@link java.io.Reader}), the returned bean is fully
@@ -137,28 +141,11 @@ public class ViewTable {
 
 		var table = table(tableChildren.toArray()).id(id).attr(MARKER_ATTR, id);
 
-		// Sidecar: serialize the VIEW_META, escape '<' -> \u003c, then insert as RAW content (see class javadoc).
+		// Sidecar: serialize the VIEW_META, neutralize script break-outs, then insert as RAW content (class javadoc).
 		var json = escapeForScript(Json.of(viewDef));
 		var sidecar = script().type("application/json").id(SIDECAR_ID_PREFIX + id).text(rawText(json));
 
 		return div(table, sidecar);
-	}
-
-	/**
-	 * Escapes every {@code <} in a serialized-JSON string to its JSON unicode escape {@code \u003c} so the JSON can be
-	 * safely embedded as raw-text {@code <script>} content (design doc §6.1).
-	 *
-	 * <p>
-	 * A blanket {@code <} &rarr; {@code \u003c} substitution is safe: {@code <} never appears inside a JSON escape
-	 * sequence, and {@code \u003c} is the valid JSON encoding of {@code <}, so the result stays parseable JSON that
-	 * decodes back to the original value.  Neutralizing {@code <} alone covers every HTML break-out sequence for a
-	 * raw-text element ({@code </script}, {@code <script}, {@code <!--}).
-	 *
-	 * @param json The serialized JSON.  Must not be <jk>null</jk>.
-	 * @return The break-out-safe JSON.
-	 */
-	static String escapeForScript(String json) {
-		return json.replace("<", "\\u003c");
 	}
 
 	/** Reads a column value from a row: a direct key lookup for a {@code Map}, a bean-property read otherwise. */

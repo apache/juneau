@@ -27,15 +27,14 @@ import org.junit.jupiter.api.*;
  * {@code juneau-pages.js} pure hash-routing logic + DOM binding shim tests (TODO-399 Phase C, Tasks 7-8).
  *
  * <p>
- * <b>Test-approach resolution (⚠️ UNVERIFIED in the plan):</b> this module has no JS-execution (jsdom/Option-B)
- * harness &mdash; confirmed while implementing Task 6 by inspecting {@code ViewsMixin_Serving_Test}, whose {@code
- * e03}/{@code g04} tests are Option-A-only (served-script content-substring assertions, with an explicit code
- * comment noting true JS-execution verification "awaits the deferred Option-B (jsdom) harness").  Per that
- * established convention, these tests extract each pure function's source body from the served script and assert
- * on its control-flow markers, mirroring {@code g04_viewsJs_columnDefsSetDefaultContentForUndefinedSafety}'s
- * function-body-extraction style.  The functions are still written as a DOM-free pure layer (see the class-header
- * comment in {@code juneau-pages.js}), so a future Option-B harness can execute them directly with zero
- * refactoring &mdash; only the verification depth of these particular tests would change.
+ * <b>Scope:</b> these tests extract each pure function's source body from the served script and assert on its
+ * control-flow markers.  They are cheap, always-on tripwires that need no Node, and they are deliberately <i>not</i>
+ * the proof that the runtime works: source shape cannot distinguish a working page from a blank one.  That proof
+ * lives in {@link PagePanelVisibility_BrowserTest}, which executes this script in a real browser and asserts on
+ * rendered visibility &mdash; opt-in, behind the module's {@code js-tests} Maven profile.
+ * <p>
+ * The functions remain written as a DOM-free pure layer (see the class-header comment in {@code juneau-pages.js}),
+ * so the harness could also drive them directly should these particular assertions ever need that depth.
  */
 class JuneauPagesJs_Test extends TestBase {
 
@@ -129,9 +128,10 @@ class JuneauPagesJs_Test extends TestBase {
 		// (getAttribute(...) === ...), never interpolated into a querySelector(...) string or innerHTML.
 		var body = pagesJs();
 		var fn = functionBody(body, "showActive");
-		assertTrue(fn.contains("getAttribute(\"data-tab-id\") === tabId"), fn);
-		assertTrue(fn.contains("getAttribute(\"data-subtab-id\") === subtabId"), fn);
-		assertFalse(fn.contains("querySelector(\"[data-tab-id=\""), fn);
+		// Spelled from the emitter's constants, so these double as part of the name-correspondence pin.
+		assertTrue(fn.contains("getAttribute(\"" + PageTable.TAB_ID_ATTR + "\") === tabId"), fn);
+		assertTrue(fn.contains("getAttribute(\"" + PageTable.SUBTAB_ID_ATTR + "\") === subtabId"), fn);
+		assertFalse(fn.contains("querySelector(\"[" + PageTable.TAB_ID_ATTR + "=\""), fn);
 		assertFalse(fn.contains("innerHTML"), fn);
 	}
 

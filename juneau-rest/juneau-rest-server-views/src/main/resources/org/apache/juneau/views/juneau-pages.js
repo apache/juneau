@@ -133,17 +133,46 @@
 		root.insertBefore(b, root.firstChild);
 	}
 
-	/** Whether `panel`'s data-panel-tab/data-panel-subtab attributes match the resolved active (tabId, subtabId). */
+	// Every node whose visibility this runtime owns: a top-level tab panel, or a sub-tab panel nested inside one.
+	var PANEL_SELECTOR = ".jc-panel, .jc-subpanel";
+
+	/*
+	 * Whether `panel` should be visible for the resolved active (tabId, subtabId).
+	 *
+	 * PANEL MARKUP CONTRACT (produced by the PageTable emitter, honored here - the two MUST agree):
+	 *   - `data-panel-tab` scopes a panel to one top-level tab, and is present on EVERY panel.
+	 *   - `data-panel-subtab` is OPTIONAL and only NARROWS a panel further, to one specific sub-tab.
+	 *   - A panel that omits `data-panel-subtab` is therefore sub-tab-AGNOSTIC: it is shown whenever its tab is
+	 *     active, whichever sub-tab that tab resolved to.
+	 *
+	 * That last rule is what makes a sub-tabbed tab render at all.  PageTable emits TWO nested levels for such a
+	 * tab: an outer `.jc-panel` (tab-scoped only) wrapping the sub-tab bar plus one `.jc-subpanel` per sub-tab
+	 * (tab- AND sub-tab-scoped).  Because juneau-views.css hides `.jc-panel` until it carries `.jc-active`,
+	 * demanding an exact `data-panel-subtab` match here would leave that outer panel `display:none` - hiding the
+	 * sub-tab bar and the active sub-panel nested inside it, i.e. rendering the entire tab blank.  The outer panel
+	 * cannot fix this from the emitter side either: it must be visible for EVERY one of its sub-tabs, and a static
+	 * attribute can only name one of them.
+	 */
 	function panelMatches(panel, tabId, subtabId) {
 		if (panel.getAttribute("data-panel-tab") !== tabId) return false;
 		var panelSubtabId = panel.getAttribute("data-panel-subtab");
-		return subtabId != null ? panelSubtabId === subtabId : !panelSubtabId;
+		if (!panelSubtabId) return true;   // sub-tab-agnostic panel: tab match is sufficient
+		return panelSubtabId === subtabId;
 	}
 
-	/** Lazily inits (or, if already a DataTable, columns.adjust()s) every view table inside a just-shown panel. */
+	/*
+	 * Lazily inits (or, if already a DataTable, columns.adjust()s) the view tables this panel OWNS.
+	 *
+	 * Tables sitting inside a DESCENDANT panel are skipped - a sub-tabbed tab's outer panel contains one
+	 * `.jc-subpanel` per sub-tab, and those tables belong to their own sub-panel, which inits them when IT is
+	 * activated.  Claiming them here would defeat lazy init (every sub-tab's ajax draw would fire on page load)
+	 * and would size their columns while they are still `display:none`, the exact mis-sizing lazy init exists to
+	 * avoid.
+	 */
 	function activatePanelViews(panel) {
 		var tables = panel.querySelectorAll("table[data-juneau-view]");
 		Array.prototype.forEach.call(tables, function (t) {
+			if (t.closest(PANEL_SELECTOR) !== panel) return;
 			var $ = window.jQuery;
 			if ($ && $.fn && $.fn.dataTable && $.fn.dataTable.isDataTable(t)) {
 				$(t).DataTable().columns.adjust();
@@ -171,7 +200,7 @@
 			el.classList.toggle("jc-subtab-active", active);
 		});
 
-		var panels = root.querySelectorAll(".jc-panel, .jc-subpanel");
+		var panels = root.querySelectorAll(PANEL_SELECTOR);
 		Array.prototype.forEach.call(panels, function (p) {
 			var active = panelMatches(p, tabId, subtabId);
 			p.classList.toggle("jc-active", active);

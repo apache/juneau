@@ -17,11 +17,13 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
 import java.util.*;
 
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
 
@@ -33,11 +35,30 @@ import org.apache.juneau.marshall.marshaller.*;
  *
  * <p>
  * Mirrors the sibling {@link ViewTable} emitter pattern exactly, including its escaping contract (see that class's
- * javadoc): PAGE_META is serialized with the repo's canonical compact JSON marshaller, has every {@code <} escaped
- * to its JSON unicode escape ({@link ViewTable#escapeForScript(String)} &mdash; reused verbatim, not re-implemented,
- * so the two sidecars can never drift in how they neutralize a {@code </script>} break-out), and is inserted as
+ * javadoc): PAGE_META is serialized with the repo's canonical compact JSON marshaller, is passed through
+ * {@link StringUtils#escapeForScript(String)} (the same shared escaper {@link ViewTable} uses, so the two sidecars
+ * can never drift in how they neutralize a {@code </script>} break-out), and is inserted as
  * {@link org.apache.juneau.bean.html5.HtmlBuilder#rawText(String) raw content} so the returned bean stays
  * re-serializable.
+ *
+ * <h5 class='section'>Panel markup contract (shared with {@code juneau-pages.js} &mdash; both sides MUST agree):</h5>
+ * <p>
+ * Panel visibility is a two-attribute, hierarchically-narrowing contract:
+ * <ul class='spaced-list'>
+ * 	<li>{@link #PANEL_TAB_ATTR} scopes a panel to one top-level tab and is emitted on <b>every</b> panel.
+ * 	<li>{@link #PANEL_SUBTAB_ATTR} is <b>optional</b> and only <i>narrows</i> a panel further, to one specific
+ * 		sub-tab.  Omitting it means the panel is sub-tab-<b>agnostic</b>: it is shown whenever its tab is active,
+ * 		whichever sub-tab that tab resolved to.
+ * </ul>
+ * <p>
+ * A leaf tab (one declaring {@link Tab#view}) therefore emits a single sub-tab-agnostic {@link #PANEL_CLASS} panel.
+ * A tab declaring {@link Tab#subtabs} emits <b>two nested levels</b>: an outer {@link #PANEL_CLASS} panel carrying
+ * only {@link #PANEL_TAB_ATTR} (it wraps the sub-tab bar and must stay visible for <i>all</i> of its sub-tabs, so it
+ * deliberately carries no {@link #PANEL_SUBTAB_ATTR} &mdash; a static attribute could only ever name one of them),
+ * and inside it one {@link #SUBPANEL_CLASS} per sub-tab carrying <b>both</b> attributes.  Because
+ * {@code juneau-views.css} hides both panel classes until the runtime adds {@code .jc-active}, the runtime's
+ * matching rule must treat a missing {@link #PANEL_SUBTAB_ATTR} as "any sub-tab"; requiring an exact match instead
+ * leaves the outer panel {@code display:none} and blanks the whole tab, sub-tab bar and active sub-panel included.
  *
  * <h5 class='section'>No module dependency, class-based chrome only (Decision 1(A)):</h5>
  * <p>
@@ -97,6 +118,48 @@ public class PageTable {
 	/** Class on a sub-tab panel (nested inside a tab's panel). */
 	public static final String SUBPANEL_CLASS = "jc-subpanel";
 
+	/**
+	 * Attribute scoping a panel to one top-level tab; emitted on <b>every</b> panel.
+	 *
+	 * <p>
+	 * Published alongside the {@code .jc-*} class constants because it is the load-bearing half of the panel markup
+	 * contract documented in this class's javadoc: {@code juneau-pages.js}'s {@code panelMatches} reads this exact
+	 * attribute name and cannot import a Java constant, so renaming it here without mirroring it there silently
+	 * blanks every panel.  {@code PageTable_SubtabPanelContract_Test} asserts the two spellings still agree.
+	 */
+	public static final String PANEL_TAB_ATTR = "data-panel-tab";
+
+	/**
+	 * Attribute narrowing a panel to one specific sub-tab; <b>optional</b>, and its <i>absence</i> is meaningful.
+	 *
+	 * <p>
+	 * A panel omitting it is sub-tab-agnostic (shown for whichever sub-tab its tab resolved to) &mdash; the rule a
+	 * sub-tabbed tab's outer panel depends on to render at all.  Same cross-artifact caveat as
+	 * {@link #PANEL_TAB_ATTR}.
+	 */
+	public static final String PANEL_SUBTAB_ATTR = "data-panel-subtab";
+
+	/**
+	 * Attribute carrying a top-level tab-bar link's tab id, compared by the runtime to decide which tab reads as
+	 * selected.  Same cross-artifact caveat as {@link #PANEL_TAB_ATTR}.
+	 */
+	public static final String TAB_ID_ATTR = "data-tab-id";
+
+	/**
+	 * Attribute carrying a sub-tab-bar link's sub-tab id.  Same cross-artifact caveat as {@link #PANEL_TAB_ATTR}.
+	 */
+	public static final String SUBTAB_ID_ATTR = "data-subtab-id";
+
+	/**
+	 * Attribute carrying the id of the tab a sub-tab link belongs to.
+	 *
+	 * <p>
+	 * Sub-tab ids are only required to be unique <i>within</i> their tab, so the runtime pairs this with
+	 * {@link #SUBTAB_ID_ATTR} before marking a sub-tab selected; matching on the sub-tab id alone would light up a
+	 * same-named sub-tab under a different tab.  Same cross-artifact caveat as {@link #PANEL_TAB_ATTR}.
+	 */
+	public static final String PARENT_TAB_ATTR = "data-parent-tab";
+
 	private PageTable() {}
 
 	/**
@@ -128,7 +191,7 @@ public class PageTable {
 			tabBarChildren.add(
 				a(hashHref(id, t.id, null), t.label == null ? t.id : t.label)
 					.class_(TAB_CLASS)
-					.attr("data-tab-id", t.id));
+					.attr(TAB_ID_ATTR, t.id));
 		var tabBar = nav(tabBarChildren.toArray()).class_(TAB_BAR_CLASS).attr("role", "tablist");
 
 		var panelsChildren = new ArrayList<>();
@@ -136,7 +199,7 @@ public class PageTable {
 			panelsChildren.add(buildTabPanel(ctx, id, t));
 		var panels = div(panelsChildren.toArray()).class_("jc-panels");
 
-		var json = ViewTable.escapeForScript(Json.of(buildMeta(pageDef)));
+		var json = escapeForScript(Json.of(buildMeta(pageDef)));
 		var sidecar = script().type("application/json").id(SIDECAR_ID_PREFIX + id).text(rawText(json));
 
 		return div(tabBar, panels, sidecar).id(id).attr(MARKER_ATTR, id).class_(PAGE_CLASS);
@@ -146,7 +209,7 @@ public class PageTable {
 	private static Div buildTabPanel(MarshallingContext ctx, String pageId, Tab t) {
 		if (t.view != null) {
 			var body = ViewTable.of(ctx, t.view, null);
-			return div(body).class_(PANEL_CLASS).attr("data-panel-tab", t.id);
+			return div(body).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
 		}
 
 		var subtabs = t.subtabs == null ? List.<Subtab>of() : t.subtabs;
@@ -156,19 +219,22 @@ public class PageTable {
 			subtabBarChildren.add(
 				a(hashHref(pageId, t.id, s.id), s.label == null ? s.id : s.label)
 					.class_(SUBTAB_CLASS)
-					.attr("data-subtab-id", s.id)
-					.attr("data-parent-tab", t.id));
+					.attr(SUBTAB_ID_ATTR, s.id)
+					.attr(PARENT_TAB_ATTR, t.id));
 		var subtabBar = nav(subtabBarChildren.toArray()).class_(SUBTAB_BAR_CLASS).attr("role", "tablist");
 
 		var subpanelsChildren = new ArrayList<>();
 		for (var s : subtabs) {
 			var body = ViewTable.of(ctx, s.view, null);
 			subpanelsChildren.add(
-				div(body).class_(SUBPANEL_CLASS).attr("data-panel-tab", t.id).attr("data-panel-subtab", s.id));
+				div(body).class_(SUBPANEL_CLASS).attr(PANEL_TAB_ATTR, t.id).attr(PANEL_SUBTAB_ATTR, s.id));
 		}
 		var subpanels = div(subpanelsChildren.toArray()).class_("jc-subpanels");
 
-		return div(subtabBar, subpanels).class_(PANEL_CLASS).attr("data-panel-tab", t.id);
+		// Tab-scoped only, on purpose: this panel wraps the sub-tab bar and must be visible for EVERY sub-tab, so it
+		// stays sub-tab-agnostic (see the panel markup contract in this class's javadoc).  Do not add
+		// data-panel-subtab here - it would pin the whole tab to a single sub-tab and blank it for the others.
+		return div(subtabBar, subpanels).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
 	}
 
 	/** Builds the deep-linkable hash href: {@code #pageId/tabId} or {@code #pageId/tabId/subtabId}. */

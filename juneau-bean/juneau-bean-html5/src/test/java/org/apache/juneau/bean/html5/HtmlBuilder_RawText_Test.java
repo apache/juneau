@@ -65,8 +65,8 @@ class HtmlBuilder_RawText_Test extends TestBase {
 	}
 
 	// SECURITY: RAWTEXT/rawText is verbatim by contract -- it does NOT silently neutralize a '</script>'
-	// end-tag sequence in the body.  Safety is the caller's responsibility (escape '<' -> \u003c), exactly as
-	// juneau-rest-server-views' ViewTable.escapeForScript does.  This test documents that contract.
+	// end-tag sequence in the body.  Safety is the caller's responsibility; callers embedding a JSON payload should
+	// use StringUtils.escapeForScript(String) rather than hand-rolling it.  This test documents that contract.
 	@Test void c01_scriptEndTagIsCallerResponsibility() throws Exception {
 		var s = HtmlSerializer.DEFAULT_SQ;
 

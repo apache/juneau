@@ -89,18 +89,18 @@ class PageTable_Emit_Test extends TestBase {
 
 	@Test void a02_emitsOneTabBarEntryPerTab() {
 		var html = Html.of(PageTable.of(leafPage()));
-		assertTrue(html.contains("data-tab-id=\"releases\""), html);
-		assertTrue(html.contains("data-tab-id=\"users\""), html);
+		assertTrue(html.contains(PageTable.TAB_ID_ATTR + "=\"releases\""), html);
+		assertTrue(html.contains(PageTable.TAB_ID_ATTR + "=\"users\""), html);
 		assertTrue(html.contains(PageTable.TAB_CLASS), html);
 	}
 
 	@Test void a03_emitsSubTabBarOnlyForTabsWithSubtabs() {
 		var html = Html.of(PageTable.of(pageWithSubtabs()));
-		assertTrue(html.contains("data-subtab-id=\"packages\""), html);
-		assertTrue(html.contains("data-subtab-id=\"bundles\""), html);
+		assertTrue(html.contains(PageTable.SUBTAB_ID_ATTR + "=\"packages\""), html);
+		assertTrue(html.contains(PageTable.SUBTAB_ID_ATTR + "=\"bundles\""), html);
 		assertTrue(html.contains(PageTable.SUBTAB_CLASS), html);
 		// The leaf "releases" tab has no subtabs -> no subtab-bar markers referencing it.
-		assertFalse(html.contains("data-parent-tab=\"releases\""), html);
+		assertFalse(html.contains(PageTable.PARENT_TAB_ATTR + "=\"releases\""), html);
 	}
 
 	@Test void a04_eachViewGetsItsOwnMarkerTableAndSidecar() {

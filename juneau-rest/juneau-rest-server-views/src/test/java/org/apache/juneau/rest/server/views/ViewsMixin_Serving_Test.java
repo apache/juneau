@@ -270,8 +270,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// Regression: the `tag` renderer must mirror console-ui's Tag#normalize/TagHtmlRender token algorithm
 		// (lowercase both <domain> and <value> into the `.tag.<domain>.<value>` CSS token) so themed chrome.css
 		// rules (e.g. `.tag.status.released`) match - a raw "RELEASED" cell must no longer render as an
-		// unthemed neutral chip.  Option-A (content substring) coverage; true JS-execution verification of the
-		// exact lowercased/hyphenated output awaits the deferred Option-B (jsdom) harness.
+		// unthemed neutral chip.  Content-substring coverage only: the module's browser harness
+		// (PagePanelVisibility_BrowserTest) covers the page runtime, not the renderer registry, so executing this
+		// renderer to check its exact lowercased/hyphenated output would need a second fixture there.
 		var body = cWithMixin.get(ViewsMixin.RENDERS_JS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("normalizeTagToken("), body);
 		var tagRendererStart = body.indexOf("registerRenderer(\"tag\"");
@@ -375,8 +376,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// Regression: a nullable column's value is OMITTED (not null) by the server's JSON serializer, so
 		// DataTables' data accessor sees `undefined` and throws "Requested unknown parameter" (datatables.net/tn/4)
 		// before any renderer runs.  Every generated column def must set defaultContent so DataTables substitutes
-		// that value instead of warning - Option-A (content substring) coverage; true JS-execution verification of
-		// the undefined-safe behavior awaits the deferred Option-B (jsdom) harness.
+		// that value instead of warning - content-substring coverage only: proving the undefined-safe behavior would
+		// mean booting DataTables itself, which the module's browser harness deliberately stubs out rather than loads.
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var buildColumnDefStart = body.indexOf("function buildColumnDef(");
 		assertTrue(buildColumnDefStart >= 0, () -> "buildColumnDef not found:\n" + body);

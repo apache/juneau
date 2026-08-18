@@ -1618,7 +1618,85 @@ public class StringUtils {
 	}
 
 	/**
+	 * Escapes a serialized-JSON string so it can be safely embedded as the raw-text content of an HTML
+	 * {@code <script>} element.
+	 *
+	 * <p>
+	 * This is the escaper for a JSON <i>sidecar</i> &mdash; a payload handed to the browser as the content of a
+	 * {@code <script type="application/json" id="...">} element, or assigned to a variable inside a plain inline
+	 * {@code <script>}.  It substitutes only characters whose JSON encoding is unambiguous, so the result stays
+	 * valid, round-trippable JSON that parses back to the original value:
+	 *
+	 * <ul class='spaced-list'>
+	 * 	<li>{@code <} &rarr; {@code \u005Cu003c}
+	 * 	<li>{@code U+2028} (LINE SEPARATOR) &rarr; {@code \u005Cu2028}
+	 * 	<li>{@code U+2029} (PARAGRAPH SEPARATOR) &rarr; {@code \u005Cu2029}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Injection vectors this defends against (do not "simplify" these away):</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li><b>{@code </script>} break-out.</b>  A {@code <script>} element's content is <i>raw text</i>: the HTML
+	 * 		parser scans it only for an end tag, which it matches ASCII-case-insensitively as {@code </script}
+	 * 		followed by whitespace, {@code /}, or {@code >}.  A payload containing that sequence closes the element
+	 * 		early and everything after it becomes live markup.  Escaping {@code <} neutralizes it at the source.  A
+	 * 		targeted {@code replace("</script>", ...)} does <b>not</b>: it misses {@code </SCRIPT>},
+	 * 		{@code </script foo>}, and {@code </script/}.
+	 * 	<li><b>{@code <!--} / {@code <script} double-escape confusion.</b>  Inside script content, {@code <!--}
+	 * 		switches the tokenizer to its "script data escaped" state, and a subsequent {@code <script} switches it
+	 * 		to "script data double escaped" &mdash; a state in which the element's own real {@code </script>} no
+	 * 		longer closes it, so the rest of the document is swallowed as script data and the page's structure is
+	 * 		attacker-controlled.  Escaping {@code </} alone does <b>not</b> stop this; escaping {@code <} does.
+	 * 	<li><b>{@code U+2028}/{@code U+2029} string-literal break-out.</b>  Both are legal raw characters inside a
+	 * 		JSON string but were JavaScript <i>line terminators</i> before ES2019, so a payload embedded in a
+	 * 		JavaScript expression context could terminate its string literal mid-value.  Escaped unconditionally so
+	 * 		one helper is correct for both the {@code type="application/json"} and the inline-expression form.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Why <c>&amp;</c> and {@code >} are deliberately NOT escaped:</h5>
+	 * <p>
+	 * Raw-text content is not entity-decoded by the browser, so HTML character references buy no safety here and
+	 * {@link #escapeHtml(String)} is the <b>wrong</b> tool for this context &mdash; it would rewrite <c>&amp;</c>
+	 * to <c>&amp;amp;</c> and corrupt the payload the moment {@code JSON.parse} reads it back verbatim.  For the
+	 * same reason {@code >} cannot terminate anything on its own once {@code <} is gone.
+	 *
+	 * <h5 class='section'>Why the substitutions are safe:</h5>
+	 * <p>
+	 * In valid JSON, {@code <}, {@code U+2028}, and {@code U+2029} can only occur inside a string literal (JSON's
+	 * inter-token whitespace is limited to space, tab, CR, and LF), and inside a string literal a backslash is
+	 * always itself escaped as {@code \u005C\u005C}.  The inserted backslash therefore always begins a fresh
+	 * escape sequence rather than extending a preceding one.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Serialize, escape, then insert as VERBATIM raw script content (never entity-encoded).</jc>
+	 * 	String <jv>json</jv> = <jsm>escapeForScript</jsm>(Json.<jsm>of</jsm>(<jv>meta</jv>));
+	 * 	<jc>// {"label":"x\u005Cu003c/script&gt;"} - parses back to the original "x&lt;/script&gt;"</jc>
+	 * </p>
+	 *
+	 * @param json The <b>already-serialized JSON</b> to escape.  Must be JSON: on arbitrary text these
+	 * 	substitutions are not escape sequences and would alter the value.  Can be <jk>null</jk> (returns
+	 * 	<jk>null</jk>).
+	 * @return The break-out-safe JSON, or <jk>null</jk> if input is <jk>null</jk>.
+	 * @see #escapeHtml(String)
+	 */
+	public static String escapeForScript(String json) {
+		if (json == null)
+			return null;
+		// The search terms are the RAW characters (a Java source \\u escape is pre-processed to the single character);
+		// the replacements are their 6-character JSON escape sequences.
+		return json
+			.replace("<", "\\u003c")
+			.replace("\u2028", "\\u2028")
+			.replace("\u2029", "\\u2029");
+	}
+
+	/**
 	 * Escapes HTML entities in a string.
+	 *
+	 * <p>
+	 * Use this for text interpolated into HTML <i>element content or an attribute value</i>.  It is <b>not</b> the
+	 * right escaper for the raw-text content of a {@code <script>} element &mdash; see
+	 * {@link #escapeForScript(String)} for that.
 	 *
 	 * <p>
 	 * Escapes the following characters:
