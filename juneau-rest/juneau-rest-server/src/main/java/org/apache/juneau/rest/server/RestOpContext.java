@@ -1893,11 +1893,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	private UrlPathMatch matchPattern(RestSession call) {
-		UrlPathMatch pm = null;
-		for (var pp : pathMatchers.get())
-			if (pm == null)
-				pm = pp.match(call.getUrlPath());
-		return pm;
+		for (var pp : pathMatchers.get()) {
+			var pm = pp.match(call.getUrlPath());
+			if (pm != null)
+				return pm;
+		}
+		return null;
 	}
 
 	/**

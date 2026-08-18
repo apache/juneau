@@ -22,6 +22,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.regex.*;
+import java.util.zip.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -544,8 +545,215 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// l) Mount-style independence: standalone container mount at /juneau-console/* vs. composed onto a host
+	//    mounted elsewhere.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * A container mount at url-pattern {@code /juneau-console/*} makes the container report
+	 * {@code servletPath="/juneau-console"}, so the path Juneau matches against is only the remainder
+	 * ({@code /chrome.css}). The mixin's endpoints must resolve at the stable
+	 * {@code /juneau-console/chrome.css} URL in that arrangement without the host having to rewrite
+	 * {@code getServletPath()}.
+	 */
+	private static MockRestClient standaloneMounted(Class<?> host) {
+		return MockRestClient.createLax(host).servletPath("/juneau-console").build();
+	}
+
+	@Test void l01_standaloneMount_chromeCssResolvesAtStableUrl() throws Exception {
+		standaloneMounted(AssetsHost.class).get("/chrome.css").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/css");
+	}
+
+	@Test void l02_standaloneMount_logoAssetResolvesAtUrlEmittedInChromeCss() throws Exception {
+		standaloneMounted(AssetsHost.class).get("/assets/logo").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("image/svg+xml");
+	}
+
+	@Test void l03_standaloneMount_pageBgAssetResolvesAtUrlEmittedInChromeCss() throws Exception {
+		standaloneMounted(AssetsHost.class).get("/assets/page-bg").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("image/png");
+	}
+
+	@Test void l04_standaloneMount_emittedAssetUrlsAreServableUnderThatMount() throws Exception {
+		// The chrome.css body references the assets by their absolute /juneau-console/... URL.  Under a
+		// /juneau-console/* container mount at the site root those URLs must hit the very endpoints above.
+		var body = standaloneMounted(AssetsHost.class).get("/chrome.css").run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("url(\"" + ConsoleChromeMixin.LOGO_ASSET_PATH + "?v="), () -> "missing logo url(), body:\n" + body);
+		assertTrue(body.contains("url(\"" + ConsoleChromeMixin.PAGE_BG_ASSET_PATH + "?v="), () -> "missing page-bg url(), body:\n" + body);
+	}
+
+	@Test void l05_composedMount_prefixedPathsStillResolveUnderANonRootHostMount() throws Exception {
+		// Back-compat guard for the documented composition style: a host mounted at /rest/* keeps serving the
+		// mixin's endpoints at <host-mount>/juneau-console/...
+		var c = MockRestClient.createLax(AssetsHost.class).servletPath("/rest").build();
+		c.get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200);
+		c.get(ConsoleChromeMixin.LOGO_ASSET_PATH).run().assertStatus(200);
+		c.get(ConsoleChromeMixin.PAGE_BG_ASSET_PATH).run().assertStatus(200);
+	}
+
+	@Test void l06_publicAssetPathConstants_arePinned() {
+		// These constants are the URLs consumers build <link>/<img> references from - changing a value is a
+		// silent break for every deployed consumer, so pin them.
+		assertEquals("/juneau-console/chrome.css", ConsoleChromeMixin.CHROME_CSS_PATH);
+		assertEquals("/juneau-console/assets/logo", ConsoleChromeMixin.LOGO_ASSET_PATH);
+		assertEquals("/juneau-console/assets/page-bg", ConsoleChromeMixin.PAGE_BG_ASSET_PATH);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// m) Mount-style-aware asset URL generation: the logo/page-bg url()s written into the served chrome.css must be
+	//    fetchable by the browser under both mount styles and at any container context path.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void m01_standaloneMount_emittedLogoUrl_isByteIdenticalToThePreFixLiteral() throws Exception {
+		var body = standaloneMounted(AssetsHost.class).get("/chrome.css").run().assertStatus(200).getContent().asString();
+		assertEquals("/juneau-console/assets/logo" + expectedCacheBuster(VALID_LOGO), emittedUrl(body, "/assets/logo"));
+	}
+
+	@Test void m02_standaloneMount_emittedPageBgUrl_isByteIdenticalToThePreFixLiteral() throws Exception {
+		var body = standaloneMounted(AssetsHost.class).get("/chrome.css").run().assertStatus(200).getContent().asString();
+		assertEquals("/juneau-console/assets/page-bg" + expectedCacheBuster(VALID_PAGE_BG), emittedUrl(body, "/assets/page-bg"));
+	}
+
+	/**
+	 * The regression this guards is mount-style detection inverted in the standalone direction: resolving the
+	 * <i>prefixed</i> constant against a standalone mount's {@code servletPath} (which already ends in
+	 * {@code /juneau-console}) doubles the segment up to {@code /juneau-console/juneau-console/assets/logo}. A
+	 * happy-path "the url contains /assets/logo" assertion passes right through that, and so does an end-to-end
+	 * fetch, because the doubled URL is a live alias under a standalone mount.
+	 */
+	@Test void m03_standaloneMount_emittedUrlsAreNotDoublePrefixed() throws Exception {
+		var body = standaloneMounted(AssetsHost.class).get("/chrome.css").run().assertStatus(200).getContent().asString();
+		assertFalse(body.contains("/juneau-console/juneau-console"), () -> "asset url double-prefixed, body:\n" + body);
+	}
+
+	@Test void m04_composedMount_emittedLogoUrl_carriesTheHostMountSegment() throws Exception {
+		var body = composedMounted(AssetsHost.class).get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertEquals("/rest/juneau-console/assets/logo" + expectedCacheBuster(VALID_LOGO), emittedUrl(body, "/assets/logo"));
+	}
+
+	@Test void m05_composedMount_emittedPageBgUrl_carriesTheHostMountSegment() throws Exception {
+		var body = composedMounted(AssetsHost.class).get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertEquals("/rest/juneau-console/assets/page-bg" + expectedCacheBuster(VALID_PAGE_BG), emittedUrl(body, "/assets/page-bg"));
+	}
+
+	/**
+	 * The mirror-image regression of (m03): detection inverted in the composed direction, resolving the
+	 * <i>unprefixed</i> constant under a composed mount, yields {@code /rest/assets/logo}. That is not caught by an
+	 * end-to-end fetch either &mdash; {@code TODO-411}'s dual path registration makes {@code /rest/assets/logo} a
+	 * live alias too &mdash; nor by the pre-fix root-absolute literal {@code /juneau-console/assets/logo}, which
+	 * still <i>looks</i> like a plausible logo URL. Both wrong answers are pinned out explicitly here.
+	 */
+	@Test void m06_composedMount_emittedUrlsAreNeitherUnprefixedNorSiteRootAbsolute() throws Exception {
+		var body = composedMounted(AssetsHost.class).get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var logoUrl = emittedUrl(body, "/assets/logo");
+		assertFalse(logoUrl.startsWith("/rest/assets/"), () -> "unprefixed constant resolved under a composed mount: " + logoUrl);
+		assertFalse(logoUrl.startsWith("/juneau-console/"), () -> "site-root-absolute literal emitted under a composed mount: " + logoUrl);
+		assertFalse(body.contains("/rest/juneau-console/juneau-console"), () -> "asset url double-prefixed, body:\n" + body);
+	}
+
+	@Test void m07_composedMountUnderANonEmptyContextPath_emittedUrlsCarryTheContextPath() throws Exception {
+		var c = MockRestClient.createLax(AssetsHost.class).contextPath("/app").servletPath("/rest").build();
+		var body = c.get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertEquals("/app/rest/juneau-console/assets/logo" + expectedCacheBuster(VALID_LOGO), emittedUrl(body, "/assets/logo"));
+		assertEquals("/app/rest/juneau-console/assets/page-bg" + expectedCacheBuster(VALID_PAGE_BG), emittedUrl(body, "/assets/page-bg"));
+	}
+
+	@Test void m08_standaloneMountUnderANonEmptyContextPath_emittedUrlsCarryTheContextPath() throws Exception {
+		var c = MockRestClient.createLax(AssetsHost.class).contextPath("/app").servletPath("/juneau-console").build();
+		var body = c.get("/chrome.css").run().assertStatus(200).getContent().asString();
+		assertEquals("/app/juneau-console/assets/logo" + expectedCacheBuster(VALID_LOGO), emittedUrl(body, "/assets/logo"));
+		assertEquals("/app/juneau-console/assets/page-bg" + expectedCacheBuster(VALID_PAGE_BG), emittedUrl(body, "/assets/page-bg"));
+	}
+
+	@Test void m09_composedMount_emittedUrlsActuallyResolveAgainstThatMount() throws Exception {
+		var c = composedMounted(AssetsHost.class);
+		var body = c.get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+		c.get(belowMount(emittedUrl(body, "/assets/logo"), "/rest")).run().assertStatus(200).assertHeader("Content-Type").isContains("image/svg+xml");
+		c.get(belowMount(emittedUrl(body, "/assets/page-bg"), "/rest")).run().assertStatus(200).assertHeader("Content-Type").isContains("image/png");
+	}
+
+	@Test void m10_standaloneMount_emittedUrlsActuallyResolveAgainstThatMount() throws Exception {
+		var c = standaloneMounted(AssetsHost.class);
+		var body = c.get("/chrome.css").run().assertStatus(200).getContent().asString();
+		c.get(belowMount(emittedUrl(body, "/assets/logo"), "/juneau-console")).run().assertStatus(200).assertHeader("Content-Type").isContains("image/svg+xml");
+		c.get(belowMount(emittedUrl(body, "/assets/page-bg"), "/juneau-console")).run().assertStatus(200).assertHeader("Content-Type").isContains("image/png");
+	}
+
+	@Test void m11_cacheBuster_isMountIndependent() throws Exception {
+		// The ?v= suffix hashes the configured asset's own bytes and reads the package version - neither has
+		// anything to do with the mount, so only the URL prefix may differ between the two mount styles.
+		var standalone = emittedUrl(standaloneMounted(AssetsHost.class).get("/chrome.css").run().getContent().asString(), "/assets/logo");
+		var composed = emittedUrl(composedMounted(AssetsHost.class).get(ConsoleChromeMixin.CHROME_CSS_PATH).run().getContent().asString(), "/assets/logo");
+		var buster = expectedCacheBuster(VALID_LOGO);
+		assertTrue(standalone.endsWith(buster), () -> "standalone url lost its cache-buster: " + standalone);
+		assertTrue(composed.endsWith(buster), () -> "composed url lost its cache-buster: " + composed);
+	}
+
+	static final ConsoleChromeMixin MOUNT_CACHE_MIXIN = ConsoleChromeMixin.create().logo(VALID_LOGO).build();
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class MountCacheHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() { return MOUNT_CACHE_MIXIN; }
+	}
+
+	/**
+	 * {@code cacheAssets(true)} caches the assembled body, and the body now varies by mount - so the cache has to
+	 * key on the mount. A body cache that ignores the mount serves whichever mount style happened to warm it first
+	 * to the other one, which no single-mount test can see.
+	 */
+	@Test void m12_cachedBody_isKeyedByMount_notSharedAcrossMountStyles() throws Exception {
+		var standalone1 = standaloneMounted(MountCacheHost.class).get("/chrome.css").run().assertStatus(200).getContent().asString();
+		var composed = composedMounted(MountCacheHost.class).get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var standalone2 = standaloneMounted(MountCacheHost.class).get("/chrome.css").run().assertStatus(200).getContent().asString();
+		assertEquals("/juneau-console/assets/logo" + expectedCacheBuster(VALID_LOGO), emittedUrl(standalone1, "/assets/logo"));
+		assertEquals("/rest/juneau-console/assets/logo" + expectedCacheBuster(VALID_LOGO), emittedUrl(composed, "/assets/logo"));
+		assertEquals(standalone1, standalone2, "the standalone body must come back from cache unchanged");
+		assertEquals(2, MOUNT_CACHE_MIXIN.debugBuildCount(), "expected exactly one assembly per distinct mount");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test helpers
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/** A host composed onto an existing application mount at {@code /rest/*}. */
+	private static MockRestClient composedMounted(Class<?> host) {
+		return MockRestClient.createLax(host).servletPath("/rest").build();
+	}
+
+	/** Extracts the single {@code url("...")} value the served CSS emits for the given asset endpoint. */
+	private static String emittedUrl(String body, String assetPathSuffix) {
+		var m = Pattern.compile("url\\(\"([^\"]*" + Pattern.quote(assetPathSuffix) + "\\?v=[^\"]+)\"\\)").matcher(body);
+		assertTrue(m.find(), () -> "no emitted url() for " + assetPathSuffix + " in body:\n" + body);
+		return m.group(1);
+	}
+
+	/**
+	 * Re-expresses a browser-absolute emitted URL as a path below the given mount, asserting along the way that it
+	 * really does sit below it - which is the half of "the browser can fetch this" that a bare status assertion
+	 * against a hand-written path cannot check.
+	 */
+	private static String belowMount(String emittedUrl, String mount) {
+		assertTrue(emittedUrl.startsWith(mount + "/"), () -> "emitted url '" + emittedUrl + "' is not below the mount '" + mount + "'");
+		return emittedUrl.substring(mount.length());
+	}
+
+	/** The exact {@code ?v=<buildVersion>-<hash8>} suffix the mixin must still append to every emitted asset URL. */
+	private static String expectedCacheBuster(String classpathResource) throws IOException {
+		byte[] bytes;
+		try (var in = ConsoleChromeMixin_Test.class.getResourceAsStream(classpathResource)) {
+			assertNotNull(in);
+			bytes = in.readAllBytes();
+		}
+		var crc = new CRC32();
+		crc.update(bytes);
+		var v = ConsoleChromeMixin.class.getPackage().getImplementationVersion();
+		return "?v=" + (v == null ? "dev" : v) + '-' + String.format("%08x", crc.getValue());
+	}
 
 	private static String bodyOf(MockRestClient client) throws Exception {
 		return client.get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();

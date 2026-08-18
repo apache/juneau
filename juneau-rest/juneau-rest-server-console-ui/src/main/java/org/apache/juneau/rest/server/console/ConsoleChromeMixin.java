@@ -45,6 +45,30 @@ import org.apache.juneau.rest.server.*;
  * structural {@code chrome.css} (shipped in this module's classpath) with the active theme's tokens appended as a
  * {@code :root{}} block.
  *
+ * <h5 class='section'>Mount styles:</h5>
+ * <p>
+ * Both of the following arrangements serve the assets at the {@link #CHROME_CSS_PATH} /
+ * {@link #LOGO_ASSET_PATH} / {@link #PAGE_BG_ASSET_PATH} URLs with no path juggling by the host resource:
+ * <ul>
+ * 	<li><b>Composed</b> &mdash; the host resource is mounted wherever the application already mounts it (e.g.
+ * 		{@code /rest/*}) and the assets hang off that mount, at
+ * 		<code>&lt;host-mount&gt;/juneau-console/chrome.css</code>.
+ * 	<li><b>Standalone</b> &mdash; the host resource is registered with the servlet container at url-pattern
+ * 		{@code /juneau-console/*} so the assets sit at a fixed site-root URL, independent of which page or tab
+ * 		rendered the referencing {@code <link>}.
+ * </ul>
+ * <p>
+ * The two arrangements need different operation paths, because a container mount at {@code /juneau-console/*}
+ * reports {@code servletPath="/juneau-console"} and Juneau resolves an operation's path against the request URI
+ * with {@code contextPath + servletPath} already removed &mdash; leaving only {@code /chrome.css} to match.
+ * Each operation below therefore declares <i>both</i> its prefixed path and the same path minus the
+ * {@code /juneau-console} prefix, so whichever one the arrangement leaves to be matched resolves.
+ * <p>
+ * The same duality applies to the logo/page-background {@code url()}s written into the served stylesheet: they are
+ * resolved per-request against the container's context path and the host's mount, picking the path form the active
+ * arrangement leaves unconsumed, so the browser fetches them from the mount that served the stylesheet rather than
+ * from the site root.
+ *
  * <h5 class='section'>Theme precedence:</h5>
  * <p>
  * <code>{@link Builder#theme(Theme) mixin.theme(...)}</code> wins over a {@link ThemeSettings} {@code BeanStore}
@@ -73,6 +97,18 @@ public class ConsoleChromeMixin {
 	/** The URL path at which the configured page-background asset is served (relative to the host mount). */
 	public static final String PAGE_BG_ASSET_PATH = "/juneau-console/assets/page-bg";
 
+	/** {@link #CHROME_CSS_PATH} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */
+	static final String CHROME_CSS_PATH_UNPREFIXED = "/chrome.css";
+
+	/** {@link #LOGO_ASSET_PATH} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */
+	static final String LOGO_ASSET_PATH_UNPREFIXED = "/assets/logo";
+
+	/** {@link #PAGE_BG_ASSET_PATH} minus the {@code /juneau-console} prefix - see the class javadoc's mount-styles section. */
+	static final String PAGE_BG_ASSET_PATH_UNPREFIXED = "/assets/page-bg";
+
+	/** The prefix the {@code *_UNPREFIXED} constants drop - see the class javadoc's mount-styles section. */
+	static final String MOUNT_PREFIX = "/juneau-console";
+
 	/** Classpath location of the shipped structural stylesheet. */
 	static final String CHROME_CSS_RESOURCE = "/org/apache/juneau/console/chrome.css";
 
@@ -96,8 +132,8 @@ public class ConsoleChromeMixin {
 	private final String logoResource;
 	private final String pageBackgroundResource;
 
-	/** Per-mixin-instance cache of the fully-assembled (static + theme blocks) response body. Never shared across mounts. */
-	private volatile byte[] cachedBody;
+	/** Per-mixin-instance cache of the fully-assembled (static + theme blocks) response body, keyed by mount (see {@link #mountKey}). */
+	private final Map<String,byte[]> cachedBodies = new ConcurrentHashMap<>();
 
 	/** Test-only diagnostic: counts every call to {@link #buildBody(RestRequest)} (i.e. every cache miss / every call when caching is disabled). */
 	private final AtomicInteger buildCount = new AtomicInteger();
@@ -140,7 +176,7 @@ public class ConsoleChromeMixin {
 	 * 	&mdash; the resource is shipped in the same jar as this class).
 	 */
 	@RestGet(
-		path=CHROME_CSS_PATH,
+		path={CHROME_CSS_PATH, CHROME_CSS_PATH_UNPREFIXED},
 		summary="Admin-console chrome stylesheet",
 		description="Structural CSS for the admin-console chrome, with the active theme's tokens appended.",
 		swagger=@OpSwagger(ignore=true)
@@ -157,7 +193,7 @@ public class ConsoleChromeMixin {
 	 * @throws IOException If the configured resource could not be read.
 	 */
 	@RestGet(
-		path=LOGO_ASSET_PATH,
+		path={LOGO_ASSET_PATH, LOGO_ASSET_PATH_UNPREFIXED},
 		summary="Configured logo image asset",
 		swagger=@OpSwagger(ignore=true)
 	)
@@ -174,7 +210,7 @@ public class ConsoleChromeMixin {
 	 * @throws IOException If the configured resource could not be read.
 	 */
 	@RestGet(
-		path=PAGE_BG_ASSET_PATH,
+		path={PAGE_BG_ASSET_PATH, PAGE_BG_ASSET_PATH_UNPREFIXED},
 		summary="Configured page-background image asset",
 		swagger=@OpSwagger(ignore=true)
 	)
@@ -201,19 +237,31 @@ public class ConsoleChromeMixin {
 		);
 	}
 
-	/** Returns the fully-assembled response body, computing (and instance-caching) it on first call. */
+	/**
+	 * Returns the fully-assembled response body for the mount the request arrived under, computing (and caching) it
+	 * on first call for that mount.
+	 *
+	 * <p>
+	 * The cache is keyed by mount rather than held in a single field because the emitted asset URLs are mount-derived
+	 * (see {@link #assetUrl}), and one mixin instance can be reached under more than one container mapping.
+	 */
 	private byte[] cachedBody(RestRequest req) throws IOException {
-		var b = cachedBody;
-		if (b == null) {
-			synchronized (this) {
-				b = cachedBody;
-				if (b == null) {  // HTT: the "already set" branch is only reachable under a lock-acquisition race - unhittable single-threaded.
-					b = buildBody(req);
-					cachedBody = b;
+		try {
+			return cachedBodies.computeIfAbsent(mountKey(req), k -> {
+				try {
+					return buildBody(req);
+				} catch (IOException e) {  // HTT: staticCss() is the only throwing call and reads a resource shipped in this jar.
+					throw new UncheckedIOException(e);
 				}
-			}
+			});
+		} catch (UncheckedIOException e) {  // HTT: see above - the wrapped read cannot fail in a well-formed jar.
+			throw e.getCause();
 		}
-		return b;
+	}
+
+	/** The request's mount identity: the two request properties every emitted asset URL is derived from. */
+	private static String mountKey(RestRequest req) {
+		return req.getContextPath() + '\n' + req.getServletPath();
 	}
 
 	/**
@@ -231,14 +279,35 @@ public class ConsoleChromeMixin {
 		if (! active.getName().equals(Theme.OPEN.getName()))
 			sb.append('\n').append(rootBlock(active));
 		if (pageBackgroundResource != null)
-			sb.append('\n').append("html, body{background-image:url(\"").append(PAGE_BG_ASSET_PATH)
+			sb.append('\n').append("html, body{background-image:url(\"").append(assetUrl(req, PAGE_BG_ASSET_PATH, PAGE_BG_ASSET_PATH_UNPREFIXED))
 				.append("?v=").append(buildVersion()).append('-').append(assetContentHash(pageBackgroundResource))
 				.append("\"), var(--jc-page-bg);}");
 		if (logoResource != null)
-			sb.append('\n').append(".jc-logo{background-image:url(\"").append(LOGO_ASSET_PATH)
+			sb.append('\n').append(".jc-logo{background-image:url(\"").append(assetUrl(req, LOGO_ASSET_PATH, LOGO_ASSET_PATH_UNPREFIXED))
 				.append("?v=").append(buildVersion()).append('-').append(assetContentHash(logoResource))
 				.append("\");}");
 		return sb.toString().getBytes(StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * Resolves one of the mixin's asset endpoints to a URL a browser can fetch from wherever the referencing
+	 * {@code chrome.css} was served: the container's context path and the host's mount, plus whichever of the
+	 * endpoint's two declared paths the active mount leaves to be matched.
+	 *
+	 * <p>
+	 * Under the <b>standalone</b> mount style the container has already consumed the {@code /juneau-console} segment
+	 * into {@code servletPath}, so resolving the prefixed path against it would emit that segment twice; under the
+	 * <b>composed</b> style {@code servletPath} is the host's own mount and the prefixed segment is exactly what is
+	 * missing. {@code servletPath} ending in {@code /juneau-console} therefore identifies the standalone case.
+	 *
+	 * <p>
+	 * A composing host whose own mount happens to end in {@code /juneau-console} reads as standalone here, which
+	 * emits its unprefixed URL rather than its prefixed one - still a live URL, since every mount serves both forms
+	 * (see the class javadoc's mount-styles section).
+	 */
+	private static String assetUrl(RestRequest req, String prefixedPath, String unprefixedPath) {
+		var standalone = req.getServletPath().endsWith(MOUNT_PREFIX);
+		return req.getUriResolver().resolve("servlet:" + (standalone ? unprefixedPath : prefixedPath));
 	}
 
 	/**
