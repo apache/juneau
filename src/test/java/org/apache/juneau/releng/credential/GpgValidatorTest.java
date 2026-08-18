@@ -81,4 +81,56 @@ class GpgValidatorTest {
 		var result = new GpgValidator(runner).validate("wrong", "ABCD1234");
 		assertFalse(result.valid());
 	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// Bounded failure messages: gpg's own output must not reach the message (finding F2).
+	// -----------------------------------------------------------------------------------------------------------
+
+	private static String signFailureMessage(int exitCode, String output) {
+		var runner = new RecordingRunner(
+				List.of(new ProcessRunner.ProcResult(0, "sec ...\n"), new ProcessRunner.ProcResult(exitCode, output)));
+		var r = new GpgValidator(runner).validate("wrong", "ABCD1234");
+		assertFalse(r.valid());
+		return r.message();
+	}
+
+	@Test
+	void subprocessOutputNeverReachesTheMessage() {
+		// The regression guard for F2, in the shape SecretsOffArgvTest uses: a sentinel that must not appear. The
+		// sentinel stands in for anything gpg might print -- and the reason this matters is not that gpg is known
+		// to echo a passphrase, but that the message is an unbounded channel from another program's stderr into a
+		// JSON response, the credential card and a table column.
+		var sentinel = "SENTINEL-a7f3c9-DO-NOT-SURFACE";
+		for (var output : List.of(sentinel, "gpg: signing failed: " + sentinel, "bad passphrase\n" + sentinel))
+			assertFalse(signFailureMessage(2, output).contains(sentinel),
+					() -> "gpg output leaked into the UI message for: " + output);
+	}
+
+	@Test
+	void failureReasonsAreEnumerated() {
+		assertEquals("The passphrase was rejected by gpg.", signFailureMessage(2, "gpg: Bad passphrase"));
+		assertEquals("gpg could not read the passphrase non-interactively (pinentry).",
+				signFailureMessage(2, "gpg: problem with pinentry"));
+		assertEquals("The signing key has expired.", signFailureMessage(2, "gpg: key has expired"));
+		assertEquals("The signing key has been revoked.", signFailureMessage(2, "gpg: key was revoked"));
+		assertEquals("gpg is not installed or not on the PATH.", signFailureMessage(127, "gpg: command not found"));
+	}
+
+	@Test
+	void unrecognizedFailureCarriesTheExitCodeAndNothingElse() {
+		// The fallback still has to be actionable, and an exit code is a bounded integer rather than free text.
+		assertEquals("gpg refused to sign (exit code 42).", signFailureMessage(42, "something entirely unexpected"));
+	}
+
+	@Test
+	void missingToolIsDistinguishedFromMissingKey() {
+		// Both fail the first gpg call, and telling the user "no secret key for X" when gpg is not installed sends
+		// them to generate a key they may already have.
+		var absent = new RecordingRunner(List.of(new ProcessRunner.ProcResult(127, "gpg: command not found")));
+		assertEquals("gpg is not installed or not on the PATH.",
+				new GpgValidator(absent).validate("s3cret", "ABCD1234").message());
+
+		var noKey = new RecordingRunner(List.of(new ProcessRunner.ProcResult(2, "gpg: error reading key")));
+		assertEquals("No secret key for NOPE.", new GpgValidator(noKey).validate("s3cret", "NOPE").message());
+	}
 }

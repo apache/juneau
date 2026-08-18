@@ -20,10 +20,26 @@
     <div class="jc-card">
         <#list credentials as c>
         <div class="cred" data-name="${c.name}">
+            <#--
+              Four states, four treatments. "Stored but never tested" used to share the red `invalid` class, which
+              claimed the credential was bad when the app had no idea and sent the user off to re-enter a password
+              that was probably fine. It must not read as a pass either -- hence amber rather than green.
+
+              lastValid is a boxed Boolean whose null means "never validated", so the untested branch tests for
+              absence (!c.lastValid??) and must come before the branches that read the value. Validation results
+              are held in memory only, so a restart correctly returns every credential here.
+            -->
+            <#if !c.present>
+                <#assign pillClass = 'unset'><#assign pillLabel = 'Not set'>
+            <#elseif !c.lastValid??>
+                <#assign pillClass = 'untested'><#assign pillLabel = 'Stored — not tested'>
+            <#elseif c.lastValid>
+                <#assign pillClass = 'valid'><#assign pillLabel = 'Valid'>
+            <#else>
+                <#assign pillClass = 'invalid'><#assign pillLabel = 'Invalid'>
+            </#if>
             <h3>${c.label}
-                <span class="pill ${c.present?string(c.lastValid!false?string('valid','invalid'),'unset')}">
-                    <#if !c.present>Not set<#elseif c.lastValid??>${c.lastValid?string('Valid','Invalid')}<#else>Set (unvalidated)</#if>
-                </span>
+                <span class="pill ${pillClass}">${pillLabel}</span>
             </h3>
             <div class="row">
                 <#if c.name != 'github'>

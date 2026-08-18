@@ -408,3 +408,10 @@ div.dt-container .dt-paging .dt-paging-button:not(.current):not(.disabled):hover
 .pill.valid { background: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); }
 .pill.invalid { background: #fdeceb; color: var(--jc-danger); }
 .pill.unset { background: var(--jc-tag-neutral-bg); color: var(--jc-tag-neutral-text); }
+
+/* Stored but never tested. Four states need four treatments: this one used to borrow .pill.invalid, which
+   asserted the credential was bad when the app had no idea. Erring away from green is right -- an untested
+   credential must never read as a pass -- but claiming a failure is the same error pointed the other way, and it
+   sends the user to re-enter a password that was probably fine. Amber, matching chrome.css's existing amber
+   group, is the "unknown" treatment. */
+.pill.untested { background: var(--jc-tag-amber-bg); color: var(--jc-tag-amber-text); }
