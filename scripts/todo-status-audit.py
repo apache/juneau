@@ -12,14 +12,19 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Best-effort status/header consistency pre-filter for Apache Juneau's .work/todo/ plan files.
+Best-effort status/header consistency pre-filter for this repository's .work/todo/ plan files.
+
+Repo-agnostic: the repository root is derived from this file's own location
+(<root>/scripts/todo-status-audit.py -> <root>), never hardcoded, so the same body works in
+every repository that adopts the convention. Only the REPO_LABEL / SKILL_NAME constants
+below and the license header differ between copies.
 
 Checks every TODO-<id>-*.md / READY-<id>-*.md / MAYBE-<id>-*.md file directly under .work/todo/
-(FINISHED-/CANCELLED-*.md archives are explicitly out of scope -- per
-agents/skills/juneau-todo-management/SKILL.md, "status line is not required in FINISHED archives")
-against that skill's "Per-file `Current status:` and `Complexity:` header" rules, and flags
-candidate inconsistencies. This is a PRE-FILTER, not a validator: it flags candidates for a human
-(or agent) to look at, and will not catch everything on older, format-drifted files -- tolerant,
+(FINISHED-/CANCELLED-*.md archives are explicitly out of scope -- per this repo's
+TODO-management skill, "status line is not required in FINISHED archives") against that
+skill's "Per-file `Current status:` and `Complexity:` header" rules, and flags candidate
+inconsistencies. This is a PRE-FILTER, not a validator: it flags candidates for a human
+(or agent) to look at, and will not catch everything on format-drifted files -- tolerant,
 best-effort markdown-header parsing throughout.
 
 Checks performed (each file may accumulate multiple flags):
@@ -47,20 +52,29 @@ Checks performed (each file may accumulate multiple flags):
                                  wording is reserved for MAYBE-*.md files).
   - maybe_prefix_non_parked     A MAYBE-*.md file whose status does NOT start with "Parked".
 
+A MISSING scan directory is a hard error (exit 2). An EMPTY-but-present one is a clean pass
+(exit 0). The original version conflated the two and returned 0 for both, so pointing the
+script at a tree with no tracker produced a reassuring "nothing to flag" -- the same silent-zero
+trap as running `rg` over the gitignored .work/ without --no-ignore.
+
 Usage:
     ./scripts/todo-status-audit.py
     ./scripts/todo-status-audit.py --verbose
+    ./scripts/todo-status-audit.py --root /path/to/other/repo
     ./scripts/todo-status-audit.py --dir /path/to/alternate/todo/dir
 
 Options:
-    --dir <path>    Directory to scan (default: .work/todo/ under the repo root). Non-recursive --
-                    only *.md files directly in this directory are considered.
+    --root <path>   Repository root; scans <root>/.work/todo/ (default: parent of this
+                    script's directory). Ignored if --dir is given.
+    --dir <path>    Exact directory to scan, overriding --root. Non-recursive -- only *.md
+                    files directly in this directory are considered.
     --verbose, -v   Also print files that passed every check (default: only print flagged files).
     --help, -h      Show this help message.
 
 Exit status:
-    0   No inconsistencies flagged.
+    0   No inconsistencies flagged (including the legitimately-empty-tracker case).
     1   At least one file was flagged.
+    2   The scan directory does not exist.
 """
 
 from __future__ import annotations
@@ -70,8 +84,14 @@ import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_TODO_DIR = REPO_ROOT / ".work" / "todo"
+# ---------------------------------------------------------------------------------------
+# The ONLY repo-specific values in this file. Everything below is identical across every
+# copy of this script; keep it that way so a fix lands once and is copied verbatim.
+# ---------------------------------------------------------------------------------------
+REPO_LABEL = "Apache Juneau"
+SKILL_NAME = "juneau-todo-management"
+
+DEFAULT_REPO_ROOT = Path(__file__).resolve().parent.parent
 
 FILENAME_RE = re.compile(r"^(TODO|READY|MAYBE)-\d+[a-z]*-.*\.md$")
 
@@ -80,7 +100,11 @@ COMPLEXITY_LINE_RE = re.compile(r"^\s*Complexity:\s*(.*)$", re.IGNORECASE | re.M
 SECTION_HEADING_RE = re.compile(r"^##\s+(.*)$", re.MULTILINE)
 NUMBERED_ITEM_RE = re.compile(r"^\s*\d+[.)]\s+(.*)$", re.MULTILINE)
 
-RESOLVED_MARKERS = ("resolved", "answered", "decided")
+# Matched on word boundaries. A bare substring test reads "unanswered" / "unresolved" -- the
+# most natural wording for an OPEN question -- as containing "answered" / "resolved", which
+# silently disables the ready_but_has_open_questions check for exactly the case it exists to
+# catch. Still best-effort: an explicit negation like "not resolved" reads as resolved.
+RESOLVED_MARKER_RE = re.compile(r"\b(?:resolved|answered|decided)\b")
 
 # Recognized status prefixes (case-insensitive, checked with str.startswith after lowercasing) per
 # the skill's "Status wording rules" -- kept separate from TODO/READY vs MAYBE since the two file
@@ -95,8 +119,6 @@ MAYBE_STATUS_PREFIX = "parked"
 
 def find_plan_files(todo_dir: Path) -> list:
     """Every TODO-/READY-/MAYBE-<id>[<letter>]-*.md file directly under todo_dir, sorted by name."""
-    if not todo_dir.is_dir():
-        return []
     return sorted(p for p in todo_dir.glob("*.md") if FILENAME_RE.match(p.name))
 
 
@@ -131,7 +153,7 @@ def open_questions_are_unresolved(section_body: str) -> bool:
         start = m.start()
         end = items[i + 1].start() if i + 1 < len(items) else len(section_body)
         block = section_body[start:end].lower()
-        if not any(marker in block for marker in RESOLVED_MARKERS):
+        if not RESOLVED_MARKER_RE.search(block):
             return True
     return False
 
@@ -190,19 +212,36 @@ def audit_file(path: Path) -> list:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Best-effort pre-filter for .work/todo/ Current status:/Complexity: header inconsistencies.",
+        description=f"Best-effort pre-filter for {REPO_LABEL}'s .work/todo/ header inconsistencies (see @{SKILL_NAME}).",
         epilog=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--dir", metavar="PATH", help="Directory to scan (default: .work/todo/ under the repo root).")
+    parser.add_argument("--root", metavar="PATH", help="Repository root; scans <root>/.work/todo/ (default: parent of this script's directory).")
+    parser.add_argument("--dir", metavar="PATH", help="Exact directory to scan, overriding --root.")
     parser.add_argument("--verbose", "-v", action="store_true", help="Also print files that passed every check.")
     args = parser.parse_args()
 
-    todo_dir = Path(args.dir) if args.dir else DEFAULT_TODO_DIR
+    if args.dir:
+        todo_dir = Path(args.dir).resolve()
+    else:
+        repo_root = Path(args.root).resolve() if args.root else DEFAULT_REPO_ROOT
+        todo_dir = repo_root / ".work" / "todo"
+
+    # Always announce the tree actually scanned, for the same reason todo-next-id.py does:
+    # bare per-repository ids make a wrong-tree run indistinguishable from a right-tree one.
+    print(f"[{REPO_LABEL}] scanning {todo_dir}", file=sys.stderr)
+
+    # A missing directory and an empty one are NOT the same answer. Missing means the caller
+    # is looking at the wrong tree (or the scaffolding was never installed) and must be told;
+    # empty means a genuinely clean tracker and is a legitimate pass.
+    if not todo_dir.is_dir():
+        print(f"ERROR: {todo_dir} does not exist -- nothing was scanned. Check the working tree, or pass --dir.", file=sys.stderr)
+        return 2
+
     files = find_plan_files(todo_dir)
 
     if not files:
-        print(f"No TODO-/READY-/MAYBE-*.md files found under {todo_dir}.")
+        print(f"No TODO-/READY-/MAYBE-*.md files found under {todo_dir} (directory exists and is empty of plan files).")
         return 0
 
     flagged_count = 0
