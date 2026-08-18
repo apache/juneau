@@ -301,11 +301,266 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// g) Builder validation: logo(...) / pageBackgroundImage(...)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final String VALID_LOGO = "/testfiles/console/logo.svg";
+	private static final String VALID_PAGE_BG = "/testfiles/console/page-bg.png";
+
+	@Test void g01_logo_null_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo(null));
+	}
+
+	@Test void g02_logo_empty_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo(""));
+	}
+
+	@Test void g03_logo_pathTraversalSegment_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo("/testfiles/console/../../../etc/passwd"));
+	}
+
+	@Test void g04_logo_unallowlistedExtension_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo("/testfiles/console/bad.txt"));
+	}
+
+	@Test void g05_logo_resourceDoesNotExist_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo("/testfiles/console/nope.svg"));
+	}
+
+	@Test void g06_logo_validClasspathResource_accepted() {
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo(VALID_LOGO).build());
+	}
+
+	@Test void g07_pageBackgroundImage_null_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage(null));
+	}
+
+	@Test void g08_pageBackgroundImage_empty_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage(""));
+	}
+
+	@Test void g09_pageBackgroundImage_pathTraversalSegment_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage("/testfiles/console/../../../etc/passwd"));
+	}
+
+	@Test void g10_pageBackgroundImage_unallowlistedExtension_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage("/testfiles/console/bad.txt"));
+	}
+
+	@Test void g11_pageBackgroundImage_resourceDoesNotExist_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage("/testfiles/console/nope.png"));
+	}
+
+	@Test void g12_pageBackgroundImage_validClasspathResource_accepted() {
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().pageBackgroundImage(VALID_PAGE_BG).build());
+	}
+
+	@Test void g13_allAllowlistedExtensions_accepted() {
+		// One fixture per allowlisted extension, content irrelevant - only the extension drives validation/content-type.
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.svg").build());
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.jpg").build());
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.jpeg").build());
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.webp").build());
+		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.gif").build());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// h) Asset serving: /juneau-console/assets/logo, /juneau-console/assets/page-bg
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class NoAssetsHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class AssetsHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() {
+			return ConsoleChromeMixin.create().logo(VALID_LOGO).pageBackgroundImage(VALID_PAGE_BG).build();
+		}
+	}
+
+	@Test void h01_logoAsset_unconfigured_is404() throws Exception {
+		MockRestClient.buildLax(NoAssetsHost.class).get(ConsoleChromeMixin.LOGO_ASSET_PATH).run().assertStatus(404);
+	}
+
+	@Test void h02_pageBgAsset_unconfigured_is404() throws Exception {
+		MockRestClient.buildLax(NoAssetsHost.class).get(ConsoleChromeMixin.PAGE_BG_ASSET_PATH).run().assertStatus(404);
+	}
+
+	@Test void h03_logoAsset_configured_servesBytesWithSvgContentTypeAndCacheControl() throws Exception {
+		assertAssetServed("/testfiles/console/logo.svg", ConsoleChromeMixin.LOGO_ASSET_PATH, "image/svg+xml");
+	}
+
+	@Test void h04_pageBgAsset_configured_servesBytesWithPngContentTypeAndCacheControl() throws Exception {
+		assertAssetServed("/testfiles/console/page-bg.png", ConsoleChromeMixin.PAGE_BG_ASSET_PATH, "image/png");
+	}
+
+	@Test void h05_logoAsset_arbitraryVersionQueryString_stillServes200() throws Exception {
+		// The `?v=...` cache-buster is consumed by the browser's cache key, not by mixin routing - any value
+		// (or none) must still resolve to the same configured asset.
+		MockRestClient.buildLax(AssetsHost.class).get(ConsoleChromeMixin.LOGO_ASSET_PATH + "?v=whatever").run().assertStatus(200);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// i) chrome.css composition: logo/page-bg override rules, with versioned URLs
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class LogoOnlyHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().logo(VALID_LOGO).build(); }
+	}
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class PageBgOnlyHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().pageBackgroundImage(VALID_PAGE_BG).build(); }
+	}
+
+	@Test void i01_noAssetsConfigured_chromeCssUnaffected() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(NoAssetsHost.class));
+		assertFalse(body.contains(ConsoleChromeMixin.LOGO_ASSET_PATH));
+		assertFalse(body.contains(ConsoleChromeMixin.PAGE_BG_ASSET_PATH));
+	}
+
+	@Test void i02_logoConfigured_chromeCssOverridesJcLogoBackgroundImage() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(AssetsHost.class));
+		assertTrue(body.contains(".jc-logo{background-image:url(\"" + ConsoleChromeMixin.LOGO_ASSET_PATH + "?v="),
+			() -> "missing logo override rule, body:\n" + body);
+	}
+
+	@Test void i03_pageBgConfigured_chromeCssLayersImageOverGradientToken() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(AssetsHost.class));
+		assertTrue(body.contains("url(\"" + ConsoleChromeMixin.PAGE_BG_ASSET_PATH + "?v="), () -> "missing page-bg url(), body:\n" + body);
+		assertTrue(body.contains("), var(--jc-page-bg);"), () -> "missing gradient-token fallback layer, body:\n" + body);
+	}
+
+	@Test void i04_versionedQueryString_matchesPackageImplementationVersionPlusContentHash() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(AssetsHost.class));
+		var v = ConsoleChromeMixin.class.getPackage().getImplementationVersion();
+		var expectedPrefix = "?v=" + (v == null ? "dev" : v) + "-";
+		var m = Pattern.compile(Pattern.quote(ConsoleChromeMixin.LOGO_ASSET_PATH) + Pattern.quote(expectedPrefix) + "([0-9a-f]{8})\"").matcher(body);
+		assertTrue(m.find(), () -> "expected version+content-hash cache-buster, body:\n" + body);
+	}
+
+	@Test void i07_contentHashCacheBuster_isStableAcrossRequests_andDiffersBetweenLogoAndPageBg() throws Exception {
+		// The content-hash cache-buster (Task 1) is computed from each asset's own bytes, cached once - it must be
+		// stable across requests (not recomputed per-request) and must differ between the two distinct fixture files.
+		var body1 = bodyOf(MockRestClient.buildLax(AssetsHost.class));
+		var body2 = bodyOf(MockRestClient.buildLax(AssetsHost.class));
+		var logoHash = extractHash(body1, ConsoleChromeMixin.LOGO_ASSET_PATH);
+		var pageBgHash = extractHash(body1, ConsoleChromeMixin.PAGE_BG_ASSET_PATH);
+		assertEquals(logoHash, extractHash(body2, ConsoleChromeMixin.LOGO_ASSET_PATH), "hash must be stable across requests");
+		assertNotEquals(logoHash, pageBgHash, "distinct fixture assets must not collide on their content hash");
+	}
+
+	private static String extractHash(String body, String assetPath) {
+		var m = Pattern.compile(Pattern.quote(assetPath) + "\\?v=[^-\"]+-([0-9a-f]{8})\"").matcher(body);
+		assertTrue(m.find(), () -> "no versioned+hashed url for " + assetPath + " in body:\n" + body);
+		return m.group(1);
+	}
+
+	@Test void i05_onlyLogoConfigured_pageBgOverrideRuleAbsent_andPageBgAssetStill404() throws Exception {
+		var c = MockRestClient.buildLax(LogoOnlyHost.class);
+		var body = bodyOf(c);
+		assertTrue(body.contains(ConsoleChromeMixin.LOGO_ASSET_PATH));
+		assertFalse(body.contains(ConsoleChromeMixin.PAGE_BG_ASSET_PATH));
+		c.get(ConsoleChromeMixin.PAGE_BG_ASSET_PATH).run().assertStatus(404);
+	}
+
+	@Test void i06_onlyPageBgConfigured_logoOverrideRuleAbsent_andLogoAssetStill404() throws Exception {
+		var c = MockRestClient.buildLax(PageBgOnlyHost.class);
+		var body = bodyOf(c);
+		assertTrue(body.contains(ConsoleChromeMixin.PAGE_BG_ASSET_PATH));
+		assertFalse(body.contains(ConsoleChromeMixin.LOGO_ASSET_PATH));
+		c.get(ConsoleChromeMixin.LOGO_ASSET_PATH).run().assertStatus(404);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// j) Security regression: Theme/CssValueGrammar untouched by this feature
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_assembledResponseWithBothAssetsConfigured_passesChromeCssScanner() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(AssetsHost.class));
+		assertEquals(List.of(), ChromeCssScanner.scan(body), () -> "violations against assembled body:\n" + body);
+	}
+
+	@Test void j02_themeTokenPath_stillRejectsUrlProduction_evenWithAssetsFeaturePresent() {
+		assertThrows(IllegalArgumentException.class,
+			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-page-bg", "url(https://evil)").build()));
+	}
+
+	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
+		// A0 must not add a --jc-logo or --jc-page-bg-image token - the logo/page-bg mechanism is deliberately
+		// NOT part of the Theme token model (finding 4 of the design doc). If this count ever changes, it must be
+		// a DIFFERENT, deliberate change to Theme.OPEN - not a side effect of the asset feature.
+		assertEquals(32, Theme.OPEN.getTokens().size());
+		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// k) DataTables table visual parity (IRS reference: zebra striping, row hover, themed header)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void k01_chromeCss_themesDataTableZebraStriping_bothGenerations() throws Exception {
+		var css = readChromeCss();
+		// DT2.x bare markup (no "stripe" convenience class - what this app's tables actually render today).
+		assertTrue(css.contains("table.dataTable > tbody > tr:nth-child(odd)"), () -> "missing bare odd-row rule, css:\n" + css);
+		assertTrue(css.contains("table.dataTable > tbody > tr:nth-child(even)"), () -> "missing bare even-row rule, css:\n" + css);
+		// DT1.x row classes.
+		assertTrue(css.contains("table.dataTable > tbody > tr.odd"), () -> "missing tr.odd rule, css:\n" + css);
+		assertTrue(css.contains("table.dataTable > tbody > tr.even"), () -> "missing tr.even rule, css:\n" + css);
+		// DT2.x "stripe"/"display" convenience-class opt-in form.
+		assertTrue(css.contains("table.dataTable.stripe > tbody > tr:nth-child(odd)"), () -> "missing .stripe odd-row rule, css:\n" + css);
+		assertTrue(css.contains("table.dataTable.stripe > tbody > tr:nth-child(even)"), () -> "missing .stripe even-row rule, css:\n" + css);
+	}
+
+	@Test void k02_chromeCss_themesDataTableRowHover_bothGenerations() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains("table.dataTable > tbody > tr:hover"), () -> "missing bare row-hover rule, css:\n" + css);
+		assertTrue(css.contains("table.dataTable.hover > tbody > tr:hover"), () -> "missing .hover row-hover rule, css:\n" + css);
+	}
+
+	@Test void k03_chromeCss_neutralizesVendoredStripeHoverCssVariables() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains("--dt-row-stripe:"), () -> "missing --dt-row-stripe neutralization, css:\n" + css);
+		assertTrue(css.contains("--dt-row-hover:"), () -> "missing --dt-row-hover neutralization, css:\n" + css);
+	}
+
+	@Test void k04_chromeCss_themesDataTableHeaderAndFont() throws Exception {
+		var css = readChromeCss();
+		assertTrue(css.contains("table.dataTable {"), () -> "missing table.dataTable base rule, css:\n" + css);
+		assertTrue(css.contains("font-family: var(--jc-font);"), () -> "missing themed font-family, css:\n" + css);
+		assertTrue(css.contains("table.dataTable > thead > tr > th"), () -> "missing themed header rule, css:\n" + css);
+	}
+
+	private static String readChromeCss() throws IOException {
+		try (var in = ConsoleChromeMixin_Test.class.getResourceAsStream("/org/apache/juneau/console/chrome.css")) {
+			assertNotNull(in);
+			return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test helpers
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static String bodyOf(MockRestClient client) throws Exception {
 		return client.get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+	}
+
+	private static void assertAssetServed(String resourcePath, String assetPath, String expectedContentType) throws Exception {
+		byte[] expected;
+		try (var in = ConsoleChromeMixin_Test.class.getResourceAsStream(resourcePath)) {
+			expected = in.readAllBytes();
+		}
+		var res = MockRestClient.buildLax(AssetsHost.class).get(assetPath).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains(expectedContentType)
+			.assertHeader("Cache-Control").isContains("max-age");
+		assertArrayEquals(expected, res.getContent().asBytes());
 	}
 
 	private static int countRootBlocks(String body) {

@@ -16,15 +16,22 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.nio.charset.*;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.zip.*;
 
+import org.apache.juneau.commons.io.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 
 /**
@@ -60,6 +67,12 @@ public class ConsoleChromeMixin {
 	/** The URL path at which the chrome stylesheet is served (relative to the host mount). */
 	public static final String CHROME_CSS_PATH = "/juneau-console/chrome.css";
 
+	/** The URL path at which the configured logo asset is served (relative to the host mount). */
+	public static final String LOGO_ASSET_PATH = "/juneau-console/assets/logo";
+
+	/** The URL path at which the configured page-background asset is served (relative to the host mount). */
+	public static final String PAGE_BG_ASSET_PATH = "/juneau-console/assets/page-bg";
+
 	/** Classpath location of the shipped structural stylesheet. */
 	static final String CHROME_CSS_RESOURCE = "/org/apache/juneau/console/chrome.css";
 
@@ -69,11 +82,19 @@ public class ConsoleChromeMixin {
 	/** {@code Cache-Control} header emitted for the chrome stylesheet (1 day). */
 	static final String CACHE_CONTROL = "max-age=86400, public";
 
+	/** The image file extensions a configured logo/page-background asset is allowed to use. */
+	private static final Set<String> ALLOWED_ASSET_EXTS = Set.of("svg", "png", "jpg", "jpeg", "webp", "gif");
+
 	/** The shipped static chrome.css bytes, read once from the classpath (shared - the static file never varies by theme). */
 	private static volatile String staticCss;
 
+	/** Per-resource content-hash cache for the configured logo/page-background assets (populated on first request). */
+	private static final Map<String,String> ASSET_HASH_CACHE = new ConcurrentHashMap<>();
+
 	private final boolean cacheAssets;
 	private final Theme theme;
+	private final String logoResource;
+	private final String pageBackgroundResource;
 
 	/** Per-mixin-instance cache of the fully-assembled (static + theme blocks) response body. Never shared across mounts. */
 	private volatile byte[] cachedBody;
@@ -97,6 +118,8 @@ public class ConsoleChromeMixin {
 	protected ConsoleChromeMixin(Builder builder) {
 		this.cacheAssets = builder.cacheAssets;
 		this.theme = builder.theme;
+		this.logoResource = builder.logoResource;
+		this.pageBackgroundResource = builder.pageBackgroundResource;
 	}
 
 	/**
@@ -124,9 +147,57 @@ public class ConsoleChromeMixin {
 	)
 	public HttpResource getChromeCss(RestRequest req) throws IOException {
 		var body = cacheAssets ? cachedBody(req) : buildBody(req);
+		return httpResource(body, CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-console/assets/logo] &mdash; serve the configured logo asset.
+	 *
+	 * @return The configured logo image as an {@link HttpResource}.
+	 * @throws IOException If the configured resource could not be read.
+	 */
+	@RestGet(
+		path=LOGO_ASSET_PATH,
+		summary="Configured logo image asset",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getLogoAsset() throws IOException {
+		if (logoResource == null)
+			throw new NotFound("No logo asset configured.");
+		return serveAsset(logoResource);
+	}
+
+	/**
+	 * [GET /juneau-console/assets/page-bg] &mdash; serve the configured page-background asset.
+	 *
+	 * @return The configured page-background image as an {@link HttpResource}.
+	 * @throws IOException If the configured resource could not be read.
+	 */
+	@RestGet(
+		path=PAGE_BG_ASSET_PATH,
+		summary="Configured page-background image asset",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getPageBackgroundAsset() throws IOException {
+		if (pageBackgroundResource == null)
+			throw new NotFound("No page-background asset configured.");
+		return serveAsset(pageBackgroundResource);
+	}
+
+	/** Reads and wraps a validated, already-configured classpath resource as a cacheable {@link HttpResource}. */
+	private static HttpResource serveAsset(String classpathResource) throws IOException {
+		byte[] bytes;
+		try (var in = ConsoleChromeMixin.class.getResourceAsStream(classpathResource)) {
+			bytes = IoUtils.readBytes(in);
+		}
+		return httpResource(bytes, MimeTypeDetector.DEFAULT.getContentType(classpathResource));
+	}
+
+	/** Wraps pre-computed bytes as a cacheable {@link HttpResource} carrying the given content type. */
+	private static HttpResource httpResource(byte[] bytes, String contentType) {
 		return HttpResourceBean.of(
-			ByteArrayBody.of(body, CONTENT_TYPE),
-			CollectionUtils.list(ContentType.of(CONTENT_TYPE), CacheControl.of(CACHE_CONTROL))
+			ByteArrayBody.of(bytes, contentType),
+			CollectionUtils.list(ContentType.of(contentType), CacheControl.of(CACHE_CONTROL))
 		);
 	}
 
@@ -145,7 +216,13 @@ public class ConsoleChromeMixin {
 		return b;
 	}
 
-	/** Builds the response body: the static structural CSS, then Theme.OPEN's block, then (if different) the active theme's override block. */
+	/**
+	 * Builds the response body: the static structural CSS, then Theme.OPEN's block, then (if different) the active
+	 * theme's override block, then (if configured) the logo/page-background asset override rules. Each override
+	 * rule's {@code ?v=<buildVersion>-<hash8>} cache-buster is content-sensitive (see {@link #assetContentHash},
+	 * mirroring {@code ViewsMixin}) so a {@code -SNAPSHOT} rebuild of the configured asset busts the browser cache
+	 * without relying on {@code buildVersion} (stable across dev rebuilds) alone.
+	 */
 	private byte[] buildBody(RestRequest req) throws IOException {
 		buildCount.incrementAndGet();
 		var sb = new StringBuilder(staticCss());
@@ -153,7 +230,45 @@ public class ConsoleChromeMixin {
 		var active = resolveActiveTheme(req);
 		if (! active.getName().equals(Theme.OPEN.getName()))
 			sb.append('\n').append(rootBlock(active));
+		if (pageBackgroundResource != null)
+			sb.append('\n').append("html, body{background-image:url(\"").append(PAGE_BG_ASSET_PATH)
+				.append("?v=").append(buildVersion()).append('-').append(assetContentHash(pageBackgroundResource))
+				.append("\"), var(--jc-page-bg);}");
+		if (logoResource != null)
+			sb.append('\n').append(".jc-logo{background-image:url(\"").append(LOGO_ASSET_PATH)
+				.append("?v=").append(buildVersion()).append('-').append(assetContentHash(logoResource))
+				.append("\");}");
 		return sb.toString().getBytes(StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * Resolves the framework build version for asset cache-busting, falling back to {@code "dev"} when unset
+	 * (e.g. running from IDE/test classpath rather than a packaged jar).
+	 */
+	private static String buildVersion() {
+		var v = ConsoleChromeMixin.class.getPackage().getImplementationVersion();
+		return v == null ? "dev" : v;  // HTT: the non-null branch only fires when running from a packaged jar with a manifest Implementation-Version - unreachable when tests run against unpackaged target/classes.
+	}
+
+	/** Computes (and caches) the given classpath resource's 8-hex-char content hash, read once per resource. */
+	private static String assetContentHash(String classpathResource) {
+		return ASSET_HASH_CACHE.computeIfAbsent(classpathResource, ConsoleChromeMixin::readAndHash);
+	}
+
+	/** Reads a validated, already-configured classpath resource and hashes its bytes. */
+	private static String readAndHash(String classpathResource) {
+		try (var in = ConsoleChromeMixin.class.getResourceAsStream(classpathResource)) {
+			return hash8(IoUtils.readBytes(in));
+		} catch (IOException e) {  // HTT: unreachable - validateAssetResource already confirmed the resource exists.
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	/** Formats a CRC32 checksum of {@code bytes} as a zero-padded 8-hex-char content hash. */
+	private static String hash8(byte[] bytes) {
+		var crc = new CRC32();
+		crc.update(bytes);
+		return String.format("%08x", crc.getValue());
 	}
 
 	/**
@@ -205,6 +320,8 @@ public class ConsoleChromeMixin {
 	public static class Builder {
 		boolean cacheAssets = true;
 		Theme theme;
+		String logoResource;
+		String pageBackgroundResource;
 
 		/**
 		 * Whether to cache the assembled response body after the first request (default <jk>true</jk>).
@@ -229,6 +346,39 @@ public class ConsoleChromeMixin {
 		}
 
 		/**
+		 * Configures a themeable logo image, served at {@link #LOGO_ASSET_PATH} and overriding the default
+		 * {@code .jc-logo} background image in the emitted {@code chrome.css}.
+		 *
+		 * @param value
+	 * 	An app-owned, classpath-root-absolute resource path (e.g. {@code "/static/img/oakleaf.svg"}). Must exist on
+	 * 	the classpath, contain no {@code ..} path segment or {@code %} character, and end in one of {@code .svg}/
+	 * 	{@code .png}/{@code .jpg}/{@code .jpeg}/{@code .webp}/{@code .gif}.
+		 * @return This object.
+		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>, empty, traversal-shaped, has an
+		 * 	unrecognized extension, or does not resolve to an existing classpath resource.
+		 */
+		public Builder logo(String value) {
+			this.logoResource = validateAssetResource(value, "logo");
+			return this;
+		}
+
+		/**
+		 * Configures a themeable page-background image, served at {@link #PAGE_BG_ASSET_PATH} and layered over the
+		 * active theme's {@code --jc-page-bg} gradient in the emitted {@code chrome.css}.
+		 *
+		 * @param value
+		 * 	An app-owned, classpath-root-absolute resource path (e.g. {@code "/static/img/topo-bg.png"}). Same
+		 * 	validation as {@link #logo(String)}.
+		 * @return This object.
+		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>, empty, traversal-shaped, has an
+		 * 	unrecognized extension, or does not resolve to an existing classpath resource.
+		 */
+		public Builder pageBackgroundImage(String value) {
+			this.pageBackgroundResource = validateAssetResource(value, "pageBackgroundImage");
+			return this;
+		}
+
+		/**
 		 * Builds the mixin.
 		 *
 		 * @return A new {@link ConsoleChromeMixin}.
@@ -236,5 +386,23 @@ public class ConsoleChromeMixin {
 		public ConsoleChromeMixin build() {
 			return new ConsoleChromeMixin(this);
 		}
+	}
+
+	/**
+	 * Fail-closed validation for a configured asset's classpath resource path: reject <jk>null</jk>/empty, reject
+	 * any traversal-shaped path (containing {@code ..} or a {@code %} URI-encoding escape, matching
+	 * {@code BasicFileFinder.isInvalidPath}), reject an extension outside the image allowlist, and reject a path
+	 * that does not resolve to an existing classpath resource.
+	 */
+	private static String validateAssetResource(String value, String paramName) {
+		if (value == null || value.isEmpty())
+			throw iaex("'%s' must not be null or empty.", paramName);
+		if (value.contains("..") || value.contains("%"))
+			throw iaex("'%s' must not contain '..' or '%%' (path traversal): '%s'.", paramName, value);
+		if (! ALLOWED_ASSET_EXTS.contains(FileUtils.getFileExtension(value).toLowerCase(Locale.ROOT)))
+			throw iaex("'%s' must end in one of .svg/.png/.jpg/.jpeg/.webp/.gif: '%s'.", paramName, value);
+		if (ConsoleChromeMixin.class.getResource(value) == null)
+			throw iaex("'%s' classpath resource not found: '%s'.", paramName, value);
+		return value;
 	}
 }

@@ -71,10 +71,8 @@ a:hover { text-decoration: underline; }
 .jc-header {
   display: flex;
   align-items: center;
-  height: 68px;
+  height: 56px;
   background-color: var(--jc-white);
-  border-bottom: 1px solid var(--jc-border);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -88,9 +86,9 @@ a:hover { text-decoration: underline; }
 }
 
 .jc-logo {
-  width: 48px;
-  height: 48px;
-  margin: 10px 20px;
+  width: 40px;
+  height: 40px;
+  margin: 8px 16px;
   flex: 0 0 auto;
   border-radius: var(--jc-radius);
   background-color: var(--jc-white);
@@ -165,7 +163,7 @@ a:hover { text-decoration: underline; }
   border-bottom: 3px solid var(--jc-accent);
   padding: 0 16px;
   position: sticky;
-  top: 68px;
+  top: 56px;
   z-index: 19;
 }
 
@@ -173,10 +171,10 @@ a:hover { text-decoration: underline; }
   display: flex;
   align-items: center;
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--jc-text-soft);
-  padding: 8px 10px;
-  margin-right: 2px;
+  padding: 9px 12px;
+  margin-right: 0;
   border-top: 3px solid transparent;
   border-bottom: none;
   cursor: pointer;
@@ -385,6 +383,123 @@ table.jc-table tbody td {
 table.jc-table tbody tr:nth-child(odd) { background-color: #fbfbfc; }
 table.jc-table tbody tr:hover { background-color: var(--jc-accent-wash); }
 table.jc-table tbody tr:last-child td { border-bottom: none; }
+
+/* ==========================================================================
+   DataTables table visual parity (IRS reference: compact rows, subtle zebra
+   striping, row hover, light header) - juneau-rest-server-views' neutral
+   `table[data-juneau-view]` / `table.dataTable` selectors (juneau-views.css)
+   get their font-family/color/background-color/border-color HERE, via
+   --jc-* tokens - the same base-shape-in-views / colors-in-chrome split as
+   the ".tag"/ribbon reconciliation above.  Child-combinator selectors mirror
+   the vendored dataTables.dataTables.css structure so specificity TIES (not
+   loses to) it; this file is served LAST in every juneau-views page's
+   <head>, so ties resolve in our favor by cascade order.
+
+   Covers BOTH DataTables stripe/hover generations: DT1.x's `tr.odd`/
+   `tr.even` row classes, AND DT2.x's - this app's table carries no
+   "stripe"/"hover"/"display" convenience class (see juneau-views.js), so
+   DT2.x's own box-shadow-based nth-child stripe/hover never actually fires;
+   the bare `tbody tr:nth-child(odd/even)`/`:hover` rules below are what
+   actually paints every row today.  The `table.dataTable.stripe`/`.hover`/
+   `.display` forms are ALSO covered for any future consumer that opts into
+   those convenience classes, with the vendored --dt-row-stripe/--dt-row-hover
+   CSS variables neutralized (white, near-zero alpha) so that DataTables'
+   own inset box-shadow overlay can never visibly fight these backgrounds.
+   ========================================================================== */
+
+table[data-juneau-view],
+table.dataTable {
+  font-family: var(--jc-font);
+  color: var(--jc-text);
+  border-bottom-color: var(--jc-border);   /* themes the table's own outer bottom border */
+  --dt-row-stripe: 255, 255, 255;
+  --dt-row-hover: 255, 255, 255;
+}
+
+table[data-juneau-view] > thead > tr > th,
+table[data-juneau-view] > thead > tr > td,
+table.dataTable > thead > tr > th,
+table.dataTable > thead > tr > td {
+  background-color: var(--jc-chrome-bg);
+  color: var(--jc-text-soft);
+  border-bottom-color: var(--jc-border);
+}
+
+table[data-juneau-view] > tbody > tr > th,
+table[data-juneau-view] > tbody > tr > td,
+table.dataTable > tbody > tr > th,
+table.dataTable > tbody > tr > td {
+  border-bottom-color: var(--jc-border);
+}
+
+/* Zebra striping - bare nth-child (the mechanism actually in effect today, see comment above), tr.odd/tr.even
+   (DT1.x), and table.dataTable.stripe/.display nth-child (DT2.x's own convenience-class opt-in form). */
+table[data-juneau-view] > tbody > tr:nth-child(odd),
+table[data-juneau-view] > tbody > tr.odd,
+table.dataTable > tbody > tr:nth-child(odd),
+table.dataTable > tbody > tr.odd,
+table.dataTable.stripe > tbody > tr:nth-child(odd),
+table.dataTable.display > tbody > tr:nth-child(odd) {
+  background-color: var(--jc-white);
+}
+
+table[data-juneau-view] > tbody > tr:nth-child(even),
+table[data-juneau-view] > tbody > tr.even,
+table.dataTable > tbody > tr:nth-child(even),
+table.dataTable > tbody > tr.even,
+table.dataTable.stripe > tbody > tr:nth-child(even),
+table.dataTable.display > tbody > tr:nth-child(even) {
+  background-color: var(--jc-card-bg);
+}
+
+/* Row hover - bare :hover (the mechanism actually in effect today) plus the .hover/.display convenience-class
+   form; wins over the zebra background-color above by source order (this rule is declared after it). */
+table[data-juneau-view] > tbody > tr:hover,
+table.dataTable > tbody > tr:hover,
+table.dataTable.hover > tbody > tr:hover,
+table.dataTable.display > tbody > tr:hover {
+  background-color: var(--jc-accent-wash);
+}
+
+/* ==========================================================================
+   DataTables ribbon visual parity (juneau-rest-server-views' ".juneau-view-*"
+   classes) - additive themed accent layer only.  -views ships the neutral
+   base shape (border/color via currentColor); this file themes the SAME
+   class names with --jc-accent/--jc-accent-wash, sink-property-allowlist
+   compliant (color/background-color only - see the file header comment).
+   ========================================================================== */
+
+/* Base thin-neutral-border shape (IRS parity item 1) - -views ships only a currentColor-fallback border, which
+   inherits the body's near-black text color instead of IRS's subtle gray; themed here with --jc-border, plus a
+   white face so a button reads as a distinct control against the card's tinted background. */
+.juneau-view-ribbon-btn { border-color: var(--jc-border); background-color: var(--jc-white); color: var(--jc-text-soft); }
+.juneau-view-ribbon-btn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-ribbon-btn:active { background-color: var(--jc-accent); color: var(--jc-white); }
+
+/* Themed accent for an ACTIVE toggle (option/optionGroup member button's aria-pressed="true" - see -views'
+   neutral border-width rule for this same attribute selector). Without this, a persisted, still-active filter
+   (e.g. a column-scoped "option" toggle whose state survived a browser refresh) is visually indistinguishable
+   from an unpressed button - clicking it once and never again can silently keep filtering out every row.  Also
+   matches the blue "active" export button in the IRS reference ribbon (item 1). */
+.juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent); color: var(--jc-white); border-color: var(--jc-accent); }
+
+/* Unified paging ribbon (nav + page-size menu) - same thin-neutral-border/white-face treatment as the ribbon
+   buttons. */
+.juneau-view-pagingpill { border-color: var(--jc-border); background-color: var(--jc-white); }
+.juneau-view-pagingpill-btn { border-color: var(--jc-border); color: var(--jc-text-soft); }
+.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menuwrap { border-color: var(--jc-border); }
+.juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
+.juneau-view-pagingpill-menubtn:hover,
+.juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menu { border-color: var(--jc-border); background-color: var(--jc-white); }
+.juneau-view-pagingpill-menu-option:hover,
+.juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-accent); }
+
+/* Per-column search row inputs (IRS parity item 4) - same thin-neutral-border treatment, themed accent on focus. */
+.juneau-view-columnsearch-input { border-color: var(--jc-border); background-color: var(--jc-white); color: var(--jc-text); }
+.juneau-view-columnsearch-input:focus { border-color: var(--jc-accent); }
 
 /* ==========================================================================
    Footer
