@@ -58,6 +58,9 @@ class SseLogServletTest {
 		return req;
 	}
 
+	@SuppressWarnings({
+		"resource" // Mockito stub: resp.getWriter() returns the caller-owned PrintWriter; no resource is opened here.
+	})
 	private HttpServletResponse responseWriting(PrintWriter out) throws IOException {
 		var resp = mock(HttpServletResponse.class);
 		when(resp.getWriter()).thenReturn(out);
@@ -133,33 +136,34 @@ class SseLogServletTest {
 		var initialSeen = new CountDownLatch(1);
 		var updateSeen = new CountDownLatch(1);
 		var writer = new FailableWriter(initialSeen, updateSeen);
-		var out = new PrintWriter(writer);
-		var bc = new RunStateBroadcaster();
-		var servlet = new SseLogServlet((v, s) -> Optional.empty(), (v, s) -> Optional.empty(),
-				v -> Optional.of("INITIAL_SNAPSHOT"), v -> Optional.of(bc));
-		var req = requestFor("/9.2.1/state");
-		var resp = responseWriting(out);
+		try (var out = new PrintWriter(writer)) {
+			var bc = new RunStateBroadcaster();
+			var servlet = new SseLogServlet((v, s) -> Optional.empty(), (v, s) -> Optional.empty(),
+					v -> Optional.of("INITIAL_SNAPSHOT"), v -> Optional.of(bc));
+			var req = requestFor("/9.2.1/state");
+			var resp = responseWriting(out);
 
-		var worker = new Thread(() -> servlet.doGet(req, resp));
-		worker.setDaemon(true);
-		worker.start();
+			var worker = new Thread(() -> servlet.doGet(req, resp));
+			worker.setDaemon(true);
+			worker.start();
 
-		assertTrue(initialSeen.await(2, TimeUnit.SECONDS), "the current snapshot must be sent on connect");
-		// tail() subscribes to bc slightly after the initial send completes; re-publish until the worker
-		// thread's subscription has actually landed rather than racing a single publish against it.
-		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
-		while (!updateSeen.await(20, TimeUnit.MILLISECONDS)) {
-			bc.publish("UPDATED_SNAPSHOT");
-			if (System.nanoTime() > deadline)
-				fail("a published snapshot must be tailed live");
+			assertTrue(initialSeen.await(2, TimeUnit.SECONDS), "the current snapshot must be sent on connect");
+			// tail() subscribes to bc slightly after the initial send completes; re-publish until the worker
+			// thread's subscription has actually landed rather than racing a single publish against it.
+			var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(2);
+			while (!updateSeen.await(20, TimeUnit.MILLISECONDS)) {
+				bc.publish("UPDATED_SNAPSHOT");
+				if (System.nanoTime() > deadline)
+					fail("a published snapshot must be tailed live");
+			}
+
+			writer.failNext = true;
+			bc.publish("nudge-the-blocked-poll-loop"); // wake tail()'s poll so its next write hits the failure
+			worker.join(2000);
+			assertFalse(worker.isAlive(), "the tail loop must exit once writes to the client start failing");
+
+			assertEquals(SseLogServlet.sse("INITIAL_SNAPSHOT") + SseLogServlet.sse("UPDATED_SNAPSHOT"),
+					writer.captured.toString());
 		}
-
-		writer.failNext = true;
-		bc.publish("nudge-the-blocked-poll-loop"); // wake tail()'s poll so its next write hits the failure
-		worker.join(2000);
-		assertFalse(worker.isAlive(), "the tail loop must exit once writes to the client start failing");
-
-		assertEquals(SseLogServlet.sse("INITIAL_SNAPSHOT") + SseLogServlet.sse("UPDATED_SNAPSHOT"),
-				writer.captured.toString());
 	}
 }

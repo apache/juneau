@@ -25,17 +25,16 @@ import org.junit.jupiter.api.Test;
 class RunStateBroadcasterTest {
 
 	@Test
-	void publishDeliversToEverySubscriber() {
+	void publishDeliversToEverySubscriber() throws Exception {
 		var bc = new RunStateBroadcaster();
 		var a = new ArrayList<String>();
 		var b = new ArrayList<String>();
-		bc.subscribe(a::add);
-		bc.subscribe(b::add);
+		try (var s1 = bc.subscribe(a::add); var s2 = bc.subscribe(b::add)) {
+			bc.publish("{\"status\":\"RUNNING\"}");
 
-		bc.publish("{\"status\":\"RUNNING\"}");
-
-		assertEquals(List.of("{\"status\":\"RUNNING\"}"), a);
-		assertEquals(List.of("{\"status\":\"RUNNING\"}"), b);
+			assertEquals(List.of("{\"status\":\"RUNNING\"}"), a);
+			assertEquals(List.of("{\"status\":\"RUNNING\"}"), b);
+		}
 	}
 
 	@Test
@@ -52,17 +51,16 @@ class RunStateBroadcasterTest {
 	}
 
 	@Test
-	void aThrowingSubscriberDoesNotBreakOthers() {
+	void aThrowingSubscriberDoesNotBreakOthers() throws Exception {
 		var bc = new RunStateBroadcaster();
 		var seen = new ArrayList<String>();
-		bc.subscribe(s -> {
+		try (var s1 = bc.subscribe(s -> {
 			throw new RuntimeException("dead client");
-		});
-		bc.subscribe(seen::add);
+		}); var s2 = bc.subscribe(seen::add)) {
+			bc.publish("snapshot");
 
-		bc.publish("snapshot");
-
-		assertEquals(List.of("snapshot"), seen);
+			assertEquals(List.of("snapshot"), seen);
+		}
 	}
 
 	@Test
