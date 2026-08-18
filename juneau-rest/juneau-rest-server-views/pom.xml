@@ -62,6 +62,121 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<!--
+			JavaScript-execution harness.  NOT activated by default, and nothing here runs, downloads, or is
+			required unless you ask for it by name:
+
+			    mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test
+
+			(-f rather than -pl, for the same reason the microbench profile in juneau-integration-tests documents:
+			the reactor's .mvn/maven.config also-make flag otherwise drags sibling modules into the run.)
+
+			A default `mvn install` - including an offline build from a source tarball - needs no Node, no npm, no
+			browser and no network for this module: the profile is off, so PagePanelVisibility_BrowserTest sees no
+			"juneau.jsTests" system property and JUnit skips it.  It still compiles, because it drives the prober
+			through plain java.lang.ProcessBuilder rather than any new Maven dependency; the module's default
+			dependency set is unchanged by this profile.
+
+			Everything the profile fetches lands under target/js (node_modules, the pinned Playwright package, and
+			the Chromium download), which the repo already ignores via "**/target/" and Apache RAT already skips via
+			"**/target/**" - so no new .gitignore entry, no new RAT exclusion, and nothing fetched can reach the
+			source distribution (juneau-distrib's src assembly packages only the sources jars under its own
+			target/src).  Both committed files - src/test/js/panel-visibility.cjs and the Java test - carry the
+			standard ASF header.
+
+			Prerequisites when you DO opt in: Node and npm on the PATH (override the launcher with
+			-Djuneau.jsTests.node=/path/to/node), plus network access on the first run.  Both steps below are
+			idempotent and cost roughly a second once target/js is warm.  On Windows the npm launcher is npm.cmd,
+			so pass -Djuneau.jsTests.npm=npm.cmd there.
+
+			The browser download is the one thing whose location is separately overridable, via
+			-Djuneau.jsTests.browsers.  It defaults inside target/ so `mvn clean` reclaims it for a developer, but CI
+			points it at Playwright's own ~/.cache/ms-playwright so actions/cache can carry the ~200MB across runs
+			(target/ cannot be cached: the reactor's defaultGoal is "clean verify", which would delete a restored
+			cache before it was used).  See the js-tests job in .github/workflows/maven.yml.
+		-->
+		<profile>
+			<id>js-tests</id>
+			<properties>
+				<!-- Pinned deliberately: a floating browser version would make failures non-reproducible. -->
+				<playwright.version>1.49.1</playwright.version>
+				<!-- Launcher names, overridable with -D when they are not on the PATH under these names. -->
+				<juneau.jsTests.node>node</juneau.jsTests.node>
+				<juneau.jsTests.npm>npm</juneau.jsTests.npm>
+				<js.tests.dir>${project.build.directory}/js</js.tests.dir>
+				<!-- Overridden by CI to a cacheable path outside target/; see the note above. -->
+				<juneau.jsTests.browsers>${js.tests.dir}/browsers</juneau.jsTests.browsers>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.3.0</version>
+						<executions>
+							<execution>
+								<id>js-install-playwright</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${juneau.jsTests.npm}</executable>
+									<arguments>
+										<argument>install</argument>
+										<argument>--no-fund</argument>
+										<argument>--no-audit</argument>
+										<argument>--prefix</argument>
+										<argument>${js.tests.dir}</argument>
+										<argument>playwright@${playwright.version}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<!--
+									Separate from the npm install because the browser is not an npm package: it is a
+									binary Playwright fetches on demand.  Idempotent - it re-verifies and skips an
+									already-present browser, which is what makes a warm cache cheap.
+								-->
+								<id>js-install-chromium</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${juneau.jsTests.node}</executable>
+									<environmentVariables>
+										<PLAYWRIGHT_BROWSERS_PATH>${juneau.jsTests.browsers}</PLAYWRIGHT_BROWSERS_PATH>
+									</environmentVariables>
+									<arguments>
+										<argument>${js.tests.dir}/node_modules/playwright/cli.js</argument>
+										<argument>install</argument>
+										<argument>chromium</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<!-- Merges with the reactor-root logging properties; these keys are local to this module. -->
+							<systemPropertyVariables>
+								<juneau.jsTests>true</juneau.jsTests>
+								<juneau.jsTests.dir>${js.tests.dir}</juneau.jsTests.dir>
+								<juneau.jsTests.harness>${project.basedir}/src/test/js/panel-visibility.cjs</juneau.jsTests.harness>
+								<juneau.jsTests.node>${juneau.jsTests.node}</juneau.jsTests.node>
+								<juneau.jsTests.browsers>${juneau.jsTests.browsers}</juneau.jsTests.browsers>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>

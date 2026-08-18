@@ -56,3 +56,85 @@ jobs:
         cache: 'maven'
     - name: Build with Maven
       run: mvn --no-transfer-progress --batch-mode --show-version
+
+  # Executes the juneau-rest-server-views client runtime (juneau-pages.js) in headless Chromium.  Two real defects
+  # shipped in that runtime because JavaScript had no execution coverage at all, so this job is the thing that makes
+  # the harness real: it is opt-in via the -Pjs-tests profile precisely so an offline source-tarball build never needs
+  # Node, npm or a browser, which means it only ever runs where something deliberately asks for it - here.
+  #
+  # Deliberately a SEPARATE job rather than a flag on the matrix build above, for two reasons: the result is
+  # JDK-independent (the JVM only orchestrates; the assertions are about Chromium's layout), so running it three times
+  # would buy nothing, and a Playwright CDN hiccup then fails only this job instead of red-X'ing the entire Java build
+  # on every JDK.
+  #
+  # Runs on EVERY push and pull request - it inherits this workflow's triggers rather than adding a path filter
+  # scoped to juneau-rest/juneau-rest-server-views.  A path filter would be cheaper but wrong: the fixture this
+  # harness renders is assembled from three modules, so a regression can arrive from outside the views module
+  # entirely.  The PAGE_META sidecar alone depends on StringUtils.escapeForScript in juneau-commons and on
+  # HtmlBuilder.rawText in juneau-bean-html5 - break either and JSON.parse fails in the browser and every page blanks,
+  # while a views-only filter stays green.  That cross-module coupling is the whole reason this harness exists.
+  js-tests:
+    name: JS harness (headless Chromium)
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Set up JDK 17
+      uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+      with:
+        distribution: 'temurin'
+        java-version: 17
+        cache: 'maven'
+    # The ~200MB browser download is the only slow part (~60s cold, versus ~2s to actually run the harness).  Cached
+    # at Playwright's own default location, which is why the profile lets -Djuneau.jsTests.browsers move it out of
+    # target/: this workflow's Maven runs use the reactor's "clean verify" defaultGoal, so a cache restored into
+    # target/ would be deleted before it was ever read.  Keyed on the pom that pins the Playwright version rather than
+    # on the literal version, so a bump cannot leave a stale key behind; the restore-keys prefix still gives a
+    # partial hit on any other pom edit, and `playwright install` then simply verifies and skips.
+    - name: Cache Playwright browsers
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('juneau-rest/juneau-rest-server-views/pom.xml') }}
+        restore-keys: ${{ runner.os }}-playwright-
+    # Recorded so a future failure log says which Node actually ran, rather than "whatever the runner image had".
+    - name: Show Node version
+      run: node --version && npm --version
+    # -pl/-am rather than -f: -f would resolve the module's SNAPSHOT dependencies from ~/.m2, which a cold runner does
+    # not have.  -Dtest= narrows Surefire to the harness so the upstream modules are built but not re-tested; the
+    # matrix job above is what runs their suites, including the always-on markup/CSS half of this same contract.
+    - name: Run JS harness
+      run: >
+        mvn --no-transfer-progress --batch-mode --show-version
+        -Pjs-tests
+        -pl juneau-rest/juneau-rest-server-views -am
+        test
+        -Dtest=PagePanelVisibility_BrowserTest
+        -Dsurefire.failIfNoSpecifiedTests=false
+        -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
+    # Surefire already prints each failed assertion with the full rendered-state JSON attached, which is the actual
+    # diagnosis (a panel reported as "jc-subpanel jc-active" with "visible":false is the blank-tab defect, stated).
+    # This step adds what Surefire cannot know: how to reproduce it, and the prober's own stderr for the case where
+    # the browser itself failed to launch rather than an assertion failing.
+    - name: Explain failure
+      if: failure()
+      env:
+        VIEWS: juneau-rest/juneau-rest-server-views
+      run: |
+        echo '================================================================================'
+        echo 'The JavaScript-execution harness failed.  It renders real PageTable output with'
+        echo 'the real juneau-views.css and juneau-pages.js in headless Chromium and asserts on'
+        echo 'what is actually visible, so a failure here means the browser disagreed with the'
+        echo 'panel-visibility or lazy-init contract - not that a source pattern stopped matching.'
+        echo
+        echo 'Reproduce locally (needs Node and npm on the PATH; first run downloads Chromium):'
+        echo "  mvn -Pjs-tests -f ${VIEWS}/pom.xml test"
+        echo
+        echo 'Contract being asserted: PageTable.java javadoc, "Panel markup contract".'
+        echo '================================================================================'
+        echo '--- Surefire report ---'
+        cat "${VIEWS}"/target/surefire-reports/*PagePanelVisibility_BrowserTest.txt 2>/dev/null || echo '(none - the failure was before the tests ran)'
+        echo '--- Prober stderr (non-empty only if Chromium or Node itself failed) ---'
+        cat "${VIEWS}/target/js/prober-stderr.txt" 2>/dev/null || echo '(none)'
