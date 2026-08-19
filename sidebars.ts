@@ -1777,6 +1777,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/10.64.AdminConsoleChrome',
 							label: '10.64. Admin-Console Chrome (juneau-rest-server-console-ui)',
 						},
+						{
+							type: 'doc',
+							id: 'topics/10.65.MarkdownViewRendering',
+							label: '10.65. Markdown View Rendering (juneau-rest-server-views-markdown)',
+						},
 					],
 					link: {
 						type: 'doc',
