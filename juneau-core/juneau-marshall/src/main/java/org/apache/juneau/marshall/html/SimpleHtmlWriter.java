@@ -32,9 +32,6 @@ import java.io.*;
 
  * </ul>
  */
-@SuppressWarnings({
-	"resource" // Writer resource managed by calling code
-})
 public class SimpleHtmlWriter extends HtmlWriter<SimpleHtmlWriter> {
 
 	/**

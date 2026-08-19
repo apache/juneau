@@ -37,9 +37,6 @@ public class SseResponseSupport implements AutoCloseable {
 		"resource" // Writer is response-owned and intentionally not closed by this wrapper.
 	})
 	private final FinishablePrintWriter writer;
-	@SuppressWarnings({
-		"resource" // Scheduler is BeanStore-managed and shared; this wrapper must not close it.
-	})
 	private final ScheduledExecutorService scheduler;
 	@SuppressWarnings({
 		"resource" // Heartbeat lifecycle is controlled by this wrapper and closed in close()/heartbeat().

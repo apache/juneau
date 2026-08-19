@@ -32,9 +32,6 @@ import org.apache.juneau.marshall.*;
  * 		This class is not intended for external use.
  * </ul>
  */
-@SuppressWarnings({
-	"resource" // Writer resource managed by calling code
-})
 public final class BasicXmlWriter extends XmlWriter<BasicXmlWriter> {
 
 	/**

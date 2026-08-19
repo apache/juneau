@@ -64,9 +64,6 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonPatch">juneau-bean-jsonpatch</a>
  * </ul>
  */
-@SuppressWarnings({
-	"resource" // Cursor shortcut methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
-})
 public class JsonPatchMarshaller extends CharMarshaller {
 
 	/**

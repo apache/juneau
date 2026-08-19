@@ -165,14 +165,13 @@ public final class ExampleClient {
 		var updates = new LinkedBlockingQueue<String>();
 		var acknowledged = new CountDownLatch(1);
 
-		var handle = client.listen(
+		try (var handle = client.listen(
 			new SubscriptionFilter().setResourceSubscriptions(List.of(noteUri)),
 			new McpSubscriptionListener() {
 				@Override public void onAcknowledged(SubscriptionFilter honoredFilter) { acknowledged.countDown(); }
 				@Override public void onResourceUpdated(String uri) { updates.add(uri); }
 				@Override public void onError(Throwable t) { System.out.println("   subscription error: " + t); }
-			});
-		try {
+			})) {
 			if (! acknowledged.await(10, TimeUnit.SECONDS))
 				System.out.println("   (warning: subscription was not acknowledged in time)");
 			else
@@ -185,8 +184,6 @@ public final class ExampleClient {
 				System.out.println("   (warning: no resources/updated notification arrived in time)");
 			else
 				System.out.println("   -> received resources/updated for: " + updatedUri);
-		} finally {
-			handle.close();
 		}
 	}
 

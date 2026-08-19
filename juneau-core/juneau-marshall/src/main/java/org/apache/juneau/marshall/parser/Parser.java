@@ -139,8 +139,7 @@ import org.apache.juneau.marshall.xml.*;
  */
 @SuppressWarnings({
 	"rawtypes",
-	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
-	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
 })
 public class Parser extends MarshallingContextable {
 

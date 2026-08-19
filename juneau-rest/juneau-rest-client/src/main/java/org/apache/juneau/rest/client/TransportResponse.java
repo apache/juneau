@@ -130,9 +130,6 @@ public final class TransportResponse implements Closeable {
 	 *
 	 * @since 9.2.1
 	 */
-	@SuppressWarnings({
-		"resource" // body and closeCallback are passed into TransportResponse which owns and closes them
-	})
 	public static final class Builder {
 
 		int statusCode;

@@ -75,9 +75,6 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 		synchronized (admissionLock) {
 			if (! subscriptions.containsKey(subscriptionId) && subscriptions.size() >= max)
 				return Optional.empty();
-			@SuppressWarnings({
-				"resource" // Returned subscription is caller-owned and closed by the caller/framework; Eclipse JDT @Owning warning is by design.
-			})
 			var sub = doRegister(subscriptionId, honoredFilter);
 			return Optional.of(sub);
 		}
@@ -97,6 +94,9 @@ public class BasicMcpSubscriptionBroker implements McpSubscriptionBroker {
 		return sub;
 	}
 
+	@SuppressWarnings({
+		"resource" // Not a leak: sub is removed from the map then explicitly closed; try-with-resources adds nothing over the remove-then-close pattern (mirrors register()'s previous.close()).
+	})
 	@Override
 	public void unregister(String subscriptionId) {
 		if (subscriptionId == null)

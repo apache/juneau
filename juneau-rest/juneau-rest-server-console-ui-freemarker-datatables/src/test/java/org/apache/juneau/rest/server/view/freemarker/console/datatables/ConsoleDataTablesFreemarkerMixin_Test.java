@@ -39,6 +39,9 @@ import org.junit.jupiter.api.*;
  * pill markup (Phase 6's now-render-aware {@code DataTablesTable}) nested inside a {@code jc-table} through the
  * same trusted-HTML adapter Phase 5 built for {@code <@tag>}.
  */
+@SuppressWarnings({
+	"resource" // Test-fixture AutoCloseables are managed by the test lifecycle, not real leaks (mixed-module resource analysis on test code).
+})
 class ConsoleDataTablesFreemarkerMixin_Test extends TestBase {
 
 	@TagDomain(domain="status")

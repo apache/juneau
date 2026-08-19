@@ -191,9 +191,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	})
 	@Test void b01_view_highlight_writesHtmlWithSeverityColors() throws Exception {
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.request("VIEW", "/multi.log?highlight=true").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
@@ -209,9 +206,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	@Test void b02_view_highlight_emptyFile_writesEmptyMarker() throws Exception {
 		// Filter out everything via a severity that doesn't match any line.
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.request("VIEW", "/plain.log?highlight=true&severity=NOPE").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
@@ -224,9 +218,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	})
 	@Test void b03_view_plain_noFilters_streamsRawReader() throws Exception {
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.request("VIEW", "/plain.log").run();
 			resp.assertStatus(200);
 			assertTrue(resp.getContent().asString().contains("hello"));
@@ -238,9 +229,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	@Test void b04_view_plain_withFilters_usesParser() throws Exception {
 		// Passing thread/start/end/loggers params triggers the filter branch in getReader(...)
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.request("VIEW", "/multi.log?thread=NoSuchThread").run();
 			resp.assertStatus(200);
 		}
@@ -250,9 +238,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	})
 	@Test void b05_parse_returnsParsedEntries() throws Exception {
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.request("PARSE", "/plain.log").run();
 			resp.assertStatus(200);
 		}
@@ -270,9 +255,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	})
 	@Test void b07_get_directoryListing_includesChildLogs() throws Exception {
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
@@ -288,9 +270,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	})
 	@Test void b08_get_subdirectoryListing() throws Exception {
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/sub").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
@@ -328,9 +307,6 @@ class LogsResource_Coverage_Test extends TestBase {
 	})
 	@Test void b12_download_returnsFileContents() throws Exception {
 		try (var c = buildClient(true)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.request("DOWNLOAD", "/plain.log").run();
 			resp.assertStatus(200);
 			assertTrue(resp.getContent().asString().contains("hello"));

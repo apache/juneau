@@ -134,6 +134,9 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 * @param req The current REST request.
 	 * @return The active FreeMarker configuration. Never {@code null}.
 	 */
+	@SuppressWarnings({
+		"resource" // False positive: req.getContext().getBeanStore() returns a borrowed, container-owned AutoCloseable, not a resource created/owned here.
+	})
 	@Override
 	public Configuration resolveConfiguration(RestRequest req) {
 		if (req.getContext().getBeanStore().getBean(Configuration.class).isPresent())

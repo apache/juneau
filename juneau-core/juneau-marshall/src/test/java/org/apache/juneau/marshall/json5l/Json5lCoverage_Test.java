@@ -32,8 +32,7 @@ import org.junit.jupiter.api.*;
  * by the primary behavioral tests.
  */
 @SuppressWarnings({
-	"unchecked", // Parser returns Object; casts in tests
-	"resource"   // Token readers/pipes are short-lived test fixtures.
+	"unchecked" // Parser returns Object; casts in tests
 })
 class Json5lCoverage_Test extends TestBase {
 

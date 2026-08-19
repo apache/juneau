@@ -49,9 +49,6 @@ class SamlMetadataResolvers_BoundedFetch_Test extends TestBase {
 		void run(String url) throws Exception;
 	}
 
-	@SuppressWarnings({
-		"resource" // HttpServer held as local fixture; stopped in finally block
-	})
 	private static void withServer(HttpHandler handler, UrlAction action) throws Exception {
 		var server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
 		server.createContext("/metadata", handler);

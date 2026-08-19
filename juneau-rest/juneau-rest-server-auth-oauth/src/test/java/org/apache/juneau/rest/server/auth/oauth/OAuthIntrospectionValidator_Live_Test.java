@@ -37,7 +37,6 @@ import com.sun.net.httpserver.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"resource",    // HttpServer held as test fixture; lifecycle managed by @AfterEach
 	"java:S5778"   // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class OAuthIntrospectionValidator_Live_Test extends TestBase {

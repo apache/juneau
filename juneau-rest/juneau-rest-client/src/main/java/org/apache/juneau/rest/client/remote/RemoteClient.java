@@ -119,7 +119,6 @@ public final class RemoteClient {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings({
-		"resource", // resp is closed within this method or returned to caller (RESPONSE mode)
 		"java:S112", // Reflective remote-proxy dispatch intentionally propagates arbitrary exceptions (target-method, parse, transport, and user-declared @Remote exception types) to the caller; narrowing the throws clauses would break that contract.
 		"java:S2143" // Date 'instanceof' check classifies simple-typed @Request args (a type test, not date arithmetic); no behavior-preserving java.time equivalent.
 	})
@@ -910,9 +909,6 @@ public final class RemoteClient {
 		 * the response, firing the transport close callback).  On any failure before the stream is handed back, the
 		 * response is closed.  A body-less response ({@code null} stream) is released immediately and returns <jk>null</jk>.
 		 */
-		@SuppressWarnings({
-			"resource" // On success the live response is owned by the returned stream (caller closes it); on failure it is closed in the finally block.
-		})
 		private InputStream processStreamReturn(RestRequest req, Method method, boolean throwOnError) throws Exception {
 			var resp = req.run();
 			var ok = false;
@@ -941,7 +937,6 @@ public final class RemoteClient {
 		 * the live response stream (decoded as UTF-8) and closing it releases the connection.
 		 */
 		@SuppressWarnings({
-			"resource" // On success the live response is owned by the returned reader (caller closes it); on failure it is closed in the finally block.
 		})
 		private Reader processReaderReturn(RestRequest req, Method method, boolean throwOnError) throws Exception {
 			var resp = req.run();
@@ -1178,7 +1173,6 @@ public final class RemoteClient {
 		 * the cursor is handed back, the response is closed.
 		 */
 		@SuppressWarnings({
-			"resource" // On success the response is owned by the returned cursor (caller closes it); on failure it is closed in the finally block.
 		})
 		private Object processCursor(RestRequest req, Class<?> returnType, Method method, boolean throwOnError) throws Exception {
 			var resp = req.run();

@@ -40,9 +40,6 @@ import org.junit.jupiter.api.*;
  * comma/end dispatch overrides.  Also pins which JSON5-spec number forms are intentionally NOT
  * implemented by this cursor.
  */
-@SuppressWarnings({
-	"resource" // Token readers are closed via try-with-resources; JDT's flow analysis over chained factory calls yields false-positive leak reports.
-})
 class Json5TokenReaderCoverage_Test extends TestBase {
 
 	private static void drain(String json) throws Exception {

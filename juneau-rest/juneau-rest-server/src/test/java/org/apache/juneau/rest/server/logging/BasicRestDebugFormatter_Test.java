@@ -39,7 +39,6 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings("resource") // Mockito mocks; nothing to close.
 class BasicRestDebugFormatter_Test {
 
 	private final BasicRestDebugFormatter f = new BasicRestDebugFormatter();

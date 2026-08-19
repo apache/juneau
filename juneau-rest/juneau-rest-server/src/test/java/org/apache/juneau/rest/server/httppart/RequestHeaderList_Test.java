@@ -38,9 +38,6 @@ import jakarta.servlet.http.*;
  */
 class RequestHeaderList_Test {
 
-	@SuppressWarnings({
-		"resource" // Mockito mock; nothing to close.
-	})
 	private static HttpServletRequest servletRequest(Map<String,String> headers) {
 		var r = mock(HttpServletRequest.class);
 		when(r.getHeaderNames()).thenReturn(Collections.enumeration(headers.keySet()));

@@ -28,9 +28,6 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings({
-	"resource" // Both flavors are plain in-memory beans (no I/O resources held); nothing to close.
-})
 class ThymeleafServlet_Test extends TestBase {
 
 	@Test void a01_servlet_noArgCtor_buildsDefaultDispatcher() {

@@ -41,7 +41,6 @@ import org.junit.jupiter.api.*;
 	"java:S116",  // Field names use underscores for test data clarity
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
 	"java:S3008", // Static field names use underscores for test data clarity
-	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ParameterInfo_Test extends TestBase {

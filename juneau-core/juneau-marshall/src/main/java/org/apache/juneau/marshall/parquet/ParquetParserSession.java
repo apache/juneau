@@ -504,9 +504,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * @throws ParseException If the header is malformed or declares out-of-range sizes.
 	 * @throws IOException If the underlying Thrift decode fails.
 	 */
-	@SuppressWarnings({
-		"resource" // bais is an in-memory ByteArrayInputStream; no OS resource to close.
-	})
 	private static PageHeaderInfo readPageHeader(byte[] fileBytes, int off, String columnPath, int maxLength, long maxCount) throws ParseException, IOException {
 		var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
 		var dec = new ThriftCompactDecoder(bais);

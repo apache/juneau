@@ -24,6 +24,9 @@ import java.util.concurrent.atomic.*;
 
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({
+	"resource" // Test-fixture AutoCloseables are managed by the test lifecycle, not real leaks (mixed-module resource analysis on test code).
+})
 class BasicMcpSubscriptionBroker_Test {
 
 	@Test void a01_constructorRejectsNonPositiveQueueSize() {

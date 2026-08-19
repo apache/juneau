@@ -42,9 +42,6 @@ import org.junit.jupiter.params.provider.*;
  * 	<li><b>e</b> — GAP-8: unpaired UTF-16 surrogate on encode.
  * </ul>
  */
-@SuppressWarnings({
-	"resource" // Token readers are closed via try-with-resources; JDT's flow analysis over chained factory calls yields false-positive leak reports.
-})
 class CborConformanceFixes_Test extends TestBase {
 
 	private static String enc(Object input) throws Exception {

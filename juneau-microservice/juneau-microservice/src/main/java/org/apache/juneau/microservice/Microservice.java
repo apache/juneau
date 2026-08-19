@@ -106,9 +106,6 @@ public class Microservice implements ConfigEventListener {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings({
-		"resource" // configStore, consoleReader, consoleWriter are passed in by the caller or assigned to system streams; lifecycle managed externally
-	})
 	public static class Builder implements BeanStoreOverridable<Builder> {
 
 		Args args;

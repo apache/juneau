@@ -213,9 +213,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 		// The ReadOnlyDirResource has views=true but deletes=false, so the listing should expose
 		// "view" / "download" actions but not "delete".
 		try (var c = buildClient(ReadOnlyDirResource.class)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
@@ -231,9 +228,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	})
 	@Test void e02_actionListing_allDisabled_doesNotIncludeFileActions() throws Exception {
 		try (var c = buildClient(AllDisabledDirResource.class)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
@@ -250,9 +244,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	})
 	@Test void e03_actionListing_fullyEnabled_includesAllActions() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
@@ -300,9 +291,6 @@ class DirectoryResource_Coverage_Test extends TestBase {
 	})
 	@Test void g01_subdirectory_listing_includesNestedFiles() throws Exception {
 		try (var c = buildClient(TestDirResource.class)) {
-			@SuppressWarnings({
-				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-			})
 			var resp = c.get("/sub").run();
 			resp.assertStatus(200);
 			assertTrue(resp.getContent().asString().contains("nested.txt"));

@@ -33,9 +33,6 @@ import com.sun.net.httpserver.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings({
-	"resource" // HttpServer held as test fixture; lifecycle managed by @AfterEach
-})
 class McpProtectedResourceMetadataClient_Test extends TestBase {
 
 	private HttpServer server;

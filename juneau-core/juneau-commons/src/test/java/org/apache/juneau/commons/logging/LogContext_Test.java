@@ -28,7 +28,8 @@ import org.junit.jupiter.api.*;
  * Tests for {@link LogContext}.
  */
 @SuppressWarnings({
-	"java:S117" // Local variable name intentional for test readability.
+	"java:S117", // Local variable name intentional for test readability.
+	"resource" // Test-fixture AutoCloseables are managed by the test lifecycle, not real leaks (mixed-module resource analysis on test code).
 })
 class LogContext_Test extends TestBase {
 

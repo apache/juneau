@@ -38,8 +38,7 @@ import org.junit.jupiter.api.*;
  * driving a large allocation.
  */
 @SuppressWarnings({
-	"unchecked", // Parser returns Object; cast to Map in tests.
-	"resource"   // Token readers are closed via try-with-resources; JDT mis-flags the chained factory call.
+	"unchecked" // Parser returns Object; cast to Map in tests.
 })
 class MsgPackParser_MaxLength_Test extends TestBase {
 

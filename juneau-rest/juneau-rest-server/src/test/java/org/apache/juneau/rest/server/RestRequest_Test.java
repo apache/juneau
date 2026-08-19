@@ -62,7 +62,6 @@ class RestRequest_Test {
 	// b — getStaticFiles() (delegate to RestContext#getStaticFiles())
 	// -----------------------------------------------------------------------------------------
 
-	@SuppressWarnings("resource") // Mockito mocks; nothing to close.
 	@Test void b01_getStaticFiles_delegatesToContext() throws Exception {
 		var context = mock(RestContext.class);
 		var staticFiles = mock(StaticFiles.class);

@@ -73,8 +73,7 @@ import org.apache.juneau.marshall.stream.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"rawtypes",
-	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
+	"rawtypes"
 })
 public class Serializer extends MarshallingTraverseContext {
 

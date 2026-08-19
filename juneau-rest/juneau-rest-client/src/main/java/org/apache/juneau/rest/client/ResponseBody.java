@@ -220,8 +220,7 @@ public final class ResponseBody {
 	 * 	produced cursor is not assignable to {@code type}.
 	 */
 	@SuppressWarnings({
-		"unchecked", // The produced cursor is verified assignable to 'type' before the cast.
-		"resource"   // The cursor reads from the borrowed response stream; the caller closes the cursor / RestResponse.
+		"unchecked" // The produced cursor is verified assignable to 'type' before the cast.
 	})
 	public <T> T asCursor(Parser parser, Class<T> type) throws IOException {
 		assertArgNotNull("parser", parser);

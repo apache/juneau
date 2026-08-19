@@ -38,9 +38,6 @@ import org.junit.jupiter.api.*;
  * the {@code read}/{@code canRead}/{@code skipChildren} bridges, and the malformed-input error
  * paths) to raise JaCoCo line+branch coverage toward 100%.
  */
-@SuppressWarnings({
-	"resource" // Token readers are closed via try-with-resources; JDT's flow analysis over chained factory calls yields false-positive leak reports.
-})
 class JsonTokenReaderCoverage_Test extends TestBase {
 
 	private static void drain(String json) throws Exception {

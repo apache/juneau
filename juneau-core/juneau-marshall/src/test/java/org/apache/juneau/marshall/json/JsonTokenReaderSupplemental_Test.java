@@ -30,9 +30,6 @@ import org.junit.jupiter.api.*;
  * settings)} constructor, string trimming, number-lexeme validation edges, comment scanning,
  * deep-nesting overflow stack, and the {@code read()} exception funnel.
  */
-@SuppressWarnings({
-	"resource" // Token readers are closed via try-with-resources; JDT false-positive leak reports over chained factory calls.
-})
 class JsonTokenReaderSupplemental_Test extends TestBase {
 
 	private static void drain(String json) throws Exception {

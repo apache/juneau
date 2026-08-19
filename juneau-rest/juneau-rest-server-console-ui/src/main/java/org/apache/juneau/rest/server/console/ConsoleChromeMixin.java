@@ -341,6 +341,9 @@ public class ConsoleChromeMixin {
 	int debugBuildCount() { return buildCount.get(); }
 
 	/** Resolves the active theme via the documented precedence: builder-supplied {@code theme(Theme)} &gt; {@link ThemeSettings} bean &gt; {@link Theme#OPEN}. */
+	@SuppressWarnings({
+		"resource" // False positive: req.getContext().getBeanStore() returns a borrowed, container-owned AutoCloseable, not a resource created/owned here.
+	})
 	private Theme resolveActiveTheme(RestRequest req) {
 		if (theme != null)
 			return theme;

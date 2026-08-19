@@ -30,9 +30,6 @@ import org.junit.jupiter.api.*;
  * detection for {@code ]} / } at value position, the empty-object field dispatch, and the
  * single-quoted string trim path.
  */
-@SuppressWarnings({
-	"resource" // Token readers are closed via try-with-resources; JDT false-positive leak reports over chained factory calls.
-})
 class Json5TokenReaderSupplemental_Test extends TestBase {
 
 	@Nested class A_missingValues extends TestBase {

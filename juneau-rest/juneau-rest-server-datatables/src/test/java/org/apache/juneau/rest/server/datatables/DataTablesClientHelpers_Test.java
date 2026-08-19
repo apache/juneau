@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  * Tests the client-side DataTables browser helpers: {@link DataTablesColumns}, {@link DataTablesTable}, and
  * {@link DataTablesMixin}.
  */
+@SuppressWarnings({
+	"resource" // MockRestClient.close() is a no-op (no real OS resource); test-fixture AutoCloseables are managed by the test lifecycle (mixed-module resource analysis on test code).
+})
 class DataTablesClientHelpers_Test extends TestBase {
 
 	/**
@@ -53,7 +56,7 @@ class DataTablesClientHelpers_Test extends TestBase {
 		@Schema(title="Full Name") public String getName() { return "Alice"; }
 		@Schema(title="") public String getNotes() { return "n"; }
 		public String getReleaseDate() { return releaseDate; }
-		public void setSecret(String value) { /* write-only */ }
+		public void setSecret(@SuppressWarnings("unused") String value) { /* write-only */ }
 	}
 
 	private static Map<String,String> byData(List<Map<String,Object>> cols) {
@@ -87,7 +90,7 @@ class DataTablesClientHelpers_Test extends TestBase {
 	/** Pure getter/setter bean (no public fields) with a write-only property to exercise the read-only filter. */
 	public static class WriteOnlyRow {
 		public String getVisible() { return "v"; }
-		public void setHidden(String value) { /* write-only */ }
+		public void setHidden(@SuppressWarnings("unused") String value) { /* write-only */ }
 	}
 
 	@Test void a03_notABeanThrows() {

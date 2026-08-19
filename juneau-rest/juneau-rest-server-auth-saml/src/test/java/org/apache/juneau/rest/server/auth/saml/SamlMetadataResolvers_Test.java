@@ -107,9 +107,6 @@ class SamlMetadataResolvers_Test extends TestBase {
 	// D: url(String) — HTTP server returns non-2xx → IOException (SamlMetadataResolvers.java line 125)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({
-		"resource" // HttpServer held as local fixture; stopped in finally block
-	})
 	@Test void d01_url_nonSuccessStatus_throwsIOException() throws Exception {
 		var server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
 		server.createContext("/metadata", ex -> {

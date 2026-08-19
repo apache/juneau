@@ -28,6 +28,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link LogRecordCapture}.
  */
+@SuppressWarnings({
+	"resource" // Test-fixture AutoCloseables are managed by the test lifecycle, not real leaks (mixed-module resource analysis on test code).
+})
 class LogRecordCapture_Test extends TestBase {
 
 	private static RichLogger getLogger(String name) {

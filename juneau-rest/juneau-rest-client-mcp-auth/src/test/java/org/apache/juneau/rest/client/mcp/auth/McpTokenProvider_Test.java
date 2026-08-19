@@ -39,9 +39,6 @@ import com.sun.net.httpserver.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings({
-	"resource" // HttpServer held as test fixture; lifecycle managed by @AfterEach
-})
 class McpTokenProvider_Test extends TestBase {
 
 	private static final URI RES = URI.create("https://mcp.example.com/api");

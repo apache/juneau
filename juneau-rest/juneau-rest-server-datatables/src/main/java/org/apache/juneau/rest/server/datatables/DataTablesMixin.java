@@ -145,6 +145,8 @@ public class DataTablesMixin {
 	}
 
 	/** Returns the shipped glue-script bytes, reading (and caching) them from the classpath on first call. */
+	// IoUtils.read(InputStream) closes the stream (see its Javadoc); JDT can't see through the call.
+	@SuppressWarnings("resource")
 	private static byte[] glueScript() throws IOException {
 		var g = glueScript;
 		if (g == null) {

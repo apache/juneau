@@ -243,9 +243,6 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 	 * @param w The writer to write the log file to.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"resource" // Log file resources managed by parser
-	})
 	public void writeTo(Writer w) throws IOException {
 		try {
 			if (! hasNext())

@@ -35,6 +35,8 @@ import org.junit.jupiter.api.*;
  * Tests the DataTables server-side-processing protocol against the
  * <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side contract</a>.
  */
+// MockRestClient.close() is a no-op (no real OS resource); mixed-module JDT resource analysis is a per-project limitation.
+@SuppressWarnings("resource")
 class DataTablesQueryProtocol_Test extends TestBase {
 
 	/** A resource wired to the DataTables protocol via a {@link QueryableSettings} bean. */

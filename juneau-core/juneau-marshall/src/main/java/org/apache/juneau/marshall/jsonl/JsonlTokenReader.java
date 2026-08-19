@@ -49,9 +49,6 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>The cursor is a true O(1)-memory streaming cursor ({@link #isStreaming()} == <jk>true</jk>).
  * </ul>
  */
-@SuppressWarnings({
-	"resource" // The cursor's underlying ParserPipe is owned by the caller via try-with-resources on the cursor itself; Eclipse JDT flags the inner pipe as unclosed but that's by design.
-})
 public class JsonlTokenReader extends JsonTokenReader {
 
 	/**

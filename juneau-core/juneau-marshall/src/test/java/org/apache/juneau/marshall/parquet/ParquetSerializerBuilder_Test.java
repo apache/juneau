@@ -130,7 +130,6 @@ class ParquetSerializerBuilder_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("resource")
 	void a07_contextSerializeRecordsDelegator() throws Exception {
 		// The context-level writeRecords(...) convenience delegator forwards to the session.
 		var sb = new StringBuilder();
