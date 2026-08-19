@@ -23,17 +23,12 @@ import java.lang.annotation.*;
  * class in the rendered {@code .tag.<domain>.<value>} markup, e.g. {@code .tag.status.released}).
  *
  * <p>
- * <b>Naming note (deviation from the TODO-361 plan text, recorded here rather than silently "fixed"):</b> the plan
- * and design documents write this annotation as {@code @Tag(domain=...)} &mdash; i.e. as if it shared its simple
- * name with the unrelated {@link Tag} <i>class</i> (the {@code Tag.of(domain, value)} static factory). That is not
- * something Java allows: an annotation type ({@code @interface}) cannot declare a static method, so a single type
- * named {@code Tag} cannot simultaneously be the {@code @Tag(domain=...)} annotation <b>and</b> expose
- * {@code Tag.of(...)}. This is a genuine plan-vs-language-semantics contradiction (verified by compiling a
- * `@interface` with a static method &mdash; {@code javac} rejects it outright), analogous in kind (though far
- * smaller in scope) to the Phase 5 FreeMarker-seam contradiction the plan's own r3 revision already fixed. Rather
- * than halt the build over an unambiguous, zero-risk naming split, this annotation is named {@code TagDomain}
- * (keeping the plan's heavily-referenced {@code Tag.of(...)} factory call form exactly as documented across
- * Phases 4-7); this deviation is called out in the phase manifest.
+ * <b>Naming note:</b> this annotation is named {@code TagDomain} rather than {@code Tag} because it cannot share
+ * the simple name {@code Tag} with the unrelated {@link Tag} <i>class</i> (the {@code Tag.of(domain, value)} static
+ * factory). An annotation type ({@code @interface}) cannot declare a static method, so a single type named
+ * {@code Tag} cannot simultaneously be the {@code @Tag(domain=...)} annotation <b>and</b> expose
+ * {@code Tag.of(...)}. Naming the annotation {@code TagDomain} keeps the {@code Tag.of(...)} factory form free for
+ * the {@link Tag} class.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

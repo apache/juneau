@@ -171,7 +171,7 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 		assertFalse(body.contains("&lt;span"), () -> "macro output was HTML-escaped (double-escaped), body:\n" + body);
 		// find() on an anchor-free pattern (no wrapping .*) avoids the super-linear backtracking risk of
 		// String.matches() with unbounded quantifiers at both ends.
-		assertTrue(Pattern.compile("<span[^>]*class=['\"]tag status released['\"][^>]*>").matcher(body).find(),
+		assertTrue(Pattern.compile("<span(?=[^>]*class=['\"]tag status released['\"])[^>]*>").matcher(body).find(),
 			() -> "expected literal <span class='tag status released'> markup, body:\n" + body);
 	}
 

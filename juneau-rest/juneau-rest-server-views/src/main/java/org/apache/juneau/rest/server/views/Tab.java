@@ -24,7 +24,7 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * A single top-level tab within a {@link PageDef}, referencing either one child {@link ViewDef} directly or an
- * ordered list of {@link Subtab} (TODO-399 Phase C, design doc §"Bean model").
+ * ordered list of {@link Subtab} (design doc §"Bean model").
  *
  * <p>
  * A {@link Tab} carries a stable {@code id} (the second hash segment, {@code #pageId/<tabId>/...}) and {@code label}
@@ -40,6 +40,7 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,label,view,subtabs")
+@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class Tab {
 
 	/** The stable tab id (the second hash segment), unique across the page. */

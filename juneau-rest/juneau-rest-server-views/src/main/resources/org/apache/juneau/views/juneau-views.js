@@ -16,7 +16,7 @@
  */
 
 /*
- * juneau-views.js - client initializer for the Apache Juneau rich-view toolkit (Task B.8).
+ * juneau-views.js - client initializer for the Apache Juneau rich-view toolkit.
  *
  * On DOMContentLoaded it owns init for every table[data-juneau-view] element: it reads the table's id, finds the
  * matching <script type="application/json" id="juneau-view:<id>"> VIEW_META sidecar, JSON.parses it, and - CRUCIAL -
@@ -38,9 +38,9 @@
 
 	// Contract-version handshake: MUST equal ViewDef.CONTRACT_VERSION / ViewsMixin.CONTRACT_VERSION (single source
 	// of truth on the server).  The initializer fails loud when a sidecar's contractVersion differs.
-	var JUNEAU_VIEW_CONTRACT_VERSION = "2";
+	const JUNEAU_VIEW_CONTRACT_VERSION = "2";
 
-	var NS = window.JuneauViews = window.JuneauViews || {};
+	const NS = window.JuneauViews = window.JuneauViews || {};
 	NS.CONTRACT_VERSION = JUNEAU_VIEW_CONTRACT_VERSION;
 
 	// ==================================================================================================================
@@ -52,7 +52,7 @@
 	 * ViewDef wire field; see the non-goal in design doc §11).  Consumed by buildOptions' default pageLength below
 	 * AND by the unified paging ribbon's page-size menu (buildPageSizeMenu, below).
 	 */
-	var PAGE_SIZE_OPTIONS = [
+	const PAGE_SIZE_OPTIONS = [
 		{ value: 25, label: "25 rows" },
 		{ value: 100, label: "100 rows" },
 		{ value: -1, label: "All rows" }
@@ -60,8 +60,8 @@
 
 	/** Resolves a column `data` key to its zero-based index in the view (-1 when absent). */
 	function columnIndexOf(viewDef, dataKey) {
-		var cols = viewDef.columns || [];
-		for (var i = 0; i < cols.length; i++)
+		const cols = viewDef.columns || [];
+		for (let i = 0; i < cols.length; i++)
 			if (cols[i].data === dataKey) return i;
 		return -1;
 	}
@@ -71,9 +71,9 @@
 	 * indices are not pinned server-side, so client-side column reorder stays correct.  Unknown fields are skipped.
 	 */
 	function resolveOrder(viewDef) {
-		var out = [];
+		const out = [];
 		(viewDef.defaultOrder || []).forEach(function (e) {
-			var idx = columnIndexOf(viewDef, e.data);
+			const idx = columnIndexOf(viewDef, e.data);
 			if (idx >= 0) out.push([idx, e.dir]);
 		});
 		return out;
@@ -89,11 +89,11 @@
 	 * eq/ne compare row[field] to the rule value; present/absent test whether row[field] is non-null/non-empty.
 	 */
 	function evaluateRowClassRules(rules, rowData) {
-		var out = [];
+		const out = [];
 		(rules || []).forEach(function (r) {
-			var v = rowData ? rowData[r.field] : undefined;
-			var present = (v != null && v !== "");
-			var match = false;
+			const v = rowData ? rowData[r.field] : undefined;
+			const present = (v != null && v !== "");
+			let match = false;
 			switch (r.op) {
 				case "eq": match = valuesEqual(v, r.value); break;
 				case "ne": match = !valuesEqual(v, r.value); break;
@@ -106,11 +106,56 @@
 		return out;
 	}
 
+	/**
+	 * Projects a VIEW_META `details` field list ([{data,title}]) against one row's data into label/value pairs
+	 * for the row-details expander (client-rendered from row data by default - this never issues a request of
+	 * its own) - pure, DOM-free. A field whose row value is null/undefined renders as "" rather than
+	 * "null"/"undefined", matching evaluateRowClassRules' null-safety above.
+	 */
+	function buildDetailFields(details, rowData) {
+		const out = [];
+		(details || []).forEach(function (d) {
+			const v = rowData ? rowData[d.data] : undefined;
+			out.push({ title: d.title || d.data, value: (v == null ? "" : String(v)) });
+		});
+		return out;
+	}
+
+	/**
+	 * The minimum honored polling interval, in milliseconds - mirrors {@code ViewDef.MIN_POLL_INTERVAL_MS}.  The
+	 * server is the authoritative clamp (a `pollIntervalMs` value already arriving in VIEW_META has already been
+	 * floored there); this client-side copy is defense-in-depth only, so a hand-edited or otherwise-malformed
+	 * sidecar can't push this runtime below the floor either.
+	 */
+	// Deliberately kept as `var` (not `const`): TablePolling_Wiring_Test#a01 pins this exact declaration text as
+	// part of the server/client MIN_POLL_INTERVAL_MS parity contract; see that test before touching this line.
+	var MIN_POLL_INTERVAL_MS = 5000;
+
+	/** Clamps a declared poll interval up to {@link #MIN_POLL_INTERVAL_MS} (mirrors the server-side clamp). */
+	function clampPollInterval(ms) {
+		return Math.max(ms, MIN_POLL_INTERVAL_MS);
+	}
+
+	/**
+	 * Formats an elapsed-time duration (milliseconds) as a short staleness-age label ("just now", "5s ago",
+	 * "2m ago", "1h ago").  Pure - the caller supplies the already-computed elapsed `ms` rather than this
+	 * function reading the clock itself, so it stays independently testable without faking `Date.now()`.
+	 */
+	function formatStalenessAge(ms) {
+		if (ms < 1000) return "just now";
+		const s = Math.floor(ms / 1000);
+		if (s < 60) return s + "s ago";
+		const m = Math.floor(s / 60);
+		if (m < 60) return m + "m ago";
+		const h = Math.floor(m / 60);
+		return h + "h ago";
+	}
+
 	/** Formats a non-negative integer with thousands separators (e.g. 1463 -> "1,463"), matching IRS's paging summary style. */
 	function formatThousands(n) {
-		var s = String(Math.trunc(Math.abs(n)));
-		var out = "";
-		for (var i = 0; i < s.length; i++) {
+		const s = String(Math.trunc(Math.abs(n)));
+		let out = "";
+		for (let i = 0; i < s.length; i++) {
 			if (i > 0 && (s.length - i) % 3 === 0) out += ",";
 			out += s.charAt(i);
 		}
@@ -126,7 +171,7 @@
 	 * (`total` falsy) renders "0-0 of 0" rather than "1-0 of 0".
 	 */
 	function pagingSummaryText(pageInfo) {
-		var total = pageInfo.recordsDisplay != null ? pageInfo.recordsDisplay : pageInfo.recordsTotal;
+		const total = pageInfo.recordsDisplay != null ? pageInfo.recordsDisplay : pageInfo.recordsTotal;
 		if (!total) return "0-0 of 0";
 		return (pageInfo.start + 1) + "-" + pageInfo.end + " of " + formatThousands(total);
 	}
@@ -139,7 +184,7 @@
 	 * treated the same as "already on the last page").
 	 */
 	function pillState(pageInfo, pageLength) {
-		var page = pageInfo.page, pages = pageInfo.pages;
+		const page = pageInfo.page, pages = pageInfo.pages;
 		return {
 			selectedLength: pageLength,
 			firstDisabled: page === 0,
@@ -155,7 +200,7 @@
 	 * An unknown render id warns once and falls back to the raw value (never throws).
 	 */
 	function buildColumnDef(col, deps) {
-		var def = {
+		const def = {
 			data: col.data,
 			orderable: col.orderable !== false,
 			searchable: col.searchable !== false,
@@ -172,12 +217,12 @@
 		if (col.className != null) def.className = col.className;
 
 		if (col.render) {
-			var spec = deps.parseRenderId(col.render);
-			var renderer = deps.resolveRenderer(spec.id);
+			const spec = deps.parseRenderId(col.render);
+			const renderer = deps.resolveRenderer(spec.id);
 			if (!renderer) {
 				deps.warn("Juneau view: unknown render id '" + spec.id + "' - falling back to raw value.");
 			} else if (renderer.display) {
-				var meta = mergeMeta(spec.meta, col);
+				const meta = mergeMeta(spec.meta, col);
 				def.render = function (data, type, rowData) {
 					if (type && type !== "display") return data;   // SERVER mode: sort/filter/type done server-side
 					try { return renderer.display(data, rowData, meta); }
@@ -190,8 +235,8 @@
 
 	/** Merges a column's render.meta with runtime column context (href is needed by the `linked` renderer). */
 	function mergeMeta(renderMeta, col) {
-		var meta = {};
-		if (renderMeta) for (var k in renderMeta) if (Object.prototype.hasOwnProperty.call(renderMeta, k)) meta[k] = renderMeta[k];
+		const meta = {};
+		if (renderMeta) for (const k in renderMeta) if (Object.hasOwn(renderMeta, k)) meta[k] = renderMeta[k];
 		if (col.href != null) meta.href = col.href;
 		meta.column = col.data;
 		return meta;
@@ -204,7 +249,7 @@
 	 * merged into the request); client -> serverSide:false + ajax{dataSrc:""}.
 	 */
 	function buildOptions(viewDef, deps) {
-		var opts = {};
+		const opts = {};
 		opts.columns = (viewDef.columns || []).map(function (c) { return buildColumnDef(c, deps); });
 		opts.order = resolveOrder(viewDef);
 		// Text polish (design doc §4.B): the native search input's label is blanked (searchPlaceholder replaces it
@@ -223,8 +268,8 @@
 				url: viewDef.dataUrl,
 				dataSrc: "data",
 				data: function (d) {
-					var extra = deps.ribbonParams ? deps.ribbonParams() : {};
-					for (var k in extra) if (Object.prototype.hasOwnProperty.call(extra, k)) d[k] = extra[k];
+					const extra = deps.ribbonParams ? deps.ribbonParams() : {};
+					for (const k in extra) if (Object.hasOwn(extra, k)) d[k] = extra[k];
 					return d;
 				}
 			};
@@ -237,6 +282,11 @@
 			evaluateRowClassRules(viewDef.rowClassRules, rowData).forEach(function (cls) {
 				if (cls) rowEl.className += (rowEl.className ? " " : "") + cls;
 			});
+			// Marks every row as expandable when the view declares a details field list - initDetailsExpander
+			// (below) delegates its click listener off this class rather than binding one handler per row.
+			if (viewDef.details && viewDef.details.length) {
+				rowEl.className += (rowEl.className ? " " : "") + "juneau-view-detail-row";
+			}
 		};
 		return opts;
 	}
@@ -257,13 +307,13 @@
 	 * rendering the label as text when the glyph isn't registered (same convention as juneau-ribbon.js's button()).
 	 */
 	function toolbarButton(className, label, iconName, onClick) {
-		var b = document.createElement("button");
+		const b = document.createElement("button");
 		b.type = "button";
 		b.className = className;
 		b.title = label;
 		b.setAttribute("aria-label", label);
-		var icons = window.JuneauViews && window.JuneauViews.icons;
-		var markup = icons && icons.resolveIcon ? icons.resolveIcon(iconName) : null;
+		const icons = window.JuneauViews && window.JuneauViews.icons;
+		const markup = icons?.resolveIcon ? icons.resolveIcon(iconName) : null;
 		if (markup != null) {
 			b.innerHTML = markup;
 		} else {
@@ -293,35 +343,35 @@
 	 * of focus leaving the control entirely).
 	 */
 	function buildPageSizeMenu(ctx) {
-		var wrap = document.createElement("span");
+		const wrap = document.createElement("span");
 		wrap.className = "juneau-view-pagingpill-menuwrap";
 
-		var btn = document.createElement("button");
+		const btn = document.createElement("button");
 		btn.type = "button";
 		btn.className = "juneau-view-pagingpill-menubtn";
 		btn.title = "Rows per page";
 		btn.setAttribute("aria-haspopup", "listbox");
 		btn.setAttribute("aria-expanded", "false");
 
-		var infoEl = document.createElement("span");
+		const infoEl = document.createElement("span");
 		infoEl.className = "juneau-view-pagingpill-info";
 		btn.appendChild(infoEl);
 
-		var icons = window.JuneauViews && window.JuneauViews.icons;
-		var caretMarkup = icons && icons.resolveIcon ? icons.resolveIcon("expand_more") : null;
-		var caretEl = document.createElement("span");
+		const icons = window.JuneauViews && window.JuneauViews.icons;
+		const caretMarkup = icons?.resolveIcon ? icons.resolveIcon("expand_more") : null;
+		const caretEl = document.createElement("span");
 		caretEl.className = "juneau-view-pagingpill-caret";
 		caretEl.setAttribute("aria-hidden", "true");
 		if (caretMarkup != null) caretEl.innerHTML = caretMarkup;
 		btn.appendChild(caretEl);
 
-		var menuEl = document.createElement("ul");
+		const menuEl = document.createElement("ul");
 		menuEl.className = "juneau-view-pagingpill-menu";
 		menuEl.setAttribute("role", "listbox");
 		menuEl.hidden = true;
 
-		var options = NS.init.PAGE_SIZE_OPTIONS.map(function (o) {
-			var optEl = document.createElement("li");
+		const options = NS.init.PAGE_SIZE_OPTIONS.map(function (o) {
+			const optEl = document.createElement("li");
 			optEl.className = "juneau-view-pagingpill-menu-option";
 			optEl.setAttribute("role", "option");
 			optEl.tabIndex = -1;
@@ -332,19 +382,19 @@
 		});
 
 		function indexOfSelected() {
-			for (var i = 0; i < options.length; i++) if (options[i].el.getAttribute("aria-selected") === "true") return i;
+			for (let i = 0; i < options.length; i++) if (options[i].el.getAttribute("aria-selected") === "true") return i;
 			return -1;
 		}
 
 		function indexOfFocused() {
-			for (var i = 0; i < options.length; i++) if (options[i].el === document.activeElement) return i;
+			for (let i = 0; i < options.length; i++) if (options[i].el === document.activeElement) return i;
 			return -1;
 		}
 
 		function openMenu() {
 			menuEl.hidden = false;
 			btn.setAttribute("aria-expanded", "true");
-			var idx = indexOfSelected();
+			const idx = indexOfSelected();
 			options[idx >= 0 ? idx : 0].el.focus();
 		}
 
@@ -369,7 +419,7 @@
 			}
 		});
 		menuEl.addEventListener("keydown", function (e) {
-			var idx = indexOfFocused();
+			const idx = indexOfFocused();
 			if (e.key === "ArrowDown") {
 				e.preventDefault();
 				options[(idx + 1) % options.length].el.focus();
@@ -415,15 +465,15 @@
 	 * buildOptions(...) sets `info: false`, so DataTables never creates that node in the first place.
 	 */
 	function buildPagingPill(viewDef, ctx) {
-		var pill = document.createElement("div");
+		const pill = document.createElement("div");
 		pill.className = "juneau-view-pagingpill";
 		pill.setAttribute("data-testid", "paging");
 
-		var firstBtn = pagingPillButton("First page", "first_page", function () { ctx.dataTable.page("first").draw(); });
-		var prevBtn = pagingPillButton("Previous page", "chevron_left", function () { ctx.dataTable.page("previous").draw(); });
-		var sizeMenu = buildPageSizeMenu(ctx);
-		var nextBtn = pagingPillButton("Next page", "chevron_right", function () { ctx.dataTable.page("next").draw(); });
-		var lastBtn = pagingPillButton("Last page", "last_page", function () { ctx.dataTable.page("last").draw(); });
+		const firstBtn = pagingPillButton("First page", "first_page", function () { ctx.dataTable.page("first").draw(); });
+		const prevBtn = pagingPillButton("Previous page", "chevron_left", function () { ctx.dataTable.page("previous").draw(); });
+		const sizeMenu = buildPageSizeMenu(ctx);
+		const nextBtn = pagingPillButton("Next page", "chevron_right", function () { ctx.dataTable.page("next").draw(); });
+		const lastBtn = pagingPillButton("Last page", "last_page", function () { ctx.dataTable.page("last").draw(); });
 		pill.appendChild(firstBtn);
 		pill.appendChild(prevBtn);
 		pill.appendChild(sizeMenu.el);
@@ -431,8 +481,8 @@
 		pill.appendChild(lastBtn);
 
 		function refreshPillState() {
-			var info = ctx.dataTable.page.info();
-			var st = pillState(info, ctx.dataTable.page.len());
+			const info = ctx.dataTable.page.info();
+			const st = pillState(info, ctx.dataTable.page.len());
 			firstBtn.disabled = st.firstDisabled;
 			prevBtn.disabled = st.prevDisabled;
 			nextBtn.disabled = st.nextDisabled;
@@ -455,19 +505,19 @@
 	 * `<thead>` (defensive; every juneau view table has one).
 	 */
 	function buildColumnSearchRow(table, viewDef, dt) {
-		var thead = table.querySelector("thead");
+		const thead = table.querySelector("thead");
 		if (!thead) return null;
-		var row = document.createElement("tr");
+		const row = document.createElement("tr");
 		row.className = "juneau-view-columnsearch-row";
 		row.setAttribute("data-testid", "col-search-row");
 		row.style.display = "none";
 		(viewDef.columns || []).forEach(function (col, idx) {
-			var th = document.createElement("th");
+			const th = document.createElement("th");
 			if (col.searchable !== false) {
-				var input = document.createElement("input");
+				const input = document.createElement("input");
 				input.type = "text";
 				input.className = "juneau-view-columnsearch-input";
-				var label = "Search " + (col.title || col.data || "column " + idx);
+				const label = "Search " + (col.title || col.data || "column " + idx);
 				input.placeholder = label;
 				input.setAttribute("aria-label", label);
 				input.addEventListener("input", function () { dt.column(idx).search(input.value).draw(); });
@@ -481,7 +531,7 @@
 
 	/** Renders the fail-loud, visible in-table banner used on a contract-version mismatch (or a parse failure). */
 	function renderBanner(table, message) {
-		var caption = table.createCaption ? table.createCaption() : null;
+		let caption = table.createCaption ? table.createCaption() : null;
 		if (!caption) {
 			caption = document.createElement("caption");
 			table.insertBefore(caption, table.firstChild);
@@ -504,15 +554,15 @@
 	 * disabled).
 	 */
 	function buildToolbarRow(wrapper, pill, bar) {
-		var filterEl = wrapper.querySelector(".dataTables_filter, .dt-search");
-		var row = document.createElement("div");
+		const filterEl = wrapper.querySelector(".dataTables_filter, .dt-search");
+		const row = document.createElement("div");
 		row.className = "juneau-view-toolbar-row";
 
-		var left = document.createElement("div");
+		const left = document.createElement("div");
 		left.className = "juneau-view-toolbar-left";
 		if (pill) left.appendChild(pill);
 
-		var right = document.createElement("div");
+		const right = document.createElement("div");
 		right.className = "juneau-view-toolbar-right";
 		if (filterEl) right.appendChild(filterEl);
 		if (bar) right.appendChild(bar);
@@ -523,13 +573,128 @@
 		return row;
 	}
 
+	/**
+	 * Whether `table` currently has a row marked in-flight - a row-action implementation is expected to set
+	 * `data-juneau-inflight` (any truthy attribute value) on a `<tr>` while its write is pending.  A poll landing
+	 * mid-write must not overwrite that row with the pre-write server view, or the UI would appear to undo the
+	 * user's action and then redo it once the write's own result repaints it (design doc §9.1 B5) - so a poll
+	 * tick skips its ENTIRE redraw whenever ANY row in this table carries the marker, leaving the table exactly
+	 * as-is (stale, but honestly so) until that write settles.
+	 */
+	function hasInFlightRow(table) {
+		return !!table.querySelector("tbody tr[data-juneau-inflight]");
+	}
+
+	/**
+	 * Builds the per-table staleness-indicator chip (per-table, never a single page-level chip).  Starts in the
+	 * neutral "fresh" state; {@link #initPolling} drives every subsequent update.
+	 */
+	function buildStalenessIndicator() {
+		const el = document.createElement("span");
+		el.className = "juneau-view-staleness";
+		el.setAttribute("data-testid", "staleness");
+		el.setAttribute("data-state", "fresh");
+		return el;
+	}
+
+	/**
+	 * Builds the row-details expander's detail-body element (client-rendered from row data by default).  A
+	 * plain `<dl>` of label/value pairs built with `textContent` only (never `innerHTML`) - the values are row
+	 * data, not markup, so this stays safe by construction without needing an escaper (unlike a raw-markup
+	 * panel content feature, which is a different, still-gated, question). There is no server-render path wired
+	 * here; see the class comment atop `ViewDef.java`'s row-details-expander section for why that path is
+	 * deferred rather than designed twice.
+	 */
+	function buildDetailPanel(fields) {
+		const dl = document.createElement("dl");
+		dl.className = "juneau-view-detail-panel";
+		dl.setAttribute("data-testid", "detail-panel");
+		fields.forEach(function (f) {
+			const dtEl = document.createElement("dt");
+			dtEl.textContent = f.title;
+			const ddEl = document.createElement("dd");
+			ddEl.textContent = f.value;
+			dl.appendChild(dtEl);
+			dl.appendChild(ddEl);
+		});
+		return dl;
+	}
+
+	/**
+	 * Wires the row-details expander via DataTables' native child-row API.  ONE delegated click listener on
+	 * `table` (rather than one per row) toggles a client-rendered detail panel, built from that row's OWN data
+	 * (no extra network request), for whichever `.juneau-view-detail-row` `<tr>` was clicked; `createdRow` (see
+	 * `buildOptions` above) is what applies that marker class.
+	 *
+	 * <p>"Collapse on redraw" needs no extra code here: DataTables' child-row API does not survive a `draw.dt` -
+	 * a sort, page change, search, or poll tick rebuilds `<tbody>` (and any open child `<tr>` along with it),
+	 * which IS the accepted behavior, not an oversight.
+	 */
+	function initDetailsExpander(table, dt, viewDef) {
+		table.addEventListener("click", function (e) {
+			const tr = e.target && e.target.closest ? e.target.closest("tr.juneau-view-detail-row") : null;
+			if (!tr) return;
+			const row = dt.row(tr);
+			if (!row || !row.length) return;
+			if (row.child.isShown()) {
+				row.child.hide();
+				tr.classList.remove("juneau-view-detail-open");
+			} else {
+				row.child(buildDetailPanel(buildDetailFields(viewDef.details, row.data()))).show();
+				tr.classList.add("juneau-view-detail-open");
+			}
+		});
+	}
+
+	/**
+	 * Wires a table's poll timer + its staleness indicator.  A plain interval fetch - deliberately not a
+	 * streaming/SSE transport, which would be an independent mechanism.
+	 *
+	 * <p>Any successful DataTables draw resets the "last refreshed" clock - whether it was triggered by this
+	 * timer, the refresh ribbon button, paging, or a search - because each one really did just complete a fresh
+	 * server round trip. Only the timer's OWN tick additionally (a) skips entirely while the tab/page is hidden
+	 * (Page Visibility API - no fetch, no cost, while backgrounded) and (b) skips entirely while
+	 * {@link #hasInFlightRow} is true. A failed round trip (`error.dt`) flips the indicator to a distinct
+	 * "error" state without touching the last-success timestamp, so a frozen clock and a broken poll never look
+	 * identical to a healthy one (the whole point of this function).
+	 */
+	function initPolling(table, dt, viewDef, indicator) {
+		const intervalMs = clampPollInterval(viewDef.pollIntervalMs);
+		const state = { lastSuccessAt: Date.now(), failed: false };
+
+		function render() {
+			const age = formatStalenessAge(Date.now() - state.lastSuccessAt);
+			indicator.setAttribute("data-state", state.failed ? "error" : "fresh");
+			indicator.textContent = state.failed ? "Refresh failed - last updated " + age : "Updated " + age;
+		}
+
+		dt.on("draw.dt", function () { state.lastSuccessAt = Date.now(); state.failed = false; render(); });
+		dt.on("error.dt", function () { state.failed = true; render(); });
+
+		function poll() {
+			if (document.hidden) return;
+			if (hasInFlightRow(table)) return;
+			dt.ajax.reload(null, false);
+		}
+
+		setInterval(poll, intervalMs);
+		// The visible age ("5s ago" -> "6s ago" ...) must keep advancing between polls, independent of the data-
+		// fetch cadence - a short, fixed, network-free tick keeps the label honest without any extra ajax cost.
+		setInterval(render, 1000);
+		render();
+	}
+
+	// NOSONAR javascript:S3776 -- sequential wiring of one view table's DataTables instance, ribbon, paging pill,
+	// column search, details expander, and polling; several of these steps and their exact call order are pinned
+	// verbatim by the wiring canary tests below `functionBody(body, "function initTable(")`, so splitting them
+	// into further helpers would reduce test/code locality without reducing real complexity.
 	function initTable(table) {
-		var $ = window.jQuery;
-		var id = table.getAttribute("data-juneau-view");
-		var sidecar = document.getElementById("juneau-view:" + id);
+		const $ = window.jQuery;
+		const id = table.getAttribute("data-juneau-view");
+		const sidecar = document.getElementById("juneau-view:" + id);
 		if (!sidecar) { error("Juneau view '" + id + "': missing JSON sidecar; refusing to init."); return; }
 
-		var viewDef;
+		let viewDef;
 		try {
 			viewDef = JSON.parse(sidecar.textContent);
 		} catch (e) {
@@ -540,40 +705,45 @@
 
 		// FAIL-LOUD contract-version handshake (§6.2): a mismatch means the served JS is stale vs the JSON - refuse.
 		if (viewDef.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
-			var m = "Juneau view '" + id + "': contract version mismatch (page='" + viewDef.contractVersion +
+			const m = "Juneau view '" + id + "': contract version mismatch (page='" + viewDef.contractVersion +
 				"', runtime='" + JUNEAU_VIEW_CONTRACT_VERSION + "'). Refusing to init - reload to clear a stale cached script.";
 			error(m);
 			renderBanner(table, m);
 			return;   // refuse to init rather than silently mis-render
 		}
 
-		if (!$ || !$.fn || !$.fn.DataTable) {
+		if (!$?.fn?.DataTable) {
 			warn("Juneau view '" + id + "': jQuery/DataTables not present; cannot bind.");
 			return;
 		}
 		if ($.fn.dataTable.isDataTable(table)) return;   // idempotent
 
-		var activeState = (NS.ribbon && NS.ribbon.loadPersistedState) ? NS.ribbon.loadPersistedState(viewDef) : {};
+		const activeState = NS.ribbon?.loadPersistedState ? NS.ribbon.loadPersistedState(viewDef) : {};
 
-		var deps = {
+		const deps = {
 			parseRenderId: NS.parseRenderId,
 			resolveRenderer: NS.resolveRenderer,
 			warn: warn,
 			ribbonParams: function () {
-				return (NS.ribbon && NS.ribbon.ribbonToQueryParams) ? NS.ribbon.ribbonToQueryParams(viewDef, activeState) : {};
+				return NS.ribbon?.ribbonToQueryParams ? NS.ribbon.ribbonToQueryParams(viewDef, activeState) : {};
 			}
 		};
 
-		var opts = buildOptions(viewDef, deps);
-		var dt = $(table).DataTable(opts);
+		const opts = buildOptions(viewDef, deps);
+		const dt = $(table).DataTable(opts);
 
-		var pill = buildPagingPill(viewDef, { table: table, dataTable: dt });
+		// A declared `details` field list makes every row expandable.
+		if (viewDef.details && viewDef.details.length) {
+			initDetailsExpander(table, dt, viewDef);
+		}
+
+		const pill = buildPagingPill(viewDef, { table: table, dataTable: dt });
 
 		// Hoisted above the `NS.ribbon.build` call (rather than scoped inside it) because the columnSearchToggle
 		// button's click handler reads `ctx.onColumnSearchToggle` at CLICK time, not at build time - as long as
 		// this same object is later given that callback (below), the button already wired to it works correctly
 		// regardless of which happens first.
-		var ctx = {
+		const ctx = {
 			table: table,
 			dataTable: dt,
 			activeState: activeState,
@@ -581,9 +751,9 @@
 			redraw: function () { dt.ajax ? dt.ajax.reload() : dt.draw(); }
 		};
 
-		var bar = (NS.ribbon && NS.ribbon.build) ? NS.ribbon.build(viewDef, ctx) : null;
+		const bar = NS.ribbon?.build ? NS.ribbon.build(viewDef, ctx) : null;
 
-		var columnSearchRow = buildColumnSearchRow(table, viewDef, dt);
+		const columnSearchRow = buildColumnSearchRow(table, viewDef, dt);
 		ctx.onColumnSearchToggle = function (on) {
 			if (!columnSearchRow) return;
 			columnSearchRow.style.display = on ? "" : "none";
@@ -596,19 +766,28 @@
 		// One unified top-toolbar row (IRS reference layout) - LEFT the unified paging ribbon, RIGHT [search,
 		// ribbon], all sitting ABOVE the table as a single row (buildToolbarRow(...) owns the left/right split).
 		// Paging exists in exactly this one place - there is no second, right-side paging control any more.
-		var wrapper = table.parentNode;
-		if (wrapper) buildToolbarRow(wrapper, pill, bar);
+		const wrapper = table.parentNode;
+		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
+
+		// A declared pollIntervalMs gets its own per-table staleness chip, inserted at the front of the RIGHT
+		// toolbar cluster (ahead of search/ribbon) without touching buildToolbarRow's own signature/tests.
+		if (viewDef.pollIntervalMs && toolbarRow) {
+			const staleness = buildStalenessIndicator();
+			const rightCluster = toolbarRow.querySelector(".juneau-view-toolbar-right");
+			if (rightCluster) rightCluster.insertBefore(staleness, rightCluster.firstChild);
+			initPolling(table, dt, viewDef, staleness);
+		}
 	}
 
 	/**
-	 * Inits every table[data-juneau-view] on the page, EXCEPT one scoped inside a [data-juneau-page] shell (TODO-399
-	 * Phase C seam): a page shell's juneau-pages.js runtime owns first-init for its own panels (lazy, on first tab
-	 * activation - DataTables mis-sizes columns initialized inside a display:none panel), rather than the eager
+	 * Inits every table[data-juneau-view] on the page, EXCEPT one scoped inside a [data-juneau-page] shell: a
+	 * page shell's juneau-pages.js runtime owns first-init for its own panels (lazy, on first tab activation -
+	 * DataTables mis-sizes columns initialized inside a display:none panel), rather than the eager
 	 * DOMContentLoaded scan below.  A standalone page with no page shell is unaffected - every one of its tables is
 	 * still inited exactly as before.
 	 */
 	function initAll() {
-		var tables = document.querySelectorAll("table[data-juneau-view]");
+		const tables = document.querySelectorAll("table[data-juneau-view]");
 		Array.prototype.forEach.call(tables, function (t) {
 			if (t.closest && t.closest("[data-juneau-page]")) return;
 			initTable(t);
@@ -632,15 +811,26 @@
 		mergeMeta: mergeMeta,
 		buildOptions: buildOptions,
 		initAll: initAll,
-		// TODO-399 Phase C seam: previously private - exposed so juneau-pages.js can init one specific view's
-		// table on demand (lazy, on first tab activation).  Already idempotent (isDataTable guard below), so
-		// re-entry from the page runtime after the DOMContentLoaded scan has already run is always safe.
+		// Previously private - exposed so juneau-pages.js can init one specific view's table on demand (lazy,
+		// on first tab activation).  Already idempotent (isDataTable guard below), so re-entry from the page
+		// runtime after the DOMContentLoaded scan has already run is always safe.
 		initTable: initTable,
-		// visual-parity pass: exposed for Option-A/manual verification.
+		// visual-parity pass: exposed for manual verification.
 		buildPagingPill: buildPagingPill,
 		buildPageSizeMenu: buildPageSizeMenu,
 		buildColumnSearchRow: buildColumnSearchRow,
-		buildToolbarRow: buildToolbarRow
+		buildToolbarRow: buildToolbarRow,
+		// Table polling + visible staleness indicator - exposed for manual verification.
+		MIN_POLL_INTERVAL_MS: MIN_POLL_INTERVAL_MS,
+		clampPollInterval: clampPollInterval,
+		formatStalenessAge: formatStalenessAge,
+		hasInFlightRow: hasInFlightRow,
+		buildStalenessIndicator: buildStalenessIndicator,
+		initPolling: initPolling,
+		// Row-details expander - exposed for manual verification.
+		buildDetailFields: buildDetailFields,
+		buildDetailPanel: buildDetailPanel,
+		initDetailsExpander: initDetailsExpander
 	};
 
 	if (document.readyState === "loading") {

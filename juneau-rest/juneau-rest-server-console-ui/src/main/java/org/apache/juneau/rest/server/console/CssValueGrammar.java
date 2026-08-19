@@ -79,7 +79,7 @@ final class CssValueGrammar {
 		// leading/trailing C0 control character before this check ever saw it.
 		for (var i = 0; i < value.length(); i++) {
 			var c = value.charAt(i);
-			if ((c >= 0x00 && c <= 0x1F) || (c >= 0x7F && c <= 0x9F))
+			if (c <= 0x1F || (c >= 0x7F && c <= 0x9F))
 				throw iaex("Theme token value contains an illegal control character at index %d.", i);
 		}
 
@@ -109,6 +109,9 @@ final class CssValueGrammar {
 
 	// <number> + allowlisted unit, one or more space-separated (unit optional, e.g. bare "0").
 	private static final String UNIT = "px|em|rem|%|vh|vw|vmin|vmax|pt|ch|fr|deg|turn|rad|s|ms";
+	@SuppressWarnings({
+		"java:S5998" // Length-list input is a short, author-set theme-token config value (never attacker-controlled request data), so the group-repetition backtracking cannot be driven to a stack overflow; rewriting this security allowlist regex risks altering the set of validated inputs.
+	})
 	private static final Pattern LENGTH_LIST = Pattern.compile(
 		"^-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?(?:\\s+-?\\d+(?:\\.\\d+)?(?:" + UNIT + ")?)*$");
 
@@ -185,7 +188,11 @@ final class CssValueGrammar {
 			"seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow",
 			"springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white",
 			"whitesmoke", "yellow", "yellowgreen"));
-		s.addAll(Set.of("transparent", "currentcolor", "inherit", "initial", "unset"));
+		// "none": lets a theme express a flat, ungradiated page background (background-image: none),
+		// letting html,body's own background-color show through.  "none" has no nested-function or url() capability,
+		// so admitting it as a bare keyword does not reopen anything URL_REJECT or the gradient nested-function
+		// allowlist exist to close - it is an orthogonal branch of isAllowedShape, not a loosening of the url() ban.
+		s.addAll(Set.of("transparent", "currentcolor", "inherit", "initial", "unset", "none"));
 		return Set.copyOf(s);
 	}
 }

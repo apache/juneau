@@ -47,6 +47,9 @@ import org.junit.jupiter.api.*;
  * 		{@code columns[1][search][value]} key the pure mapping emits.
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class ViewServerWiring_Test extends TestBase {
 
 	/** Row bean: {@code name} (col 0), {@code status} (col 1), {@code date} (col 2). */

@@ -210,11 +210,10 @@ class JspViewRenderer_ForwardPaths_Test extends TestBase {
 	@Test void a00_contextPresentButDispatcherNull_reportsNoEngineDiagnostic() throws Exception {
 		// The rd == null branch itself (a non-null ServletContext that resolves the target to no
 		// dispatcher), as distinct from a null ServletContext (which never reaches this class's process()
-		// call at all under MockRest's defaults). process(...) now has a dedicated
-		// `catch (InternalServerError ex) { throw ex; }` clause ahead of the generic catch, so this
-		// branch's specific "Could not resolve RequestDispatcher... NO_ENGINE_DIAGNOSTIC" message reaches
-		// the response body intact instead of being re-wrapped into the generic "JSP render failed for"
-		// message.
+		// call at all under MockRest's defaults). process(...) re-throws InternalServerError ahead of the
+		// generic catch, so this branch's specific "Could not resolve RequestDispatcher...
+		// NO_ENGINE_DIAGNOSTIC" message reaches the response body intact instead of being re-wrapped into
+		// the generic "JSP render failed for" message.
 		var ctx = fakeServletContext(null);
 		var res = c.get("/view").servletContext(ctx).run();
 		res.assertStatus(500);

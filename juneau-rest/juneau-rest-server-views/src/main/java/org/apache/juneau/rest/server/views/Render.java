@@ -43,6 +43,7 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,meta")
+@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class Render {
 
 	/** The renderer id (registry key in {@code juneau-renders.js}). */

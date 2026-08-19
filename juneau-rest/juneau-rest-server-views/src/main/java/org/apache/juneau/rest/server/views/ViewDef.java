@@ -35,9 +35,10 @@ import org.apache.juneau.rest.server.datatables.*;
  * sidecar the server writes and the {@code juneau-views.js} runtime consumes stay wire-stable.
  *
  * <p>
- * The reserved detail/row-action/catalog fields ({@code details}, {@code rowActions}, {@code catalog}) are
- * <b>not</b> part of this MVP builder and are therefore omitted from the serialized contract (design doc §6.10
- * reserved stubs) &mdash; omitted, not emitted as {@code null}.
+ * {@code details} (the row-details expander's field list) is implemented; see {@link #details(DetailDef...)}.
+ * The remaining reserved row-action/catalog fields ({@code rowActions}, {@code catalog}) are <b>not</b> part of this
+ * MVP builder and are therefore omitted from the serialized contract (design doc §6.10 reserved stubs) &mdash;
+ * omitted, not emitted as {@code null}.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -59,11 +60,24 @@ import org.apache.juneau.rest.server.datatables.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules")
+@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,details,pollIntervalMs")
+@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class ViewDef {
 
 	/** The frozen contract version.  Bumped only on a breaking wire change. */
 	public static final String CONTRACT_VERSION = "2";
+
+	/**
+	 * The minimum honored polling interval, in milliseconds.
+	 *
+	 * <p>
+	 * A declared {@link #poll(long)} interval below this floor is clamped up to it rather than honored as
+	 * configured &mdash; a declarable interval with no floor lets a consumer configure a self-inflicted load
+	 * problem on a server-side-query table.  Enforced here (server-side) rather than only in
+	 * {@code juneau-views.js} so the clamp is a single, easily-tested source of truth and a stale/cached client
+	 * script can't be tricked into honoring a sub-floor value the server never actually declared.
+	 */
+	public static final long MIN_POLL_INTERVAL_MS = 5_000L;
 
 	/**
 	 * How the table sources its rows.
@@ -154,6 +168,49 @@ public class ViewDef {
 		}
 	}
 
+	/**
+	 * A single field projected into the row-details expander's body.
+	 *
+	 * <p>
+	 * Client-rendered from the row's own already-fetched data by default &mdash; declaring a {@link #data} key
+	 * reads a value the row already carries, so expanding a row never issues a request of its own. An optional
+	 * server-render path for consumers that need it is not exposed by this type.
+	 *
+	 * @since 10.0.0
+	 */
+	@BeanType(properties="data,title")
+	public static class DetailDef {
+
+		/** The row bean-property / JSON key this field reads from the row's own data. */
+		public String data;
+
+		/** The label shown next to the value in the expanded detail panel. */
+		public String title;
+
+		/**
+		 * Creates a detail field bound to the specified row data key.
+		 *
+		 * @param data The bean-property / JSON key.  Must not be <jk>null</jk>.
+		 * @return A new {@link DetailDef}.
+		 */
+		public static DetailDef of(String data) {
+			var d = new DetailDef();
+			d.data = data;
+			return d;
+		}
+
+		/**
+		 * Sets the label shown next to the value in the expanded detail panel.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public DetailDef title(String value) {
+			title = value;
+			return this;
+		}
+	}
+
 	/** The frozen contract version discriminator (always {@value #CONTRACT_VERSION} for this contract). */
 	public String contractVersion = CONTRACT_VERSION;
 
@@ -182,10 +239,26 @@ public class ViewDef {
 	public List<RowClassRule> rowClassRules;
 
 	/**
+	 * The row-details expander's field list; omitted from the wire when unset (no expander).
+	 *
+	 * <p>
+	 * Rendered client-side from the row's own already-fetched data by default &mdash; declaring this does not
+	 * add a request per expansion. Expanding a row does not survive a redraw: a sort, page change, search, or
+	 * {@link #poll(long)} tick collapses any expanded row.
+	 */
+	public List<DetailDef> details;
+
+	/**
+	 * The declared table-refresh polling interval, in milliseconds; omitted from the wire when unset (no polling).
+	 * Never below {@link #MIN_POLL_INTERVAL_MS} &mdash; see {@link #poll(long)}.
+	 */
+	public Long pollIntervalMs;
+
+	/**
 	 * The row bean type, retained (non-serialized) so {@link #build()} can auto-seed {@link #columns} from
 	 * {@link DataTablesColumns#of(Class)} when no explicit columns were declared.  Not a wire field.
 	 */
-	private transient Class<?> rowTypeClass;
+	private Class<?> rowTypeClass;
 
 	/**
 	 * Starts a new {@link ViewDef} builder with the specified stable view id.
@@ -270,6 +343,27 @@ public class ViewDef {
 	}
 
 	/**
+	 * Declares that this table's data should be polled (re-fetched) on the given interval.
+	 *
+	 * <p>
+	 * A value below {@link #MIN_POLL_INTERVAL_MS} is silently clamped up to the floor rather than rejected, so a
+	 * consumer that fat-fingers a too-aggressive interval gets a safe table rather than a build-time failure.
+	 * The client ({@code juneau-views.js}) re-fetches on this interval via a plain interval timer &mdash; a
+	 * separate mechanism from any streaming/SSE transport &mdash; pauses while the tab or page is not visible,
+	 * shows a per-table last-refreshed age, and never overwrites a row that is currently in-flight from a write
+	 * (that row is left stale until the write's own result repaints it).
+	 *
+	 * @param intervalMs The desired polling interval, in milliseconds.  Must be positive.
+	 * @return This object.
+	 */
+	public ViewDef poll(long intervalMs) {
+		if (intervalMs <= 0)
+			throw iaex("ViewDef.poll(...) interval must be positive.");
+		pollIntervalMs = Math.max(intervalMs, MIN_POLL_INTERVAL_MS);
+		return this;
+	}
+
+	/**
 	 * Adds a value-based row-decorator rule ({@link RowClassRule.Op#EQ eq}/{@link RowClassRule.Op#NE ne}).
 	 *
 	 * @param field The row field to test.  Must not be <jk>null</jk>.
@@ -298,6 +392,21 @@ public class ViewDef {
 		if (rowClassRules == null)
 			rowClassRules = l();
 		rowClassRules.add(rule);
+		return this;
+	}
+
+	/**
+	 * Declares the row-details expander's field list.
+	 *
+	 * <p>
+	 * Rendered client-side ({@code juneau-views.js}) from the row's own data by default; see {@link #details} for
+	 * the no-extra-request and collapse-on-redraw notes.
+	 *
+	 * @param value The detail fields, in display order.
+	 * @return This object.
+	 */
+	public ViewDef details(DetailDef...value) {
+		details = l(value);
 		return this;
 	}
 

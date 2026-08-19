@@ -48,26 +48,37 @@ class CssValueGrammar_Test extends TestBase {
 		"url/**/(https://evil)",      // comment
 		"  url(x)",                   // leading whitespace
 		"linear-gradient(url(evil))", // nested url() inside an otherwise-shaped gradient - grammar-layer reject
+		// The "none"-interaction vectors below (folded in from the former a12, merged to close out S4144 - these
+		// share a01's exact shape and target, so splitting them into a second method was pure duplication):
+		"url(none)",                       // "none" as a url() argument must not smuggle the url() production through
+		"URL(none.png)",
+		"url\t(none)",                     // tab (C0) between url and paren
+		"none url(evil)",                  // "none" prefix must not whitelist a trailing url()
+		"linear-gradient(none, url(evil))",
 	})
 	void a01_bypassVectorSweep_throws(String payload) {
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("x").token("--jc-page-bg", payload));
+		var b = Theme.create("x");
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-page-bg", payload));
 	}
 
 	@Test void a02_cssHexEscapedUrl_throws() {
 		// CSS-hex-escaped letters spelling "url(" - the grammar has no production admitting a literal backslash,
 		// so these die in the allowlist grammar (not the normalization url-regex, which does not match "\75rl(").
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("x").token("--jc-page-bg", "\\75rl(x)"));
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("x").token("--jc-page-bg", "url\\3C(x)"));
+		var b = Theme.create("x");
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-page-bg", "\\75rl(x)"));
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-page-bg", "url\\3C(x)"));
 	}
 
 	@Test void a03_rawC0ControlChar_anywhere_throws() {
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("x").token("--jc-accent", "#1589EE\u0000"));
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("x").token("--jc-accent", "\u0007red"));
+		var b = Theme.create("x");
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-accent", "#1589EE\u0000"));
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-accent", "\u0007red"));
 	}
 
 	@Test void a04_rawC1DelControlChar_throws() {
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("x").token("--jc-accent", "red\u007F"));
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("x").token("--jc-accent", "red\u0085"));
+		var b = Theme.create("x");
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-accent", "red\u007F"));
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-accent", "red\u0085"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -82,14 +93,16 @@ class CssValueGrammar_Test extends TestBase {
 		// the (?i)url\s*\( belt would NOT catch it either, and the grammar would ACCEPT it (whitespace is in the
 		// rgb() charset). It must still throw - and for a DIFFERENT reason (control character) than an
 		// out-of-grammar value.
+		var b = Theme.create("x");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> Theme.create("x").token("--jc-accent", "rgb(21,\n137,238)"));
+			() -> b.token("--jc-accent", "rgb(21,\n137,238)"));
 		assertTrue(ex.getMessage().contains("control character"), () -> "unexpected message: " + ex.getMessage());
 	}
 
 	@Test void a06_outOfGrammarValue_throwsWithDistinctMessage_notControlCharacter() {
+		var b = Theme.create("x");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> Theme.create("x").token("--jc-accent", "not-a-css-value!!!"));
+			() -> b.token("--jc-accent", "not-a-css-value!!!"));
 		assertFalse(ex.getMessage().contains("control character"), () -> "unexpected message: " + ex.getMessage());
 	}
 
@@ -123,7 +136,25 @@ class CssValueGrammar_Test extends TestBase {
 	}
 
 	@Test void a09_gradientWithDisallowedNestedFunction_rejected() {
+		var b = Theme.create("x");
 		assertThrows(IllegalArgumentException.class,
-			() -> Theme.create("x").token("--jc-avatar-bg", "linear-gradient(135deg, image(evil))"));
+			() -> b.token("--jc-avatar-bg", "linear-gradient(135deg, image(evil))"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// The bare keyword "none" is admitted so a theme can express a flat page background
+	// (background-image: none), but admitting it must NOT reopen the url() ban - "none" is an orthogonal branch of
+	// isAllowedShape, not a loosening of URL_REJECT or the gradient nested-function allowlist. The "must not reopen
+	// the url() ban" vectors are covered by the "none"-interaction entries folded into (a01) above.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void a10_bareNoneKeyword_acceptedVerbatim() {
+		var theme = Theme.create("x").token("--jc-page-bg", "none").build();
+		assertEquals("none", theme.getTokens().get("--jc-page-bg"));
+	}
+
+	@Test void a11_noneKeyword_isCaseInsensitive() {
+		assertEquals("NONE", Theme.create("x").token("--jc-page-bg", "NONE").build().getTokens().get("--jc-page-bg"));
+		assertEquals("None", Theme.create("x").token("--jc-page-bg", "None").build().getTokens().get("--jc-page-bg"));
 	}
 }

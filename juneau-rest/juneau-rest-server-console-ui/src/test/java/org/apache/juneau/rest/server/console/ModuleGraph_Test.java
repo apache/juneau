@@ -23,9 +23,11 @@ import java.nio.file.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
- * Mechanical, {@code basedir}-relative assertion of the TODO-361 three-module dependency graph.
+ * Mechanical, {@code basedir}-relative assertion of the three-module dependency graph.
  *
  * <p>
  * This is an <b>invariant/regression assertion, not a shown-failing-first TDD RED</b>: the
@@ -59,18 +61,14 @@ class ModuleGraph_Test extends TestBase {
 		return pomXml.contains("<artifactId>" + artifactId + "</artifactId>");
 	}
 
-	@Test void a01_viewFreemarker_doesNotDependOnDatatables() throws IOException {
-		var pom = pomOf("juneau-rest-server-view-freemarker");
-		assertFalse(hasDependency(pom, "juneau-rest-server-datatables"));
-	}
-
-	@Test void a02_consoleUiFreemarker_doesNotDependOnDatatables() throws IOException {
-		var pom = pomOf("juneau-rest-server-console-ui-freemarker");
-		assertFalse(hasDependency(pom, "juneau-rest-server-datatables"));
-	}
-
-	@Test void a03_consoleUi_doesNotDependOnDatatables() throws IOException {
-		var pom = pomOf("juneau-rest-server-console-ui");
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"juneau-rest-server-view-freemarker",
+		"juneau-rest-server-console-ui-freemarker",
+		"juneau-rest-server-console-ui",
+	})
+	void a01_moduleDoesNotDependOnDatatables(String moduleArtifactId) throws IOException {
+		var pom = pomOf(moduleArtifactId);
 		assertFalse(hasDependency(pom, "juneau-rest-server-datatables"));
 	}
 

@@ -78,7 +78,7 @@ class ViewTable_Emit_Test extends TestBase {
 		var html = Html.of(ViewTable.of(view()));
 		// Distinct marker: must NOT collide with the plain-DataTables path (data-juneau-datatable).
 		assertFalse(html.contains("data-juneau-datatable"), html);
-		assertEquals(ViewTable.MARKER_ATTR, "data-juneau-view");
+		assertEquals("data-juneau-view", ViewTable.MARKER_ATTR);
 	}
 
 	@Test void a03_sidecarCarriesTheSerializedViewMeta() {

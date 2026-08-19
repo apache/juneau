@@ -121,6 +121,44 @@ public class ConsoleChromeMixin {
 	/** The image file extensions a configured logo/page-background asset is allowed to use. */
 	private static final Set<String> ALLOWED_ASSET_EXTS = Set.of("svg", "png", "jpg", "jpeg", "webp", "gif");
 
+	/**
+	 * The framework-authored role-token alias derivations.
+	 *
+	 * <p>
+	 * {@code chrome.css} consumes <i>role</i>-named tokens ({@code --jc-header-bg}, {@code --jc-surface},
+	 * {@code --jc-on-accent}, ...); {@link Theme#OPEN} (and every consumer theme) still defines the original
+	 * <i>colour</i>-named leaf tokens ({@code --jc-white}, {@code --jc-border-2}, ...). This block bridges the two
+	 * by deriving each role token <b>from</b> the legacy token it replaces, so a consumer's existing override of a
+	 * legacy token still flows through to every derived role, and a consumer who sets a role token directly
+	 * out-ranks the derived default by cascade order (this block is emitted inside the {@code Theme.OPEN} block,
+	 * before any active-theme override block).
+	 *
+	 * <p>
+	 * These aliases are <b>permanent</b> (no deprecation window) and are deliberately <i>not</i>
+	 * {@link Theme#OPEN} tokens: {@code CssValueGrammar} rejects {@code var()} in every spelling, so a
+	 * {@code var(--jc-*)} alias expressed as a {@code Theme} token would throw at class-initialization time. This
+	 * is framework-authored literal text and never passes through that grammar (which exists to validate
+	 * <i>consumer</i> input, not the framework's own stylesheet). {@code Theme.OPEN} owns leaf values; this block
+	 * owns derived values; no token name is declared by both.
+	 */
+	static final String OPEN_ROLE_ALIASES = String.join("",
+		"--jc-surface:var(--jc-white);",
+		"--jc-header-bg:var(--jc-surface);",
+		"--jc-nav-bg:var(--jc-header-bg);",
+		"--jc-control-bg:var(--jc-surface);",
+		"--jc-table-bg:var(--jc-surface);",
+		"--jc-table-row-bg:var(--jc-surface);",
+		"--jc-on-accent:var(--jc-white);",
+		"--jc-on-btn-primary:var(--jc-on-accent);",
+		"--jc-table-stripe-bg:var(--jc-card-bg);",
+		"--jc-hover-bg:var(--jc-chrome-bg);",
+		"--jc-table-header-bg:var(--jc-chrome-bg);",
+		"--jc-control-border:var(--jc-border-2);",
+		"--jc-header-icon-text:var(--jc-header-icon-color);",
+		"--jc-btn-primary-bg:var(--jc-btn-primary);",
+		"--jc-btn-primary-bg-hover:var(--jc-btn-primary-hover);"
+	);
+
 	/** The shipped static chrome.css bytes, read once from the classpath (shared - the static file never varies by theme). */
 	private static volatile String staticCss;
 
@@ -274,7 +312,7 @@ public class ConsoleChromeMixin {
 	private byte[] buildBody(RestRequest req) throws IOException {
 		buildCount.incrementAndGet();
 		var sb = new StringBuilder(staticCss());
-		sb.append('\n').append(rootBlock(Theme.OPEN));
+		sb.append('\n').append(openRootBlock());
 		var active = resolveActiveTheme(req);
 		if (! active.getName().equals(Theme.OPEN.getName()))
 			sb.append('\n').append(rootBlock(active));
@@ -360,6 +398,24 @@ public class ConsoleChromeMixin {
 		sb.append(":root{");
 		for (var e : theme.getTokens().entrySet())
 			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
+		sb.append('}');
+		return sb.toString();
+	}
+
+	/**
+	 * Renders {@link Theme#OPEN}'s {@code :root{}} block with the framework-authored role-token alias derivations
+	 * ({@link #OPEN_ROLE_ALIASES}) appended inside the same block, immediately after the leaf tokens. The aliases
+	 * are appended as trusted framework literal text (not routed through {@code CssValueEscaper}, which is for
+	 * consumer-supplied values); folding them into {@code Theme.OPEN}'s block keeps the served response at exactly
+	 * one {@code :root{}} block for the default theme while still placing every derived default before any
+	 * active-theme override block.
+	 */
+	private static String openRootBlock() {
+		var sb = new StringBuilder();
+		sb.append(":root{");
+		for (var e : Theme.OPEN.getTokens().entrySet())
+			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
+		sb.append(OPEN_ROLE_ALIASES);
 		sb.append('}');
 		return sb.toString();
 	}
@@ -455,23 +511,23 @@ public class ConsoleChromeMixin {
 		public ConsoleChromeMixin build() {
 			return new ConsoleChromeMixin(this);
 		}
-	}
 
-	/**
-	 * Fail-closed validation for a configured asset's classpath resource path: reject <jk>null</jk>/empty, reject
-	 * any traversal-shaped path (containing {@code ..} or a {@code %} URI-encoding escape, matching
-	 * {@code BasicFileFinder.isInvalidPath}), reject an extension outside the image allowlist, and reject a path
-	 * that does not resolve to an existing classpath resource.
-	 */
-	private static String validateAssetResource(String value, String paramName) {
-		if (value == null || value.isEmpty())
-			throw iaex("'%s' must not be null or empty.", paramName);
-		if (value.contains("..") || value.contains("%"))
-			throw iaex("'%s' must not contain '..' or '%%' (path traversal): '%s'.", paramName, value);
-		if (! ALLOWED_ASSET_EXTS.contains(FileUtils.getFileExtension(value).toLowerCase(Locale.ROOT)))
-			throw iaex("'%s' must end in one of .svg/.png/.jpg/.jpeg/.webp/.gif: '%s'.", paramName, value);
-		if (ConsoleChromeMixin.class.getResource(value) == null)
-			throw iaex("'%s' classpath resource not found: '%s'.", paramName, value);
-		return value;
+		/**
+		 * Fail-closed validation for a configured asset's classpath resource path: reject <jk>null</jk>/empty,
+		 * reject any traversal-shaped path (containing {@code ..} or a {@code %} URI-encoding escape, matching
+		 * {@code BasicFileFinder.isInvalidPath}), reject an extension outside the image allowlist, and reject a
+		 * path that does not resolve to an existing classpath resource.
+		 */
+		private static String validateAssetResource(String value, String paramName) {
+			if (value == null || value.isEmpty())
+				throw iaex("'%s' must not be null or empty.", paramName);
+			if (value.contains("..") || value.contains("%"))
+				throw iaex("'%s' must not contain '..' or '%%' (path traversal): '%s'.", paramName, value);
+			if (! ALLOWED_ASSET_EXTS.contains(FileUtils.getFileExtension(value).toLowerCase(Locale.ROOT)))
+				throw iaex("'%s' must end in one of .svg/.png/.jpg/.jpeg/.webp/.gif: '%s'.", paramName, value);
+			if (ConsoleChromeMixin.class.getResource(value) == null)
+				throw iaex("'%s' classpath resource not found: '%s'.", paramName, value);
+			return value;
+		}
 	}
 }

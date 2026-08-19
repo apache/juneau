@@ -61,6 +61,6 @@ final class CssValueEscaper {
 	}
 
 	private static boolean isBreakout(char c) {
-		return c == ';' || c == '{' || c == '}' || c == '\\' || c == '<' || c == '>' || (c >= 0x00 && c <= 0x1F);
+		return c == ';' || c == '{' || c == '}' || c == '\\' || c == '<' || c == '>' || c <= 0x1F;
 	}
 }

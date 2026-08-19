@@ -22,7 +22,7 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * A single sub-tab within a {@link Tab} that has {@link Tab#subtabs}, referencing exactly one child {@link ViewDef}
- * (TODO-399 Phase C, design doc §"Bean model").
+ * (design doc §"Bean model").
  *
  * <p>
  * A {@link Subtab} carries a stable {@code id} (the third hash segment, {@code #pageId/tabId/<subtabId>}) and
@@ -38,6 +38,7 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="id,label,view")
+@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class Subtab {
 
 	/** The stable sub-tab id (the third hash segment). */

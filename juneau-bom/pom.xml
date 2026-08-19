@@ -118,7 +118,7 @@
 			<!-- ===================================================================================== -->
 			<!-- juneau-secret                                                                         -->
 			<!-- ===================================================================================== -->
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-secret-keychain</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-secret-macos-keychain</artifactId><version>${project.version}</version></dependency>
 
 			<!-- ===================================================================================== -->
 			<!-- Curated dependency bundles (transitive module sets per deployment shape)              -->

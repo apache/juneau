@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
  * (DataTables ribbon visual-parity design doc §4.A, plan Task 2). Option-A (content-substring +
  * function-body-extraction) coverage, mirroring {@code ViewsMixin_Serving_Test}'s established idiom.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class RibbonIcons_Resolution_Test extends TestBase {
 
 	@Rest(mixins=ViewsMixin.class)

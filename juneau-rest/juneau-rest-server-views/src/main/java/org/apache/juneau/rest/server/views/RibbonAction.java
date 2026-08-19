@@ -39,6 +39,7 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="type,buttons,optional,id,title,group,column,value,param,persist,symbol,color,deselectable,options")
+@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class RibbonAction {
 
 	/** The discriminator: {@code export}/{@code refresh}/{@code columnSearchToggle}/{@code option}/{@code optionGroup}/{@code divider}. */

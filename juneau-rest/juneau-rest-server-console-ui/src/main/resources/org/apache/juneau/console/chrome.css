@@ -64,6 +64,14 @@ body {
 a { color: var(--jc-link); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* Accessibility: a single token-driven :focus-visible ring covers every interactive control at once
+   (icon buttons, all .jc-btn variants, nav tabs, links, ribbon/pagingpill controls) so keyboard focus is visible
+   by default - a WCAG 2.4.7 (AA) requirement. :focus-visible (not :focus) so mouse clicks don't show the ring. */
+:focus-visible {
+  outline: 2px solid var(--jc-focus);
+  outline-offset: 2px;
+}
+
 /* ==========================================================================
    Header
    ========================================================================== */
@@ -71,8 +79,8 @@ a:hover { text-decoration: underline; }
 .jc-header {
   display: flex;
   align-items: center;
-  height: 56px;
-  background-color: var(--jc-white);
+  height: var(--jc-header-height);
+  background-color: var(--jc-header-bg);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -91,7 +99,7 @@ a:hover { text-decoration: underline; }
   margin: 8px 16px;
   flex: 0 0 auto;
   border-radius: var(--jc-radius);
-  background-color: var(--jc-white);
+  background-color: var(--jc-header-bg);
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0OCA0OCc+PHJlY3Qgd2lkdGg9JzQ4JyBoZWlnaHQ9JzQ4JyByeD0nMTAnIGZpbGw9JyMxNTg5RUUnLz48cGF0aCBkPSdNMjQgOGMtNyA2LTExIDEzLTExIDE5YTExIDExIDAgMCAwIDIyIDBjMC02LTQtMTMtMTEtMTl6JyBmaWxsPScjZmZmZmZmJyBmaWxsLW9wYWNpdHk9JzAuOTUnLz48cGF0aCBkPSdNMjQgMTR2MjAnIHN0cm9rZT0nIzE1ODlFRScgc3Ryb2tlLXdpZHRoPScxLjYnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcvPjwvc3ZnPgo=");
   background-repeat: no-repeat;
   background-position: center;
@@ -128,13 +136,13 @@ a:hover { text-decoration: underline; }
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  color: var(--jc-header-icon-color);
+  color: var(--jc-header-icon-text);
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
 
-.jc-icon-btn:hover { background-color: var(--jc-chrome-bg); }
+.jc-icon-btn:hover { background-color: var(--jc-hover-bg); }
 
 .jc-icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
@@ -143,7 +151,7 @@ a:hover { text-decoration: underline; }
   height: 30px;
   border-radius: 50%;
   background-image: var(--jc-avatar-bg);
-  color: var(--jc-white);
+  color: var(--jc-on-accent);
   font-size: 0.75rem;
   font-weight: 700;
   display: flex;
@@ -159,11 +167,11 @@ a:hover { text-decoration: underline; }
 .jc-nav {
   display: flex;
   align-items: stretch;
-  background-color: var(--jc-white);
-  border-bottom: 3px solid var(--jc-accent);
+  background-color: var(--jc-nav-bg);
+  border-bottom: var(--jc-nav-indicator-width) solid var(--jc-accent);
   padding: 0 16px;
   position: sticky;
-  top: 56px;
+  top: var(--jc-header-height);
   z-index: 19;
 }
 
@@ -175,7 +183,7 @@ a:hover { text-decoration: underline; }
   color: var(--jc-text-soft);
   padding: 9px 12px;
   margin-right: 0;
-  border-top: 3px solid transparent;
+  border-top: var(--jc-nav-indicator-width) solid transparent;
   border-bottom: none;
   cursor: pointer;
   transition: background-color 0.1s ease-in;
@@ -190,6 +198,40 @@ a:hover { text-decoration: underline; }
   background-color: var(--jc-accent-wash);
   border-top-color: var(--jc-accent);
   color: var(--jc-text);
+}
+
+/* ==========================================================================
+   Page-shell tabs / sub-tabs (.jc-tab / .jc-subtab)
+   The base SHAPE (flex layout, padding, border WIDTH, the display:none-until-
+   .jc-active panel toggle) lives in juneau-views.css with NO palette
+   (currentColor borders); chrome.css paints them HERE so a tab surface reads as
+   belonging next to the .jc-nav-tab bar directly above it - the same
+   base-shape-in-views / colours-in-chrome split as .tag and the ribbon buttons.
+   The active tab's 3px bottom edge (border-bottom-width, set neutrally in
+   -views) becomes the accent, echoing .jc-nav-tab.active's accent top edge.
+   ========================================================================== */
+
+.jc-tab,
+.jc-subtab {
+  color: var(--jc-text-soft);
+  background-color: var(--jc-control-bg);
+  border-color: var(--jc-border);
+  transition: background-color 0.1s ease-in;
+}
+
+.jc-tab:hover,
+.jc-subtab:hover {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-accent);
+  text-decoration: none;
+}
+
+.jc-tab-active,
+.jc-subtab-active {
+  color: var(--jc-text);
+  background-color: var(--jc-accent-wash);
+  border-color: var(--jc-border);
+  border-bottom-color: var(--jc-accent);
 }
 
 /* ==========================================================================
@@ -243,6 +285,7 @@ a:hover { text-decoration: underline; }
   background-color: var(--jc-card-bg);
   border: 1px solid var(--jc-border);
   border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
   padding: 18px 20px 8px;
 }
 
@@ -281,31 +324,31 @@ a:hover { text-decoration: underline; }
 }
 
 .jc-btn-primary {
-  background-color: var(--jc-btn-primary);
-  color: var(--jc-white);
+  background-color: var(--jc-btn-primary-bg);
+  color: var(--jc-on-btn-primary);
 }
-.jc-btn-primary:hover { background-color: var(--jc-btn-primary-hover); }
+.jc-btn-primary:hover { background-color: var(--jc-btn-primary-bg-hover); }
 
 .jc-btn-outline {
-  background-color: var(--jc-white);
+  background-color: var(--jc-control-bg);
   color: var(--jc-text-soft);
-  border-color: var(--jc-border-2);
+  border-color: var(--jc-control-border);
 }
-.jc-btn-outline:hover { background-color: var(--jc-chrome-bg); }
+.jc-btn-outline:hover { background-color: var(--jc-hover-bg); }
 
 .jc-btn-danger {
-  background-color: var(--jc-white);
+  background-color: var(--jc-control-bg);
   color: var(--jc-danger);
-  border-color: var(--jc-border-2);
+  border-color: var(--jc-control-border);
 }
-.jc-btn-danger:hover { background-color: #fdeceb; }
+.jc-btn-danger:hover { background-color: var(--jc-danger-wash); }
 
 .jc-btn-success {
-  background-color: var(--jc-white);
+  background-color: var(--jc-control-bg);
   color: var(--jc-success);
-  border-color: var(--jc-border-2);
+  border-color: var(--jc-control-border);
 }
-.jc-btn-success:hover { background-color: #eaf6ee; }
+.jc-btn-success:hover { background-color: var(--jc-success-wash); }
 
 /* ==========================================================================
    Tag / pill system
@@ -314,7 +357,7 @@ a:hover { text-decoration: underline; }
 .tag {
   display: inline-block;
   padding: 1px 6px;
-  border-radius: 3px;
+  border-radius: var(--jc-radius);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -358,7 +401,7 @@ a:hover { text-decoration: underline; }
 table.jc-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: var(--jc-white);
+  background-color: var(--jc-table-bg);
   border: 1px solid var(--jc-border);
   border-radius: var(--jc-radius);
   overflow: hidden;
@@ -373,7 +416,7 @@ table.jc-table thead th {
   text-align: left;
   padding: 10px 12px;
   border-bottom: 2px solid var(--jc-border);
-  background-color: var(--jc-chrome-bg);
+  background-color: var(--jc-table-header-bg);
   white-space: nowrap;
 }
 
@@ -425,7 +468,7 @@ table[data-juneau-view] > thead > tr > th,
 table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
-  background-color: var(--jc-chrome-bg);
+  background-color: var(--jc-table-header-bg);
   color: var(--jc-text-soft);
   border-bottom-color: var(--jc-border);
 }
@@ -445,7 +488,7 @@ table.dataTable > tbody > tr:nth-child(odd),
 table.dataTable > tbody > tr.odd,
 table.dataTable.stripe > tbody > tr:nth-child(odd),
 table.dataTable.display > tbody > tr:nth-child(odd) {
-  background-color: var(--jc-white);
+  background-color: var(--jc-table-row-bg);
 }
 
 table[data-juneau-view] > tbody > tr:nth-child(even),
@@ -454,7 +497,7 @@ table.dataTable > tbody > tr:nth-child(even),
 table.dataTable > tbody > tr.even,
 table.dataTable.stripe > tbody > tr:nth-child(even),
 table.dataTable.display > tbody > tr:nth-child(even) {
-  background-color: var(--jc-card-bg);
+  background-color: var(--jc-table-stripe-bg);
 }
 
 /* Row hover - bare :hover (the mechanism actually in effect today) plus the .hover/.display convenience-class
@@ -477,33 +520,33 @@ table.dataTable.display > tbody > tr:hover {
 /* Base thin-neutral-border shape (IRS parity item 1) - -views ships only a currentColor-fallback border, which
    inherits the body's near-black text color instead of IRS's subtle gray; themed here with --jc-border, plus a
    white face so a button reads as a distinct control against the card's tinted background. */
-.juneau-view-ribbon-btn { border-color: var(--jc-border); background-color: var(--jc-white); color: var(--jc-text-soft); }
+.juneau-view-ribbon-btn { border-color: var(--jc-border); background-color: var(--jc-control-bg); color: var(--jc-text-soft); }
 .juneau-view-ribbon-btn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
-.juneau-view-ribbon-btn:active { background-color: var(--jc-accent); color: var(--jc-white); }
+.juneau-view-ribbon-btn:active { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 
 /* Themed accent for an ACTIVE toggle (option/optionGroup member button's aria-pressed="true" - see -views'
    neutral border-width rule for this same attribute selector). Without this, a persisted, still-active filter
    (e.g. a column-scoped "option" toggle whose state survived a browser refresh) is visually indistinguishable
    from an unpressed button - clicking it once and never again can silently keep filtering out every row.  Also
    matches the blue "active" export button in the IRS reference ribbon (item 1). */
-.juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent); color: var(--jc-white); border-color: var(--jc-accent); }
+.juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); border-color: var(--jc-accent); }
 
 /* Unified paging ribbon (nav + page-size menu) - same thin-neutral-border/white-face treatment as the ribbon
    buttons. */
-.juneau-view-pagingpill { border-color: var(--jc-border); background-color: var(--jc-white); }
+.juneau-view-pagingpill { border-color: var(--jc-border); background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-btn { border-color: var(--jc-border); color: var(--jc-text-soft); }
 .juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menuwrap { border-color: var(--jc-border); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
 .juneau-view-pagingpill-menubtn:hover,
 .juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
-.juneau-view-pagingpill-menu { border-color: var(--jc-border); background-color: var(--jc-white); }
+.juneau-view-pagingpill-menu { border-color: var(--jc-border); background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-menu-option:hover,
 .juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
 .juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-accent); }
 
 /* Per-column search row inputs (IRS parity item 4) - same thin-neutral-border treatment, themed accent on focus. */
-.juneau-view-columnsearch-input { border-color: var(--jc-border); background-color: var(--jc-white); color: var(--jc-text); }
+.juneau-view-columnsearch-input { border-color: var(--jc-border); background-color: var(--jc-control-bg); color: var(--jc-text); }
 .juneau-view-columnsearch-input:focus { border-color: var(--jc-accent); }
 
 /* ==========================================================================
@@ -515,4 +558,110 @@ table.dataTable.display > tbody > tr:hover {
   font-size: 0.75rem;
   color: var(--jc-text-muted);
   padding: 24px 0 32px;
+}
+
+/* ==========================================================================
+   Prose typography (.jc-prose)
+   Opt-in scoping class for rendered documents (runbooks, onboarding docs,
+   "what this surface means" explainers) so prose reads as the console rather
+   than as the browser default.  Vertical rhythm consumes the --jc-space-*
+   scale, so a themed density change flows through here too.
+   NOTE: `table.jc-table` is the DATA-GRID rule; a `.jc-prose table` is a
+   static in-document table, styled separately below via a descendant rule
+   (not a new class) since the distinction that matters is
+   data-grid-versus-prose.
+   ========================================================================== */
+
+.jc-prose {
+  color: var(--jc-text);
+  line-height: 1.6;
+}
+
+.jc-prose > :first-child { margin-top: 0; }
+.jc-prose > :last-child { margin-bottom: 0; }
+
+.jc-prose h1,
+.jc-prose h2,
+.jc-prose h3,
+.jc-prose h4,
+.jc-prose h5,
+.jc-prose h6 {
+  color: var(--jc-text);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: var(--jc-space-3);
+}
+
+.jc-prose h1 { font-size: 2rem;     margin-top: var(--jc-space-6); }
+.jc-prose h2 { font-size: 1.5rem;   margin-top: var(--jc-space-5); }
+.jc-prose h3 { font-size: 1.25rem;  margin-top: var(--jc-space-4); }
+.jc-prose h4 { font-size: 1.125rem; margin-top: var(--jc-space-4); }
+.jc-prose h5 { font-size: 1rem;     margin-top: var(--jc-space-3); }
+.jc-prose h6 {
+  font-size: 0.875rem;
+  margin-top: var(--jc-space-3);
+  color: var(--jc-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.jc-prose p { margin: 0 0 var(--jc-space-3); }
+
+.jc-prose ul,
+.jc-prose ol { margin: 0 0 var(--jc-space-3); padding-left: var(--jc-space-5); }
+.jc-prose li { margin-bottom: var(--jc-space-1); }
+.jc-prose li > ul,
+.jc-prose li > ol { margin-bottom: 0; margin-top: var(--jc-space-1); }
+
+.jc-prose a { color: var(--jc-link); }
+.jc-prose a:hover { text-decoration: underline; }
+
+.jc-prose code {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  background-color: var(--jc-chrome-bg);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  padding: var(--jc-space-1) var(--jc-space-2);
+}
+
+.jc-prose pre {
+  background-color: var(--jc-chrome-bg);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-radius);
+  padding: var(--jc-space-3) var(--jc-space-4);
+  overflow: auto;
+  margin: 0 0 var(--jc-space-3);
+}
+
+.jc-prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+
+.jc-prose blockquote {
+  margin: 0 0 var(--jc-space-3);
+  padding: var(--jc-space-2) var(--jc-space-4);
+  border-left: var(--jc-nav-indicator-width) solid var(--jc-border);
+  color: var(--jc-text-soft);
+}
+
+.jc-prose table {
+  border-collapse: collapse;
+  margin: 0 0 var(--jc-space-3);
+}
+
+.jc-prose table th,
+.jc-prose table td {
+  border: 1px solid var(--jc-border);
+  padding: var(--jc-space-2) var(--jc-space-3);
+  text-align: left;
+}
+
+.jc-prose table th {
+  background-color: var(--jc-table-header-bg);
+  color: var(--jc-text-soft);
+  font-weight: 600;
 }

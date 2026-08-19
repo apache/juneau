@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>juneau-examples</artifactId>
+		<groupId>org.apache.juneau</groupId>
+		<version>10.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>juneau-examples-views</artifactId>
+	<name>Apache Juneau Rich-Views Examples</name>
+	<description>Runnable first-party example of the juneau-rest-server-views rich-DataTables toolkit, dogfooding a sub-tabbed PageDef (TODO-430).</description>
+	<packaging>jar</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<exec.mainClass>org.apache.juneau.examples.views.ExampleViewsServer</exec.mainClass>
+	</properties>
+
+	<dependencies>
+
+		<!-- The rich-view toolkit itself: ViewDef/PageDef/Tab/Subtab/PageTable/ViewsMixin. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-views</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- DataTablesMixin's jQuery/DataTables CDN URL constants, used directly by the demo page's <head>.
+			Already a transitive compile dep of juneau-rest-server-views; declared directly too since this
+			module references its API, not just juneau-rest-server-views's. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-datatables</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Embedded Jetty launcher (Microservice + JettyConfiguration). Brings jetty-server / jetty-ee11-servlet;
+			mirrors juneau-examples-mcp's ExampleServer wiring exactly. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Test: JUnit Jupiter, per repo test conventions. -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Test: TestBase, per repo test conventions. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test-utils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!--
+				Lets `mvn ... exec:java` run ExampleViewsServer directly. Per .mvn/maven.config's global
+				also-make flag, invoke with `-f juneau-examples/juneau-examples-views/pom.xml` rather than
+				`-pl ...` - `-pl` still resolves the goal against the reactor's root project (which has no
+				exec.mainClass), not this module. See juneau-examples-mcp/pom.xml for the same convention.
+			-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<mainClass>${exec.mainClass}</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

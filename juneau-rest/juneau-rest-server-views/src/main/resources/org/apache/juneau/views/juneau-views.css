@@ -23,12 +23,12 @@
  * palette).  It exists so a client-rendered `render("tag:status")` cell is legible standalone, even before an app
  * adopts console-ui's chrome.
  *
- * The ".tag.<domain>.<value>" class-name contract is OWNED by console-ui (TODO-361).  When console-ui's chrome.css
- * is present it themes the SAME classes (colors by domain/value); this module takes NO dependency on console-ui and
- * MUST NOT add a color palette here (per the 361/399 reconciliation).  Any color layering is console-ui's job.
+ * The ".tag.<domain>.<value>" class-name contract is OWNED by console-ui.  When console-ui's chrome.css is present
+ * it themes the SAME classes (colors by domain/value); this module takes NO dependency on console-ui and MUST NOT
+ * add a color palette here.  Any color layering is console-ui's job.
  *
- * The banner class below is the fail-loud contract-version-mismatch surface rendered by juneau-views.js (B.8); it,
- * too, avoids a color palette (uses currentColor / inherited text color only).
+ * The banner class below is the fail-loud contract-version-mismatch surface rendered by juneau-views.js; it, too,
+ * avoids a color palette (uses currentColor / inherited text color only).
  */
 
 /* Base chip - neutral shape/padding/border-radius, NO colors. */
@@ -43,7 +43,7 @@
 	vertical-align: baseline;
 }
 
-/* Fail-loud contract-version-mismatch banner (B.8) - neutral, no palette color. */
+/* Fail-loud contract-version-mismatch banner - neutral, no palette color. */
 .juneau-view-error {
 	display: block;
 	padding: 0.5em 0.75em;
@@ -51,6 +51,21 @@
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	font-weight: bold;
+}
+
+/*
+ * Accessibility: a NEUTRAL keyboard focus ring for this module's own interactive controls, mirroring console-ui
+ * chrome.css's generic :focus-visible rule but WITHOUT a palette colour (currentColor only, per this file's
+ * no-palette contract) - so a standalone client-rendered view is keyboard-accessible (WCAG 2.4.7) even before an
+ * app adopts the chrome.  When chrome.css is present, its own token-driven :focus-visible ring applies to the
+ * same controls with the themed --jc-focus colour.
+ */
+.juneau-view-ribbon-btn:focus-visible,
+.juneau-view-pagingpill-btn:focus-visible,
+.juneau-view-pagingpill-menu-option:focus-visible,
+.juneau-view-columnsearch-input:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
 }
 
 /*
@@ -285,6 +300,30 @@ table.dataTable > tbody > tr > td {
 }
 
 /*
+ * Per-table staleness indicator (per-table, never a single page-level chip) - a small neutral text chip
+ * juneau-views.js inserts at the front of the toolbar row's RIGHT cluster for any table that declares a
+ * `pollIntervalMs`.  NEUTRAL - no palette color (per this file's no-color contract); the `data-state="error"`
+ * case ("the last refresh attempt failed" must look visibly distinct from a merely-aging timestamp) gets a
+ * heavier border/bold text instead of a color change, mirroring the
+ * ".juneau-view-ribbon-btn[aria-pressed=\"true\"]" neutral-emphasis convention above; console-ui's chrome.css
+ * MAY layer a themed color onto this same attribute selector when present.
+ */
+.juneau-view-staleness {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.15em 0.6em;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.75em;
+	font-size: 0.8125rem;
+	white-space: nowrap;
+}
+
+.juneau-view-staleness[data-state="error"] {
+	border-width: 2px;
+	font-weight: bold;
+}
+
+/*
  * Per-column search row (design doc §4, item 4 - IRS parity fix): one text input per searchable column, inserted
  * into <thead> by buildColumnSearchRow(...) (juneau-views.js) and shown/hidden by the columnSearchToggle ribbon
  * button.  NEUTRAL - shape only; console-ui's chrome.css themes the input's border/background/focus colors.
@@ -304,11 +343,11 @@ table.dataTable > tbody > tr > td {
 }
 
 /*
- * TODO-399 Phase C - self-contained ".jc-*" tabs/sub-tabs page shell (Decision 1(A)).  Folded into this file rather
- * than a separate juneau-pages.css: small enough not to warrant its own served asset/pom touch (see the module's
- * ViewsMixin asset-serving pattern).  NEUTRAL - no color palette; console-ui's chrome.css MAY theme these same
- * classes when present, mirroring the ".tag.<domain>.<value>" chip reconciliation above - this module takes NO
- * dependency on console-ui either way.
+ * Self-contained ".jc-*" tabs/sub-tabs page shell (Decision 1(A)).  Folded into this file rather than a separate
+ * juneau-pages.css: small enough not to warrant its own served asset/pom touch (see the module's ViewsMixin
+ * asset-serving pattern).  NEUTRAL - no color palette; console-ui's chrome.css MAY theme these same classes when
+ * present, mirroring the ".tag.<domain>.<value>" chip reconciliation above - this module takes NO dependency on
+ * console-ui either way.
  */
 .jc-tab-bar,
 .jc-subtab-bar {
@@ -356,4 +395,43 @@ table.dataTable > tbody > tr > td {
 	border: 1px solid;            /* currentColor - no palette color set here */
 	border-radius: 0.25em;
 	font-weight: bold;
+}
+
+/*
+ * Row-details expander - initDetailsExpander(...)/createdRow (juneau-views.js) mark every row
+ * `.juneau-view-detail-row` when the view declares a `details` field list; a `::before` triangle glyph on the
+ * first cell (a bare CSS content string, like the paging pill's checkmark above - no icon-registry dependency)
+ * flips direction via the `.juneau-view-detail-open` class the same click handler toggles. NEUTRAL - no palette
+ * color; console-ui's chrome.css MAY theme these same classes when present.
+ */
+.juneau-view-detail-row {
+	cursor: pointer;
+}
+
+.juneau-view-detail-row > td:first-child::before {
+	content: "\25B8";   /* ▸ */
+	display: inline-block;
+	width: 1em;
+	margin-right: 0.35em;
+}
+
+.juneau-view-detail-open > td:first-child::before {
+	content: "\25BE";   /* ▾ */
+}
+
+/* The expanded detail body itself - DataTables' native child row (juneau-views.js `row.child(...).show()`). */
+.juneau-view-detail-panel {
+	margin: 0;
+	padding: 0.5em 1em;
+}
+
+.juneau-view-detail-panel dt {
+	float: left;
+	clear: left;
+	width: 40%;
+	font-weight: 600;
+}
+
+.juneau-view-detail-panel dd {
+	margin: 0 0 0.35em 42%;
 }

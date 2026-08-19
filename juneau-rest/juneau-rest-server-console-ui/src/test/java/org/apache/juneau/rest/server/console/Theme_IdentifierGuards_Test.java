@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Phase 1 gate: {@link Theme#create(String)} / {@link Theme.Builder#token(String, String)} identifier REJECT
@@ -37,36 +39,36 @@ class Theme_IdentifierGuards_Test extends TestBase {
 	// Token name REJECT
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_tokenName_noJcPrefix_rejects() {
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("salesforce").token("rm-accent", "red"));
-	}
-
-	@Test void a02_tokenName_withSpace_rejects() {
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("salesforce").token("--jc-bad name", "red"));
-	}
-
 	/**
-	 * The anchoring proof: an unanchored {@code find()}-based regex would incorrectly ACCEPT this because
-	 * {@code --jc-foo} matches as a substring; only a full-string {@code matches("^--jc-[a-z0-9-]+$")} rejects it.
+	 * The third vector is the anchoring proof: an unanchored {@code find()}-based regex would incorrectly ACCEPT
+	 * {@code --jc-foo;--bar} because {@code --jc-foo} matches as a substring; only a full-string
+	 * {@code matches("^--jc-[a-z0-9-]+$")} rejects it.
 	 */
-	@Test void a03_tokenName_trailingIllegalSuffix_rejects_anchoringProof() {
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("salesforce").token("--jc-foo;--bar", "red"));
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"rm-accent",         // no --jc- prefix
+		"--jc-bad name",     // interior space
+		"--jc-foo;--bar",    // anchoring proof (see javadoc)
+	})
+	void a01_tokenName_invalidNames_rejects(String name) {
+		var b = Theme.create("salesforce");
+		assertThrows(IllegalArgumentException.class, () -> b.token(name, "red"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Theme name REJECT
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a04_themeName_uppercase_rejects() {
+	@Test void a02_themeName_uppercase_rejects() {
 		assertThrows(IllegalArgumentException.class, () -> Theme.create("Salesforce"));
 	}
 
 	/** Path-shaped names are rejected here so a later fast-follow that interpolates the name into an asset path doesn't need to re-gate. */
-	@Test void a05_themeName_pathShaped_rejects() {
+	@Test void a03_themeName_pathShaped_rejects() {
 		assertThrows(IllegalArgumentException.class, () -> Theme.create("../evil"));
 	}
 
-	@Test void a06_themeName_empty_rejects() {
+	@Test void a04_themeName_empty_rejects() {
 		assertThrows(IllegalArgumentException.class, () -> Theme.create(""));
 	}
 
@@ -74,7 +76,7 @@ class Theme_IdentifierGuards_Test extends TestBase {
 	// Positive control
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a07_positiveControl_roundTrips() {
+	@Test void a05_positiveControl_roundTrips() {
 		var theme = Theme.create("salesforce").token("--jc-accent", "#1589EE").build();
 		assertEquals("salesforce", theme.getName());
 		assertEquals("#1589EE", theme.getTokens().get("--jc-accent"));

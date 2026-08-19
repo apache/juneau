@@ -23,8 +23,8 @@ import java.util.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * The top-level, declarative "tabs / sub-tabs page" definition (TODO-399 Phase C, design doc §"Bean model") &mdash;
- * composes multiple existing {@link ViewDef} views into one multi-tab / sub-tab admin page.
+ * The top-level, declarative "tabs / sub-tabs page" definition (design doc §"Bean model") &mdash; composes
+ * multiple existing {@link ViewDef} views into one multi-tab / sub-tab admin page.
  *
  * <p>
  * A {@link PageDef} is an ordinary Juneau bean built via a small fluent builder ({@link #create(String)} + chained
@@ -61,6 +61,7 @@ import org.apache.juneau.commons.bean.*;
  * @since 10.0.0
  */
 @BeanType(properties="contractVersion,id,title,tabs")
+@SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class PageDef {
 
 	/** The frozen contract version, reusing {@link ViewDef#CONTRACT_VERSION} as the single source of truth. */

@@ -16,7 +16,7 @@
  */
 
 /*
- * juneau-ribbon.js - ribbon/toolbar runtime for the Apache Juneau rich-view toolkit (Task B.7).
+ * juneau-ribbon.js - ribbon/toolbar runtime for the Apache Juneau rich-view toolkit.
  *
  * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv via DataTables Buttons, with excel/pdf
  * lit up only when JSZip/pdfMake are present), refresh, columnSearchToggle, option/optionGroup server-query toggles
@@ -36,7 +36,7 @@
 (function () {
 	"use strict";
 
-	var NS = window.JuneauViews = window.JuneauViews || {};
+	const NS = window.JuneauViews = window.JuneauViews || {};
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
@@ -44,8 +44,8 @@
 
 	/** Resolves a column `data` key to its zero-based index in the view (mirrors RibbonAction.columnIndex). */
 	function columnIndex(viewDef, columnKey) {
-		var cols = viewDef.columns || [];
-		for (var i = 0; i < cols.length; i++)
+		const cols = viewDef.columns || [];
+		for (let i = 0; i < cols.length; i++)
 			if (cols[i].data === columnKey) return i;
 		return -1;
 	}
@@ -58,7 +58,7 @@
 	function optionParam(viewDef, opt) {
 		if (opt == null || opt.value == null) return null;
 		if (opt.column != null) {
-			var idx = columnIndex(viewDef, opt.column);
+			const idx = columnIndex(viewDef, opt.column);
 			if (idx < 0) return null;
 			return { name: "columns[" + idx + "][search][value]", value: opt.value };
 		}
@@ -74,19 +74,19 @@
 	 * refresh/columnSearchToggle/divider/export are not query-contributing and are skipped.
 	 */
 	function ribbonToQueryParams(viewDef, activeState) {
-		var out = {};
-		var state = activeState || {};
+		const out = {};
+		const state = activeState || {};
 		(viewDef.ribbon || []).forEach(function (a) {
 			if (a.type === "option") {
 				if (state[a.id]) {
-					var p = optionParam(viewDef, a);
+					const p = optionParam(viewDef, a);
 					if (p) out[p.name] = p.value;
 				}
 			} else if (a.type === "optionGroup" && a.options) {
-				var selected = state[a.id];
+				const selected = state[a.id];
 				a.options.forEach(function (o) {
 					if (o.id === selected) {
-						var p = optionParam(viewDef, o);
+						const p = optionParam(viewDef, o);
 						if (p) out[p.name] = p.value;
 					}
 				});
@@ -102,8 +102,8 @@
 	 */
 	function detectExportFeatures(win) {
 		win = win || (typeof window !== "undefined" ? window : {});
-		var $ = win.jQuery;
-		var hasButtons = !!($ && $.fn && $.fn.dataTable && $.fn.dataTable.Buttons);
+		const $ = win.jQuery;
+		const hasButtons = !!$?.fn?.dataTable?.Buttons;
 		return { buttons: hasButtons, jszip: !!win.JSZip, pdfmake: !!win.pdfMake };
 	}
 
@@ -113,12 +113,12 @@
 	 * dep is present, otherwise omitted.
 	 */
 	function resolveExportButtons(action, features) {
-		var out = [];
-		if (!features || !features.buttons) return out;   // degrade gracefully - no export cluster at all
+		const out = [];
+		if (!features?.buttons) return out;   // degrade gracefully - no export cluster at all
 		(action.buttons || []).forEach(function (b) { out.push(b); });
 		(action.optional || []).forEach(function (b) {
-			if (b === "excel" && features.jszip) out.push(b);
-			else if (b === "pdf" && features.pdfmake) out.push(b);
+			// Both branches merely gate on their own extra dep being present - combined rather than duplicated.
+			if ((b === "excel" && features.jszip) || (b === "pdf" && features.pdfmake)) out.push(b);
 			// else: dep absent - omit/grey (feature-detected)
 		});
 		return out;
@@ -133,10 +133,10 @@
 	 * Default built-in id -> icon-name lookup (visual-parity design doc §4.A).  Keyed by *button id* for the export
 	 * cluster (one export action renders one button per resolved id) and by *action type* for refresh/
 	 * columnSearchToggle (each renders exactly one button).  `collapse` is not wired to any RibbonAction.type today -
-	 * it ships here purely for forward-compatibility with TODO-399 P4's (deferred) row-expander "collapse all"
+	 * it ships here purely for forward-compatibility with a possible future (deferred) row-expander "collapse all"
 	 * affordance; inert until that action type exists.
 	 */
-	var DEFAULT_ICONS = {
+	const DEFAULT_ICONS = {
 		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf",
 		refresh: "refresh", columnSearchToggle: "manage_search", collapse: "unfold_less"
 	};
@@ -146,12 +146,12 @@
 	 * action/Opt always wins; otherwise a `defaultKey` (the export button id, or the action `type`) resolves from
 	 * DEFAULT_ICONS; a custom option/optionGroup member with neither falls back to the neutral "tune" glyph, never
 	 * blank/unset.  Markup resolution (NS.icons.resolveIcon(name)) and the "unregistered name -> render title as
-	 * text" fallback both happen in the DOM binding layer (Task 3), since this pure layer has no access to the
-	 * registry's runtime contents (apps can register icons after page load).
+	 * text" fallback both happen in the DOM binding layer, since this pure layer has no access to the registry's
+	 * runtime contents (apps can register icons after page load).
 	 */
 	function resolveButtonIcon(actionOrOpt, defaultKey) {
 		if (actionOrOpt && actionOrOpt.symbol != null) return actionOrOpt.symbol;
-		if (defaultKey != null && Object.prototype.hasOwnProperty.call(DEFAULT_ICONS, defaultKey)) return DEFAULT_ICONS[defaultKey];
+		if (defaultKey != null && Object.hasOwn(DEFAULT_ICONS, defaultKey)) return DEFAULT_ICONS[defaultKey];
 		return "tune";
 	}
 
@@ -164,15 +164,15 @@
 	}
 
 	function loadPersistedState(viewDef) {
-		var state = {};
-		var store = safeStorage();
+		const state = {};
+		const store = safeStorage();
 		if (!store) return state;
 		(viewDef.ribbon || []).forEach(function (a) {
 			if (a.type === "option" && a.persist) {
-				var raw = store.getItem(ribbonStorageKey(viewDef.id, a.id));
+				const raw = store.getItem(ribbonStorageKey(viewDef.id, a.id));
 				if (raw != null) state[a.id] = (raw === "true");
 			} else if (a.type === "optionGroup" && a.persist) {
-				var sel = store.getItem(ribbonStorageKey(viewDef.id, a.id));
+				const sel = store.getItem(ribbonStorageKey(viewDef.id, a.id));
 				if (sel != null) state[a.id] = sel;
 			}
 		});
@@ -180,7 +180,7 @@
 	}
 
 	function persist(viewDef, id, value) {
-		var store = safeStorage();
+		const store = safeStorage();
 		if (store) store.setItem(ribbonStorageKey(viewDef.id, id), String(value));
 	}
 
@@ -196,17 +196,21 @@
 	 * action, one visual cluster - each export action gets its own synthetic per-index id so consecutive distinct
 	 * export actions never merge).  A {@code divider} or an ungrouped action always closes any open cluster.
 	 */
+	// NOSONAR javascript:S3776 -- one dispatch branch per RibbonAction.type (design doc §4.A); each branch is a
+	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
+	// buildRibbon(")`, so splitting them into further helpers would reduce test/code locality without reducing
+	// real complexity.
 	function buildRibbon(viewDef, ctx) {
-		var actions = viewDef.ribbon || [];
+		const actions = viewDef.ribbon || [];
 		if (!actions.length) return null;
 
-		var $ = window.jQuery;
-		var features = detectExportFeatures(window);
-		var bar = document.createElement("div");
+		const $ = window.jQuery;
+		const features = detectExportFeatures(window);
+		const bar = document.createElement("div");
 		bar.className = "juneau-view-ribbon";
 		bar.setAttribute("data-testid", "ribbon");
 
-		var openGroup = null;   // { id, el } - the currently-open adjacent-group wrapper, or null when ungrouped
+		let openGroup = null;   // { id, el } - the currently-open adjacent-group wrapper, or null when ungrouped
 		function place(el, groupId) {
 			if (groupId == null) {
 				openGroup = null;
@@ -214,7 +218,7 @@
 				return;
 			}
 			if (!openGroup || openGroup.id !== groupId) {
-				var wrap = document.createElement("span");
+				const wrap = document.createElement("span");
 				wrap.className = "juneau-view-ribbon-group";
 				bar.appendChild(wrap);
 				openGroup = { id: groupId, el: wrap };
@@ -225,20 +229,20 @@
 		actions.forEach(function (a, idx) {
 			if (a.type === "divider") {
 				openGroup = null;
-				var d = document.createElement("span");
+				const d = document.createElement("span");
 				d.className = "juneau-view-ribbon-divider";
 				bar.appendChild(d);
 				return;
 			}
 			if (a.type === "export") {
-				var ids = resolveExportButtons(a, features);
-				if (ids.length && $ && ctx.dataTable && $.fn.dataTable.Buttons) {
+				const ids = resolveExportButtons(a, features);
+				if (ids.length && ctx.dataTable && $?.fn?.dataTable?.Buttons) {
 					try {
 						// Still registers/feature-gates each button with DataTables Buttons - but renders our own
 						// first-party icon buttons instead of delegating to Buttons' own DOM (design doc §4.A); a
 						// click programmatically triggers the SAME, already-reviewed Buttons action (design doc §7).
 						new $.fn.dataTable.Buttons(ctx.dataTable, { buttons: ids });
-						var exportGroupId = a.group != null ? a.group : ("__export" + idx);
+						const exportGroupId = a.group != null ? a.group : ("__export" + idx);
 						ids.forEach(function (id) {
 							place(button(id, resolveButtonIcon(null, id), function () {
 								ctx.dataTable.button(id).trigger();
@@ -253,7 +257,7 @@
 				return;
 			}
 			if (a.type === "columnSearchToggle") {
-				var csBtn = button(a.title || "Column search", resolveButtonIcon(a, "columnSearchToggle"), function () {
+				const csBtn = button(a.title || "Column search", resolveButtonIcon(a, "columnSearchToggle"), function () {
 					csBtn.setAttribute("aria-pressed", toggleColumnSearch(viewDef, ctx) ? "true" : "false");
 				});
 				csBtn.setAttribute("aria-pressed", ctx.columnSearchOn ? "true" : "false");
@@ -282,12 +286,12 @@
 	 * documented for juneau-renders.js).
 	 */
 	function button(label, iconName, onClick) {
-		var b = document.createElement("button");
+		const b = document.createElement("button");
 		b.type = "button";
 		b.className = "juneau-view-ribbon-btn";
 		b.title = label;
 		b.setAttribute("aria-label", label);
-		var markup = NS.icons && NS.icons.resolveIcon ? NS.icons.resolveIcon(iconName) : null;
+		const markup = NS.icons?.resolveIcon ? NS.icons.resolveIcon(iconName) : null;
 		if (markup != null) {
 			b.innerHTML = markup;
 		} else {
@@ -298,7 +302,7 @@
 	}
 
 	function optionToggle(viewDef, action, ctx) {
-		var b = button(action.title || action.id, resolveButtonIcon(action, null), function () {
+		const b = button(action.title || action.id, resolveButtonIcon(action, null), function () {
 			ctx.activeState[action.id] = !ctx.activeState[action.id];
 			b.setAttribute("aria-pressed", ctx.activeState[action.id] ? "true" : "false");
 			if (action.persist) persist(viewDef, action.id, !!ctx.activeState[action.id]);
@@ -309,10 +313,10 @@
 	}
 
 	function optionGroup(viewDef, group, ctx) {
-		var wrap = document.createElement("span");
+		const wrap = document.createElement("span");
 		wrap.className = "juneau-view-ribbon-group";
 		(group.options || []).forEach(function (o) {
-			var b = button(o.title || o.id, resolveButtonIcon(o, null), function () {
+			const b = button(o.title || o.id, resolveButtonIcon(o, null), function () {
 				ctx.activeState[group.id] = (ctx.activeState[group.id] === o.id && group.deselectable) ? null : o.id;
 				if (group.persist) persist(viewDef, group.id, ctx.activeState[group.id]);
 				ctx.redraw();

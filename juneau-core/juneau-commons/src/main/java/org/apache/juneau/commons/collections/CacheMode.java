@@ -76,6 +76,17 @@ public enum CacheMode {
 	 * 	<li>Entries may be removed unpredictably by the garbage collector
 	 * 	<li>Not suitable for high-concurrency scenarios
 	 * </ul>
+	 *
+	 * <p>
+	 * <b>Composite-key caches:</b> {@link Cache2}, {@link Cache3}, {@link Cache4}, and {@link Cache5} synthesize
+	 * an internal composite-key object (e.g. a {@code TupleN}) on every lookup, and that object is never exposed
+	 * to the caller - it is reachable only from the cache's own backing map. As a result, a WEAK-mode entry in
+	 * one of these caches becomes GC-eligible <b>immediately</b> after insertion and may be reclaimed at the very
+	 * next garbage collection, i.e. WEAK effectively behaves like {@link #NONE} once any GC has occurred. This is
+	 * best-effort, <b>not retention-guaranteed</b> weak-key caching by design (not a bug) and is <i>not</i>
+	 * equivalent to WEAK on the single-key {@link Cache}, where retention instead tracks the caller's own key and
+	 * an entry survives for as long as that key remains strongly reachable elsewhere. If guaranteed retention is
+	 * required, use {@link #FULL} (the default mode) instead of WEAK for the composite-key caches.
 	 */
 	WEAK,
 

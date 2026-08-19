@@ -33,8 +33,7 @@ import org.apache.juneau.rest.server.*;
 /**
  * Mixin that serves the first-party rich-view runtime assets &mdash; {@code juneau-views.js},
  * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, and the opt-in
- * {@code juneau-pages.js} tabs/sub-tabs page runtime (TODO-399 Phase C) &mdash; each at its stable path (design doc
- * §6.1).
+ * {@code juneau-pages.js} tabs/sub-tabs page runtime &mdash; each at its stable path (design doc §6.1).
  *
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=ViewsMixin.class)}; the asset URLs then become
@@ -54,7 +53,9 @@ import org.apache.juneau.rest.server.*;
  * <h5 class='section'>Cache-busting + versioned URLs:</h5>
  * <p>
  * Each asset is served with a one-day {@code Cache-Control} and referenced from a page's {@code head=} block with a
- * {@code ?v=<buildVersion>-<hash8>} cache-buster (see {@link #viewAssetUrl(String)}), where {@code hash8} is an
+ * {@code ?v=<buildVersion>-<hash8>} cache-buster (see {@link #viewAssetUrl(String)}, or
+ * {@link #viewAssetUrl(RestRequest, String)} for a template-rendered consumer that needs the URL already resolved
+ * to an absolute, browser-fetchable form), where {@code hash8} is an
  * 8-hex-char CRC32 of that asset's own served bytes, computed once and cached (classpath resources never change
  * within a running JVM). Keying the buster off content rather than {@code buildVersion} alone matters for
  * {@code -SNAPSHOT} builds: that version string is stable across dev rebuilds, so a version-only buster would keep
@@ -103,8 +104,8 @@ public class ViewsMixin {
 	public static final String ICONS_JS_PATH = "/juneau-icons.js";
 
 	/**
-	 * The URL path at which the opt-in tabs/sub-tabs page runtime is served (relative to the host mount) &mdash;
-	 * TODO-399 Phase C.  A separate, opt-in asset (Decision 2(A)): single-view pages never load it.
+	 * The URL path at which the opt-in tabs/sub-tabs page runtime is served (relative to the host mount).  A
+	 * separate, opt-in asset (Decision 2(A)): single-view pages never load it.
 	 */
 	public static final String PAGES_JS_PATH = "/juneau-pages.js";
 
@@ -129,7 +130,7 @@ public class ViewsMixin {
 	/** Classpath location of the shipped icon registry. */
 	static final String ICONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-icons.js";
 
-	/** Classpath location of the shipped page runtime (TODO-399 Phase C). */
+	/** Classpath location of the shipped page runtime. */
 	static final String PAGES_JS_RESOURCE = "/org/apache/juneau/views/juneau-pages.js";
 
 	/** Content type emitted for the JavaScript assets. */
@@ -223,7 +224,7 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * [GET /juneau-pages.js] &mdash; serve the opt-in tabs/sub-tabs page runtime (TODO-399 Phase C).
+	 * [GET /juneau-pages.js] &mdash; serve the opt-in tabs/sub-tabs page runtime.
 	 *
 	 * @return The page runtime as a JavaScript {@link HttpResource}.
 	 */
@@ -248,6 +249,28 @@ public class ViewsMixin {
 	 */
 	public static String viewAssetUrl(String path) {
 		return "servlet:" + path + "?v=" + buildVersion() + "-" + contentHash(path);
+	}
+
+	/**
+	 * Returns a real, browser-fetchable <b>absolute</b> URL for a served asset, resolved against the given
+	 * request's context path and mount &mdash; carrying the same {@code ?v=<buildVersion>-<hash8>} content-
+	 * sensitive cache-buster as {@link #viewAssetUrl(String)} (see the class Javadoc's cache-busting section).
+	 *
+	 * <p>
+	 * {@link #viewAssetUrl(String)} returns a {@code servlet:}-prefixed URL that only Juneau's own HTML serializer
+	 * resolves (it rewrites {@code servlet:} against the request at render time). A template-rendering consumer
+	 * (e.g. {@code juneau-rest-server-view-freemarker}) sits downstream of that serializer, so it never sees the
+	 * rewrite and would otherwise receive the literal, unfetchable string. This overload resolves the URL itself,
+	 * per-request, the same way {@code ConsoleChromeMixin.assetUrl(RestRequest, ...)} does &mdash; via
+	 * {@link RestRequest#getUriResolver()} &mdash; so it is usable from any consumer, template-rendered or not.
+	 *
+	 * @param req The current request, supplying the context path/mount to resolve against.
+	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
+	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #PAGES_JS_PATH}).
+	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
+	 */
+	public static String viewAssetUrl(RestRequest req, String path) {
+		return req.getUriResolver().resolve("servlet:" + path) + "?v=" + buildVersion() + "-" + contentHash(path);
 	}
 
 	/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */

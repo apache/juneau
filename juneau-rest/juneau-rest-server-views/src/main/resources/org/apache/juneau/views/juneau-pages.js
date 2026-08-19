@@ -16,11 +16,11 @@
  */
 
 /*
- * juneau-pages.js - opt-in tabs/sub-tabs page runtime for the Apache Juneau rich-view toolkit (TODO-399 Phase C).
+ * juneau-pages.js - opt-in tabs/sub-tabs page runtime for the Apache Juneau rich-view toolkit.
  *
- * Separate, opt-in asset (Decision 2, RESOLVED (A)): a page composing multiple ViewDef views into tabs/sub-tabs
- * loads this file IN ADDITION to juneau-views.js; a plain single-view page never loads it and pays nothing for
- * hash-routing/lazy-init complexity.
+ * Separate, opt-in asset: a page composing multiple ViewDef views into tabs/sub-tabs loads this file IN ADDITION
+ * to juneau-views.js; a plain single-view page never loads it and pays nothing for hash-routing/lazy-init
+ * complexity.
  *
  * On DOMContentLoaded it owns init for every [data-juneau-page] shell: it reads the shell's id, finds the matching
  * <script type="application/json" id="juneau-page:<id>"> PAGE_META sidecar, JSON.parses it, and - like
@@ -54,9 +54,9 @@
 	// Contract-version handshake for PAGE_META: MUST equal PageDef.CONTRACT_VERSION / ViewsMixin.CONTRACT_VERSION
 	// (single source of truth on the server, itself reusing ViewDef.CONTRACT_VERSION).  Distinct from - and does
 	// not replace - the per-view VIEW_META handshake juneau-views.js's initTable(...) already performs.
-	var JUNEAU_PAGE_CONTRACT_VERSION = "2";
+	const JUNEAU_PAGE_CONTRACT_VERSION = "2";
 
-	var NS = window.JuneauViews = window.JuneauViews || {};
+	const NS = window.JuneauViews = window.JuneauViews || {};
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM)
@@ -68,9 +68,9 @@
 	 * beyond the third are ignored; a missing trailing segment yields `null` for that field (never `""`).
 	 */
 	function parseHash(hash) {
-		var h = String(hash || "").replace(/^#/, "");
+		const h = String(hash || "").replace(/^#/, "");
 		if (!h) return null;
-		var parts = h.split("/");
+		const parts = h.split("/");
 		return {
 			pageId: parts[0] || null,
 			tabId: parts[1] || null,
@@ -81,7 +81,7 @@
 	/** Finds the entry in `list` whose `.id === id`, or `null` when absent/list is empty. */
 	function findById(list, id) {
 		if (!list) return null;
-		for (var i = 0; i < list.length; i++)
+		for (let i = 0; i < list.length; i++)
 			if (list[i].id === id) return list[i];
 		return null;
 	}
@@ -93,18 +93,18 @@
 	 * `{tabId, subtabId}` (`subtabId` is `null` for a leaf tab) or `null` when `pageMeta` has no tabs at all.
 	 */
 	function resolveInitial(pageMeta, hash) {
-		var tabs = (pageMeta && pageMeta.tabs) || [];
+		const tabs = (pageMeta && pageMeta.tabs) || [];
 		if (!tabs.length) return null;
 
-		var parsed = parseHash(hash);
-		var tab = null;
+		const parsed = parseHash(hash);
+		let tab = null;
 		if (parsed && parsed.pageId === pageMeta.id && parsed.tabId)
 			tab = findById(tabs, parsed.tabId);
 		if (!tab) tab = tabs[0];
 
-		var result = { tabId: tab.id, subtabId: null };
+		const result = { tabId: tab.id, subtabId: null };
 		if (tab.subtabs && tab.subtabs.length) {
-			var sub = (parsed && parsed.subtabId) ? findById(tab.subtabs, parsed.subtabId) : null;
+			let sub = (parsed && parsed.subtabId) ? findById(tab.subtabs, parsed.subtabId) : null;
 			if (!sub) sub = tab.subtabs[0];
 			result.subtabId = sub.id;
 		}
@@ -113,7 +113,7 @@
 
 	/** Builds the deep-linkable hash for a (pageId, tabId, subtabId) triple; `subtabId` may be null/omitted. */
 	function hashFor(pageId, tabId, subtabId) {
-		var h = "#" + pageId + "/" + tabId;
+		let h = "#" + pageId + "/" + tabId;
 		if (subtabId != null) h += "/" + subtabId;
 		return h;
 	}
@@ -127,14 +127,14 @@
 
 	/** Renders the fail-loud, visible banner used on a PAGE_META contract-version mismatch (or a parse failure). */
 	function renderBanner(root, message) {
-		var b = document.createElement("div");
+		const b = document.createElement("div");
 		b.className = "jc-page-error";
 		b.textContent = message;
 		root.insertBefore(b, root.firstChild);
 	}
 
 	// Every node whose visibility this runtime owns: a top-level tab panel, or a sub-tab panel nested inside one.
-	var PANEL_SELECTOR = ".jc-panel, .jc-subpanel";
+	const PANEL_SELECTOR = ".jc-panel, .jc-subpanel";
 
 	/*
 	 * Whether `panel` should be visible for the resolved active (tabId, subtabId).
@@ -155,7 +155,7 @@
 	 */
 	function panelMatches(panel, tabId, subtabId) {
 		if (panel.getAttribute("data-panel-tab") !== tabId) return false;
-		var panelSubtabId = panel.getAttribute("data-panel-subtab");
+		const panelSubtabId = panel.getAttribute("data-panel-subtab");
 		if (!panelSubtabId) return true;   // sub-tab-agnostic panel: tab match is sufficient
 		return panelSubtabId === subtabId;
 	}
@@ -170,13 +170,13 @@
 	 * avoid.
 	 */
 	function activatePanelViews(panel) {
-		var tables = panel.querySelectorAll("table[data-juneau-view]");
+		const tables = panel.querySelectorAll("table[data-juneau-view]");
 		Array.prototype.forEach.call(tables, function (t) {
 			if (t.closest(PANEL_SELECTOR) !== panel) return;
-			var $ = window.jQuery;
-			if ($ && $.fn && $.fn.dataTable && $.fn.dataTable.isDataTable(t)) {
+			const $ = window.jQuery;
+			if ($?.fn?.dataTable?.isDataTable(t)) {
 				$(t).DataTable().columns.adjust();
-			} else if (NS.init && NS.init.initTable) {
+			} else if (NS.init?.initTable) {
 				NS.init.initTable(t);
 			} else {
 				warn("Juneau page: juneau-views.js not loaded (or too old to expose initTable); cannot lazy-init view '" +
@@ -187,33 +187,33 @@
 
 	/** Applies the resolved (tabId, subtabId) to `root`: toggles active classes, shows/hides panels, lazy-inits. */
 	function showActive(root, tabId, subtabId) {
-		var tabs = root.querySelectorAll(".jc-tab");
+		const tabs = root.querySelectorAll(".jc-tab");
 		Array.prototype.forEach.call(tabs, function (el) {
 			el.classList.toggle("jc-tab-active", el.getAttribute("data-tab-id") === tabId);
 		});
 
-		var subtabs = root.querySelectorAll(".jc-subtab");
+		const subtabs = root.querySelectorAll(".jc-subtab");
 		Array.prototype.forEach.call(subtabs, function (el) {
-			var active = subtabId != null &&
+			const active = subtabId != null &&
 				el.getAttribute("data-subtab-id") === subtabId &&
 				el.getAttribute("data-parent-tab") === tabId;
 			el.classList.toggle("jc-subtab-active", active);
 		});
 
-		var panels = root.querySelectorAll(PANEL_SELECTOR);
+		const panels = root.querySelectorAll(PANEL_SELECTOR);
 		Array.prototype.forEach.call(panels, function (p) {
-			var active = panelMatches(p, tabId, subtabId);
+			const active = panelMatches(p, tabId, subtabId);
 			p.classList.toggle("jc-active", active);
 			if (active) activatePanelViews(p);
 		});
 	}
 
 	function initPage(root) {
-		var id = root.getAttribute("data-juneau-page");
-		var sidecar = document.getElementById("juneau-page:" + id);
+		const id = root.getAttribute("data-juneau-page");
+		const sidecar = document.getElementById("juneau-page:" + id);
 		if (!sidecar) { error("Juneau page '" + id + "': missing PAGE_META sidecar; refusing to init."); return; }
 
-		var pageMeta;
+		let pageMeta;
 		try {
 			pageMeta = JSON.parse(sidecar.textContent);
 		} catch (e) {
@@ -223,7 +223,7 @@
 		}
 
 		if (pageMeta.contractVersion !== JUNEAU_PAGE_CONTRACT_VERSION) {
-			var m = "Juneau page '" + id + "': contract version mismatch (page='" + pageMeta.contractVersion +
+			const m = "Juneau page '" + id + "': contract version mismatch (page='" + pageMeta.contractVersion +
 				"', runtime='" + JUNEAU_PAGE_CONTRACT_VERSION + "'). Refusing to init - reload to clear a stale cached script.";
 			error(m);
 			renderBanner(root, m);
@@ -231,7 +231,7 @@
 		}
 
 		function apply() {
-			var active = resolveInitial(pageMeta, window.location.hash);
+			const active = resolveInitial(pageMeta, window.location.hash);
 			if (active) showActive(root, active.tabId, active.subtabId);
 		}
 
@@ -240,7 +240,7 @@
 	}
 
 	function initAllPages() {
-		var pages = document.querySelectorAll("[data-juneau-page]");
+		const pages = document.querySelectorAll("[data-juneau-page]");
 		Array.prototype.forEach.call(pages, function (p) { initPage(p); });
 	}
 

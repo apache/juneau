@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Phase 2 gate: {@code CssValueEscaper} unit tests.
@@ -45,17 +47,13 @@ class CssValueEscaper_Test extends TestBase {
 		assertFalse(escaped.contains(">"));
 	}
 
-	@Test void a03_legitimateGradient_passesThroughByteForByte() {
-		var value = "linear-gradient(180deg, #eef3f8, #dde6ef)";
-		assertEquals(value, CssValueEscaper.escape(value));
-	}
-
-	@Test void a04_legitimateHexColor_passesThroughByteForByte() {
-		assertEquals("#1589EE", CssValueEscaper.escape("#1589EE"));
-	}
-
-	@Test void a05_legitimateFontFamilyList_passesThroughByteForByte() {
-		var value = "'Salesforce Sans', Inter, sans-serif";
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"linear-gradient(180deg, #eef3f8, #dde6ef)",
+		"#1589EE",
+		"'Salesforce Sans', Inter, sans-serif",
+	})
+	void a03_legitimateValues_passThroughByteForByte(String value) {
 		assertEquals(value, CssValueEscaper.escape(value));
 	}
 

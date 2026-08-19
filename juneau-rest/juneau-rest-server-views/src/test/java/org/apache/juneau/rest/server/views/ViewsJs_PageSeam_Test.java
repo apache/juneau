@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Lazy-init seam test for {@code juneau-views.js} (TODO-399 Phase C, Task 6, design doc §"Client page runtime").
+ * Lazy-init seam test for {@code juneau-views.js} (design doc §"Client page runtime").
  *
  * <p>
  * Asserts on the served script text: {@code initTable} must be reachable off the public {@code NS.init} namespace
@@ -36,6 +36,9 @@ import org.junit.jupiter.api.*;
  * views it is called for.  These text assertions remain as always-on tripwires for the seam's <i>shape</i>, since
  * that harness is opt-in.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class ViewsJs_PageSeam_Test extends TestBase {
 
 	@Rest(mixins=ViewsMixin.class)

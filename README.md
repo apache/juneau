@@ -322,7 +322,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
   * MCP client/server modules - see [MCP Support](#mcp-model-context-protocol-support) above.
 * **juneau-microservice** - **juneau-microservice**, **juneau-microservice-jetty**, **juneau-microservice-tomcat**, **juneau-microservice-test**, **juneau-microservice-examples** - Lightweight standalone microservice APIs (Jetty and Tomcat), plus a JUnit 5 test harness.
 * **juneau-sc** - **juneau-sc-server** - Git-backed source-control configuration server integration (`GitControl`, etc.).
-* **juneau-secret-keychain** - Opt-in `SecretStore` implementation backed by the macOS `security` keychain CLI (implements the `SecretStore` SPI in `juneau-commons`).
+* **juneau-secret-macos-keychain** - Opt-in `SecretStore` implementation backed by the macOS `security` keychain CLI (implements the `SecretStore` SPI in `juneau-commons`).
 * **juneau-examples** - **juneau-examples-core** - Core code examples; **juneau-examples-mcp** - Runnable MCP example (notes-service demo).
 * **juneau-petstore** - **juneau-petstore-core** - Shared petstore domain + REST resources; **juneau-petstore-jetty** - Jetty/Microservice deployment; **juneau-petstore-springboot** - Spring Boot deployment.
 * **juneau-shaded** - Shaded (uber) JARs combining multiple Juneau modules for simplified dependency management, especially useful for Bazel builds: **juneau-shaded-core**, **juneau-shaded-rest-client**, **juneau-shaded-rest-server**, **juneau-shaded-rest-server-springboot**, and **juneau-shaded-all**.

@@ -47,6 +47,17 @@ import org.apache.juneau.commons.function.*;
  * 	<li>Can be disabled entirely via builder or system property
  * </ul>
  *
+ * <h5 class='section'>WEAK Mode Semantics:</h5>
+ * <p>
+ * {@link CacheMode#WEAK} on this class is <b>best-effort</b>, not retention-guaranteed. Each lookup synthesizes
+ * an internal {@code Tuple3} composite key that is never exposed to the caller, so that key is reachable only
+ * from this cache's own backing {@link WeakHashMap}. Consequently a WEAK-mode entry becomes GC-eligible
+ * <b>immediately</b> after insertion and may be reclaimed at the very next garbage collection - effectively
+ * behaving like {@link CacheMode#NONE} once any GC has occurred. This differs from the single-key {@link Cache},
+ * where WEAK mode keys directly on the caller's own key and therefore retains an entry for as long as that key
+ * remains strongly reachable elsewhere. If guaranteed retention is required, use {@link CacheMode#FULL} (the
+ * default mode) instead of WEAK. See {@link CacheMode#WEAK} for details.
+ *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a cache with default supplier</jc>
@@ -130,8 +141,11 @@ public class Cache3<K1,K2,K3,V> {
 		 * Available modes:
 		 * <ul>
 		 * 	<li>{@link CacheMode#NONE NONE} - No caching (always invoke supplier)
-		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link WeakHashMap})
-		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link ConcurrentHashMap}, default)
+		 * 	<li>{@link CacheMode#WEAK WEAK} - Best-effort weak-key caching (uses {@link WeakHashMap}); on this
+		 * 		composite-key cache an entry may be reclaimed at <b>any</b> GC, not only when the caller's keys
+		 * 		become unreachable - see {@link CacheMode#WEAK} for why
+		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link ConcurrentHashMap}, default); use this
+		 * 		mode for guaranteed retention
 		 * </ul>
 		 *
 		 * @param value The caching mode.
@@ -220,6 +234,11 @@ public class Cache3<K1,K2,K3,V> {
 		 * <p>
 		 * Weak caching uses {@link WeakHashMap} for storage, allowing cache entries to be
 		 * garbage collected when keys are no longer strongly referenced elsewhere.
+		 *
+		 * <p>
+		 * <b>Note:</b> on this composite-key cache, WEAK is best-effort only - the internal composite key is
+		 * never caller-visible, so an entry may be reclaimed at any GC. See {@link CacheMode#WEAK} for details,
+		 * and use {@link CacheMode#FULL} instead if guaranteed retention is required.
 		 *
 		 * @return This object for method chaining.
 		 * @see #cacheMode(CacheMode)

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
 
 /**
- * Markup + escaping tests for the {@link PageTable} emitter (TODO-399 Phase C, Tasks 3-4).
+ * Markup + escaping tests for the {@link PageTable} emitter.
  *
  * <p>
  * Proves the emitter produces the {@code data-juneau-page} shell, a tab-bar entry per {@link Tab} (+ a sub-tab bar

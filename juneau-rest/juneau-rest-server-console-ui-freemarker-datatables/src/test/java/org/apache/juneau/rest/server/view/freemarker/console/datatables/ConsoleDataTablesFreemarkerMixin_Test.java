@@ -104,7 +104,7 @@ class ConsoleDataTablesFreemarkerMixin_Test extends TestBase {
 		// String.matches() with unbounded quantifiers at both ends.
 		assertTrue(Pattern.compile("<table(?=[^>]*class=['\"]jc-table['\"])(?=[^>]*data-juneau-datatable)[^>]*>").matcher(body).find(),
 			() -> "expected <table class='jc-table' ...data-juneau-datatable...> (attribute order not asserted), body:\n" + body);
-		assertTrue(Pattern.compile("<td[^>]*>\\s*<span[^>]*class=['\"]tag status released['\"][^>]*>.*?</td>", Pattern.DOTALL).matcher(body).find(),
+		assertTrue(Pattern.compile("<td[^>]*>\\s*<span(?=[^>]*class=['\"]tag status released['\"])[^>]*>.*?</td>", Pattern.DOTALL).matcher(body).find(),
 			() -> "expected <span class='tag status released'> nested inside a <td>, body:\n" + body);
 		assertTrue(body.contains("widget"), () -> "expected the plain property's raw value too, body:\n" + body);
 		assertFalse(body.contains("&lt;span"), () -> "macro output was HTML-escaped (double-escaped), body:\n" + body);

@@ -35,7 +35,8 @@ import org.junit.jupiter.api.*;
  * This is the load-bearing seam of the toolkit: it pins the {@link ViewDef} JSON serialization field-by-field
  * against the frozen §6.10 example.  The serializer is the repo's canonical compact JSON marshaller
  * ({@link Json#of(Object)} &rarr; {@code JsonSerializer.DEFAULT}) &mdash; the same config that serializes the
- * {@code DataTablesResults} envelope in the TODO-355 tests, so the emitted sidecar and this fixture agree.
+ * {@code DataTablesResults} envelope in the server-side query protocol tests, so the emitted sidecar and this
+ * fixture agree.
  */
 class ViewMeta_Contract_Test extends TestBase {
 
@@ -116,7 +117,7 @@ class ViewMeta_Contract_Test extends TestBase {
 	}
 
 	@Test void a02_topLevelKeyOrderMatchesContract() {
-		var actual = Json.to(Json.of(releasesView()), Map.class);
+		Map<?,?> actual = Json.to(Json.of(releasesView()), Map.class);
 		assertEquals(
 			List.of("contractVersion", "id", "rowType", "dataMode", "dataUrl", "defaultOrder", "columns", "ribbon", "rowClassRules"),
 			new ArrayList<>(actual.keySet()));
@@ -124,8 +125,9 @@ class ViewMeta_Contract_Test extends TestBase {
 
 	@Test void a03_reservedFieldsOmittedNotNull() {
 		var json = Json.of(releasesView());
-		// Reserved C/D/E stubs must be omitted entirely (not serialized as null keys).
-		for (var k : List.of("details", "rowActions", "catalog", "format", "description", "pinned", "defaultVisible")) {
+		// "details" is implemented - see e07/e08 below for its POSITIVE assertion. The remaining reserved C/D/E
+		// stubs must still be omitted entirely (not serialized as null keys).
+		for (var k : List.of("rowActions", "catalog", "format", "description", "pinned", "defaultVisible")) {
 			var key = "\"" + k + "\"";
 			assertFalse(json.contains(key), () -> "Reserved field leaked into VIEW_META: " + k + "\n" + json);
 		}
@@ -136,8 +138,9 @@ class ViewMeta_Contract_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_rowClassRuleEqRequiresValue() {
+		var view = ViewDef.create("x");
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> ViewDef.create("x").rowClassRule("deleted", Op.EQ, null, "row-deleted"));
+			() -> view.rowClassRule("deleted", Op.EQ, null, "row-deleted"));
 		assertTrue(e.getMessage().contains("value"), e::getMessage);
 	}
 
@@ -156,7 +159,8 @@ class ViewMeta_Contract_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// B.2: render-id string sugar (§6.6) - "id:field" -> {id, meta:{field}}
+	// B.2: render-id string sugar (§6.6): everything after the first colon of an "id:field"-shaped string becomes
+	// the parsed renderer's meta.field.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_renderSugarTagField() {
@@ -296,8 +300,8 @@ class ViewMeta_Contract_Test extends TestBase {
 	}
 
 	@Test void d11_queryableSettingsWithoutRowTypeThrows() {
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").build().queryableSettings());
+		var view = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").build();
+		var e = assertThrows(IllegalArgumentException.class, view::queryableSettings);
 		assertTrue(e.getMessage().contains("rowType"), e::getMessage);
 	}
 
@@ -338,5 +342,91 @@ class ViewMeta_Contract_Test extends TestBase {
 		var ungrouped = RibbonAction.columnSearchToggle();
 		assertNull(ungrouped.group);
 		assertFalse(Json.of(ungrouped).contains("\"group\""), Json.of(ungrouped));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e) Declarable poll interval: floor clamp + wire presence/omission
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_pollIntervalMs_omittedWhenUnset() {
+		// The golden fixture view never calls .poll(...) - confirms the new field doesn't leak when absent, and
+		// that a01/a02's frozen contract is untouched by this additive field.
+		var json = Json.of(releasesView());
+		assertFalse(json.contains("\"pollIntervalMs\""), json);
+	}
+
+	@Test void e02_pollAboveFloor_isHonoredAsDeclared() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a")).poll(30_000L).build();
+		assertEquals(30_000L, v.pollIntervalMs);
+		assertTrue(Json.of(v).contains("\"pollIntervalMs\":30000"), Json.of(v));
+	}
+
+	@Test void e03_pollBelowFloor_isClampedUpToFloor() {
+		// By design: a declared interval below the floor is clamped to it, not rejected.
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a")).poll(1_000L).build();
+		assertEquals(ViewDef.MIN_POLL_INTERVAL_MS, v.pollIntervalMs);
+	}
+
+	@Test void e04_pollAtExactlyTheFloor_isUnchanged() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.poll(ViewDef.MIN_POLL_INTERVAL_MS).build();
+		assertEquals(ViewDef.MIN_POLL_INTERVAL_MS, v.pollIntervalMs);
+	}
+
+	@Test void e05_pollNonPositiveThrows() {
+		var view = ViewDef.create("x");
+		var e = assertThrows(IllegalArgumentException.class, () -> view.poll(0L));
+		assertTrue(e.getMessage().contains("positive"), e::getMessage);
+		var e2 = assertThrows(IllegalArgumentException.class, () -> view.poll(-500L));
+		assertTrue(e2.getMessage().contains("positive"), e2::getMessage);
+	}
+
+	@Test void e06_pollIntervalMs_isTheLastWireKey_afterRowClassRules() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a")).poll(60_000L).build();
+		Map<?,?> actual = Json.to(Json.of(v), Map.class);
+		assertEquals(
+			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "pollIntervalMs"),
+			new ArrayList<>(actual.keySet()));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) Row-details expander: the positive assertion for the "details" key (the same positive-assertion-plus-
+	// remaining-negatives split used elsewhere for "rowActions", applied here - see a03 above for the remaining
+	// negative list with "details" now removed from it).
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_details_omittedWhenUnset() {
+		// The golden fixture view never calls .details(...) - confirms the new field doesn't leak when absent,
+		// and that a01/a02's frozen contract is untouched by this additive field.
+		var json = Json.of(releasesView());
+		assertFalse(json.contains("\"details\""), json);
+	}
+
+	@Test void f02_details_emittedInPinnedOrder_withExpectedShape() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.details(ViewDef.DetailDef.of("owner").title("Owner"), ViewDef.DetailDef.of("createdAt").title("Created"))
+			.build();
+		var json = Json.of(v);
+		assertTrue(json.contains(
+			"\"details\":[{\"data\":\"owner\",\"title\":\"Owner\"},{\"data\":\"createdAt\",\"title\":\"Created\"}]"),
+			json);
+	}
+
+	@Test void f03_details_isBeforePollIntervalMs_andAfterRowClassRules_inTopLevelKeyOrder() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowClassRule("error", Op.PRESENT, "row-flagged")
+			.details(ViewDef.DetailDef.of("owner").title("Owner"))
+			.poll(60_000L)
+			.build();
+		Map<?,?> actual = Json.to(Json.of(v), Map.class);
+		assertEquals(
+			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "details", "pollIntervalMs"),
+			new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void f04_detailDefTitleDefaultsToNullWhenUnset() {
+		var d = ViewDef.DetailDef.of("owner");
+		assertEquals("owner", d.data);
+		assertNull(d.title);
 	}
 }

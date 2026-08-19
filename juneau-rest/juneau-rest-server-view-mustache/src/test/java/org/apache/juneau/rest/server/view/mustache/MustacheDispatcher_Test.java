@@ -76,7 +76,7 @@ class MustacheDispatcher_Test extends TestBase {
 	 * Section A: resolveMustacheFactory
 	 * ---------------------------------------------------------------------------------------- */
 
-	@Test void a01_resolveMustacheFactory_prefersRegisteredBean() throws Exception {
+	@Test void a01_resolveMustacheFactory_prefersRegisteredBean() {
 		var dispatcher = MustacheDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
 		var registered = mockFactory(noopMustache());
@@ -109,7 +109,7 @@ class MustacheDispatcher_Test extends TestBase {
 			"cacheTemplates(false) must bypass the lazy singleton and rebuild a fresh factory (with an empty compile-cache) on every call");
 	}
 
-	@Test void a04_resolveMustacheFactory_registeredBeanIgnoresCacheTemplatesFlag() throws Exception {
+	@Test void a04_resolveMustacheFactory_registeredBeanIgnoresCacheTemplatesFlag() {
 		var dispatcher = MustacheDispatcher.create().cacheTemplates(false).build();
 		var beanStore = new BasicBeanStore();
 		var registered = mockFactory(noopMustache());
@@ -156,8 +156,8 @@ class MustacheDispatcher_Test extends TestBase {
 		var res = mock(RestResponse.class);
 		when(res.getWriter()).thenThrow(new IOException("broken pipe"));
 
-		var ex = assertThrows(IOException.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), res));
+		var req = mockRequest(beanStore);
+		var ex = assertThrows(IOException.class, () -> dispatcher.render("hello", req, res));
 		assertEquals("broken pipe", ex.getMessage());
 	}
 
@@ -168,8 +168,9 @@ class MustacheDispatcher_Test extends TestBase {
 		when(factory.compile(anyString())).thenThrow(new NoClassDefFoundError("com.github.mustachejava.Mustache"));
 		beanStore.addBean(MustacheFactory.class, factory);
 
-		var ex = assertThrows(InternalServerError.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
 		assertTrue(ex.getMessage().contains("Mustache engine"));
 	}
 
@@ -180,8 +181,9 @@ class MustacheDispatcher_Test extends TestBase {
 		when(factory.compile(anyString())).thenThrow(new RuntimeException("boom"));
 		beanStore.addBean(MustacheFactory.class, factory);
 
-		var ex = assertThrows(InternalServerError.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
 		assertTrue(ex.getMessage().contains("Mustache render failed"));
 	}
 
@@ -189,7 +191,8 @@ class MustacheDispatcher_Test extends TestBase {
 		var dispatcher = MustacheDispatcher.create().basePath("/templates/").build();
 		var beanStore = new BasicBeanStore();
 
-		assertThrows(Forbidden.class,
-			() -> dispatcher.render("../../../etc/passwd", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		assertThrows(Forbidden.class, () -> dispatcher.render("../../../etc/passwd", req, res));
 	}
 }

@@ -65,6 +65,7 @@ REACTOR_GROUPS = [
 # Standalone (non-grouped) projects at the repo root.
 STANDALONE_PROJECTS = [
     "juneau-integration-tests",
+    "juneau-secret-macos-keychain",
 ]
 
 

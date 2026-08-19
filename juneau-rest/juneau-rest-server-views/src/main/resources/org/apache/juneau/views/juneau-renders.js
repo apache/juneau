@@ -16,7 +16,7 @@
  */
 
 /*
- * juneau-renders.js - dependency-free cell-renderer registry for the Apache Juneau rich-view toolkit (Task B.6).
+ * juneau-renders.js - dependency-free cell-renderer registry for the Apache Juneau rich-view toolkit.
  *
  * A pure, library-free registry mapping render ids (per the VIEW_META §6.6 grammar) to cell-render functions.  Each
  * renderer is an object with up to five orthogonal facets DataTables asks a column for:
@@ -39,13 +39,13 @@
 (function () {
 	"use strict";
 
-	var NS = window.JuneauViews = window.JuneauViews || {};
+	const NS = window.JuneauViews = window.JuneauViews || {};
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
 	// ==================================================================================================================
 
-	var registry = NS._renderers = NS._renderers || {};
+	const registry = NS._renderers = NS._renderers || {};
 
 	/**
 	 * Registers (or overrides) a renderer under `id`.  `def` is `{display?, sort?, filter?, type?, class?}`; a bare
@@ -58,7 +58,7 @@
 
 	/** Looks up a renderer by id; returns null when unknown (callers warn + fall back to the raw value). */
 	function resolveRenderer(id) {
-		return Object.prototype.hasOwnProperty.call(registry, id) ? registry[id] : null;
+		return Object.hasOwn(registry, id) ? registry[id] : null;
 	}
 
 	/**
@@ -68,7 +68,7 @@
 	function parseRenderId(spec) {
 		if (spec == null) return null;
 		if (typeof spec === "object") return spec;
-		var i = spec.indexOf(":");
+		const i = spec.indexOf(":");
 		if (i < 0) return { id: spec };
 		return { id: spec.substring(0, i), meta: { field: spec.substring(i + 1) } };
 	}
@@ -77,11 +77,11 @@
 
 	function escHtml(s) {
 		return String(s)
-			.replace(/&/g, "&amp;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;")
-			.replace(/"/g, "&quot;")
-			.replace(/'/g, "&#39;");
+			.replaceAll("&", "&amp;")
+			.replaceAll("<", "&lt;")
+			.replaceAll(">", "&gt;")
+			.replaceAll('"', "&quot;")
+			.replaceAll("'", "&#39;");
 	}
 
 	function escAttr(s) {
@@ -91,7 +91,7 @@
 	/** Interpolates a `{property}` URL template against a row, URL-encoding each substituted value. */
 	function interpolateHref(template, rowData) {
 		return String(template).replace(/\{([^}]+)\}/g, function (m, key) {
-			var v = rowData ? rowData[key] : undefined;
+			const v = rowData ? rowData[key] : undefined;
 			return v == null ? "" : encodeURIComponent(String(v));
 		});
 	}
@@ -116,12 +116,12 @@
 	/** Coerces a cell value to a Date, accepting epoch millis, numeric strings, and ISO/parseable date strings. */
 	function toDate(cellData) {
 		if (cellData == null || cellData === "") return null;
-		if (cellData instanceof Date) return isNaN(cellData.getTime()) ? null : cellData;
-		if (typeof cellData === "number") { var dn = new Date(cellData); return isNaN(dn.getTime()) ? null : dn; }
-		var s = String(cellData);
-		if (/^\d+$/.test(s)) { var de = new Date(Number(s)); return isNaN(de.getTime()) ? null : de; }
-		var d = new Date(s);
-		return isNaN(d.getTime()) ? null : d;
+		if (cellData instanceof Date) return Number.isNaN(cellData.getTime()) ? null : cellData;
+		if (typeof cellData === "number") { const dn = new Date(cellData); return Number.isNaN(dn.getTime()) ? null : dn; }
+		const s = String(cellData);
+		if (/^\d+$/.test(s)) { const de = new Date(Number(s)); return Number.isNaN(de.getTime()) ? null : de; }
+		const d = new Date(s);
+		return Number.isNaN(d.getTime()) ? null : d;
 	}
 
 	// --- generic renderers (pure) --------------------------------------------------------------------------------
@@ -129,38 +129,38 @@
 
 	registerRenderer("date", {
 		display: function (cellData) {
-			var d = toDate(cellData);
+			const d = toDate(cellData);
 			if (!d) return cellData == null ? "" : escHtml(cellData);
 			return escHtml(new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short", day: "2-digit" }).format(d));
 		},
-		sort: function (cellData) { var d = toDate(cellData); return d ? d.getTime() : cellData; }
+		sort: function (cellData) { const d = toDate(cellData); return d ? d.getTime() : cellData; }
 	});
 
 	registerRenderer("datetime", {
 		display: function (cellData) {
-			var d = toDate(cellData);
+			const d = toDate(cellData);
 			if (!d) return cellData == null ? "" : escHtml(cellData);
 			return escHtml(new Intl.DateTimeFormat(undefined, {
 				year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit"
 			}).format(d));
 		},
-		sort: function (cellData) { var d = toDate(cellData); return d ? d.getTime() : cellData; }
+		sort: function (cellData) { const d = toDate(cellData); return d ? d.getTime() : cellData; }
 	});
 
 	registerRenderer("ts-zulu", {
 		// Absolute UTC ("Zulu") ISO-8601 timestamp - stable, locale-independent, no date library.
 		display: function (cellData) {
-			var d = toDate(cellData);
+			const d = toDate(cellData);
 			if (!d) return cellData == null ? "" : escHtml(cellData);
 			return escHtml(d.toISOString().replace(/\.\d{3}Z$/, "Z"));
 		},
-		sort: function (cellData) { var d = toDate(cellData); return d ? d.getTime() : cellData; }
+		sort: function (cellData) { const d = toDate(cellData); return d ? d.getTime() : cellData; }
 	});
 
 	registerRenderer("bool", {
 		display: function (cellData) {
 			if (cellData == null || cellData === "") return "";
-			var truthy = (cellData === true || cellData === 1 || cellData === "true" || cellData === "1" || cellData === "yes");
+			const truthy = (cellData === true || cellData === 1 || cellData === "true" || cellData === "1" || cellData === "yes");
 			return truthy ? "Yes" : "No";
 		}
 	});
@@ -169,8 +169,8 @@
 		// Consumes the column's `href` {property} template (merged into meta by the initializer); no template -> text.
 		display: function (cellData, rowData, meta) {
 			if (cellData == null) return "";
-			var text = String(cellData);
-			var href = meta && meta.href;
+			const text = String(cellData);
+			const href = meta && meta.href;
 			if (!href) return escHtml(text);
 			return '<a href="' + escAttr(interpolateHref(href, rowData)) + '">' + escHtml(text) + "</a>";
 		}
@@ -179,9 +179,9 @@
 	registerRenderer("truncate", {
 		display: function (cellData, rowData, meta) {
 			if (cellData == null) return "";
-			var s = String(cellData);
-			var max = meta && meta.length ? parseInt(meta.length, 10) : 64;
-			if (!(max > 0) || s.length <= max) return escHtml(s);
+			const s = String(cellData);
+			const max = meta && meta.length ? Number.parseInt(meta.length, 10) : 64;
+			if (max <= 0 || s.length <= max) return escHtml(s);
 			return '<span title="' + escAttr(s) + '">' + escHtml(s.substring(0, max)) + "\u2026</span>";
 		}
 	});
@@ -189,7 +189,7 @@
 	registerRenderer("json", {
 		display: function (cellData) {
 			if (cellData == null) return "";
-			var s;
+			let s;
 			try { s = JSON.stringify(cellData); } catch (e) { s = String(cellData); }
 			return "<code>" + escHtml(s) + "</code>";
 		}
@@ -198,12 +198,12 @@
 	registerRenderer("decimal", {
 		display: function (cellData, rowData, meta) {
 			if (cellData == null || cellData === "") return "";
-			var n = Number(cellData);
-			if (isNaN(n)) return escHtml(cellData);
-			var places = meta && meta.places != null ? parseInt(meta.places, 10) : 2;
+			const n = Number(cellData);
+			if (Number.isNaN(n)) return escHtml(cellData);
+			const places = meta && meta.places != null ? Number.parseInt(meta.places, 10) : 2;
 			return escHtml(n.toFixed(places >= 0 ? places : 2));
 		},
-		sort: function (cellData) { var n = Number(cellData); return isNaN(n) ? cellData : n; }
+		sort: function (cellData) { const n = Number(cellData); return Number.isNaN(n) ? cellData : n; }
 	});
 
 	registerRenderer("tag", {
@@ -213,11 +213,11 @@
 		// chrome.css rules (e.g. `.tag.status.released`) match; the RAW value is kept as the display text.
 		display: function (cellData, rowData, meta) {
 			if (cellData == null || cellData === "") return "";
-			var value = String(cellData);
-			var domain = meta && meta.field ? String(meta.field) : "";
-			var domainToken = normalizeTagToken(domain);
-			var valueToken = normalizeTagToken(value);
-			var cls = "tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
+			const value = String(cellData);
+			const domain = meta && meta.field ? String(meta.field) : "";
+			const domainToken = normalizeTagToken(domain);
+			const valueToken = normalizeTagToken(value);
+			const cls = "tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
 			return '<span class="' + escAttr(cls) + '">' + escHtml(value) + "</span>";
 		},
 		"class": function () { return "tag-cell"; }

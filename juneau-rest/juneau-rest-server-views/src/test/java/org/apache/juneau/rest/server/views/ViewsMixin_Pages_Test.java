@@ -24,14 +24,16 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Serving + versioned-URL tests for the {@code juneau-pages.js} asset on {@link ViewsMixin} (TODO-399 Phase C,
- * Task 5).
+ * Serving + versioned-URL tests for the {@code juneau-pages.js} asset on {@link ViewsMixin}.
  *
  * <p>
  * Extends the existing {@code ViewsMixin_Serving_Test} Option-A serving-smoke pattern to the new opt-in page-runtime
  * asset: 200 + correct content-type + {@code Cache-Control}, a 404 when the mixin is absent, and the
  * {@code ?v=<buildVersion>} cache-buster via {@link ViewsMixin#viewAssetUrl(String)}.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class ViewsMixin_Pages_Test extends TestBase {
 
 	public static class NoMixin extends org.apache.juneau.rest.server.servlet.BasicRestServlet {

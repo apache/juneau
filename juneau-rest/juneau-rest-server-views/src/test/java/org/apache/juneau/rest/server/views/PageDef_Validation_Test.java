@@ -58,23 +58,22 @@ class PageDef_Validation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_tabWithBothViewAndSubtabs_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () ->
-			PageDef.create("admin")
-				.tabs(Tab.create("t", "T").view(view("v")).subtabs(Subtab.create("s", "S").view(view("s"))))
-				.build());
+		var page = PageDef.create("admin")
+			.tabs(Tab.create("t", "T").view(view("v")).subtabs(Subtab.create("s", "S").view(view("s"))));
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("exactly one"), e::getMessage);
 	}
 
 	@Test void a02_tabWithNeitherViewNorSubtabs_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () ->
-			PageDef.create("admin").tabs(Tab.create("t", "T")).build());
+		var page = PageDef.create("admin").tabs(Tab.create("t", "T"));
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("exactly one"), e::getMessage);
 	}
 
 	@Test void a03_tabWithEmptySubtabsListAndNoView_rejected() {
 		// An explicitly-empty subtabs() call is equivalent to "no subtabs" -> still neither.
-		var e = assertThrows(IllegalArgumentException.class, () ->
-			PageDef.create("admin").tabs(Tab.create("t", "T").subtabs()).build());
+		var page = PageDef.create("admin").tabs(Tab.create("t", "T").subtabs());
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("exactly one"), e::getMessage);
 	}
 
@@ -83,10 +82,9 @@ class PageDef_Validation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_duplicateTabId_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () ->
-			PageDef.create("admin")
-				.tabs(Tab.create("releases", "R1").view(view("r1")), Tab.create("releases", "R2").view(view("r2")))
-				.build());
+		var page = PageDef.create("admin")
+			.tabs(Tab.create("releases", "R1").view(view("r1")), Tab.create("releases", "R2").view(view("r2")));
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("releases"), e::getMessage);
 	}
 
@@ -95,12 +93,11 @@ class PageDef_Validation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_duplicateSubtabIdWithinSameTab_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () ->
-			PageDef.create("admin")
-				.tabs(Tab.create("catalog", "Catalog").subtabs(
-					Subtab.create("packages", "P1").view(view("p1")),
-					Subtab.create("packages", "P2").view(view("p2"))))
-				.build());
+		var page = PageDef.create("admin")
+			.tabs(Tab.create("catalog", "Catalog").subtabs(
+				Subtab.create("packages", "P1").view(view("p1")),
+				Subtab.create("packages", "P2").view(view("p2"))));
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("packages"), e::getMessage);
 	}
 
@@ -120,20 +117,18 @@ class PageDef_Validation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_duplicateViewIdAcrossTabs_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () ->
-			PageDef.create("admin")
-				.tabs(Tab.create("a", "A").view(view("shared")), Tab.create("b", "B").view(view("shared")))
-				.build());
+		var page = PageDef.create("admin")
+			.tabs(Tab.create("a", "A").view(view("shared")), Tab.create("b", "B").view(view("shared")));
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("shared"), e::getMessage);
 	}
 
 	@Test void d02_duplicateViewIdBetweenTabAndSubtab_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () ->
-			PageDef.create("admin")
-				.tabs(
-					Tab.create("a", "A").view(view("shared")),
-					Tab.create("b", "B").subtabs(Subtab.create("s", "S").view(view("shared"))))
-				.build());
+		var page = PageDef.create("admin")
+			.tabs(
+				Tab.create("a", "A").view(view("shared")),
+				Tab.create("b", "B").subtabs(Subtab.create("s", "S").view(view("shared"))));
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("shared"), e::getMessage);
 	}
 
@@ -149,12 +144,14 @@ class PageDef_Validation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_noTabs_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> PageDef.create("admin").build());
+		var page = PageDef.create("admin");
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("tab"), e::getMessage);
 	}
 
 	@Test void e02_emptyTabsList_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> PageDef.create("admin").tabs().build());
+		var page = PageDef.create("admin").tabs();
+		var e = assertThrows(IllegalArgumentException.class, page::build);
 		assertTrue(e.getMessage().contains("tab"), e::getMessage);
 	}
 }

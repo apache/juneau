@@ -74,7 +74,7 @@ class FreemarkerDispatcher_Test extends TestBase {
 	 * Section A: resolveConfiguration
 	 * ---------------------------------------------------------------------------------------- */
 
-	@Test void a01_resolveConfiguration_prefersRegisteredBean() throws Exception {
+	@Test void a01_resolveConfiguration_prefersRegisteredBean() {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var beanStore = new BasicBeanStore();
 		var registered = stringLoaderConfig("hello", "Hi!");
@@ -83,7 +83,7 @@ class FreemarkerDispatcher_Test extends TestBase {
 		assertSame(registered, dispatcher.resolveConfiguration(mockRequest(beanStore)));
 	}
 
-	@Test void a02_resolveConfiguration_secondCallReusesCachedDefault() throws Exception {
+	@Test void a02_resolveConfiguration_secondCallReusesCachedDefault() {
 		var dispatcher = FreemarkerDispatcher.create().build();
 		var req = mockRequest(new BasicBeanStore());
 
@@ -129,8 +129,9 @@ class FreemarkerDispatcher_Test extends TestBase {
 		// an IOException subclass, which render()'s "catch (IOException | BasicHttpException ex)" rethrows as-is.
 		beanStore.addBean(Configuration.class, stringLoaderConfig("hello", "Hi!"));
 
-		assertThrows(IOException.class,
-			() -> dispatcher.render("does-not-exist", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		assertThrows(IOException.class, () -> dispatcher.render("does-not-exist", req, res));
 	}
 
 	@Test void b04_render_linkageErrorFromEngine_wrapsWithNoEngineDiagnostic() throws Exception {
@@ -140,8 +141,9 @@ class FreemarkerDispatcher_Test extends TestBase {
 		when(cfg.getTemplate("hello")).thenThrow(new NoClassDefFoundError("freemarker.core.Environment"));
 		beanStore.addBean(Configuration.class, cfg);
 
-		var ex = assertThrows(InternalServerError.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
 		assertTrue(ex.getMessage().contains("FreeMarker engine"));
 	}
 
@@ -152,8 +154,9 @@ class FreemarkerDispatcher_Test extends TestBase {
 		when(cfg.getTemplate("hello")).thenThrow(new RuntimeException("boom"));
 		beanStore.addBean(Configuration.class, cfg);
 
-		var ex = assertThrows(InternalServerError.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
 		assertTrue(ex.getMessage().contains("FreeMarker render failed"));
 	}
 
@@ -161,8 +164,9 @@ class FreemarkerDispatcher_Test extends TestBase {
 		var dispatcher = FreemarkerDispatcher.create().basePath("/templates/").build();
 		var beanStore = new BasicBeanStore();
 
-		assertThrows(Forbidden.class,
-			() -> dispatcher.render("../../../etc/passwd", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		assertThrows(Forbidden.class, () -> dispatcher.render("../../../etc/passwd", req, res));
 	}
 
 	/* ---------------------------------------------------------------------------------------- *

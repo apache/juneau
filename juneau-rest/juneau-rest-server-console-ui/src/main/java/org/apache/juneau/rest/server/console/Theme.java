@@ -100,6 +100,24 @@ public final class Theme {
 		.token("--jc-tag-red-bg", "#f8d7da")
 		.token("--jc-tag-red-text", "#721c24")
 		.token("--jc-tag-red-border", "#f5c6cb")
+		// Additive token gaps.  Appended after the tag palette so --jc-font stays first and the tag
+		// triads stay contiguous (see Theme_TokenOrdering_Test.a02).  All are behaviour-preserving: each default
+		// equals the literal it replaces in chrome.css, so the shipped chrome renders pixel-identically.
+		.token("--jc-header-height", "56px")               // (a) keeps .jc-header height and .jc-nav sticky offset in sync
+		.token("--jc-nav-indicator-width", "3px")          // (g) nav underline / active-tab indicator thickness
+		.token("--jc-card-shadow", "none")                 // (c) card elevation seam; flat by default (relies on the "none" keyword)
+		.token("--jc-danger-wash", "#fdeceb")              // (d) themeable .jc-btn-danger:hover fill (was a hardcoded hex)
+		.token("--jc-success-wash", "#eaf6ee")             // (d) themeable .jc-btn-success:hover fill (was a hardcoded hex)
+		.token("--jc-space-1", "4px")                      // (e) spacing scale seam (consumed by the .jc-prose rhythm)
+		.token("--jc-space-2", "8px")
+		.token("--jc-space-3", "12px")
+		.token("--jc-space-4", "16px")
+		.token("--jc-space-5", "24px")
+		.token("--jc-space-6", "32px")
+		// Accessibility: a themeable focus-ring colour so the generic :focus-visible rule in chrome.css
+		// gives every interactive control a WCAG 2.4.7-compliant keyboard-focus indicator by default.  Defaults to
+		// the Lightning-blue accent so the ring reads as "the same brand colour" out of the box.
+		.token("--jc-focus", "#1589EE")
 		.build();
 
 	private final String name;

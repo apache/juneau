@@ -52,7 +52,7 @@ final class ChromeCssScanner {
 
 	private static final Pattern COMMENT = Pattern.compile("/\\*.*?\\*/", Pattern.DOTALL);
 	private static final Pattern WHOLE_VALUE_VAR_JC =
-		Pattern.compile("([a-zA-Z-]+)\\s*:\\s*var\\((--jc-[a-z0-9-]+)\\)\\s*;");
+		Pattern.compile("([a-zA-Z-]++)\\s*:\\s*var\\((--jc-[a-z0-9-]++)\\)\\s*;");
 
 	/**
 	 * Scans the specified CSS source and returns a list of human-readable violation descriptions (empty if the CSS

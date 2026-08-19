@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.views.ViewDef.DataMode;
 import org.junit.jupiter.api.*;
 
 /**
- * End-to-end server wiring smoke test for {@link PageTable} + {@link ViewsMixin} (TODO-399 Phase C, Task 9).
+ * End-to-end server wiring smoke test for {@link PageTable} + {@link ViewsMixin}.
  *
  * <p>
  * Proves a REST resource composing {@link ViewsMixin} and returning a {@code PageTable.of(...)} response emits a
@@ -44,6 +44,9 @@ import org.junit.jupiter.api.*;
  * {@code juneau-renders.js}/{@code juneau-views.css} (design doc §"Client page runtime"; mirrors
  * {@code ViewServerWiring_Test}/{@code ViewsMixin_Serving_Test}'s end-to-end coverage style).
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class PageServerWiring_Test extends TestBase {
 
 	public static class Release {

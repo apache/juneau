@@ -44,6 +44,9 @@ import org.junit.jupiter.api.*;
  * {@code Cache-Control}; a host without the mixin {@code 404}s the same paths.  The {@code ?v=<buildVersion>}
  * cache-buster and the {@code CONTRACT_VERSION} handshake constant are asserted directly.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class ViewsMixin_Serving_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -438,6 +441,53 @@ class ViewsMixin_Serving_Test extends TestBase {
 				"content_copy", "csv", "table", "picture_as_pdf", "refresh", "manage_search", "unfold_less",
 				"first_page", "chevron_left", "chevron_right", "last_page", "tune", "filter_alt", "expand_more"})
 			assertTrue(body.contains("\"" + name + "\""), () -> "missing bundled glyph '" + name + "':\n" + body);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// i) viewAssetUrl(RestRequest, path): a real, resolved, browser-fetchable URL (not "servlet:...")
+	//------------------------------------------------------------------------------------------------------------------
+
+	/** Echoes the request-aware overload's resolved URL as a plain-text response, for assertion below. */
+	@Rest(mixins=ViewsMixin.class)
+	public static class AssetUrlHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/echo-asset-url") public String echoAssetUrl(RestRequest req) {
+			return ViewsMixin.viewAssetUrl(req, ViewsMixin.VIEWS_JS_PATH);
+		}
+	}
+
+	@Test void i01_requestAwareOverload_resolvesToARealUrl_notAServletPrefixedLiteral() throws Exception {
+		var url = MockRestClient.buildLax(AssetUrlHost.class).get("/echo-asset-url").accept("text/plain").run()
+			.assertStatus(200).getContent().asString();
+		// The whole point of FG-4: the literal "servlet:" scheme must NOT leak into the resolved result - a
+		// template-rendering consumer downstream of Juneau's own HTML serializer would otherwise receive it
+		// verbatim and fetch nothing.
+		assertFalse(url.startsWith("servlet:"), url);
+		assertTrue(url.endsWith(ViewsMixin.VIEWS_JS_PATH.substring(1)) || url.contains(ViewsMixin.VIEWS_JS_PATH + "?v="), url);
+	}
+
+	@Test void i02_requestAwareOverload_carriesTheSameVersionAndContentHashCacheBuster() throws Exception {
+		var url = MockRestClient.buildLax(AssetUrlHost.class).get("/echo-asset-url").accept("text/plain").run()
+			.assertStatus(200).getContent().asString();
+		var staticForm = ViewsMixin.viewAssetUrl(ViewsMixin.VIEWS_JS_PATH);
+		var expectedSuffix = staticForm.substring(staticForm.indexOf("?v="));
+		assertTrue(url.endsWith(expectedSuffix), url);
+	}
+
+	@Test void i03_requestAwareOverload_resolvesUnderANonRootHostMount() throws Exception {
+		var c = MockRestClient.createLax(AssetUrlHost.class).servletPath("/rest/admin").build();
+		var url = c.get("/echo-asset-url").accept("text/plain").run().assertStatus(200).getContent().asString();
+		assertTrue(url.startsWith("/rest/admin" + ViewsMixin.VIEWS_JS_PATH), url);
+	}
+
+	@Test void i04_requestAwareOverload_resolvedUrlIsActuallyFetchableAtThatMount() throws Exception {
+		// Round-trip proof: the URL this overload hands a template is not just shaped right - fetching it (minus
+		// the query string) against the SAME mount actually serves the asset.
+		var c = MockRestClient.createLax(AssetUrlHost.class).servletPath("/rest/admin").build();
+		var url = c.get("/echo-asset-url").accept("text/plain").run().assertStatus(200).getContent().asString();
+		var pathOnly = url.substring(0, url.indexOf('?'));
+		var relative = pathOnly.substring("/rest/admin".length());
+		c.get(relative).run().assertStatus(200);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

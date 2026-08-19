@@ -147,15 +147,13 @@ public class JspViewRenderer implements ViewRenderer {
 					target, NO_ENGINE_DIAGNOSTIC);
 			rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());
 			return FINISHED;
-		} catch (InternalServerError ex) {
-			// Re-surface the specific NO_ENGINE diagnostic constructed above as-is -- without this
-			// clause, the generic `catch (Exception ex)` below would re-wrap it into a generic
-			// "JSP render failed for '%s'" message, discarding the diagnostic text from the response body.
+		} catch (InternalServerError | IOException ex) {
+			// InternalServerError re-surfaces the specific NO_ENGINE diagnostic constructed above as-is;
+			// IOException propagates unchanged. Without this clause the generic `catch (Exception ex)` below
+			// would re-wrap them into a generic "JSP render failed for '%s'" message, discarding the diagnostic.
 			throw ex;
 		} catch (NoClassDefFoundError ex) {
 			throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException ex) {
-			throw ex;
 		} catch (Exception ex) {
 			throw new InternalServerError(ex, "JSP render failed for '%s'", target);
 		}

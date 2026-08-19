@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@code juneau-pages.js} pure hash-routing logic + DOM binding shim tests (TODO-399 Phase C, Tasks 7-8).
+ * {@code juneau-pages.js} pure hash-routing logic + DOM binding shim tests.
  *
  * <p>
  * <b>Scope:</b> these tests extract each pure function's source body from the served script and assert on its
@@ -36,6 +36,9 @@ import org.junit.jupiter.api.*;
  * The functions remain written as a DOM-free pure layer (see the class-header comment in {@code juneau-pages.js}),
  * so the harness could also drive them directly should these particular assertions ever need that depth.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class JuneauPagesJs_Test extends TestBase {
 
 	@Rest(mixins=ViewsMixin.class)

@@ -68,6 +68,9 @@ import org.junit.jupiter.api.*;
  * never produces.  They are still a two-artifact contract &mdash; {@code juneau-pages.js} sets them and
  * {@code juneau-views.css} styles them &mdash; so they get the same protection a different way, in {@code c03}.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class PageTable_SubtabPanelContract_Test extends TestBase {
 
 	@Rest(mixins=ViewsMixin.class)

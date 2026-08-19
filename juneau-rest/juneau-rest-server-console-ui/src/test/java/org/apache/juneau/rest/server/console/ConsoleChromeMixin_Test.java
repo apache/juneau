@@ -30,6 +30,8 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Phase 3 gate: {@link ConsoleChromeMixin} + {@link ThemeSettings} + the dynamic {@code GET /juneau-console/chrome.css}
@@ -138,22 +140,32 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Test void c01_openBlock_containsOnlyJcNames() throws Exception {
 		var body = bodyOf(MockRestClient.buildLax(DefaultHost.class));
 		var block = firstRootBlock(body);
-		var m = Pattern.compile("([a-zA-Z-]+)\\s*:").matcher(block);
+		var m = Pattern.compile("([a-zA-Z-]++)\\s*:").matcher(block);
 		while (m.find())
 			assertTrue(m.group(1).startsWith("--jc-"), () -> "non --jc- name in :root{} block: " + m.group(1));
 	}
 
-	@Test void c02_everyChromeCssVarJc_isDefinedInThemeOpen() throws IOException {
+	@Test void c02_everyChromeCssVarJc_isDefinedInThemeOpenOrAliasBlock() throws IOException {
+		// Three-way check: chrome.css now consumes role-named tokens (--jc-header-bg, --jc-surface, ...)
+		// that are declared by the framework-authored alias block (ConsoleChromeMixin.OPEN_ROLE_ALIASES), not by
+		// Theme.OPEN. Every chrome.css reference must resolve to one of the two framework blocks.
 		var referenced = referencedTokensInChromeCss();
-		var defined = Theme.OPEN.getTokens().keySet();
+		var defined = new LinkedHashSet<>(Theme.OPEN.getTokens().keySet());
+		defined.addAll(aliasDefinedNames());
 		for (var name : referenced)
-			assertTrue(defined.contains(name), () -> "chrome.css references '" + name + "' but Theme.OPEN does not define it");
+			assertTrue(defined.contains(name), () -> "chrome.css references '" + name + "' but neither Theme.OPEN nor the alias block defines it");
 	}
 
-	@Test void c03_everyThemeOpenToken_isReferencedInChromeCss() throws IOException {
-		var referenced = referencedTokensInChromeCss();
-		for (var name : Theme.OPEN.getTokens().keySet())
-			assertTrue(referenced.contains(name), () -> "Theme.OPEN defines orphan token '" + name + "' not referenced by chrome.css");
+	@Test void c03_everyDefinedToken_isReferencedInChromeCssOrAliasBlock() throws IOException {
+		// Three-way check: a legacy token that chrome.css no longer references directly (e.g. --jc-white)
+		// is not an orphan - it is still consumed by the alias block as the source of a derived role token. A role
+		// token declared by the alias block must in turn be consumed by chrome.css (or by a later alias link).
+		var referenced = new LinkedHashSet<>(referencedTokensInChromeCss());
+		referenced.addAll(aliasReferencedNames());
+		var defined = new LinkedHashSet<>(Theme.OPEN.getTokens().keySet());
+		defined.addAll(aliasDefinedNames());
+		for (var name : defined)
+			assertTrue(referenced.contains(name), () -> "orphan token '" + name + "' defined but never referenced by chrome.css or the alias block");
 	}
 
 	private static Set<String> referencedTokensInChromeCss() throws IOException {
@@ -164,7 +176,25 @@ class ConsoleChromeMixin_Test extends TestBase {
 		}
 		var stripped = Pattern.compile("/\\*.*?\\*/", Pattern.DOTALL).matcher(css).replaceAll("");
 		var out = new LinkedHashSet<String>();
-		var m = Pattern.compile("var\\((--jc-[a-z0-9-]+)\\)").matcher(stripped);
+		var m = Pattern.compile("var\\((--jc-[a-z0-9-]++)\\)").matcher(stripped);
+		while (m.find())
+			out.add(m.group(1));
+		return out;
+	}
+
+	/** The role-token names DECLARED (left-hand side) by the framework-authored alias block. */
+	private static Set<String> aliasDefinedNames() {
+		var out = new LinkedHashSet<String>();
+		var m = Pattern.compile("(--jc-[a-z0-9-]++)\\s*:").matcher(ConsoleChromeMixin.OPEN_ROLE_ALIASES);
+		while (m.find())
+			out.add(m.group(1));
+		return out;
+	}
+
+	/** The token names REFERENCED (via var(...)) by the framework-authored alias block. */
+	private static Set<String> aliasReferencedNames() {
+		var out = new LinkedHashSet<String>();
+		var m = Pattern.compile("var\\((--jc-[a-z0-9-]++)\\)").matcher(ConsoleChromeMixin.OPEN_ROLE_ALIASES);
 		while (m.find())
 			out.add(m.group(1));
 		return out;
@@ -229,6 +259,9 @@ class ConsoleChromeMixin_Test extends TestBase {
 	// e) url-sink gate, end-to-end
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S5778" // End-to-end security gate: deliberately asserts the whole mixin-construction chain (theme(Theme.create(x).token(url).build())) rejects a url() bypass vector, so it stays robust if value validation is ever relocated between token()/build()/theme(); isolating a single call would drop that end-to-end coverage.
+	})
 	@Test void e01_bypassVector_throwsAtMixinConstructionTime_notSilentlySwallowed() {
 		assertThrows(IllegalArgumentException.class,
 			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-page-bg", "url(https://evil)").build()));
@@ -308,55 +341,41 @@ class ConsoleChromeMixin_Test extends TestBase {
 	private static final String VALID_LOGO = "/testfiles/console/logo.svg";
 	private static final String VALID_PAGE_BG = "/testfiles/console/page-bg.png";
 
-	@Test void g01_logo_null_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo(null));
+	@ParameterizedTest
+	@NullSource
+	@ValueSource(strings = {
+		"",                                        // empty
+		"/testfiles/console/../../../etc/passwd", // path traversal segment
+		"/testfiles/console/bad.txt",              // unallowlisted extension
+		"/testfiles/console/nope.svg",             // resource does not exist
+	})
+	void g01_logo_invalidInputs_rejected(String value) {
+		var b = ConsoleChromeMixin.create();
+		assertThrows(IllegalArgumentException.class, () -> b.logo(value));
 	}
 
-	@Test void g02_logo_empty_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo(""));
-	}
-
-	@Test void g03_logo_pathTraversalSegment_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo("/testfiles/console/../../../etc/passwd"));
-	}
-
-	@Test void g04_logo_unallowlistedExtension_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo("/testfiles/console/bad.txt"));
-	}
-
-	@Test void g05_logo_resourceDoesNotExist_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().logo("/testfiles/console/nope.svg"));
-	}
-
-	@Test void g06_logo_validClasspathResource_accepted() {
+	@Test void g02_logo_validClasspathResource_accepted() {
 		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo(VALID_LOGO).build());
 	}
 
-	@Test void g07_pageBackgroundImage_null_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage(null));
+	@ParameterizedTest
+	@NullSource
+	@ValueSource(strings = {
+		"",                                        // empty
+		"/testfiles/console/../../../etc/passwd", // path traversal segment
+		"/testfiles/console/bad.txt",              // unallowlisted extension
+		"/testfiles/console/nope.png",             // resource does not exist
+	})
+	void g03_pageBackgroundImage_invalidInputs_rejected(String value) {
+		var b = ConsoleChromeMixin.create();
+		assertThrows(IllegalArgumentException.class, () -> b.pageBackgroundImage(value));
 	}
 
-	@Test void g08_pageBackgroundImage_empty_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage(""));
-	}
-
-	@Test void g09_pageBackgroundImage_pathTraversalSegment_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage("/testfiles/console/../../../etc/passwd"));
-	}
-
-	@Test void g10_pageBackgroundImage_unallowlistedExtension_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage("/testfiles/console/bad.txt"));
-	}
-
-	@Test void g11_pageBackgroundImage_resourceDoesNotExist_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.create().pageBackgroundImage("/testfiles/console/nope.png"));
-	}
-
-	@Test void g12_pageBackgroundImage_validClasspathResource_accepted() {
+	@Test void g04_pageBackgroundImage_validClasspathResource_accepted() {
 		assertDoesNotThrow(() -> ConsoleChromeMixin.create().pageBackgroundImage(VALID_PAGE_BG).build());
 	}
 
-	@Test void g13_allAllowlistedExtensions_accepted() {
+	@Test void g05_allAllowlistedExtensions_accepted() {
 		// One fixture per allowlisted extension, content irrelevant - only the extension drives validation/content-type.
 		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.svg").build());
 		assertDoesNotThrow(() -> ConsoleChromeMixin.create().logo("/testfiles/console/logo.jpg").build());
@@ -488,6 +507,9 @@ class ConsoleChromeMixin_Test extends TestBase {
 		assertEquals(List.of(), ChromeCssScanner.scan(body), () -> "violations against assembled body:\n" + body);
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // End-to-end security regression: deliberately asserts the whole mixin-construction chain rejects a url() production even with the assets feature present; isolating a single call would drop that end-to-end coverage.
+	})
 	@Test void j02_themeTokenPath_stillRejectsUrlProduction_evenWithAssetsFeaturePresent() {
 		assertThrows(IllegalArgumentException.class,
 			() -> ConsoleChromeMixin.create().theme(Theme.create("x").token("--jc-page-bg", "url(https://evil)").build()));
@@ -498,9 +520,11 @@ class ConsoleChromeMixin_Test extends TestBase {
 		// NOT part of the Theme token model (finding 4 of the design doc). If this count ever changes, it must be
 		// a DIFFERENT, deliberate change to Theme.OPEN - not a side effect of the asset feature.
 		//
-		// 35 = the original 32, plus the three-token red tag triad added so a four-state status vocabulary has a
-		// fourth colour. Bumping this number is only ever correct alongside a reviewed edit to Theme.OPEN itself.
-		assertEquals(35, Theme.OPEN.getTokens().size());
+		// 47 = the original 32, plus the three-token red tag triad, plus the eleven additive
+		// token gaps (--jc-header-height, --jc-nav-indicator-width, --jc-card-shadow, --jc-danger-wash,
+		// --jc-success-wash, and the six-step --jc-space-1..6 scale), plus the --jc-focus focus-ring colour.
+		// Bumping this number is only ever correct alongside a reviewed edit to Theme.OPEN itself.
+		assertEquals(47, Theme.OPEN.getTokens().size());
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 	}
@@ -647,7 +671,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	/**
 	 * The mirror-image regression of (m03): detection inverted in the composed direction, resolving the
 	 * <i>unprefixed</i> constant under a composed mount, yields {@code /rest/assets/logo}. That is not caught by an
-	 * end-to-end fetch either &mdash; {@code TODO-411}'s dual path registration makes {@code /rest/assets/logo} a
+	 * end-to-end fetch either &mdash; the dual path registration makes {@code /rest/assets/logo} a
 	 * live alias too &mdash; nor by the pre-fix root-absolute literal {@code /juneau-console/assets/logo}, which
 	 * still <i>looks</i> like a plausible logo URL. Both wrong answers are pinned out explicitly here.
 	 */
@@ -808,13 +832,17 @@ class ConsoleChromeMixin_Test extends TestBase {
 	 * itself - that the iteration order is the declaration order and not a per-JVM hash order, which is what makes
 	 * the response byte-stable enough to ever carry an {@code ETag} - is proved in {@code Theme_TokenOrdering_Test}.
 	 */
-	@Test void o01_openBlockDeclarationOrder_matchesThemeOpensDeclarationOrder() throws Exception {
+	@Test void o01_openBlockDeclarationOrder_matchesThemeOpenThenAliasBlockDeclarationOrder() throws Exception {
+		// The OPEN :root{} block emits Theme.OPEN's tokens in declaration order, followed by the framework-authored
+		// role-token alias derivations in their declaration order.
 		var block = firstRootBlock(bodyOf(MockRestClient.buildLax(DefaultHost.class)));
 		var emitted = new ArrayList<String>();
-		var m = Pattern.compile("(--jc-[a-z0-9-]+)\\s*:").matcher(block);
+		var m = Pattern.compile("(--jc-[a-z0-9-]++)\\s*:").matcher(block);
 		while (m.find())
 			emitted.add(m.group(1));
-		assertEquals(new ArrayList<>(Theme.OPEN.getTokens().keySet()), emitted);
+		var expected = new ArrayList<>(Theme.OPEN.getTokens().keySet());
+		expected.addAll(aliasDefinedNames());
+		assertEquals(expected, emitted);
 	}
 
 	@Test void o02_twoIndependentlyBuiltMixinsWithTheSameTheme_serveByteIdenticalBodies() throws Exception {

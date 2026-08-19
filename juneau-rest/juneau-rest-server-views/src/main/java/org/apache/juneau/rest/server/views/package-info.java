@@ -20,7 +20,7 @@
  * contract consumed by the first-party client runtime.
  *
  * <p>
- * This optional module builds on {@code juneau-rest-server-datatables} (the TODO-355 server-side query protocol):
+ * This optional module builds on {@code juneau-rest-server-datatables} (the server-side query protocol):
  * an app author declares one {@link org.apache.juneau.rest.server.views.ViewDef} &mdash; columns, ribbon actions,
  * row-decorator rules, and named cell renderers &mdash; as ordinary Juneau beans, and the model serializes to the
  * {@code VIEW_META} JSON contract that the shipped {@code juneau-views.js}/{@code juneau-ribbon.js}/

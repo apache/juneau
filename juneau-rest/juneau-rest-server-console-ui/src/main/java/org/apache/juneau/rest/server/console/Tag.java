@@ -65,6 +65,9 @@ public final class Tag {
 	 * @throws IllegalArgumentException If either argument is <jk>null</jk>, empty, or (after lowercasing) not in
 	 * 	the legal shape.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Intended public API: the wildcard return keeps this factory's contract at the HtmlElement abstraction (it currently returns a Span) without committing callers to the concrete type; narrowing it to Span would be a public-signature change.
+	})
 	public static HtmlElement<?> of(String domain, String value) {
 		var d = normalize("domain", domain);
 		var v = normalize("value", value);

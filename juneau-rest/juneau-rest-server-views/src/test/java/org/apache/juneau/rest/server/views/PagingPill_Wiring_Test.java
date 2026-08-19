@@ -30,6 +30,9 @@ import org.junit.jupiter.api.*;
  * coverage, mirroring {@code ViewsMixin_Serving_Test}'s established idiom - the pill's DataTables-API-surface
  * wiring (`page.len`, `page(...)`, `draw.dt`) and the cross-version native-control-hide CSS selector list.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class PagingPill_Wiring_Test extends TestBase {
 
 	@Rest(mixins=ViewsMixin.class)

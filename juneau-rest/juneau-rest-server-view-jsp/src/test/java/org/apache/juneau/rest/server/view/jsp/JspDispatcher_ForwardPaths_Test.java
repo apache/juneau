@@ -91,10 +91,9 @@ class JspDispatcher_ForwardPaths_Test extends TestBase {
 	@Test void a00_contextPresentButDispatcherNull_reportsNoEngineDiagnostic() throws Exception {
 		// A real (non-null) ServletContext that itself resolves the target to no dispatcher -- the
 		// documented rd == null branch, distinct from JspMixin_MockRest_Test's NPE-driven 500 (see class
-		// javadoc above). render(...) now has a dedicated `catch (InternalServerError ex) { throw ex; }`
-		// clause ahead of the generic catch, so this branch's specific "Could not resolve
-		// RequestDispatcher... NO_ENGINE_DIAGNOSTIC" message reaches the response body intact instead of
-		// being re-wrapped into the generic "JSP render failed for" message.
+		// javadoc above). render(...) re-throws InternalServerError ahead of the generic catch, so this
+		// branch's specific "Could not resolve RequestDispatcher... NO_ENGINE_DIAGNOSTIC" message reaches
+		// the response body intact instead of being re-wrapped into the generic "JSP render failed for" message.
 		var ctx = fakeServletContext(null);
 		var res = c.get("/jsp/hello.jsp").servletContext(ctx).run();
 		res.assertStatus(500);

@@ -121,8 +121,8 @@ class ThymeleafDispatcher_Test extends TestBase {
 		var res = mock(RestResponse.class);
 		when(res.getWriter()).thenThrow(new IOException("broken pipe"));
 
-		var ex = assertThrows(IOException.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), res));
+		var req = mockRequest(beanStore);
+		var ex = assertThrows(IOException.class, () -> dispatcher.render("hello", req, res));
 		assertEquals("broken pipe", ex.getMessage());
 	}
 
@@ -134,8 +134,9 @@ class ThymeleafDispatcher_Test extends TestBase {
 			.process(anyString(), any(IContext.class), any(Writer.class));
 		beanStore.addBean(TemplateEngine.class, engine);
 
-		var ex = assertThrows(InternalServerError.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
 		assertTrue(ex.getMessage().contains("Thymeleaf engine"));
 	}
 
@@ -147,8 +148,9 @@ class ThymeleafDispatcher_Test extends TestBase {
 			.process(anyString(), any(IContext.class), any(Writer.class));
 		beanStore.addBean(TemplateEngine.class, engine);
 
-		var ex = assertThrows(InternalServerError.class,
-			() -> dispatcher.render("hello", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		var ex = assertThrows(InternalServerError.class, () -> dispatcher.render("hello", req, res));
 		assertTrue(ex.getMessage().contains("Thymeleaf render failed"));
 	}
 
@@ -156,8 +158,9 @@ class ThymeleafDispatcher_Test extends TestBase {
 		var dispatcher = ThymeleafDispatcher.create().basePath("/templates/").build();
 		var beanStore = new BasicBeanStore();
 
-		assertThrows(Forbidden.class,
-			() -> dispatcher.render("../../../etc/passwd", mockRequest(beanStore), mockResponse()));
+		var req = mockRequest(beanStore);
+		var res = mockResponse();
+		assertThrows(Forbidden.class, () -> dispatcher.render("../../../etc/passwd", req, res));
 	}
 
 	/* ---------------------------------------------------------------------------------------- *

@@ -29,9 +29,9 @@ import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Builds the HTML delivery shell for a {@link PageDef} &mdash; the self-contained, class-based tab/sub-tab shell
- * (TODO-399 Phase C, design doc §"Client page runtime" + Decision 1(A)) wrapping one independent
- * {@code data-juneau-view} table per referenced {@link ViewDef}, plus the {@code <script type="application/json">}
- * PAGE_META sidecar the {@code juneau-pages.js} runtime consumes for hash routing.
+ * (design doc §"Client page runtime" + Decision 1(A)) wrapping one independent {@code data-juneau-view} table per
+ * referenced {@link ViewDef}, plus the {@code <script type="application/json">} PAGE_META sidecar the
+ * {@code juneau-pages.js} runtime consumes for hash routing.
  *
  * <p>
  * Mirrors the sibling {@link ViewTable} emitter pattern exactly, including its escaping contract (see that class's
@@ -64,8 +64,8 @@ import org.apache.juneau.marshall.marshaller.*;
  * <p>
  * The emitted shell carries only the neutral {@code .jc-*} classes ({@link #PAGE_CLASS}, {@link #TAB_CLASS},
  * {@link #SUBTAB_CLASS}, etc.) &mdash; no inline {@code style="..."} and no {@code url(...)}.  This module takes no
- * dependency on {@code juneau-rest-server-console-ui}; TODO-361's {@code chrome.css} may theme the same classes when
- * present, mirroring the already-agreed {@code .tag.<domain>.<value>} chip reconciliation.
+ * dependency on {@code juneau-rest-server-console-ui}; that module's {@code chrome.css} may theme the same classes
+ * when present, mirroring the already-agreed {@code .tag.<domain>.<value>} chip reconciliation.
  *
  * <h5 class='section'>Child views stay independent (no wrapping/absorption):</h5>
  * <p>
