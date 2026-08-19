@@ -4,3 +4,10 @@
 .project
 /.settings/
 /bin/
+
+# JMH annotation-processor generated benchmark sources. All real source under this module lives
+# under src/main/java and src/test/java; running the `microbench` profile's exec:java outside a
+# full `mvn install` can make jmh-generator-annprocess emit its generated *_jmhType/*_jmhTest
+# classes at the module root (org/...) instead of target/generated-sources/annotations. They
+# regenerate on the next benchmark compile.
+/org/**/jmh_generated/
