@@ -132,11 +132,16 @@ public class ConsoleChromeMixin {
 	 *
 	 * <p>
 	 * These aliases are <b>permanent</b> (no deprecation window) and are deliberately <i>not</i>
-	 * {@link Theme#OPEN} tokens: {@code CssValueGrammar} rejects {@code var()} in every spelling, so a
-	 * {@code var(--jc-*)} alias expressed as a {@code Theme} token would throw at class-initialization time. This
-	 * is framework-authored literal text and never passes through that grammar (which exists to validate
-	 * <i>consumer</i> input, not the framework's own stylesheet). {@code Theme.OPEN} owns leaf values; this block
-	 * owns derived values; no token name is declared by both.
+	 * {@link Theme#OPEN} tokens. A {@code var(--jc-*)}-valued token IS legal Theme-layer syntax &mdash;
+	 * {@code Theme.Builder} recognizes it as a reference and resolves it to a concrete literal at {@code build()}
+	 * time &mdash; but that resolution scope deliberately excludes these role aliases, which are appended here
+	 * outside {@code Theme.OPEN}'s token map. Making them {@code Theme.OPEN} tokens instead would resolve each alias
+	 * to a <i>fixed literal</i> at composition time, snapshotting the live CSS cascade (the dark-mode /
+	 * user-agent overrides that reach these role tokens at use time) into a frozen value &mdash; so
+	 * {@code Theme.OPEN} is kept all-literal and the aliases stay here as framework-authored literal text that is
+	 * emitted verbatim (never routed through {@code CssValueGrammar}, which exists to validate <i>consumer</i>
+	 * input, not the framework's own stylesheet). {@code Theme.OPEN} owns leaf values; this block owns derived
+	 * values; no token name is declared by both.
 	 */
 	static final String OPEN_ROLE_ALIASES = String.join("",
 		"--jc-surface:var(--jc-white);",

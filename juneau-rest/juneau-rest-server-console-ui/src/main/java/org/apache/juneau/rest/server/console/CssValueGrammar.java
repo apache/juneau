@@ -62,15 +62,23 @@ final class CssValueGrammar {
 	private static final Pattern URL_REJECT = Pattern.compile("(?i)url\\s*\\(");
 
 	/**
-	 * Normalizes and validates a token value, returning the normalized (comment-stripped, trimmed) value if it is
-	 * accepted.
+	 * Runs the normalization belt on a token value and returns the normalized (comment-stripped, trimmed) value,
+	 * <b>without</b> the allowlist-grammar shape check.
+	 *
+	 * <p>
+	 * This is the shared belt that both {@link #normalizeAndValidate(String)} and the {@code Theme}-layer
+	 * {@code var(--jc-name)} reference recognizer (see {@link Theme.Builder#token(String, String)}) run on, so the
+	 * reference recognizer sees exactly the same control-character-rejected, comment-stripped, {@code url(}-rejected
+	 * string as the grammar does &mdash; there is no second, reference-specific normalization pass to keep in sync.
+	 * The belt does <b>not</b> recognize or accept {@code var()}: that is Theme-layer syntax handled one layer above
+	 * this class.
 	 *
 	 * @param value The raw candidate value.
-	 * @return The normalized value.
-	 * @throws IllegalArgumentException If the value is <jk>null</jk>, contains a control character, contains a
-	 * 	{@code url(} production in any spelling, or does not match one of the allowed CSS value shapes.
+	 * @return The normalized (comment-stripped, trimmed) value.
+	 * @throws IllegalArgumentException If the value is <jk>null</jk>, contains a control character, or contains a
+	 * 	{@code url(} production in any spelling.
 	 */
-	static String normalizeAndValidate(String value) {
+	static String normalize(String value) {
 		if (value == null)
 			throw iaex("Theme token value must not be null.");
 
@@ -88,6 +96,21 @@ final class CssValueGrammar {
 
 		if (URL_REJECT.matcher(stripped).find())
 			throw iaex("Theme token value must not contain a url() production.");
+
+		return stripped;
+	}
+
+	/**
+	 * Normalizes and validates a token value, returning the normalized (comment-stripped, trimmed) value if it is
+	 * accepted.
+	 *
+	 * @param value The raw candidate value.
+	 * @return The normalized value.
+	 * @throws IllegalArgumentException If the value is <jk>null</jk>, contains a control character, contains a
+	 * 	{@code url(} production in any spelling, or does not match one of the allowed CSS value shapes.
+	 */
+	static String normalizeAndValidate(String value) {
+		var stripped = normalize(value);
 
 		if (isAllowedShape(stripped))
 			return stripped;

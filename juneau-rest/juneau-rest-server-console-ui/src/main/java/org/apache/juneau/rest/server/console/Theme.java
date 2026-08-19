@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.console;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.regex.*;
 
 /**
  * An immutable, named set of CSS custom-property ("theme token") overrides for the admin-console chrome.
@@ -37,6 +38,14 @@ import java.util.*;
  * {@code ConsoleChromeMixin}). {@link #OPEN} is a placeholder empty theme in this revision; its real token set
  * lands together with {@code chrome.css}.
  *
+ * <p>
+ * A token value may also be a {@code var(--jc-name)} <b>reference</b> to another known token. References are
+ * <i>not</i> a {@code CssValueGrammar} value shape: {@code Theme.Builder} recognizes them one layer above the
+ * grammar and resolves each to a concrete literal at {@link Builder#build() build()} time (own tokens shadowing
+ * {@link #OPEN}'s), so the substring {@code var(} never appears in any {@link #getTokens()} value &mdash; only the
+ * resolved literal, which is itself re-validated by the grammar, is ever emitted. An unknown reference, a cycle,
+ * or a chain longer than the resolution depth cap is a loud {@code build()} failure, never a silent fallback.
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	Theme <jv>salesforce</jv> = Theme.<jsm>create</jsm>(<js>"salesforce"</js>)
@@ -54,6 +63,24 @@ public final class Theme {
 
 	/** Anchored (full-string) guard for a CSS custom-property token name. */
 	private static final String TOKEN_NAME_PATTERN = "^--jc-[a-z0-9-]+$";
+
+	/**
+	 * Anchored recognizer for a {@code var(--jc-name)} Theme-layer reference, run on the post-belt (control-char
+	 * rejected, comment-stripped, trimmed) value.
+	 *
+	 * <p>
+	 * Fully anchored ({@code ^...$}) so a reference can only ever be the <b>entire</b> value, never a prefix or
+	 * suffix of some larger value: {@code linear-gradient(var(--jc-a), #fff)} never matches this and is rejected by
+	 * the unchanged grammar. There is no fallback branch &mdash; {@code var(--jc-x, #fff)} simply fails to match
+	 * (comma inside the parens) and falls through to grammar rejection.
+	 */
+	private static final Pattern VAR_REFERENCE = Pattern.compile("^(?i:var)\\(\\s*(--jc-[a-z0-9-]+)\\s*\\)$");
+
+	/**
+	 * The maximum number of reference hops resolved before {@code build()} fails, enforced independently of cycle
+	 * detection so a long <i>acyclic</i> chain is bounded too.
+	 */
+	private static final int MAX_REFERENCE_HOPS = 8;
 
 	/**
 	 * The default, "open" theme.
@@ -176,32 +203,120 @@ public final class Theme {
 		/**
 		 * Adds (or overrides) a single CSS custom-property token.
 		 *
+		 * <p>
+		 * The value may be either a <b>literal</b> or a {@code var(--jc-name)} <b>reference</b> to another known
+		 * token:
+		 * <ul class='spaced-list'>
+		 * 	<li>A literal is validated eagerly here by {@code CssValueGrammar}'s accept-known-safe allowlist grammar
+		 * 		after normalization (trim &rarr; reject C0/C1/DEL &rarr; strip comments &rarr; reject {@code url(} in
+		 * 		any spelling &rarr; grammar).
+		 * 	<li>A value that, after that same normalization belt, matches {@code var(--jc-name)} is recognized as a
+		 * 		reference and stored <i>unresolved</i> &mdash; it is resolved to a concrete literal at {@link #build()}
+		 * 		time (its target may not be defined yet, e.g. a forward reference). {@code var()} is never a
+		 * 		{@code CssValueGrammar} value shape; it is Theme-layer syntax recognized one layer above the grammar.
+		 * </ul>
+		 * Escaping happens later, at emission time, via {@code CssValueEscaper} (see {@code ConsoleChromeMixin}).
+		 *
 		 * @param name The token name. Must not be <jk>null</jk> and must match {@code ^--jc-[a-z0-9-]+$}.
 		 * @param value
-		 * 	The CSS value.  Validated (not escaped) by {@code CssValueGrammar}'s accept-known-safe allowlist
-		 * 	grammar after normalization (trim &rarr; reject C0/C1/DEL &rarr; strip comments &rarr; reject
-		 * 	{@code url(} in any spelling &rarr; grammar).  Escaping happens later, at emission time, via
-		 * 	{@code CssValueEscaper} (see {@code ConsoleChromeMixin}).
+		 * 	The CSS value &mdash; a literal, or a {@code var(--jc-name)} reference.
 		 * @return This object.
 		 * @throws IllegalArgumentException
 		 * 	If the name is not in the legal shape (full-string {@code String.matches(...)}, not {@code find(...)}
 		 * 	&mdash; {@code "--jc-foo;--bar"} must REJECT even though {@code "--jc-foo"} matches as a leading
-		 * 	substring), or if the value is not one of the allowlisted CSS value shapes.
+		 * 	substring), if the value contains a control character or a {@code url(} production, or if the value is
+		 * 	neither a {@code var(--jc-name)} reference nor one of the allowlisted CSS value shapes. A reference whose
+		 * 	target is unknown, cyclic, or too deeply chained is instead reported at {@link #build()} time.
 		 */
 		public Builder token(String name, String value) {
 			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
 				throw iaex("Invalid theme token name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
-			tokens.put(name, CssValueGrammar.normalizeAndValidate(value));
+			// Recognition runs on the SAME post-belt string the grammar would see (one shared belt, no second
+			// comment-stripping pass).  A reference is stored unresolved; a literal is validated eagerly, exactly
+			// as before this feature existed.
+			var normalized = CssValueGrammar.normalize(value);
+			if (referencedName(normalized) != null)
+				tokens.put(name, normalized);
+			else
+				tokens.put(name, CssValueGrammar.normalizeAndValidate(value));
 			return this;
 		}
 
 		/**
-		 * Builds the immutable {@link Theme}.
+		 * Builds the immutable {@link Theme}, resolving every {@code var(--jc-name)} reference to a concrete literal.
 		 *
-		 * @return A new {@link Theme}.
+		 * <p>
+		 * Resolution scope is this builder's own tokens, shadowing {@link Theme#OPEN}'s tokens (exact shadowing: a
+		 * name defined on this builder wins outright, even if resolving that entry then fails &mdash; there is no
+		 * silent fall-through to {@code Theme.OPEN}'s value for a shadowed name). Resolution runs on a copy of the
+		 * token map, so a failed {@code build()} leaves this builder unchanged and retryable.
+		 *
+		 * @return A new {@link Theme} whose every token value is a resolved six-shape literal (the substring
+		 * 	{@code var(} appears in none of them).
+		 * @throws IllegalArgumentException
+		 * 	If a reference names an unknown token, forms a cycle (the message carries the cycle path), or exceeds the
+		 * 	resolution depth cap.
 		 */
 		public Theme build() {
-			return new Theme(name, tokens);
+			return new Theme(name, resolveReferences());
+		}
+
+		/** Resolves every reference in a copy of the token map, preserving declaration order; never mutates {@link #tokens}. */
+		private Map<String,String> resolveReferences() {
+			var resolved = new LinkedHashMap<String,String>();
+			for (var e : tokens.entrySet()) {
+				var target = referencedName(e.getValue());
+				resolved.put(e.getKey(), target == null ? e.getValue() : resolveReference(e.getKey(), target));
+			}
+			return resolved;
+		}
+
+		/**
+		 * Iteratively walks a reference chain from {@code firstTarget} to the literal it names, with exact shadowing
+		 * (own tokens win over {@link Theme#OPEN}'s), cycle detection, and an independent hop cap; re-validates the
+		 * resolved literal against the grammar as defense-in-depth.
+		 */
+		private String resolveReference(String definingName, String firstTarget) {
+			// Theme.OPEN is null only while Theme.OPEN itself is being built - and it has no references, so this
+			// fallback map is never actually consulted during that construction.
+			var openTokens = Theme.OPEN == null ? Collections.<String,String>emptyMap() : Theme.OPEN.getTokens();
+			var visited = new LinkedHashSet<String>();
+			visited.add(definingName);
+			var target = firstTarget;
+			var hops = 0;
+			while (true) {
+				if (visited.contains(target))
+					throw iaex("Theme token '%s' contains a cyclic reference: %s.", definingName, cyclePath(visited, target));
+				if (++hops > MAX_REFERENCE_HOPS)
+					throw iaex("Theme token '%s' exceeds the maximum reference depth of %d hops.", definingName, MAX_REFERENCE_HOPS);
+				visited.add(target);
+
+				String targetValue;
+				if (tokens.containsKey(target))
+					targetValue = tokens.get(target);          // own map wins outright (exact shadowing)
+				else if (openTokens.containsKey(target))
+					targetValue = openTokens.get(target);
+				else
+					throw iaex("Theme token '%s' references unknown token '%s'.", definingName, target);
+
+				var next = referencedName(targetValue);
+				if (next == null)
+					// The resolved literal - and only that literal, with no var() present - is re-validated by the
+					// unchanged grammar as defense-in-depth against a bad value hiding under a referenceable name.
+					return CssValueGrammar.normalizeAndValidate(targetValue);
+				target = next;
+			}
+		}
+
+		/** Returns the {@code --jc-name} a {@code var(--jc-name)} reference points at, or <jk>null</jk> if {@code value} is not a reference. */
+		private static String referencedName(String value) {
+			var m = VAR_REFERENCE.matcher(value);
+			return m.matches() ? m.group(1) : null;
+		}
+
+		/** Renders a cycle path like {@code --jc-a -> --jc-b -> --jc-a} for a build-failure message. */
+		private static String cyclePath(Set<String> visited, String repeated) {
+			return String.join(" -> ", visited) + " -> " + repeated;
 		}
 	}
 }

@@ -25,7 +25,16 @@ import org.junit.jupiter.params.provider.*;
 
 /**
  * Phase 2 gate: {@code CssValueGrammar}'s allowlist-grammar accept/reject sweep, tested through
- * {@link Theme.Builder#token(String, String)} (the only call site).
+ * {@link Theme.Builder#token(String, String)}.
+ *
+ * <p>
+ * {@code token(...)} is no longer the <i>only</i> production call site for {@code CssValueGrammar}: with the
+ * {@code var(--jc-name)} Theme-layer reference feature, {@code Theme.Builder.build()} re-validates each resolved
+ * literal too (defense-in-depth). {@code var()} itself is never a grammar value shape &mdash; it is recognized and
+ * resolved one layer above the grammar &mdash; so the {@code var()} reject vectors below still fail here exactly as
+ * any other out-of-grammar value: a malformed {@code var(...)} (fallback, non-{@code --jc-} target, empty, or
+ * nested inside a gradient) never matches the anchored reference recognizer and falls straight through to grammar
+ * rejection at {@code token()} time.
  *
  * <p>
  * The GREEN bypass-vector sweep below is the B1 close-out: it must beat every named vector the plan-review
@@ -156,5 +165,26 @@ class CssValueGrammar_Test extends TestBase {
 	@Test void a11_noneKeyword_isCaseInsensitive() {
 		assertEquals("NONE", Theme.create("x").token("--jc-page-bg", "NONE").build().getTokens().get("--jc-page-bg"));
 		assertEquals("None", Theme.create("x").token("--jc-page-bg", "None").build().getTokens().get("--jc-page-bg"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// GREEN: malformed var(...) forms are NOT the anchored var(--jc-name) reference, so they never reach the
+	// reference recognizer and REJECT at the grammar layer at token() time, exactly like any other non-shape value.
+	// A well-formed var(--jc-name) reference is deliberately absent here - it is ACCEPTED (deferred) at token() and
+	// is exercised by Theme_VarReferences_Test instead; it must NOT be added to a07's positive (verbatim) sweep.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"var(--jc-x, #fff)",                    // fallback branch - comma inside parens, never matches the recognizer
+		"VAR(--jc-x, red)",                     // case-insensitive fallback - still a fallback, still rejected
+		"var(--not-jc-x)",                      // target is not a --jc- name
+		"var()",                                // no argument
+		"var(--jc-x) #fff",                     // reference is not the ENTIRE value (recognizer is fully anchored)
+		"linear-gradient(var(--jc-a), #fff)",   // nested var() - grammar-layer reject (var not in the nested allowlist)
+	})
+	void a12_malformedOrNestedVar_rejectedAtGrammarLayer(String payload) {
+		var b = Theme.create("x");
+		assertThrows(IllegalArgumentException.class, () -> b.token("--jc-accent", payload));
 	}
 }

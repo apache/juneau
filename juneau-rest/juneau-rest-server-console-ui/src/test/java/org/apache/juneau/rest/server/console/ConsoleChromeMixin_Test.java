@@ -850,6 +850,34 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// p) var(--jc-name) reference resolution reaches the served body as a literal
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Mirrors the {@code ReleaseManagerTheme} acceptance case: a derived token expressed as
+	 * {@code var(--jc-danger)} on the SAME builder as its target, so the served override block carries the resolved
+	 * literal, never the unresolved reference.
+	 */
+	private static final Theme DERIVED_THEME = Theme.create("derived")
+		.token("--jc-danger", "#c23934")
+		.token("--jc-tag-red-text", "var(--jc-danger)")
+		.build();
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class DerivedHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public ConsoleChromeMixin console() { return ConsoleChromeMixin.create().theme(DERIVED_THEME).build(); }
+	}
+
+	@Test void p01_varReference_isResolvedToItsLiteral_inTheServedOverrideBlock() throws Exception {
+		var body = bodyOf(MockRestClient.buildLax(DerivedHost.class));
+		assertTrue(body.contains("--jc-tag-red-text:#c23934;"), () -> "reference not resolved to its literal in the served body:\n" + body);
+		// The DECLARATION must be the literal, not a var() reference (chrome.css legitimately uses var(--jc-danger)
+		// at use-sites, so we pin the declaration form rather than a blanket substring).
+		assertFalse(body.contains("--jc-tag-red-text:var("), () -> "unresolved var() reference leaked into the served declaration:\n" + body);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Test helpers
 	//-----------------------------------------------------------------------------------------------------------------
 
