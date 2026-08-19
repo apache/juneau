@@ -16,19 +16,9 @@
  */
 package org.apache.juneau.rest.server.views;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.zip.*;
-
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.entity.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.resource.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.util.*;
 
 /**
  * Mixin that serves the first-party rich-view runtime assets &mdash; {@code juneau-views.js},
@@ -142,11 +132,12 @@ public class ViewsMixin {
 	/** {@code Cache-Control} header emitted for every asset (1 day). */
 	static final String CACHE_CONTROL = "max-age=86400, public";
 
-	/** Per-resource byte cache, populated on first request (the shipped files never vary). */
-	private static final Map<String,byte[]> CACHE = new ConcurrentHashMap<>();
-
-	/** Per-path content-hash cache, populated on first {@link #viewAssetUrl(String)} call (mirrors {@link #CACHE}). */
-	private static final Map<String,String> HASH_CACHE = new ConcurrentHashMap<>();
+	/**
+	 * Read+cache+hash+serve helper for this mixin's shipped assets, anchored on this class so
+	 * {@link ClasspathAssetCache#buildVersion()} resolves this module's own implementation version (see that
+	 * class's javadoc's version-anchor section).
+	 */
+	private static final ClasspathAssetCache ASSET_CACHE = new ClasspathAssetCache(ViewsMixin.class);
 
 	/**
 	 * [GET /juneau-views.js] &mdash; serve the client initializer.
@@ -248,7 +239,7 @@ public class ViewsMixin {
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
-		return "servlet:" + path + "?v=" + buildVersion() + "-" + contentHash(path);
+		return "servlet:" + path + ASSET_CACHE.cacheBuster(resourceFor(path));
 	}
 
 	/**
@@ -270,41 +261,12 @@ public class ViewsMixin {
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
-		return req.getUriResolver().resolve("servlet:" + path) + "?v=" + buildVersion() + "-" + contentHash(path);
+		return req.getUriResolver().resolve("servlet:" + path) + ASSET_CACHE.cacheBuster(resourceFor(path));
 	}
 
 	/** Reads (and caches) the classpath asset and wraps it as a cacheable {@link HttpResource}. */
 	private static HttpResource serve(String resource, String contentType) {
-		var bytes = CACHE.computeIfAbsent(resource, ViewsMixin::load);
-		return HttpResourceBean.of(
-			ByteArrayBody.of(bytes, contentType),
-			list(ContentType.of(contentType), CacheControl.of(CACHE_CONTROL))
-		);
-	}
-
-	/** Reads a shipped classpath asset into a byte array, wrapping the (effectively unreachable) IO failure. */
-	private static byte[] load(String resource) {
-		try (var in = ViewsMixin.class.getResourceAsStream(resource)) {
-			if (in == null)
-				throw new IOException("Classpath resource not found: " + resource);
-			return IoUtils.readBytes(in);
-		} catch (IOException e) {  // HTT: unreachable - the asset ships in the same jar as this class.
-			throw new UncheckedIOException(e);
-		}
-	}
-
-	/**
-	 * Resolves the framework build version for asset cache-busting, falling back to {@code "dev"} when unset (e.g.
-	 * running from an IDE/test classpath rather than a packaged jar).
-	 */
-	private static String buildVersion() {
-		var v = ViewsMixin.class.getPackage().getImplementationVersion();
-		return v == null ? "dev" : v;  // HTT: the non-null branch only fires from a packaged jar manifest - unreachable against unpackaged target/classes.
-	}
-
-	/** Computes (and caches) the given asset path's 8-hex-char content hash from its served bytes. */
-	private static String contentHash(String path) {
-		return HASH_CACHE.computeIfAbsent(path, p -> hash8(CACHE.computeIfAbsent(resourceFor(p), ViewsMixin::load)));
+		return ASSET_CACHE.serve(resource, contentType, CACHE_CONTROL);
 	}
 
 	/** Maps a public asset path constant to its classpath resource constant (content-hashing only; routing itself is by {@code @RestGet(path=...)}). */
@@ -316,12 +278,5 @@ public class ViewsMixin {
 		if (ICONS_JS_PATH.equals(path)) return ICONS_JS_RESOURCE;
 		if (PAGES_JS_PATH.equals(path)) return PAGES_JS_RESOURCE;
 		throw new IllegalArgumentException("Unknown asset path: " + path);
-	}
-
-	/** Formats a CRC32 checksum of {@code bytes} as a zero-padded 8-hex-char content hash. */
-	private static String hash8(byte[] bytes) {
-		var crc = new CRC32();
-		crc.update(bytes);
-		return String.format("%08x", crc.getValue());
 	}
 }

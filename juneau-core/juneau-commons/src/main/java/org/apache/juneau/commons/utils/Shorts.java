@@ -1046,6 +1046,241 @@ public class Shorts {
 	public static <E> SortedSet<E> ss(E...v) { return CollectionUtils.sortedSet(v); }
 
 	/**
+	 * Creates a modifiable {@link ArrayList} copy of the specified collection.
+	 *
+	 * @param <E> The element type.
+	 * @param v The collection to copy from.  Can be <jk>null</jk> (returns an empty list, not <jk>null</jk>).
+	 * @return A new modifiable list.
+	 * @see CollectionUtils#toList(Collection)
+	 */
+	public static <E> List<E> tl(Collection<E> v) { return CollectionUtils.toList(v); }
+
+	/**
+	 * Creates a modifiable {@link LinkedHashSet} copy of the specified collection.
+	 *
+	 * @param <E> The element type.
+	 * @param v The collection to copy from.  Can be <jk>null</jk> (returns <jk>null</jk>).
+	 * @return A new modifiable set, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @see CollectionUtils#toSet(Collection)
+	 */
+	public static <E> Set<E> ts(Collection<E> v) { return CollectionUtils.toSet(v); }
+
+	/**
+	 * Creates a modifiable, empty {@link ArrayList} presized to the specified capacity.
+	 *
+	 * @param <E> The element type.
+	 * @param n The initial capacity.
+	 * @return A new modifiable, empty list.
+	 * @see CollectionUtils#listOfSize(int)
+	 */
+	public static <E> List<E> los(int n) { return CollectionUtils.listOfSize(n); }
+
+	/**
+	 * Creates an unmodifiable set from the specified elements.  Unlike {@link Set#of(Object...)},
+	 * permits a <jk>null</jk> element and preserves insertion order.
+	 *
+	 * @param <E> The element type.
+	 * @param v The elements.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
+	 * @return A new unmodifiable set.
+	 * @see CollectionUtils#immutableSet(Object...)
+	 */
+	@SafeVarargs
+	public static <E> Set<E> ist(E...v) { return CollectionUtils.immutableSet(v); }
+
+	/**
+	 * Creates an unmodifiable, empty map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @return A new unmodifiable empty map.
+	 * @see CollectionUtils#immutableMap()
+	 */
+	public static <K,V> Map<K,V> im() { return CollectionUtils.immutableMap(); }
+
+	/**
+	 * Creates an unmodifiable map with 1 entry.  Unlike {@link Map#of(Object,Object)}, permits a
+	 * <jk>null</jk> key or value and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 The key.
+	 * @param v1 The value.
+	 * @return A new unmodifiable map.
+	 * @see CollectionUtils#immutableMap(Object,Object)
+	 */
+	public static <K,V> Map<K,V> im(K k1, V v1) { return CollectionUtils.immutableMap(k1, v1); }
+
+	/**
+	 * Creates an unmodifiable map with 2 entries.  Unlike {@link Map#of(Object,Object,Object,Object)}, permits
+	 * <jk>null</jk> keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 The first key.
+	 * @param v1 The first value.
+	 * @param k2 The second key.
+	 * @param v2 The second value.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if <jv>k1</jv> and <jv>k2</jv> are duplicate keys.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object)
+	 */
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2) { return CollectionUtils.immutableMap(k1, v1, k2, v2); }
+
+	/**
+	 * Creates an unmodifiable map with 3 entries.  Unlike {@link Map#of(Object,Object,Object,Object,Object,Object)},
+	 * permits <jk>null</jk> keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 The first key.
+	 * @param v1 The first value.
+	 * @param k2 The second key.
+	 * @param v2 The second value.
+	 * @param k3 The third key.
+	 * @param v3 The third value.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object)
+	 */
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3); }
+
+	/**
+	 * Creates an unmodifiable map with 4 entries (keys/values in alternating order).  Unlike
+	 * {@link Map#of(Object,Object,Object,Object,Object,Object,Object,Object)}, permits <jk>null</jk> keys/values
+	 * and preserves insertion order.  Mutating the returned map (e.g. <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>)
+	 * throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1. @param v1 Value 1. @param k2 Key 2. @param v2 Value 2.
+	 * @param k3 Key 3. @param v3 Value 3. @param k4 Key 4. @param v4 Value 4.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object)
+	 */
+	@SuppressWarnings({
+		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
+	})
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4); }
+
+	/**
+	 * Creates an unmodifiable map with 5 entries (keys/values in alternating order).  Unlike
+	 * {@link Map#of(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)}, permits <jk>null</jk>
+	 * keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1. @param v1 Value 1. @param k2 Key 2. @param v2 Value 2. @param k3 Key 3. @param v3 Value 3.
+	 * @param k4 Key 4. @param v4 Value 4. @param k5 Key 5. @param v5 Value 5.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
+	 */
+	@SuppressWarnings({
+		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
+	})
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5); }
+
+	/**
+	 * Creates an unmodifiable map with 6 entries (keys/values in alternating order).  Unlike
+	 * {@link Map#of(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)}, permits
+	 * <jk>null</jk> keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1. @param v1 Value 1. @param k2 Key 2. @param v2 Value 2. @param k3 Key 3. @param v3 Value 3.
+	 * @param k4 Key 4. @param v4 Value 4. @param k5 Key 5. @param v5 Value 5. @param k6 Key 6. @param v6 Value 6.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
+	 */
+	@SuppressWarnings({
+		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
+	})
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6); }
+
+	/**
+	 * Creates an unmodifiable map with 7 entries (keys/values in alternating order).  Unlike
+	 * {@link Map#of(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)},
+	 * permits <jk>null</jk> keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1. @param v1 Value 1. @param k2 Key 2. @param v2 Value 2. @param k3 Key 3. @param v3 Value 3. @param k4 Key 4. @param v4 Value 4.
+	 * @param k5 Key 5. @param v5 Value 5. @param k6 Key 6. @param v6 Value 6. @param k7 Key 7. @param v7 Value 7.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
+	 */
+	@SuppressWarnings({
+		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
+	})
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7); }
+
+	/**
+	 * Creates an unmodifiable map with 8 entries (keys/values in alternating order).  Unlike
+	 * {@link Map#of(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)},
+	 * permits <jk>null</jk> keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1. @param v1 Value 1. @param k2 Key 2. @param v2 Value 2. @param k3 Key 3. @param v3 Value 3. @param k4 Key 4. @param v4 Value 4.
+	 * @param k5 Key 5. @param v5 Value 5. @param k6 Key 6. @param v6 Value 6. @param k7 Key 7. @param v7 Value 7. @param k8 Key 8. @param v8 Value 8.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
+	 */
+	@SuppressWarnings({
+		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
+	})
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8); }
+
+	/**
+	 * Creates an unmodifiable map with 9 entries (keys/values in alternating order).  Unlike
+	 * {@link Map#of(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)},
+	 * permits <jk>null</jk> keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1. @param v1 Value 1. @param k2 Key 2. @param v2 Value 2. @param k3 Key 3. @param v3 Value 3. @param k4 Key 4. @param v4 Value 4. @param k5 Key 5. @param v5 Value 5.
+	 * @param k6 Key 6. @param v6 Value 6. @param k7 Key 7. @param v7 Value 7. @param k8 Key 8. @param v8 Value 8. @param k9 Key 9. @param v9 Value 9.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
+	 */
+	@SuppressWarnings({
+		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
+	})
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9); }
+
+	/**
+	 * Creates an unmodifiable map with 10 entries (keys/values in alternating order).  Unlike
+	 * {@link Map#of(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)},
+	 * permits <jk>null</jk> keys/values and preserves insertion order.  Mutating the returned map (e.g.
+	 * <jk>put</jk>/<jk>remove</jk>/<jk>clear</jk>) throws {@link UnsupportedOperationException}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1. @param v1 Value 1. @param k2 Key 2. @param v2 Value 2. @param k3 Key 3. @param v3 Value 3. @param k4 Key 4. @param v4 Value 4. @param k5 Key 5. @param v5 Value 5.
+	 * @param k6 Key 6. @param v6 Value 6. @param k7 Key 7. @param v7 Value 7. @param k8 Key 8. @param v8 Value 8. @param k9 Key 9. @param v9 Value 9. @param k10 Key 10. @param v10 Value 10.
+	 * @return A new unmodifiable map.
+	 * @throws IllegalArgumentException if any of the keys are duplicated.
+	 * @see CollectionUtils#immutableMap(Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object,Object)
+	 */
+	@SuppressWarnings({
+		"java:S107" // Fixed-arity terse map-factory overload; the many parameters are intentional alternating key/value pairs mirroring map entries.
+	})
+	public static <K,V> Map<K,V> im(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) { return CollectionUtils.immutableMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9, k10, v10); }
+
+	/**
 	 * Returns an unmodifiable view of the specified list.
 	 *
 	 * @param <T> The element type.

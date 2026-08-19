@@ -227,7 +227,83 @@ class Shorts_Test extends TestBase {
 	void c008_ints_intArray() { assertArrayEquals(new int[]{1, 2}, ints(1, 2)); }
 
 	@Test
-	void c009_tl_toList() { assertEquals(List.of("a"), CollectionUtils.toList(Set.of("a"))); }
+	void c009_tl_toList() { assertEquals(List.of("a"), tl(Set.of("a"))); }
+
+	@Test
+	void c010_tl_toList_nullReturnsEmpty() { assertEquals(List.of(), tl(null)); }
+
+	@Test
+	void c011_ts_toSet() { assertEquals(Set.of("a"), ts(List.of("a", "a"))); }
+
+	@Test
+	void c012_ts_toSet_nullReturnsNull() { assertNull(ts(null)); }
+
+	@Test
+	void c013_los_listOfSize() {
+		List<String> l = los(5);
+		assertTrue(l.isEmpty());
+		l.add("x");
+		assertEquals(List.of("x"), l);
+	}
+
+	@Test
+	void c014_ist_immutableSet() {
+		Set<String> s = ist("a", null, "b");
+		assertEquals(3, s.size());
+		assertTrue(s.contains(null));
+		assertThrows(UnsupportedOperationException.class, () -> s.add("c"));
+	}
+
+	@Test
+	void c015_im_immutableMap_empty() {
+		Map<String,Integer> m = im();
+		assertTrue(m.isEmpty());
+		assertThrows(UnsupportedOperationException.class, () -> m.put("x", 1));
+	}
+
+	@Test
+	void c016_im_immutableMap_insertionOrder() {
+		Map<String,Integer> m = im("z", 1, "a", 2, "m", 3, "b", 4);
+		assertEquals(List.of("z", "a", "m", "b"), new ArrayList<>(m.keySet()));
+	}
+
+	@Test
+	void c017_im_immutableMap_nullKeyAndValue() {
+		Map<String,Integer> nullKey = im(null, 1);
+		assertEquals(1, nullKey.get(null));
+		assertTrue(nullKey.containsKey(null));
+
+		Map<String,Integer> nullValue = im("a", null);
+		assertNull(nullValue.get("a"));
+		assertTrue(nullValue.containsKey("a"));
+	}
+
+	@Test
+	void c018_im_immutableMap_duplicateKeyThrows() {
+		assertThrows(IllegalArgumentException.class, () -> im("a", 1, "b", 2, "a", 3));
+	}
+
+	@Test
+	void c019_im_immutableMap_immutability() {
+		Map<String,Integer> m = im("a", 1, "b", 2);
+		assertThrows(UnsupportedOperationException.class, () -> m.put("c", 3));
+		assertThrows(UnsupportedOperationException.class, () -> m.remove("a"));
+		assertThrows(UnsupportedOperationException.class, m::clear);
+	}
+
+	@Test
+	void c020_im_immutableMap_allArities() {
+		assertEquals(1, im("a", 1).size());
+		assertEquals(2, im("a", 1, "b", 2).size());
+		assertEquals(3, im("a", 1, "b", 2, "c", 3).size());
+		assertEquals(4, im("a", 1, "b", 2, "c", 3, "d", 4).size());
+		assertEquals(5, im("a", 1, "b", 2, "c", 3, "d", 4, "e", 5).size());
+		assertEquals(6, im("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6).size());
+		assertEquals(7, im("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7).size());
+		assertEquals(8, im("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8).size());
+		assertEquals(9, im("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9).size());
+		assertEquals(10, im("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10).size());
+	}
 
 	// ---- ClassUtils aliases ----
 

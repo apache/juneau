@@ -24,6 +24,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.Div;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
@@ -221,6 +222,24 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var url2 = ViewsMixin.viewAssetUrl(ViewsMixin.VIEWS_JS_PATH);
 		assertEquals(url1, url2, "hash must be stable across repeated calls");
 		assertNotEquals(url1, ViewsMixin.viewAssetUrl(ViewsMixin.RIBBON_JS_PATH), "distinct assets must not collide on their content hash");
+	}
+
+	/**
+	 * Pins {@link ViewsMixin#viewAssetUrl(String)}'s content-hash suffix against an independently-computed
+	 * {@link ChecksumUtils#hash8} of each served asset's actual bytes (fetched over the mock client, not read off
+	 * the classpath directly) - a regression guard for the {@code ClasspathAssetCache} extraction (TODO-443):
+	 * proves the shared helper still produces byte-for-byte the same hash the hand-rolled pre-refactor
+	 * {@code hash8}/{@code contentHash} pair did.
+	 */
+	@Test void c04_viewAssetUrl_contentHash_matchesIndependentlyComputedHash8OfServedBytes() throws Exception {
+		for (var path : new String[]{
+				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
+				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.PAGES_JS_PATH}) {
+			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
+			var expectedHash = ChecksumUtils.hash8(servedBytes);
+			var url = ViewsMixin.viewAssetUrl(path);
+			assertTrue(url.endsWith("-" + expectedHash), () -> path + ": expected suffix '-" + expectedHash + "' in '" + url + "'");
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

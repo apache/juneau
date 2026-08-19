@@ -34,7 +34,7 @@ Mirrors the exact scan scope documented in this repo's TODO-management skill, in
      Note that this scan cannot distinguish an illustrative id from a live one: writing
      "for example, TODO-5" anywhere in TODO.md permanently consumes id 5. Write "TODO-<n>" in
      prose.
-  2. Every "TODO-"/"READY-"/"MAYBE-"/"FINISHED-"/"CANCELLED-<n>[<letter>]-*.md" filename
+  2. Every "TODO-"/"READY-"/"MAYBE-"/"HOLD-"/"FINISHED-"/"CANCELLED-<n>[<letter>]-*.md" filename
      directly under .work/todo/ and .work/todo/finished/.
 
 next = 1 + max(all numeric ids found). A child's letter suffix (TODO-174a, FINISHED-337f, ...)
@@ -96,7 +96,7 @@ DEFAULT_REPO_ROOT = Path(__file__).resolve().parent.parent
 TODO_TOKEN_RE = re.compile(r"(?<![\w:])TODO-(\d+)([a-z]*)\b")
 
 # Every lifecycle-state filename directly under .work/todo/ or .work/todo/finished/.
-FILENAME_RE = re.compile(r"^(?:TODO|READY|MAYBE|FINISHED|CANCELLED)-(\d+)([a-z]*)-.*\.md$")
+FILENAME_RE = re.compile(r"^(?:TODO|READY|MAYBE|HOLD|FINISHED|CANCELLED)-(\d+)([a-z]*)-.*\.md$")
 
 
 def collect_ids(todo_dir: Path) -> tuple[set, set]:

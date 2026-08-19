@@ -14,6 +14,12 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 #
+# Supply-chain pinning policy: every third-party Action below is pinned to a full commit SHA,
+# not a floating tag, because a tag is mutable and a SHA pin is what makes "what code ran in CI"
+# part of this project's provenance story. To bump: resolve the new tag to its full commit SHA
+# and update the trailing version comment to match. Same policy applies to maven.yml and
+# sonarcloud.yml.
+#
 name: "CodeQL"
 
 on:

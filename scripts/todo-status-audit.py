@@ -19,9 +19,9 @@ Repo-agnostic: the repository root is derived from this file's own location
 every repository that adopts the convention. Only the REPO_LABEL / SKILL_NAME constants
 below and the license header differ between copies.
 
-Checks every TODO-<id>-*.md / READY-<id>-*.md / MAYBE-<id>-*.md file directly under .work/todo/
-(FINISHED-/CANCELLED-*.md archives are explicitly out of scope -- per this repo's
-TODO-management skill, "status line is not required in FINISHED archives") against that
+Checks every TODO-<id>-*.md / READY-<id>-*.md / MAYBE-<id>-*.md / HOLD-<id>-*.md file directly
+under .work/todo/ (FINISHED-/CANCELLED-*.md archives are explicitly out of scope -- per this
+repo's TODO-management skill, "status line is not required in FINISHED archives") against that
 skill's "Per-file `Current status:` and `Complexity:` header" rules, and flags candidate
 inconsistencies. This is a PRE-FILTER, not a validator: it flags candidates for a human
 (or agent) to look at, and will not catch everything on format-drifted files -- tolerant,
@@ -35,10 +35,10 @@ Checks performed (each file may accumulate multiple flags):
   - unrecognized_status_phrase  The status text doesn't start with one of the skill's documented
                                  phrases for this file's prefix (TODO/READY: "Waiting for user
                                  input on open questions.", "Ready to execute.", "In progress.";
-                                 MAYBE: must start with "Parked"). Free-form variants that legitimately
-                                 extend a recognized prefix (e.g. "Ready to execute (all items
-                                 independently actionable)." ) are NOT flagged -- only prefix
-                                 mismatches are.
+                                 MAYBE: must start with "Parked"; HOLD: must start with "On hold").
+                                 Free-form variants that legitimately extend a recognized prefix
+                                 (e.g. "Ready to execute (all items independently actionable)." )
+                                 are NOT flagged -- only prefix mismatches are.
   - ready_but_has_open_questions
                                  Status starts with "Ready to execute" but the file still has a
                                  "## Open questions" section containing at least one numbered item
@@ -51,6 +51,9 @@ Checks performed (each file may accumulate multiple flags):
   - parked_status_wrong_prefix  A TODO-*.md/READY-*.md file whose status starts with "Parked" (that
                                  wording is reserved for MAYBE-*.md files).
   - maybe_prefix_non_parked     A MAYBE-*.md file whose status does NOT start with "Parked".
+  - on_hold_status_wrong_prefix A TODO-*.md/READY-*.md file whose status starts with "On hold" (that
+                                 wording is reserved for HOLD-*.md files).
+  - hold_prefix_non_on_hold     A HOLD-*.md file whose status does NOT start with "On hold".
 
 A MISSING scan directory is a hard error (exit 2). An EMPTY-but-present one is a clean pass
 (exit 0). The original version conflated the two and returned 0 for both, so pointing the
@@ -93,7 +96,7 @@ SKILL_NAME = "juneau-todo-management"
 
 DEFAULT_REPO_ROOT = Path(__file__).resolve().parent.parent
 
-FILENAME_RE = re.compile(r"^(TODO|READY|MAYBE)-\d+[a-z]*-.*\.md$")
+FILENAME_RE = re.compile(r"^(TODO|READY|MAYBE|HOLD)-\d+[a-z]*-.*\.md$")
 
 STATUS_LINE_RE = re.compile(r"^\s*Current status:\s*(.*)$", re.IGNORECASE | re.MULTILINE)
 COMPLEXITY_LINE_RE = re.compile(r"^\s*Complexity:\s*(.*)$", re.IGNORECASE | re.MULTILINE)
@@ -115,6 +118,7 @@ TODO_READY_STATUS_PREFIXES = (
     "in progress",
 )
 MAYBE_STATUS_PREFIX = "parked"
+HOLD_STATUS_PREFIX = "on hold"
 
 
 def find_plan_files(todo_dir: Path) -> list:
@@ -159,10 +163,12 @@ def open_questions_are_unresolved(section_body: str) -> bool:
 
 
 def status_prefix_ok(prefix: str, status: str) -> bool:
-    """True if status's wording matches one of the recognized phrases for this file's TODO/READY/MAYBE prefix."""
+    """True if status's wording matches one of the recognized phrases for this file's TODO/READY/MAYBE/HOLD prefix."""
     normalized = status.strip().lower()
     if prefix == "MAYBE":
         return normalized.startswith(MAYBE_STATUS_PREFIX)
+    if prefix == "HOLD":
+        return normalized.startswith(HOLD_STATUS_PREFIX)
     return any(normalized.startswith(p) for p in TODO_READY_STATUS_PREFIXES)
 
 
@@ -206,6 +212,12 @@ def audit_file(path: Path) -> list:
 
         if prefix == "MAYBE" and not normalized.startswith("parked"):
             flags.append(("maybe_prefix_non_parked", f"MAYBE-prefixed file but status doesn't start with 'Parked': '{status}'"))
+
+        if prefix in ("TODO", "READY") and normalized.startswith(HOLD_STATUS_PREFIX):
+            flags.append(("on_hold_status_wrong_prefix", "Status says 'On hold...' but filename is not HOLD-prefixed."))
+
+        if prefix == "HOLD" and not normalized.startswith(HOLD_STATUS_PREFIX):
+            flags.append(("hold_prefix_non_on_hold", f"HOLD-prefixed file but status doesn't start with 'On hold': '{status}'"))
 
     return flags
 

@@ -1017,6 +1017,20 @@ public class CollectionUtils {
 	}
 
 	/**
+	 * Convenience method for creating an unmodifiable set.
+	 * Unlike Set.of(...), supports a null element and preserves insertion order.
+	 *
+	 * @param <E> The element type.
+	 * @param values The values to initialize the set with.  Must not be <jk>null</jk> (a <jk>null</jk> array throws {@link IllegalArgumentException}).
+	 * @return A new unmodifiable set.
+	 */
+	@SafeVarargs
+	public static <E> Set<E> immutableSet(E...values) {
+		assertArgNotNull(ARG_values, values);
+		return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(values)));
+	}
+
+	/**
 	 * Convenience method for creating a {@link LinkedHashMap}.
 	 *
 	 * @param <K> The key type.

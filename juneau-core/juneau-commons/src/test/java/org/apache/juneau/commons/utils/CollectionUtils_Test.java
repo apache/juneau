@@ -1750,4 +1750,37 @@ class CollectionUtils_Test extends TestBase {
 		List<Object> deepNested = deepStream((Object[]) nested).toList();
 		assertEquals(list("a", "b", "c"), deepNested); // fully flattened
 	}
+
+	//====================================================================================================
+	// immutableSet(E...)
+	//====================================================================================================
+	@Test
+	void a102_immutableSet() {
+		// Empty
+		Set<String> empty = immutableSet();
+		assertNotNull(empty);
+		assertTrue(empty.isEmpty());
+
+		// Multiple elements, insertion order preserved
+		Set<String> s1 = immutableSet("z", "a", "m");
+		assertEquals(3, s1.size());
+		assertEquals(list("z", "a", "m"), new ArrayList<>(s1));
+
+		// Null element permitted (unlike Set.of)
+		Set<String> withNull = immutableSet("a", null, "b");
+		assertEquals(3, withNull.size());
+		assertTrue(withNull.contains(null));
+
+		// Duplicate elements de-duplicated like a normal Set
+		Set<String> deduped = immutableSet("a", "b", "a");
+		assertEquals(2, deduped.size());
+
+		// Null array rejected
+		assertThrows(IllegalArgumentException.class, () -> immutableSet((String[]) null));
+
+		// Immutability
+		assertThrows(UnsupportedOperationException.class, () -> s1.add("x"));
+		assertThrows(UnsupportedOperationException.class, () -> s1.remove("z"));
+		assertThrows(UnsupportedOperationException.class, s1::clear);
+	}
 }
