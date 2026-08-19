@@ -58,6 +58,9 @@ public class CredentialRest extends BasicRestResource {
 	/** This resource's absolute mount (RootRest {@code /rest/*} + {@code /credentials}), used by {@link #credentialsView()}. */
 	static final String MOUNT = "/rest/credentials";
 
+	/** This resource's page/view id, shared by {@link #credentialsView()}'s {@link ViewDef} id and {@link #page(HttpServletRequest)}'s page/attribute name. */
+	static final String NAME = "credentials";
+
 	private final CredentialService service;
 
 	public CredentialRest(CredentialService service) {
@@ -65,14 +68,14 @@ public class CredentialRest extends BasicRestResource {
 	}
 
 	/**
-	 * The rich-view toolkit's declarative view of the Credentials list (TODO-399 Phase C dogfood): a second,
-	 * independently-composable {@link ViewDef} alongside {@link ReleaseRest#releasesView()}, wired into the RM
-	 * {@code Admin} tab page ({@code AdminRest}). Client-side data mode: {@link #status()} already returns the
-	 * bare {@code List<CredentialStatus>} the toolkit's client-mode ajax (({@code dataSrc: ""})) expects, so no new
+	 * The rich-view toolkit's declarative view of the Credentials list: a second, independently-composable
+	 * {@link ViewDef} alongside {@link ReleaseRest#releasesView()}, wired into the RM {@code Admin} tab page
+	 * ({@code AdminRest}). Client-side data mode: {@link #status()} already returns the bare
+	 * {@code List<CredentialStatus>} the toolkit's client-mode ajax (({@code dataSrc: ""})) expects, so no new
 	 * server-side query wiring is needed.
 	 */
 	static ViewDef credentialsView() {
-		return ViewDef.create("credentials")
+		return ViewDef.create(NAME)
 			.rowType(CredentialStatus.class)
 			.dataMode(DataMode.CLIENT)
 			.dataUrl(MOUNT + "/status")
@@ -97,7 +100,7 @@ public class CredentialRest extends BasicRestResource {
 	/** Human page. */
 	@RestGet("/")
 	public View page(HttpServletRequest req) {
-		return ConsolePage.of("credentials", req).attr("credentials", service.status());
+		return ConsolePage.of(NAME, req).attr(NAME, service.status());
 	}
 
 	/** JSON status for all credentials (no secrets). */

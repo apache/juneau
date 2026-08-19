@@ -24,6 +24,7 @@ import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.marshall.html.HtmlSerializer;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
+import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.converter.ProtocolQueryable;
 import org.apache.juneau.rest.server.converter.QueryableSettings;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
@@ -48,7 +49,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * <p>
  * Built on the {@code juneau-rest-server-views} rich-view toolkit: {@link #releasesView()} declares the typed
- * {@link ViewDef} (columns + renderers + ribbon), {@link #page(HttpServletRequest)} emits its {@link ViewTable} shell as trusted markup
+ * {@link ViewDef} (columns + renderers + ribbon), {@link #page(RestRequest)} emits its {@link ViewTable} shell as trusted markup
  * into the FreeMarker template, and {@link #data()} serves the {@code DataTablesResults} envelope via
  * {@link ProtocolQueryable} + the view's {@link ViewDef#queryableSettings() queryable settings}. The four runtime
  * assets are served by the composed {@link ViewsMixin} at this resource's mount.
@@ -58,6 +59,9 @@ public class ReleaseRest extends BasicRestResource {
 
 	/** This resource's absolute mount (RootRest {@code /rest/*} + {@code /releases}), used to resolve asset/data URLs. */
 	static final String MOUNT = "/rest/releases";
+
+	/** The rich-view toolkit's cell renderer id for a clickable/href-bearing column (see {@link Column#render(String)}). */
+	static final String RENDER_LINKED = "linked";
 
 	private final ReleaseListService service;
 
@@ -86,8 +90,7 @@ public class ReleaseRest extends BasicRestResource {
 	 * rendered Status/Stage pills (emitting the shared {@code .tag.<domain>.<value>} classes the app's console-ui
 	 * palette themes), timestamp/date columns, and a copy/csv export + column-search + status quick-filter + refresh
 	 * ribbon. Data arrives via ajax draws against {@link #data()}. Static (no instance state) so {@code AdminRest}
-	 * can reuse this same declarative definition when composing the {@code Admin} tab page (TODO-399 Phase C
-	 * dogfood).
+	 * can reuse this same declarative definition when composing the {@code Admin} tab page.
 	 */
 	static ViewDef releasesView() {
 		return ViewDef.create("releases")
@@ -96,14 +99,14 @@ public class ReleaseRest extends BasicRestResource {
 			.dataUrl(MOUNT + "/data")
 			.defaultOrder("version", Dir.DESC)
 			.columns(
-				Column.of("version").title("Version").render("linked").href(MOUNT + "/{version}/1"),
+				Column.of("version").title("Version").render(RENDER_LINKED).href(MOUNT + "/{version}/1"),
 				Column.of("rc").title("RC"),
 				Column.of("status").title("Status").render("tag:status"),
 				Column.of("stage").title("Stage").render("tag:stage"),
 				Column.of("voteCloses").title("Vote closes").render("ts-zulu"),
 				Column.of("released").title("Released").render("date"),
-				Column.of("githubReleaseUrl").title("GitHub").render("linked").href("{githubReleaseUrl}").orderable(false),
-				Column.of("milestoneUrl").title("Milestone").render("linked").href("{milestoneUrl}").orderable(false))
+				Column.of("githubReleaseUrl").title("GitHub").render(RENDER_LINKED).href("{githubReleaseUrl}").orderable(false),
+				Column.of("milestoneUrl").title("Milestone").render(RENDER_LINKED).href("{milestoneUrl}").orderable(false))
 			.ribbon(
 				// "filters" clusters the column-search toggle and the dropped-only quick-filter into one
 				// segmented ribbon group (visual-parity control-row layout: filter-ribbon); "export" actions are
@@ -119,24 +122,26 @@ public class ReleaseRest extends BasicRestResource {
 
 	/** Human page — the rich-view table shell (emitted as trusted markup) + JSON sidecar, hydrated by the toolkit JS. */
 	@RestGet("/")
-	public View page(HttpServletRequest req) {
+	public View page(RestRequest req) {
 		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(releasesView()));
 		return ConsolePage.of("releases", req)
 			.attr("viewTable", markup)
-			.attr("viewsCssUrl", asset(ViewsMixin.VIEWS_CSS_PATH))
-			.attr("rendersJsUrl", asset(ViewsMixin.RENDERS_JS_PATH))
-			.attr("iconsJsUrl", asset(ViewsMixin.ICONS_JS_PATH))
-			.attr("ribbonJsUrl", asset(ViewsMixin.RIBBON_JS_PATH))
-			.attr("viewsJsUrl", asset(ViewsMixin.VIEWS_JS_PATH));
+			.attr("viewsCssUrl", asset(req, ViewsMixin.VIEWS_CSS_PATH))
+			.attr("rendersJsUrl", asset(req, ViewsMixin.RENDERS_JS_PATH))
+			.attr("iconsJsUrl", asset(req, ViewsMixin.ICONS_JS_PATH))
+			.attr("ribbonJsUrl", asset(req, ViewsMixin.RIBBON_JS_PATH))
+			.attr("viewsJsUrl", asset(req, ViewsMixin.VIEWS_JS_PATH));
 	}
 
 	/**
-	 * Resolves a toolkit asset to an absolute, cache-busted URL for the FreeMarker head block. {@link ViewsMixin}'s
-	 * {@code servlet:}-relative form is rewritten to this resource's absolute mount because the FreeMarker template
-	 * is rendered outside Juneau's {@code HtmlDoc} URL-resolution (which would otherwise resolve {@code servlet:}).
+	 * Resolves a toolkit asset to an absolute, cache-busted URL for the FreeMarker head block via the
+	 * request-aware {@link ViewsMixin#viewAssetUrl(RestRequest, String)}, resolved per-request against
+	 * this resource's actual mount/context path rather than a hardcoded string-replace of the {@code servlet:}
+	 * scheme &mdash; the FreeMarker template is rendered outside Juneau's {@code HtmlDoc} URL-resolution, which is
+	 * why the URL must already be resolved before it reaches the template.
 	 */
-	private static String asset(String path) {
-		return ViewsMixin.viewAssetUrl(path).replace("servlet:", MOUNT);
+	private static String asset(RestRequest req, String path) {
+		return ViewsMixin.viewAssetUrl(req, path);
 	}
 
 	/**

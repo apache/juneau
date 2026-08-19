@@ -71,7 +71,8 @@ class ReleaseRestTest {
 	@Test
 	void detailForAnUnknownVersionIs404() {
 		var rest = rest(List.of(release("9.2.1", "RELEASED")));
-		var ex = assertThrows(NotFound.class, () -> rest.detail("9.9.9", "1", req()));
+		var httpReq = req();
+		var ex = assertThrows(NotFound.class, () -> rest.detail("9.9.9", "1", httpReq));
 		assertEquals(404, ex.getStatusCode());
 	}
 
@@ -104,13 +105,6 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a request carrying
-	 * DataTables params it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal, recordsFiltered,
-	 * data}}) with server-side per-column filtering applied &mdash; not the bare {@code List<Release>} array it used
-	 * to return. Wired via the {@code juneau-rest-server-views} toolkit ({@code ViewDef.queryableSettings()} +
-	 * {@code ProtocolQueryable}); this proves the envelope shape and that filtering happens on the server.
-	 */
-	/**
 	 * Regression: the rendered Releases page never included {@code juneau-icons.js} (only renders/ribbon/views
 	 * were wired up), so the icon registry was absent when the ribbon built its buttons and every button fell back
 	 * to rendering its label as plain text instead of a glyph. Asserts the served page's script list carries the
@@ -133,6 +127,13 @@ class ReleaseRestTest {
 		}
 	}
 
+	/**
+	 * The {@code /data} endpoint speaks the DataTables server-side-processing contract: given a request carrying
+	 * DataTables params it returns a {@code DataTablesResults} envelope ({@code {draw, recordsTotal, recordsFiltered,
+	 * data}}) with server-side per-column filtering applied &mdash; not the bare {@code List<Release>} array it used
+	 * to return. Wired via the {@code juneau-rest-server-views} toolkit ({@code ViewDef.queryableSettings()} +
+	 * {@code ProtocolQueryable}); this proves the envelope shape and that filtering happens on the server.
+	 */
 	@Test
 	void dataReturnsDataTablesEnvelopeWithServerSideFilterApplied() throws Exception {
 		var releases = List.of(release("9.2.1", "RELEASED"), release("9.3.0", "VOTING"));

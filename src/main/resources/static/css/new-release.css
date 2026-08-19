@@ -151,7 +151,7 @@
   max-height: 240px;
   overflow-y: auto;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .rm-console .l-cmd   { color: #7ec9ff; }

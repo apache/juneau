@@ -17,8 +17,12 @@
 
 package org.apache.juneau.releng.rest;
 
+import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
+
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.http.Content;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.Conflict;
@@ -74,13 +78,38 @@ public class ReleaseRunRest extends BasicRestResource {
 		var liveCapable = engine.mode() == ExecutionMode.LIVE;
 		var active = engine.displayRun().orElse(null);
 		var runMode = active == null ? ExecutionMode.SAFE : engine.effectiveMode(active);
-		var view = ConsolePage.of("new-release", req).attr("steps", engine.registry().steps())
+		var view = ConsolePage.of("new-release", req).attr("stepMeta", stepMetaJson(engine.registry().steps()))
 				.attr("mode", runMode.name()).attr("appMode", engine.mode().name())
 				.attr("liveCapable", Boolean.valueOf(liveCapable));
 		// FreemarkerView.attr() rejects null values by design; the template only checks run??
 		// (attribute presence), so omit the attribute entirely when there's no displayable run.
 		return active == null ? view
 				: view.attr("run", active).attr("armed", Boolean.valueOf(engine.isArmed(active.version)));
+	}
+
+	/**
+	 * Serializes the step registry's {@code {id: {title, mutating}}} map for the {@code nr-step-meta} sidecar.
+	 *
+	 * <p>Built and escaped Java-side rather than interpolated in the {@code .ftlh}: the block is the raw-text content
+	 * of a {@code <script type="application/json">} element, for which FreeMarker's HTML auto-escaping is the wrong
+	 * escaper (it entity-encodes {@code &}/{@code <}/{@code "} into forms {@code JSON.parse} reads verbatim) and its
+	 * incidental {@code </script>} break-out protection depends only on the file extension. This serializes with the
+	 * repo's JSON marshaller and hands the result to {@link org.apache.juneau.commons.utils.StringUtils#escapeForScript(String)}
+	 * &mdash; the same shared, hardened escaper the framework's {@code ViewTable}/{@code PageTable} sidecars use
+	 * &mdash; so a step title containing {@code </script>} cannot terminate the element early.
+	 *
+	 * @param steps The registry's steps.
+	 * @return The break-out-safe, {@code JSON.parse}-able sidecar payload.
+	 */
+	static String stepMetaJson(Iterable<? extends org.apache.juneau.releng.engine.ReleaseStep> steps) {
+		var meta = new LinkedHashMap<String,Object>();
+		for (var step : steps) {
+			var entry = new LinkedHashMap<String,Object>();
+			entry.put("title", step.title());
+			entry.put("mutating", Boolean.valueOf(step.mutating()));
+			meta.put(step.id(), entry);
+		}
+		return escapeForScript(Json.of(meta));
 	}
 
 	/** JSON RunState for polling / initial page data. */

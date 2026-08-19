@@ -97,10 +97,18 @@ DEFAULT_REPO_ROOT = Path(__file__).resolve().parent.parent
 
 FILENAME_RE = re.compile(r"^(TODO|READY|MAYBE)-\d+[a-z]*-.*\.md$")
 
-STATUS_LINE_RE = re.compile(r"^\s*Current status:\s*(.*)$", re.IGNORECASE | re.MULTILINE)
-COMPLEXITY_LINE_RE = re.compile(r"^\s*Complexity:\s*(.*)$", re.IGNORECASE | re.MULTILINE)
-SECTION_HEADING_RE = re.compile(r"^##\s+(.*)$", re.MULTILINE)
-NUMBERED_ITEM_RE = re.compile(r"^\s*\d+[.)]\s+(.*)$", re.MULTILINE)
+# Each trailing capture used to be "\s*(.*)$"/"\s+(.*)$" -- a mandatory-or-optional whitespace run directly
+# adjacent to a "rest of line" run, both of which can consume the same space characters. That overlap gives
+# the regex engine multiple equivalent ways to split a run of whitespace between the two groups, which is
+# super-linear (not just linear) to explore on a failing match. Every caller below already re-derives the
+# "meaningful" text with .strip() (or a case-insensitive substring test on the stripped text), so the leading
+# whitespace only ever needs to be consumed ONCE, deterministically -- as a single non-repeating "\s" where a
+# separator is mandatory (SECTION_HEADING_RE, NUMBERED_ITEM_RE), or dropped entirely where it was already
+# optional and redundant with the caller's own .strip() (STATUS_LINE_RE, COMPLEXITY_LINE_RE).
+STATUS_LINE_RE = re.compile(r"^\s*Current status:(.*)$", re.IGNORECASE | re.MULTILINE)
+COMPLEXITY_LINE_RE = re.compile(r"^\s*Complexity:(.*)$", re.IGNORECASE | re.MULTILINE)
+SECTION_HEADING_RE = re.compile(r"^##\s(.*)$", re.MULTILINE)
+NUMBERED_ITEM_RE = re.compile(r"^\s*\d+[.)]\s(.*)$", re.MULTILINE)
 
 # Matched on word boundaries. A bare substring test reads "unanswered" / "unresolved" -- the
 # most natural wording for an OPEN question -- as containing "answered" / "resolved", which
@@ -111,9 +119,10 @@ RESOLVED_MARKER_RE = re.compile(r"\b(?:resolved|answered|decided)\b")
 # Recognized status prefixes (case-insensitive, checked with str.startswith after lowercasing) per
 # the skill's "Status wording rules" -- kept separate from TODO/READY vs MAYBE since the two file
 # families use disjoint wording.
+READY_TO_EXECUTE_STATUS = "ready to execute"
 TODO_READY_STATUS_PREFIXES = (
     "waiting for user input on open questions",
-    "ready to execute",
+    READY_TO_EXECUTE_STATUS,
     "in progress",
 )
 MAYBE_STATUS_PREFIX = "parked"
@@ -168,6 +177,45 @@ def status_prefix_ok(prefix: str, status: str) -> bool:
     return any(normalized.startswith(p) for p in TODO_READY_STATUS_PREFIXES)
 
 
+def _flag_missing_headers(status_match, complexity_match, flags: list) -> None:
+    """Appends missing_status_header / missing_complexity_header for headers absent from the file."""
+    if status_match is None:
+        flags.append(("missing_status_header", "No 'Current status:' line found."))
+    if complexity_match is None:
+        flags.append(("missing_complexity_header", "No 'Complexity:' line found."))
+
+
+def _flag_status_placement(text: str, status_match, flags: list) -> None:
+    """Appends status_header_misplaced if the status line appears at/after the first '##' heading."""
+    first_heading = SECTION_HEADING_RE.search(text)
+    if first_heading is not None and status_match.start() >= first_heading.start():
+        flags.append(("status_header_misplaced", "'Current status:' appears at/after the first '##' section heading."))
+
+
+def _flag_open_questions_if_ready(prefix: str, normalized_status: str, text: str, flags: list) -> None:
+    """Appends ready_but_has_open_questions if a Ready-to-execute file still has an unresolved '## Open questions'."""
+    if prefix not in ("TODO", "READY") or not normalized_status.startswith(READY_TO_EXECUTE_STATUS):
+        return
+    oq_section = extract_section(text, "Open questions")
+    if oq_section is not None and open_questions_are_unresolved(oq_section):
+        flags.append(("ready_but_has_open_questions", "Status says 'Ready to execute' but '## Open questions' still has unresolved item(s)."))
+
+
+def _flag_status_prefix_transitions(prefix: str, status: str, normalized_status: str, flags: list) -> None:
+    """Appends the READY/TODO/MAYBE prefix-vs-status-wording mismatch flags (missed renames, wrong prefix)."""
+    if prefix == "READY" and normalized_status.startswith("waiting for user input"):
+        flags.append(("ready_prefix_waiting_status", "READY-prefixed file but status still says 'Waiting for user input'."))
+
+    if prefix == "TODO" and normalized_status.startswith(READY_TO_EXECUTE_STATUS):
+        flags.append(("todo_prefix_marked_ready", "TODO-prefixed file already marked 'Ready to execute' -- possible missed rename to READY-*.md."))
+
+    if prefix in ("TODO", "READY") and normalized_status.startswith("parked"):
+        flags.append(("parked_status_wrong_prefix", "Status says 'Parked...' but filename is not MAYBE-prefixed."))
+
+    if prefix == "MAYBE" and not normalized_status.startswith("parked"):
+        flags.append(("maybe_prefix_non_parked", f"MAYBE-prefixed file but status doesn't start with 'Parked': '{status}'"))
+
+
 def audit_file(path: Path) -> list:
     """Return a list of (reason_code, detail) tuples for this plan file. Empty list means no flags."""
     text = path.read_text(encoding="utf-8")
@@ -176,38 +224,19 @@ def audit_file(path: Path) -> list:
 
     status_match = STATUS_LINE_RE.search(text)
     complexity_match = COMPLEXITY_LINE_RE.search(text)
-
-    if status_match is None:
-        flags.append(("missing_status_header", "No 'Current status:' line found."))
-    if complexity_match is None:
-        flags.append(("missing_complexity_header", "No 'Complexity:' line found."))
+    _flag_missing_headers(status_match, complexity_match, flags)
 
     if status_match is not None:
         status = status_match.group(1).strip()
-        first_heading = SECTION_HEADING_RE.search(text)
-        if first_heading is not None and status_match.start() >= first_heading.start():
-            flags.append(("status_header_misplaced", "'Current status:' appears at/after the first '##' section heading."))
+        normalized = status.lower()
+
+        _flag_status_placement(text, status_match, flags)
 
         if not status_prefix_ok(prefix, status):
             flags.append(("unrecognized_status_phrase", f"Status text doesn't match the {prefix} wording rules: '{status}'"))
 
-        normalized = status.lower()
-        if prefix in ("TODO", "READY") and normalized.startswith("ready to execute"):
-            oq_section = extract_section(text, "Open questions")
-            if oq_section is not None and open_questions_are_unresolved(oq_section):
-                flags.append(("ready_but_has_open_questions", "Status says 'Ready to execute' but '## Open questions' still has unresolved item(s)."))
-
-        if prefix == "READY" and normalized.startswith("waiting for user input"):
-            flags.append(("ready_prefix_waiting_status", "READY-prefixed file but status still says 'Waiting for user input'."))
-
-        if prefix == "TODO" and normalized.startswith("ready to execute"):
-            flags.append(("todo_prefix_marked_ready", "TODO-prefixed file already marked 'Ready to execute' -- possible missed rename to READY-*.md."))
-
-        if prefix in ("TODO", "READY") and normalized.startswith("parked"):
-            flags.append(("parked_status_wrong_prefix", "Status says 'Parked...' but filename is not MAYBE-prefixed."))
-
-        if prefix == "MAYBE" and not normalized.startswith("parked"):
-            flags.append(("maybe_prefix_non_parked", f"MAYBE-prefixed file but status doesn't start with 'Parked': '{status}'"))
+        _flag_open_questions_if_ready(prefix, normalized, text, flags)
+        _flag_status_prefix_transitions(prefix, status, normalized, flags)
 
     return flags
 

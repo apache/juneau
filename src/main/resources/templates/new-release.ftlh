@@ -173,14 +173,14 @@
             </div>
         </div>
 
-        <!-- Step id -> {title, mutating} from the StepRegistry (page()'s "steps" attr), for the
-             detail pane's title/mutating-tag rendering. Not RunState — that's already inline above. -->
-        <script id="nr-step-meta" type="application/json">
-        {
-            <#list steps as reg>"${reg.id()}": {"title": "${reg.title()}", "mutating": ${reg.mutating()?c}}<#if reg?has_next>,</#if>
-            </#list>
-        }
-        </script>
+        <!-- Step id -> {title, mutating} from the StepRegistry, for the detail pane's title/mutating-tag
+             rendering. Not RunState — that's already inline above. Serialized Java-side by page() with the
+             repo's JSON marshaller and passed through StringUtils.escapeForScript, then inserted here as raw
+             content (?no_esc): FreeMarker's HTML auto-escaping is the WRONG escaper for a raw-text <script>
+             (it entity-encodes &/</" into forms JSON.parse reads verbatim, corrupting the payload), and its
+             break-out protection is only incidental to the .ftlh extension. escapeForScript neutralizes the
+             </script> / <!-- break-outs while keeping the JSON valid. -->
+        <script id="nr-step-meta" type="application/json">${stepMeta?no_esc}</script>
     </#if>
     </section>
 </#macro>

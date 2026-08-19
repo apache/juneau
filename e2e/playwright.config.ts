@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
-import path from 'path';
-import os from 'os';
+import path from 'node:path';
+import os from 'node:os';
 
 /**
  * Dedicated test port for the Spring Boot app this suite boots for itself. MUST NOT be 8790 — that port is

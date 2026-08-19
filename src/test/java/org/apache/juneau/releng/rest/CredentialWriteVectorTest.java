@@ -18,6 +18,8 @@
 package org.apache.juneau.releng.rest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.nio.file.*;
 import java.util.*;
@@ -152,10 +154,10 @@ class CredentialWriteVectorTest {
 	 * check for the wrong reason -- which would make the refusals below pass vacuously.
 	 */
 	private static jakarta.servlet.http.HttpServletRequest req(String method, String contentType, Map<String,String> headers) {
-		var r = org.mockito.Mockito.mock(jakarta.servlet.http.HttpServletRequest.class);
-		org.mockito.Mockito.when(r.getMethod()).thenReturn(method);
-		org.mockito.Mockito.when(r.getContentType()).thenReturn(contentType);
-		headers.forEach((k, v) -> org.mockito.Mockito.when(r.getHeader(k)).thenReturn(v));
+		var r = mock(jakarta.servlet.http.HttpServletRequest.class);
+		when(r.getMethod()).thenReturn(method);
+		when(r.getContentType()).thenReturn(contentType);
+		headers.forEach((k, v) -> when(r.getHeader(k)).thenReturn(v));
 		return r;
 	}
 

@@ -355,6 +355,12 @@ class ReleaseRunRestTest {
 	 * every required step — including {@code nexus-release}, {@code manual-followup-checklist}, and
 	 * {@code compose-announcement-email} — before {@code finalize-run} accepts it.
 	 */
+	@SuppressWarnings({
+		"java:S5961" // Deliberately one continuous end-to-end run through every required pipeline step, in
+					 // order, on a single mutable run; splitting into separate @Test methods would re-derive
+					 // (or fake) the intermediate run state each time and weaken exactly the regression this
+					 // test exists to catch -- that the SAME run legitimately clears every required step.
+	})
 	@Test
 	void safeVoteResultAdvancesGateAndPipelineReachesFinalize(@TempDir Path dir) throws IOException {
 		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
@@ -497,5 +503,43 @@ class ReleaseRunRestTest {
 		assertEquals(StepStatus.SUCCEEDED, rest.state("9.2.1").step("tally-vote-result").status);
 		assertEquals(StepStatus.PENDING, rest.state("9.2.1").step("nexus-release").status,
 				"a rejected vote must not advance the linear pipeline");
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// nr-step-meta <script> sidecar: break-out neutralization
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * The {@code nr-step-meta} JSON is now built Java-side by {@link ReleaseRunRest#stepMetaJson(Iterable)} and passed
+	 * through {@code escapeForScript} rather than interpolated in the {@code .ftlh}. A step title carrying a
+	 * {@code </script>} break-out must be neutralized (no raw {@code <} survives) yet remain valid, round-trippable
+	 * JSON &mdash; the property FreeMarker's HTML auto-escaping would have silently corrupted. Asserts the
+	 * neutralization, not merely that a benign title round-trips.
+	 */
+	@Test
+	void stepMetaJsonNeutralizesScriptBreakoutInAStepTitle() throws Exception {
+		var evilTitle = "</script><script>alert(1)</script>\u2028x";
+		var step = new org.apache.juneau.releng.engine.ReleaseStep() {
+			@Override public String id() { return "evil"; }
+			@Override public String title() { return evilTitle; }
+			@Override public boolean mutating() { return true; }
+			@Override public org.apache.juneau.releng.engine.Preview preview(org.apache.juneau.releng.engine.StepContext c) { return null; }
+			@Override public org.apache.juneau.releng.engine.StepResult apply(org.apache.juneau.releng.engine.StepContext c) { return null; }
+		};
+
+		var json = ReleaseRunRest.stepMetaJson(List.of(step));
+
+		// Break-out neutralized: no raw '<' or raw U+2028 can survive to close the raw-text <script> element early.
+		assertFalse(json.contains("<"), () -> "raw '<' survived into the <script> sidecar: " + json);
+		assertFalse(json.contains("\u2028"), () -> "raw U+2028 survived into the <script> sidecar: " + json);
+		assertTrue(json.contains("\\u003c"), () -> "expected escaped '<' (\\u003c) in sidecar: " + json);
+
+		// Still valid, round-trippable JSON: a JSON parser decodes \u003c back to the original title verbatim
+		// (this is exactly what FreeMarker's HTML entity-encoding would have corrupted).
+		var parsed = org.apache.juneau.marshall.marshaller.Json.to(json, Map.class);
+		@SuppressWarnings("unchecked")
+		var entry = (Map<String,Object>) parsed.get("evil");
+		assertEquals(evilTitle, entry.get("title"));
+		assertEquals(Boolean.TRUE, entry.get("mutating"));
 	}
 }

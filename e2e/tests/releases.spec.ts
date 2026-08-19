@@ -144,6 +144,11 @@ test.describe('Releases table', () => {
       await expect
         .poll(async () => dataRows(page).first().innerText())
         .not.toBe(firstRowBefore);
+
+      // Explicit assertion (the poll above exists only to retry until DataTables' redraw settles): the
+      // last page's first row must genuinely differ from the first page's first row.
+      const firstRowAfter = await dataRows(page).first().innerText();
+      expect(firstRowAfter).not.toBe(firstRowBefore);
     });
 
     test('the range segment doubles as a page-size menu button', async ({ page }) => {

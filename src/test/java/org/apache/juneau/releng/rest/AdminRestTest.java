@@ -32,7 +32,7 @@ import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.junit.jupiter.api.Test;
 
 /**
- * TODO-399 Phase C dogfood (tasks 10-12): the RM {@code Admin} tab composes the existing Releases/Credentials
+ * The RM {@code Admin} tab composes the existing Releases/Credentials
  * {@link org.apache.juneau.rest.server.views.ViewDef ViewDef}s into one {@link org.apache.juneau.rest.server.views.PageDef PageDef}
  * page, rendered by {@link PageTable} and served through {@link AdminRest}.
  */
