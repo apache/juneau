@@ -26,9 +26,14 @@ import java.util.*;
 
 import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.commons.secret.*;
+import org.apache.juneau.http.Content;
 import org.apache.juneau.releng.credential.*;
 import org.apache.juneau.rest.mock.MockRestClient;
+import org.apache.juneau.rest.server.Mutating;
+import org.apache.juneau.rest.server.Rest;
+import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.filter.*;
+import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
 
@@ -45,17 +50,42 @@ import org.junit.jupiter.api.io.*;
  * browser may send cross-origin without one.
  *
  * <p>
- * Group a reproduces it. The store is an {@link InMemorySecretStore} and never the Keychain, so running these tests
- * cannot touch a real credential &mdash; but everything between the request and the store is the real thing: the
- * real resource class, its real default parser list, real content negotiation and real {@code @Content} binding.
- * The vector is the framework's defaults doing exactly what they are configured to do, which is why it holds for
- * any application on {@code BasicUniversalConfig} and not only this one.
+ * Group a reproduces it, and both of its routes are demonstrated as an <i>actual overwrite</i> &mdash; the claim is
+ * integrity loss, so a {@code 200} with no write would falsify it just as much as a {@code 415} would. The store is
+ * an {@link InMemorySecretStore} and never the Keychain, so running these tests cannot touch a real credential
+ * &mdash; but everything between the request and the store is the real thing: a real {@code BasicRestResource}, its
+ * real default parser list, real content negotiation and real {@code @Content} binding. The vector is the
+ * framework's defaults doing exactly what they are configured to do, which is why it holds for any application on
+ * {@code BasicUniversalConfig} and not only this one.
  *
  * <p>
- * Group b closes it, at the boundary rather than at the resource. {@link MockRestClient} dispatches into a
- * {@code RestContext} directly and so does not run the servlet filter chain &mdash; which is the point: group a's
- * requests reach the handler precisely because nothing stands in front of it, and the fix is to put something
- * there. Group b therefore asserts the refusal at {@link LoopbackBoundary}, where the decision is actually made.
+ * The two routes need different subjects, and the reason is the trap this test exists to avoid. The form-encodable
+ * body route is gated by nothing at the resource, so it is reproduced against the real {@code CredentialRest}. The
+ * {@code &content=} query route is gated at the resource by {@code disableContentParam}, and {@code CredentialRest}
+ * already sets that to {@code "true"} &mdash; so reproducing the {@code content=} route against {@code CredentialRest}
+ * would demonstrate the <i>fix</i>, not the finding, and could never fail against unfixed code. That route is
+ * therefore reproduced against {@link DefaultConfigCredentialResource}, a resource carrying {@code BasicRestResource}'s
+ * defaults unchanged (in particular {@code disableContentParam} at its default {@code false}) &mdash; the
+ * configuration every other Juneau consumer has.
+ *
+ * <p>
+ * The route (b) remedy is asserted twice. {@link #contentQueryParameterIsRefusedByTheResource()} asserts it against
+ * the real {@code CredentialRest}, which is correct and kept, but {@code CredentialRest} differs from
+ * {@link DefaultConfigCredentialResource} in more than {@code disableContentParam} &mdash; its full parser list,
+ * filters and view config are also live &mdash; so a pass there does not by itself prove {@code disableContentParam}
+ * is the control doing the work. {@link #contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} closes
+ * that gap: it asserts the same remedy against {@link HardenedConfigCredentialResource}, a twin of
+ * {@link DefaultConfigCredentialResource} with only {@code disableContentParam} flipped to {@code "true"}. Because
+ * reproduction and remedy subjects then differ by exactly the one control under test, that pairing is airtight.
+ *
+ * <p>
+ * Group b closes it. {@link MockRestClient} dispatches into a {@code RestContext} directly and so does not run the
+ * servlet filter chain &mdash; which is the point: group a's requests reach the handler precisely because nothing
+ * stands in front of it, and the fix is to put something there. The two controls are asserted against the routes
+ * they close, kept separate so that the record shows <i>which</i> control closes <i>which</i> route and neither is
+ * later dropped as redundant: {@link LoopbackBoundary} refuses the form-encodable shape (route a), and
+ * {@code disableContentParam="true"} on {@code CredentialRest} refuses the {@code content=} route (route b). The
+ * absent-{@code Content-Type} case is pinned last as a standing regression guard.
  *
  * @see LoopbackBoundary
  */
@@ -79,6 +109,16 @@ class CredentialWriteVectorTest {
 	@SuppressWarnings("resource") // Caller closes via try-with-resources; MockRestClient caches RestContext per class, so opt out with a fresh StackOverlay.
 	private MockRestClient client() {
 		return MockRestClient.builder(new CredentialRest(service)).overridingBeanStore(new StackOverlay()).build();
+	}
+
+	@SuppressWarnings("resource") // As client(): caller closes; fresh StackOverlay opts out of the per-class RestContext cache.
+	private MockRestClient defaultConfigClient() {
+		return MockRestClient.builder(new DefaultConfigCredentialResource(service)).overridingBeanStore(new StackOverlay()).build();
+	}
+
+	@SuppressWarnings("resource") // As client(): caller closes; fresh StackOverlay opts out of the per-class RestContext cache.
+	private MockRestClient hardenedConfigClient() {
+		return MockRestClient.builder(new HardenedConfigCredentialResource(service)).overridingBeanStore(new StackOverlay()).build();
 	}
 
 	private String storedSecret() {
@@ -114,6 +154,30 @@ class CredentialWriteVectorTest {
 	}
 
 	@Test
+	void contentQueryParameterOverwritesAStoredCredentialWhenDisableContentParamIsDefault() throws Exception {
+		// Route (b) of F1, reproduced as an actual overwrite -- the half that contentQueryParameterIsRefusedByThe
+		// Resource (below) cannot demonstrate. That test runs against the real CredentialRest, which sets
+		// disableContentParam="true", so it can only ever show the fix working; a &content= reproduction there
+		// could not fail against unfixed code, which would make it a test of the remedy rather than a confirmation
+		// of the finding. This runs against DefaultConfigCredentialResource instead -- BasicRestResource's defaults
+		// unchanged, disableContentParam at its default false -- the configuration every BasicUniversalConfig
+		// consumer ships. That is the only difference from CredentialRest that matters for this route, so the pair
+		// (this and the remedy test below) records that disableContentParam="true" is the control closing it.
+		//
+		// The payload is UON, not JSON, for the same reason the remedy test gives: RestRequest rewrites the content
+		// type to UON's own and hands the parameter to UonParser, so JSON here would be refused as malformed and
+		// the test would pass while proving nothing. Asserted on the store, not only the status, because the claim
+		// is integrity loss -- a 200 with no write would falsify it.
+		try (var c = defaultConfigClient();
+			var res = c.post("/apache?content=" + java.net.URLEncoder.encode(
+				"(account=" + KEYCHAIN_FREE_ACCOUNT + ",secret=hijacked-via-url)",
+				java.nio.charset.StandardCharsets.UTF_8)).run()) {
+			assertEquals(200, res.getStatusCode(), "content= parameter was not honoured on default config");
+		}
+		assertEquals("hijacked-via-url", storedSecret(), "content= parameter did not reach the store on default config");
+	}
+
+	@Test
 	void contentQueryParameterIsRefusedByTheResource() throws Exception {
 		// The second half of F1, asserted closed rather than reproduced. disableContentParam defaults to false, so
 		// the body can travel in the URL instead; CredentialRest now sets it to "true", and this fails if that is
@@ -138,6 +202,28 @@ class CredentialWriteVectorTest {
 			assertNotEquals(200, res.getStatusCode(), "content= parameter was still honoured");
 		}
 		assertEquals("the-real-password", storedSecret(), "content= parameter still reached the store");
+	}
+
+	@Test
+	void contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue() throws Exception {
+		// The airtight version of contentQueryParameterIsRefusedByTheResource (above), which stays because it is
+		// also correct. That test's subject is the real CredentialRest, which differs from the reproduction
+		// subject (DefaultConfigCredentialResource) in more than disableContentParam -- so a pass there does not,
+		// on its own, prove disableContentParam is the operative control rather than some other difference
+		// between the two resources. HardenedConfigCredentialResource is DefaultConfigCredentialResource with
+		// only that one flag flipped to "true", so reproduction and remedy subjects here differ by exactly the
+		// control under test.
+		//
+		// Same UON-not-JSON payload reasoning as the other content= tests: RestRequest rewrites the content type
+		// to UON's own, so a JSON payload would be refused as malformed and this would pass while proving
+		// nothing. Asserted on the store, not only the status, because the claim is integrity loss.
+		try (var c = hardenedConfigClient();
+			var res = c.post("/apache?content=" + java.net.URLEncoder.encode(
+				"(account=" + KEYCHAIN_FREE_ACCOUNT + ",secret=hijacked-via-url)",
+				java.nio.charset.StandardCharsets.UTF_8)).run()) {
+			assertNotEquals(200, res.getStatusCode(), "content= parameter was still honoured with disableContentParam=true");
+		}
+		assertEquals("the-real-password", storedSecret(), "content= parameter still reached the store on the hardened twin");
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
@@ -198,6 +284,7 @@ class CredentialWriteVectorTest {
 			"X-Csrf-Token", "t0ken")));
 		assertFalse(res.isAllowed());
 		assertEquals(415, res.status());
+		assertEquals(LoopbackBoundary.Reason.CONTENT_TYPE_NOT_JSON, res.reason(), "refused for the wrong reason");
 	}
 
 	@Test
@@ -209,5 +296,115 @@ class CredentialWriteVectorTest {
 			"Sec-Fetch-Site", "same-origin",
 			"X-Csrf-Token", "t0ken")));
 		assertTrue(res.isAllowed());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// The absent-Content-Type contract, pinned as a standing regression guard
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test
+	void absentContentTypeOnAWriteIsRefusedAsNotJson() {
+		// A state-changing request that is otherwise entirely in order -- right Host and Origin, same-origin
+		// Sec-Fetch-Site, valid CSRF token -- but carries no Content-Type at all. It is refused 415, on the
+		// content-type check, because isJson(null) is false: the check is an allowlist (base type must equal
+		// application/json) rather than a denylist of the form-encodable types, and an allowlist refuses the
+		// header's absence by construction.
+		//
+		// This is asserted for the sake of the *next* change, not this one. The safe behaviour here depends
+		// entirely on the allowlist shape; a future relaxation toward a denylist ("refuse the three form-encodable
+		// types") would silently let a Content-Type-less write through, and nothing on isJson's own side would
+		// object -- the coupling between "allowlist" and "typeless is refused" is invisible from there. This
+		// assertion is the only thing that would fail if that shape were quietly changed, so the reason is pinned
+		// explicitly and not merely the status.
+		var res = boundary().check(req("POST", null, Map.of(
+			"Host", "127.0.0.1:8790",
+			"Origin", "http://127.0.0.1:8790",
+			"Sec-Fetch-Site", "same-origin",
+			"X-Csrf-Token", "t0ken")));
+		assertFalse(res.isAllowed());
+		assertEquals(415, res.status());
+		assertEquals(LoopbackBoundary.Reason.CONTENT_TYPE_NOT_JSON, res.reason());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// Test subject for route (b)'s reproduction: BasicRestResource defaults, disableContentParam left at false
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * A single credential write carrying {@code BasicRestResource}'s defaults unchanged &mdash; in particular
+	 * {@code disableContentParam} at its default {@code false}, so the {@code &content=} query route is live. This
+	 * is the honest subject for reproducing route (b) of F1: the real {@code CredentialRest} sets
+	 * {@code disableContentParam="true"}, so the {@code content=} route against it can only ever demonstrate the
+	 * fix. The write mirrors {@link CredentialRest#set(String, CredentialRest.StoreRequest)} and reuses its
+	 * {@link CredentialRest.StoreRequest} body so the only relevant difference from the real resource, on this
+	 * route, is the one property under test.
+	 */
+	@Rest
+	public static class DefaultConfigCredentialResource extends BasicRestResource {
+
+		private final CredentialService service;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param service The credential service the write lands in.
+		 */
+		public DefaultConfigCredentialResource(CredentialService service) {
+			this.service = service;
+		}
+
+		/**
+		 * Store/update a credential, exactly as {@link CredentialRest#set(String, CredentialRest.StoreRequest)}.
+		 *
+		 * @param name The credential name (path variable).
+		 * @param body The {@code {account?, secret}} body.
+		 * @return The updated status for the named credential.
+		 */
+		@Mutating("replaces a stored credential in the Keychain")
+		@RestPost("/{name}")
+		public CredentialStatus set(@org.apache.juneau.http.Path("name") String name, @Content CredentialRest.StoreRequest body) {
+			service.store(name, body.account, body.secret);
+			return service.status().stream().filter(c -> c.name.equals(name)).findFirst().orElseThrow();
+		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// Test subject for route (b)'s remedy: DefaultConfigCredentialResource with only disableContentParam flipped
+	// -----------------------------------------------------------------------------------------------------------
+
+	/**
+	 * {@link DefaultConfigCredentialResource} with the single control under test flipped on. Every other property
+	 * &mdash; parser list, method, path, body shape &mdash; is copy-identical, so this is the honest subject for
+	 * asserting route (b)'s remedy: the only difference between the reproduction subject
+	 * ({@link DefaultConfigCredentialResource}) and this remedy subject is {@code disableContentParam} itself,
+	 * which is what {@link #contentQueryParameterIsRefusedByTheTwinWithDisableContentParamTrue()} relies on.
+	 */
+	@Rest(disableContentParam = "true")
+	public static class HardenedConfigCredentialResource extends BasicRestResource {
+
+		private final CredentialService service;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param service The credential service the write lands in.
+		 */
+		public HardenedConfigCredentialResource(CredentialService service) {
+			this.service = service;
+		}
+
+		/**
+		 * Store/update a credential, exactly as {@link DefaultConfigCredentialResource#set(String, CredentialRest.StoreRequest)}.
+		 *
+		 * @param name The credential name (path variable).
+		 * @param body The {@code {account?, secret}} body.
+		 * @return The updated status for the named credential.
+		 */
+		@Mutating("replaces a stored credential in the Keychain")
+		@RestPost("/{name}")
+		public CredentialStatus set(@org.apache.juneau.http.Path("name") String name, @Content CredentialRest.StoreRequest body) {
+			service.store(name, body.account, body.secret);
+			return service.status().stream().filter(c -> c.name.equals(name)).findFirst().orElseThrow();
+		}
 	}
 }
