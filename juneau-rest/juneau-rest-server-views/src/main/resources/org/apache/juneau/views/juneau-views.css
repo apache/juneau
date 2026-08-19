@@ -435,3 +435,128 @@ table.dataTable > tbody > tr > td {
 .juneau-view-detail-panel dd {
 	margin: 0 0 0.35em 42%;
 }
+
+/*
+ * Declarative row-action modal (present=dialog) + settled-outcome banner (juneau-views.js openActionDialog/
+ * buildDialogOverlay/renderActionOutcome, TODO-416/417).  NEUTRAL - shape/layout only, no palette color; a host's
+ * chrome.css MAY theme these same classes.  The confirmation body is typed fields painted with textContent (never
+ * innerHTML), so there is no markup styling here to get wrong.
+ */
+.juneau-view-dialog-backdrop {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.35);
+	z-index: 1000;
+}
+
+.juneau-view-dialog {
+	min-width: 20em;
+	max-width: 90vw;
+	max-height: 90vh;
+	overflow: auto;
+	padding: 1em 1.25em;
+	border: 1px solid;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.juneau-view-dialog-title {
+	margin: 0 0 0.75em;
+	font-size: 1.1em;
+}
+
+.juneau-view-dialog-fields {
+	margin: 0 0 1em;
+}
+
+.juneau-view-dialog-fields dt {
+	float: left;
+	clear: left;
+	width: 40%;
+	font-weight: 600;
+}
+
+.juneau-view-dialog-fields dd {
+	margin: 0 0 0.35em 42%;
+}
+
+.juneau-view-dialog-actions {
+	display: flex;
+	gap: 0.5em;
+	justify-content: flex-end;
+}
+
+/* The post-response settled-outcome banner (success/failure/refusal/unknown) - neutral; role drives assistive text. */
+.juneau-view-action-outcome {
+	margin-top: 0.35em;
+	font-size: 0.9em;
+}
+
+/*
+ * The LIVE async-job progress banner (TODO-425) - shown while a long job streams over SSE.  Deliberately a
+ * DISTINCT class from .juneau-view-action-outcome: a running job and a settled outcome are never the same visual
+ * state.  The row it sits in carries `data-juneau-job` (never `data-juneau-inflight`), so table polling keeps
+ * running for the whole job (HIGH-9).
+ */
+.juneau-view-job-progress {
+	margin-top: 0.35em;
+	font-size: 0.9em;
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.juneau-view-job-progress-msg {
+	flex: 1 1 auto;
+}
+
+.juneau-view-job-cancel {
+	flex: 0 0 auto;
+}
+
+/*
+ * Row selection + bulk mutation (TODO-428) - two INDEPENDENT opt-ins.  NEUTRAL - shape only, no palette color; a
+ * host's chrome.css MAY theme these same classes.  The selection column itself (`.juneau-view-select-th`/
+ * `.juneau-view-select-cell`) is rendered whenever a `SelectionDef` was declared, WITH or WITHOUT bulk mutation;
+ * the bulk toolbar (`.juneau-view-bulk-toolbar`) only ever exists when a `BulkMutateDef` was ALSO declared - so a
+ * selection-only (e.g. selectable-for-export) table gets the checkbox column and nothing else here.
+ */
+.juneau-view-select-th,
+.juneau-view-select-cell {
+	width: 2.25em;
+	text-align: center;
+}
+
+.juneau-view-select-checkbox,
+.juneau-view-select-all-checkbox {
+	cursor: pointer;
+}
+
+/* The bulk-actions toolbar - inserted into the unified toolbar row's LEFT cluster, after the paging pill. */
+.juneau-view-bulk-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+
+.juneau-view-bulk-count {
+	font-size: 0.8125rem;
+	white-space: nowrap;
+}
+
+.juneau-view-bulk-action-btn {
+	padding: 0.3em 0.75em;
+	border: 1px solid;            /* currentColor - no palette color set here */
+	border-radius: 0.25em;
+	background: transparent;
+	font-size: 0.8125rem;
+	cursor: pointer;
+}
+
+.juneau-view-bulk-action-btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}

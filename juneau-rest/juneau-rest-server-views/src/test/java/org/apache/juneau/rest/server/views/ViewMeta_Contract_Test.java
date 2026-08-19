@@ -53,7 +53,7 @@ class ViewMeta_Contract_Test extends TestBase {
 	 */
 	private static final String EXPECTED_VIEW_META = """
 		{
-		  "contractVersion": "2",
+		  "contractVersion": "3",
 		  "id": "releases",
 		  "rowType": "Release",
 		  "dataMode": "server",
@@ -125,9 +125,10 @@ class ViewMeta_Contract_Test extends TestBase {
 
 	@Test void a03_reservedFieldsOmittedNotNull() {
 		var json = Json.of(releasesView());
-		// "details" is implemented - see e07/e08 below for its POSITIVE assertion. The remaining reserved C/D/E
-		// stubs must still be omitted entirely (not serialized as null keys).
-		for (var k : List.of("rowActions", "catalog", "format", "description", "pinned", "defaultVisible")) {
+		// "details" and "rowActions" are implemented - see f01-f04 (details) and g01-g05 (rowActions) below for
+		// their POSITIVE assertions. The remaining reserved C/D/E stubs must still be omitted entirely (not
+		// serialized as null keys).
+		for (var k : List.of("catalog", "format", "description", "pinned", "defaultVisible")) {
 			var key = "\"" + k + "\"";
 			assertFalse(json.contains(key), () -> "Reserved field leaked into VIEW_META: " + k + "\n" + json);
 		}
@@ -428,5 +429,82 @@ class ViewMeta_Contract_Test extends TestBase {
 		var d = ViewDef.DetailDef.of("owner");
 		assertEquals("owner", d.data);
 		assertNull(d.title);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// g) Row actions: the positive assertion for the "rowActions" key (moved out of a03's negative reserved list -
+	// same positive-assertion-plus-remaining-negatives split used for "details" in section f).  This freezes the
+	// COMPLETE RowAction wire schema (TODO-399 Decision 8) so a later wave (TODO-416) can rely on it verbatim.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_rowActions_omittedWhenUnset() {
+		// The golden fixture view never calls .rowActions(...) - confirms the new field doesn't leak when absent,
+		// and that a01/a02's frozen contract is untouched by this additive field.
+		var json = Json.of(releasesView());
+		assertFalse(json.contains("\"rowActions\""), json);
+	}
+
+	@Test void g02_rowActions_emittedInPinnedOrder_withCompleteWireSchema() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowActions(
+				RowAction.create("ack").label("Acknowledge").icon("check").endpoint("servlet:/x/{id}/ack")
+					.method(RowAction.Method.POST).confirm("Acknowledge this?").form("servlet:/x/ack-form")
+					.present(RowAction.Present.DIALOG).onSuccess(RowAction.OnSuccess.MERGE_ROW))
+			.build();
+		var json = Json.of(v);
+		// Every RowAction wire field, in the pinned @BeanType order, with the exact tokens 416 will consume.
+		assertTrue(json.contains(
+			"\"rowActions\":[{\"id\":\"ack\",\"label\":\"Acknowledge\",\"icon\":\"check\","
+			+ "\"endpoint\":\"servlet:/x/{id}/ack\",\"method\":\"POST\",\"confirm\":\"Acknowledge this?\","
+			+ "\"form\":\"servlet:/x/ack-form\",\"present\":\"dialog\",\"onSuccess\":\"mergeRow\"}]"),
+			json);
+	}
+
+	@Test void g03_rowActions_omitsUnsetOptionalFields() {
+		// Only id is required; every other RowAction field is omitted (not null) when unset.
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowActions(RowAction.create("del").endpoint("servlet:/x/{id}").method(RowAction.Method.DELETE))
+			.build();
+		var json = Json.of(v);
+		assertTrue(json.contains("\"rowActions\":[{\"id\":\"del\",\"endpoint\":\"servlet:/x/{id}\",\"method\":\"DELETE\"}]"), json);
+		assertFalse(json.contains("\"confirm\""), json);
+		assertFalse(json.contains("\"present\""), json);
+		assertFalse(json.contains("\"onSuccess\""), json);
+	}
+
+	@Test void g04_rowActions_isAfterRowClassRules_andBeforeDetails_inTopLevelKeyOrder() {
+		var v = ViewDef.create("x").dataMode(DataMode.SERVER).dataUrl("u").columns(Column.of("a"))
+			.rowClassRule("error", Op.PRESENT, "row-flagged")
+			.rowActions(RowAction.create("go").endpoint("u").method(RowAction.Method.POST))
+			.details(ViewDef.DetailDef.of("owner").title("Owner"))
+			.poll(60_000L)
+			.build();
+		Map<?,?> actual = Json.to(Json.of(v), Map.class);
+		assertEquals(
+			List.of("contractVersion", "id", "dataMode", "dataUrl", "columns", "rowClassRules", "rowActions", "details", "pollIntervalMs"),
+			new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void g05_rowActionMethodTokensAreTheNonSafeMethods() {
+		// The Method enum makes a safe method (GET/HEAD/OPTIONS/TRACE) unexpressible - the build-time half of the
+		// HIGH-7 refusal - and each token is the uppercase HTTP method the client submits with.
+		assertEquals("POST", RowAction.Method.POST.wire());
+		assertEquals("PUT", RowAction.Method.PUT.wire());
+		assertEquals("PATCH", RowAction.Method.PATCH.wire());
+		assertEquals("DELETE", RowAction.Method.DELETE.wire());
+	}
+
+	@Test void g06_rowActionCreateBlankIdThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> RowAction.create("  "));
+		assertTrue(e.getMessage().contains("blank"), e::getMessage);
+	}
+
+	@Test void g07_rowActionPresentAndOnSuccessTokens() {
+		assertEquals("page", RowAction.Present.PAGE.wire());
+		assertEquals("dialog", RowAction.Present.DIALOG.wire());
+		assertEquals("inline", RowAction.Present.INLINE.wire());
+		assertEquals("redraw", RowAction.OnSuccess.REDRAW.wire());
+		assertEquals("mergeRow", RowAction.OnSuccess.MERGE_ROW.wire());
+		assertEquals("navigate", RowAction.OnSuccess.NAVIGATE.wire());
 	}
 }

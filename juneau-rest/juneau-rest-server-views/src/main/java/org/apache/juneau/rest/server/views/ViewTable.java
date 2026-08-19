@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
 import java.util.*;
@@ -25,6 +26,9 @@ import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.filter.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * Builds the HTML delivery shell for a {@link ViewDef} &mdash; the {@code data-juneau-view} table plus the
@@ -80,6 +84,40 @@ public class ViewTable {
 	/** Prefix of the sidecar {@code <script>} element id: {@code juneau-view:<viewId>}. */
 	public static final String SIDECAR_ID_PREFIX = "juneau-view:";
 
+	/**
+	 * Attribute the auto-embedded CSRF token is stamped into on the emitted {@code <table>}.
+	 *
+	 * <p>
+	 * On an allowed request the {@link LoopbackBoundaryFilter} publishes the process's CSRF token under
+	 * {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE}; the request-bearing {@code of(...)} overloads read it and
+	 * stamp it here so the {@code juneau-views.js} row-action submit can attach it without the host having to
+	 * remember a step.  A host may also set this attribute (or a documented init call) itself as an
+	 * override/fallback.  The runtime <b>fails closed</b> when this attribute is absent, empty, or whitespace: it
+	 * visibly refuses to issue any row-action request rather than sending one the server would 403.
+	 */
+	public static final String CSRF_ATTR = "data-juneau-csrf";
+
+	/**
+	 * Marker attribute stamped when a {@link SelectionDef} is declared ({@code TODO-428}). Pure DOM signaling
+	 * &mdash; never part of the {@code VIEW_META} wire contract; see {@link SelectionDef}'s class javadoc.
+	 */
+	public static final String SELECT_ATTR = "data-juneau-select";
+
+	/** Attribute carrying {@link SelectionDef#rowIdField()} &mdash; the row-data key the runtime stamps as each row's stable id. */
+	public static final String ROW_ID_FIELD_ATTR = "data-juneau-row-id-field";
+
+	/** Attribute carrying {@code "1"}/{@code "0"} for {@link SelectionDef#selectAll()}. */
+	public static final String SELECT_ALL_ATTR = "data-juneau-select-all";
+
+	/**
+	 * Marker attribute stamped when a {@link BulkMutateDef} is declared ({@code TODO-428}); pairs with the
+	 * {@link #BULK_SIDECAR_ID_PREFIX} sidecar carrying the actual bulk-action list.
+	 */
+	public static final String BULK_ATTR = "data-juneau-bulk";
+
+	/** Prefix of the bulk-actions sidecar {@code <script>} element id: {@code juneau-view-bulk:<viewId>}. */
+	public static final String BULK_SIDECAR_ID_PREFIX = "juneau-view-bulk:";
+
 	private ViewTable() {}
 
 	/**
@@ -106,6 +144,128 @@ public class ViewTable {
 	}
 
 	/**
+	 * Builds the view-table shell for a server-side view, auto-embedding the request's CSRF token so a declared
+	 * row action can submit with it.
+	 *
+	 * <p>
+	 * The token is read from {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} &mdash; the value the boundary filter
+	 * stamps on every allowed request &mdash; and stamped into {@link #CSRF_ATTR} on the emitted {@code <table>}.
+	 * When the request carries no such token (no boundary filter in front of this application, or the attribute is
+	 * blank), no attribute is emitted and the runtime fails closed on any row-action attempt.  This is the
+	 * auto-embed entry point of the token contract; a {@link #CSRF_ATTR} the host sets itself is the
+	 * override/fallback.
+	 *
+	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the token.
+	 * 	Can be <jk>null</jk> (no token embedded).
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>} and the JSON sidecar.
+	 */
+	public static Div of(HttpServletRequest req, ViewDef viewDef) {
+		return of(MarshallingContext.DEFAULT, viewDef, null, csrfToken(req));
+	}
+
+	/**
+	 * Builds the view-table shell and renders {@code rows}, auto-embedding the request's CSRF token.
+	 *
+	 * <p>
+	 * The request-bearing counterpart of {@link #of(ViewDef, Collection)}; see {@link #of(HttpServletRequest, ViewDef)}
+	 * for the token-embed and fail-closed contract.
+	 *
+	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the token.
+	 * 	Can be <jk>null</jk> (no token embedded).
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps).  Can be <jk>null</jk> (server-side mode) or empty.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>}, an optional {@code <tbody>}, and the
+	 * 	JSON sidecar.
+	 */
+	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows) {
+		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req));
+	}
+
+	/**
+	 * Builds the view-table shell with row selection enabled (design doc §9.3; {@code TODO-428}), auto-embedding
+	 * the request's CSRF token.
+	 *
+	 * <p>
+	 * This overload has no code path that can render a bulk-mutate control &mdash; a {@link SelectionDef} alone
+	 * can only ever add per-row checkboxes (and, per {@link SelectionDef#selectAll()}, a select-all header
+	 * checkbox). Use {@link #of(HttpServletRequest, ViewDef, Collection, BulkMutateDef)} when bulk mutation is
+	 * also required (that overload requires its own {@link SelectionDef}, supplied via
+	 * {@link BulkMutateDef#create(WritePermit, SelectionDef)}).
+	 *
+	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the CSRF
+	 * 	token. Can be <jk>null</jk> (no token embedded).
+	 * @param viewDef The built view definition. Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps). Can be <jk>null</jk> (server-side mode) or empty.
+	 * @param selection The selection opt-in. Must not be <jk>null</jk> (use one of the other overloads for a table
+	 * 	with no selection).
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view data-juneau-select>}, its VIEW_META
+	 * 	sidecar, and no bulk-actions sidecar.
+	 */
+	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows, SelectionDef selection) {
+		if (selection == null)
+			throw iaex("selection must not be null; use one of the other of(...) overloads for a table with no selection.");
+		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), selection, null);
+	}
+
+	/**
+	 * Builds the view-table shell with row selection AND bulk mutation enabled (design doc §9.3; {@code
+	 * TODO-428}), auto-embedding the request's CSRF token.
+	 *
+	 * <p>
+	 * The selection this table renders is {@link BulkMutateDef#selection()} &mdash; the one {@code bulkMutate} was
+	 * itself constructed against ({@link BulkMutateDef#create(WritePermit, SelectionDef)} requires one) &mdash; so
+	 * there is exactly one {@link SelectionDef} in play and no way for it to disagree with what the bulk actions
+	 * target.
+	 *
+	 * @param req The current request, whose {@link LoopbackBoundaryFilter#TOKEN_ATTRIBUTE} supplies the CSRF
+	 * 	token. Can be <jk>null</jk> (no token embedded).
+	 * @param viewDef The built view definition. Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps). Can be <jk>null</jk> (server-side mode) or empty.
+	 * @param bulkMutate The bulk-mutate opt-in. Must not be <jk>null</jk> (use the {@link SelectionDef} overload,
+	 * 	or one of the pre-{@code TODO-428} overloads, for a table with no bulk mutation).
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view data-juneau-select data-juneau-bulk>},
+	 * 	its VIEW_META sidecar, AND the independently-versioned bulk-actions sidecar.
+	 */
+	public static Div of(HttpServletRequest req, ViewDef viewDef, Collection<?> rows, BulkMutateDef bulkMutate) {
+		if (bulkMutate == null)
+			throw iaex("bulkMutate must not be null; use the SelectionDef overload for selection without bulk mutation.");
+		return of(MarshallingContext.DEFAULT, viewDef, rows, csrfToken(req), bulkMutate.selection(), bulkMutate);
+	}
+
+	/**
+	 * Builds the view-table shell with row selection enabled, using the default marshalling context and no CSRF
+	 * token embed (test/no-request convenience; see {@link #of(HttpServletRequest, ViewDef, Collection, SelectionDef)}
+	 * for the auto-embedding counterpart).
+	 *
+	 * @param viewDef The built view definition. Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps). Can be <jk>null</jk> (server-side mode) or empty.
+	 * @param selection The selection opt-in. Must not be <jk>null</jk>.
+	 * @return A new {@link Div} as described above.
+	 */
+	public static Div of(ViewDef viewDef, Collection<?> rows, SelectionDef selection) {
+		if (selection == null)
+			throw iaex("selection must not be null; use one of the other of(...) overloads for a table with no selection.");
+		return of(MarshallingContext.DEFAULT, viewDef, rows, null, selection, null);
+	}
+
+	/**
+	 * Builds the view-table shell with row selection AND bulk mutation enabled, using the default marshalling
+	 * context and no CSRF token embed (test/no-request convenience; see
+	 * {@link #of(HttpServletRequest, ViewDef, Collection, BulkMutateDef)} for the auto-embedding counterpart).
+	 *
+	 * @param viewDef The built view definition. Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps). Can be <jk>null</jk> (server-side mode) or empty.
+	 * @param bulkMutate The bulk-mutate opt-in. Must not be <jk>null</jk>.
+	 * @return A new {@link Div} as described above.
+	 */
+	public static Div of(ViewDef viewDef, Collection<?> rows, BulkMutateDef bulkMutate) {
+		if (bulkMutate == null)
+			throw iaex("bulkMutate must not be null; use the SelectionDef overload for selection without bulk mutation.");
+		return of(MarshallingContext.DEFAULT, viewDef, rows, null, bulkMutate.selection(), bulkMutate);
+	}
+
+	/**
 	 * Builds the view-table shell using the specified marshalling context for bean-property cell reads.
 	 *
 	 * @param ctx The marshalling context used to read bean-property cell values.  Must not be <jk>null</jk>.
@@ -115,11 +275,72 @@ public class ViewTable {
 	 * 	JSON sidecar.
 	 */
 	public static Div of(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows) {
+		return of(ctx, viewDef, rows, null);
+	}
+
+	/**
+	 * Builds the view-table shell, optionally stamping a pre-resolved CSRF token onto the emitted {@code <table>}.
+	 *
+	 * <p>
+	 * The shared core the request-bearing and context-only overloads delegate to.  A non-blank {@code csrfToken}
+	 * is stamped into {@link #CSRF_ATTR}; a blank or {@code null} token stamps nothing, leaving the runtime to
+	 * fail closed on any row-action attempt.
+	 *
+	 * @param ctx The marshalling context used to read bean-property cell values.  Must not be <jk>null</jk>.
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps).  Can be <jk>null</jk> (server-side mode) or empty.
+	 * @param csrfToken The CSRF token to embed, or <jk>null</jk>/blank to embed none.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>}, an optional {@code <tbody>}, and the
+	 * 	JSON sidecar.
+	 */
+	public static Div of(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken) {
+		return of(ctx, viewDef, rows, csrfToken, null, null);
+	}
+
+	/**
+	 * Builds the view-table shell, optionally stamping a CSRF token, a {@link SelectionDef}, and/or a
+	 * {@link BulkMutateDef} &mdash; the shared core every public overload (pre- and post-{@code TODO-428})
+	 * ultimately delegates to.
+	 *
+	 * <p>
+	 * {@code selection}/{@code bulkMutate} are independent opt-ins (design doc §9.3; HIGH-5): passing
+	 * {@code selection} alone renders per-row checkboxes and nothing else &mdash; there is no branch below that
+	 * can render a bulk-mutate control from {@code selection} alone. When {@code bulkMutate} is non-<jk>null</jk>,
+	 * its own {@link BulkMutateDef#selection()} is what selection-related markup is rendered from; a caller-passed
+	 * {@code selection} that is not that SAME instance is rejected, so the two can never silently disagree about
+	 * which rows a bulk action targets.
+	 *
+	 * @param ctx The marshalling context used to read bean-property cell values.  Must not be <jk>null</jk>.
+	 * @param viewDef The built view definition.  Must not be <jk>null</jk>.
+	 * @param rows The rows to render (beans or maps).  Can be <jk>null</jk> (server-side mode) or empty.
+	 * @param csrfToken The CSRF token to embed, or <jk>null</jk>/blank to embed none.
+	 * @param selection The selection opt-in, or <jk>null</jk> for none. When {@code bulkMutate} is non-<jk>null</jk>,
+	 * 	must be either <jk>null</jk> or exactly {@code bulkMutate.selection()}.
+	 * @param bulkMutate The bulk-mutate opt-in, or <jk>null</jk> for none.
+	 * @return A new {@link Div} carrying the {@code <table data-juneau-view>}, an optional {@code <tbody>}, the
+	 * 	VIEW_META sidecar, and &mdash; only when {@code bulkMutate} is supplied &mdash; the independently-versioned
+	 * 	bulk-actions sidecar.
+	 * @throws IllegalArgumentException If {@code selection} and {@code bulkMutate} are both non-<jk>null</jk> but
+	 * 	{@code selection} is not {@code bulkMutate.selection()}.
+	 */
+	public static Div of(MarshallingContext ctx, ViewDef viewDef, Collection<?> rows, String csrfToken,
+			SelectionDef selection, BulkMutateDef bulkMutate) {
+		if (bulkMutate != null) {
+			if (selection != null && selection != bulkMutate.selection())
+				throw iaex("selection must be exactly bulkMutate.selection() when both are supplied; "
+					+ "a BulkMutateDef can only render the SelectionDef it was constructed against.");
+			selection = bulkMutate.selection();
+		}
+
 		var id = viewDef.id;
 		var cols = viewDef.columns == null ? List.<Column>of() : viewDef.columns;
 
-		// <thead> of column titles (falling back to the data key when no title was set).
-		var headerCells = new ArrayList<>(cols.size());
+		// <thead> of column titles (falling back to the data key when no title was set); a selection opt-in
+		// prepends a dedicated, unlabeled leading header cell for the checkbox column (never sharing the leading
+		// cell with any other affordance - TODO-428 Q3/owner decision).
+		var headerCells = new ArrayList<>(cols.size() + 1);
+		if (selection != null)
+			headerCells.add(th().attr("class", "juneau-view-select-th").attr("aria-label", "Select"));
 		for (var c : cols)
 			headerCells.add(th(c.title == null ? c.data : c.title));
 
@@ -129,7 +350,9 @@ public class ViewTable {
 		if (rows != null) {
 			var bodyRows = new ArrayList<>(rows.size());
 			for (var row : rows) {
-				var cells = new ArrayList<>(cols.size());
+				var cells = new ArrayList<>(cols.size() + 1);
+				if (selection != null)
+					cells.add(td().attr("class", "juneau-view-select-cell"));
 				for (var c : cols) {
 					var v = value(ctx, row, c.data);
 					cells.add(td(v == null ? "" : v));
@@ -141,11 +364,46 @@ public class ViewTable {
 
 		var table = table(tableChildren.toArray()).id(id).attr(MARKER_ATTR, id);
 
+		// Auto-embed the CSRF token (MED-10/HIGH-1) so a row-action submit can attach it; a blank token stamps
+		// nothing, so the runtime fails closed rather than shipping an empty header the boundary would 403.
+		if (csrfToken != null && ! csrfToken.isBlank())
+			table.attr(CSRF_ATTR, csrfToken);
+
+		// Selection opt-in: pure DOM-attribute signaling (never VIEW_META/ViewDef.CONTRACT_VERSION - see
+		// SelectionDef's class javadoc). Absent entirely when selection is null, so juneau-views.js renders no
+		// checkbox column at all for an ordinary table - the separability guarantee's "off by default" half.
+		if (selection != null) {
+			table.attr(SELECT_ATTR, "1");
+			table.attr(ROW_ID_FIELD_ATTR, selection.rowIdField());
+			table.attr(SELECT_ALL_ATTR, selection.selectAll() ? "1" : "0");
+		}
+
 		// Sidecar: serialize the VIEW_META, neutralize script break-outs, then insert as RAW content (class javadoc).
 		var json = escapeForScript(Json.of(viewDef));
 		var sidecar = script().type("application/json").id(SIDECAR_ID_PREFIX + id).text(rawText(json));
 
-		return div(table, sidecar);
+		var children = new ArrayList<>();
+		children.add(table);
+
+		// Bulk-mutate opt-in: its OWN independently-versioned sidecar (BulkMutateDef.CONTRACT_VERSION), never
+		// merged into VIEW_META - a version bump here can never force a ViewDef.CONTRACT_VERSION bump (R2).
+		// Absent entirely when bulkMutate is null, so an ordinary or selection-only table carries no bulk affordance.
+		if (bulkMutate != null) {
+			table.attr(BULK_ATTR, "1");
+			var bulkJson = escapeForScript(Json.of(bulkMutate));
+			children.add(script().type("application/json").id(BULK_SIDECAR_ID_PREFIX + id).text(rawText(bulkJson)));
+		}
+
+		children.add(sidecar);
+		return div(children.toArray());
+	}
+
+	/** Reads the boundary-stamped CSRF token off the request, or {@code null} when absent. */
+	private static String csrfToken(HttpServletRequest req) {
+		if (req == null)
+			return null;
+		var v = req.getAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE);
+		return v == null ? null : v.toString();
 	}
 
 	/** Reads a column value from a row: a direct key lookup for a {@code Map}, a bean-property read otherwise. */

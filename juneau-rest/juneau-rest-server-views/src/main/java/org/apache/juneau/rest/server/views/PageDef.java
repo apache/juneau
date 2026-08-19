@@ -119,11 +119,14 @@ public class PageDef {
 	 * Finalizes the builder, validating the composed tab tree, and returns the wire-ready {@link PageDef}.
 	 *
 	 * <p>
-	 * Validation (design doc §"Bean model"): at least one tab must be declared; every {@link Tab} must declare
-	 * exactly one of {@link Tab#view}/{@link Tab#subtabs} (delegated to {@link Tab#validate()}, which also checks
-	 * sub-tab id uniqueness <i>within</i> that tab); every {@link Tab#id} must be unique across the page; and every
-	 * referenced {@link ViewDef#id} (from a leaf tab's view or any subtab's view) must be unique across the whole
-	 * page, so hash routing and sidecar lookup stay unambiguous.
+	 * Validation (design doc §"Bean model"; TODO-420 widens the panel-body shape from a view/subtabs
+	 * exclusive-or to the matrix documented on {@link Tab}/{@link Subtab}): at least one tab must be declared;
+	 * every {@link Tab} must satisfy its own panel-body matrix and every declared {@link Subtab} its own
+	 * (delegated to {@link Tab#validate()}, which also checks sub-tab id uniqueness <i>within</i> that tab); every
+	 * {@link Tab#id} must be unique across the page; and every referenced {@link ViewDef#id} (from a leaf tab's
+	 * view or any subtab's view &mdash; a tab or subtab carrying {@link Tab#content}/{@link Subtab#content}
+	 * instead references no {@link ViewDef} and contributes nothing here) must be unique across the whole page, so
+	 * hash routing and sidecar lookup stay unambiguous.
 	 *
 	 * @return This object.
 	 * @throws IllegalArgumentException On any validation rule violation.
@@ -142,12 +145,12 @@ public class PageDef {
 			t.validate();
 			if (!tabIds.add(t.id))
 				throw iaex("PageDef '%s': duplicate tab id '%s'.", id, t.id);
-			if (t.view != null) {
+			if (t.view != null)
 				addViewId(viewIds, t.view.id);
-			} else {
+			if (t.subtabs != null)
 				for (var s : t.subtabs)
-					addViewId(viewIds, s.view.id);
-			}
+					if (s.view != null)
+						addViewId(viewIds, s.view.id);
 		}
 	}
 

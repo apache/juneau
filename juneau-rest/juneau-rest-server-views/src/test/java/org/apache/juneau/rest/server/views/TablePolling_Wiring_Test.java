@@ -113,14 +113,23 @@ class TablePolling_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("if (document.hidden) return;"), fnBody);
 	}
 
-	/** A plain interval fetch - not a streaming/SSE transport. */
+	/**
+	 * A plain interval fetch - not a streaming/SSE transport.
+	 *
+	 * <p>
+	 * Scoped to the {@code initPolling} function body: the TABLE-POLLING transport must stay a plain
+	 * {@code setInterval} + {@code dt.ajax.reload} loop and must never itself become an {@code EventSource} stream.
+	 * The check is deliberately NOT over the whole file: the async-job feature (TODO-425) legitimately opens an
+	 * {@code EventSource} elsewhere (its own DISTINCT job-running affordance, HIGH-9), which must not freeze polling -
+	 * so streaming may exist in the file, just never inside the polling loop.
+	 */
 	@Test void b05_initPolling_isAPlainIntervalFetch_notAStreamingTransport() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function initPolling(");
 		assertTrue(fnBody.contains("setInterval(poll, intervalMs)"), fnBody);
 		assertTrue(fnBody.contains("dt.ajax.reload(null, false)"), fnBody);
-		assertFalse(body.toLowerCase().contains("eventsource"), body);
-		assertFalse(body.contains("text/event-stream"), body);
+		assertFalse(fnBody.toLowerCase().contains("eventsource"), fnBody);
+		assertFalse(fnBody.contains("text/event-stream"), fnBody);
 	}
 
 	/** A failed round trip must flip a DISTINCT visible state, not just leave a frozen "fresh" timestamp. */

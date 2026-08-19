@@ -248,7 +248,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	@Test void d01_contractVersion_equalsViewDefContractVersion() {
 		assertEquals(ViewDef.CONTRACT_VERSION, ViewsMixin.CONTRACT_VERSION);
-		assertEquals("2", ViewsMixin.CONTRACT_VERSION);
+		assertEquals("3", ViewsMixin.CONTRACT_VERSION);
 	}
 
 	@Test void d02_viewsJs_bakesInContractVersionHandshake() throws Exception {

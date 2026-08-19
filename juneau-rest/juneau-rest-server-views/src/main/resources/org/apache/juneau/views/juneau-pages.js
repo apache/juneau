@@ -54,7 +54,7 @@
 	// Contract-version handshake for PAGE_META: MUST equal PageDef.CONTRACT_VERSION / ViewsMixin.CONTRACT_VERSION
 	// (single source of truth on the server, itself reusing ViewDef.CONTRACT_VERSION).  Distinct from - and does
 	// not replace - the per-view VIEW_META handshake juneau-views.js's initTable(...) already performs.
-	const JUNEAU_PAGE_CONTRACT_VERSION = "2";
+	const JUNEAU_PAGE_CONTRACT_VERSION = "3";
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
 

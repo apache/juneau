@@ -35,10 +35,10 @@ import org.apache.juneau.rest.server.datatables.*;
  * sidecar the server writes and the {@code juneau-views.js} runtime consumes stay wire-stable.
  *
  * <p>
- * {@code details} (the row-details expander's field list) is implemented; see {@link #details(DetailDef...)}.
- * The remaining reserved row-action/catalog fields ({@code rowActions}, {@code catalog}) are <b>not</b> part of this
- * MVP builder and are therefore omitted from the serialized contract (design doc §6.10 reserved stubs) &mdash;
- * omitted, not emitted as {@code null}.
+ * {@code details} (the row-details expander's field list) and {@code rowActions} (the per-row action menu; see
+ * {@link #rowActions(RowAction...)}) are both implemented.  The remaining reserved catalog fields ({@code catalog},
+ * {@code format}, ...) are <b>not</b> part of this MVP builder and are therefore omitted from the serialized
+ * contract (design doc §6.10 reserved stubs) &mdash; omitted, not emitted as {@code null}.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -56,16 +56,17 @@ import org.apache.juneau.rest.server.datatables.*;
  * 	<li class='jc'>{@link Column}
  * 	<li class='jc'>{@link RibbonAction}
  * 	<li class='jc'>{@link RowClassRule}
+ * 	<li class='jc'>{@link RowAction}
  * </ul>
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,details,pollIntervalMs")
+@BeanType(properties="contractVersion,id,rowType,dataMode,dataUrl,defaultOrder,columns,ribbon,rowClassRules,rowActions,details,pollIntervalMs")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class ViewDef {
 
 	/** The frozen contract version.  Bumped only on a breaking wire change. */
-	public static final String CONTRACT_VERSION = "2";
+	public static final String CONTRACT_VERSION = "3";
 
 	/**
 	 * The minimum honored polling interval, in milliseconds.
@@ -239,6 +240,16 @@ public class ViewDef {
 	public List<RowClassRule> rowClassRules;
 
 	/**
+	 * The per-row action descriptors, in menu order; omitted from the wire when unset (no row menu).
+	 *
+	 * <p>
+	 * Each {@link RowAction} declares a mutating request the {@code juneau-views.js} runtime renders as a row-menu
+	 * item and submits with the auto-embedded CSRF token (see {@link RowAction} for the frozen wire schema and
+	 * the fail-closed submit contract).
+	 */
+	public List<RowAction> rowActions;
+
+	/**
 	 * The row-details expander's field list; omitted from the wire when unset (no expander).
 	 *
 	 * <p>
@@ -407,6 +418,22 @@ public class ViewDef {
 	 */
 	public ViewDef details(DetailDef...value) {
 		details = l(value);
+		return this;
+	}
+
+	/**
+	 * Declares the per-row action menu.
+	 *
+	 * <p>
+	 * Each {@link RowAction} is a mutating request the {@code juneau-views.js} runtime renders as a row-menu item
+	 * and submits with the process's CSRF token.  A {@link RowAction} can only carry a non-safe HTTP method
+	 * ({@link RowAction.Method}), so a mutating action can never be declared against a safe (CSRF-exempt) method.
+	 *
+	 * @param value The row actions, in menu order.
+	 * @return This object.
+	 */
+	public ViewDef rowActions(RowAction...value) {
+		rowActions = l(value);
 		return this;
 	}
 

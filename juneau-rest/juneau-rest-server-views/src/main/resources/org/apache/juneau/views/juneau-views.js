@@ -38,10 +38,45 @@
 
 	// Contract-version handshake: MUST equal ViewDef.CONTRACT_VERSION / ViewsMixin.CONTRACT_VERSION (single source
 	// of truth on the server).  The initializer fails loud when a sidecar's contractVersion differs.
-	const JUNEAU_VIEW_CONTRACT_VERSION = "2";
+	const JUNEAU_VIEW_CONTRACT_VERSION = "3";
+
+	// The typed action-result contract version (ActionResult.CONTRACT_VERSION on the server).  This is a SEPARATE,
+	// independently-versioned wire contract from VIEW_META - it is deliberately NOT aliased to
+	// JUNEAU_VIEW_CONTRACT_VERSION, so the row-action submit result and the view sidecar version independently.  A
+	// 2xx action-result whose contractVersion differs is rendered as a visible, non-optimistic UNKNOWN rather than
+	// silently mis-read.
+	const JUNEAU_ACTION_RESULT_CONTRACT_VERSION = "1";
+
+	/**
+	 * The bulk-mutate-actions contract version (BulkMutateDef.CONTRACT_VERSION on the server; {@code TODO-428}).
+	 * A THIRD, independently-versioned wire contract - deliberately not aliased to either
+	 * JUNEAU_VIEW_CONTRACT_VERSION or JUNEAU_ACTION_RESULT_CONTRACT_VERSION, so a bulk-actions-list revision can
+	 * never force a VIEW_META (ViewDef) contract bump (R2/design-doc guard). A sidecar whose contractVersion
+	 * differs is refused (fail-loud), leaving row selection itself fully functional - only the bulk toolbar is
+	 * withheld, per the two-independent-opt-ins separability guarantee (HIGH-5).
+	 */
+	const JUNEAU_BULK_CONTRACT_VERSION = "1";
+
+	/**
+	 * TODO-428 selection/bulk DOM attribute names - MUST equal ViewTable's constants of the same names
+	 * (SELECT_ATTR, ROW_ID_FIELD_ATTR, SELECT_ALL_ATTR, BULK_ATTR, BULK_SIDECAR_ID_PREFIX) on the server. Selection
+	 * and bulk-mutation are two INDEPENDENT opt-ins (HIGH-5): a table carries SELECT_ATTR with or without
+	 * BULK_ATTR, but never the reverse (ViewTable.of(..., BulkMutateDef) always stamps both, since a
+	 * BulkMutateDef is only constructible against a SelectionDef it requires at compile time).  All of this is
+	 * pure DOM-attribute signaling - none of it is part of the VIEW_META wire contract (R2 guard; see
+	 * SelectionDef/BulkMutateDef's class javadocs on the server).
+	 */
+	const SELECT_ATTR = "data-juneau-select";
+	const ROW_ID_ATTR = "data-juneau-row-id";
+	const ROW_ID_FIELD_ATTR = "data-juneau-row-id-field";
+	const SELECT_ALL_ATTR = "data-juneau-select-all";
+	const BULK_ATTR = "data-juneau-bulk";
+	const BULK_SIDECAR_ID_PREFIX = "juneau-view-bulk:";
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
 	NS.CONTRACT_VERSION = JUNEAU_VIEW_CONTRACT_VERSION;
+	NS.ACTION_RESULT_CONTRACT_VERSION = JUNEAU_ACTION_RESULT_CONTRACT_VERSION;
+	NS.BULK_CONTRACT_VERSION = JUNEAU_BULK_CONTRACT_VERSION;
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
@@ -119,6 +154,222 @@
 			out.push({ title: d.title || d.data, value: (v == null ? "" : String(v)) });
 		});
 		return out;
+	}
+
+	/**
+	 * Resolves a row's STABLE selection id (MED-11) from its data, via the `rowIdField` key the host declared in
+	 * its {@code SelectionDef} (carried client-side only via the {@code ROW_ID_FIELD_ATTR} DOM attribute - never
+	 * VIEW_META).  Deliberately NEVER a DOM/table index: a poll/sort/page tick reshuffles which data occupies
+	 * which row index, but this always resolves to the SAME id for the SAME underlying record.  Returns
+	 * `undefined` when `rowData`/`rowIdField` is absent, or when the row data has no such key - callers must
+	 * treat that as "this row cannot be selected" rather than inventing a fallback identity (e.g. a DOM index).
+	 */
+	function rowIdOf(rowData, rowIdField) {
+		return (rowData && rowIdField) ? rowData[rowIdField] : undefined;
+	}
+
+	/**
+	 * The persistence rule (Q2/MED-11): given the currently-selected ids and the ids actually present in the
+	 * latest draw (sort/page/poll), returns the subset of `selectedIds` that are STILL present - silently
+	 * DROPPING any id that has left the current page/result set, so a selection can never be kept "live" for a
+	 * row that is no longer on screen (closing the "bulk action hits the wrong target" case).  Pure - no DOM, no
+	 * Set/Map identity assumptions on the caller's side (plain arrays in, plain array out); ids are compared as
+	 * strings so a numeric id and its string form are never silently treated as different rows.
+	 */
+	function pruneSelection(selectedIds, currentIds) {
+		const present = {};
+		(currentIds || []).forEach(function (id) { if (id != null) present[String(id)] = true; });
+		const out = [];
+		(selectedIds || []).forEach(function (id) { if (id != null && Object.hasOwn(present, String(id))) out.push(id); });
+		return out;
+	}
+
+	/**
+	 * The default CSRF header name - MUST equal {@code LoopbackBoundary.DEFAULT_CSRF_HEADER} ("X-Csrf-Token") so the
+	 * runtime and the server boundary agree by default.  A host may override the name per-table (see
+	 * resolveCsrfHeaderName in the binding layer); absent an override the runtime sends this one.
+	 */
+	const DEFAULT_CSRF_HEADER = "X-Csrf-Token";
+
+	/**
+	 * The safe (non-state-changing) HTTP methods - mirrors {@code MethodSafety.SAFE_METHODS}.  A row action bound to
+	 * one of these would skip Origin/CSRF/JSON at the server boundary (a CSRF-able write), so the runtime refuses to
+	 * issue it.  The Java builder ({@code RowAction.Method}) already makes a safe method unexpressible; this is the
+	 * client half of that same HIGH-7 refusal, for a hand-edited or stale sidecar.
+	 */
+	const SAFE_METHODS = { GET: 1, HEAD: 1, OPTIONS: 1, TRACE: 1 };
+
+	/** Whether a method is safe (GET/HEAD/OPTIONS/TRACE) - null/absent is NOT safe (mirrors MethodSafety.isSafe). */
+	function isSafeMethod(method) {
+		return !!(method && Object.hasOwn(SAFE_METHODS, String(method).toUpperCase()));
+	}
+
+	/**
+	 * The single, shared fail-closed token test.  Absent (null/undefined), present-but-empty, and
+	 * present-but-WHITESPACE all count as blank - matching the actual control, {@code LoopbackBoundary.check}'s
+	 * `presented == null || presented.isBlank()` (NOT `SynchronizerToken.matches`'s `isEmpty`, which would let a
+	 * whitespace token through to a confusing server 403).  Client refusal here is defense-against-omission; the
+	 * landed server-side {@code LoopbackBoundary} is the real security boundary.
+	 */
+	function isBlankToken(v) {
+		return v == null || String(v).trim() === "";
+	}
+
+	/**
+	 * Builds the fail-closed row-action request descriptor from a RowAction intent, a token, and a header name -
+	 * pure, DOM/fetch-free (plain data in, plain data out) so the fail-closed contract is unit-testable without a
+	 * browser.  Returns EITHER a `{refuse:true, reason}` marker (the caller renders a VISIBLE refusal) OR a
+	 * ready-to-issue `{url, method, headers, body}`:
+	 *   - a missing or SAFE method refuses (`reason:"safe-method"`) - HIGH-7;
+	 *   - a blank/absent/whitespace token refuses (`reason:"missing-token"`) - HIGH-1 fail-closed;
+	 *   - otherwise the body is JSON and the headers carry `Content-Type: application/json` (so the write passes
+	 *     `LoopbackBoundary.isJson`) plus the CSRF token under `headerName` (defaulting to DEFAULT_CSRF_HEADER).
+	 *
+	 * The optional `extra` object is merged into the JSON body - the modal submit path (TODO-416) uses it to carry
+	 * the server-minted `idempotencyKey` and the `targetId`, so a double-click/re-submit/browser-retry all carry the
+	 * same key and the server can check the key's `(action, targetId)` binding.  A bare submit (no `extra`) sends
+	 * exactly `{action}` as before.
+	 */
+	function buildActionRequest(action, token, headerName, extra) {
+		if (!action || isSafeMethod(action.method) || !action.method)
+			return { refuse: true, reason: "safe-method" };
+		if (isBlankToken(token))
+			return { refuse: true, reason: "missing-token" };
+		const headers = { "Content-Type": "application/json" };
+		headers[headerName || DEFAULT_CSRF_HEADER] = token;
+		const payload = { action: action.id };
+		if (extra) for (const k in extra) if (Object.hasOwn(extra, k) && extra[k] != null) payload[k] = extra[k];
+		return {
+			url: action.endpoint,
+			method: action.method,
+			headers: headers,
+			body: JSON.stringify(payload)
+		};
+	}
+
+	/** Maps a buildActionRequest refusal reason to the visible message shown in the row-action refusal banner. */
+	function actionRefusalMessage(reason) {
+		if (reason === "safe-method")
+			return "action must use a non-safe method (POST/PUT/PATCH/DELETE)";
+		if (reason === "missing-token")
+			return "no CSRF token available - the page did not supply one, so the request was not sent";
+		if (reason === "request-failed")
+			return "the request could not be completed";
+		return "the action was refused";
+	}
+
+	/**
+	 * The frozen set of typed action-result outcome tokens (ActionResult.Outcome) - the four synchronous outcomes
+	 * plus the two async terminal states reserved for TODO-425 (`cancelled`, `cancelled-after-effect`).  An outcome
+	 * token not in this set is normalized to `unknown` (a visible, non-optimistic state - never an optimistic
+	 * success).
+	 */
+	const ACTION_OUTCOMES = {
+		"success": 1, "failure": 1, "refusal": 1, "unknown": 1, "cancelled": 1, "cancelled-after-effect": 1
+	};
+
+	/** JSON.parse guarded against a null/blank/malformed body - returns the parsed value or null, never throws. */
+	function parseJsonSafe(text) {
+		if (text == null || text === "") return null;
+		try { return JSON.parse(text); } catch (e) { return null; }
+	}
+
+	/**
+	 * Parses a 2xx action-submit body into a typed ActionResult, or null when the body is absent/malformed or does
+	 * NOT carry the contract's load-bearing `outcome` discriminator.  A null return means "no typed result was
+	 * carried" - the caller treats that as a bare success (the pre-416 behavior) rather than inventing an outcome.
+	 */
+	function parseActionResult(text) {
+		const o = parseJsonSafe(text);
+		if (!o || typeof o !== "object" || o.outcome == null) return null;
+		return o;
+	}
+
+	/**
+	 * Normalizes a typed ActionResult's outcome to a known token, mapping anything unrecognized to `unknown` - so an
+	 * unknown/garbled outcome renders as a visible non-optimistic state, never as an optimistic success.
+	 */
+	function normalizeOutcome(result) {
+		const o = result && result.outcome;
+		return (o != null && Object.hasOwn(ACTION_OUTCOMES, o)) ? o : "unknown";
+	}
+
+	/**
+	 * Parses a 2xx action-submit body into an ASYNC "job accepted" pointer (AsyncJobRef), or null when it is not
+	 * one.  Whether an action is asynchronous is a property of the RESPONSE, not the declared RowAction (TODO-425):
+	 * the same POST returns EITHER a terminal ActionResult (has `outcome`) OR this pointer (has `streamUrl`), so no
+	 * new RowAction wire field is needed and the two shapes are disjoint.  A job pointer MUST carry a non-blank
+	 * `streamUrl` (the SSE capability URL); a body without one is not a job pointer and falls through to the normal
+	 * typed-result path.
+	 */
+	function parseJobStarted(text) {
+		const o = parseJsonSafe(text);
+		if (!o || typeof o !== "object") return null;
+		if (isBlankToken(o.streamUrl)) return null;
+		return o;
+	}
+
+	/**
+	 * Builds the fail-closed cancel-request descriptor for an async job (a non-safe POST to the job's cancelUrl) -
+	 * pure, DOM/fetch-free, mirroring buildActionRequest's fail-closed token contract.  Returns EITHER a
+	 * `{refuse:true, reason}` marker OR a ready `{url, method:"POST", headers, body}`; the body is an empty JSON
+	 * object so the write passes LoopbackBoundary.isJson, and the CSRF token rides `headerName`.  Server-side
+	 * cancellation is authoritative (a client cannot be trusted to stop the work); this only asks for it.
+	 */
+	function buildJobCancelRequest(cancelUrl, token, headerName) {
+		if (isBlankToken(cancelUrl))
+			return { refuse: true, reason: "no-cancel-url" };
+		if (isBlankToken(token))
+			return { refuse: true, reason: "missing-token" };
+		const headers = { "Content-Type": "application/json" };
+		headers[headerName || DEFAULT_CSRF_HEADER] = token;
+		return { url: cancelUrl, method: "POST", headers: headers, body: "{}" };
+	}
+
+	/**
+	 * Builds a visible, non-optimistic transport-refusal classification for ANY non-2xx action response (HIGH-3),
+	 * WITHOUT requiring the typed action-result schema.  Prefers the boundary's `X-Loopback-Boundary` reason header,
+	 * then the small `{reason,message}` JSON envelope the LoopbackBoundaryFilter emits, then a status-derived
+	 * fallback - so a 403/415/421 (or a missing/malformed body) always maps to a comprehensible named refusal rather
+	 * than a generic/empty/silent failure on a security refusal.
+	 */
+	function transportRefusal(status, boundaryReason, envelope) {
+		const code = ! isBlankToken(boundaryReason) ? boundaryReason
+			: (envelope && envelope.reason ? envelope.reason : ("http:" + (status || 0)));
+		let message = envelope && envelope.message ? envelope.message : null;
+		if (isBlankToken(message)) message = transportStatusMessage(status);
+		return { code: code, message: message };
+	}
+
+	/** A comprehensible fallback message for the transport statuses the LoopbackBoundary answers with. */
+	function transportStatusMessage(status) {
+		if (status === 403) return "the request was refused by the server boundary (403)";
+		if (status === 415) return "the request body was not accepted as JSON (415)";
+		if (status === 421) return "the request was misdirected - Host did not match (421)";
+		return "the request was refused (" + (status == null ? "no status" : status) + ")";
+	}
+
+	/**
+	 * The visible text for a settled action outcome - a pure (data-in/text-out) mapping over every outcome the typed
+	 * result can carry AND the transport-refusal case, so no terminal state is silent.  `cls` is
+	 * `{outcome, refusalCode, message, replay, transport}`.
+	 */
+	function actionOutcomeMessage(cls) {
+		const replay = cls.replay ? " (replay of a previous attempt)" : "";
+		const detail = cls.message ? ": " + cls.message : "";
+		switch (cls.outcome) {
+			case "success": return "Done" + detail + replay + ".";
+			case "failure": return "Failed" + detail + ".";
+			case "refusal": return (cls.transport ? "Request refused" : "Refused") + " (" + (cls.refusalCode || "unknown") + ")" + detail + ".";
+			case "cancelled": return "Cancelled" + detail + ".";
+			case "cancelled-after-effect": return "Cancelled after a partial effect" + detail + ".";
+			default: return "Outcome unknown - the write may or may not have completed" + detail + ".";
+		}
+	}
+
+	/** Whether an action is presented as a modal dialog (`present=dialog`) - the TODO-416 modal/form path. */
+	function isDialogAction(action) {
+		return !! (action && action.present === "dialog");
 	}
 
 	/**
@@ -288,6 +539,22 @@
 				rowEl.className += (rowEl.className ? " " : "") + "juneau-view-detail-row";
 			}
 		};
+
+		// A declared rowActions list appends ONE synthetic, non-orderable/non-searchable trailing column whose
+		// cell is the per-row action trigger.  initTable(...) appends the matching <th> to <thead> before booting
+		// DataTables so column and header counts stay in step.  The action BEHAVIOR (modal/form/typed result) is a
+		// later wave (TODO-416); this column only surfaces the menu trigger and routes its click to submitRowAction.
+		if (viewDef.rowActions && viewDef.rowActions.length) {
+			opts.columns.push({
+				data: null,
+				orderable: false,
+				searchable: false,
+				className: "juneau-view-actions-cell",
+				defaultContent: "",
+				title: "",
+				render: function () { return actionTriggerMarkup(); }
+			});
+		}
 		return opts;
 	}
 
@@ -580,6 +847,11 @@
 	 * user's action and then redo it once the write's own result repaints it (design doc §9.1 B5) - so a poll
 	 * tick skips its ENTIRE redraw whenever ANY row in this table carries the marker, leaving the table exactly
 	 * as-is (stale, but honestly so) until that write settles.
+	 *
+	 * <p>Scoped to SYNCHRONOUS writes ONLY: it reads `data-juneau-inflight`, NOT the async job marker
+	 * (`data-juneau-job`, set by setRowJobRunning).  A long-running TODO-425 job must NOT freeze the whole table's
+	 * polling for up to the 120s hard timeout - so it uses the distinct marker this function deliberately ignores
+	 * (HIGH-9).
 	 */
 	function hasInFlightRow(table) {
 		return !!table.querySelector("tbody tr[data-juneau-inflight]");
@@ -684,6 +956,739 @@
 		render();
 	}
 
+	/** The per-row action-menu trigger markup (returned by the synthetic actions column's render). */
+	function actionTriggerMarkup() {
+		const icons = window.JuneauViews && window.JuneauViews.icons;
+		const glyph = icons?.resolveIcon ? icons.resolveIcon("more_vert") : null;
+		const inner = glyph != null ? glyph : "\u22EF";   // horizontal ellipsis fallback when no glyph is registered
+		return '<button type="button" class="juneau-view-action-trigger" aria-haspopup="menu" ' +
+			'aria-label="Row actions">' + inner + '</button>';
+	}
+
+	/**
+	 * Reads the auto-embedded CSRF token off the view table's `data-juneau-csrf` attribute (stamped by
+	 * ViewTable from the LoopbackBoundaryFilter request attribute, or set by the host as an override/fallback).
+	 * Returns the raw attribute value (possibly null/blank); isBlankToken(...) is what decides fail-closed, so a
+	 * whitespace value is NOT normalized away here - it must reach the same blank test the server boundary uses.
+	 */
+	function resolveCsrfToken(table) {
+		return table.getAttribute("data-juneau-csrf");
+	}
+
+	/** The per-table CSRF header-name override (`data-juneau-csrf-header`), else the framework default. */
+	function resolveCsrfHeaderName(table) {
+		const override = table.getAttribute("data-juneau-csrf-header");
+		return isBlankToken(override) ? DEFAULT_CSRF_HEADER : override.trim();
+	}
+
+	/** Appends the actions column's header cell to <thead> (kept in step with buildOptions' synthetic column). */
+	function appendActionsHeaderCell(table) {
+		const headRow = table.querySelector("thead tr");
+		if (!headRow) return;
+		const th = document.createElement("th");
+		th.className = "juneau-view-actions-th";
+		th.setAttribute("aria-label", "Actions");
+		headRow.appendChild(th);
+	}
+
+	// ==================================================================================================================
+	// ROW SELECTION + BULK MUTATION (TODO-428) - two INDEPENDENT opt-ins (HIGH-5), detected purely from DOM
+	// attributes ViewTable stamps (SELECT_ATTR / BULK_ATTR) - NEVER from VIEW_META/viewDef.  Enabling selection
+	// alone can never surface a bulk-mutate control: hasBulk(...) is only ever consulted from within the
+	// `hasSelection(table)` branch of initTable, and BULK_ATTR is only ever stamped by ViewTable when a
+	// BulkMutateDef (which itself REQUIRES a WritePermit + a SelectionDef to construct) was supplied.
+	// ==================================================================================================================
+
+	/** Whether `table` declares row selection (SelectionDef was supplied to ViewTable.of(...)). */
+	function hasSelection(table) {
+		return table.getAttribute(SELECT_ATTR) === "1";
+	}
+
+	/** Whether `table` declares bulk mutation (BulkMutateDef was supplied to ViewTable.of(...)). */
+	function hasBulk(table) {
+		return table.getAttribute(BULK_ATTR) === "1";
+	}
+
+	/**
+	 * Stamps the STABLE row id (MED-11) onto a just-created `<tr>`, read from that row's OWN data via the
+	 * `rowIdField` key - never a DOM/table index. A no-op when `rowIdField` is absent (selection not declared) or
+	 * the row has no such key (nothing to stamp; that row is simply unselectable). This is the ONLY place
+	 * `ROW_ID_ATTR` is written; every reader elsewhere (selection wiring, bulk execution, the TODO-416 modal path's
+	 * `submitActionDialog`) treats it as already-authoritative once stamped.
+	 */
+	function stampRowId(rowEl, rowData, rowIdField) {
+		if (!rowIdField) return;
+		const id = rowIdOf(rowData, rowIdField);
+		if (id != null) rowEl.setAttribute(ROW_ID_ATTR, String(id));
+	}
+
+	/** The selection checkbox cell's markup - a bare, unlabeled-by-design checkbox (the row IS its own label). */
+	function selectionCellMarkup(checked) {
+		return '<input type="checkbox" class="juneau-view-select-checkbox" aria-label="Select row"' +
+			(checked ? " checked" : "") + '>';
+	}
+
+	/**
+	 * Builds the synthetic, non-orderable/non-searchable LEADING selection column (mirrors how a declared
+	 * rowActions list appends a synthetic TRAILING column in buildOptions) - `selectionState.selected` is a
+	 * live `Set` of currently-selected stable row ids, so a redraw always paints each row's checkbox from the
+	 * CURRENT selection, never a stale snapshot.
+	 */
+	function buildSelectionColumnDef(selectionState) {
+		return {
+			data: null,
+			orderable: false,
+			searchable: false,
+			className: "juneau-view-select-cell",
+			defaultContent: "",
+			title: "",
+			render: function (data, type, rowData) {
+				if (type && type !== "display") return "";
+				const id = rowIdOf(rowData, selectionState.rowIdField);
+				return selectionCellMarkup(id != null && selectionState.selected.has(String(id)));
+			}
+		};
+	}
+
+	/**
+	 * Wires row selection: per-row checkbox toggle (delegated `change` listener - checkboxes are re-created on
+	 * every draw, the table element is not), the optional select-all header checkbox (only when `SelectionDef`
+	 * declared `selectAll`), and the off-screen-id-drop persistence rule (Q2/MED-11) on every `draw.dt` (sort,
+	 * page, or a TODO-426 poll tick).  Select-all is scoped to the CURRENT draw's rows only (the ones actually on
+	 * screen) - consistent with the drop rule, it can never reach into an off-screen page.
+	 */
+	function initSelection(table, dt, selectionState, ctx) {
+		function currentRowIds() {
+			const ids = [];
+			Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
+				ids.push(tr.getAttribute(ROW_ID_ATTR));
+			});
+			return ids;
+		}
+
+		function refresh() {
+			if (ctx && ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
+		}
+
+		table.addEventListener("change", function (e) {
+			const cb = e.target && e.target.closest ? e.target.closest(".juneau-view-select-checkbox") : null;
+			if (!cb) return;
+			const tr = cb.closest("tr");
+			const id = tr ? tr.getAttribute(ROW_ID_ATTR) : null;
+			if (id == null) return;
+			if (cb.checked) selectionState.selected.add(id); else selectionState.selected.delete(id);
+			refresh();
+		});
+
+		if (table.getAttribute(SELECT_ALL_ATTR) === "1") {
+			const th = table.querySelector(".juneau-view-select-th");
+			if (th) {
+				const allCb = document.createElement("input");
+				allCb.type = "checkbox";
+				allCb.className = "juneau-view-select-all-checkbox";
+				allCb.setAttribute("aria-label", "Select all rows on this page");
+				allCb.addEventListener("change", function () {
+					Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
+						const id = tr.getAttribute(ROW_ID_ATTR);
+						const cb = tr.querySelector(".juneau-view-select-checkbox");
+						if (cb) cb.checked = allCb.checked;
+						if (allCb.checked) selectionState.selected.add(id); else selectionState.selected.delete(id);
+					});
+					refresh();
+				});
+				th.appendChild(allCb);
+			}
+		}
+
+		// The off-screen-id-drop rule (Q2/MED-11): every redraw prunes the live selection down to ids still
+		// actually on screen, so a poll/sort/page tick can never leave a bulk mutate targeting a row the user can
+		// no longer see.
+		dt.on("draw.dt", function () {
+			const pruned = pruneSelection(Array.from(selectionState.selected), currentRowIds());
+			selectionState.selected = new Set(pruned);
+			refresh();
+		});
+	}
+
+	/**
+	 * Reads and JSON.parses the bulk-actions sidecar (`BULK_SIDECAR_ID_PREFIX + id`) - the independently-versioned
+	 * {@code BulkMutateDef} contract, deliberately never merged into VIEW_META (R2 guard).  Returns `null` on a
+	 * missing or malformed sidecar (the caller treats that as "no usable bulk config" and withholds the toolbar,
+	 * rather than guessing).
+	 */
+	function readBulkDef(id) {
+		const sidecar = document.getElementById(BULK_SIDECAR_ID_PREFIX + id);
+		if (!sidecar) return null;
+		return parseJsonSafe(sidecar.textContent);
+	}
+
+	/**
+	 * Builds the bulk-actions toolbar: a live "N selected" count plus one button per declared bulk action, each
+	 * disabled while the selection is empty (there is nothing for a bulk action to target).  A click drives
+	 * executeBulkAction(...) - the per-target submit path, never an aggregate one.
+	 */
+	function buildBulkToolbar(bulkDef, table, ctx, selectionState) {
+		const bar = document.createElement("div");
+		bar.className = "juneau-view-bulk-toolbar";
+		bar.setAttribute("data-testid", "bulk-toolbar");
+
+		const countEl = document.createElement("span");
+		countEl.className = "juneau-view-bulk-count";
+		bar.appendChild(countEl);
+
+		const buttons = (bulkDef.actions || []).map(function (action) {
+			const btn = document.createElement("button");
+			btn.type = "button";
+			btn.className = "juneau-view-bulk-action-btn";
+			btn.textContent = action.label || action.id;
+			btn.disabled = true;
+			btn.addEventListener("click", function () { executeBulkAction(action, table, ctx, selectionState); });
+			bar.appendChild(btn);
+			return btn;
+		});
+
+		return {
+			el: bar,
+			refresh: function (count) {
+				countEl.textContent = count > 0 ? (count + " selected") : "";
+				buttons.forEach(function (b) { b.disabled = count === 0; });
+			}
+		};
+	}
+
+	/**
+	 * Executes ONE bulk action over the current selection as N INDEPENDENT per-row writes (HIGH-5) - it is a
+	 * plain loop calling the SAME submitRowAction(...) the single-row action-menu uses, once per selected id, each
+	 * carrying that row's stable id as `targetId` in the JSON body (the same `extra` convention the TODO-416 modal
+	 * submit path already uses for `idempotencyKey`/`targetId`).  There is deliberately NO aggregate request and
+	 * NO aggregate result: each row gets its own TODO-417 in-flight marker and its own typed ActionResult,
+	 * rendered independently, so one target's failure/refusal/unknown can never be hidden behind an overall
+	 * "success" - and each clears ITS OWN `data-juneau-inflight` on ITS OWN terminal outcome (MED-4), so a stuck
+	 * target can never halt the whole table's polling.  A selected id whose row is no longer on screen (e.g. it
+	 * left the page between the click and this loop running) is silently skipped - the persistence rule (MED-11)
+	 * never lets an off-screen row become an actionable target.
+	 */
+	function executeBulkAction(action, table, ctx, selectionState) {
+		const ids = Array.from(selectionState.selected);
+		if (!ids.length) return;
+		const byId = {};
+		Array.prototype.forEach.call(table.querySelectorAll("tbody tr[" + ROW_ID_ATTR + "]"), function (tr) {
+			byId[tr.getAttribute(ROW_ID_ATTR)] = tr;
+		});
+		ids.forEach(function (id) {
+			const tr = byId[id];
+			if (!tr) return;
+			submitRowAction(action, table, tr, ctx, { targetId: id });
+		});
+	}
+
+	/** Renders a VISIBLE, non-blocking inline error line (anti-silent-degradation) into `container`. */
+	function renderInlineError(container, message) {
+		const el = document.createElement("div");
+		el.className = "juneau-view-error";
+		el.setAttribute("role", "alert");
+		el.textContent = message;
+		container.appendChild(el);
+	}
+
+	/**
+	 * Issues one row action, FAIL-CLOSED.  Resolves the table's token + header name, asks the pure
+	 * buildActionRequest(...) for a request descriptor, and:
+	 *   - on a refusal marker (safe method, or blank/absent/whitespace token) renders a VISIBLE refusal and sends
+	 *     NOTHING - no silent degradation, and never an empty-header request the server would 403;
+	 *   - otherwise marks the row in-flight (TODO-417) and issues the JSON fetch with the CSRF header, then settles
+	 *     the row from the typed ActionResult / transport refusal (TODO-416).
+	 *
+	 * This is the DIRECT submit path (no confirmation dialog); a `present=dialog` action goes through
+	 * openActionDialog(...) instead.  The optional `extra` payload (idempotencyKey + targetId) is carried on the
+	 * dialog path.  The client refusal is defense-against-omission; the landed server-side LoopbackBoundary is the
+	 * real control.
+	 */
+	function submitRowAction(action, table, tr, ctx, extra) {
+		const req = buildActionRequest(action, resolveCsrfToken(table), resolveCsrfHeaderName(table), extra);
+		if (req.refuse) {
+			renderRowActionRefusal(tr, action, req.reason);
+			return;
+		}
+		setRowInFlight(tr, true);
+		fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
+			.then(function (resp) {
+				settleActionResponse(resp, action, table, tr, ctx);
+			})
+			.catch(function () {
+				// A network-level failure is itself a terminal outcome: clear the marker (so polling resumes) and
+				// render a visible refusal rather than leaving the row stuck in-flight.
+				setRowInFlight(tr, false);
+				renderRowActionRefusal(tr, action, "request-failed");
+			});
+	}
+
+	/**
+	 * Whether `table` currently has a row marked in-flight (design doc §9.1 B5) - see hasInFlightRow above; this is
+	 * the setter half.  Marks the `<tr>` in-flight for an OUTSTANDING SYNCHRONOUS WRITE and disables its action
+	 * trigger so a double-click cannot issue a second write (TODO-417).  The marker is scoped to synchronous writes
+	 * ONLY - a long-running async job (TODO-425) uses a distinct affordance that does not inhibit table polling,
+	 * because initPolling skips the WHOLE table's poll while any row carries this marker.
+	 */
+	function setRowInFlight(tr, on) {
+		if (!tr) return;
+		if (on) tr.setAttribute("data-juneau-inflight", "1");
+		else tr.removeAttribute("data-juneau-inflight");
+		const trigger = tr.querySelector ? tr.querySelector(".juneau-view-action-trigger") : null;
+		if (trigger) trigger.disabled = !!on;
+	}
+
+	/**
+	 * Settles a row from an action-submit response - the TODO-416/417 join point.  It ALWAYS clears the in-flight
+	 * marker and re-enables the action FIRST (on success, failure, refusal, unknown, AND a transport refusal), so a
+	 * stuck marker can never freeze the whole table's polling (MED-4); then it renders the outcome:
+	 *   - non-2xx  -> a visible TRANSPORT refusal built from `X-Loopback-Boundary` + the `{reason,message}` envelope,
+	 *                 WITHOUT requiring the typed action-result schema (HIGH-3);
+	 *   - 2xx + typed ActionResult -> success (merge/redraw the row from the authoritative payload), failure,
+	 *                 named refusal, or a non-optimistic unknown - every outcome is rendered, none is silent;
+	 *   - 2xx + no typed body -> a bare success (the pre-416 behavior: redraw for an onSuccess=redraw action).
+	 */
+	function settleActionResponse(resp, action, table, tr, ctx) {
+		setRowInFlight(tr, false);   // EVERY terminal outcome clears the marker first - polling must always resume.
+		if (! resp) { renderActionOutcome(tr, { outcome: "unknown" }); return; }
+
+		if (! resp.ok) {
+			const boundaryReason = (resp.headers && typeof resp.headers.get === "function")
+				? resp.headers.get("X-Loopback-Boundary") : null;
+			readBodyText(resp).then(function (text) {
+				const t = transportRefusal(resp.status, boundaryReason, parseJsonSafe(text));
+				renderActionOutcome(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message });
+			});
+			return;
+		}
+
+		readBodyText(resp).then(function (text) {
+			// TODO-425: an ASYNC action's start POST returns a job pointer (not a terminal result).  The in-flight
+			// marker was ALREADY cleared above (first line of settle), so table polling has resumed BEFORE the long
+			// job runs - the job then uses the DISTINCT job-running affordance (data-juneau-job), never
+			// data-juneau-inflight, so hasInFlightRow/initPolling never freeze the whole table for the job's
+			// duration (HIGH-9).
+			const started = parseJobStarted(text);
+			if (started) {
+				startJobStream(started, action, table, tr, ctx);
+				return;
+			}
+			const result = parseActionResult(text);
+			if (! result) {                    // bare 2xx, no typed result -> pre-416 success behavior.
+				applySuccessBehavior(action, table, tr, ctx, null);
+				return;
+			}
+			if (result.contractVersion != null && result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION) {
+				renderActionOutcome(tr, { outcome: "unknown",
+					message: "action-result contract mismatch (page='" + result.contractVersion +
+						"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" });
+				return;
+			}
+			const outcome = normalizeOutcome(result);
+			if (outcome === "success") {
+				applySuccessBehavior(action, table, tr, ctx, result);
+				renderActionOutcome(tr, { outcome: "success", replay: !! result.replay, message: result.message });
+			} else {
+				renderActionOutcome(tr, {
+					outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay
+				});
+			}
+		});
+	}
+
+	/** Reads a fetch Response body as text, defensively (a stubbed/absent body resolves to "" rather than throwing). */
+	function readBodyText(resp) {
+		if (resp && typeof resp.text === "function") {
+			try { return Promise.resolve(resp.text()); } catch (e) { return Promise.resolve(""); }
+		}
+		return Promise.resolve("");
+	}
+
+	/**
+	 * Applies a successful action's onSuccess behavior: `mergeRow` re-renders the row from the result's authoritative
+	 * payload (TODO-417), `redraw` reloads the table, `navigate` is left to the consumer.  A bare success (no typed
+	 * result) with onSuccess=redraw still redraws, preserving the pre-416 direct-submit behavior.
+	 */
+	function applySuccessBehavior(action, table, tr, ctx, result) {
+		if (action.onSuccess === "mergeRow" && result && result.row != null) {
+			mergeRowFromResult(tr, ctx, result.row);
+		} else if (action.onSuccess === "redraw" && ctx && ctx.redraw) {
+			ctx.redraw();
+		}
+	}
+
+	/**
+	 * Re-renders a row from the ActionResult's authoritative row payload (the `MERGE_ROW` case).  Prefers
+	 * DataTables' native row API when present; otherwise fires an optional `ctx.mergeRow(tr, rowData)` hook.  Always
+	 * stamps `data-juneau-row-merged` on the row so the re-render is observable (and so a host can style a
+	 * just-updated row).
+	 */
+	function mergeRowFromResult(tr, ctx, rowData) {
+		let mergedViaDt = false;
+		try {
+			if (ctx && ctx.dataTable && typeof ctx.dataTable.row === "function") {
+				const row = ctx.dataTable.row(tr);
+				if (row && typeof row.data === "function") {
+					row.data(rowData);
+					if (typeof row.draw === "function") row.draw(false);
+					mergedViaDt = true;
+				}
+			}
+		} catch (e) { mergedViaDt = false; }
+		if (! mergedViaDt && ctx && typeof ctx.mergeRow === "function") ctx.mergeRow(tr, rowData);
+		if (tr && tr.setAttribute) tr.setAttribute("data-juneau-row-merged", "1");
+	}
+
+	/**
+	 * Renders a VISIBLE settled-outcome banner into the row's actions cell (anti-silent-degradation): success gets a
+	 * `role=status`, everything else (failure, refusal, transport refusal, cancelled, unknown) gets a `role=alert`.
+	 * Distinct from renderRowActionRefusal (which is the pre-flight fail-closed refusal); this is the post-response
+	 * outcome.
+	 */
+	function renderActionOutcome(tr, cls) {
+		const cell = tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
+		let banner = cell.querySelector ? cell.querySelector(".juneau-view-action-outcome") : null;
+		if (! banner) {
+			banner = document.createElement("div");
+			banner.className = "juneau-view-action-outcome";
+			banner.setAttribute("data-testid", "action-outcome");
+			cell.appendChild(banner);
+		}
+		const state = cls.outcome || "unknown";
+		banner.setAttribute("data-state", state);
+		banner.setAttribute("role", state === "success" ? "status" : "alert");
+		banner.textContent = actionOutcomeMessage(cls);
+	}
+
+	// ==================================================================================================================
+	// ASYNC JOBS (TODO-425): a long-running job streamed over SSE, with a DISTINCT running affordance
+	// ==================================================================================================================
+
+	/**
+	 * Marks a row as running a LONG async job (TODO-425) - deliberately a DIFFERENT attribute
+	 * (`data-juneau-job`) from the synchronous in-flight marker (`data-juneau-inflight`).  This is the whole point
+	 * of HIGH-9: hasInFlightRow (and therefore initPolling) freezes the ENTIRE table's polling while ANY row
+	 * carries `data-juneau-inflight`, which is correct for a short synchronous write but catastrophic for a job
+	 * that can run up to the server's 120s hard timeout - it would hide a resurrected incident on a PagerDuty
+	 * table for the whole job.  A job therefore NEVER sets `data-juneau-inflight`; it sets this distinct marker,
+	 * which hasInFlightRow does NOT read, so the table keeps polling for the entire duration of the job.  The
+	 * action trigger is disabled while running so a second job cannot be started on the same row.
+	 */
+	function setRowJobRunning(tr, on) {
+		if (!tr) return;
+		if (on) tr.setAttribute("data-juneau-job", "1");
+		else tr.removeAttribute("data-juneau-job");
+		const trigger = tr.querySelector ? tr.querySelector(".juneau-view-action-trigger") : null;
+		if (trigger) trigger.disabled = !!on;
+	}
+
+	/**
+	 * Renders (and updates) the VISIBLE, live job-progress banner in the row's actions cell, plus a Cancel button
+	 * wired to the job's cancelUrl.  The progress text is painted with `textContent` ONLY (never innerHTML) - the
+	 * streamed content is customer-adjacent and this origin holds the CSRF token, so a typed/escaped path is the
+	 * only safe one (same invariant as the modal fields, BLK-1/MED-9).  Distinct `data-testid`/class from the
+	 * settled-outcome banner so a running job and a terminal outcome are never confused.
+	 */
+	function renderJobProgress(tr, text, started, table) {
+		const cell = tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
+		let banner = cell.querySelector ? cell.querySelector(".juneau-view-job-progress") : null;
+		if (! banner) {
+			banner = document.createElement("div");
+			banner.className = "juneau-view-job-progress";
+			banner.setAttribute("data-testid", "job-progress");
+			banner.setAttribute("role", "status");
+			const msg = document.createElement("span");
+			msg.className = "juneau-view-job-progress-msg";
+			banner.appendChild(msg);
+			if (started && ! isBlankToken(started.cancelUrl)) {
+				const cancel = document.createElement("button");
+				cancel.type = "button";
+				cancel.className = "juneau-view-job-cancel";
+				cancel.textContent = "Cancel";
+				cancel.addEventListener("click", function () { cancelJob(started, table, tr); });
+				banner.appendChild(cancel);
+			}
+			cell.appendChild(banner);
+		}
+		const msgEl = banner.querySelector(".juneau-view-job-progress-msg");
+		if (msgEl) msgEl.textContent = (text == null ? "" : String(text));
+	}
+
+	/** Removes the live job-progress banner from a row (called when the job settles to a terminal outcome). */
+	function clearJobProgress(tr) {
+		const cell = tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
+		const banner = cell.querySelector ? cell.querySelector(".juneau-view-job-progress") : null;
+		if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
+	}
+
+	/**
+	 * Opens the SSE progress stream for a started async job and drives the row through its lifecycle (TODO-425).
+	 * The stream URL ITSELF is the capability (an unguessable >=128-bit token) - a browser EventSource CANNOT set
+	 * an X-Csrf-Token header, so unguessability is the access control, not a CSRF header (HIGH-4).  `progress`
+	 * events update the live banner; the single terminal `result` event carries the typed ActionResult and settles
+	 * the row (reusing the same normalize/contract-check/render path as a synchronous result, so cancelled /
+	 * cancelled-after-effect render via actionOutcomeMessage without any new UI).  A stream error is itself a
+	 * non-optimistic terminal outcome.  Throughout, the row carries only the DISTINCT `data-juneau-job` marker, so
+	 * the table keeps polling (HIGH-9).
+	 */
+	function startJobStream(started, action, table, tr, ctx) {
+		if (typeof EventSource === "undefined") {
+			// No SSE transport in this browser - a visible, non-optimistic outcome; polling was never frozen.
+			renderActionOutcome(tr, { outcome: "unknown", message: "live progress is unavailable in this browser" });
+			return null;
+		}
+		setRowJobRunning(tr, true);
+		renderJobProgress(tr, "Working\u2026", started, table);
+		const es = new EventSource(started.streamUrl);
+		const st = { settled: false };
+		function finish(result, fallback) {
+			if (st.settled) return;
+			st.settled = true;
+			es.close();
+			setRowJobRunning(tr, false);
+			clearJobProgress(tr);
+			if (result) finishJobFromResult(action, table, tr, ctx, result);
+			else renderActionOutcome(tr, fallback);
+		}
+		es.addEventListener("progress", function (e) {
+			if (! st.settled) renderJobProgress(tr, e.data, started, table);
+		});
+		es.addEventListener("result", function (e) {
+			finish(parseActionResult(e.data), { outcome: "unknown", message: "the job produced no readable result" });
+		});
+		es.addEventListener("error", function () {
+			finish(null, { outcome: "unknown", message: "the progress stream was interrupted" });
+		});
+		if (ctx) ctx._jobSource = es;
+		return es;
+	}
+
+	/**
+	 * Settles a row from an async job's terminal ActionResult (the SSE `result` event) - the async twin of
+	 * settleActionResponse's 2xx typed branch, reusing the SAME contract-version handshake, outcome normalization,
+	 * success behavior and visible-outcome render.  cancelled / cancelled-after-effect are just outcomes here;
+	 * actionOutcomeMessage already renders both.
+	 */
+	function finishJobFromResult(action, table, tr, ctx, result) {
+		if (! result) { renderActionOutcome(tr, { outcome: "unknown" }); return; }
+		if (result.contractVersion != null && result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION) {
+			renderActionOutcome(tr, { outcome: "unknown",
+				message: "action-result contract mismatch (page='" + result.contractVersion +
+					"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" });
+			return;
+		}
+		const outcome = normalizeOutcome(result);
+		if (outcome === "success") {
+			applySuccessBehavior(action, table, tr, ctx, result);
+			renderActionOutcome(tr, { outcome: "success", replay: !! result.replay, message: result.message });
+		} else {
+			renderActionOutcome(tr, {
+				outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay
+			});
+		}
+	}
+
+	/**
+	 * Requests cancellation of a running job (fail-closed CSRF POST to the job's cancelUrl).  The SERVER is
+	 * authoritative - the terminal cancelled / cancelled-after-effect outcome still arrives over the SSE `result`
+	 * event, so this only asks; a blank token or missing cancelUrl renders a visible refusal and sends nothing.
+	 */
+	function cancelJob(started, table, tr) {
+		const req = buildJobCancelRequest(started && started.cancelUrl, resolveCsrfToken(table), resolveCsrfHeaderName(table));
+		if (req.refuse) {
+			renderRowActionRefusal(tr, { id: "cancel", label: "Cancel" }, req.reason === "missing-token" ? "missing-token" : "request-failed");
+			return;
+		}
+		fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
+			.catch(function () { renderRowActionRefusal(tr, { id: "cancel", label: "Cancel" }, "request-failed"); });
+	}
+
+	/**
+	 * Opens a `present=dialog` action's modal overlay (TODO-416).  When the action declares a form-source URL, the
+	 * modal-open confirmation is a READ-ONLY GET that returns the typed ModalDef JSON (confirmation fields + the
+	 * server-minted idempotency key) - it never mutates (HIGH-7); its typed fields are painted with `textContent`
+	 * (never `innerHTML`, never raw markup - BLK-1/MED-9).  With no form URL the dialog is a confirm-only prompt
+	 * from the declared `confirm` text.  The mutation is the SEPARATE non-safe submit the confirm button issues.
+	 */
+	function openActionDialog(action, table, tr, ctx) {
+		if (isBlankToken(action.form)) {
+			showActionDialog({ title: action.confirm || action.label || action.id }, action, table, tr, ctx);
+			return;
+		}
+		fetch(action.form, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
+			.then(function (resp) {
+				if (! resp || ! resp.ok) {
+					// A non-2xx on the read-only confirmation fetch is itself a visible transport refusal - the
+					// modal never opens optimistically on a boundary rejection.
+					const boundaryReason = (resp && resp.headers && typeof resp.headers.get === "function")
+						? resp.headers.get("X-Loopback-Boundary") : null;
+					return readBodyText(resp).then(function (text) {
+						const t = transportRefusal(resp ? resp.status : 0, boundaryReason, parseJsonSafe(text));
+						renderActionOutcome(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message });
+					});
+				}
+				return readBodyText(resp).then(function (text) {
+					showActionDialog(parseJsonSafe(text) || { title: action.confirm || action.label || action.id },
+						action, table, tr, ctx);
+				});
+			})
+			.catch(function () { renderRowActionRefusal(tr, action, "request-failed"); });
+	}
+
+	/**
+	 * Builds a `present=dialog` overlay DOM node (a backdrop + a `role=dialog` box) from a ModalDef, painting the
+	 * title and each typed confirmation field with `textContent` ONLY - never `innerHTML`, never raw markup, never a
+	 * live-data HTML blob (BLK-1/MED-9): live/remote data is attacker-influenceable and this origin holds the CSRF
+	 * token, so a typed/escaped path is the only safe one here.  Returns the pieces so the caller can wire buttons.
+	 */
+	function buildDialogOverlay(modal, action) {
+		const backdrop = document.createElement("div");
+		backdrop.className = "juneau-view-dialog-backdrop";
+		backdrop.setAttribute("data-testid", "dialog-backdrop");
+
+		const dialog = document.createElement("div");
+		dialog.className = "juneau-view-dialog";
+		dialog.setAttribute("role", "dialog");
+		dialog.setAttribute("aria-modal", "true");
+
+		const title = document.createElement("h2");
+		title.className = "juneau-view-dialog-title";
+		title.textContent = (modal && modal.title) || (action && (action.confirm || action.label || action.id)) || "Confirm";
+		dialog.appendChild(title);
+
+		if (modal && modal.fields && modal.fields.length) {
+			const dl = document.createElement("dl");
+			dl.className = "juneau-view-dialog-fields";
+			dl.setAttribute("data-testid", "dialog-fields");
+			modal.fields.forEach(function (f) {
+				const dt = document.createElement("dt");
+				dt.textContent = (f && f.label != null) ? String(f.label) : "";
+				const dd = document.createElement("dd");
+				dd.textContent = (f && f.value != null) ? String(f.value) : "";
+				dl.appendChild(dt);
+				dl.appendChild(dd);
+			});
+			dialog.appendChild(dl);
+		}
+
+		const actions = document.createElement("div");
+		actions.className = "juneau-view-dialog-actions";
+		const cancelBtn = document.createElement("button");
+		cancelBtn.type = "button";
+		cancelBtn.className = "juneau-view-dialog-cancel";
+		cancelBtn.textContent = "Cancel";
+		const confirmBtn = document.createElement("button");
+		confirmBtn.type = "button";
+		confirmBtn.className = "juneau-view-dialog-confirm";
+		confirmBtn.textContent = (action && action.label) || "Confirm";
+		actions.appendChild(cancelBtn);
+		actions.appendChild(confirmBtn);
+		dialog.appendChild(actions);
+
+		backdrop.appendChild(dialog);
+		return { backdrop: backdrop, dialog: dialog, confirmBtn: confirmBtn, cancelBtn: cancelBtn };
+	}
+
+	/** Shows a dialog overlay for an action and wires its confirm (submit) / cancel (dismiss) buttons. */
+	function showActionDialog(modal, action, table, tr, ctx) {
+		const ui = buildDialogOverlay(modal, action);
+		function close() { if (ui.backdrop.parentNode) ui.backdrop.parentNode.removeChild(ui.backdrop); }
+		ui.cancelBtn.addEventListener("click", close);
+		ui.confirmBtn.addEventListener("click", function () {
+			close();
+			submitActionDialog(modal, action, table, tr, ctx);
+		});
+		document.body.appendChild(ui.backdrop);
+		return ui;
+	}
+
+	/**
+	 * Issues the dialog's non-safe submit, carrying the server-minted idempotency key and the row's targetId so the
+	 * server can check the key's `(action, targetId)` binding (HIGH-8) - a double-click / re-submit / browser retry
+	 * therefore all carry the SAME key.  Delegates the fail-closed CSRF submit + in-flight marker + typed-result
+	 * settling to submitRowAction(...).
+	 */
+	function submitActionDialog(modal, action, table, tr, ctx) {
+		const extra = {};
+		const targetId = (tr && tr.getAttribute) ? tr.getAttribute("data-juneau-row-id") : null;
+		if (targetId != null) extra.targetId = targetId;
+		if (modal && modal.idempotencyKey != null) extra.idempotencyKey = modal.idempotencyKey;
+		submitRowAction(action, table, tr, ctx, extra);
+	}
+
+	/** Renders a VISIBLE row-action refusal (anti-silent-degradation) into the row's actions cell. */
+	function renderRowActionRefusal(tr, action, reason) {
+		const cell = tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr;
+		let banner = cell.querySelector ? cell.querySelector(".juneau-view-action-refusal") : null;
+		if (!banner) {
+			banner = document.createElement("div");
+			banner.className = "juneau-view-action-refusal";
+			banner.setAttribute("role", "alert");
+			banner.setAttribute("data-testid", "action-refusal");
+			cell.appendChild(banner);
+		}
+		const name = (action && (action.label || action.id)) || "action";
+		banner.textContent = "Action '" + name + "' not sent: " + actionRefusalMessage(reason) + ".";
+	}
+
+	/**
+	 * Builds the row-action menu element (`<ul role="menu">`) from a view's rowActions.  Each item's activation
+	 * routes to submitRowAction(...); a safe-method or token-less action still renders (so the menu is honest
+	 * about what is declared) but visibly refuses on activation rather than silently doing nothing.
+	 */
+	function buildRowActionMenu(viewDef, table, tr, ctx) {
+		const menu = document.createElement("ul");
+		menu.className = "juneau-view-action-menu";
+		menu.setAttribute("role", "menu");
+		menu.setAttribute("data-testid", "action-menu");
+		(viewDef.rowActions || []).forEach(function (action) {
+			const li = document.createElement("li");
+			li.setAttribute("role", "none");
+			const item = document.createElement("button");
+			item.type = "button";
+			item.className = "juneau-view-action-item";
+			item.setAttribute("role", "menuitem");
+			item.setAttribute("data-action-id", action.id);
+			item.textContent = action.label || action.id;
+			item.addEventListener("click", function () {
+				closeRowActionMenus(table);
+				// A present=dialog action opens the modal (confirmation + optional form) before its submit;
+				// everything else is the direct fail-closed submit.
+				if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
+				else submitRowAction(action, table, tr, ctx);
+			});
+			li.appendChild(item);
+			menu.appendChild(li);
+		});
+		return menu;
+	}
+
+	/** Removes any open row-action menu under `table` (single-open invariant). */
+	function closeRowActionMenus(table) {
+		Array.prototype.forEach.call(table.querySelectorAll(".juneau-view-action-menu"), function (m) {
+			if (m.parentNode) m.parentNode.removeChild(m);
+		});
+	}
+
+	/**
+	 * Wires the row-action menu via ONE delegated click listener on `table` (rather than one per row): a click on
+	 * a row's `.juneau-view-action-trigger` toggles a menu of that view's rowActions for that row.  Mirrors the
+	 * details-expander's delegated-listener pattern above.
+	 */
+	function initRowActions(table, dt, viewDef, ctx) {
+		table.addEventListener("click", function (e) {
+			const trigger = e.target && e.target.closest ? e.target.closest(".juneau-view-action-trigger") : null;
+			if (!trigger) return;
+			const tr = trigger.closest("tr");
+			if (!tr) return;
+			const existing = tr.querySelector(".juneau-view-action-menu");
+			closeRowActionMenus(table);
+			if (existing) return;   // second click on an open menu's trigger closes it
+			const cell = trigger.closest(".juneau-view-actions-cell") || tr.lastElementChild;
+			if (cell) cell.appendChild(buildRowActionMenu(viewDef, table, tr, ctx));
+		});
+	}
+
 	// NOSONAR javascript:S3776 -- sequential wiring of one view table's DataTables instance, ribbon, paging pill,
 	// column search, details expander, and polling; several of these steps and their exact call order are pinned
 	// verbatim by the wiring canary tests below `functionBody(body, "function initTable(")`, so splitting them
@@ -730,6 +1735,29 @@
 		};
 
 		const opts = buildOptions(viewDef, deps);
+
+		// TODO-428: row selection is detected PURELY from the DOM attribute ViewTable stamped (SELECT_ATTR) -
+		// never from viewDef/VIEW_META (R2 guard).  When present, a synthetic LEADING selection column is
+		// unshifted (mirroring how a declared rowActions list appends a synthetic TRAILING one below) and every
+		// created row is additionally stamped with its stable id.
+		const selectionState = hasSelection(table)
+			? { selected: new Set(), rowIdField: table.getAttribute(ROW_ID_FIELD_ATTR) }
+			: null;
+		if (selectionState) {
+			opts.columns.unshift(buildSelectionColumnDef(selectionState));
+			const priorCreatedRow = opts.createdRow;
+			opts.createdRow = function (rowEl, rowData, index) {
+				if (priorCreatedRow) priorCreatedRow(rowEl, rowData, index);
+				stampRowId(rowEl, rowData, selectionState.rowIdField);
+			};
+		}
+
+		// A declared rowActions list added a synthetic trailing column in buildOptions; append its matching <th>
+		// BEFORE booting DataTables so header and column counts agree (DataTables errors on a mismatch).
+		if (viewDef.rowActions && viewDef.rowActions.length) {
+			appendActionsHeaderCell(table);
+		}
+
 		const dt = $(table).DataTable(opts);
 
 		// A declared `details` field list makes every row expandable.
@@ -751,6 +1779,35 @@
 			redraw: function () { dt.ajax ? dt.ajax.reload() : dt.draw(); }
 		};
 
+		// A declared rowActions list wires the per-row action menu + fail-closed CSRF submit (delegated listener).
+		if (viewDef.rowActions && viewDef.rowActions.length) {
+			initRowActions(table, dt, viewDef, ctx);
+		}
+
+		// TODO-428: selection wiring (checkbox toggle, select-all, off-screen-id-drop on every draw.dt) is wired
+		// whenever selection was declared - completely independent of whether bulk mutation was ALSO declared.
+		// The bulk toolbar itself (a SEPARATE, independent opt-in - hasBulk(...)) is only ever built INSIDE this
+		// same `if (selectionState)` branch, so a selection-only table (e.g. selectable-for-export) has no code
+		// path that can reach it (HIGH-5's compile/DOM-shape separability guarantee).
+		if (selectionState) {
+			initSelection(table, dt, selectionState, ctx);
+			if (hasBulk(table)) {
+				const bulkDef = readBulkDef(id);
+				if (!bulkDef) {
+					ctx._bulkError = "Juneau view '" + id + "': missing or malformed bulk-actions sidecar; bulk mutation withheld.";
+					error(ctx._bulkError);
+				} else if (bulkDef.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION) {
+					ctx._bulkError = "Juneau view '" + id + "': bulk-actions contract version mismatch (page='" +
+						bulkDef.contractVersion + "', runtime='" + JUNEAU_BULK_CONTRACT_VERSION + "'); bulk mutation withheld.";
+					error(ctx._bulkError);
+				} else {
+					// Selection remains fully usable (e.g. for export) even when bulk mutation is withheld above -
+					// only the toolbar this branch builds is gated on a healthy sidecar.
+					ctx.bulkToolbar = buildBulkToolbar(bulkDef, table, ctx, selectionState);
+				}
+			}
+		}
+
 		const bar = NS.ribbon?.build ? NS.ribbon.build(viewDef, ctx) : null;
 
 		const columnSearchRow = buildColumnSearchRow(table, viewDef, dt);
@@ -768,6 +1825,18 @@
 		// Paging exists in exactly this one place - there is no second, right-side paging control any more.
 		const wrapper = table.parentNode;
 		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
+
+		// The bulk toolbar (or its withheld-sidecar error) is inserted into the LEFT cluster, after the paging
+		// pill, as a follow-up DOM step - mirroring the staleness-indicator insertion below, which is likewise a
+		// post-hoc addition rather than a buildToolbarRow(...) parameter (keeping that function's own
+		// signature/tests untouched).
+		if (toolbarRow) {
+			const leftCluster = toolbarRow.querySelector(".juneau-view-toolbar-left");
+			if (leftCluster) {
+				if (ctx.bulkToolbar) leftCluster.appendChild(ctx.bulkToolbar.el);
+				else if (ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
+			}
+		}
 
 		// A declared pollIntervalMs gets its own per-table staleness chip, inserted at the front of the RIGHT
 		// toolbar cluster (ahead of search/ribbon) without touching buildToolbarRow's own signature/tests.
@@ -830,7 +1899,65 @@
 		// Row-details expander - exposed for manual verification.
 		buildDetailFields: buildDetailFields,
 		buildDetailPanel: buildDetailPanel,
-		initDetailsExpander: initDetailsExpander
+		initDetailsExpander: initDetailsExpander,
+		// Row actions + fail-closed CSRF submit - exposed for manual verification and the fail-closed canary.
+		DEFAULT_CSRF_HEADER: DEFAULT_CSRF_HEADER,
+		isSafeMethod: isSafeMethod,
+		isBlankToken: isBlankToken,
+		buildActionRequest: buildActionRequest,
+		actionRefusalMessage: actionRefusalMessage,
+		resolveCsrfToken: resolveCsrfToken,
+		resolveCsrfHeaderName: resolveCsrfHeaderName,
+		buildRowActionMenu: buildRowActionMenu,
+		submitRowAction: submitRowAction,
+		initRowActions: initRowActions,
+		// Declarative modal + typed action-result + in-flight lifecycle (TODO-416/417) - exposed for the canary
+		// and manual verification.
+		ACTION_RESULT_CONTRACT_VERSION: JUNEAU_ACTION_RESULT_CONTRACT_VERSION,
+		parseActionResult: parseActionResult,
+		normalizeOutcome: normalizeOutcome,
+		transportRefusal: transportRefusal,
+		actionOutcomeMessage: actionOutcomeMessage,
+		isDialogAction: isDialogAction,
+		setRowInFlight: setRowInFlight,
+		settleActionResponse: settleActionResponse,
+		mergeRowFromResult: mergeRowFromResult,
+		renderActionOutcome: renderActionOutcome,
+		openActionDialog: openActionDialog,
+		buildDialogOverlay: buildDialogOverlay,
+		showActionDialog: showActionDialog,
+		submitActionDialog: submitActionDialog,
+		// Async jobs + SSE streaming (TODO-425) - exposed for the canary and manual verification.  The job-running
+		// affordance (setRowJobRunning) is DISTINCT from the synchronous in-flight marker: it never freezes polling.
+		parseJobStarted: parseJobStarted,
+		buildJobCancelRequest: buildJobCancelRequest,
+		setRowJobRunning: setRowJobRunning,
+		renderJobProgress: renderJobProgress,
+		clearJobProgress: clearJobProgress,
+		startJobStream: startJobStream,
+		finishJobFromResult: finishJobFromResult,
+		cancelJob: cancelJob,
+		// Row selection + bulk mutation (TODO-428) - two independent opt-ins - exposed for the canary and manual
+		// verification.  BULK_CONTRACT_VERSION is exposed above (NS.BULK_CONTRACT_VERSION) alongside the other two
+		// independently-versioned contracts.
+		SELECT_ATTR: SELECT_ATTR,
+		ROW_ID_ATTR: ROW_ID_ATTR,
+		ROW_ID_FIELD_ATTR: ROW_ID_FIELD_ATTR,
+		SELECT_ALL_ATTR: SELECT_ALL_ATTR,
+		BULK_ATTR: BULK_ATTR,
+		BULK_SIDECAR_ID_PREFIX: BULK_SIDECAR_ID_PREFIX,
+		rowIdOf: rowIdOf,
+		pruneSelection: pruneSelection,
+		hasSelection: hasSelection,
+		hasBulk: hasBulk,
+		stampRowId: stampRowId,
+		selectionCellMarkup: selectionCellMarkup,
+		buildSelectionColumnDef: buildSelectionColumnDef,
+		initSelection: initSelection,
+		readBulkDef: readBulkDef,
+		buildBulkToolbar: buildBulkToolbar,
+		executeBulkAction: executeBulkAction,
+		renderInlineError: renderInlineError
 	};
 
 	if (document.readyState === "loading") {

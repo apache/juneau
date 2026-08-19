@@ -79,7 +79,27 @@ import org.apache.juneau.marshall.marshaller.*;
  * <p>
  * A light-weight tab tree (id/label/subtabs only &mdash; no embedded {@code ViewDef} content, since the page
  * runtime's lazy-init binding layer locates a panel's {@code table[data-juneau-view]} elements directly via the DOM
- * rather than via PAGE_META): <c>{contractVersion, id, tabs:[{id, label, subtabs?:[{id, label}]}]}</c>.
+ * rather than via PAGE_META): <c>{contractVersion, id, tabs:[{id, label, subtabs?:[{id, label}]}]}</c>. This
+ * projection is built by {@link #buildMeta(PageDef)}, which copies only the fields above from each {@link Tab}/
+ * {@link Subtab} &mdash; {@link Tab#content}/{@link Subtab#content} (TODO-420) are never read by it and so
+ * structurally cannot reach PAGE_META, regardless of what {@code @BeanType} pins on {@link Tab}/{@link Subtab};
+ * this is a stronger guarantee than reserve-and-omit (there is nothing to omit because there is no code path that
+ * copies it), and it is why the field is also simply absent from {@link Tab}/{@link Subtab}'s own
+ * {@code @BeanType} property lists, so the framework's wire contract (and {@link PageDef#CONTRACT_VERSION}) needs
+ * no bump to add it.
+ *
+ * <h5 class='section'>Panel-body content (TODO-420): template engine, trusted / first-party content only</h5>
+ * <p>
+ * {@link Tab#content}/{@link Subtab#content} let a panel hold raw markup instead of (or, for {@link Tab#content},
+ * above) a {@code ViewDef}-backed table &mdash; see the panel-body matrices on {@link Tab}/{@link Subtab}. This
+ * emitter writes that markup <b>verbatim</b>, via {@code rawText(...)}, exactly like the PAGE_META/VIEW_META JSON
+ * sidecars use {@code rawText(...)} for their own (separately escaped) payloads. Unlike the sidecars, {@code
+ * content} passes through with <b>no</b> escaping of any kind &mdash; the framework is a template engine on this
+ * path: the caller pre-sanitizes, this method emits verbatim. {@code content} is for trusted, first-party prose
+ * only (the FG-2 docs-page use case) and MUST NEVER carry live/remote/attacker-influenceable data; a write-path
+ * confirmation/detail body must use a typed/escaped path instead. A build-gating scanner
+ * ({@code RawContentSinkScanner}, this module's test tree) enforces that this framework's own sources never pour a
+ * non-literal (i.e. plausibly live-data-derived) value into {@link Tab#content}/{@link Subtab#content}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -205,7 +225,11 @@ public class PageTable {
 		return div(tabBar, panels, sidecar).id(id).attr(MARKER_ATTR, id).class_(PAGE_CLASS);
 	}
 
-	/** Builds one top-level tab's panel: either a leaf view panel, or a sub-tab bar + one sub-panel per subtab. */
+	/**
+	 * Builds one top-level tab's panel: a leaf view panel, a leaf raw-content panel, or a (optionally
+	 * content-prefaced) sub-tab bar + one sub-panel per subtab &mdash; the {@code Tab} panel-body matrix
+	 * ({@code {view} | {subtabs} | {content} | {content+subtabs}}, TODO-420) mirrored from {@link Tab#validate()}.
+	 */
 	private static Div buildTabPanel(MarshallingContext ctx, String pageId, Tab t) {
 		if (t.view != null) {
 			var body = ViewTable.of(ctx, t.view, null);
@@ -213,6 +237,11 @@ public class PageTable {
 		}
 
 		var subtabs = t.subtabs == null ? List.<Subtab>of() : t.subtabs;
+
+		if (subtabs.isEmpty())
+			// Leaf content-only tab (Tab = {content}): the panel body IS the raw content, emitted verbatim (see
+			// Tab#content's ownership contract - caller sanitizes, this emits as-is).
+			return div(rawText(t.content)).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
 
 		var subtabBarChildren = new ArrayList<>();
 		for (var s : subtabs)
@@ -225,7 +254,8 @@ public class PageTable {
 
 		var subpanelsChildren = new ArrayList<>();
 		for (var s : subtabs) {
-			var body = ViewTable.of(ctx, s.view, null);
+			// Subtab = {view} | {content} (Subtab#validate()): exactly one of these is non-null here.
+			Object body = s.view != null ? ViewTable.of(ctx, s.view, null) : rawText(s.content);
 			subpanelsChildren.add(
 				div(body).class_(SUBPANEL_CLASS).attr(PANEL_TAB_ATTR, t.id).attr(PANEL_SUBTAB_ATTR, s.id));
 		}
@@ -234,7 +264,16 @@ public class PageTable {
 		// Tab-scoped only, on purpose: this panel wraps the sub-tab bar and must be visible for EVERY sub-tab, so it
 		// stays sub-tab-agnostic (see the panel markup contract in this class's javadoc).  Do not add
 		// data-panel-subtab here - it would pin the whole tab to a single sub-tab and blank it for the others.
-		return div(subtabBar, subpanels).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
+		//
+		// The optional Tab#content preamble (Tab = {content+subtabs}) is emitted first, inside this SAME outer
+		// panel - so it renders above the sub-tab bar and stays visible for every sub-tab exactly like the bar
+		// itself, with no separate routing attribute (design doc open question 3).
+		var outerChildren = new ArrayList<>();
+		if (t.content != null)
+			outerChildren.add(rawText(t.content));
+		outerChildren.add(subtabBar);
+		outerChildren.add(subpanels);
+		return div(outerChildren.toArray()).class_(PANEL_CLASS).attr(PANEL_TAB_ATTR, t.id);
 	}
 
 	/** Builds the deep-linkable hash href: {@code #pageId/tabId} or {@code #pageId/tabId/subtabId}. */
