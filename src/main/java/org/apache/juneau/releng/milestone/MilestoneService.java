@@ -17,6 +17,8 @@
 
 package org.apache.juneau.releng.milestone;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -39,7 +41,7 @@ public class MilestoneService {
 	/** Groups Dependabot bump PRs into one {@link ChangelogEntry} per dependency, sorted by dependency. */
 	public List<ChangelogEntry> generateChanges(List<PullRequest> prs) {
 		// Preserve encounter order within a group, but iterate PRs by ascending number for stable from/to + refs.
-		var sorted = new ArrayList<>(prs);
+		var sorted = cp(prs);
 		sorted.sort((a, b) -> Integer.compare(a.number, b.number));
 
 		var groups = new LinkedHashMap<String, ChangelogEntry.Builder>();
