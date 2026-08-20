@@ -49,6 +49,9 @@ import org.junit.jupiter.api.*;
  * {@code LoopbackBoundary_Test} / {@code LoopbackBoundaryFilter_Test}.  The one write-time transport check the mixin
  * DOES own &mdash; {@code Content-Type: application/json} (415) &mdash; is exercised below.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixture held in a static field; lifecycle managed by the test/framework, not a real leak.
+})
 class SavedViewsMixin_Serving_Test extends TestBase {
 
 	@Rest
