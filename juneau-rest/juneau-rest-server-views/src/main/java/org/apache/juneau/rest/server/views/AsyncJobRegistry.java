@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
 import java.time.*;
@@ -93,19 +94,40 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	private final boolean ownsScheduler;
 
 	/**
-	 * Creates a registry with the production defaults: a system clock, the {@link #HARD_TIMEOUT} timeout,
+	 * Creates a registry with the production defaults: a system clock, the {@link #HARD_TIMEOUT} (120s) timeout,
 	 * {@link #MAX_OUTPUT_BYTES} / {@link #MAX_SUBSCRIBERS_PER_JOB} caps, and a private daemon scheduler that enforces
 	 * each job's hard timeout.
+	 *
+	 * <p>
+	 * The 120s default is a disclosure bound for jobs that are not long-running agent dispatches.  Callers that need
+	 * a longer bound (for example a Claude-length create) use {@link #AsyncJobRegistry(Duration)} rather than raising
+	 * this global default.
+	 * </p>
 	 */
 	public AsyncJobRegistry() {
-		this(Clock.systemUTC(), HARD_TIMEOUT, MAX_OUTPUT_BYTES, MAX_SUBSCRIBERS_PER_JOB, defaultScheduler(), true);
+		this(HARD_TIMEOUT);
+	}
+
+	/**
+	 * Creates a registry with a caller-chosen hard per-job timeout and the production caps / scheduler.
+	 *
+	 * <p>
+	 * Use this when a job may run longer than {@link #HARD_TIMEOUT} (120s).  The no-arg constructor keeps that
+	 * default; this overload does not change it.
+	 * </p>
+	 *
+	 * @param timeout The hard per-job timeout.  Must be a positive duration.
+	 * @throws IllegalArgumentException If {@code timeout} is <jk>null</jk>, zero, or negative.
+	 */
+	public AsyncJobRegistry(Duration timeout) {
+		this(Clock.systemUTC(), requirePositiveTimeout(timeout), MAX_OUTPUT_BYTES, MAX_SUBSCRIBERS_PER_JOB, defaultScheduler(), true);
 	}
 
 	/**
 	 * Test/advanced constructor allowing an injected clock, timeout, caps and scheduler.
 	 *
 	 * @param clock The clock supplying job-creation and timeout-check instants.  Must not be <jk>null</jk>.
-	 * @param timeout The hard per-job timeout.  Must not be <jk>null</jk>.
+	 * @param timeout The hard per-job timeout.  Must be a positive duration.
 	 * @param maxOutputBytes The per-job streamed-output cap, in bytes.
 	 * @param maxSubscribers The per-job concurrent-subscriber cap.
 	 * @param scheduler The scheduler that enforces each job's hard timeout, or <jk>null</jk> to rely solely on
@@ -117,11 +139,18 @@ public final class AsyncJobRegistry implements AutoCloseable {
 
 	private AsyncJobRegistry(Clock clock, Duration timeout, long maxOutputBytes, int maxSubscribers, ScheduledExecutorService scheduler, boolean ownsScheduler) {
 		this.clock = assertArgNotNull("clock", clock);
-		this.timeout = assertArgNotNull("timeout", timeout);
+		this.timeout = requirePositiveTimeout(timeout);
 		this.maxOutputBytes = maxOutputBytes;
 		this.maxSubscribers = maxSubscribers;
 		this.scheduler = scheduler;
 		this.ownsScheduler = ownsScheduler;
+	}
+
+	private static Duration requirePositiveTimeout(Duration timeout) {
+		assertArgNotNull("timeout", timeout);
+		if (timeout.isZero() || timeout.isNegative())
+			throw iaex("AsyncJobRegistry timeout must be a positive duration, not %s.", timeout);
+		return timeout;
 	}
 
 	private static ScheduledExecutorService defaultScheduler() {

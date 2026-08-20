@@ -334,15 +334,27 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 		var root = requireModuleRoot();
 		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
 		var source = Files.readString(root.resolve(rel));
-		var needle = "slots[i].textContent = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : \"\";";
+		var needle = "slot.textContent = value;";
 		assertTrue(source.contains(needle), "fillDetailSlots assignment moved - update this fixture");
 		var fn = extractFunction(source, "function fillDetailSlots(");
 		var clean = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
 		assertEquals(List.of(), clean.violations());
-		var mutated = fn.replace("slots[i].textContent", "slots[i].innerHTML");
+		var mutated = fn.replace("slot.textContent", "slot.innerHTML");
 		var mutatedResult = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), mutated);
 		assertTrue(mutatedResult.violations().size() >= 1,
 			() -> "mutating fillDetailSlots to innerHTML must be flagged: " + mutatedResult.violations());
+	}
+
+	@Test void d04_fillMarkdownSlot_hasNoInnerHtml() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
+		var source = Files.readString(root.resolve(rel));
+		var fn = extractFunction(source, "function fillMarkdownSlot(");
+		assertTrue(fn.contains("DOMParser"), fn);
+		assertTrue(fn.contains("createElement"), fn);
+		assertFalse(fn.contains("innerHTML"), fn);
+		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+		assertEquals(List.of(), r.violations(), () -> "fillMarkdownSlot must not assign innerHTML: " + r.violations());
 	}
 
 	private static String extractFunction(String body, String signature) {

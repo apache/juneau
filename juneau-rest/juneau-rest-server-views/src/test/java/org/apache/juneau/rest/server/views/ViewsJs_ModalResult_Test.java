@@ -94,7 +94,8 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		// innerHTML uses live only in the trusted icon/caret render helpers, never in the action-result path.
 		var body = viewsJs();
 		for (var sig : new String[]{"function settleActionResponse(", "function renderActionOutcome(",
-				"function showActionDialog(", "function submitActionDialog(", "function openActionDialog("}) {
+				"function showActionDialog(", "function submitActionDialog(", "function openActionDialog(",
+				"function appendDialogForm(", "function collectDialogFormFields("}) {
 			var f = fn(body, sig);
 			assertFalse(f.contains(".innerHTML"), () -> sig + " must never use innerHTML:\n" + f);
 			assertFalse(f.contains("insertAdjacentHTML"), () -> sig + " must never use insertAdjacentHTML:\n" + f);
@@ -230,5 +231,53 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		var s = fn(body, "function submitActionDialog(");
 		assertTrue(s.contains("idempotencyKey"), s);
 		assertTrue(s.contains("targetId"), s);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// h) FormDef inputs: createElement + textContent / .value, never innerHTML; submit collects field values
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_appendDialogFormUsesCreateElementNeverInnerHtml() throws Exception {
+		var body = viewsJs();
+		var append = fn(body, "function appendDialogForm(");
+		assertTrue(append.contains("createElement(\"label\")"), append);
+		assertTrue(append.contains("createElement(\"input\")"), append);
+		assertTrue(append.contains("createElement(\"textarea\")"), append);
+		assertTrue(append.contains(".textContent"), append);
+		assertTrue(append.contains(".value"), append);
+		assertFalse(append.contains(".innerHTML"), () -> "FormDef paint must never use innerHTML:\n" + append);
+		assertFalse(append.contains("insertAdjacentHTML"), append);
+		assertFalse(append.contains("form.template"), () -> "client must not consume form.template as markup:\n" + append);
+	}
+
+	@Test void h02_collectDialogFormFieldsUsesValueNotInnerHtml() throws Exception {
+		var body = viewsJs();
+		var collect = fn(body, "function collectDialogFormFields(");
+		assertTrue(collect.contains(".value"), collect);
+		assertFalse(collect.contains(".innerHTML"), () -> "collect must never use innerHTML:\n" + collect);
+		assertTrue(collect.contains("data-juneau-form-field"), collect);
+	}
+
+	@Test void h03_submitDialogMergesCollectedFields() throws Exception {
+		var body = viewsJs();
+		var s = fn(body, "function submitActionDialog(");
+		assertTrue(s.contains("extra.fields"), s);
+		assertTrue(s.contains("idempotencyKey"), s);
+		assertTrue(s.contains("targetId"), s);
+	}
+
+	@Test void h04_typedInputsOnly_textAndTextarea() throws Exception {
+		var body = viewsJs();
+		var typed = fn(body, "function isTypedFormInputType(");
+		assertTrue(typed.contains("\"text\""), typed);
+		assertTrue(typed.contains("\"textarea\""), typed);
+		var append = fn(body, "function appendDialogForm(");
+		assertTrue(append.contains("isTypedFormInputType(type)"), append);
+	}
+
+	@Test void h05_buildDialogOverlayPaintsForm() throws Exception {
+		var body = viewsJs();
+		var build = fn(body, "function buildDialogOverlay(");
+		assertTrue(build.contains("appendDialogForm(dialog, modal && modal.form)"), build);
 	}
 }

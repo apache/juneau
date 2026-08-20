@@ -966,16 +966,129 @@
 	}
 
 	/**
-	 * Fills `[data-juneau-field]` slots from an expand JSON `fields` map via textContent only.  Unknown keys are
-	 * dropped; missing keys and non-scalars become empty.
+	 * Tag names (uppercase) the markdown slot copier will create.  Everything else is unwrapped (children kept)
+	 * except the drop-with-children set in {@link #fillMarkdownSlot}.
+	 */
+	const MARKDOWN_ALLOWED_TAGS = {
+		P: 1, BR: 1, H1: 1, H2: 1, H3: 1, H4: 1, H5: 1, H6: 1,
+		UL: 1, OL: 1, LI: 1, PRE: 1, CODE: 1, EM: 1, STRONG: 1, A: 1, BLOCKQUOTE: 1, HR: 1,
+		TABLE: 1, THEAD: 1, TBODY: 1, TR: 1, TH: 1, TD: 1, DEL: 1, SUP: 1, SUB: 1
+	};
+
+	/** Tags whose children are discarded, not unwrapped (script body must not become text). */
+	const MARKDOWN_DROP_TAGS = {
+		SCRIPT: 1, STYLE: 1, IFRAME: 1, OBJECT: 1, EMBED: 1, LINK: 1, META: 1, BASE: 1, FORM: 1, INPUT: 1, SVG: 1, IMG: 1
+	};
+
+	/**
+	 * Whether `href` is safe to copy onto an {@code <a>}: http(s), mailto, same-origin path, fragment, or a
+	 * scheme-less relative URL.  javascript:/data:/vbscript: and other schemes are rejected.
+	 */
+	function isSafeMarkdownHref(href) {
+		if (href == null) return false;
+		const t = String(href).trim();
+		if (!t) return false;
+		const lower = t.toLowerCase();
+		if (lower.startsWith("javascript:") || lower.startsWith("data:") || lower.startsWith("vbscript:"))
+			return false;
+		if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("mailto:"))
+			return true;
+		if (t.charAt(0) === "#" || t.charAt(0) === "/")
+			return true;
+		return lower.indexOf(":") < 0;
+	}
+
+	function clearElementChildren(el) {
+		if (!el) return;
+		if (typeof el.replaceChildren === "function") {
+			el.replaceChildren();
+			return;
+		}
+		while (el.firstChild)
+			el.removeChild(el.firstChild);
+	}
+
+	function copyAllowedMarkdownAttrs(from, to) {
+		if (!from || !to || typeof to.setAttribute !== "function") return;
+		if (from.tagName === "A") {
+			const href = typeof from.getAttribute === "function" ? from.getAttribute("href") : null;
+			if (isSafeMarkdownHref(href))
+				to.setAttribute("href", href);
+		}
+	}
+
+	function copySanitizedMarkdownChildren(from, to, doc) {
+		if (!from || !to || !from.childNodes) return;
+		const kids = from.childNodes;
+		for (let i = 0; i < kids.length; i++) {
+			const n = kids[i];
+			if (!n) continue;
+			if (n.nodeType === 3) {
+				const text = n.nodeValue == null ? "" : String(n.nodeValue);
+				if (doc && typeof doc.createTextNode === "function")
+					to.appendChild(doc.createTextNode(text));
+				continue;
+			}
+			if (n.nodeType !== 1) continue;
+			const tag = n.tagName ? String(n.tagName).toUpperCase() : "";
+			if (MARKDOWN_DROP_TAGS[tag])
+				continue;
+			if (!MARKDOWN_ALLOWED_TAGS[tag]) {
+				copySanitizedMarkdownChildren(n, to, doc);
+				continue;
+			}
+			const dest = doc.createElement(tag.toLowerCase());
+			copyAllowedMarkdownAttrs(n, dest);
+			copySanitizedMarkdownChildren(n, dest, doc);
+			to.appendChild(dest);
+		}
+	}
+
+	/**
+	 * Paints a markdown field slot from sanitizing-markdown HTML.  Parses with {@code DOMParser} (does not
+	 * execute script) and copies allowlisted nodes via {@code createElement}/{@code createTextNode}.  Never
+	 * assigns {@code innerHTML}.  Missing {@code DOMParser} fails closed to {@code textContent}.
+	 */
+	function fillMarkdownSlot(el, html) {
+		clearElementChildren(el);
+		if (html == null || html === "") return;
+		const src = String(html);
+		const doc = typeof document !== "undefined" ? document : null;
+		const Parser = typeof DOMParser !== "undefined" ? DOMParser
+			: (typeof window !== "undefined" ? window.DOMParser : null);
+		if (!Parser || !doc || typeof doc.createElement !== "function") {
+			el.textContent = src;
+			return;
+		}
+		let parsed;
+		try {
+			parsed = new Parser().parseFromString("<div>" + src + "</div>", "text/html");
+		} catch (e) {
+			el.textContent = src;
+			return;
+		}
+		const wrap = parsed && parsed.body && parsed.body.firstChild;
+		if (!wrap) return;
+		copySanitizedMarkdownChildren(wrap, el, doc);
+	}
+
+	/**
+	 * Fills `[data-juneau-field]` slots from an expand JSON `fields` map.  TEXT slots (the default, and any
+	 * unknown format) use textContent only.  {@code data-juneau-field-format="markdown"} slots use
+	 * fillMarkdownSlot.  Unknown keys are dropped; missing keys and non-scalars become empty.
 	 */
 	function fillDetailSlots(root, fields) {
 		if (!root || !root.querySelectorAll) return;
 		const map = fields && typeof fields === "object" ? fields : {};
 		const slots = root.querySelectorAll("[data-juneau-field]");
 		for (let i = 0; i < slots.length; i++) {
-			const key = slots[i].getAttribute("data-juneau-field");
-			slots[i].textContent = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
+			const slot = slots[i];
+			const key = slot.getAttribute("data-juneau-field");
+			const value = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
+			if (slot.getAttribute("data-juneau-field-format") === "markdown")
+				fillMarkdownSlot(slot, value);
+			else
+				slot.textContent = value;
 		}
 	}
 
@@ -1845,6 +1958,8 @@
 			dialog.appendChild(dl);
 		}
 
+		appendDialogForm(dialog, modal && modal.form);
+
 		const actions = document.createElement("div");
 		actions.className = "juneau-view-dialog-actions";
 		const cancelBtn = document.createElement("button");
@@ -1863,6 +1978,69 @@
 		return { backdrop: backdrop, dialog: dialog, confirmBtn: confirmBtn, cancelBtn: cancelBtn };
 	}
 
+	/** Whether `type` is a legal FormDef input token.  Anything else is skipped (typed inputs only). */
+	function isTypedFormInputType(type) {
+		return type === "text" || type === "textarea";
+	}
+
+	/**
+	 * Paints typed form fields as native label+input/textarea controls via createElement.  Labels use textContent;
+	 * prefills use `.value`.  Never innerHTML, never a template-markup sink (that FormDef field is a server-author
+	 * reference).  Unknown types are skipped so a hostile type token cannot become an element.
+	 */
+	function appendDialogForm(dialog, form) {
+		if (!dialog || !form || !form.fields || !form.fields.length) return;
+		const wrap = document.createElement("div");
+		wrap.className = "juneau-view-dialog-form";
+		wrap.setAttribute("data-testid", "dialog-form");
+		form.fields.forEach(function (f) {
+			if (!f || f.name == null || String(f.name) === "") return;
+			const type = (f.type == null || f.type === "") ? "text" : String(f.type);
+			if (!isTypedFormInputType(type)) return;
+			const row = document.createElement("div");
+			row.className = "juneau-view-dialog-form-row";
+			const id = "juneau-dialog-field-" + String(f.name);
+			const label = document.createElement("label");
+			label.setAttribute("for", id);
+			label.textContent = f.label != null ? String(f.label) : String(f.name);
+			const input = type === "textarea" ? document.createElement("textarea") : document.createElement("input");
+			if (type !== "textarea") input.type = "text";
+			input.id = id;
+			input.name = String(f.name);
+			input.setAttribute("data-juneau-form-field", String(f.name));
+			if (f.required) input.required = true;
+			if (f.value != null) input.value = String(f.value);
+			row.appendChild(label);
+			row.appendChild(input);
+			wrap.appendChild(row);
+		});
+		if (wrap.childNodes.length)
+			dialog.appendChild(wrap);
+	}
+
+	/**
+	 * Reads typed form controls from a dialog via `.value` (never textContent of the control, never innerHTML)
+	 * into a `{ name: value }` map for the submit body.
+	 */
+	function collectDialogFormFields(dialog) {
+		const out = {};
+		if (!dialog || !dialog.querySelectorAll) return out;
+		const nodes = dialog.querySelectorAll("[data-juneau-form-field]");
+		for (let i = 0; i < nodes.length; i++) {
+			const el = nodes[i];
+			const name = el.getAttribute ? el.getAttribute("data-juneau-form-field") : null;
+			if (name == null || name === "") continue;
+			const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
+			if (tag !== "input" && tag !== "textarea") continue;
+			if (tag === "input") {
+				const itype = el.type ? String(el.type).toLowerCase() : "text";
+				if (itype !== "text") continue;
+			}
+			out[name] = el.value != null ? String(el.value) : "";
+		}
+		return out;
+	}
+
 	/** Shows a dialog overlay for an action and wires its confirm (submit) / cancel (dismiss) buttons. */
 	function showActionDialog(modal, action, table, tr, ctx) {
 		const ui = buildDialogOverlay(modal, action);
@@ -1872,8 +2050,9 @@
 		}
 		ui.cancelBtn.addEventListener("click", close);
 		ui.confirmBtn.addEventListener("click", function () {
+			const fields = collectDialogFormFields(ui.dialog);
 			close();
-			submitActionDialog(modal, action, table, tr, ctx);
+			submitActionDialog(modal, action, table, tr, ctx, fields);
 		});
 		if (ctx) ctx._actionDialog = ui.backdrop;
 		document.body.appendChild(ui.backdrop);
@@ -1883,14 +2062,18 @@
 	/**
 	 * Issues the dialog's non-safe submit, carrying the server-minted idempotency key and the row's targetId so the
 	 * server can check the key's `(action, targetId)` binding (HIGH-8) - a double-click / re-submit / browser retry
-	 * therefore all carry the SAME key.  Delegates the fail-closed CSRF submit + in-flight marker + typed-result
-	 * settling to submitRowAction(...).
+	 * therefore all carry the SAME key.  Typed FormDef values collected via `.value` ride in `extra.fields`.
+	 * Delegates the fail-closed CSRF submit + in-flight marker + typed-result settling to submitRowAction(...).
 	 */
-	function submitActionDialog(modal, action, table, tr, ctx) {
+	function submitActionDialog(modal, action, table, tr, ctx, fields) {
 		const extra = {};
 		const targetId = (tr && tr.getAttribute) ? tr.getAttribute("data-juneau-row-id") : null;
 		if (targetId != null) extra.targetId = targetId;
 		if (modal && modal.idempotencyKey != null) extra.idempotencyKey = modal.idempotencyKey;
+		if (fields && typeof fields === "object") {
+			const keys = Object.keys(fields);
+			if (keys.length) extra.fields = fields;
+		}
 		submitRowAction(action, table, tr, ctx, extra);
 	}
 
@@ -2384,6 +2567,8 @@
 		isSafeDetailUrl: isSafeDetailUrl,
 		substituteDetailUrl: substituteDetailUrl,
 		scalarFieldValue: scalarFieldValue,
+		isSafeMarkdownHref: isSafeMarkdownHref,
+		fillMarkdownSlot: fillMarkdownSlot,
 		fillDetailSlots: fillDetailSlots,
 		findRowDetailTemplate: findRowDetailTemplate,
 		detailCoalesceKey: detailCoalesceKey,
@@ -2417,6 +2602,9 @@
 		renderActionOutcome: renderActionOutcome,
 		openActionDialog: openActionDialog,
 		buildDialogOverlay: buildDialogOverlay,
+		appendDialogForm: appendDialogForm,
+		collectDialogFormFields: collectDialogFormFields,
+		isTypedFormInputType: isTypedFormInputType,
 		showActionDialog: showActionDialog,
 		submitActionDialog: submitActionDialog,
 		// Async jobs + SSE streaming (TODO-425) - exposed for the canary and manual verification.  The job-running

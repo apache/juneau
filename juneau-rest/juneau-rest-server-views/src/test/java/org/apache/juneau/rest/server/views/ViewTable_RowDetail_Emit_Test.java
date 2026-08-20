@@ -113,4 +113,27 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		assertTrue(html.contains("data-juneau-row-detail"), html);
 		assertTrue(html.contains("data-juneau-detail-section=\"overview\""), html);
 	}
+
+	@Test void a08_markdownFormat_stampsAttribute_textDoesNot() {
+		var v = ViewDef.create("skills")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id").title("Id"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("body", "SKILL.md")
+					.columns(1)
+					.fields(
+						DetailField.of("name").title("Name"),
+						DetailField.of("body").title("").format(DetailField.Format.MARKDOWN))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		assertTrue(html.contains("data-juneau-field=\"name\""), html);
+		assertFalse(html.contains("data-juneau-field-format=\"text\""), html);
+		assertTrue(html.contains("data-juneau-field-format=\"markdown\""), html);
+		assertTrue(html.contains("data-juneau-field=\"body\""), html);
+		assertTrue(html.contains("juneau-view-detail-markdown"), html);
+		assertTrue(html.contains("jc-prose"), html);
+		assertFalse(html.contains(">body</div>"), "empty markdown title must not fall back to the data key: " + html);
+	}
 }

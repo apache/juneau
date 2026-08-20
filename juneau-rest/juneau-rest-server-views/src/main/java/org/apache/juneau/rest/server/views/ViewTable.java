@@ -146,6 +146,12 @@ public class ViewTable {
 	/** Attribute carrying a {@link DetailField#data} key on each empty field slot. */
 	public static final String DETAIL_FIELD_ATTR = "data-juneau-field";
 
+	/**
+	 * Attribute carrying a {@link DetailField.Format} wire token.  Omitted for {@link DetailField.Format#TEXT}
+	 * (the default).
+	 */
+	public static final String DETAIL_FIELD_FORMAT_ATTR = "data-juneau-field-format";
+
 	/** Attribute carrying an {@link org.apache.juneau.rest.server.widgets.ActionRef} id on a write button. */
 	public static final String DETAIL_ACTION_ATTR = "data-juneau-action";
 
@@ -482,11 +488,7 @@ public class ViewTable {
 			var fieldSlots = new ArrayList<>();
 			if (s.fields != null) {
 				for (var f : s.fields) {
-					fieldSlots.add(div(
-						div(f.title == null || f.title.isBlank() ? f.data : f.title)
-							.class_("juneau-view-detail-field-title"),
-						div().attr(DETAIL_FIELD_ATTR, f.data).class_("juneau-view-detail-field-value")
-					).class_("juneau-view-detail-field"));
+					fieldSlots.add(emitDetailField(f));
 				}
 			}
 			kids.add(div(fieldSlots.toArray())
@@ -501,6 +503,25 @@ public class ViewTable {
 			.attr(DETAIL_CONTRACT_ATTR, RowDetailDef.CONTRACT_VERSION)
 			.attr(DETAIL_URL_ATTR, d.endpoint)
 			.children(sections.toArray());
+	}
+
+	private static Div emitDetailField(DetailField f) {
+		var markdown = f.format == DetailField.Format.MARKDOWN;
+		var valueSlot = div().attr(DETAIL_FIELD_ATTR, f.data);
+		if (markdown) {
+			valueSlot.attr(DETAIL_FIELD_FORMAT_ATTR, DetailField.Format.MARKDOWN.wire());
+			valueSlot.class_("juneau-view-detail-field-value juneau-view-detail-markdown jc-prose");
+		} else {
+			valueSlot.class_("juneau-view-detail-field-value");
+		}
+		var hideTitle = markdown && f.title != null && f.title.isEmpty();
+		if (hideTitle)
+			return div(valueSlot).class_("juneau-view-detail-field juneau-view-detail-field-markdown");
+		var label = f.title == null || f.title.isBlank() ? f.data : f.title;
+		return div(
+			div(label).class_("juneau-view-detail-field-title"),
+			valueSlot
+		).class_(markdown ? "juneau-view-detail-field juneau-view-detail-field-markdown" : "juneau-view-detail-field");
 	}
 
 	private static Div emitActionBar(org.apache.juneau.rest.server.widgets.ActionBar bar, List<RowAction> rowActions) {

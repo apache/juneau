@@ -48,6 +48,8 @@ class ViewsJs_RowDetail_Test extends TestBase {
 			"isSafeDetailUrl: isSafeDetailUrl",
 			"substituteDetailUrl: substituteDetailUrl",
 			"scalarFieldValue: scalarFieldValue",
+			"isSafeMarkdownHref: isSafeMarkdownHref",
+			"fillMarkdownSlot: fillMarkdownSlot",
 			"fillDetailSlots: fillDetailSlots",
 			"findRowDetailTemplate: findRowDetailTemplate",
 			"JUNEAU_ROW_DETAIL_CONTRACT_VERSION: JUNEAU_ROW_DETAIL_CONTRACT_VERSION"
@@ -170,6 +172,18 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertTrue(String.valueOf(r.get("fill_xss")).contains("<img"));
 		assertEquals("42", r.get("fill_num"));
 		assertEquals("", r.get("fill_missing"));
+		assertEquals(true, r.get("hasFillMarkdown"));
+		assertEquals(false, r.get("md_hasScript"));
+		assertEquals(false, r.get("md_hasImg"));
+		assertEquals(false, r.get("md_jsHref"));
+		assertEquals(true, r.get("md_httpsHref"));
+		assertEquals(true, r.get("md_textHasOk"));
+		assertEquals(true, r.get("md_textHasX"));
+		assertEquals(true, r.get("md_textHasY"));
+		assertEquals(false, r.get("md_textHasAlert"));
+		assertEquals(false, r.get("href_js"));
+		assertEquals(true, r.get("href_https"));
+		assertEquals(false, r.get("href_data"));
 	}
 
 	@Test void b04_404500_actionRefButtonless_collapseRemains() {

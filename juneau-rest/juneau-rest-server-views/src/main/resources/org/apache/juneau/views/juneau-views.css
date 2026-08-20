@@ -448,6 +448,14 @@ table.dataTable > tbody > tr > td {
 	font-weight: 600;
 }
 
+.juneau-view-detail-field-markdown {
+	grid-column: 1 / -1;
+}
+
+.juneau-view-detail-markdown {
+	max-width: 96ch;
+}
+
 .juneau-view-detail-status {
 	margin: 0.5em 0 0;
 }
@@ -497,6 +505,29 @@ table.dataTable > tbody > tr > td {
 
 .juneau-view-dialog-fields dd {
 	margin: 0 0 0.35em 42%;
+}
+
+.juneau-view-dialog-form {
+	margin: 0 0 1em;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75em;
+}
+
+.juneau-view-dialog-form-row label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 0.25em;
+}
+
+.juneau-view-dialog-form-row input,
+.juneau-view-dialog-form-row textarea {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.juneau-view-dialog-form-row textarea {
+	min-height: 6em;
 }
 
 .juneau-view-dialog-actions {

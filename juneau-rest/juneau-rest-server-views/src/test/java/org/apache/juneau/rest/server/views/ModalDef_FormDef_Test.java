@@ -29,9 +29,9 @@ import org.junit.jupiter.api.*;
  * confirmation fetch returns (design doc §6.2; the modal/form half of {@code TODO-416}).
  *
  * <p>
- * The confirmation body is typed structured fields painted client-side with {@code textContent} (never
- * {@code innerHTML}); this test pins that field shape and the FreeMarker-first form source, plus the omit-when-unset
- * rule for the optional form and idempotency key.
+ * The confirmation body is typed fields painted with textContent (never innerHTML); this test pins that field
+ * shape, the typed FormDef inputs the client paints (never template markup), plus the omit-when-unset rule for
+ * the optional form and idempotency key.
  */
 class ModalDef_FormDef_Test extends TestBase {
 
@@ -112,5 +112,47 @@ class ModalDef_FormDef_Test extends TestBase {
 		var e = assertThrows(IllegalArgumentException.class, () -> FormDef.ofTemplate("  "));
 		assertTrue(e.getMessage().contains("blank"), e::getMessage);
 		assertThrows(IllegalArgumentException.class, () -> FormDef.ofTemplate(null));
+	}
+
+	@Test void c04_formDef_serializesTypedInputs() {
+		var form = FormDef.create()
+			.field(FormDef.Input.of("resolution", "Resolution comment", "textarea").required().value("done"));
+		var json = Json.of(form);
+		var expected = Json.to("""
+			{"fields":[{"name":"resolution","label":"Resolution comment","type":"textarea","required":true,"value":"done"}]}
+			""", Map.class);
+		assertEquals(expected, Json.to(json, Map.class), json);
+		assertFalse(json.contains("\"template\""), json);
+	}
+
+	@Test void c05_formDef_textDefaultAndOptionalPrefillOmitted() {
+		var json = Json.of(FormDef.create().field(FormDef.Input.of("note", "Note", null)));
+		assertTrue(json.contains("\"type\":\"text\""), json);
+		assertFalse(json.contains("\"required\""), json);
+		assertFalse(json.contains("\"value\""), json);
+	}
+
+	@Test void c06_formDef_inputBlankNameOrLabelThrows() {
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("  ", "L", "text"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of(null, "L", "text"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "  ", "text"));
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", null, "text"));
+	}
+
+	@Test void c07_formDef_unknownTypeThrows() {
+		var e = assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "L", "password"));
+		assertTrue(e.getMessage().contains("text"), e::getMessage);
+		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "L", "<img>"));
+	}
+
+	@Test void c08_formDef_nullFieldThrows() {
+		assertThrows(IllegalArgumentException.class, () -> FormDef.create().field(null));
+	}
+
+	@Test void c09_formDef_templateAndFieldsTogether() {
+		var json = Json.of(FormDef.ofTemplate("servlet:/x.ftl")
+			.field(FormDef.Input.of("resolution", "Resolution", "textarea")));
+		assertTrue(json.contains("\"template\":\"servlet:/x.ftl\""), json);
+		assertTrue(json.contains("\"name\":\"resolution\""), json);
 	}
 }

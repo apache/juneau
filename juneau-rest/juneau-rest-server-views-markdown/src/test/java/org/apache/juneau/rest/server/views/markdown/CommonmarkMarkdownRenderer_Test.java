@@ -85,4 +85,45 @@ class CommonmarkMarkdownRenderer_Test extends TestBase {
 		assertEquals("<p>one</p>\n", RENDERER.toHtml("one"));
 		assertEquals("<p>two</p>\n", RENDERER.toHtml("two"));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// d) XSS: raw HTML escaped, javascript:/data: URLs stripped
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_rawScript_isEscapedNotAnElement() {
+		var html = RENDERER.toHtml("hello <script>alert(1)</script>");
+		assertFalse(html.contains("<script"), () -> html);
+		assertTrue(html.contains("&lt;script"), () -> html);
+	}
+
+	@Test void d02_imgOnerror_isEscaped() {
+		var html = RENDERER.toHtml("<img src=x onerror=alert(1)>");
+		assertFalse(html.contains("<img"), () -> html);
+		assertTrue(html.contains("&lt;img"), () -> html);
+	}
+
+	@Test void d03_javascriptHref_isStripped() {
+		var html = RENDERER.toHtml("[x](javascript:alert(1))");
+		assertFalse(html.contains("javascript:"), () -> html);
+		assertTrue(html.contains("<a>") || html.contains("<a >") || html.contains("<a>x</a>"), () -> html);
+	}
+
+	@Test void d04_httpsHref_isKept() {
+		var html = RENDERER.toHtml("[y](https://example.com)");
+		assertTrue(html.contains("href=\"https://example.com\""), () -> html);
+	}
+
+	@Test void d05_dataUrl_isRejected() {
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl("data:text/html,<script>"));
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl("javascript:alert(1)"));
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl("vbscript:msg"));
+		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl("https://x"));
+		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl("http://x"));
+		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl("mailto:a@b"));
+		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl("#frag"));
+		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl("/rest/skills"));
+		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl("relative/path"));
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(null));
+		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(""));
+	}
 }

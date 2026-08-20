@@ -190,4 +190,18 @@ class AsyncJobRegistry_Test extends TestBase {
 			assertEquals(120, AsyncJobRegistry.HARD_TIMEOUT.getSeconds());
 		}
 	}
+
+	@Test void h02_publicTimeoutConstructorHonorsLongerDuration() {
+		try (var r = new AsyncJobRegistry(Duration.ofMinutes(10))) {
+			var job = r.create();
+			assertEquals(Duration.ofMinutes(10), Duration.between(job.createdAt(), job.deadline()));
+			assertEquals(120, AsyncJobRegistry.HARD_TIMEOUT.getSeconds(), "global default must stay 120s");
+		}
+	}
+
+	@Test void h03_publicTimeoutConstructorRejectsNonPositive() {
+		assertThrows(IllegalArgumentException.class, () -> new AsyncJobRegistry((Duration) null));
+		assertThrows(IllegalArgumentException.class, () -> new AsyncJobRegistry(Duration.ZERO));
+		assertThrows(IllegalArgumentException.class, () -> new AsyncJobRegistry(Duration.ofSeconds(-1)));
+	}
 }

@@ -194,6 +194,56 @@ const PROBE = async function () {
 		}
 	}
 
+	// ---- FormDef inputs: typed textarea/text via createElement + .value; XSS prefill stays inert ----
+	{
+		const dom = makeRow('QABCDEF');
+		const evil = '<img src=x onerror=alert(1)>';
+		const modal = {
+			title: 'Close this incident?',
+			fields: [{ label: 'Incident', value: evil }],
+			form: {
+				template: '<img src=x onerror=alert(2)>',
+				fields: [
+					{ name: 'resolution', label: 'Resolution comment', type: 'textarea', required: true, value: evil },
+					{ name: 'note', label: 'Note', type: 'text', value: 'ok' },
+					{ name: 'skipme', label: 'Bad', type: 'password', value: 'secret' }
+				]
+			},
+			idempotencyKey: 'key-close'
+		};
+		const action = { id: 'close', label: 'Close', endpoint: '/x/close', method: 'POST', present: 'dialog' };
+		const ui = init.showActionDialog(modal, action, dom.table, dom.tr, {});
+		await tick();
+		const backdrop = document.querySelector('.juneau-view-dialog-backdrop');
+		const formEl = backdrop ? backdrop.querySelector('.juneau-view-dialog-form') : null;
+		const textarea = formEl ? formEl.querySelector('textarea[data-juneau-form-field="resolution"]') : null;
+		const text = formEl ? formEl.querySelector('input[data-juneau-form-field="note"]') : null;
+		const password = formEl ? formEl.querySelector('[data-juneau-form-field="skipme"]') : null;
+		out.form = {
+			formVisible: rendered(formEl),
+			textareaPrefill: textarea ? textarea.value : null,
+			notePrefill: text ? text.value : null,
+			passwordSkipped: !password,
+			injectedImgCount: backdrop ? backdrop.querySelectorAll('img').length : -1,
+			templateNotInFormHtml: formEl ? formEl.innerHTML.indexOf('<img') < 0 : false
+		};
+		if (textarea) textarea.value = 'fixed in change';
+		const fetchCalls = [];
+		const realFetch = window.fetch;
+		window.fetch = function (url, opts) {
+			fetchCalls.push({ url: url, opts: opts });
+			return Promise.resolve(resp({ ok: true, status: 200,
+				body: JSON.stringify({ contractVersion: V, outcome: 'success' }) }));
+		};
+		dom.table.setAttribute('data-juneau-csrf', 'tok-xyz');
+		ui.confirmBtn.click();
+		await tick(); await tick();
+		window.fetch = realFetch;
+		out.form.submitIssued = fetchCalls.length > 0;
+		if (fetchCalls.length > 0)
+			out.form.submitBody = fetchCalls[0].opts.body;
+	}
+
 	return out;
 };
 

@@ -28,8 +28,9 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <p>
  * Structure is emitted as a {@code <template data-juneau-row-detail>} sibling of the view table; field values
- * arrive via a same-origin GET and are painted with {@code textContent} only.  This type is Java-only &mdash; it
- * is not part of the {@code VIEW_META} JSON sidecar.
+ * arrive via a same-origin GET.  {@link DetailField.Format#TEXT} (the default) paints with {@code textContent};
+ * {@link DetailField.Format#MARKDOWN} copies allowlisted nodes from a {@code DOMParser} document and never
+ * assigns {@code innerHTML}.  This type is Java-only &mdash; it is not part of the {@code VIEW_META} JSON sidecar.
  *
  * @since 10.0.0
  */

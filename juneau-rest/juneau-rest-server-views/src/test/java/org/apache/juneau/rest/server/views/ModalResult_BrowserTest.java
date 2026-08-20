@@ -228,4 +228,24 @@ class ModalResult_BrowserTest extends TestBase {
 		assertTrue(body.contains("ack"), () -> "action id not carried on submit: " + report);
 		assertEquals(Boolean.TRUE, m.get("backdropClosedAfterConfirm"), () -> "modal did not close on confirm: " + report);
 	}
+
+	@Test void e04_formDefInputsPaintTypedControlsAndSubmitFieldValues() {
+		var f = sub("form");
+		assertEquals(Boolean.TRUE, f.get("formVisible"), () -> "FormDef inputs not visible: " + report);
+		assertEquals("<img src=x onerror=alert(1)>", f.get("textareaPrefill"), () -> report.toString());
+		assertEquals("ok", f.get("notePrefill"), () -> report.toString());
+		assertEquals(Boolean.TRUE, f.get("passwordSkipped"), () -> "non-text type was painted: " + report);
+		assertEquals(0L, ((Number) f.get("injectedImgCount")).longValue(),
+			() -> "hostile prefill became an element: " + report);
+		assertEquals(Boolean.TRUE, f.get("templateNotInFormHtml"), () -> "form.template was used as markup: " + report);
+		assertEquals(Boolean.TRUE, f.get("submitIssued"), () -> "confirm did not submit: " + report);
+		var body = String.valueOf(f.get("submitBody"));
+		assertTrue(body.contains("key-close"), () -> "idempotency key missing: " + report);
+		assertTrue(body.contains("QABCDEF"), () -> "target id missing: " + report);
+		assertTrue(body.contains("fixed in change"), () -> "edited textarea value missing: " + report);
+		assertTrue(body.contains("\"fields\""), () -> "fields object missing: " + report);
+		assertTrue(body.contains("resolution"), () -> report.toString());
+		assertFalse(body.contains("skipme"), () -> "skipped type leaked into submit: " + report);
+		assertFalse(body.contains("secret"), () -> "skipped type value leaked: " + report);
+	}
 }
