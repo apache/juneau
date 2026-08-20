@@ -193,6 +193,54 @@ class ViewMeta_Contract_Test extends TestBase {
 		assertTrue(json.contains("\"render\":{\"id\":\"ts-zulu\",\"meta\":{\"field\":\"created:at\"}}"), json);
 	}
 
+	@Test void c05_tsZuluPopupOffIsExplicitMeta() {
+		var json = Json.of(Column.of("createdAt").render(Render.of("ts-zulu").meta("popup", "off")));
+		assertTrue(json.contains("\"render\":{\"id\":\"ts-zulu\",\"meta\":{\"popup\":\"off\"}}"), json);
+	}
+
+	@Test void c06_tsZuluBareIdOmitsPopupMeta_clientDefaultsOn() {
+		var json = Json.of(Column.of("createdAt").render("ts-zulu"));
+		assertTrue(json.contains("\"render\":{\"id\":\"ts-zulu\"}"), json);
+		assertFalse(json.contains("\"popup\""), json);
+	}
+
+	@Test void c07_progressFactory_serializesMaxAsString() {
+		var json = Json.of(Render.progress(100));
+		assertTrue(json.contains("\"id\":\"progress\""), json);
+		assertTrue(json.contains("\"max\":\"100\""), json);
+		assertFalse(json.contains("\"warn\""), json);
+		assertFalse(json.contains("\"exceeds\""), json);
+		assertFalse(json.contains("\"popover\""), json);
+	}
+
+	@Test void c08_progressFactory_omitsNullThresholds_keepsZero() {
+		var json = Json.of(Render.progress(100, null, 90));
+		assertTrue(json.contains("\"max\":\"100\""), json);
+		assertFalse(json.contains("\"warn\""), json);
+		assertTrue(json.contains("\"exceeds\":\"90\""), json);
+		var zero = Json.of(Render.progress(100, 0, 0));
+		assertTrue(zero.contains("\"warn\":\"0\""), zero);
+		assertTrue(zero.contains("\"exceeds\":\"0\""), zero);
+	}
+
+	@Test void c09_progressSugar_setsFieldNotMax() {
+		var json = Json.of(Column.of("used").render("progress:cpu"));
+		assertTrue(json.contains("\"id\":\"progress\""), json);
+		assertTrue(json.contains("\"field\":\"cpu\""), json);
+		assertFalse(json.contains("\"max\""), json);
+	}
+
+	@Test void c11_popover_omittedWhenNull_presentWhenSet() {
+		var bare = Json.of(Render.of("progress"));
+		assertFalse(bare.contains("popover"), bare);
+		var with = Json.of(Render.of("tag").popover(CellPopover.of(
+			PopoverField.of("actual").title("Actual"),
+			PopoverField.of("max").title("Max").render("decimal"))));
+		assertTrue(with.contains("\"popover\""), with);
+		assertTrue(with.contains("\"data\":\"actual\""), with);
+		assertTrue(with.contains("\"id\":\"decimal\""), with);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// B.2: column auto-seed from DataTablesColumns.of(rowType) when .columns(...) is omitted
 	//------------------------------------------------------------------------------------------------------------------

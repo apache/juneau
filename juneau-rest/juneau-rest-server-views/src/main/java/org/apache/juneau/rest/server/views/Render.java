@@ -28,7 +28,9 @@ import org.apache.juneau.commons.bean.*;
  * <p>
  * Serializes to the canonical object form <c>{"id":"tag","meta":{"field":"status"}}</c>.  The client
  * {@code juneau-renders.js} registry looks up {@link #id} and invokes the matching renderer, passing the
- * {@link #meta} map through as per-column context.
+ * {@link #meta} map through as per-column context.  Timestamp renderers ({@code ts-zulu}, {@code datetime})
+ * honor {@code meta.popup}: {@code off} disables the local/California hover popup; {@code ts-zulu} defaults
+ * the popup on, {@code datetime} defaults it off.
  *
  * <p>
  * A compact string sugar is supported via {@link #parse(String)}: everything after the <b>first</b> colon becomes
@@ -42,7 +44,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="id,meta")
+@BeanType(properties="id,meta,popover")
 @SuppressWarnings("java:S1845") // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 public class Render {
 
@@ -95,5 +97,60 @@ public class Render {
 			meta = m();
 		meta.put(key, value);
 		return this;
+	}
+
+	/**
+	 * Optional per-cell popover, omitted from the wire when unset.
+	 *
+	 * <p>
+	 * The runtime appends a sibling trigger next to the rendered cell and paints the popover from row data
+	 * already on the client.  Never assigned {@code innerHTML}.
+	 */
+	public CellPopover popover;
+
+	/**
+	 * Sets the optional per-cell popover.
+	 *
+	 * @param value The popover definition.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public Render popover(CellPopover value) {
+		popover = value;
+		return this;
+	}
+
+	/**
+	 * Creates a {@code progress} renderer with the given maximum (denominator).
+	 *
+	 * <p>
+	 * Equivalent to {@code Render.of("progress").meta("max", String.valueOf(max))}.  Chain
+	 * {@link #meta(String,String)} for {@code label} / {@code field}.
+	 *
+	 * @param max The ratio denominator.  Serialized as the string {@code meta.max}.
+	 * @return A new {@link Render}.
+	 */
+	public static Render progress(int max) {
+		return of("progress").meta("max", String.valueOf(max));
+	}
+
+	/**
+	 * Creates a {@code progress} renderer with maximum and optional warn/exceeds thresholds.
+	 *
+	 * <p>
+	 * {@code warn} and {@code exceeds} are omitted from {@code meta} when <jk>null</jk>.  A boxed {@code 0} is a
+	 * real threshold ({@code "0"}), not omitted.
+	 *
+	 * @param max The ratio denominator.
+	 * @param warn Warn threshold in the same units as the cell value.  Can be <jk>null</jk>.
+	 * @param exceeds Exceeds threshold in the same units as the cell value.  Can be <jk>null</jk>.
+	 * @return A new {@link Render}.
+	 */
+	public static Render progress(int max, Integer warn, Integer exceeds) {
+		var r = progress(max);
+		if (warn != null)
+			r.meta("warn", String.valueOf(warn));
+		if (exceeds != null)
+			r.meta("exceeds", String.valueOf(exceeds));
+		return r;
 	}
 }

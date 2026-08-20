@@ -124,6 +124,68 @@
 		return Number.isNaN(d.getTime()) ? null : d;
 	}
 
+	const CALIFORNIA_TZ = "America/Los_Angeles";
+
+	/**
+	 * UTC cell text: {@code MM/DD/YYYY HH:MMZ} (24-hour, seconds dropped, Z glued to the minutes).  The date/time
+	 * gap is U+00A0 so the value does not wrap mid-cell.
+	 */
+	function formatUtcZulu(d) {
+		const utc = new Intl.DateTimeFormat("en-US", {
+			year: "numeric", month: "2-digit", day: "2-digit",
+			hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "UTC"
+		}).format(d);
+		return utc.replace(", ", "\u00a0") + "Z";
+	}
+
+	/**
+	 * Browser-local companion: {@code h:mm am|pm} when the local calendar date matches UTC, otherwise
+	 * {@code MM/DD/YYYY h:mm am|pm} so a day-rollover is not ambiguous.
+	 */
+	function formatLocalTime(d) {
+		const time = new Intl.DateTimeFormat("en-US", {
+			hour: "numeric", minute: "2-digit", hour12: true
+		}).format(d).toLowerCase();
+		const dateOpts = { year: "numeric", month: "2-digit", day: "2-digit" };
+		const localDate = new Intl.DateTimeFormat("en-US", dateOpts).format(d);
+		const utcDate = new Intl.DateTimeFormat("en-US", { ...dateOpts, timeZone: "UTC" }).format(d);
+		return localDate === utcDate ? time : localDate + " " + time;
+	}
+
+	/**
+	 * California ({@code America/Los_Angeles}) text: {@code MM/DD/YYYY hh:mm am|pm} plus a DST-correct
+	 * {@code PDT}/{@code PST} suffix.  Hour is zero-padded ({@code 01:11 pm}).
+	 */
+	function formatCalifornia(d) {
+		const base = new Intl.DateTimeFormat("en-US", {
+			year: "numeric", month: "2-digit", day: "2-digit",
+			hour: "2-digit", minute: "2-digit", hour12: true, timeZone: CALIFORNIA_TZ
+		}).format(d).replace(", ", "\u00a0").toLowerCase();
+		const tzPart = new Intl.DateTimeFormat("en-US", { timeZone: CALIFORNIA_TZ, timeZoneName: "short" })
+			.formatToParts(d).find(function (p) { return p.type === "timeZoneName"; });
+		return tzPart ? base + "\u00a0" + tzPart.value : base;
+	}
+
+	function popupLines(d) {
+		return { local: "Local time: " + formatLocalTime(d), california: "California: " + formatCalifornia(d) };
+	}
+
+	/** {@code meta.popup} of {@code off}/{@code false}/{@code 0}/{@code no} disables; any other value enables. */
+	function popupOn(meta, defaultOn) {
+		if (!meta || meta.popup == null || meta.popup === "") return defaultOn;
+		const v = String(meta.popup).toLowerCase();
+		return v !== "off" && v !== "false" && v !== "0" && v !== "no";
+	}
+
+	function zuluDisplay(cellData, withPopup) {
+		const d = toDate(cellData);
+		if (!d) return cellData == null ? "" : escHtml(cellData);
+		const text = formatUtcZulu(d);
+		if (!withPopup) return escHtml(text);
+		return '<span class="juneau-ts" tabindex="0" data-juneau-ts="' + escAttr(d.toISOString()) + '">'
+			+ escHtml(text) + "</span>";
+	}
+
 	// --- generic renderers (pure) --------------------------------------------------------------------------------
 	// SERVER mode: display + class only.  Unknown-id policy (skip + warn) lives in the consumer (juneau-views.js).
 
@@ -137,7 +199,10 @@
 	});
 
 	registerRenderer("datetime", {
-		display: function (cellData) {
+		// Locale cell by default.  {@code meta.popup=on} opts into the same Zulu cell + local/California popup as
+		// {@code ts-zulu} (Column.render(Render.of("datetime").meta("popup", "on"))).
+		display: function (cellData, rowData, meta) {
+			if (popupOn(meta, false)) return zuluDisplay(cellData, true);
 			const d = toDate(cellData);
 			if (!d) return cellData == null ? "" : escHtml(cellData);
 			return escHtml(new Intl.DateTimeFormat(undefined, {
@@ -148,11 +213,10 @@
 	});
 
 	registerRenderer("ts-zulu", {
-		// Absolute UTC ("Zulu") ISO-8601 timestamp - stable, locale-independent, no date library.
-		display: function (cellData) {
-			const d = toDate(cellData);
-			if (!d) return cellData == null ? "" : escHtml(cellData);
-			return escHtml(d.toISOString().replace(/\.\d{3}Z$/, "Z"));
+		// UTC {@code MM/DD/YYYY HH:MMZ} cell; hover/focus popup of browser-local + California time (default on).
+		// Column.render("ts-zulu"); disable with Render.of("ts-zulu").meta("popup", "off").
+		display: function (cellData, rowData, meta) {
+			return zuluDisplay(cellData, popupOn(meta, true));
 		},
 		sort: function (cellData) { const d = toDate(cellData); return d ? d.getTime() : cellData; }
 	});
@@ -223,12 +287,207 @@
 		"class": function () { return "tag-cell"; }
 	});
 
+	function progressUnknown(cellData) {
+		if (cellData == null) return true;
+		if (typeof cellData === "string" && cellData.trim() === "") return true;
+		if (typeof cellData !== "number" && typeof cellData !== "string") return true;
+		return !Number.isFinite(Number(cellData));
+	}
+
+	function progressMax(meta) {
+		if (!meta || meta.max == null) return { ok: true, value: 100 };
+		if (String(meta.max).trim() === "") return { ok: false };
+		const n = Number(meta.max);
+		if (!Number.isFinite(n) || n <= 0) return { ok: false };
+		return { ok: true, value: n };
+	}
+
+	function progressThreshold(meta, key) {
+		if (!meta || meta[key] == null || meta[key] === "") return null;
+		const n = Number(meta[key]);
+		return Number.isFinite(n) ? n : null;
+	}
+
+	function progressStateClass(actual, max, warn, exceeds) {
+		if (actual > max) return "is-exceeds";
+		if (exceeds != null && actual >= exceeds) return "is-exceeds";
+		if (warn != null && actual >= warn) return "is-warn";
+		return "is-ok";
+	}
+
+	function progressBarWidth(pct) {
+		if (pct < 0) return 0;
+		if (pct > 100) return 100;
+		return pct;
+	}
+
+	registerRenderer("progress", {
+		display: function (cellData, rowData, meta) {
+			const fieldToken = meta && meta.field ? normalizeTagToken(meta.field) : "";
+			const outerClass = "jc-progress" + (fieldToken ? " progress " + fieldToken : "");
+			const maxParsed = progressMax(meta);
+			if (progressUnknown(cellData) || !maxParsed.ok)
+				return '<span class="' + escAttr(outerClass) + '"></span>';
+			const actual = Number(cellData);
+			const max = maxParsed.value;
+			const pct = Math.round((actual / max) * 100);
+			const barWidth = progressBarWidth(pct);
+			const warn = progressThreshold(meta, "warn");
+			const exceeds = progressThreshold(meta, "exceeds");
+			const state = progressStateClass(actual, max, warn, exceeds);
+			let labelMode = meta && meta.label != null && meta.label !== "" ? String(meta.label) : "percent";
+			if (labelMode !== "none" && labelMode !== "value" && labelMode !== "percent")
+				labelMode = "percent";
+			const bar = '<span class="jc-progress-bar ' + state + '" style="width:' + barWidth + '%"></span>';
+			let label = "";
+			if (labelMode !== "none") {
+				const text = labelMode === "value" ? String(cellData) : String(pct) + "%";
+				label = '<span class="jc-progress-label">' + escHtml(text) + "</span>";
+			}
+			return '<span class="' + escAttr(outerClass) + '">' + bar + label + "</span>";
+		},
+		sort: function (cellData) {
+			const n = Number(cellData);
+			return Number.isFinite(n) ? n : cellData;
+		},
+		"class": function () { return "progress-cell"; }
+	});
+
+	const frozenBuiltins = Object.create(null);
+	const BUILTIN_RENDER_IDS = [
+		"bool", "date", "datetime", "decimal", "json", "linked", "progress", "tag", "truncate", "ts-zulu"
+	];
+	(function snapshotFrozenBuiltins() {
+		for (let i = 0; i < BUILTIN_RENDER_IDS.length; i++) {
+			const id = BUILTIN_RENDER_IDS[i];
+			const def = registry[id];
+			if (!def) continue;
+			frozenBuiltins[id] = Object.freeze(Object.assign({}, def));
+		}
+	})();
+
+	/** Sink-only lookup: built-in functions frozen at load; `registerRenderer` cannot replace these. */
+	function resolveSinkRenderer(id) {
+		return Object.hasOwn(frozenBuiltins, id) ? frozenBuiltins[id] : null;
+	}
+
+	// ==================================================================================================================
+	// TIMESTAMP POPUP  (datetime-renderer-owned; 445c CellPopover can generalize later)
+	// Two-line floating box: local browser time + California.  Built with createElement/textContent only — never
+	// innerHTML — so a hostile ISO/label cannot become markup.  Delegated on document so DataTables re-renders
+	// keep working.  Cursor-follows on hover; keyboard focus anchors under the cell.
+	// ==================================================================================================================
+
+	const TS_POPUP_ID = "juneau-ts-popup";
+	const TS_POPUP_OFFSET = 12;
+
+	function tsHost(t) {
+		return (t && typeof t.closest === "function") ? t.closest("[data-juneau-ts]") : null;
+	}
+
+	function tsPopupEl() {
+		if (typeof document === "undefined" || typeof document.getElementById !== "function") return null;
+		let el = document.getElementById(TS_POPUP_ID);
+		if (!el && document.body) {
+			el = document.createElement("div");
+			el.id = TS_POPUP_ID;
+			el.className = "juneau-ts-popup";
+			el.setAttribute("role", "tooltip");
+			el.style.display = "none";
+			document.body.appendChild(el);
+		}
+		return el || null;
+	}
+
+	function tsPopupFill(el, d) {
+		el.replaceChildren();
+		const lines = popupLines(d);
+		const local = document.createElement("div");
+		local.textContent = lines.local;
+		const california = document.createElement("div");
+		california.textContent = lines.california;
+		el.appendChild(local);
+		el.appendChild(california);
+	}
+
+	function tsPopupPosition(el, x, y) {
+		if (!el) return;
+		const vw = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1024;
+		const vh = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight : 768;
+		const w = el.offsetWidth || 0;
+		const h = el.offsetHeight || 0;
+		let left = x + TS_POPUP_OFFSET;
+		let top = y + TS_POPUP_OFFSET;
+		if (left + w > vw - 4) left = Math.max(4, x - TS_POPUP_OFFSET - w);
+		if (top + h > vh - 4) top = Math.max(4, y - TS_POPUP_OFFSET - h);
+		el.style.left = left + "px";
+		el.style.top = top + "px";
+	}
+
+	function tsPopupShow(host, x, y) {
+		const d = toDate(host.getAttribute("data-juneau-ts"));
+		if (!d) return;
+		const el = tsPopupEl();
+		if (!el) return;
+		tsPopupFill(el, d);
+		el.style.display = "block";
+		tsPopupPosition(el, x, y);
+	}
+
+	function tsPopupHide() {
+		const el = (typeof document !== "undefined" && typeof document.getElementById === "function")
+			? document.getElementById(TS_POPUP_ID) : null;
+		if (el) el.style.display = "none";
+	}
+
+	function initTsPopup() {
+		if (typeof document === "undefined" || typeof document.addEventListener !== "function") return;
+		if (document._juneauTsPopupBound) return;
+		document._juneauTsPopupBound = true;
+		document.addEventListener("mouseover", function (e) {
+			const host = tsHost(e.target);
+			if (host) tsPopupShow(host, e.clientX, e.clientY);
+		});
+		document.addEventListener("mousemove", function (e) {
+			const el = document.getElementById(TS_POPUP_ID);
+			if (!el || el.style.display === "none") return;
+			if (tsHost(e.target)) tsPopupPosition(el, e.clientX, e.clientY);
+			else tsPopupHide();
+		});
+		document.addEventListener("mouseout", function (e) {
+			const host = tsHost(e.target);
+			if (!host) return;
+			const to = e.relatedTarget;
+			if (to && typeof host.contains === "function" && host.contains(to)) return;
+			tsPopupHide();
+		});
+		document.addEventListener("focusin", function (e) {
+			const host = tsHost(e.target);
+			if (!host || typeof host.getBoundingClientRect !== "function") return;
+			const rect = host.getBoundingClientRect();
+			tsPopupShow(host, rect.left, rect.bottom);
+		});
+		document.addEventListener("focusout", function (e) {
+			const host = tsHost(e.target);
+			if (!host) return;
+			const to = e.relatedTarget;
+			if (to && typeof host.contains === "function" && host.contains(to)) return;
+			tsPopupHide();
+		});
+		document.addEventListener("keydown", function (e) {
+			if (e.key === "Escape") tsPopupHide();
+		});
+	}
+
+	if (typeof document !== "undefined") initTsPopup();
+
 	// ==================================================================================================================
 	// PUBLIC API
 	// ==================================================================================================================
 
 	NS.registerRenderer = registerRenderer;
 	NS.resolveRenderer = resolveRenderer;
+	NS.resolveSinkRenderer = resolveSinkRenderer;
 	NS.parseRenderId = parseRenderId;
 	// Exposed for reuse by the initializer + Option-B unit tests.
 	NS._render = NS._render || {};
@@ -237,4 +496,9 @@
 	NS._render.interpolateHref = interpolateHref;
 	NS._render.toDate = toDate;
 	NS._render.normalizeTagToken = normalizeTagToken;
+	NS._render.formatUtcZulu = formatUtcZulu;
+	NS._render.formatLocalTime = formatLocalTime;
+	NS._render.formatCalifornia = formatCalifornia;
+	NS._render.popupLines = popupLines;
+	NS._render.frozenBuiltinIds = BUILTIN_RENDER_IDS.slice();
 })();

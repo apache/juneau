@@ -399,6 +399,12 @@ public class ViewDef {
 	public void validate() {
 		if (details != null)
 			details.validate(rowActions);
+		if (columns != null) {
+			for (var c : columns) {
+				if (c != null && c.render != null && c.render.popover != null)
+					c.render.popover.validate();
+			}
+		}
 	}
 
 	/**

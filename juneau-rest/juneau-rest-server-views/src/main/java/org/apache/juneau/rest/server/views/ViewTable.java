@@ -152,6 +152,17 @@ public class ViewTable {
 	 */
 	public static final String DETAIL_FIELD_FORMAT_ATTR = "data-juneau-field-format";
 
+	/** Attribute carrying a {@link DetailField#render} id.  Omitted when render is unset. */
+	public static final String DETAIL_FIELD_RENDER_ATTR = "data-juneau-field-render";
+
+	/**
+	 * Attribute carrying JSON-encoded {@link Render#meta}.  Omitted when meta is null or empty.
+	 */
+	public static final String DETAIL_FIELD_RENDER_META_ATTR = "data-juneau-field-render-meta";
+
+	/** Attribute carrying a {@link DetailField#href} template.  Omitted when href is unset. */
+	public static final String DETAIL_FIELD_RENDER_HREF_ATTR = "data-juneau-field-render-href";
+
 	/** Attribute carrying an {@link org.apache.juneau.rest.server.widgets.ActionRef} id on a write button. */
 	public static final String DETAIL_ACTION_ATTR = "data-juneau-action";
 
@@ -506,9 +517,17 @@ public class ViewTable {
 	}
 
 	private static Div emitDetailField(DetailField f) {
-		var markdown = f.format == DetailField.Format.MARKDOWN;
+		var rendered = f.render != null;
+		var markdown = !rendered && f.format == DetailField.Format.MARKDOWN;
 		var valueSlot = div().attr(DETAIL_FIELD_ATTR, f.data);
-		if (markdown) {
+		if (rendered) {
+			valueSlot.attr(DETAIL_FIELD_RENDER_ATTR, f.render.id);
+			if (f.render.meta != null && !f.render.meta.isEmpty())
+				valueSlot.attr(DETAIL_FIELD_RENDER_META_ATTR, Json.of(f.render.meta));
+			if (f.href != null)
+				valueSlot.attr(DETAIL_FIELD_RENDER_HREF_ATTR, f.href);
+			valueSlot.class_("juneau-view-detail-field-value");
+		} else if (markdown) {
 			valueSlot.attr(DETAIL_FIELD_FORMAT_ATTR, DetailField.Format.MARKDOWN.wire());
 			valueSlot.class_("juneau-view-detail-field-value juneau-view-detail-markdown jc-prose");
 		} else {

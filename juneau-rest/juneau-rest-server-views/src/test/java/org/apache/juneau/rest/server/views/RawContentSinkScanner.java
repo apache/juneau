@@ -85,6 +85,30 @@ final class RawContentSinkScanner {
 	/** Matches a jQuery {@code .html(} call in JavaScript (the other XSS sink the chooser must never use). */
 	private static final Pattern JS_JQUERY_HTML = Pattern.compile("\\.html\\s*\\(");
 
+	/** Matches an {@code outerHTML =} assignment. */
+	private static final Pattern JS_OUTERHTML_ASSIGN = Pattern.compile("\\.outerHTML\\s*=");
+
+	/** Matches {@code insertAdjacentHTML(}. */
+	private static final Pattern JS_INSERT_ADJACENT_HTML = Pattern.compile("insertAdjacentHTML\\s*\\(");
+
+	/** Matches {@code document.write(}. */
+	private static final Pattern JS_DOCUMENT_WRITE = Pattern.compile("document\\.write\\s*\\(");
+
+	/** First-party icon-registry SVG assignments; never request/app/renderer text. */
+	private static final List<AllowedJsSink> SHIPPED_JS_ALLOWLIST = List.of(
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "b.innerHTML = markup;"),
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-views.js", "caretEl.innerHTML = caretMarkup;"),
+		new AllowedJsSink("src/main/resources/org/apache/juneau/views/juneau-ribbon.js", "b.innerHTML = markup;")
+	);
+
+	/** Shipped widget JS assets scanned by {@link #scanShippedJs(Path)}. */
+	private static final List<String> SHIPPED_JS_FILES = List.of(
+		"juneau-config.js", "juneau-pages.js", "juneau-icons.js",
+		"juneau-renders.js", "juneau-views.js", "juneau-ribbon.js"
+	);
+
+	record AllowedJsSink(String relativePath, String snippet) {}
+
 	/** A single string literal or text-block literal (content kept verbatim by {@link #stripComments}). */
 	private static final Pattern LITERAL_TOKEN =
 		Pattern.compile("\\s*(?:\"\"\"[\\s\\S]*?\"\"\"|\"(?:[^\"\\\\]|\\\\.)*\"|null)\\s*");
@@ -143,23 +167,90 @@ final class RawContentSinkScanner {
 	 * 	literal-only carve-out: user-controlled strings must never reach these APIs).
 	 */
 	static Result scanJsHtmlSinks(String file, String source) {
+		return scanJsHtmlSinks(file, source, Set.of());
+	}
+
+	/**
+	 * Scans a JavaScript source string for HTML-injection assignments.  Comments are stripped first.
+	 * Hits whose unique assignment snippet is in {@code allowedSnippets} are recorded as sinks but not
+	 * violations.
+	 *
+	 * @param file A label for the source (used in violation messages).
+	 * @param source The JavaScript source text.
+	 * @param allowedSnippets Unique assignment snippets that are audited first-party sites.
+	 * @return The sinks found and any violations.
+	 */
+	static Result scanJsHtmlSinks(String file, String source, Set<String> allowedSnippets) {
 		var sinks = new ArrayList<Sink>();
 		var violations = new ArrayList<String>();
 		var code = stripComments(source);
+		addJsHits(file, code, JS_INNERHTML_ASSIGN, "innerHTML assignment", allowedSnippets, sinks, violations);
+		addJsHits(file, code, JS_JQUERY_HTML, ".html( call", allowedSnippets, sinks, violations);
+		addJsHits(file, code, JS_OUTERHTML_ASSIGN, "outerHTML assignment", allowedSnippets, sinks, violations);
+		addJsHits(file, code, JS_INSERT_ADJACENT_HTML, "insertAdjacentHTML( call", allowedSnippets, sinks, violations);
+		addJsHits(file, code, JS_DOCUMENT_WRITE, "document.write( call", allowedSnippets, sinks, violations);
+		return new Result(sinks, violations);
+	}
 
-		var inner = JS_INNERHTML_ASSIGN.matcher(code);
-		while (inner.find()) {
-			var detail = "innerHTML assignment";
-			sinks.add(new Sink(file, false, detail));
-			violations.add(file + ": " + detail + " — user-controlled strings must be painted with textContent / input.value only");
+	private static void addJsHits(String file, String code, Pattern pattern, String kind,
+			Set<String> allowedSnippets, List<Sink> sinks, List<String> violations) {
+		var m = pattern.matcher(code);
+		while (m.find()) {
+			var snippet = jsSinkSnippet(code, m.start(), m.end());
+			sinks.add(new Sink(file, false, snippet));
+			if (allowedSnippets != null && allowedSnippets.contains(snippet))
+				continue;
+			violations.add(file + ": " + kind + " (" + snippet + ") — user-controlled strings must be painted with textContent / input.value only");
 		}
-		var html = JS_JQUERY_HTML.matcher(code);
-		while (html.find()) {
-			var detail = ".html( call";
-			sinks.add(new Sink(file, false, detail));
-			violations.add(file + ": " + detail + " — user-controlled strings must be painted with textContent / input.value only");
+	}
+
+	/** Unique assignment snippet: identifier chain through the terminating semicolon (or newline). */
+	static String jsSinkSnippet(String code, int matchStart, int matchEnd) {
+		var from = matchStart;
+		while (from > 0) {
+			var c = code.charAt(from - 1);
+			if (Character.isLetterOrDigit(c) || c == '_' || c == '$' || c == '.')
+				from--;
+			else
+				break;
+		}
+		var to = matchEnd;
+		while (to < code.length() && code.charAt(to) != ';' && code.charAt(to) != '\n')
+			to++;
+		if (to < code.length() && code.charAt(to) == ';')
+			to++;
+		return code.substring(from, to).trim();
+	}
+
+	/**
+	 * Walks the six shipped {@code juneau-*.js} assets.  Hits are violations unless the unique snippet is on
+	 * the first-party icon-registry allowlist.
+	 *
+	 * @param moduleRoot The {@code juneau-rest-server-views} module root.
+	 * @return Aggregated sinks and violations, plus the allowlisted-hit count in {@link Result#sinks()}.
+	 * @throws IOException If an asset cannot be read.
+	 */
+	static Result scanShippedJs(Path moduleRoot) throws IOException {
+		var sinks = new ArrayList<Sink>();
+		var violations = new ArrayList<String>();
+		var viewsDir = Path.of("src", "main", "resources", "org", "apache", "juneau", "views");
+		for (var name : SHIPPED_JS_FILES) {
+			var rel = viewsDir.resolve(name);
+			var file = moduleRoot.resolve(rel);
+			var allowed = new HashSet<String>();
+			for (var a : SHIPPED_JS_ALLOWLIST)
+				if (a.relativePath().equals(rel.toString().replace('\\', '/')))
+					allowed.add(a.snippet());
+			var r = scanJsHtmlSinks(rel.toString().replace('\\', '/'), Files.readString(file), allowed);
+			sinks.addAll(r.sinks());
+			violations.addAll(r.violations());
 		}
 		return new Result(sinks, violations);
+	}
+
+	/** Allowlisted snippets that must still exist in their files (anti-vacuous). */
+	static List<AllowedJsSink> shippedJsAllowlist() {
+		return SHIPPED_JS_ALLOWLIST;
 	}
 
 	/**

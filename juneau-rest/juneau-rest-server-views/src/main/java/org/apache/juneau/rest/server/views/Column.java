@@ -155,7 +155,14 @@ public class Column {
 	/**
 	 * Sets the named cell-renderer using the <c>"id:field"</c> string sugar (see {@link Render#parse(String)}).
 	 *
-	 * @param value The render-id string.  E.g. <c>"tag:status"</c> or <c>"date"</c>.
+	 * <p>
+	 * Timestamp columns: {@code Column.render("ts-zulu")} shows UTC as {@code MM/DD/YYYY HH:MMZ} and, on
+	 * hover/focus, a two-line popup of browser-local time and California ({@code America/Los_Angeles})
+	 * time.  Disable the popup with {@link #render(Render) render}{@code (Render.of("ts-zulu").meta("popup", "off"))}.
+	 * {@code datetime} keeps a locale cell unless {@code meta("popup", "on")} is set, which opts into the
+	 * same Zulu cell and popup.
+	 *
+	 * @param value The render-id string.  E.g. <c>"tag:status"</c>, <c>"date"</c>, or <c>"ts-zulu"</c>.
 	 * @return This object.
 	 */
 	public Column render(String value) {

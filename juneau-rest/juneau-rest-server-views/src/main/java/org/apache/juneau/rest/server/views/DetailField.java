@@ -78,6 +78,18 @@ public class DetailField {
 	public Format format;
 
 	/**
+	 * Optional named renderer.  <jk>null</jk> means no renderer (TEXT or MARKDOWN paint).  Mutually exclusive
+	 * with a non-{@link Format#TEXT} {@link #format}.
+	 */
+	public Render render;
+
+	/**
+	 * Optional <c>{property}</c> URL template consumed by the {@code linked} renderer (and any renderer that
+	 * reads {@code meta.href}).  <jk>null</jk> means no template.  Independent of {@link #render} id.
+	 */
+	public String href;
+
+	/**
 	 * Creates a field bound to the specified expand-JSON key.
 	 *
 	 * @param data The {@code fields} map key.  Must not be <jk>null</jk> or blank.
@@ -111,6 +123,39 @@ public class DetailField {
 	 */
 	public DetailField format(Format value) {
 		format = value;
+		return this;
+	}
+
+	/**
+	 * Sets the named renderer using the <c>"id:field"</c> string sugar (see {@link Render#parse(String)}).
+	 *
+	 * @param value The render-id string.  Must not be <jk>null</jk> or blank.
+	 * @return This object.
+	 */
+	public DetailField render(String value) {
+		render = Render.parse(value);
+		return this;
+	}
+
+	/**
+	 * Sets the named renderer to a pre-built {@link Render}.
+	 *
+	 * @param value The renderer reference.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public DetailField render(Render value) {
+		render = value;
+		return this;
+	}
+
+	/**
+	 * Sets the declarative <c>{property}</c> URL template (same shape as {@link Column#href}).
+	 *
+	 * @param value The template.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public DetailField href(String value) {
+		href = value;
 		return this;
 	}
 }

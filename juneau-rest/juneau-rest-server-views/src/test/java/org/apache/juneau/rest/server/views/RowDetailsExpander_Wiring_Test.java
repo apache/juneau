@@ -166,6 +166,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-detail-row > td:first-child::before {"), body);
 		assertTrue(body.contains(".juneau-view-detail-open > td:first-child::before {"), body);
+		assertTrue(body.contains("width: 20px"), body);
 		assertFalse(body.contains("url("), body);
 	}
 

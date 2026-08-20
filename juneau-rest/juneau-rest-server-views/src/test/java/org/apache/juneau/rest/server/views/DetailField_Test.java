@@ -45,4 +45,17 @@ class DetailField_Test extends TestBase {
 		assertEquals("markdown", f.format.wire());
 		assertEquals("text", DetailField.Format.TEXT.wire());
 	}
+
+	@Test void a04_renderAndHref_nullByDefault() {
+		var f = DetailField.of("cpu");
+		assertNull(f.render);
+		assertNull(f.href);
+		f.render("tag:status").href("/x/{id}");
+		assertEquals("tag", f.render.id);
+		assertEquals("status", f.render.meta.get("field"));
+		assertEquals("/x/{id}", f.href);
+		f.render(Render.of("progress")).href(null);
+		assertEquals("progress", f.render.id);
+		assertNull(f.href);
+	}
 }

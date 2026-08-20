@@ -42,6 +42,13 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		}
 	}
 
+	private static String rendersJs() throws IOException {
+		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.RENDERS_JS_RESOURCE)) {
+			assertNotNull(in, () -> "missing classpath resource: " + ViewsMixin.RENDERS_JS_RESOURCE);
+			return new String(in.readAllBytes(), UTF_8);
+		}
+	}
+
 	@Test void a01_helpersExportedOnNsInit() throws Exception {
 		var body = viewsJs();
 		for (var name : new String[]{
@@ -50,6 +57,7 @@ class ViewsJs_RowDetail_Test extends TestBase {
 			"scalarFieldValue: scalarFieldValue",
 			"isSafeMarkdownHref: isSafeMarkdownHref",
 			"fillMarkdownSlot: fillMarkdownSlot",
+			"fillRenderSlot: fillRenderSlot",
 			"fillDetailSlots: fillDetailSlots",
 			"findRowDetailTemplate: findRowDetailTemplate",
 			"JUNEAU_ROW_DETAIL_CONTRACT_VERSION: JUNEAU_ROW_DETAIL_CONTRACT_VERSION"
@@ -71,11 +79,14 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		if (harness == null)
 			return;
 		var viewsFile = Files.createTempFile("juneau-views-", ".js");
+		var rendersFile = Files.createTempFile("juneau-renders-", ".js");
 		try {
 			Files.writeString(viewsFile, viewsJs(), UTF_8);
-			report = Json.to(runNode(harness, viewsFile), Map.class);
+			Files.writeString(rendersFile, rendersJs(), UTF_8);
+			report = Json.to(runNode(harness, viewsFile, rendersFile), Map.class);
 		} finally {
 			Files.deleteIfExists(viewsFile);
+			Files.deleteIfExists(rendersFile);
 		}
 	}
 
@@ -108,11 +119,11 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		return null;
 	}
 
-	private static String runNode(Path harness, Path viewsJs) throws Exception {
+	private static String runNode(Path harness, Path viewsJs, Path rendersJs) throws Exception {
 		var stdout = Files.createTempFile("row-detail-stdout-", ".json");
 		var stderr = Files.createTempFile("row-detail-stderr-", ".txt");
 		try {
-			var pb = new ProcessBuilder(List.of("node", harness.toString(), viewsJs.toString()))
+			var pb = new ProcessBuilder(List.of("node", harness.toString(), viewsJs.toString(), rendersJs.toString()))
 				.redirectOutput(stdout.toFile())
 				.redirectError(stderr.toFile());
 			var p = pb.start();
@@ -184,6 +195,22 @@ class ViewsJs_RowDetail_Test extends TestBase {
 		assertEquals(false, r.get("href_js"));
 		assertEquals(true, r.get("href_https"));
 		assertEquals(false, r.get("href_data"));
+	}
+
+	@Test void b07_fillRenderSlot_tagProgressLinkedAndCanary() {
+		var r = report();
+		assertEquals(true, r.get("hasFillRender"));
+		assertEquals(true, r.get("rr_tagHasClass"));
+		assertEquals(true, r.get("rr_progressWidth"));
+		assertEquals(true, r.get("rr_linkedHref"));
+		assertEquals(false, r.get("rr_jsHref"));
+		assertEquals(false, r.get("rr_hasScript"));
+		assertEquals(false, r.get("rr_hostileStyle"));
+		assertEquals(true, r.get("rr_truncateTitle"));
+		assertEquals(true, r.get("rr_jsonCode"));
+		assertEquals(true, r.get("rr_malformedMetaOk"));
+		assertEquals("", r.get("rr_missing"));
+		assertEquals(true, r.get("rr_dispatchRenderFirst"));
 	}
 
 	@Test void b04_404500_actionRefButtonless_collapseRemains() {

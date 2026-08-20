@@ -32,7 +32,7 @@ const vm = require('node:vm');
 
 const viewsJsPath = process.argv[2];
 if (!viewsJsPath) {
-	console.error('usage: node row-detail.cjs <juneau-views.js>');
+	console.error('usage: node row-detail.cjs <juneau-views.js> [juneau-renders.js]');
 	process.exit(2);
 }
 
@@ -128,6 +128,9 @@ const document = {
 };
 const window = { document: document, console: console, jQuery: undefined, DOMParser: DOMParser };
 const sandbox = { window: window, document: document, console: console, DOMParser: DOMParser };
+const rendersJsPath = process.argv[3];
+if (rendersJsPath)
+	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
 vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
 
 const NS = window.JuneauViews;
@@ -260,5 +263,88 @@ out.drop_gen = I.shouldDropDetailPayload(true, 1, 2);
 out.drop_keep = I.shouldDropDetailPayload(true, 2, 2);
 
 out.write_parentIsTrNotJson = true;
+
+out.hasFillRender = typeof I.fillRenderSlot === 'function';
+if (out.hasFillRender) {
+	function renderSlot(id, extraAttrs) {
+		const s = el('div');
+		s.attrs['data-juneau-field'] = 'v';
+		s.attrs['data-juneau-field-render'] = id;
+		if (extraAttrs) for (const k in extraAttrs) s.attrs[k] = extraAttrs[k];
+		return s;
+	}
+	function wrap(slot) {
+		return { querySelectorAll: function (sel) { return sel === '[data-juneau-field]' ? [slot] : []; } };
+	}
+	const tagSlot = renderSlot('tag', { 'data-juneau-field-render-meta': '{"field":"status"}' });
+	I.fillDetailSlots(wrap(tagSlot), { v: 'Released' });
+	out.rr_tagHasClass = collectTags(tagSlot, []).indexOf('SPAN') >= 0
+		&& String(tagSlot.textContent).indexOf('Released') >= 0
+		&& findTag(tagSlot, 'SPAN', []).some(function (n) {
+			return String(n.getAttribute('class') || '').indexOf('tag') >= 0;
+		});
+
+	const progSlot = renderSlot('progress', { 'data-juneau-field-render-meta': '{"max":"100"}' });
+	I.fillDetailSlots(wrap(progSlot), { v: 50 });
+	out.rr_progressWidth = findTag(progSlot, 'SPAN', []).some(function (n) {
+		return n.getAttribute('style') === 'width:50%';
+	});
+
+	const linkSlot = renderSlot('linked', { 'data-juneau-field-render-href': '/x/{id}' });
+	I.fillDetailSlots(wrap(linkSlot), { v: 'n1', id: 'a1' });
+	const anchors = findTag(linkSlot, 'A', []);
+	out.rr_linkedHref = anchors.some(function (a) { return a.getAttribute('href') === '/x/a1'; });
+
+	const badLink = renderSlot('linked', { 'data-juneau-field-render-href': 'javascript:alert(1)' });
+	I.fillDetailSlots(wrap(badLink), { v: 'n1' });
+	out.rr_jsHref = findTag(badLink, 'A', []).some(function (a) {
+		return String(a.getAttribute('href') || '').indexOf('javascript:') >= 0;
+	});
+
+	window.JuneauViews.registerRenderer('evil-script', {
+		display: function () { return '<script>alert(1)</script><span>ok</span>'; }
+	});
+	const hostile = renderSlot('evil-script');
+	I.fillRenderSlot(hostile, 'x', 'evil-script', {}, null, {});
+	out.rr_hasScript = collectTags(hostile, []).indexOf('SCRIPT') >= 0
+		|| String(hostile.textContent).indexOf('alert(1)') >= 0;
+
+	window.JuneauViews.registerRenderer('evil-style', {
+		display: function () { return '<span style="color:red;width:50%">x</span>'; }
+	});
+	const styleSlot = renderSlot('evil-style');
+	I.fillRenderSlot(styleSlot, 'x', 'evil-style', {}, null, {});
+	out.rr_hostileStyle = findTag(styleSlot, 'SPAN', []).some(function (n) {
+		const st = n.getAttribute('style');
+		return st && st.indexOf('color') >= 0;
+	});
+
+	const trunc = renderSlot('truncate', { 'data-juneau-field-render-meta': '{"length":"4"}' });
+	I.fillDetailSlots(wrap(trunc), { v: 'abcdef' });
+	out.rr_truncateTitle = findTag(trunc, 'SPAN', []).some(function (n) {
+		return n.getAttribute('title') === 'abcdef';
+	});
+
+	const jsonSlot = renderSlot('json');
+	I.fillDetailSlots(wrap(jsonSlot), { v: 'hi' });
+	out.rr_jsonCode = collectTags(jsonSlot, []).indexOf('CODE') >= 0;
+
+	const badMeta = renderSlot('tag', { 'data-juneau-field-render-meta': '{not json' });
+	I.fillDetailSlots(wrap(badMeta), { v: 'X' });
+	out.rr_malformedMetaOk = String(badMeta.textContent).indexOf('X') >= 0;
+
+	const missing = renderSlot('tag');
+	I.fillDetailSlots(wrap(missing), {});
+	out.rr_missing = missing.textContent;
+
+	const both = el('div');
+	both.attrs['data-juneau-field'] = 'v';
+	both.attrs['data-juneau-field-render'] = 'tag';
+	both.attrs['data-juneau-field-format'] = 'markdown';
+	I.fillDetailSlots(wrap(both), { v: 'Released' });
+	out.rr_dispatchRenderFirst = findTag(both, 'SPAN', []).some(function (n) {
+		return String(n.getAttribute('class') || '').indexOf('tag') >= 0;
+	});
+}
 
 process.stdout.write(JSON.stringify(out));

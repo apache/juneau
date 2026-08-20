@@ -539,16 +539,42 @@
 			const renderer = deps.resolveRenderer(spec.id);
 			if (!renderer) {
 				deps.warn("Juneau view: unknown render id '" + spec.id + "' - falling back to raw value.");
-			} else if (renderer.display) {
-				const meta = mergeMeta(spec.meta, col);
+			}
+			const meta = mergeMeta(spec.meta, col);
+			const popover = spec && spec.popover;
+			if ((renderer && renderer.display) || popover) {
 				def.render = function (data, type, rowData) {
 					if (type && type !== "display") return data;   // SERVER mode: sort/filter/type done server-side
-					try { return renderer.display(data, rowData, meta); }
-					catch (e) { return data == null ? "" : data; }
+					let html = data == null ? "" : String(data);
+					if (renderer && renderer.display) {
+						try { html = renderer.display(data, rowData, meta); }
+						catch (e) { html = data == null ? "" : String(data); }
+						if (html == null) html = "";
+						else html = String(html);
+					}
+					return appendPopoverTrigger(html, col, spec);
 				};
 			}
 		}
 		return def;
+	}
+
+	function viewEscAttr(s) {
+		return (NS._render && typeof NS._render.escAttr === "function") ? NS._render.escAttr(s) : String(s);
+	}
+
+	/**
+	 * Appends a sibling popover trigger after the renderer's HTML.  Never wraps the renderer output (so a
+	 * {@code linked} {@code <a>} is not nested in a button).  Dynamic bits go through escAttr.
+	 */
+	function appendPopoverTrigger(html, col, spec) {
+		const popover = spec && spec.popover;
+		if (!popover) return html;
+		const name = popover.title != null && String(popover.title).trim() !== "" ? String(popover.title) : "Details";
+		const colData = col && col.data != null ? String(col.data) : "";
+		return html + '<button type="button" class="jc-cell-popover-trigger"'
+			+ ' aria-expanded="false" aria-haspopup="dialog" aria-label="' + viewEscAttr(name) + '"'
+			+ ' data-juneau-popover="1" data-juneau-popover-col="' + viewEscAttr(colData) + '"></button>';
 	}
 
 	/** Merges a column's render.meta with runtime column context (href is needed by the `linked` renderer). */
@@ -867,6 +893,24 @@
 	}
 
 	/**
+	 * The DataTables wrapper that owns native search/length/paging chrome AND is the correct parent for the
+	 * unified toolbar row.  DT1 wraps the {@code <table>} directly in {@code .dataTables_wrapper}.  DT2 nests the
+	 * table inside {@code .dt-layout-row.dt-layout-table > .dt-layout-cell}, with {@code .dt-search} living in a
+	 * *sibling* layout row under {@code .dt-container} — so {@code table.parentNode} is the cell, not the
+	 * wrapper, and a querySelector there never finds the search box (it stays on its own row above the paging
+	 * pill).  Walks up via {@code Element.closest}; falls back to {@code parentNode} for DT1 / non-DOM test
+	 * doubles that have no {@code closest}.
+	 */
+	function findViewWrapper(table) {
+		if (!table) return null;
+		if (typeof table.closest === "function") {
+			const found = table.closest(".dt-container, .dataTables_wrapper");
+			if (found) return found;
+		}
+		return table.parentNode;
+	}
+
+	/**
 	 * Assembles ONE unified toolbar row and inserts it as the FIRST child of `wrapper`, i.e. ABOVE the table (IRS
 	 * reference layout).  Per the control-row layout spec: a LEFT cluster (`.juneau-view-toolbar-left`) holding
 	 * just the unified paging ribbon (nav + page-size, left-aligned - the only place paging exists), and a RIGHT
@@ -877,7 +921,8 @@
 	 * always present).  Moves DataTables' native ".dataTables_filter"/".dt-search" search box into the right
 	 * cluster rather than leaving it in its own DataTables-generated wrapper; degrades gracefully (right cluster
 	 * still built from whichever of search/bar exist) when no native search box is found (e.g. searching
-	 * disabled).
+	 * disabled).  Caller must pass the real DT wrapper from {@code findViewWrapper(table)}, not
+	 * {@code table.parentNode} (which is a nested layout cell under DT2).
 	 */
 	function buildToolbarRow(wrapper, pill, bar) {
 		const filterEl = wrapper.querySelector(".dataTables_filter, .dt-search");
@@ -1072,6 +1117,123 @@
 		copySanitizedMarkdownChildren(wrap, el, doc);
 	}
 
+	const RENDER_ALLOWED_TAGS = { SPAN: 1, A: 1, CODE: 1, DIV: 1 };
+
+	function copyRenderStyle(from, to) {
+		if (typeof from.getAttribute !== "function") return;
+		const raw = from.getAttribute("style");
+		if (raw == null || raw === "") return;
+		const m = /^\s*width\s*:\s*([+-]?\d+)\s*%?\s*;?\s*$/i.exec(String(raw));
+		if (!m) return;
+		const n = Number(m[1]);
+		if (!Number.isInteger(n) || n < 0 || n > 100) return;
+		to.setAttribute("style", "width:" + n + "%");
+	}
+
+	function copyAllowedRenderAttrs(from, to) {
+		if (!from || !to || typeof to.setAttribute !== "function") return;
+		if (typeof from.getAttribute !== "function") return;
+		const cls = from.getAttribute("class");
+		if (cls) to.setAttribute("class", cls);
+		if (from.tagName === "A") {
+			const href = from.getAttribute("href");
+			if (isSafeMarkdownHref(href))
+				to.setAttribute("href", href);
+		}
+		const title = from.getAttribute("title");
+		if (title != null && title !== "")
+			to.setAttribute("title", title);
+		copyRenderStyle(from, to);
+		const tabindex = from.getAttribute("tabindex");
+		if (tabindex === "0")
+			to.setAttribute("tabindex", "0");
+		const ts = from.getAttribute("data-juneau-ts");
+		if (ts) {
+			const toDate = NS._render && NS._render.toDate;
+			if (typeof toDate === "function" && toDate(ts))
+				to.setAttribute("data-juneau-ts", ts);
+		}
+	}
+
+	function copySanitizedRenderChildren(from, to, doc) {
+		if (!from || !to || !from.childNodes) return;
+		const kids = from.childNodes;
+		for (let i = 0; i < kids.length; i++) {
+			const n = kids[i];
+			if (!n) continue;
+			if (n.nodeType === 3) {
+				const text = n.nodeValue == null ? "" : String(n.nodeValue);
+				if (doc && typeof doc.createTextNode === "function")
+					to.appendChild(doc.createTextNode(text));
+				continue;
+			}
+			if (n.nodeType !== 1) continue;
+			const tag = n.tagName ? String(n.tagName).toUpperCase() : "";
+			if (MARKDOWN_DROP_TAGS[tag])
+				continue;
+			if (!RENDER_ALLOWED_TAGS[tag]) {
+				copySanitizedRenderChildren(n, to, doc);
+				continue;
+			}
+			const dest = doc.createElement(tag.toLowerCase());
+			copyAllowedRenderAttrs(n, dest);
+			copySanitizedRenderChildren(n, dest, doc);
+			to.appendChild(dest);
+		}
+	}
+
+	function resolveFillRenderer(id) {
+		const sink = typeof NS.resolveSinkRenderer === "function" ? NS.resolveSinkRenderer(id) : null;
+		if (sink) return sink;
+		const frozen = NS._render && NS._render.frozenBuiltinIds;
+		if (frozen && frozen.indexOf(id) >= 0)
+			return null;
+		return typeof NS.resolveRenderer === "function" ? NS.resolveRenderer(id) : null;
+	}
+
+	/**
+	 * Paints a named-renderer detail-field slot.  Resolves built-ins through the frozen sink lookup, rebuilds
+	 * the escaped HTML string through a closed tag/attribute allowlist.  Never assigns innerHTML.
+	 */
+	function fillRenderSlot(slot, value, id, meta, href, fields) {
+		clearElementChildren(slot);
+		if (value == null || value === "") return;
+		const renderer = resolveFillRenderer(id);
+		if (!renderer || typeof renderer.display !== "function") {
+			slot.textContent = value;
+			return;
+		}
+		const m = {};
+		if (meta && typeof meta === "object") {
+			for (const k in meta) if (Object.hasOwn(meta, k)) m[k] = meta[k];
+		}
+		if (href != null) m.href = href;
+		let html;
+		try { html = renderer.display(value, fields, m); }
+		catch (e) {
+			slot.textContent = value;
+			return;
+		}
+		if (html == null || html === "") return;
+		const doc = typeof document !== "undefined" ? document : null;
+		const Parser = typeof DOMParser !== "undefined" ? DOMParser
+			: (typeof window !== "undefined" ? window.DOMParser : null);
+		if (!Parser || !doc || typeof doc.createElement !== "function") {
+			slot.textContent = value;
+			return;
+		}
+		let parsed;
+		try {
+			parsed = new Parser().parseFromString("<div>" + String(html) + "</div>", "text/html");
+		} catch (e) {
+			slot.textContent = value;
+			return;
+		}
+		const wrap = parsed && parsed.body && parsed.body.firstChild;
+		if (!wrap) return;
+		copySanitizedRenderChildren(wrap, slot, doc);
+	}
+
 	/**
 	 * Fills `[data-juneau-field]` slots from an expand JSON `fields` map.  TEXT slots (the default, and any
 	 * unknown format) use textContent only.  {@code data-juneau-field-format="markdown"} slots use
@@ -1085,7 +1247,19 @@
 			const slot = slots[i];
 			const key = slot.getAttribute("data-juneau-field");
 			const value = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
-			if (slot.getAttribute("data-juneau-field-format") === "markdown")
+			const renderId = slot.getAttribute("data-juneau-field-render");
+			if (renderId) {
+				let meta = {};
+				const metaRaw = slot.getAttribute("data-juneau-field-render-meta");
+				if (metaRaw) {
+					try {
+						const parsed = JSON.parse(metaRaw);
+						if (parsed && typeof parsed === "object") meta = parsed;
+					} catch (e) { meta = {}; }
+				}
+				const href = slot.getAttribute("data-juneau-field-render-href");
+				fillRenderSlot(slot, value, renderId, meta, href, map);
+			} else if (slot.getAttribute("data-juneau-field-format") === "markdown")
 				fillMarkdownSlot(slot, value);
 			else
 				slot.textContent = value;
@@ -1173,6 +1347,256 @@
 				return;
 			}
 			expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
+		});
+	}
+
+	const CELL_POPOVER_ID = "juneau-cell-popover";
+
+	function cellPopoverEl() {
+		if (typeof document === "undefined" || typeof document.getElementById !== "function") return null;
+		let el = document.getElementById(CELL_POPOVER_ID);
+		if (!el && document.body) {
+			el = document.createElement("div");
+			el.id = CELL_POPOVER_ID;
+			el.className = "jc-cell-popover";
+			el.setAttribute("role", "dialog");
+			el.setAttribute("tabindex", "-1");
+			el.style.display = "none";
+			el.style.position = "fixed";
+			document.body.appendChild(el);
+		}
+		return el || null;
+	}
+
+	function hideTsPopupIfPresent() {
+		const ts = (typeof document !== "undefined" && typeof document.getElementById === "function")
+			? document.getElementById("juneau-ts-popup") : null;
+		if (ts) ts.style.display = "none";
+	}
+
+	function currentPopoverTrigger() {
+		if (typeof document === "undefined" || !document.querySelector) return null;
+		return document.querySelector(".jc-cell-popover-trigger[aria-expanded=\"true\"]");
+	}
+
+	function closeCellPopover() {
+		const el = (typeof document !== "undefined" && typeof document.getElementById === "function")
+			? document.getElementById(CELL_POPOVER_ID) : null;
+		const trigger = currentPopoverTrigger();
+		if (el) {
+			el.style.display = "none";
+			if (typeof el.replaceChildren === "function") el.replaceChildren();
+			else while (el.firstChild) el.removeChild(el.firstChild);
+		}
+		if (trigger) {
+			trigger.setAttribute("aria-expanded", "false");
+			trigger.removeAttribute("aria-controls");
+			if (typeof document.contains === "function" && document.contains(trigger)
+				&& typeof trigger.focus === "function")
+				trigger.focus();
+		}
+	}
+
+	function positionCellPopover(el, trigger) {
+		if (!el || !trigger || typeof trigger.getBoundingClientRect !== "function") return;
+		const rect = trigger.getBoundingClientRect();
+		const vw = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1024;
+		const vh = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight : 768;
+		el.style.display = "block";
+		const w = el.offsetWidth || 0;
+		const h = el.offsetHeight || 0;
+		let left = rect.left;
+		let top = rect.bottom + 4;
+		if (left + w > vw - 4) left = Math.max(4, vw - w - 4);
+		if (top + h > vh - 4) top = Math.max(4, rect.top - h - 4);
+		if (left < 4) left = 4;
+		el.style.left = left + "px";
+		el.style.top = top + "px";
+	}
+
+	function popoverFieldValue(rowData, key) {
+		if (!rowData || key == null || !Object.hasOwn(rowData, key)) return "";
+		const v = rowData[key];
+		if (v == null) return "";
+		return v;
+	}
+
+	function paintPopoverTextValue(cell, value) {
+		cell.textContent = value == null || value === "" ? "" : String(value);
+	}
+
+	function paintPopoverRenderedValue(cell, field, value, rowData) {
+		const spec = typeof NS.parseRenderId === "function" ? NS.parseRenderId(field.render) : field.render;
+		const id = spec && spec.id;
+		const renderer = typeof NS.resolveSinkRenderer === "function" ? NS.resolveSinkRenderer(id) : null;
+		if (!renderer || typeof renderer.display !== "function") {
+			paintPopoverTextValue(cell, value);
+			return;
+		}
+		const meta = {};
+		if (spec.meta) {
+			for (const k in spec.meta) if (Object.hasOwn(spec.meta, k)) meta[k] = spec.meta[k];
+		}
+		meta.popup = "off";
+		let html;
+		try { html = renderer.display(value, rowData, meta); }
+		catch (e) {
+			paintPopoverTextValue(cell, value);
+			return;
+		}
+		const Parser = typeof DOMParser !== "undefined" ? DOMParser
+			: (typeof window !== "undefined" ? window.DOMParser : null);
+		const doc = typeof document !== "undefined" ? document : null;
+		if (!Parser || !doc) {
+			paintPopoverTextValue(cell, value);
+			return;
+		}
+		let parsed;
+		try { parsed = new Parser().parseFromString(String(html == null ? "" : html), "text/html"); }
+		catch (e) {
+			paintPopoverTextValue(cell, value);
+			return;
+		}
+		const body = parsed && parsed.body;
+		if (!body) {
+			paintPopoverTextValue(cell, value);
+			return;
+		}
+		const kids = body.childNodes;
+		for (let i = 0; i < kids.length; i++) {
+			if (kids[i] && kids[i].nodeType === 1) {
+				paintPopoverTextValue(cell, value);
+				return;
+			}
+		}
+		cell.textContent = body.textContent == null ? "" : String(body.textContent);
+	}
+
+	/**
+	 * Fills the cell-popover dialog from row data using createElement/textContent only.  Named so the
+	 * raw-HTML scanner can extract it.
+	 */
+	function fillCellPopover(el, popover, rowData) {
+		if (!el) return;
+		if (typeof el.replaceChildren === "function") el.replaceChildren();
+		else while (el.firstChild) el.removeChild(el.firstChild);
+		const doc = typeof document !== "undefined" ? document : null;
+		if (!doc || typeof doc.createElement !== "function") return;
+		if (popover.title != null && String(popover.title).trim() !== "") {
+			const t = doc.createElement("div");
+			t.className = "jc-cell-popover-title";
+			t.id = CELL_POPOVER_ID + "-title";
+			t.textContent = String(popover.title);
+			el.appendChild(t);
+			el.setAttribute("aria-labelledby", t.id);
+		} else {
+			el.setAttribute("aria-label", "Details");
+			el.removeAttribute("aria-labelledby");
+		}
+		const fields = popover.fields || [];
+		for (let i = 0; i < fields.length; i++) {
+			const f = fields[i];
+			if (!f || f.data == null) continue;
+			const row = doc.createElement("div");
+			row.className = "jc-cell-popover-row";
+			const lab = doc.createElement("div");
+			lab.className = "jc-cell-popover-label";
+			lab.textContent = f.title != null && String(f.title) !== "" ? String(f.title) : String(f.data);
+			const val = doc.createElement("div");
+			val.className = "jc-cell-popover-value";
+			const raw = popoverFieldValue(rowData, f.data);
+			if (f.render)
+				paintPopoverRenderedValue(val, f, raw, rowData);
+			else
+				paintPopoverTextValue(val, raw);
+			row.appendChild(lab);
+			row.appendChild(val);
+			el.appendChild(row);
+		}
+	}
+
+	function findPopoverDecl(ctx, viewDef, colData) {
+		const cols = (ctx && ctx.effectiveColumns) || (viewDef && viewDef.columns) || [];
+		for (let i = 0; i < cols.length; i++) {
+			const c = cols[i];
+			if (!c || c.data !== colData) continue;
+			const spec = typeof NS.parseRenderId === "function" ? NS.parseRenderId(c.render) : c.render;
+			return spec && spec.popover ? spec.popover : null;
+		}
+		return null;
+	}
+
+	function openCellPopover(btn, ctx, viewDef) {
+		const dt = ctx && ctx.dataTable;
+		if (!dt || !btn) return;
+		const tr = btn.closest ? btn.closest("tr") : null;
+		if (!tr || typeof dt.row !== "function") return;
+		const row = dt.row(tr);
+		const rowData = row && typeof row.data === "function" ? row.data() : null;
+		const colData = btn.getAttribute("data-juneau-popover-col");
+		const popover = findPopoverDecl(ctx, viewDef, colData);
+		if (!popover) return;
+		hideTsPopupIfPresent();
+		const prev = currentPopoverTrigger();
+		if (prev && prev !== btn) {
+			prev.setAttribute("aria-expanded", "false");
+			prev.removeAttribute("aria-controls");
+		}
+		const el = cellPopoverEl();
+		if (!el) return;
+		fillCellPopover(el, popover, rowData || {});
+		btn.setAttribute("aria-expanded", "true");
+		btn.setAttribute("aria-controls", CELL_POPOVER_ID);
+		positionCellPopover(el, btn);
+		if (typeof el.focus === "function") el.focus();
+	}
+
+	function bindCellPopoverDocumentListeners() {
+		if (typeof document === "undefined" || typeof document.addEventListener !== "function") return;
+		if (document._juneauCellPopoverBound) return;
+		document._juneauCellPopoverBound = true;
+		document.addEventListener("keydown", function (e) {
+			if (e.key === "Escape") closeCellPopover();
+		});
+		document.addEventListener("pointerdown", function (e) {
+			const el = document.getElementById(CELL_POPOVER_ID);
+			if (!el || el.style.display === "none") return;
+			const t = e.target;
+			if (t && t.closest && (t.closest("#" + CELL_POPOVER_ID) || t.closest("[data-juneau-popover]")))
+				return;
+			closeCellPopover();
+		});
+		document.addEventListener("focusout", function (e) {
+			const el = document.getElementById(CELL_POPOVER_ID);
+			if (!el || el.style.display === "none") return;
+			const to = e.relatedTarget;
+			const trigger = currentPopoverTrigger();
+			if (to && ((el.contains && el.contains(to)) || (trigger && trigger.contains && trigger.contains(to))))
+				return;
+			if (to && to.closest && (to.closest("#" + CELL_POPOVER_ID) || to.closest("[data-juneau-popover]")))
+				return;
+			closeCellPopover();
+		});
+	}
+
+	/**
+	 * ONE delegated click listener on the stable table element.  Survives DataTables redraw.
+	 */
+	function initCellPopover(table, ctx, viewDef) {
+		bindCellPopoverDocumentListeners();
+		if (!table || typeof table.addEventListener !== "function") return;
+		if (table._juneauCellPopoverBound) return;
+		table._juneauCellPopoverBound = true;
+		table.addEventListener("click", function (e) {
+			const btn = e.target && e.target.closest ? e.target.closest("[data-juneau-popover]") : null;
+			if (!btn) return;
+			e.preventDefault();
+			e.stopPropagation();
+			if (btn.getAttribute("aria-expanded") === "true") {
+				closeCellPopover();
+				return;
+			}
+			openCellPopover(btn, ctx, viewDef);
 		});
 	}
 
@@ -2162,7 +2586,7 @@
 	}
 
 	function stripGeneratedDom(table) {
-		const wrapper = table.parentNode;
+		const wrapper = findViewWrapper(table);
 		if (wrapper) {
 			Array.prototype.forEach.call(wrapper.querySelectorAll(".juneau-view-toolbar-row"), removeEl);
 		}
@@ -2324,7 +2748,7 @@
 			}
 		};
 
-		const wrapper = table.parentNode;
+		const wrapper = findViewWrapper(table);
 		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
 
 		if (toolbarRow) {
@@ -2441,6 +2865,7 @@
 		if (findRowDetailTemplate(table)) {
 			initDetailsExpander(table, ctx, viewDef);
 		}
+		initCellPopover(table, ctx, viewDef);
 		if (viewDef.rowActions && viewDef.rowActions.length) {
 			initRowActions(table, viewDef, ctx);
 		}
@@ -2569,6 +2994,7 @@
 		scalarFieldValue: scalarFieldValue,
 		isSafeMarkdownHref: isSafeMarkdownHref,
 		fillMarkdownSlot: fillMarkdownSlot,
+		fillRenderSlot: fillRenderSlot,
 		fillDetailSlots: fillDetailSlots,
 		findRowDetailTemplate: findRowDetailTemplate,
 		detailCoalesceKey: detailCoalesceKey,
@@ -2577,6 +3003,10 @@
 		setActionRefEnabled: setActionRefEnabled,
 		hideActionRefs: hideActionRefs,
 		initDetailsExpander: initDetailsExpander,
+		fillCellPopover: fillCellPopover,
+		initCellPopover: initCellPopover,
+		closeCellPopover: closeCellPopover,
+		appendPopoverTrigger: appendPopoverTrigger,
 		// Row actions + fail-closed CSRF submit - exposed for manual verification and the fail-closed canary.
 		DEFAULT_CSRF_HEADER: DEFAULT_CSRF_HEADER,
 		isSafeMethod: isSafeMethod,

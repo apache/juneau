@@ -136,4 +136,58 @@ class ViewTable_RowDetail_Emit_Test extends TestBase {
 		assertTrue(html.contains("jc-prose"), html);
 		assertFalse(html.contains(">body</div>"), "empty markdown title must not fall back to the data key: " + html);
 	}
+
+	@Test void a09_renderStamp_tagMeta_noFormat() {
+		var v = ViewDef.create("alerts")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("s", "S")
+					.fields(DetailField.of("status").title("Status").render("tag:status"))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		assertTrue(html.contains("data-juneau-field-render=\"tag\""), html);
+		assertTrue(html.contains("data-juneau-field-render-meta="), html);
+		assertTrue(html.contains("field") && html.contains("status"), html);
+		assertFalse(html.contains("data-juneau-field-format"), html);
+	}
+
+	@Test void a10_renderStamp_linkedHref_andNullRenderOmits() {
+		var v = ViewDef.create("alerts")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("s", "S")
+					.fields(
+						DetailField.of("name").title("Name").render("linked").href("/x/{id}"),
+						DetailField.of("plain").title("Plain"))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		assertTrue(html.contains("data-juneau-field-render=\"linked\""), html);
+		assertTrue(html.contains("data-juneau-field-render-href=\"/x/{id}\""), html);
+		var plainAt = html.indexOf("data-juneau-field=\"plain\"");
+		var plainTagEnd = html.indexOf('>', plainAt);
+		var plainTagStart = html.lastIndexOf('<', plainAt);
+		var plainTag = html.substring(plainTagStart, plainTagEnd);
+		assertFalse(plainTag.contains("data-juneau-field-render"), plainTag);
+	}
+
+	@Test void a11_markdownStillStampsFormat_neverRender() {
+		var v = ViewDef.create("skills")
+			.dataMode(DataMode.CLIENT)
+			.dataUrl("/data")
+			.columns(Column.of("id"))
+			.details(RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("body", "SKILL.md")
+					.fields(DetailField.of("body").title("").format(DetailField.Format.MARKDOWN))))
+			.build();
+		var html = Html.of(ViewTable.of(v));
+		assertTrue(html.contains("data-juneau-field-format=\"markdown\""), html);
+		assertFalse(html.contains("data-juneau-field-render"), html);
+	}
 }

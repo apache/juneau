@@ -161,4 +161,68 @@ class RowDetailDef_Test extends TestBase {
 		var bar = ActionBar.create().items(ActionRef.of("ack"), ActionRef.of("esc"), SafeAction.COLLAPSE);
 		assertSize(3, bar.items);
 	}
+
+	@Test void b01_renderPlusMarkdown_rejected() {
+		var e = assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(
+				DetailField.of("body").format(DetailField.Format.MARKDOWN).render("tag")))
+			.validate(null));
+		assertTrue(e.getMessage().contains("non-TEXT"), e::getMessage);
+	}
+
+	@Test void b02_blankRenderId_rejected() {
+		var f = DetailField.of("cpu");
+		f.render = new Render();
+		f.render.id = "  ";
+		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(f))
+			.validate(null));
+	}
+
+	@Test void b03_unknownRenderId_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("nope")))
+			.validate(null));
+	}
+
+	@Test void b04_customWithoutOptIn_rejected_withOptInAccepted() {
+		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("spark")))
+			.validate(null));
+		RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.allowCustomRenderers("spark")
+			.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("spark")))
+			.validate(null);
+	}
+
+	@Test void b05_blankCustomEntry_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> RowDetailDef.create()
+			.endpoint("/data/{id}")
+			.allowCustomRenderers("spark", "  ")
+			.sections(oneSection())
+			.validate(null));
+	}
+
+	@Test void b06_everyBuiltinId_accepted_withDefaultText() {
+		for (var id : SinkRenderAllowlist.BUILTIN_IDS) {
+			RowDetailDef.create()
+				.endpoint("/data/{id}")
+				.sections(DetailSection.create("s", "S").fields(DetailField.of("f-" + id).render(id)))
+				.validate(null);
+		}
+	}
+
+	@Test void b07_viewTableOf_rejectsBadDetailRender() {
+		var v = ViewDef.create("x").dataMode(ViewDef.DataMode.CLIENT).dataUrl("/u")
+			.columns(Column.of("name"))
+			.details(RowDetailDef.create().endpoint("/d/{id}")
+				.sections(DetailSection.create("s", "S").fields(DetailField.of("cpu").render("evil"))))
+			.build();
+		assertThrows(IllegalArgumentException.class, () -> ViewTable.of(v));
+	}
 }

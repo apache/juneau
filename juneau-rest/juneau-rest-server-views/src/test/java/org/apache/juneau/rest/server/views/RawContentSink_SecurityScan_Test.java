@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
@@ -355,6 +356,52 @@ class RawContentSink_SecurityScan_Test extends TestBase {
 		assertFalse(fn.contains("innerHTML"), fn);
 		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
 		assertEquals(List.of(), r.violations(), () -> "fillMarkdownSlot must not assign innerHTML: " + r.violations());
+	}
+
+	@Test void d05_fillRenderSlot_hasNoHtmlSinks() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
+		var source = Files.readString(root.resolve(rel));
+		var fn = extractFunction(source, "function fillRenderSlot(");
+		assertTrue(fn.contains("createElement"), fn);
+		assertFalse(fn.contains("innerHTML"), fn);
+		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+		assertEquals(List.of(), r.violations(), () -> "fillRenderSlot must not assign innerHTML: " + r.violations());
+	}
+
+	@Test void d06_fillCellPopover_hasNoHtmlSinks() throws Exception {
+		var root = requireModuleRoot();
+		var rel = Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-views.js");
+		var source = Files.readString(root.resolve(rel));
+		var fn = extractFunction(source, "function fillCellPopover(");
+		assertTrue(fn.contains("createElement"), fn);
+		assertFalse(fn.contains("innerHTML"), fn);
+		var r = RawContentSinkScanner.scanJsHtmlSinks(rel.toString(), fn);
+		assertEquals(List.of(), r.violations(), () -> "fillCellPopover must not assign innerHTML: " + r.violations());
+	}
+
+	@Test void e01_newPatterns_areFlagged() {
+		assertTrue(RawContentSinkScanner.scanJsHtmlSinks("x.js", "el.outerHTML = x;").violations().size() >= 1);
+		assertTrue(RawContentSinkScanner.scanJsHtmlSinks("x.js", "el.insertAdjacentHTML('beforeend', x);").violations().size() >= 1);
+		assertTrue(RawContentSinkScanner.scanJsHtmlSinks("x.js", "document.write(x);").violations().size() >= 1);
+	}
+
+	@Test void e02_shippedJs_onlyAllowlistedHits() throws Exception {
+		var root = requireModuleRoot();
+		var r = RawContentSinkScanner.scanShippedJs(root);
+		assertEquals(List.of(), r.violations(),
+			() -> "shipped JS HTML-sink violations:\n  " + String.join("\n  ", r.violations()));
+		assertTrue(r.sinks().size() >= 3, () -> "expected >= 3 allowlisted hits, got " + r.sinks());
+		for (var a : RawContentSinkScanner.shippedJsAllowlist()) {
+			var file = root.resolve(a.relativePath().replace('/', File.separatorChar));
+			var src = Files.readString(file);
+			assertTrue(src.contains(a.snippet().replace(";", "")),
+				() -> "allowlisted snippet missing from " + a.relativePath() + ": " + a.snippet());
+		}
+		var renders = Files.readString(root.resolve(
+			Path.of("src", "main", "resources", "org", "apache", "juneau", "views", "juneau-renders.js")));
+		var rendersHits = RawContentSinkScanner.scanJsHtmlSinks("juneau-renders.js", renders);
+		assertEquals(List.of(), rendersHits.sinks(), () -> "juneau-renders.js must have zero HTML-sink hits: " + rendersHits.sinks());
 	}
 
 	private static String extractFunction(String body, String signature) {

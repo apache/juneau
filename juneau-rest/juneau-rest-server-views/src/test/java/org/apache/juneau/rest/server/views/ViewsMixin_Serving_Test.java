@@ -311,6 +311,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("registerRenderer("), body);
 		assertTrue(body.contains("parseRenderId("), body);
 		assertTrue(body.contains("\"ts-zulu\""), body);   // the ts-zulu renderer is actually registered
+		assertTrue(body.contains("formatUtcZulu("), body);
+		assertTrue(body.contains("formatCalifornia("), body);
+		assertTrue(body.contains("America/Los_Angeles"), body);
+		assertTrue(body.contains("textContent"), body);   // popup lines must not use innerHTML
+		assertTrue(body.contains("createElement"), body);
+		assertFalse(body.contains(".innerHTML"), body);
 	}
 
 	@Test void e02_viewsCss_hasNeutralTagChip() throws Exception {
@@ -318,12 +324,14 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// A real base-chip rule (not just the header comment): neutral shape/padding, no colors.
 		assertTrue(body.contains(".tag {"), body);
 		assertTrue(body.contains("border-radius:"), body);
+		assertTrue(body.contains(".juneau-ts-popup {"), body);
+		assertTrue(body.contains("position: fixed"), body);
 	}
 
 	@Test void e04_viewsCss_hasNeutralRibbonButtonShape() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-ribbon-btn {"), body);
-		assertTrue(body.contains("width: 32px"), body);
+		assertTrue(body.contains("min-width: 32px"), body);
 		assertTrue(body.contains("height: 32px"), body);
 		assertTrue(body.contains("display: flex"), body);
 		assertTrue(body.contains("border: 1px solid"), body);
@@ -396,8 +404,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var fnBody = functionBody(body, "function buildRibbon(");
 		assertTrue(fnBody.contains("function place("), fnBody);
 		assertTrue(fnBody.contains("juneau-view-ribbon-group"), fnBody);
-		// export's own buttons always cluster (synthetic per-index id when no explicit .group is set).
-		assertTrue(fnBody.contains("__export"), fnBody);
+		// Ungrouped icon buttons (refresh + export, etc.) share one synthetic cluster so they render as a
+		// connected ribbon rather than orphan glyphs.  An explicit .group() still splits clusters.
+		assertTrue(fnBody.contains("__ungrouped"), fnBody);
 		assertTrue(fnBody.contains("place("), fnBody);
 		// A divider always closes any open cluster (a divider is a deliberate visual break, not a grouping seam).
 		var dividerStart = fnBody.indexOf("a.type === \"divider\"");
@@ -576,8 +585,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void n02_viewsJs_wrapsRibbonAndSearchInToolbarRow() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("function buildToolbarRow("), body);
+		assertTrue(body.contains("function findViewWrapper("), body);
 		assertTrue(body.contains("juneau-view-toolbar-row"), body);
 		assertTrue(body.contains(".querySelector(\".dataTables_filter, .dt-search\""), body);
+		assertTrue(body.contains(".dt-container, .dataTables_wrapper"), body);
 	}
 
 	@Test void n03_viewsCss_controlRowsWrapAndDividerIsSpacing() throws Exception {
@@ -586,7 +597,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var rowStart = body.indexOf(".juneau-view-toolbar-row {");
 		var rowEnd = body.indexOf("}", rowStart);
 		var rowRegion = body.substring(rowStart, rowEnd);
-		assertTrue(rowRegion.contains("flex-wrap: wrap"), rowRegion);
+		assertTrue(rowRegion.contains("flex-wrap: nowrap"), rowRegion);
 		// Control-row layout: LEFT cluster + RIGHT cluster, pushed apart so the right cluster stays right-aligned
 		// (superseded the old single-cluster "justify-content: flex-start").
 		assertTrue(rowRegion.contains("justify-content: space-between"), rowRegion);
@@ -609,27 +620,36 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
 		assertTrue(region.contains("display: flex"), region);
-		assertTrue(region.contains("flex-wrap: wrap"), region);
+		assertTrue(region.contains("flex-wrap: nowrap"), region);
+
+		assertTrue(body.contains(".juneau-view-toolbar-right .dataTables_filter,"), body);
+		assertTrue(body.contains(".juneau-view-toolbar-right .dt-search {"), body);
+		var searchStart = body.indexOf(".juneau-view-toolbar-right .dt-search {");
+		var searchEnd = body.indexOf("}", searchStart);
+		assertTrue(body.substring(searchStart, searchEnd).contains("display: inline-flex"), body);
 	}
 
 	/**
-	 * Control-row layout item 2/5 (single segmented ribbon): the group wrapper must NOT carry a `gap` (a gap would
-	 * leave a visible seam between adjacent buttons instead of a collapsed shared border), and its member buttons
-	 * must collapse borders via a negative margin with rounding only on the outer ends.
+	 * Control-row layout item 2/5 (single segmented ribbon): the group is one OUTER chrome - member buttons
+	 * drop their inner vertical borders (left/right none; first restores left, last restores right) with
+	 * rounding only on the outer ends.  A gap or a per-button box border would draw inner outlines.
 	 */
 	@Test void o02_viewsCss_ribbonGroupCollapsesSharedBordersRoundedOnlyOnOuterEnds() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains(".juneau-view-ribbon-group { display: inline-flex; }"), body);
+		assertTrue(body.contains(".juneau-view-ribbon-group { display: inline-flex;"), body);
 
 		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn {"), body);
 		var memberStart = body.indexOf(".juneau-view-ribbon-group .juneau-view-ribbon-btn {");
 		var memberEnd = body.indexOf("}", memberStart);
 		var memberRegion = body.substring(memberStart, memberEnd);
 		assertTrue(memberRegion.contains("border-radius: 0"), memberRegion);
-		assertTrue(memberRegion.contains("margin-left: -1px"), memberRegion);
+		assertTrue(memberRegion.contains("border-left: none"), memberRegion);
+		assertTrue(memberRegion.contains("border-right: none"), memberRegion);
+		assertFalse(memberRegion.contains("margin-left: -1px"), memberRegion);
 
 		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child {"), body);
 		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child {"), body);
+		assertTrue(body.contains(".juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child {"), body);
 	}
 
 	@Test void o03_viewsCss_hasNeutralColumnSearchRowAndInputShape() throws Exception {
@@ -639,6 +659,16 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var start = body.indexOf(".juneau-view-columnsearch-input {");
 		var end = body.indexOf("}", start);
 		assertTrue(body.substring(start, end).contains("border: 1px solid"), body);
+	}
+
+	@Test void o04_viewsCss_hasCompactDataTableDensityAndHairlineGrid() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("padding: 4px 5px"), body);
+		assertTrue(body.contains("font-size: 0.75rem"), body);
+		assertTrue(body.contains("font-weight: normal"), body);
+		assertTrue(body.contains("flex-direction: row !important"), body);
+		assertTrue(body.contains("content: none"), body);
+		assertTrue(body.contains("border-collapse: collapse"), body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

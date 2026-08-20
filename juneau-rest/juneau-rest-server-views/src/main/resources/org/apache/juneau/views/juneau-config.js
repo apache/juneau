@@ -359,6 +359,33 @@
 		return map;
 	}
 
+	function copyPopover(p) {
+		if (!p || typeof p !== "object") return p;
+		const out = {};
+		if (p.title != null) out.title = p.title;
+		if (p.fields) {
+			out.fields = p.fields.map(function (f) {
+				if (!f || typeof f !== "object") return f;
+				const g = { data: f.data };
+				if (f.title != null) g.title = f.title;
+				if (f.render != null) {
+					if (typeof f.render === "string") {
+						g.render = f.render;
+					} else {
+						g.render = { id: f.render.id };
+						if (f.render.meta) {
+							g.render.meta = {};
+							for (const k in f.render.meta)
+								if (Object.hasOwn(f.render.meta, k)) g.render.meta[k] = f.render.meta[k];
+						}
+					}
+				}
+				return g;
+			});
+		}
+		return out;
+	}
+
 	/**
 	 * Shallow-copies a catalog column into an effective-column model.  Nested `render` / `formats` are copied so a
 	 * later format swap cannot mutate the live catalog object the VIEW_META sidecar handed us.
@@ -386,6 +413,8 @@
 					for (const k in col.render.meta)
 						if (Object.hasOwn(col.render.meta, k)) out.render.meta[k] = col.render.meta[k];
 				}
+				if (col.render.popover)
+					out.render.popover = copyPopover(col.render.popover);
 			}
 		}
 		return out;
@@ -408,6 +437,8 @@
 			out.meta = {};
 			for (const k in render.meta) if (Object.hasOwn(render.meta, k)) out.meta[k] = render.meta[k];
 		}
+		if (render.popover)
+			out.popover = copyPopover(render.popover);
 		return out;
 	}
 
@@ -1122,6 +1153,7 @@
 	NS.config.buildOptsColumnSpace = buildOptsColumnSpace;
 	NS.config.dtIndex = dtIndex;
 	NS.config.swapRenderId = swapRenderId;
+	NS.config.copyCatalogColumn = copyCatalogColumn;
 
 	/**
 	 * Loads the active saved-view blob for a configurable table (or {@code null} for Default).  Stale / unknown-

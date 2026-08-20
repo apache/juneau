@@ -46,6 +46,12 @@ public class RowDetailDef {
 	public List<DetailSection> sections;
 
 	/**
+	 * App-approved custom renderer ids allowed on {@link DetailField#render} in addition to
+	 * {@link SinkRenderAllowlist#BUILTIN_IDS}.  Blank entries fail {@link #validate(List)}.
+	 */
+	public Set<String> allowedCustomRenderers;
+
+	/**
 	 * Creates an empty row-detail definition.
 	 *
 	 * @return A new {@link RowDetailDef}.
@@ -77,6 +83,21 @@ public class RowDetailDef {
 	}
 
 	/**
+	 * Opts in custom (non-built-in) renderer ids for {@link DetailField#render}.
+	 *
+	 * <p>
+	 * Opt-in is id permission only: the custom renderer's HTML still goes through the closed
+	 * {@code fillRenderSlot} copier.  Opting in a built-in id is a no-op.
+	 *
+	 * @param value Custom renderer ids.  Must not contain blank entries.
+	 * @return This object.
+	 */
+	public RowDetailDef allowCustomRenderers(String...value) {
+		allowedCustomRenderers = st(value);
+		return this;
+	}
+
+	/**
 	 * Fail-closed bean validation, including {@link ActionRef} existence against the enclosing view's action
 	 * catalog.
 	 *
@@ -94,6 +115,12 @@ public class RowDetailDef {
 				endpoint);
 		if (sections == null || sections.isEmpty())
 			throw iaex("RowDetailDef must declare at least one section.");
+		if (allowedCustomRenderers != null) {
+			for (var id : allowedCustomRenderers) {
+				if (id == null || id.isBlank())
+					throw iaex("allowCustomRenderers entry must not be blank.");
+			}
+		}
 
 		var actionIds = new HashSet<String>();
 		if (rowActions != null)
@@ -120,6 +147,13 @@ public class RowDetailDef {
 						throw iaex("DetailSection '%s' field data must not be null or blank.", s.id);
 					if (!fieldKeys.add(f.data))
 						throw iaex("RowDetailDef duplicate field data key '%s'.", f.data);
+					if (f.render != null) {
+						if (f.render.id == null || f.render.id.isBlank())
+							throw iaex("DetailField '%s' render id must not be null or blank.", f.data);
+						if (f.format != null && f.format != DetailField.Format.TEXT)
+							throw iaex("DetailField '%s' cannot set both render and a non-TEXT format.", f.data);
+						SinkRenderAllowlist.assertAllowed(f.render.id, allowedCustomRenderers);
+					}
 				}
 			}
 			if (s.actions != null) {
