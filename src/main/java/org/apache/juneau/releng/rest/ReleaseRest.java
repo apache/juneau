@@ -33,6 +33,7 @@ import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
 import org.apache.juneau.rest.server.views.Column;
+import org.apache.juneau.rest.server.views.ColumnConfig;
 import org.apache.juneau.rest.server.views.RibbonAction;
 import org.apache.juneau.rest.server.views.ViewDef;
 import org.apache.juneau.rest.server.views.ViewDef.DataMode;
@@ -99,14 +100,17 @@ public class ReleaseRest extends BasicRestResource {
 			.dataUrl(MOUNT + "/data")
 			.defaultOrder("version", Dir.DESC)
 			.columns(
-				Column.of("version").title("Version").render(RENDER_LINKED).href(MOUNT + "/{version}/1"),
+				Column.of("version").title("Version").render(RENDER_LINKED).href(MOUNT + "/{version}/1").pinned(true),
 				Column.of("rc").title("RC"),
 				Column.of("status").title("Status").render("tag:status"),
 				Column.of("stage").title("Stage").render("tag:stage"),
-				Column.of("voteCloses").title("Vote closes").render("ts-zulu"),
-				Column.of("released").title("Released").render("date"),
-				Column.of("githubReleaseUrl").title("GitHub").render(RENDER_LINKED).href("{githubReleaseUrl}").orderable(false),
-				Column.of("milestoneUrl").title("Milestone").render(RENDER_LINKED).href("{milestoneUrl}").orderable(false))
+				Column.of("voteCloses").title("Vote closes").render("ts-zulu").formats("ts-zulu", "datetime", "date"),
+				Column.of("released").title("Released").render("date").formats("date", "datetime", "ts-zulu"),
+				Column.of("githubReleaseUrl").title("GitHub").render(RENDER_LINKED).href("{githubReleaseUrl}").orderable(false)
+					.defaultVisible(false),
+				Column.of("milestoneUrl").title("Milestone").render(RENDER_LINKED).href("{milestoneUrl}").orderable(false)
+					.defaultVisible(false))
+			.columnConfig(ColumnConfig.create())
 			.ribbon(
 				// "filters" clusters the column-search toggle and the dropped-only quick-filter into one
 				// segmented ribbon group (visual-parity control-row layout: filter-ribbon); "export" actions are
@@ -123,14 +127,16 @@ public class ReleaseRest extends BasicRestResource {
 	/** Human page — the rich-view table shell (emitted as trusted markup) + JSON sidecar, hydrated by the toolkit JS. */
 	@RestGet("/")
 	public View page(RestRequest req) {
-		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(releasesView()));
+		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(ViewTable.of(req, releasesView()));
 		return ConsolePage.of("releases", req)
 			.attr("viewTable", markup)
 			.attr("viewsCssUrl", asset(req, ViewsMixin.VIEWS_CSS_PATH))
+			.attr("configCssUrl", asset(req, ViewsMixin.CONFIG_CSS_PATH))
 			.attr("rendersJsUrl", asset(req, ViewsMixin.RENDERS_JS_PATH))
 			.attr("iconsJsUrl", asset(req, ViewsMixin.ICONS_JS_PATH))
 			.attr("ribbonJsUrl", asset(req, ViewsMixin.RIBBON_JS_PATH))
-			.attr("viewsJsUrl", asset(req, ViewsMixin.VIEWS_JS_PATH));
+			.attr("viewsJsUrl", asset(req, ViewsMixin.VIEWS_JS_PATH))
+			.attr("configJsUrl", asset(req, ViewsMixin.CONFIG_JS_PATH));
 	}
 
 	/**

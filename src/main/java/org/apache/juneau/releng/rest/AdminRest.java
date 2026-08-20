@@ -73,14 +73,16 @@ public class AdminRest extends BasicRestResource {
 	/** Human page &mdash; the composed tab/sub-tab page shell (emitted as trusted markup) + PAGE_META sidecar. */
 	@RestGet("/")
 	public View page(RestRequest req) {
-		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(adminPage()));
+		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(PageTable.of(req, adminPage()));
 		return ConsolePage.of("admin", req)
 			.attr("pageTable", markup)
 			.attr("viewsCssUrl", asset(req, ViewsMixin.VIEWS_CSS_PATH))
+			.attr("configCssUrl", asset(req, ViewsMixin.CONFIG_CSS_PATH))
 			.attr("rendersJsUrl", asset(req, ViewsMixin.RENDERS_JS_PATH))
 			.attr("iconsJsUrl", asset(req, ViewsMixin.ICONS_JS_PATH))
 			.attr("ribbonJsUrl", asset(req, ViewsMixin.RIBBON_JS_PATH))
 			.attr("viewsJsUrl", asset(req, ViewsMixin.VIEWS_JS_PATH))
+			.attr("configJsUrl", asset(req, ViewsMixin.CONFIG_JS_PATH))
 			.attr("pagesJsUrl", asset(req, ViewsMixin.PAGES_JS_PATH));
 	}
 

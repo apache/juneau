@@ -118,6 +118,13 @@ class AdminRestTest {
 			try (var resp = client.request("GET", ViewsMixin.VIEWS_JS_PATH).run()) {
 				assertEquals(200, resp.getStatusCode());
 			}
+			try (var resp = client.request("GET", ViewsMixin.CONFIG_JS_PATH).run()) {
+				assertEquals(200, resp.getStatusCode());
+				assertTrue(resp.getBodyAsString().contains("JuneauViews"));
+			}
+			try (var resp = client.request("GET", ViewsMixin.CONFIG_CSS_PATH).run()) {
+				assertEquals(200, resp.getStatusCode());
+			}
 		}
 	}
 
@@ -154,6 +161,15 @@ class AdminRestTest {
 		assertTrue(base.contains("href=\"/rest/admin\""), "Missing Admin nav link: " + base);
 		assertTrue(base.contains("activeTab == 'admin'"), "Missing admin-tab conditional asset wiring: " + base);
 		assertTrue(base.contains("pagesJsUrl"), "Missing juneau-pages.js include for the Admin tab: " + base);
+		assertTrue(base.contains("configJsUrl"), "Missing juneau-config.js include: " + base);
+		assertTrue(base.contains("configCssUrl"), "Missing juneau-config.css include: " + base);
+		var viewsJsIdx = base.indexOf("viewsJsUrl");
+		var configJsIdx = base.indexOf("configJsUrl");
+		var pagesJsIdx = base.indexOf("pagesJsUrl");
+		assertTrue(viewsJsIdx >= 0 && configJsIdx > viewsJsIdx,
+			"juneau-config.js must load after juneau-views.js: " + base);
+		assertTrue(pagesJsIdx > configJsIdx,
+			"juneau-pages.js must load after juneau-config.js: " + base);
 	}
 
 	/**

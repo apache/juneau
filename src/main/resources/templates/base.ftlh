@@ -50,6 +50,7 @@
          .tag.<domain>.<value> classes. This same stylesheet also carries the TODO-399 Phase C .jc-tab/.jc-panel
          page-shell base rules the Admin tab's juneau-pages.js runtime relies on. -->
     <link rel="stylesheet" href="${viewsCssUrl!'/rest/releases/juneau-views.css'}">
+    <link rel="stylesheet" href="${configCssUrl!'/rest/releases/juneau-config.css'}">
     </#if>
     <link rel="stylesheet" href="/juneau-console/chrome.css">
     <link rel="stylesheet" href="/css/chrome.css">
@@ -101,6 +102,7 @@
     <script src="${iconsJsUrl!'/rest/releases/juneau-icons.js'}"></script>
     <script src="${ribbonJsUrl!'/rest/releases/juneau-ribbon.js'}"></script>
     <script src="${viewsJsUrl!'/rest/releases/juneau-views.js'}"></script>
+    <script src="${configJsUrl!'/rest/releases/juneau-config.js'}"></script>
     </#if>
     <#if activeTab?? && activeTab == 'admin'>
     <#-- TODO-399 Phase C: the opt-in tabs/sub-tabs page runtime — only the Admin tab's composed PageDef page loads
